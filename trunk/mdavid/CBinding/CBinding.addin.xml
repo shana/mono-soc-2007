@@ -1,0 +1,61 @@
+<AddIn
+	id          = "MonoDevelop.CBinding"
+	name        = "C/C++ Language Binding"
+	author      = "Marcos David Marin Amador"
+	copright    = "MIT"
+	url         = "http://www.monodevelop.com"
+	description = "C/C++ Language binding"
+	category    = "Language bindings"
+	version     = "0.1">
+	
+	<!-- MIT copyright ok? -->
+	
+	<Runtime>
+		<Import assembly = "CBinding.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<AddIn id = "MonoDevelop.Core" version = "0.13.0"/>
+		<AddIn id = "MonoDevelop.Core.Gui" version = "0.13.0"/>
+		<AddIn id = "MonoDevelop.Projects" version = "0.13.0"/>
+		<AddIn id = "MonoDevelop.Ide" version = "0.13.0"/>
+	</Dependencies>
+	
+	<Extension path = "/SharpDevelop/Workbench/FileFilter">
+		<FileFilter
+			id = "C"
+			insertbefore = "AllFiles"
+			_label = "C/C++ Files"
+			extensions = "*.c,*.cpp,*.h,*.hpp"/>
+	</Extension>
+	
+	<Extension path = "/MonoDevelop/FileTemplates">
+		<!-- Add file templates -->
+	</Extension>
+	
+	<Extension path = "/MonoDevelop/ProjectTemplates">
+		<ProjectTemplate id = "EmptyCProject" resource = "EmptyCProject.xpt.xml"/>
+		<!-- Add more project templates -->
+	</Extension>
+	
+	<!-- -->
+	
+	<Extension path = "/Workspace/Icons">
+		<Icon
+			id = "CPrj"
+			language = "C"
+			resource = "res:C.Project.Empty"/>
+    	<Icon
+    		id = "CFile"
+			extensions = ".c"
+			resource = "res:C.File.Empty"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/LanguageBindings">
+		<LanguageBinding
+			id = "C"
+			supportedextensions = ".c,.h,.cpp,.hpp"
+			class = "CBinding.CLanguageBinding"/>
+	</Extension>
+	
+</AddIn>
