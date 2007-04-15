@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<Template
+	originator   = "Marcos David Marin Amador" 
+    created      = "04/12/2007"
+    lastModified = "04/14/2007">
+	
+	<!-- Template Header -->
+	<TemplateConfiguration>
+		<_Name>Empty Project</_Name>
+		<Category>C</Category>
+		<Icon>res:C.Project.Empty</Icon>
+		<LanguageName>C</LanguageName>
+		<_Description>Creates an empty C solution.</_Description>
+	</TemplateConfiguration>
+	
+	<!-- Template Content -->
+	<Combine name = "${ProjectName}" directory = ".">
+		<Project name = "${ProjectName}" directory = "."/>
+	</Combine>
+</Template>
