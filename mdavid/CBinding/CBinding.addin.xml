@@ -17,8 +17,9 @@
 	<Dependencies>
 		<AddIn id = "MonoDevelop.Core" version = "0.13.0"/>
 		<AddIn id = "MonoDevelop.Core.Gui" version = "0.13.0"/>
-		<AddIn id = "MonoDevelop.Projects" version = "0.13.0"/>
 		<AddIn id = "MonoDevelop.Ide" version = "0.13.0"/>
+		<AddIn id = "MonoDevelop.Projects" version = "0.13.0"/>
+		<AddIn id = "MonoDevelop.Projects.Gui" version = "0.13.0"/>
 	</Dependencies>
 	
 	<Extension path = "/SharpDevelop/Workbench/FileFilter">
@@ -30,7 +31,7 @@
 	</Extension>
 	
 	<Extension path = "/MonoDevelop/FileTemplates">
-		<!-- Add file templates -->
+		<FileTemplate id = "EmptyCFile" resource = "EmptyCFile.xft.xml"/>
 	</Extension>
 	
 	<Extension path = "/MonoDevelop/ProjectTemplates">
@@ -56,6 +57,10 @@
 			id = "C"
 			supportedextensions = ".c,.h,.cpp,.hpp"
 			class = "CBinding.CLanguageBinding"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
+		<DataType class = "CBinding.CCompilerParameters"/>
 	</Extension>
 	
 </AddIn>

@@ -5,16 +5,24 @@ ASSEMBLY = $(ADDIN_BUILD)/CBinding.dll
 REFS = \
 	-r:System \
 	-r:System.Xml \
+	-r:mscorlib \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Core.Gui.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.Gui.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide
+	
 
 FILES = \
-	CLanguageBinding.cs
+	Project/CCompilerParameters.cs \
+	CLanguageBinding.cs \
+	CCompilerManager.cs
 
 RES = \
 	icons/C.File.Empty \
 	icons/C.Project.Empty \
-	templates/EmptyCProject.xpt.xml
+	templates/EmptyCProject.xpt.xml \
+	templates/EmptyCFile.xft.xml
 
 ADDIN = CBinding.addin.xml
 
