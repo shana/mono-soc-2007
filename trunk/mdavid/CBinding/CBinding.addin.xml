@@ -52,10 +52,15 @@
 			resource = "res:C.File.Empty"/>
 	</Extension>
 	
+	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">
+		<ProjectBinding id = "CProject" class = "CBinding.CProjectBinding" />
+	</Extension>
+
+	
 	<Extension path = "/SharpDevelop/Workbench/LanguageBindings">
 		<LanguageBinding
 			id = "C"
-			supportedextensions = ".c,.h,.cpp,.hpp"
+			supportedextensions = ".c,.h"
 			class = "CBinding.CLanguageBinding"/>
 	</Extension>
 	

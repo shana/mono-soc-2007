@@ -27,8 +27,8 @@ namespace CBinding
 		[ItemProperty("binpath")]
 		private string binpath = string.Empty;
 		
-		[ItemProperty("compilerpath")]
-		private string compilerpath = string.Empty;
+		[ItemProperty("compiler")]
+		private string compiler = string.Empty;
 		
 		public object Clone ()
 		{
@@ -65,9 +65,9 @@ namespace CBinding
 			set { binpath = value; }
 		}
 		
-		public string CompilerPath {
-			get { return compilerpath; }
-			set { compilerpath = value; }
+		public string Compiler {
+			get { return compiler; }
+			set { compiler = value; }
 		}
 	}
 }
