@@ -28,10 +28,10 @@ namespace CBinding
 		                                DotNetProjectConfiguration configuration,
 		                                IProgressMonitor monitor)
 		{
-			// TODO: current implementation is weak as a twig, or weaker...
+			// TODO: current implementation is weak as a twig
 			CCompilerParameters parameters = (CCompilerParameters)configuration.CompilationParameters;
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());			
-			string compiler = parameters.CompilerPath;
+			string compiler = parameters.Compiler;
 			string outdir = configuration.OutputDirectory;
 			StringBuilder args = new StringBuilder ();
 			StringWriter output = new StringWriter ();
@@ -55,14 +55,18 @@ namespace CBinding
 			if (parameters.ObjectOnly)
 				args.Append ("-c ");
 			
-			if (parameters.Output != string.Empty && !parameters.ObjectOnly)
-				args.Append ("-o " + outdir + "/" + parameters.Output);
+			if (parameters.IncludePath != string.Empty)
+				args.Append ("-I" + parameters.IncludePath + " ");
 			
-			// FIXME: this is a crappy hack, remove and fix CLanguageBinding.CreateCompilationPArameters ()
-			if (parameters.Output == string.Empty && !parameters.ObjectOnly)
+			if (parameters.LibPath != string.Empty)
+				args.Append ("-L" + parameters.LibPath + " ");
+			
+			if (parameters.Output != string.Empty)
 			{
-				parameters.Output = IdeApp.ProjectOperations.CurrentSelectedProject.Name;
-				args.Append ("-o " + outdir + "/" + parameters.Output);
+				if (parameters.ObjectOnly)
+					args.Append ("-o " + outdir + "/" + parameters.Output + ".o");
+				else
+					args.Append ("-o " + outdir + "/" + parameters.Output);
 			}
 			
 			DoCompilation (monitor, compiler, args.ToString (), configuration, output, error);
