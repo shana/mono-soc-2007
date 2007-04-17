@@ -65,7 +65,7 @@
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
-		<DataType class = "CBinding.CCompilerParameters"/>
+		<DataType class = "CBinding.CCompilationParameters"/>
 	</Extension>
 	
 </AddIn>

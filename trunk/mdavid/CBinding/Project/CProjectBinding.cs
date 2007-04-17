@@ -11,8 +11,7 @@ namespace CBinding
 		
 		public Project CreateProject (ProjectCreateInformation info, XmlElement projectOptions)
 		{
-			// TODO: implement
-			return null;
+			return new CProject (info, projectOptions);
 		}
 		
 		public Project CreateSingleFileProject (string sourceFile)

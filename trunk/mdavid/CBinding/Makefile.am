@@ -14,9 +14,10 @@ REFS = \
 	
 
 FILES = \
-	Project/CCompilerParameters.cs \
+	Project/CCompilationParameters.cs \
 	Project/CProject.cs \
 	Project/CProjectBinding.cs \
+	Project/CProjectConfiguration.cs \
 	CLanguageBinding.cs \
 	CCompilerManager.cs
 

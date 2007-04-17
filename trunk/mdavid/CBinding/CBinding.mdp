@@ -23,9 +23,10 @@
     <File name="./templates/EmptyCFile.xft.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./CCompilerManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./Project" subtype="Directory" buildaction="Compile" />
-    <File name="./Project/CCompilerParameters.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Project/CCompilationParameters.cs" subtype="Code" buildaction="Compile" />
     <File name="./Project/CProject.cs" subtype="Code" buildaction="Compile" />
     <File name="./Project/CProjectBinding.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Project/CProjectConfiguration.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

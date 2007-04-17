@@ -7,16 +7,10 @@ using MonoDevelop.Projects.Serialization;
 
 namespace CBinding
 {
-	public class CCompilerParameters : ICloneable
-	{
-		[ItemProperty("output")]
-		private string output = string.Empty;
-		
-		[ItemProperty("objectonly")]
-		private bool objectonly = false;
-		
+	public class CCompilationParameters : ICloneable
+	{		
 		[ItemProperty("genwarnings")]
-		private bool genwarnings = true;
+		private bool genwarnings = false;
 		
 		[ItemProperty("includepath")]
 		private string includepath = string.Empty;
@@ -28,21 +22,11 @@ namespace CBinding
 		private string binpath = string.Empty;
 		
 		[ItemProperty("compiler")]
-		private string compiler = string.Empty;
+		private string compiler = "gcc";
 		
 		public object Clone ()
 		{
 			return MemberwiseClone ();
-		}
-		
-		public string Output {
-			get { return output; }
-			set { output = value; }
-		}
-		
-		public bool ObjectOnly {
-			get { return objectonly; }
-			set { objectonly = value; }
 		}
 		
 		public bool GenWarnings {
