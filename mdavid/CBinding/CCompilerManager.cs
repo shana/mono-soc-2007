@@ -25,14 +25,14 @@ namespace CBinding
 		
 		public ICompilerResult Compile (ProjectFileCollection projectFiles,
 		                                ProjectReferenceCollection references,
-		                                DotNetProjectConfiguration configuration,
+		                                CProjectConfiguration configuration,
 		                                IProgressMonitor monitor)
 		{
-			// TODO: current implementation is weak as a twig
-			CCompilerParameters parameters = (CCompilerParameters)configuration.CompilationParameters;
+			CCompilationParameters parameters = (CCompilationParameters)configuration.CompilationParameters;
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());			
 			string compiler = parameters.Compiler;
 			string outdir = configuration.OutputDirectory;
+			string outputName = configuration.CompiledOutputName;
 			StringBuilder args = new StringBuilder ();
 			StringWriter output = new StringWriter ();
 			StringWriter error = new StringWriter ();
@@ -51,32 +51,35 @@ namespace CBinding
 			
 			if (parameters.GenWarnings)
 				args.Append ("-Wall ");
-			
-			if (parameters.ObjectOnly)
-				args.Append ("-c ");
-			
+
 			if (parameters.IncludePath != string.Empty)
 				args.Append ("-I" + parameters.IncludePath + " ");
 			
 			if (parameters.LibPath != string.Empty)
 				args.Append ("-L" + parameters.LibPath + " ");
 			
-			if (parameters.Output != string.Empty)
+			switch (configuration.CompileTarget)
 			{
-				if (parameters.ObjectOnly)
-					args.Append ("-o " + outdir + "/" + parameters.Output + ".o");
-				else
-					args.Append ("-o " + outdir + "/" + parameters.Output);
+			case CBinding.CompileTarget.Bin:
+				break;
+			case CBinding.CompileTarget.Object:
+				args.Append ("-c ");
+				break;
+			case CBinding.CompileTarget.SharedObject:
+				args.Append ("-shared ");
+				break;
 			}
 			
-			DoCompilation (monitor, compiler, args.ToString (), configuration, output, error);
+			args.Append ("-o " + outdir + "/" + outputName);
+			
+			DoCompilation (monitor, compiler, args.ToString (), output, error);
 			return new DefaultCompilerResult (cr, "");
 		}
 		
 		// FIXME: make private
 		public string GeneratePkgConfigArguments (IProgressMonitor monitor,
-		                                           DotNetProjectConfiguration configuration,
-		                                           ProjectReferenceCollection references)
+		                                          CProjectConfiguration configuration,
+		                                          ProjectReferenceCollection references)
 		{
 			monitor.Log.WriteLine ("Generating pkg-config arguments...");
 			
@@ -95,7 +98,6 @@ namespace CBinding
 		
 		private bool DoCompilation (IProgressMonitor monitor,
 		                            string compiler, string args,
-		                            DotNetProjectConfiguration configuration,
 		                            TextWriter output, TextWriter error)
 		{
 			LogTextWriter errorWriter = new LogTextWriter ();

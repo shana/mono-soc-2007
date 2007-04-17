@@ -15,6 +15,6 @@
 	
 	<!-- Template Content -->
 	<Combine name = "${ProjectName}" directory = ".">
-		<Project name = "${ProjectName}" directory = "."/>
+		<Project name = "${ProjectName}" directory = "." type = "C/C++"/>
 	</Combine>
 </Template>
