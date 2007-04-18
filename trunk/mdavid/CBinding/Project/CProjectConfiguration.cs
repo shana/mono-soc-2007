@@ -15,10 +15,10 @@ namespace CBinding
 	public class CProjectConfiguration : AbstractProjectConfiguration
 	{
 		[ItemProperty("Output/output")]
-		string output = "a.out";
+		string output = string.Empty;
 		
 		[ItemProperty("Build/target")]
-		CBinding.CompileTarget target = CBinding.CompileTarget.Bin;
+		CBinding.CompileTarget target = CBinding.CompileTarget.SharedObject;
 		
 		[ItemProperty("CodeGeneration", FallbackType = typeof (UnknownCompilationParameters))]
 		ICloneable compilationParameters;
@@ -34,7 +34,7 @@ namespace CBinding
 			get { return target; }
 			set { target = value; }
 		}
-		
+
 		public ICloneable CompilationParameters {
 			get { return compilationParameters; }
 			set { compilationParameters = value; }

@@ -22,7 +22,7 @@ namespace CBinding
 		private string binpath = string.Empty;
 		
 		[ItemProperty("compiler")]
-		private string compiler = "gcc";
+		private string compiler = string.Empty;
 		
 		public object Clone ()
 		{
