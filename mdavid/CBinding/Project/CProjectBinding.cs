@@ -9,7 +9,8 @@ namespace CBinding
 			get { return "C/C++"; }
 		}
 		
-		public Project CreateProject (ProjectCreateInformation info, XmlElement projectOptions)
+		public Project CreateProject (ProjectCreateInformation info,
+		                              XmlElement projectOptions)
 		{
 			return new CProject (info, projectOptions);
 		}

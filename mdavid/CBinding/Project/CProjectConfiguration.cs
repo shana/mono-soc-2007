@@ -8,8 +8,8 @@ namespace CBinding
 {
 	public enum CompileTarget {
 		Bin,
-		Object,
-		SharedObject
+		StaticLibrary,
+		SharedLibrary
 	};
 	
 	public class CProjectConfiguration : AbstractProjectConfiguration
@@ -18,9 +18,10 @@ namespace CBinding
 		string output = string.Empty;
 		
 		[ItemProperty("Build/target")]
-		CBinding.CompileTarget target = CBinding.CompileTarget.SharedObject;
+		CBinding.CompileTarget target = CBinding.CompileTarget.Bin;
 		
-		[ItemProperty("CodeGeneration", FallbackType = typeof (UnknownCompilationParameters))]
+		[ItemProperty("CodeGeneration",
+		              FallbackType = typeof(UnknownCompilationParameters))]
 		ICloneable compilationParameters;
 		
 		private string source_directory_path;
@@ -43,29 +44,39 @@ namespace CBinding
 		public string CompiledOutputName {
 			get {
 				string ext;
+				string suf;
 				
-				if (Output.EndsWith (".so") || Output.EndsWith (".o"))
+				if (Output.EndsWith (".so")) {
 					ext = string.Empty;
-				else
-				{
+					suf = string.Empty;
+				}
+				else if (Output.EndsWith (".a") && Output.StartsWith ("lib")) {
+					ext = string.Empty;
+					suf = string.Empty;
+				}
+				else {
 					switch (CompileTarget)
 					{
 					case CBinding.CompileTarget.Bin:
-						ext = string.Empty;;
+						ext = string.Empty;
+						suf = string.Empty;
 						break;
-					case CBinding.CompileTarget.SharedObject:
+					case CBinding.CompileTarget.SharedLibrary:
 						ext = ".so";
+						suf = string.Empty;
 						break;
-					case CBinding.CompileTarget.Object:
-						ext = ".o";
+					case CBinding.CompileTarget.StaticLibrary:
+						ext = ".a";
+						suf = "lib";
 						break;
 					default:
 						ext = string.Empty;
+						suf = string.Empty;
 						break;
 					}
 				}	
 				
-				return string.Format("{0}{1}", Output, ext);
+				return string.Format("{0}{1}{2}", suf, Output, ext);
 			}
 		}
 		
@@ -83,8 +94,7 @@ namespace CBinding
 			target = configuration.target;
 			source_directory_path = configuration.source_directory_path;
 			
-			if (configuration.CompilationParameters == null)
-			{
+			if (configuration.CompilationParameters == null) {
 				compilationParameters = null;
 			} else {
 				compilationParameters = (ICloneable)configuration.Clone ();

@@ -16,7 +16,7 @@
 	<!-- Template Content -->
 	<Combine name = "${ProjectName}" directory = ".">
 		<Project name = "${ProjectName}" directory = "." type = "C/C++">
-			<Options Target = "Bin" PauseConsoleOutput = "True" Language = "C"/>
+			<Options Target = "StaticLibrary" PauseConsoleOutput = "True" Language = "C"/>
 		</Project>
 	</Combine>
 </Template>

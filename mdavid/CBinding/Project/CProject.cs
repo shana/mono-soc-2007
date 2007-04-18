@@ -30,45 +30,42 @@ namespace CBinding
 		{
 			string binPath = ".";
 			
-			if (info != null)
-			{
+			if (info != null) {
 				Name = info.ProjectName;
 				binPath = info.BinPath;
 			}
 			
 			
-			if (projectOptions != null)
-			{
-				if (projectOptions.Attributes["Language"] != null)
-				{
+			if (projectOptions != null) {
+				if (projectOptions.Attributes["Language"] != null) {
 					language = (Language)Enum.Parse (
 						typeof(Language),
 						projectOptions.Attributes["Language"].InnerText);
 				}
 			}
 			
-			CProjectConfiguration configuration = (CProjectConfiguration)CreateConfiguration ("Debug");
+			CProjectConfiguration configuration =
+				(CProjectConfiguration)CreateConfiguration ("Debug");
+				
 			Configurations.Add (configuration);
 			
-			configuration = (CProjectConfiguration)CreateConfiguration ("Release");
+			configuration =
+				(CProjectConfiguration)CreateConfiguration ("Release");
+				
 			configuration.DebugMode = false;
 			Configurations.Add (configuration);
 			
-			foreach (CProjectConfiguration c in Configurations)
-			{
+			foreach (CProjectConfiguration c in Configurations) {
 				c.OutputDirectory = Path.Combine (binPath, c.Name);
 				c.Output = Name;
 				
-				if (projectOptions != null)
-				{
-					if (projectOptions.Attributes["Target"] != null)
-					{
+				if (projectOptions != null) {
+					if (projectOptions.Attributes["Target"] != null) {
 						c.CompileTarget = (CBinding.CompileTarget)Enum.Parse (
 						     typeof(CBinding.CompileTarget),
 							 projectOptions.Attributes["Target"].InnerText);
 					}
-					if (projectOptions.Attributes["PauseConsoleOutput"] != null)
-					{
+					if (projectOptions.Attributes["PauseConsoleOutput"] != null) {
 						c.PauseConsoleOutput = bool.Parse (
 							projectOptions.Attributes["PauseConsoleOutput"].InnerText);
 					}
@@ -86,11 +83,11 @@ namespace CBinding
 		
 		public override bool IsCompileable (string fileName)
 		{
-			// TODO: redo with taking into account project language
-			return ((fileName.ToUpper ().EndsWith (".C"))   ||
-			        (fileName.ToUpper ().EndsWith (".CPP")) ||
-			        (fileName.ToUpper ().EndsWith (".CXX")) ||
-			        (fileName.ToUpper ().EndsWith (".C++")));
+			if (language == Language.C) {
+				return (Path.GetExtension (fileName.ToUpper ()) == ".C");
+			} else {
+				return (Path.GetExtension (fileName.ToUpper ()) == ".CPP");
+			}
 		}
 		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)
@@ -102,7 +99,8 @@ namespace CBinding
 			                        monitor);
 		}
 		
-		protected override void DoExecute (IProgressMonitor monitor, ExecutionContext context)
+		protected override void DoExecute (IProgressMonitor monitor,
+		                                   ExecutionContext context)
 		{
 			// TODO: implement
 		}

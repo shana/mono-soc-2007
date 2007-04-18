@@ -14,31 +14,25 @@ using MonoDevelop.Ide.Gui;
 namespace CBinding
 {
 	public class CCompilerManager
-	{
-		public bool CanCompile (string fileName)
-		{
-			return ((fileName.ToUpper ().EndsWith (".C"))   ||
-			        (fileName.ToUpper ().EndsWith (".CPP")) ||
-			        (fileName.ToUpper ().EndsWith (".H"))   ||
-			        (fileName.ToUpper ().EndsWith (".HPP")));
-		}
-		
+	{		
 		public ICompilerResult Compile (ProjectFileCollection projectFiles,
 		                                ProjectReferenceCollection references,
 		                                CProjectConfiguration configuration,
 		                                IProgressMonitor monitor)
 		{
-			CCompilationParameters parameters = (CCompilationParameters)configuration.CompilationParameters;
+			CCompilationParameters parameters =
+				(CCompilationParameters)configuration.CompilationParameters;
+			
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());			
 			string compiler = parameters.Compiler;
 			string outdir = configuration.OutputDirectory;
 			string outputName = configuration.CompiledOutputName;
+			bool res;
 			StringBuilder args = new StringBuilder ();
 			StringWriter output = new StringWriter ();
 			StringWriter error = new StringWriter ();
 			
-			foreach (ProjectFile f in projectFiles)
-			{
+			foreach (ProjectFile f in projectFiles) {
 				if (f.Subtype != Subtype.Directory) {
 					switch (f.BuildAction)
 					{
@@ -61,20 +55,69 @@ namespace CBinding
 			switch (configuration.CompileTarget)
 			{
 			case CBinding.CompileTarget.Bin:
+				args.Append ("-o " + outdir + "/" + outputName);
 				break;
-			case CBinding.CompileTarget.Object:
+			case CBinding.CompileTarget.SharedLibrary:
 				args.Append ("-c ");
 				break;
-			case CBinding.CompileTarget.SharedObject:
-				args.Append ("-shared ");
+			case CBinding.CompileTarget.StaticLibrary:
+				args.Append ("-c ");
 				break;
 			}
 			
-			args.Append ("-o " + outdir + "/" + outputName);
+			res = DoCompilation (monitor, compiler, args.ToString (), output, error);
+			ParseOutput (error.ToString (), cr);
 			
-			DoCompilation (monitor, compiler, args.ToString (), output, error);
+			if (res &&
+			    configuration.CompileTarget == CBinding.CompileTarget.StaticLibrary) {
+				CompileToStaticLibrary (
+					projectFiles, monitor, configuration, output, error);
+			}
+			
 			return new DefaultCompilerResult (cr, "");
 		}
+		
+		private void CompileToStaticLibrary (ProjectFileCollection projectFiles,
+		                                     IProgressMonitor monitor,
+		                                     CProjectConfiguration configuration,
+		                                     TextWriter output, TextWriter error)
+		{
+			LogTextWriter errorWriter = new LogTextWriter ();
+			errorWriter.ChainWriter (monitor.Log);
+			errorWriter.ChainWriter (error);
+			
+			LogTextWriter outputWriter = new LogTextWriter ();
+			outputWriter.ChainWriter (monitor.Log);
+			outputWriter.ChainWriter (output);
+			
+			StringBuilder ofiles = new StringBuilder ();
+			
+			foreach (ProjectFile f in projectFiles) {
+				if (f.BuildAction == BuildAction.Compile) {
+					int index = f.Name.LastIndexOf (".");
+					ofiles.Append (f.Name.Substring (0, index) + ".o ");
+				}
+			}
+			
+			monitor.Log.WriteLine ("Generating static library...");
+			
+			//TEMP
+			monitor.Log.WriteLine (
+				"Using Command: ar rcs " + configuration.CompiledOutputName +
+				" " + ofiles);
+			
+			Process p = Runtime.ProcessService.StartProcess (
+				"ar", "rcs " + configuration.CompiledOutputName + " " + ofiles,
+				null, outputWriter, errorWriter, null);
+			
+			p.WaitForExit();
+		}
+		
+//		private void CompileToSharedLibrary (IProgressMonitor monitor,
+//		                                     CProjectConfiguration configuration,
+//		                                     TextWriter output, TextWriter error)
+//		{
+//		}
 		
 		// FIXME: make private
 		public string GeneratePkgConfigArguments (IProgressMonitor monitor,
@@ -86,12 +129,8 @@ namespace CBinding
 			StringBuilder args = new StringBuilder ();
 			
 			if (references != null)
-			{
 				foreach (ProjectReference r in references)
-				{
 					args.Append(r.Reference + " ");
-				}
-			}
 			
 			return args.ToString ();
 		}
@@ -113,10 +152,51 @@ namespace CBinding
 			// TEMP
 			monitor.Log.WriteLine ("using command: " + compiler + " " + args);
 			
-			Process p = Runtime.ProcessService.StartProcess (compiler, args, null, outputWriter, errorWriter, null);
+			Process p = Runtime.ProcessService.StartProcess (
+				compiler, args, null, outputWriter, errorWriter, null);
 			p.WaitForExit();
 			
 			return (p.ExitCode == 0);
+		}
+		
+		private void ParseOutput (string errorString, CompilerResults cr)
+		{
+			TextReader reader = new StringReader (errorString);
+			string next;
+			
+			while ((next = reader.ReadLine ()) != null) {
+				CompilerError error = CreateErrorFromErrorString (next);
+				if (error != null)
+					cr.Errors.Add (error);
+			}
+			
+			reader.Close ();
+		}
+		
+		private CompilerError CreateErrorFromErrorString (string errorString)
+		{
+			CompilerError error = new CompilerError ();
+			string[] split;
+			
+			split = errorString.Split(new char[] { ':' });
+			
+			if (split.Length < 4)
+				return null;
+			
+			if (split.Length == 4) {
+				error.FileName = split[0];
+				error.Line = int.Parse (split[1]);
+				error.IsWarning = split[2].Equals ("warning");
+				error.ErrorText = split[3];
+			} else {
+				error.FileName = split[0];
+				error.Line = int.Parse (split[1]);
+				error.Column = int.Parse (split[2]);
+				error.IsWarning = split[3].Equals ("warning");
+				error.ErrorText = split[4];
+			}
+			
+			return error;
 		}
 	}
 }
