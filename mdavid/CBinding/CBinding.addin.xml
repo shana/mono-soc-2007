@@ -36,6 +36,7 @@
 	
 	<Extension path = "/MonoDevelop/ProjectTemplates">
 		<ProjectTemplate id = "EmptyCProject" resource = "EmptyCProject.xpt.xml"/>
+		<ProjectTemplate id = "EmptyCppProject" resource = "EmptyCppProject.xpt.xml"/>
 		<!-- Add more project templates -->
 	</Extension>
 	

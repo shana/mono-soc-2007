@@ -25,7 +25,8 @@ RES = \
 	icons/C.File.Empty \
 	icons/C.Project.Empty \
 	templates/EmptyCProject.xpt.xml \
-	templates/EmptyCFile.xft.xml
+	templates/EmptyCFile.xft.xml \
+	templates/EmptyCppProject.xpt.xml
 
 ADDIN = CBinding.addin.xml
 

@@ -9,10 +9,18 @@ using MonoDevelop.Projects.Serialization;
 
 namespace CBinding
 {
+	public enum Language {
+		C,
+		CPP
+	};
+	
 	[DataInclude(typeof(CProjectConfiguration))]
 	public class CProject : Project
 	{
 		private CCompilerManager manager = new CCompilerManager ();
+		
+		[ItemProperty("language")]
+		private Language language = Language.C;
 		
 		public CProject ()
 		{
@@ -26,6 +34,17 @@ namespace CBinding
 			{
 				Name = info.ProjectName;
 				binPath = info.BinPath;
+			}
+			
+			
+			if (projectOptions != null)
+			{
+				if (projectOptions.Attributes["Language"] != null)
+				{
+					language = (Language)Enum.Parse (
+						typeof(Language),
+						projectOptions.Attributes["Language"].InnerText);
+				}
 			}
 			
 			CProjectConfiguration configuration = (CProjectConfiguration)CreateConfiguration ("Debug");
@@ -67,6 +86,7 @@ namespace CBinding
 		
 		public override bool IsCompileable (string fileName)
 		{
+			// TODO: redo with taking into account project language
 			return ((fileName.ToUpper ().EndsWith (".C"))   ||
 			        (fileName.ToUpper ().EndsWith (".CPP")) ||
 			        (fileName.ToUpper ().EndsWith (".CXX")) ||
@@ -98,9 +118,19 @@ namespace CBinding
 			CProjectConfiguration conf = new CProjectConfiguration ();
 			
 			conf.Name = name;
+			
 			conf.CompilationParameters = new CCompilationParameters ();
 			
+			if (language == Language.CPP)
+				((CCompilationParameters)conf.CompilationParameters).Compiler = "g++";
+			else
+				((CCompilationParameters)conf.CompilationParameters).Compiler = "gcc";
+			
 			return conf;
+		}
+		
+		public Language Language {
+			get { return language; }
 		}
 	}
 }
