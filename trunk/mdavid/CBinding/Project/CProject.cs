@@ -17,7 +17,8 @@ namespace CBinding
 	[DataInclude(typeof(CProjectConfiguration))]
 	public class CProject : Project
 	{
-		private CCompilerManager manager = new CCompilerManager ();
+		[ItemProperty("Compiler")]
+		private ICompiler compiler_manager;
 		
 		[ItemProperty("language")]
 		private Language language = Language.C;
@@ -43,6 +44,8 @@ namespace CBinding
 						projectOptions.Attributes["Language"].InnerText);
 				}
 			}
+			
+			Compiler = null; // use default compiler depending on language
 			
 			CProjectConfiguration configuration =
 				(CProjectConfiguration)CreateConfiguration ("Debug");
@@ -92,8 +95,7 @@ namespace CBinding
 		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)
 		{
-			// TODO: implement
-			return manager.Compile (ProjectFiles,
+			return compiler_manager.Compile (ProjectFiles,
 			                        ProjectReferences,
 			                        (CProjectConfiguration)ActiveConfiguration,
 			                        monitor);
@@ -116,19 +118,26 @@ namespace CBinding
 			CProjectConfiguration conf = new CProjectConfiguration ();
 			
 			conf.Name = name;
-			
 			conf.CompilationParameters = new CCompilationParameters ();
-			
-			if (language == Language.CPP)
-				((CCompilationParameters)conf.CompilationParameters).Compiler = "g++";
-			else
-				((CCompilationParameters)conf.CompilationParameters).Compiler = "gcc";
 			
 			return conf;
 		}
 		
 		public Language Language {
 			get { return language; }
+		}
+		
+		public ICompiler Compiler {
+			set {
+				if (value != null) {
+					compiler_manager = value;
+				} else {
+					if (language == Language.C)
+						compiler_manager = new GccCompiler ();
+					//else
+						// TODO: compiler_manager = new GppCompiler ();
+				}
+			}
 		}
 	}
 }
