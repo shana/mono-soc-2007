@@ -20,7 +20,8 @@ FILES = \
 	Project/CProjectConfiguration.cs \
 	CLanguageBinding.cs \
 	ICompiler.cs \
-	GccCompiler.cs
+	GccCompiler.cs \
+	GppCompiler.cs
 
 RES = \
 	icons/C.File.Empty \

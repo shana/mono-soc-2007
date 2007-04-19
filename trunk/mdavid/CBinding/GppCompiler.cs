@@ -13,7 +13,7 @@ using MonoDevelop.Ide.Gui;
 
 namespace CBinding
 {
-	public class GccCompiler : ICompiler
+	public class GppCompiler : ICompiler
 	{		
 		public ICompilerResult Compile (ProjectFileCollection projectFiles,
 		                                ProjectReferenceCollection references,
@@ -69,7 +69,7 @@ namespace CBinding
 			monitor.Log.WriteLine ("Generating binary...");
 			
 			Process p = Runtime.ProcessService.StartProcess (
-				"gcc", "-o " + outputName + " " + objectFiles,
+				"g++", "-o " + outputName + " " + objectFiles,
 				null, null);
 			p.WaitForExit ();
 		}
@@ -116,7 +116,7 @@ namespace CBinding
 				0, file.Name.LastIndexOf (".")) + ".o";
 			
 			Process p = Runtime.ProcessService.StartProcess (
-				"gcc", file.Name + " " + args + "-c -o " + outputName,
+				"g++", file.Name + " " + args + "-c -o " + outputName,
 				null, null, error, null);
 				
 			p.WaitForExit ();
