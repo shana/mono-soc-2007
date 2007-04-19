@@ -1,3 +1,5 @@
+// **** REMAKE ***
+
 using System;
 using System.IO;
 using System.Text;
@@ -13,7 +15,7 @@ using MonoDevelop.Ide.Gui;
 
 namespace CBinding
 {
-	public class CCompilerManager
+	public class GccCompiler : ICompiler
 	{		
 		public ICompilerResult Compile (ProjectFileCollection projectFiles,
 		                                ProjectReferenceCollection references,
@@ -24,7 +26,7 @@ namespace CBinding
 				(CCompilationParameters)configuration.CompilationParameters;
 			
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());			
-			string compiler = parameters.Compiler;
+			string compiler = "gcc";
 			string outdir = configuration.OutputDirectory;
 			string outputName = configuration.CompiledOutputName;
 			bool res;
@@ -65,7 +67,11 @@ namespace CBinding
 				break;
 			}
 			
-			res = DoCompilation (monitor, compiler, args.ToString (), output, error);
+			res = DoCompilation (
+				monitor, configuration, compiler, args.ToString (), output, error);
+				
+			monitor.Log.WriteLine ("res = {0}", res.ToString ());
+				
 			ParseOutput (error.ToString (), cr);
 			
 			if (res &&
@@ -82,6 +88,7 @@ namespace CBinding
 		                                     CProjectConfiguration configuration,
 		                                     TextWriter output, TextWriter error)
 		{
+			string workingdir = configuration.OutputDirectory;
 			LogTextWriter errorWriter = new LogTextWriter ();
 			errorWriter.ChainWriter (monitor.Log);
 			errorWriter.ChainWriter (error);
@@ -102,13 +109,14 @@ namespace CBinding
 			monitor.Log.WriteLine ("Generating static library...");
 			
 			//TEMP
+			monitor.Log.WriteLine ("working dir: " + workingdir);
 			monitor.Log.WriteLine (
 				"Using Command: ar rcs " + configuration.CompiledOutputName +
 				" " + ofiles);
 			
 			Process p = Runtime.ProcessService.StartProcess (
 				"ar", "rcs " + configuration.CompiledOutputName + " " + ofiles,
-				null, outputWriter, errorWriter, null);
+				workingdir, outputWriter, errorWriter, null);
 			
 			p.WaitForExit();
 		}
@@ -136,9 +144,15 @@ namespace CBinding
 		}
 		
 		private bool DoCompilation (IProgressMonitor monitor,
+		                            CProjectConfiguration configuration,
 		                            string compiler, string args,
 		                            TextWriter output, TextWriter error)
-		{
+		{	
+			string workingdir = configuration.OutputDirectory;
+			// Go up two levels
+			workingdir = workingdir.Substring (0, workingdir.LastIndexOf ("/"));
+			workingdir = workingdir.Substring (0, workingdir.LastIndexOf ("/"));
+			
 			LogTextWriter errorWriter = new LogTextWriter ();
 			errorWriter.ChainWriter (monitor.Log);
 			errorWriter.ChainWriter (error);
@@ -150,16 +164,17 @@ namespace CBinding
 			monitor.Log.WriteLine ("Compiling project...");
 			
 			// TEMP
+			monitor.Log.WriteLine ("working dir: " + workingdir);
 			monitor.Log.WriteLine ("using command: " + compiler + " " + args);
 			
 			Process p = Runtime.ProcessService.StartProcess (
-				compiler, args, null, outputWriter, errorWriter, null);
+				compiler, args, workingdir, outputWriter, errorWriter, null);
 			p.WaitForExit();
 			
 			return (p.ExitCode == 0);
 		}
 		
-		private void ParseOutput (string errorString, CompilerResults cr)
+		public void ParseOutput (string errorString, CompilerResults cr)
 		{
 			TextReader reader = new StringReader (errorString);
 			string next;

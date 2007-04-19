@@ -19,7 +19,8 @@ FILES = \
 	Project/CProjectBinding.cs \
 	Project/CProjectConfiguration.cs \
 	CLanguageBinding.cs \
-	CCompilerManager.cs
+	ICompiler.cs \
+	GccCompiler.cs
 
 RES = \
 	icons/C.File.Empty \
