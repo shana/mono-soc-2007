@@ -12,7 +12,8 @@ namespace CBinding
 		public Project CreateProject (ProjectCreateInformation info,
 		                              XmlElement projectOptions)
 		{
-			return new CProject (info, projectOptions);
+			string language = projectOptions.GetAttribute ("language");
+			return new CProject (info, projectOptions, language);
 		}
 		
 		public Project CreateSingleFileProject (string sourceFile)

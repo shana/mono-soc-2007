@@ -8,10 +8,8 @@ namespace CBinding
 	public interface ICompiler
 	{
 		ICompilerResult Compile (ProjectFileCollection projectFiles,
-		                                ProjectReferenceCollection references,
-		                                CProjectConfiguration configuration,
-		                                IProgressMonitor monitor);
-		
-		void ParseOutput (string errorString, CompilerResults cr);		                                
+		                         ProjectReferenceCollection references,
+		                         CProjectConfiguration configuration,
+		                         IProgressMonitor monitor);	                                
 	}
 }

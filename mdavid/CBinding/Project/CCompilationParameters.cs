@@ -12,12 +12,6 @@ namespace CBinding
 		[ItemProperty("genwarnings")]
 		private bool genwarnings = false;
 		
-		[ItemProperty("includepath")]
-		private string includepath = string.Empty;
-		
-		[ItemProperty("libpath")]
-		private string libpath = string.Empty;
-		
 		public object Clone ()
 		{
 			return MemberwiseClone ();
@@ -26,16 +20,6 @@ namespace CBinding
 		public bool GenWarnings {
 			get { return genwarnings; }
 			set { genwarnings = value; }
-		}
-		
-		public string IncludePath {
-			get { return includepath; }
-			set { includepath = value; }
-		}
-		
-		public string LibPath {
-			get { return libpath; }
-			set { libpath = value; }
 		}
 	}
 }

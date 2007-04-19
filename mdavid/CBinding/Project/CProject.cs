@@ -17,17 +17,17 @@ namespace CBinding
 	[DataInclude(typeof(CProjectConfiguration))]
 	public class CProject : Project
 	{
-		[ItemProperty("Compiler")]
+		[ItemProperty]
 		private ICompiler compiler_manager;
 		
-		[ItemProperty("language")]
-		private Language language = Language.C;
+		[ItemProperty]
+		private Language language;
 		
 		public CProject ()
 		{
 		}
 		
-		public CProject (ProjectCreateInformation info, XmlElement projectOptions)
+		public CProject (ProjectCreateInformation info, XmlElement projectOptions, string language)
 		{
 			string binPath = ".";
 			
@@ -36,13 +36,14 @@ namespace CBinding
 				binPath = info.BinPath;
 			}
 			
-			
-			if (projectOptions != null) {
-				if (projectOptions.Attributes["Language"] != null) {
-					language = (Language)Enum.Parse (
-						typeof(Language),
-						projectOptions.Attributes["Language"].InnerText);
-				}
+			switch (language)
+			{
+			case "C":
+				this.language = Language.C;
+				break;
+			case "CPP":
+				this.language = Language.CPP;
+				break;
 			}
 			
 			Compiler = null; // use default compiler depending on language
@@ -60,6 +61,7 @@ namespace CBinding
 			
 			foreach (CProjectConfiguration c in Configurations) {
 				c.OutputDirectory = Path.Combine (binPath, c.Name);
+				c.SourceDirectory = BaseDirectory;
 				c.Output = Name;
 				
 				if (projectOptions != null) {
@@ -81,7 +83,7 @@ namespace CBinding
 		}
 		
 		public override string[] SupportedLanguages {
-			get { return new string[] { "C", "C++" }; }
+			get { return new string[] { "C", "CPP" }; }
 		}
 		
 		public override bool IsCompileable (string fileName)
@@ -95,10 +97,10 @@ namespace CBinding
 		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)
 		{
-			return compiler_manager.Compile (ProjectFiles,
-			                        ProjectReferences,
-			                        (CProjectConfiguration)ActiveConfiguration,
-			                        monitor);
+			return compiler_manager.Compile (
+				ProjectFiles, ProjectReferences,
+				(CProjectConfiguration)ActiveConfiguration,
+			    monitor);
 		}
 		
 		protected override void DoExecute (IProgressMonitor monitor,
@@ -134,8 +136,8 @@ namespace CBinding
 				} else {
 					if (language == Language.C)
 						compiler_manager = new GccCompiler ();
-					//else
-						// TODO: compiler_manager = new GppCompiler ();
+					else
+						compiler_manager = new GppCompiler ();
 				}
 			}
 		}
