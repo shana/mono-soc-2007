@@ -1,0 +1,6 @@
+<objects>
+  <object type="Ribbons.RibbonButton" palette-category="widget" allow-children="false" base-type="Gtk.Widget">
+    <itemgroups />
+    <signals />
+  </object>
+</objects>

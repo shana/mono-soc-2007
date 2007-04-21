@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<UserCombinePreferences filename="/home/gizmo/SoC/laurent/src/Ribbons/Ribbons.mds">
+  <Files>
+    <File filename="./Ribbons/RibbonButton.cs" />
+    <File filename="./Sample/MainWindow.cs" />
+    <File filename="./Sample/Main.cs" />
+  </Files>
+  <Views>
+    <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ProjectPad">
+      <TreeView>
+        <Node expanded="True">
+          <Node name="Ribbons" expanded="True" />
+          <Node name="Sample" expanded="True" />
+        </Node>
+      </TreeView>
+    </ViewMemento>
+    <ViewMemento Id="MonoDevelop.Ide.Gui.Pads.ClassPad">
+      <TreeView>
+        <Node expanded="True">
+          <Node name="Ribbons" expanded="True" />
+        </Node>
+      </TreeView>
+    </ViewMemento>
+    <ViewMemento Id="MonoQuery.DatabasePad">
+      <TreeView>
+        <Node expanded="False" />
+      </TreeView>
+    </ViewMemento>
+    <ViewMemento Id="MonoDevelop.NUnit.TestPad">
+      <TreeView>
+        <Node expanded="False" />
+      </TreeView>
+    </ViewMemento>
+  </Views>
+  <Properties>
+    <Properties>
+      <Property key="ActiveConfiguration" value="Debug" />
+      <Property key="ActiveWindow" value="/home/gizmo/SoC/laurent/src/Ribbons/Ribbons/RibbonButton.cs" />
+    </Properties>
+  </Properties>
+</UserCombinePreferences>
