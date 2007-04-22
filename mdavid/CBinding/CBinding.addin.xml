@@ -40,8 +40,6 @@
 		<!-- Add more project templates -->
 	</Extension>
 	
-	<!-- -->
-	
 	<Extension path = "/Workspace/Icons">
 		<Icon
 			id = "CPrj"
@@ -56,7 +54,16 @@
 	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">
 		<ProjectBinding id = "CProject" class = "CBinding.CProjectBinding" />
 	</Extension>
-
+	
+	<Extension path = "/SharpDevelop/Workbench/ProjectOptions/ConfigurationProperties">
+		<!-- FIXME: aparently the conditional codon only works for dotnetprojects -->
+		<!-- Could make my own codon -->
+		<!--<Conditional activelanguage = "*">-->
+			<DialogPanel id = "CCodeGenerationPanel"
+			             _label = "Code Generation"
+			             class = "CBinding.CodeGenerationPanelBinding"/>
+		<!--</Conditional>-->
+	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/LanguageBindings">
 		<LanguageBinding
@@ -64,9 +71,13 @@
 			supportedextensions = ".c,.h"
 			class = "CBinding.CLanguageBinding"/>
 	</Extension>
-	
+
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
 		<DataType class = "CBinding.CCompilationParameters"/>
+		<DataType class = "CBinding.CProjectConfiguration"/>
+		<DataType class = "CBinding.CProject"/>
+		<DataType class = "CBinding.GccCompiler"/>
+		<DataType class = "CBinding.GppCompiler"/>
 	</Extension>
 	
 </AddIn>

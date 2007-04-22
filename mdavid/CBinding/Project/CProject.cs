@@ -17,8 +17,8 @@ namespace CBinding
 	[DataInclude(typeof(CProjectConfiguration))]
 	public class CProject : Project
 	{
-		[ItemProperty]
-		private ICompiler compiler_manager;
+		[ItemProperty ("compiler", ValueType = typeof(CCompiler))]
+		private CCompiler compiler_manager;
 		
 		[ItemProperty]
 		private Language language;
@@ -27,7 +27,8 @@ namespace CBinding
 		{
 		}
 		
-		public CProject (ProjectCreateInformation info, XmlElement projectOptions, string language)
+		public CProject (ProjectCreateInformation info,
+		                 XmlElement projectOptions, string language)
 		{
 			string binPath = ".";
 			
@@ -97,6 +98,14 @@ namespace CBinding
 		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)
 		{
+			CProjectConfiguration pc = (CProjectConfiguration)ActiveConfiguration;
+			foreach (ProjectFile f in ProjectFiles) {
+				if (f.BuildAction == BuildAction.FileCopy)
+					Runtime.FileService.CopyFile (
+						f.Name, Path.Combine (pc.OutputDirectory, 
+						                      Path.GetFileName (f.Name)));
+			}
+			
 			return compiler_manager.Compile (
 				ProjectFiles, ProjectReferences,
 				(CProjectConfiguration)ActiveConfiguration,
@@ -129,7 +138,7 @@ namespace CBinding
 			get { return language; }
 		}
 		
-		public ICompiler Compiler {
+		public CCompiler Compiler {
 			set {
 				if (value != null) {
 					compiler_manager = value;
@@ -140,6 +149,14 @@ namespace CBinding
 						compiler_manager = new GppCompiler ();
 				}
 			}
+		}
+		
+		protected override void OnFileAddedToProject (ProjectFileEventArgs e)
+		{
+			base.OnFileAddedToProject (e);
+			
+			if (!IsCompileable (e.ProjectFile.Name))
+				e.ProjectFile.BuildAction = BuildAction.Nothing;
 		}
 	}
 }

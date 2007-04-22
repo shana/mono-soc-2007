@@ -2,13 +2,13 @@
 <Template
 	originator   = "Marcos David Marin Amador" 
     created      = "04/17/2007"
-    lastModified = "04/17/2007">
+    lastModified = "04/21/2007">
 	
 	<!-- Template Header -->
 	<TemplateConfiguration>
 		<_Name>Empty C++ Project</_Name>
 		<Category>C/C++</Category>
-		<Icon>res:C.Project.Empty</Icon> <!-- change -->
+		<Icon>res:Cpp.Project.Empty</Icon>
 		<LanguageName>CPP</LanguageName>
 		<_Description>Creates an empty C++ solution.</_Description>
 	</TemplateConfiguration>

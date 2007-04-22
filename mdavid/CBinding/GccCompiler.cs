@@ -13,12 +13,13 @@ using MonoDevelop.Ide.Gui;
 
 namespace CBinding
 {
-	public class GccCompiler : ICompiler
+	public class GccCompiler : CCompiler
 	{		
-		public ICompilerResult Compile (ProjectFileCollection projectFiles,
-		                                ProjectReferenceCollection references,
-		                                CProjectConfiguration configuration,
-		                                IProgressMonitor monitor)
+		public override ICompilerResult Compile (
+			ProjectFileCollection projectFiles,
+		    ProjectReferenceCollection references,
+		    CProjectConfiguration configuration,
+		    IProgressMonitor monitor)
 		{
 			StringBuilder args = new StringBuilder ();
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());
@@ -30,6 +31,18 @@ namespace CBinding
 			
 			if (cp.GenWarnings)
 				args.Append ("-Wall ");
+			
+			if (cp.Includes != null)
+				foreach (string inc in cp.Includes)
+					args.Append ("-I" + inc + " ");
+			
+			if (cp.LibPaths != null)
+				foreach (string libpath in cp.LibPaths)
+					args.Append ("-L" + libpath + " ");
+			
+			if (cp.Libs != null)
+				foreach (string lib in cp.Libs)
+					args.Append ("-l" + lib + " ");
 			
 			foreach (ProjectFile f in projectFiles) {
 				if (f.BuildAction == BuildAction.Compile)
@@ -115,6 +128,9 @@ namespace CBinding
 			string outputName = file.Name.Substring (
 				0, file.Name.LastIndexOf (".")) + ".o";
 			
+			monitor.Log.WriteLine (
+				"using: gcc " + file.Name + " " + args + "-c -o " + outputName);
+			
 			Process p = Runtime.ProcessService.StartProcess (
 				"gcc", file.Name + " " + args + "-c -o " + outputName,
 				null, null, error, null);
@@ -140,7 +156,7 @@ namespace CBinding
 			return objectFiles.ToString ();
 		}
 		
-		private void ParseOutput (string errorString, CompilerResults cr)
+		protected override void ParseOutput (string errorString, CompilerResults cr)
 		{
 			TextReader reader = new StringReader (errorString);
 			string next;
