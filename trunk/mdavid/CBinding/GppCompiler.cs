@@ -13,12 +13,13 @@ using MonoDevelop.Ide.Gui;
 
 namespace CBinding
 {
-	public class GppCompiler : ICompiler
+	public class GppCompiler : CCompiler
 	{		
-		public ICompilerResult Compile (ProjectFileCollection projectFiles,
-		                                ProjectReferenceCollection references,
-		                                CProjectConfiguration configuration,
-		                                IProgressMonitor monitor)
+		public override ICompilerResult Compile (
+			ProjectFileCollection projectFiles,
+		    ProjectReferenceCollection references,
+		    CProjectConfiguration configuration,
+		    IProgressMonitor monitor)
 		{
 			StringBuilder args = new StringBuilder ();
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());
@@ -140,7 +141,7 @@ namespace CBinding
 			return objectFiles.ToString ();
 		}
 		
-		private void ParseOutput (string errorString, CompilerResults cr)
+		protected override void ParseOutput (string errorString, CompilerResults cr)
 		{
 			TextReader reader = new StringReader (errorString);
 			string next;

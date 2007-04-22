@@ -85,19 +85,19 @@ namespace CBinding
 			set { source_directory_path = value; }
 		}
 		
-		public override void CopyFrom (IConfiguration conf)
+		public override void CopyFrom (IConfiguration configuration)
 		{
-			base.CopyFrom(conf);
-			CProjectConfiguration configuration = (CProjectConfiguration)conf;
+			base.CopyFrom(configuration);
+			CProjectConfiguration conf = (CProjectConfiguration)configuration;
 			
-			output = configuration.output;
-			target = configuration.target;
-			source_directory_path = configuration.source_directory_path;
+			output = conf.output;
+			target = conf.target;
+			source_directory_path = conf.source_directory_path;
 			
-			if (configuration.CompilationParameters == null) {
+			if (conf.CompilationParameters == null) {
 				compilationParameters = null;
 			} else {
-				compilationParameters = (ICloneable)configuration.Clone ();
+				compilationParameters = (ICloneable)conf.Clone ();
 			}
 		}
 	}
