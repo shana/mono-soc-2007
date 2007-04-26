@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stetic-interface>
+  <import>
+    <widget-library name="../bin/Release/CBinding.dll" />
+  </import>
+  <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="377 293">
+    <property name="MemberName" />
+    <child>
+      <placeholder />
+    </child>
+  </widget>
+</stetic-interface>
