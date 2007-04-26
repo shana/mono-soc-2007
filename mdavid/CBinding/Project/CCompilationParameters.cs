@@ -8,48 +8,46 @@ using MonoDevelop.Projects.Serialization;
 
 namespace CBinding
 {
+	public enum WarningLevel {
+		None,
+		Normal,
+		All
+	}
+	
 	public class CCompilationParameters : ICloneable
 	{		
-		[ItemProperty ("genwarnings")]
-		private bool genwarnings = false;
+		[ItemProperty ("WarningLevel")]
+		private WarningLevel warningLevel = WarningLevel.Normal;
 		
-		[ItemProperty ("Includes")]
-		[ItemProperty ("Include", Scope = 1, ValueType = typeof(string))]
-    	private ArrayList includes;
+		[ItemProperty ("OptimizationLevel")]
+		private int optimization = 0;
 		
-		[ItemProperty ("LibPaths")]
-		[ItemProperty ("LibPath", Scope = 1, ValueType = typeof(string))]
-		[ExpandedCollection]
-    	private ArrayList libpaths;
-		
-		[ItemProperty ("Libs")]
-		[ItemProperty ("Lib", Scope = 1, ValueType = typeof(string))]
-		[ExpandedCollection]
-    	private ArrayList libs;
+		[ItemProperty ("ExtraArguments")]
+		private string extraargs = string.Empty;
 		
 		public object Clone ()
 		{
 			return MemberwiseClone ();
 		}
 		
-		public bool GenWarnings {
-			get { return genwarnings; }
-			set { genwarnings = value; }
+		public WarningLevel WarningLevel {
+			get { return warningLevel; }
+			set { warningLevel = value; }
 		}
 		
-		public ArrayList Includes {
-			get { return includes; }
-			set { includes = value; }
+		public int OptimizationLevel {
+			get { return optimization; }
+			set {
+				if (value >= 0 && value <= 3)
+					optimization = value;
+				else
+					optimization = 0;
+			}
 		}
 		
-		public ArrayList LibPaths {
-			get { return libpaths; }
-			set { libpaths = value; }
-		}
-		
-		public ArrayList Libs {
-			get { return libs; }
-			set { libs = value; }
+		public string ExtraArguments {
+			get { return extraargs; }
+			set { extraargs = value; }
 		}
 	}
 }

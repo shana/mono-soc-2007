@@ -29,19 +29,34 @@ namespace CBinding
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
 			
-			if (cp.GenWarnings)
+			switch (cp.WarningLevel)
+			{
+			case WarningLevel.None:
+				args.Append ("-w ");
+				break;
+			case WarningLevel.Normal:
+				// nothing
+				break;
+			case WarningLevel.All:
 				args.Append ("-Wall ");
+				break;
+			}
 			
-			if (cp.Includes != null)
-				foreach (string inc in cp.Includes)
+			args.Append ("-O" + cp.OptimizationLevel + " ");
+			
+			if (cp.ExtraArguments != null && cp.ExtraArguments.Length > 0)
+				args.Append (cp.ExtraArguments + " ");
+			
+			if (configuration.Includes != null)
+				foreach (string inc in configuration.Includes)
 					args.Append ("-I" + inc + " ");
 			
-			if (cp.LibPaths != null)
-				foreach (string libpath in cp.LibPaths)
+			if (configuration.LibPaths != null)
+				foreach (string libpath in configuration.LibPaths)
 					args.Append ("-L" + libpath + " ");
 			
-			if (cp.Libs != null)
-				foreach (string lib in cp.Libs)
+			if (configuration.Libs != null)
+				foreach (string lib in configuration.Libs)
 					args.Append ("-l" + lib + " ");
 			
 			foreach (ProjectFile f in projectFiles) {

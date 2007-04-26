@@ -20,6 +20,18 @@ namespace CBinding
 		[ItemProperty("Build/target")]
 		CBinding.CompileTarget target = CBinding.CompileTarget.Bin;
 		
+		[ItemProperty ("Includes")]
+		[ItemProperty ("Include", Scope = 1, ValueType = typeof(string))]
+    	private ArrayList includes = new ArrayList ();
+		
+		[ItemProperty ("LibPaths")]
+		[ItemProperty ("LibPath", Scope = 1, ValueType = typeof(string))]
+    	private ArrayList libpaths = new ArrayList ();
+		
+		[ItemProperty ("Libs")]
+		[ItemProperty ("Lib", Scope = 1, ValueType = typeof(string))]
+    	private ArrayList libs = new ArrayList ();
+		
 		[ItemProperty("CodeGeneration",
 		              FallbackType = typeof(UnknownCompilationParameters))]
 		ICloneable compilationParameters;
@@ -83,6 +95,21 @@ namespace CBinding
 		public string SourceDirectory {
 			get { return source_directory_path; }
 			set { source_directory_path = value; }
+		}
+		
+		public ArrayList Includes {
+			get { return includes; }
+			set { includes = value; }
+		}
+		
+		public ArrayList LibPaths {
+			get { return libpaths; }
+			set { libpaths = value; }
+		}
+		
+		public ArrayList Libs {
+			get { return libs; }
+			set { libs = value; }
 		}
 		
 		public override void CopyFrom (IConfiguration configuration)

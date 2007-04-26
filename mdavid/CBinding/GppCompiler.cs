@@ -26,11 +26,10 @@ namespace CBinding
 			bool res = false;
 			string outputName = configuration.OutputDirectory + "/" +
 				configuration.CompiledOutputName;
-			CCompilationParameters cp =
-				(CCompilationParameters)configuration.CompilationParameters;
+			//CCompilationParameters cp =
+			//	(CCompilationParameters)configuration.CompilationParameters;
 			
-			if (cp.GenWarnings)
-				args.Append ("-Wall ");
+			// Arguments
 			
 			foreach (ProjectFile f in projectFiles) {
 				if (f.BuildAction == BuildAction.Compile)
