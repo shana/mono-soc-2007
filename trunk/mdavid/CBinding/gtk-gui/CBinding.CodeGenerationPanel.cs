@@ -99,18 +99,22 @@ namespace CBinding {
             Stetic.Gui.Initialize();
             // Widget CBinding.CodeGenerationPanel
             Stetic.BinContainer.Attach(this);
+            this.Events = ((Gdk.EventMask)(0));
             this.Name = "CBinding.CodeGenerationPanel";
             // Container child CBinding.CodeGenerationPanel.Gtk.Container+ContainerChild
             this.notebook1 = new Gtk.Notebook();
             this.notebook1.CanFocus = true;
+            this.notebook1.Events = ((Gdk.EventMask)(0));
             this.notebook1.Name = "notebook1";
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.table1 = new Gtk.Table(((uint)(5)), ((uint)(2)), false);
+            this.table1.Events = ((Gdk.EventMask)(0));
             this.table1.Name = "table1";
             this.table1.RowSpacing = ((uint)(10));
             this.table1.ColumnSpacing = ((uint)(10));
             // Container child table1.Gtk.Table+TableChild
             this.compilerComboBox = Gtk.ComboBox.NewText();
+            this.compilerComboBox.Events = ((Gdk.EventMask)(0));
             this.compilerComboBox.Name = "compilerComboBox";
             this.compilerComboBox.Active = 0;
             this.table1.Add(this.compilerComboBox);
@@ -122,6 +126,7 @@ namespace CBinding {
             // Container child table1.Gtk.Table+TableChild
             this.extraArgsEntry = new Gtk.Entry();
             this.extraArgsEntry.CanFocus = true;
+            this.extraArgsEntry.Events = ((Gdk.EventMask)(0));
             this.extraArgsEntry.Name = "extraArgsEntry";
             this.extraArgsEntry.IsEditable = true;
             this.extraArgsEntry.InvisibleChar = '●';
@@ -135,6 +140,7 @@ namespace CBinding {
             w2.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table1.Gtk.Table+TableChild
             this.label11 = new Gtk.Label();
+            this.label11.Events = ((Gdk.EventMask)(0));
             this.label11.Name = "label11";
             this.label11.Xpad = 10;
             this.label11.Xalign = 0F;
@@ -145,6 +151,7 @@ namespace CBinding {
             w3.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table1.Gtk.Table+TableChild
             this.label4 = new Gtk.Label();
+            this.label4.Events = ((Gdk.EventMask)(0));
             this.label4.Name = "label4";
             this.label4.Xpad = 10;
             this.label4.Xalign = 0F;
@@ -157,6 +164,7 @@ namespace CBinding {
             w4.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table1.Gtk.Table+TableChild
             this.label5 = new Gtk.Label();
+            this.label5.Events = ((Gdk.EventMask)(0));
             this.label5.Name = "label5";
             this.label5.Xpad = 10;
             this.label5.Xalign = 0F;
@@ -169,6 +177,7 @@ namespace CBinding {
             w5.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table1.Gtk.Table+TableChild
             this.label6 = new Gtk.Label();
+            this.label6.Events = ((Gdk.EventMask)(0));
             this.label6.Name = "label6";
             this.label6.Xpad = 10;
             this.label6.Xalign = 0F;
@@ -181,6 +190,7 @@ namespace CBinding {
             w6.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table1.Gtk.Table+TableChild
             this.label7 = new Gtk.Label();
+            this.label7.Events = ((Gdk.EventMask)(0));
             this.label7.Name = "label7";
             this.label7.Xpad = 10;
             this.label7.Xalign = 0F;
@@ -194,6 +204,7 @@ namespace CBinding {
             // Container child table1.Gtk.Table+TableChild
             this.optimizationSpinButton = new Gtk.SpinButton(0, 3, 1);
             this.optimizationSpinButton.CanFocus = true;
+            this.optimizationSpinButton.Events = ((Gdk.EventMask)(0));
             this.optimizationSpinButton.Name = "optimizationSpinButton";
             this.optimizationSpinButton.Adjustment.PageIncrement = 10;
             this.optimizationSpinButton.ClimbRate = 1;
@@ -211,6 +222,7 @@ namespace CBinding {
             this.targetComboBox.AppendText(Mono.Unix.Catalog.GetString("Executable"));
             this.targetComboBox.AppendText(Mono.Unix.Catalog.GetString("Static Library"));
             this.targetComboBox.AppendText(Mono.Unix.Catalog.GetString("Shared Object"));
+            this.targetComboBox.Events = ((Gdk.EventMask)(0));
             this.targetComboBox.Name = "targetComboBox";
             this.table1.Add(this.targetComboBox);
             Gtk.Table.TableChild w9 = ((Gtk.Table.TableChild)(this.table1[this.targetComboBox]));
@@ -222,11 +234,13 @@ namespace CBinding {
             w9.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table1.Gtk.Table+TableChild
             this.vbox1 = new Gtk.VBox();
+            this.vbox1.Events = ((Gdk.EventMask)(0));
             this.vbox1.Name = "vbox1";
             this.vbox1.Spacing = 1;
             // Container child vbox1.Gtk.Box+BoxChild
             this.noWarningRadio = new Gtk.RadioButton(Mono.Unix.Catalog.GetString("no warnings"));
             this.noWarningRadio.CanFocus = true;
+            this.noWarningRadio.Events = ((Gdk.EventMask)(0));
             this.noWarningRadio.Name = "noWarningRadio";
             this.noWarningRadio.Active = true;
             this.noWarningRadio.DrawIndicator = true;
@@ -240,6 +254,7 @@ namespace CBinding {
             // Container child vbox1.Gtk.Box+BoxChild
             this.normalWarningRadio = new Gtk.RadioButton(Mono.Unix.Catalog.GetString("normal"));
             this.normalWarningRadio.CanFocus = true;
+            this.normalWarningRadio.Events = ((Gdk.EventMask)(0));
             this.normalWarningRadio.Name = "normalWarningRadio";
             this.normalWarningRadio.DrawIndicator = true;
             this.normalWarningRadio.UseUnderline = true;
@@ -252,6 +267,7 @@ namespace CBinding {
             // Container child vbox1.Gtk.Box+BoxChild
             this.allWarningRadio = new Gtk.RadioButton(Mono.Unix.Catalog.GetString("all"));
             this.allWarningRadio.CanFocus = true;
+            this.allWarningRadio.Events = ((Gdk.EventMask)(0));
             this.allWarningRadio.Name = "allWarningRadio";
             this.allWarningRadio.DrawIndicator = true;
             this.allWarningRadio.UseUnderline = true;
@@ -274,20 +290,24 @@ namespace CBinding {
             w14.TabExpand = false;
             // Notebook tab
             this.label1 = new Gtk.Label();
+            this.label1.Events = ((Gdk.EventMask)(0));
             this.label1.Name = "label1";
             this.label1.LabelProp = Mono.Unix.Catalog.GetString("Code Generation");
             this.notebook1.SetTabLabel(this.table1, this.label1);
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.table2 = new Gtk.Table(((uint)(2)), ((uint)(3)), false);
+            this.table2.Events = ((Gdk.EventMask)(0));
             this.table2.Name = "table2";
             this.table2.RowSpacing = ((uint)(10));
             this.table2.ColumnSpacing = ((uint)(10));
             // Container child table2.Gtk.Table+TableChild
             this.hbox1 = new Gtk.HBox();
+            this.hbox1.Events = ((Gdk.EventMask)(0));
             this.hbox1.Name = "hbox1";
             // Container child hbox1.Gtk.Box+BoxChild
             this.addLibButton = new Gtk.Button();
             this.addLibButton.CanFocus = true;
+            this.addLibButton.Events = ((Gdk.EventMask)(0));
             this.addLibButton.Name = "addLibButton";
             this.addLibButton.UseUnderline = true;
             this.addLibButton.Label = Mono.Unix.Catalog.GetString("Add");
@@ -298,6 +318,7 @@ namespace CBinding {
             w15.Fill = false;
             // Container child hbox1.Gtk.Box+BoxChild
             this.vseparator1 = new Gtk.VSeparator();
+            this.vseparator1.Events = ((Gdk.EventMask)(0));
             this.vseparator1.Name = "vseparator1";
             this.hbox1.Add(this.vseparator1);
             Gtk.Box.BoxChild w16 = ((Gtk.Box.BoxChild)(this.hbox1[this.vseparator1]));
@@ -307,6 +328,7 @@ namespace CBinding {
             // Container child hbox1.Gtk.Box+BoxChild
             this.removeLibButton = new Gtk.Button();
             this.removeLibButton.CanFocus = true;
+            this.removeLibButton.Events = ((Gdk.EventMask)(0));
             this.removeLibButton.Name = "removeLibButton";
             this.removeLibButton.UseUnderline = true;
             this.removeLibButton.Label = Mono.Unix.Catalog.GetString("Remove");
@@ -323,6 +345,7 @@ namespace CBinding {
             w18.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.label8 = new Gtk.Label();
+            this.label8.Events = ((Gdk.EventMask)(0));
             this.label8.Name = "label8";
             this.label8.LabelProp = Mono.Unix.Catalog.GetString("Library:");
             this.table2.Add(this.label8);
@@ -332,6 +355,7 @@ namespace CBinding {
             // Container child table2.Gtk.Table+TableChild
             this.libAddEntry = new Gtk.Entry();
             this.libAddEntry.CanFocus = true;
+            this.libAddEntry.Events = ((Gdk.EventMask)(0));
             this.libAddEntry.Name = "libAddEntry";
             this.libAddEntry.IsEditable = true;
             this.libAddEntry.InvisibleChar = '●';
@@ -343,6 +367,7 @@ namespace CBinding {
             // Container child table2.Gtk.Table+TableChild
             this.libTextView = new Gtk.TextView();
             this.libTextView.CanFocus = true;
+            this.libTextView.Events = ((Gdk.EventMask)(0));
             this.libTextView.Name = "libTextView";
             this.libTextView.Editable = false;
             this.libTextView.CursorVisible = false;
@@ -359,20 +384,24 @@ namespace CBinding {
             w22.TabExpand = false;
             // Notebook tab
             this.label2 = new Gtk.Label();
+            this.label2.Events = ((Gdk.EventMask)(0));
             this.label2.Name = "label2";
             this.label2.LabelProp = Mono.Unix.Catalog.GetString("Libraries");
             this.notebook1.SetTabLabel(this.table2, this.label2);
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.vpaned1 = new Gtk.VPaned();
             this.vpaned1.CanFocus = true;
+            this.vpaned1.Events = ((Gdk.EventMask)(0));
             this.vpaned1.Name = "vpaned1";
             this.vpaned1.Position = 172;
             // Container child vpaned1.Gtk.Paned+PanedChild
             this.vbox2 = new Gtk.VBox();
+            this.vbox2.Events = ((Gdk.EventMask)(0));
             this.vbox2.Name = "vbox2";
             this.vbox2.Spacing = 10;
             // Container child vbox2.Gtk.Box+BoxChild
             this.label9 = new Gtk.Label();
+            this.label9.Events = ((Gdk.EventMask)(0));
             this.label9.Name = "label9";
             this.label9.Xpad = 10;
             this.label9.Xalign = 0F;
@@ -385,6 +414,7 @@ namespace CBinding {
             // Container child vbox2.Gtk.Box+BoxChild
             this.includePathTextView = new Gtk.TextView();
             this.includePathTextView.CanFocus = true;
+            this.includePathTextView.Events = ((Gdk.EventMask)(0));
             this.includePathTextView.Name = "includePathTextView";
             this.includePathTextView.Editable = false;
             this.includePathTextView.CursorVisible = false;
@@ -394,11 +424,13 @@ namespace CBinding {
             w24.Position = 1;
             // Container child vbox2.Gtk.Box+BoxChild
             this.hbox2 = new Gtk.HBox();
+            this.hbox2.Events = ((Gdk.EventMask)(0));
             this.hbox2.Name = "hbox2";
             this.hbox2.Spacing = 5;
             // Container child hbox2.Gtk.Box+BoxChild
             this.includePathEntry = new Gtk.Entry();
             this.includePathEntry.CanFocus = true;
+            this.includePathEntry.Events = ((Gdk.EventMask)(0));
             this.includePathEntry.Name = "includePathEntry";
             this.includePathEntry.IsEditable = true;
             this.includePathEntry.InvisibleChar = '●';
@@ -408,6 +440,7 @@ namespace CBinding {
             // Container child hbox2.Gtk.Box+BoxChild
             this.includePathAddButton = new Gtk.Button();
             this.includePathAddButton.CanFocus = true;
+            this.includePathAddButton.Events = ((Gdk.EventMask)(0));
             this.includePathAddButton.Name = "includePathAddButton";
             this.includePathAddButton.UseUnderline = true;
             this.includePathAddButton.Label = Mono.Unix.Catalog.GetString("Add");
@@ -419,6 +452,7 @@ namespace CBinding {
             // Container child hbox2.Gtk.Box+BoxChild
             this.includePathRemoveButton = new Gtk.Button();
             this.includePathRemoveButton.CanFocus = true;
+            this.includePathRemoveButton.Events = ((Gdk.EventMask)(0));
             this.includePathRemoveButton.Name = "includePathRemoveButton";
             this.includePathRemoveButton.UseUnderline = true;
             this.includePathRemoveButton.Label = Mono.Unix.Catalog.GetString("Remove");
@@ -437,10 +471,12 @@ namespace CBinding {
             w29.Resize = false;
             // Container child vpaned1.Gtk.Paned+PanedChild
             this.vbox3 = new Gtk.VBox();
+            this.vbox3.Events = ((Gdk.EventMask)(0));
             this.vbox3.Name = "vbox3";
             this.vbox3.Spacing = 10;
             // Container child vbox3.Gtk.Box+BoxChild
             this.label10 = new Gtk.Label();
+            this.label10.Events = ((Gdk.EventMask)(0));
             this.label10.Name = "label10";
             this.label10.Xpad = 10;
             this.label10.Xalign = 0F;
@@ -453,6 +489,7 @@ namespace CBinding {
             // Container child vbox3.Gtk.Box+BoxChild
             this.libPathTextView = new Gtk.TextView();
             this.libPathTextView.CanFocus = true;
+            this.libPathTextView.Events = ((Gdk.EventMask)(0));
             this.libPathTextView.Name = "libPathTextView";
             this.libPathTextView.Editable = false;
             this.libPathTextView.CursorVisible = false;
@@ -462,11 +499,13 @@ namespace CBinding {
             w31.Position = 1;
             // Container child vbox3.Gtk.Box+BoxChild
             this.hbox3 = new Gtk.HBox();
+            this.hbox3.Events = ((Gdk.EventMask)(0));
             this.hbox3.Name = "hbox3";
             this.hbox3.Spacing = 5;
             // Container child hbox3.Gtk.Box+BoxChild
             this.libPathEntry = new Gtk.Entry();
             this.libPathEntry.CanFocus = true;
+            this.libPathEntry.Events = ((Gdk.EventMask)(0));
             this.libPathEntry.Name = "libPathEntry";
             this.libPathEntry.IsEditable = true;
             this.libPathEntry.InvisibleChar = '●';
@@ -476,6 +515,7 @@ namespace CBinding {
             // Container child hbox3.Gtk.Box+BoxChild
             this.libPathAddButton = new Gtk.Button();
             this.libPathAddButton.CanFocus = true;
+            this.libPathAddButton.Events = ((Gdk.EventMask)(0));
             this.libPathAddButton.Name = "libPathAddButton";
             this.libPathAddButton.UseUnderline = true;
             this.libPathAddButton.Label = Mono.Unix.Catalog.GetString("Add");
@@ -487,6 +527,7 @@ namespace CBinding {
             // Container child hbox3.Gtk.Box+BoxChild
             this.libPathRemoveButton = new Gtk.Button();
             this.libPathRemoveButton.CanFocus = true;
+            this.libPathRemoveButton.Events = ((Gdk.EventMask)(0));
             this.libPathRemoveButton.Name = "libPathRemoveButton";
             this.libPathRemoveButton.UseUnderline = true;
             this.libPathRemoveButton.Label = Mono.Unix.Catalog.GetString("Remove");
@@ -507,6 +548,7 @@ namespace CBinding {
             w37.TabExpand = false;
             // Notebook tab
             this.label3 = new Gtk.Label();
+            this.label3.Events = ((Gdk.EventMask)(0));
             this.label3.Name = "label3";
             this.label3.LabelProp = Mono.Unix.Catalog.GetString("Paths");
             this.notebook1.SetTabLabel(this.vpaned1, this.label3);

@@ -24,9 +24,11 @@ FILES = \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
 	CLanguageBinding.cs \
-	CCompiler.cs \
-	GccCompiler.cs \
-	GppCompiler.cs
+	Compiler/CCompilerBindingCodon.cs \
+	Compiler/CCompiler.cs \
+	Compiler/GNUCompiler.cs \
+	Compiler/GccCompiler.cs \
+	Compiler/GppCompiler.cs
 
 RES = \
 	icons/C.File.Empty \
