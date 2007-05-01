@@ -5,13 +5,16 @@
   </import>
   <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="391 390">
     <property name="MemberName" />
+    <property name="Events">0</property>
     <child>
       <widget class="Gtk.Notebook" id="notebook1">
         <property name="MemberName" />
         <property name="CanFocus">True</property>
+        <property name="Events">0</property>
         <child>
           <widget class="Gtk.Table" id="table1">
             <property name="MemberName" />
+            <property name="Events">0</property>
             <property name="NRows">5</property>
             <property name="NColumns">2</property>
             <property name="RowSpacing">10</property>
@@ -19,6 +22,7 @@
             <child>
               <widget class="Gtk.ComboBox" id="compilerComboBox">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="IsTextCombo">True</property>
                 <property name="Items" translatable="yes" />
                 <property name="Active">0</property>
@@ -41,6 +45,7 @@
               <widget class="Gtk.Entry" id="extraArgsEntry">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="Events">0</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
               </widget>
@@ -63,6 +68,7 @@
             <child>
               <widget class="Gtk.Label" id="label11">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Xpad">10</property>
                 <property name="Xalign">0</property>
                 <property name="LabelProp" translatable="yes">Compiler:</property>
@@ -82,6 +88,7 @@
             <child>
               <widget class="Gtk.Label" id="label4">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Xpad">10</property>
                 <property name="Xalign">0</property>
                 <property name="LabelProp" translatable="yes">Warning Level:</property>
@@ -103,6 +110,7 @@
             <child>
               <widget class="Gtk.Label" id="label5">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Xpad">10</property>
                 <property name="Xalign">0</property>
                 <property name="LabelProp" translatable="yes">Optimization Level:</property>
@@ -124,6 +132,7 @@
             <child>
               <widget class="Gtk.Label" id="label6">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Xpad">10</property>
                 <property name="Xalign">0</property>
                 <property name="LabelProp" translatable="yes">Target:</property>
@@ -145,6 +154,7 @@
             <child>
               <widget class="Gtk.Label" id="label7">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Xpad">10</property>
                 <property name="Xalign">0</property>
                 <property name="LabelProp" translatable="yes">Extra Compiler Arguments:</property>
@@ -167,6 +177,7 @@
               <widget class="Gtk.SpinButton" id="optimizationSpinButton">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="Events">0</property>
                 <property name="Upper">3</property>
                 <property name="PageIncrement">10</property>
                 <property name="StepIncrement">1</property>
@@ -192,6 +203,7 @@
             <child>
               <widget class="Gtk.ComboBox" id="targetComboBox">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="IsTextCombo">True</property>
                 <property name="Items" translatable="yes">Executable
 Static Library
@@ -216,11 +228,13 @@ Shared Object</property>
             <child>
               <widget class="Gtk.VBox" id="vbox1">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Spacing">1</property>
                 <child>
                   <widget class="Gtk.RadioButton" id="noWarningRadio">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
+                    <property name="Events">0</property>
                     <property name="Label" translatable="yes">no warnings</property>
                     <property name="Active">True</property>
                     <property name="DrawIndicator">True</property>
@@ -239,6 +253,7 @@ Shared Object</property>
                   <widget class="Gtk.RadioButton" id="normalWarningRadio">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
+                    <property name="Events">0</property>
                     <property name="Label" translatable="yes">normal</property>
                     <property name="DrawIndicator">True</property>
                     <property name="HasLabel">True</property>
@@ -256,6 +271,7 @@ Shared Object</property>
                   <widget class="Gtk.RadioButton" id="allWarningRadio">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
+                    <property name="Events">0</property>
                     <property name="Label" translatable="yes">all</property>
                     <property name="DrawIndicator">True</property>
                     <property name="HasLabel">True</property>
@@ -294,6 +310,7 @@ Shared Object</property>
         <child>
           <widget class="Gtk.Label" id="label1">
             <property name="MemberName" />
+            <property name="Events">0</property>
             <property name="LabelProp" translatable="yes">Code Generation</property>
           </widget>
           <packing>
@@ -303,6 +320,7 @@ Shared Object</property>
         <child>
           <widget class="Gtk.Table" id="table2">
             <property name="MemberName" />
+            <property name="Events">0</property>
             <property name="NRows">2</property>
             <property name="NColumns">3</property>
             <property name="RowSpacing">10</property>
@@ -316,10 +334,12 @@ Shared Object</property>
             <child>
               <widget class="Gtk.HBox" id="hbox1">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <child>
                   <widget class="Gtk.Button" id="addLibButton">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
+                    <property name="Events">0</property>
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">Add</property>
                     <property name="UseUnderline">True</property>
@@ -335,6 +355,7 @@ Shared Object</property>
                 <child>
                   <widget class="Gtk.VSeparator" id="vseparator1">
                     <property name="MemberName" />
+                    <property name="Events">0</property>
                   </widget>
                   <packing>
                     <property name="Position">1</property>
@@ -347,6 +368,7 @@ Shared Object</property>
                   <widget class="Gtk.Button" id="removeLibButton">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
+                    <property name="Events">0</property>
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">Remove</property>
                     <property name="UseUnderline">True</property>
@@ -377,6 +399,7 @@ Shared Object</property>
             <child>
               <widget class="Gtk.Label" id="label8">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="LabelProp" translatable="yes">Library:</property>
               </widget>
               <packing>
@@ -395,6 +418,7 @@ Shared Object</property>
               <widget class="Gtk.Entry" id="libAddEntry">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="Events">0</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
               </widget>
@@ -415,6 +439,7 @@ Shared Object</property>
               <widget class="Gtk.TextView" id="libTextView">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="Events">0</property>
                 <property name="Editable">False</property>
                 <property name="CursorVisible">False</property>
                 <property name="Text" translatable="yes" />
@@ -443,6 +468,7 @@ Shared Object</property>
         <child>
           <widget class="Gtk.Label" id="label2">
             <property name="MemberName" />
+            <property name="Events">0</property>
             <property name="LabelProp" translatable="yes">Libraries</property>
           </widget>
           <packing>
@@ -453,14 +479,17 @@ Shared Object</property>
           <widget class="Gtk.VPaned" id="vpaned1">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
+            <property name="Events">0</property>
             <property name="Position">172</property>
             <child>
               <widget class="Gtk.VBox" id="vbox2">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Spacing">10</property>
                 <child>
                   <widget class="Gtk.Label" id="label9">
                     <property name="MemberName" />
+                    <property name="Events">0</property>
                     <property name="Xpad">10</property>
                     <property name="Xalign">0</property>
                     <property name="LabelProp" translatable="yes">Include:</property>
@@ -476,6 +505,7 @@ Shared Object</property>
                   <widget class="Gtk.TextView" id="includePathTextView">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
+                    <property name="Events">0</property>
                     <property name="Editable">False</property>
                     <property name="CursorVisible">False</property>
                     <property name="Text" translatable="yes" />
@@ -489,11 +519,13 @@ Shared Object</property>
                 <child>
                   <widget class="Gtk.HBox" id="hbox2">
                     <property name="MemberName" />
+                    <property name="Events">0</property>
                     <property name="Spacing">5</property>
                     <child>
                       <widget class="Gtk.Entry" id="includePathEntry">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
+                        <property name="Events">0</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
                       </widget>
@@ -506,6 +538,7 @@ Shared Object</property>
                       <widget class="Gtk.Button" id="includePathAddButton">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
+                        <property name="Events">0</property>
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Add</property>
                         <property name="UseUnderline">True</property>
@@ -522,6 +555,7 @@ Shared Object</property>
                       <widget class="Gtk.Button" id="includePathRemoveButton">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
+                        <property name="Events">0</property>
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Remove</property>
                         <property name="UseUnderline">True</property>
@@ -550,10 +584,12 @@ Shared Object</property>
             <child>
               <widget class="Gtk.VBox" id="vbox3">
                 <property name="MemberName" />
+                <property name="Events">0</property>
                 <property name="Spacing">10</property>
                 <child>
                   <widget class="Gtk.Label" id="label10">
                     <property name="MemberName" />
+                    <property name="Events">0</property>
                     <property name="Xpad">10</property>
                     <property name="Xalign">0</property>
                     <property name="LabelProp" translatable="yes">Library:</property>
@@ -569,6 +605,7 @@ Shared Object</property>
                   <widget class="Gtk.TextView" id="libPathTextView">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
+                    <property name="Events">0</property>
                     <property name="Editable">False</property>
                     <property name="CursorVisible">False</property>
                     <property name="Text" translatable="yes" />
@@ -582,11 +619,13 @@ Shared Object</property>
                 <child>
                   <widget class="Gtk.HBox" id="hbox3">
                     <property name="MemberName" />
+                    <property name="Events">0</property>
                     <property name="Spacing">5</property>
                     <child>
                       <widget class="Gtk.Entry" id="libPathEntry">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
+                        <property name="Events">0</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
                       </widget>
@@ -599,6 +638,7 @@ Shared Object</property>
                       <widget class="Gtk.Button" id="libPathAddButton">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
+                        <property name="Events">0</property>
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Add</property>
                         <property name="UseUnderline">True</property>
@@ -615,6 +655,7 @@ Shared Object</property>
                       <widget class="Gtk.Button" id="libPathRemoveButton">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
+                        <property name="Events">0</property>
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Remove</property>
                         <property name="UseUnderline">True</property>
@@ -646,6 +687,7 @@ Shared Object</property>
         <child>
           <widget class="Gtk.Label" id="label3">
             <property name="MemberName" />
+            <property name="Events">0</property>
             <property name="LabelProp" translatable="yes">Paths</property>
           </widget>
           <packing>
