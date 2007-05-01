@@ -80,4 +80,10 @@
 		<DataType class = "CBinding.GppCompiler"/>
 	</Extension>
 	
+	<!-- Use own Codon -->
+	<Extension path = "/CBinding/CompilerBindings" extension-nodes = "Class" description = "C/C++ Compiler implementations">
+		<Class id = "gcc" class = "CBinding.GccCompiler"/>
+		<Class id = "g++" class = "CBinding.GppCompiler"/>
+	</Extension>
+	
 </AddIn>

@@ -92,7 +92,8 @@ namespace CBinding
 			if (language == Language.C) {
 				return (Path.GetExtension (fileName.ToUpper ()) == ".C");
 			} else {
-				return (Path.GetExtension (fileName.ToUpper ()) == ".CPP");
+				return (Path.GetExtension (fileName.ToUpper ()) == ".CPP" ||
+				        Path.GetExtension (fileName.ToUpper ()) == ".C");
 			}
 		}
 		
@@ -139,6 +140,7 @@ namespace CBinding
 		}
 		
 		public CCompiler Compiler {
+			get { return compiler_manager; }
 			set {
 				if (value != null) {
 					compiler_manager = value;

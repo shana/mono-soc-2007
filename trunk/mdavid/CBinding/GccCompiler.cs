@@ -15,6 +15,15 @@ namespace CBinding
 {
 	public class GccCompiler : CCompiler
 	{		
+		public override string Name {
+			get { return "gcc"; }
+		}
+		
+		public override Language Language {
+			get { return Language.C; }
+		}
+
+
 		public override ICompilerResult Compile (
 			ProjectFileCollection projectFiles,
 		    ProjectReferenceCollection references,
@@ -51,14 +60,6 @@ namespace CBinding
 				foreach (string inc in configuration.Includes)
 					args.Append ("-I" + inc + " ");
 			
-			if (configuration.LibPaths != null)
-				foreach (string libpath in configuration.LibPaths)
-					args.Append ("-L" + libpath + " ");
-			
-			if (configuration.Libs != null)
-				foreach (string lib in configuration.Libs)
-					args.Append ("-l" + lib + " ");
-			
 			foreach (ProjectFile f in projectFiles) {
 				if (f.BuildAction == BuildAction.Compile)
 					res = DoCompilation (f, args.ToString (), monitor, cr);
@@ -73,7 +74,7 @@ namespace CBinding
 				{
 				case CBinding.CompileTarget.Bin:
 					MakeBin (
-						projectFiles, monitor, outputName);
+						projectFiles, configuration, cr, monitor, outputName);
 					break;
 				case CBinding.CompileTarget.StaticLibrary:
 					MakeStaticLibrary (
@@ -81,7 +82,7 @@ namespace CBinding
 					break;
 				case CBinding.CompileTarget.SharedLibrary:
 					MakeSharedLibrary (
-						projectFiles, monitor, outputName);
+						projectFiles, configuration, monitor, outputName);
 					break;
 				}
 			}
@@ -90,14 +91,30 @@ namespace CBinding
 		}
 		
 		private void MakeBin(ProjectFileCollection projectFiles,
+		                     CProjectConfiguration configuration,
+		                     CompilerResults cr,
 		                     IProgressMonitor monitor, string outputName)
 		{
 			string objectFiles = ObjectFiles (projectFiles);
+			StringBuilder args = new StringBuilder ();
+			
+			if (configuration.LibPaths != null)
+				foreach (string libpath in configuration.LibPaths)
+					args.Append ("-L" + libpath + " ");
+			
+			if (configuration.Libs != null)
+				foreach (string lib in configuration.Libs)
+					args.Append ("-l" + lib + " ");
 			
 			monitor.Log.WriteLine ("Generating binary...");
 			
+			// temp
+			monitor.Log.WriteLine (
+				"using: ld -o " + outputName + " " + objectFiles +
+				" " + args.ToString ());
+			
 			Process p = Runtime.ProcessService.StartProcess (
-				"gcc", "-o " + outputName + " " + objectFiles,
+				"gcc", "-o " + outputName + " " + objectFiles + " " + args.ToString (),
 				null, null);
 			p.WaitForExit ();
 		}
@@ -116,14 +133,24 @@ namespace CBinding
 		}
 		
 		private void MakeSharedLibrary(ProjectFileCollection projectFiles,
+		                               CProjectConfiguration configuration,
 		                               IProgressMonitor monitor, string outputName)
 		{
 			string objectFiles = ObjectFiles (projectFiles);
+			StringBuilder args = new StringBuilder ();
+			
+			if (configuration.LibPaths != null)
+				foreach (string libpath in configuration.LibPaths)
+					args.Append ("-L" + libpath + " ");
+			
+			if (configuration.Libs != null)
+				foreach (string lib in configuration.Libs)
+					args.Append ("-l" + lib + " ");
 			
 			monitor.Log.WriteLine ("Generating shared object...");
 			
 			Process p = Runtime.ProcessService.StartProcess (
-				"ld", "-shared -o " + outputName + " " + objectFiles,
+				"ld", "-shared -o " + outputName + " " + objectFiles + " " + args.ToString (),
 				null, null);
 			p.WaitForExit ();
 		}
@@ -136,9 +163,6 @@ namespace CBinding
 		                            CompilerResults cr)
 		{
 			StringWriter error = new StringWriter ();
-			LogTextWriter chainedError = new LogTextWriter ();
-			chainedError.ChainWriter (monitor.Log);
-			chainedError.ChainWriter (error);
 			
 			string outputName = file.Name.Substring (
 				0, file.Name.LastIndexOf (".")) + ".o";
@@ -152,6 +176,8 @@ namespace CBinding
 				
 			p.WaitForExit ();
 			ParseOutput (error.ToString (), cr);
+			
+			error.Close ();
 			
 			return p.ExitCode == 0;
 		}
