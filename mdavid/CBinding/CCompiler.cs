@@ -12,6 +12,14 @@ namespace CBinding
 		    ProjectReferenceCollection references,
 		    CProjectConfiguration configuration,
 		    IProgressMonitor monitor);
+		
+		public abstract string Name {
+			get;
+		}
+			
+		public abstract Language Language {
+			get;
+		}
 		    
 		protected abstract void ParseOutput (string errorString, CompilerResults cr);
 	}

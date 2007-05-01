@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections;
 
+using MonoDevelop.Core;
 using MonoDevelop.Core.Properties;
 using MonoDevelop.Core.Gui.Dialogs;
 
@@ -9,13 +10,16 @@ namespace CBinding
 {
 	public partial class CodeGenerationPanel : Gtk.Bin
 	{
+		private CProject project;
 		private CProjectConfiguration configuration;
 		private CCompilationParameters compilationParameters;
+		object[] compilers;
 		
 		public CodeGenerationPanel (IProperties customizationObject)
 		{
 			this.Build();
 			
+			project = (CProject)customizationObject.GetProperty ("Project");
 			configuration = (CProjectConfiguration)customizationObject.GetProperty ("Config");
 			compilationParameters = (CCompilationParameters)configuration.CompilationParameters;
 			
@@ -58,6 +62,24 @@ namespace CBinding
 			foreach (string include in configuration.Includes)
 				includePathTextView.Buffer.Text += include + "\n";
 			
+			compilers = Runtime.AddInService.GetTreeItems (
+				"/CBinding/CompilerBindings");
+			
+			foreach (CCompiler compiler in compilers) {
+				if (compiler.Language == project.Language)
+					compilerComboBox.AppendText (compiler.Name);
+			}
+			
+			int active = 0;
+			foreach (CCompiler compiler in compilers) {
+				if (compiler.Name.Equals (project.Compiler.Name))
+					break;
+				active++;
+			}
+			
+			// FIXME: set correct active compiler
+			compilerComboBox.Active = 0;
+
 			addLibButton.Clicked += OnLibAdded;
 			removeLibButton.Clicked += OnLibRemoved;
 			libPathAddButton.Clicked += OnLibPathAdded;
@@ -181,6 +203,18 @@ namespace CBinding
 			while ((line = reader.ReadLine ()) != null)
 				configuration.Includes.Add (line);
 			reader.Close ();
+			
+			if (compilers != null) {
+				foreach (CCompiler compiler in compilers) {
+					if (compilerComboBox.ActiveText == compiler.Name) {
+						project.Compiler = compiler;
+						break;
+					}
+				}
+			} else {
+				// Use default compiler depending on language.
+				project.Compiler = null;
+			}
 			
 			return true;
 		}
