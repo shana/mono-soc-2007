@@ -59,9 +59,22 @@
 		<!-- FIXME: aparently the conditional codon only works for dotnetprojects -->
 		<!-- Could make my own codon -->
 		<!--<Conditional activelanguage = "*">-->
-			<DialogPanel id = "CCodeGenerationPanel"
-			             _label = "Code Generation"
-			             class = "CBinding.CodeGenerationPanelBinding"/>
+			<DialogPanel
+				id = "CodeGenerationPanel"
+			    _label = "Code Generation"
+			    class = "CBinding.CodeGenerationPanelBinding"/>
+		<!--</Conditional>-->
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/ProjectOptions/GeneralOptions/Common">
+		<!-- FIXME: aparently the conditional codon only works for dotnetprojects -->
+		<!-- Could make my own codon -->
+		<!--<Conditional activelanguage = "*">-->
+			<DialogPanel
+				id = "CompilerPanel"
+			    _label = "Compiler"
+			    insertafter = "Compile"
+			    class = "CBinding.CompilerPanelBinding"/>
 		<!--</Conditional>-->
 	</Extension>
 	

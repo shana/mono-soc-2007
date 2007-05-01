@@ -21,8 +21,10 @@ FILES = \
 	Project/CProjectBinding.cs \
 	Project/CProjectConfiguration.cs \
 	Gui/CodeGenerationPanel.cs \
+	Gui/CompilerPanel.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
+	gtk-gui/CBinding.CompilerPanel.cs \
 	CLanguageBinding.cs \
 	Compiler/CCompilerBindingCodon.cs \
 	Compiler/CCompiler.cs \

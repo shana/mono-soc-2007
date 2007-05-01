@@ -1,5 +1,5 @@
 <objects>
-  <object type="CBinding.CodeGenerationPanel" palette-category="widget" allow-children="false" base-type="Gtk.Bin">
+  <object type="CBinding.CompilerPanel" palette-category="widget" allow-children="false" base-type="Gtk.Widget">
     <itemgroups>
       <itemgroup label="Container Properties">
         <property name="BorderWidth" />
