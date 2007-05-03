@@ -65,7 +65,7 @@ namespace CBinding
 				{
 				case CBinding.CompileTarget.Bin:
 					MakeBin (
-						projectFiles, configuration, cr, monitor, outputName);
+						projectFiles, references, configuration, cr, monitor, outputName);
 					break;
 				case CBinding.CompileTarget.StaticLibrary:
 					MakeStaticLibrary (
@@ -73,7 +73,7 @@ namespace CBinding
 					break;
 				case CBinding.CompileTarget.SharedLibrary:
 					MakeSharedLibrary (
-						projectFiles, configuration, cr, monitor, outputName);
+						projectFiles, references, configuration, cr, monitor, outputName);
 					break;
 				}
 			}
@@ -82,11 +82,13 @@ namespace CBinding
 		}
 		
 		private void MakeBin(ProjectFileCollection projectFiles,
+		                     ProjectReferenceCollection references,
 		                     CProjectConfiguration configuration,
 		                     CompilerResults cr,
 		                     IProgressMonitor monitor, string outputName)
 		{
 			string objectFiles = ObjectFiles (projectFiles);
+			string pkgargs = GeneratePkgArgs (references);
 			StringBuilder args = new StringBuilder ();
 			
 			if (configuration.LibPaths != null)
@@ -102,10 +104,11 @@ namespace CBinding
 			// temp
 			monitor.Log.WriteLine (
 				"using: " + linkerCommand + " -o " + outputName + " " + objectFiles +
-				" " + args.ToString ());
+				" " + args.ToString () + " " + pkgargs);
 			
 			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-				linkerCommand, "-o " + outputName + " " + objectFiles + " " + args.ToString (),
+				linkerCommand, "-o " + outputName + " " + objectFiles + " " +
+				args.ToString () + " " + pkgargs,
 				null, null);
 			p.WaitForExit ();
 			
@@ -131,11 +134,13 @@ namespace CBinding
 		}
 		
 		private void MakeSharedLibrary(ProjectFileCollection projectFiles,
+		                               ProjectReferenceCollection references,
 		                               CProjectConfiguration configuration,
 		                               CompilerResults cr,
 		                               IProgressMonitor monitor, string outputName)
 		{
 			string objectFiles = ObjectFiles (projectFiles);
+			string pkgargs = GeneratePkgArgs (references);
 			StringBuilder args = new StringBuilder ();
 			
 			if (configuration.LibPaths != null)
@@ -150,11 +155,12 @@ namespace CBinding
 			
 			// temp
 			monitor.Log.WriteLine (
-				"using: " + linkerCommand + " -shared -o " + outputName + " " + objectFiles +
-				" " + args.ToString ());
+				"using: " + linkerCommand + " -shared -o " + outputName + " " +
+				objectFiles + " " + args.ToString () + " " + pkgargs);
 			
 			Process p = Runtime.ProcessService.StartProcess (
-				linkerCommand, "-shared -o " + outputName + " " + objectFiles + " " + args.ToString (),
+				linkerCommand, "-shared -o " + outputName + " " + objectFiles +
+				" " + args.ToString () + " " + pkgargs,
 				null, null);
 			p.WaitForExit ();
 			
@@ -173,11 +179,11 @@ namespace CBinding
 		                            IProgressMonitor monitor,
 		                            CompilerResults cr)
 		{			
-			string outputName = file.Name.Substring (
-				0, file.Name.LastIndexOf (".")) + ".o";
+			string outputName = Path.ChangeExtension (file.Name, ".o");
 			
 			monitor.Log.WriteLine (
-				"using: " + compilerCommand + " " + file.Name + " " + args + "-c -o " + outputName);
+				"using: " + compilerCommand + " " + file.Name + " " + args +
+				"-c -o " + outputName);
 			
 			ProcessWrapper p = Runtime.ProcessService.StartProcess (
 				compilerCommand, file.Name + " " + args + "-c -o " + outputName,
@@ -201,9 +207,7 @@ namespace CBinding
 			
 			foreach (ProjectFile f in projectFiles) {
 				if (f.BuildAction == BuildAction.Compile) {
-					objectFiles.Append (
-						f.Name.Substring (
-							0, f.Name.LastIndexOf (".")) + ".o ");
+					objectFiles.Append (Path.ChangeExtension (f.Name, ".o"));
 				}
 			}
 			

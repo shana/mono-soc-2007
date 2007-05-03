@@ -22,10 +22,12 @@ namespace CBinding
 			compilers = Runtime.AddInService.GetTreeItems (
 				"/CBinding/CompilerBindings");
 			
-			foreach (CCompiler compiler in compilers) {
+			// for some reason this shoots an invalid cast exception
+			foreach (ICompiler compiler in compilers) {
 				if (compiler.Language == project.Language)
 					compilerComboBox.AppendText (compiler.Name);
 			}
+
 			
 			int active = 0;
 			foreach (object compiler in compilerComboBox) {
@@ -53,7 +55,7 @@ namespace CBinding
 				// Use default compiler depending on language.
 				project.Compiler = null;
 			}
-			
+
 			return true;
 		}
 	}

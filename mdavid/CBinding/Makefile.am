@@ -22,11 +22,14 @@ FILES = \
 	Project/CProjectConfiguration.cs \
 	Gui/CodeGenerationPanel.cs \
 	Gui/CompilerPanel.cs \
+	Gui/AddLibraryDialog.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
 	gtk-gui/CBinding.CompilerPanel.cs \
+	gtk-gui/CBinding.AddLibraryDialog.cs \
 	CLanguageBinding.cs \
 	Compiler/CCompilerBindingCodon.cs \
+	Compiler/ICompiler.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GNUCompiler.cs \
 	Compiler/GccCompiler.cs \

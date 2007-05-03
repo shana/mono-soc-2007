@@ -12,6 +12,7 @@ namespace CBinding
 	{
 		private CProjectConfiguration configuration;
 		private CCompilationParameters compilationParameters;
+		private Gtk.ListStore store = new Gtk.ListStore (typeof(string));
 		
 		public CodeGenerationPanel (IProperties customizationObject)
 		{
@@ -19,6 +20,10 @@ namespace CBinding
 			
 			configuration = (CProjectConfiguration)customizationObject.GetProperty ("Config");
 			compilationParameters = (CCompilationParameters)configuration.CompilationParameters;
+			
+			libTreeView.Model = store;
+			libTreeView.HeadersVisible = false;
+			libTreeView.AppendColumn ("Library", new Gtk.CellRendererText (), "text", 0);
 			
 			switch (compilationParameters.WarningLevel)
 			{
@@ -51,7 +56,7 @@ namespace CBinding
 			extraArgsEntry.Text = compilationParameters.ExtraArguments;
 			
 			foreach (string lib in configuration.Libs)
-				libTextView.Buffer.Text += lib + "\n";
+				store.AppendValues (lib);
 			
 			foreach (string libpath in configuration.LibPaths)
 				libPathTextView.Buffer.Text += libpath + "\n";
@@ -65,6 +70,7 @@ namespace CBinding
 			libPathRemoveButton.Clicked += OnLibPathRemoved;
 			includePathAddButton.Clicked += OnIncludePathAdded;
 			includePathRemoveButton.Clicked += OnIncludePathRemoved;
+			browseButton.Clicked += OnBrowseButtonClick;
 		}
 		
 		private void OnIncludePathAdded (object sender, EventArgs e)
@@ -95,15 +101,25 @@ namespace CBinding
 		
 		private void OnLibAdded (object sender, EventArgs e)
 		{
-			if (libAddEntry.Text.Length > 0) {
-				libTextView.Buffer.Text += libAddEntry.Text + "\n";
+			if (libAddEntry.Text.Length > 0) {				
+				store.AppendValues (libAddEntry.Text);
 				libAddEntry.Text = string.Empty;
 			}
 		}
 		
 		private void OnLibRemoved (object sender, EventArgs e)
 		{
-			DeleteLine (libAddEntry.Text, libTextView.Buffer);			
+			Gtk.TreeIter iter;
+			libTreeView.Selection.GetSelected (out iter);
+			store.Remove (ref iter);
+		}
+		
+		private void OnBrowseButtonClick (object sender, EventArgs e)
+		{
+			AddLibraryDialog dialog = new AddLibraryDialog ();
+			dialog.Run ();
+			libAddEntry.Text = dialog.Library;
+			OnLibAdded (null, null);
 		}
 		
 		private void DeleteLine (string line, Gtk.TextBuffer buffer)
@@ -139,6 +155,7 @@ namespace CBinding
 				return false;
 			
 			string line;
+			Gtk.TreeIter iter;
 			StringReader reader;
 			
 			if (noWarningRadio.Active)
@@ -165,11 +182,14 @@ namespace CBinding
 			
 			compilationParameters.ExtraArguments = extraArgsEntry.Text;
 			
-			reader = new StringReader (libTextView.Buffer.Text);
+			store.GetIterFirst (out iter);
 			configuration.Libs.Clear ();
-			while ((line = reader.ReadLine ()) != null)
+			while (store.IterIsValid (iter)) {
+				line = (string)store.GetValue (iter, 0);
 				configuration.Libs.Add (line);
-			reader.Close ();
+				store.IterNext (ref iter);
+			}
+
 			
 			reader = new StringReader (libPathTextView.Buffer.Text);
 			configuration.LibPaths.Clear ();
