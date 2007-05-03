@@ -7,19 +7,19 @@ using MonoDevelop.Projects;
 
 namespace CBinding
 {
-	[Description ("A C/C++ Compiler implementation. The specified class must subclass CCompiler")]
+	[Description ("A C/C++ Compiler implementation. The specified class must implement ICompiler")]
 	[CodonNameAttribute ("CCompilerBinding")]
 	public class CCompilerBindingCodon : ClassCodon
 	{
-		CCompiler compiler;
+		ICompiler compiler;
 		
-		public CCompiler Compiler {
+		public ICompiler Compiler {
 			get { return compiler; }
 		}
 		
 		public override object BuildItem (object owner, ArrayList subItems, ConditionCollection conditions)
 		{
-			compiler = (CCompiler)AddIn.CreateObject (Class);
+			compiler = (ICompiler)AddIn.CreateObject (Class);
 			return this;
 		}
 	}
