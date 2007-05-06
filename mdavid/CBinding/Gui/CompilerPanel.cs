@@ -19,8 +19,7 @@ namespace CBinding
 			
 			project = (CProject)customizationObject.GetProperty ("Project");
 			
-			compilers = Runtime.AddInService.GetTreeItems (
-				"/CBinding/CompilerBindings");
+			// get compilers
 			
 			// for some reason this shoots an invalid cast exception
 			foreach (ICompiler compiler in compilers) {

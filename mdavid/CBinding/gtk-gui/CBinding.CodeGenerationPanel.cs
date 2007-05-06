@@ -108,6 +108,7 @@ namespace CBinding {
             this.notebook1.Name = "notebook1";
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.table1 = new Gtk.Table(((uint)(4)), ((uint)(2)), false);
+            this.table1.Name = "table1";
             this.table1.RowSpacing = ((uint)(10));
             this.table1.ColumnSpacing = ((uint)(10));
             // Container child table1.Gtk.Table+TableChild
@@ -338,6 +339,8 @@ namespace CBinding {
             // Container child table2.Gtk.Table+TableChild
             this.table3 = new Gtk.Table(((uint)(3)), ((uint)(3)), false);
             this.table3.Name = "table3";
+            this.table3.RowSpacing = ((uint)(6));
+            this.table3.ColumnSpacing = ((uint)(6));
             // Container child table3.Gtk.Table+TableChild
             this.removeLibButton = new Gtk.Button();
             this.removeLibButton.CanFocus = true;
