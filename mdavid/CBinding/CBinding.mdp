@@ -59,6 +59,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
   </References>
-  <GtkDesignInfo partialTypes="True" />
   <Deployment.LinuxDeployData scriptName="cbinding" />
+  <GtkDesignInfo partialTypes="True" />
 </Project>
