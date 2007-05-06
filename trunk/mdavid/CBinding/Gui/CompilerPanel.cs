@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Collections;
 
+using Mono.Addins;
+
 using MonoDevelop.Core;
 using MonoDevelop.Core.Properties;
 using MonoDevelop.Core.Gui.Dialogs;
@@ -19,9 +21,8 @@ namespace CBinding
 			
 			project = (CProject)customizationObject.GetProperty ("Project");
 			
-			// get compilers
+			compilers = AddinManager.GetExtensionObjects ("/CBinding/Compilers");
 			
-			// for some reason this shoots an invalid cast exception
 			foreach (ICompiler compiler in compilers) {
 				if (compiler.Language == project.Language)
 					compilerComboBox.AppendText (compiler.Name);
@@ -29,7 +30,7 @@ namespace CBinding
 
 			
 			int active = 0;
-			foreach (object compiler in compilerComboBox) {
+			foreach (Gtk.TreeIter compiler in compilerComboBox) {
 				if (compiler.Equals (project.Compiler.Name))
 					break;
 				active++;
