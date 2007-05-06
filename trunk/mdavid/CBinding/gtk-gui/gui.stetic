@@ -13,6 +13,7 @@
             <property name="NColumns">2</property>
             <property name="RowSpacing">10</property>
             <property name="ColumnSpacing">10</property>
+            <property name="BorderWidth">3</property>
             <child>
               <widget class="Gtk.Entry" id="extraArgsEntry">
                 <property name="MemberName" />
@@ -260,6 +261,7 @@ Shared Object</property>
             <property name="NColumns">3</property>
             <property name="RowSpacing">10</property>
             <property name="ColumnSpacing">10</property>
+            <property name="BorderWidth">3</property>
             <child>
               <placeholder />
             </child>
@@ -477,6 +479,7 @@ Shared Object</property>
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="Position">172</property>
+            <property name="BorderWidth">3</property>
             <child>
               <widget class="Gtk.VBox" id="vbox2">
                 <property name="MemberName" />
