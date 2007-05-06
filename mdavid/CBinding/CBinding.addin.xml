@@ -2,14 +2,12 @@
 	id          = "MonoDevelop.CBinding"
 	name        = "C/C++ Language Binding"
 	author      = "Marcos David Marin Amador"
-	copright    = "MIT"
+	copright    = "MIT X11"
 	url         = "http://www.monodevelop.com"
 	description = "C/C++ Language binding"
 	category    = "Language bindings"
 	version     = "0.1">
-	
-	<!-- MIT copyright ok? -->
-	
+
 	<Runtime>
 		<Import assembly = "CBinding.dll"/>
 	</Runtime>
@@ -21,7 +19,7 @@
 		<AddIn id = "MonoDevelop.Projects" version = "0.13.0"/>
 		<AddIn id = "MonoDevelop.Projects.Gui" version = "0.13.0"/>
 	</Dependencies>
-	
+
 	<Extension path = "/SharpDevelop/Workbench/FileFilter">
 		<FileFilter
 			id = "C"
@@ -29,15 +27,14 @@
 			_label = "C/C++ Files"
 			extensions = "*.c,*.cpp,*.h,*.hpp"/>
 	</Extension>
-	
+
 	<Extension path = "/MonoDevelop/FileTemplates">
 		<FileTemplate id = "EmptyCFile" resource = "EmptyCFile.xft.xml"/>
 	</Extension>
-	
+
 	<Extension path = "/MonoDevelop/ProjectTemplates">
 		<ProjectTemplate id = "EmptyCProject" resource = "EmptyCProject.xpt.xml"/>
 		<ProjectTemplate id = "EmptyCppProject" resource = "EmptyCppProject.xpt.xml"/>
-		<!-- Add more project templates -->
 	</Extension>
 	
 	<Extension path = "/Workspace/Icons">
@@ -54,7 +51,7 @@
 	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">
 		<ProjectBinding id = "CProject" class = "CBinding.CProjectBinding" />
 	</Extension>
-	
+
 	<Extension path = "/SharpDevelop/Workbench/ProjectOptions/ConfigurationProperties">
 		<!-- FIXME: aparently the conditional codon only works for dotnetprojects -->
 		<!-- Could make my own codon -->
@@ -77,7 +74,7 @@
 			    class = "CBinding.CompilerPanelBinding"/>
 		<!--</Conditional>-->
 	</Extension>
-	
+
 	<Extension path = "/SharpDevelop/Workbench/LanguageBindings">
 		<LanguageBinding
 			id = "C"
@@ -91,11 +88,6 @@
 		<DataType class = "CBinding.CProject"/>
 		<DataType class = "CBinding.GccCompiler"/>
 		<DataType class = "CBinding.GppCompiler"/>
-	</Extension>
-	
-	<Extension path = "/CBinding/CompilerBindings" extension-nodes = "CCompilerBinding" description = "C/C++ Compiler implementations">
-		<CCompilerBinding id = "gcc" class = "CBinding.GccCompiler"/>
-		<CCompilerBinding id = "g++" class = "CBinding.GppCompiler"/>
 	</Extension>
 	
 </AddIn>

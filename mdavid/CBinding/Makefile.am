@@ -29,7 +29,6 @@ FILES = \
 	gtk-gui/CBinding.CompilerPanel.cs \
 	gtk-gui/CBinding.AddLibraryDialog.cs \
 	CLanguageBinding.cs \
-	Compiler/CCompilerBindingCodon.cs \
 	Compiler/ICompiler.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GNUCompiler.cs \

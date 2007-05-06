@@ -1,8 +1,11 @@
+using Mono.Addins;
+
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 
 namespace CBinding
 {
+	[TypeExtensionPoint ("/CBinding/Compilers")]
 	public interface ICompiler
 	{
 		string Name {
