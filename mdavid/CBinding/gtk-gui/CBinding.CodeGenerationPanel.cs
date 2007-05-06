@@ -111,6 +111,7 @@ namespace CBinding {
             this.table1.Name = "table1";
             this.table1.RowSpacing = ((uint)(10));
             this.table1.ColumnSpacing = ((uint)(10));
+            this.table1.BorderWidth = ((uint)(3));
             // Container child table1.Gtk.Table+TableChild
             this.extraArgsEntry = new Gtk.Entry();
             this.extraArgsEntry.CanFocus = true;
@@ -260,6 +261,7 @@ namespace CBinding {
             this.table2.Name = "table2";
             this.table2.RowSpacing = ((uint)(10));
             this.table2.ColumnSpacing = ((uint)(10));
+            this.table2.BorderWidth = ((uint)(3));
             // Container child table2.Gtk.Table+TableChild
             this.hbox1 = new Gtk.HBox();
             this.hbox1.Name = "hbox1";
@@ -372,6 +374,7 @@ namespace CBinding {
             this.vpaned1.CanFocus = true;
             this.vpaned1.Name = "vpaned1";
             this.vpaned1.Position = 172;
+            this.vpaned1.BorderWidth = ((uint)(3));
             // Container child vpaned1.Gtk.Paned+PanedChild
             this.vbox2 = new Gtk.VBox();
             this.vbox2.Name = "vbox2";

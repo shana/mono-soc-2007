@@ -27,15 +27,19 @@ namespace CBinding
 				if (compiler.Language == project.Language)
 					compilerComboBox.AppendText (compiler.Name);
 			}
-
 			
 			int active = 0;
-			foreach (Gtk.TreeIter compiler in compilerComboBox) {
-				if (compiler.Equals (project.Compiler.Name))
+			Gtk.TreeIter iter;
+			Gtk.ListStore store = (Gtk.ListStore)compilerComboBox.Model;
+			compilerComboBox.Model.GetIterFirst (out iter);
+			while (store.IterIsValid (iter)) {
+				if ((string)store.GetValue (iter, 0) == project.Compiler.Name) {
 					break;
+				}
 				active++;
 			}
 
+			// FIXME: set correct active compiler
 			compilerComboBox.Active = active;
 		}
 		
