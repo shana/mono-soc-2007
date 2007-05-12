@@ -11,8 +11,6 @@ namespace CBinding
 		{
 			this.Build();
 			
-			Modal = true;
-			
 			Gtk.FileFilter libs = new Gtk.FileFilter ();
 			Gtk.FileFilter all = new Gtk.FileFilter ();
 			

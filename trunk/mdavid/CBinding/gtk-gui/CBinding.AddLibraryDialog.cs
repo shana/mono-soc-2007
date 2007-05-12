@@ -24,8 +24,7 @@ namespace CBinding {
             // Widget CBinding.AddLibraryDialog
             this.Name = "CBinding.AddLibraryDialog";
             this.Title = Mono.Unix.Catalog.GetString("Add Library");
-            this.WindowPosition = ((Gtk.WindowPosition)(4));
-            this.HasSeparator = false;
+            this.Modal = true;
             // Internal child CBinding.AddLibraryDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";

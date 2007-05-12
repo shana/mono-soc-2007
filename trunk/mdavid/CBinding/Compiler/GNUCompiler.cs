@@ -268,6 +268,7 @@ namespace CBinding
 			reader.Close ();
 		}
 		
+		// FIXME: needs to be improved
 		private CompilerError CreateLinkerErrorFromErrorString (string errorString)
 		{
 			CompilerError error = new CompilerError ();
