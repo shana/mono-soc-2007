@@ -12,7 +12,9 @@ namespace CBinding
 	{
 		private CProjectConfiguration configuration;
 		private CCompilationParameters compilationParameters;
-		private Gtk.ListStore store = new Gtk.ListStore (typeof(string));
+		private Gtk.ListStore libStore = new Gtk.ListStore (typeof(string));
+		private Gtk.ListStore libPathStore = new Gtk.ListStore (typeof(string));
+		private Gtk.ListStore includePathStore = new Gtk.ListStore (typeof(string));
 		
 		public CodeGenerationPanel (IProperties customizationObject)
 		{
@@ -21,9 +23,17 @@ namespace CBinding
 			configuration = (CProjectConfiguration)customizationObject.GetProperty ("Config");
 			compilationParameters = (CCompilationParameters)configuration.CompilationParameters;
 			
-			libTreeView.Model = store;
+			libTreeView.Model = libStore;
 			libTreeView.HeadersVisible = false;
 			libTreeView.AppendColumn ("Library", new Gtk.CellRendererText (), "text", 0);
+			
+			libPathTreeView.Model = libPathStore;
+			libPathTreeView.HeadersVisible = false;
+			libPathTreeView.AppendColumn ("Library", new Gtk.CellRendererText (), "text", 0);
+			
+			includePathTreeView.Model = includePathStore;
+			includePathTreeView.HeadersVisible = false;
+			includePathTreeView.AppendColumn ("Include", new Gtk.CellRendererText (), "text", 0);
 			
 			switch (compilationParameters.WarningLevel)
 			{
@@ -56,13 +66,13 @@ namespace CBinding
 			extraArgsEntry.Text = compilationParameters.ExtraArguments;
 			
 			foreach (string lib in configuration.Libs)
-				store.AppendValues (lib);
+				libStore.AppendValues (lib);
 			
-			foreach (string libpath in configuration.LibPaths)
-				libPathTextView.Buffer.Text += libpath + "\n";
+			foreach (string libPath in configuration.LibPaths)
+				libPathStore.AppendValues (libPath);
 			
-			foreach (string include in configuration.Includes)
-				includePathTextView.Buffer.Text += include + "\n";
+			foreach (string includePath in configuration.Includes)
+				includePathStore.AppendValues (includePath);
 
 			addLibButton.Clicked += OnLibAdded;
 			removeLibButton.Clicked += OnLibRemoved;
@@ -71,38 +81,44 @@ namespace CBinding
 			includePathAddButton.Clicked += OnIncludePathAdded;
 			includePathRemoveButton.Clicked += OnIncludePathRemoved;
 			browseButton.Clicked += OnBrowseButtonClick;
+			includePathBrowseButton.Clicked += OnIncludePathBrowseButtonClick;
+			libPathBrowseButton.Clicked += OnLibPathBrowseButtonClick;
 		}
 		
 		private void OnIncludePathAdded (object sender, EventArgs e)
 		{
-			if (includePathEntry.Text.Length > 0) {
-				includePathTextView.Buffer.Text += includePathEntry.Text + "\n";
+			if (includePathEntry.Text.Length > 0) {				
+				includePathStore.AppendValues (includePathEntry.Text);
 				includePathEntry.Text = string.Empty;
 			}
 		}
 		
 		private void OnIncludePathRemoved (object sender, EventArgs e)
 		{
-			DeleteLine (includePathEntry.Text, includePathTextView.Buffer);
+			Gtk.TreeIter iter;
+			includePathTreeView.Selection.GetSelected (out iter);
+			includePathStore.Remove (ref iter);
 		}
 		
 		private void OnLibPathAdded (object sender, EventArgs e)
 		{
 			if (libPathEntry.Text.Length > 0) {
-				libPathTextView.Buffer.Text += libPathEntry.Text + "\n";
+				libPathStore.AppendValues (libPathEntry.Text);
 				libPathEntry.Text = string.Empty;
 			}
 		}
 		
 		private void OnLibPathRemoved (object sender, EventArgs e)
 		{
-			DeleteLine (libPathEntry.Text, libPathTextView.Buffer);
+			Gtk.TreeIter iter;
+			libPathTreeView.Selection.GetSelected (out iter);
+			libPathStore.Remove (ref iter);
 		}
 		
 		private void OnLibAdded (object sender, EventArgs e)
 		{
 			if (libAddEntry.Text.Length > 0) {				
-				store.AppendValues (libAddEntry.Text);
+				libStore.AppendValues (libAddEntry.Text);
 				libAddEntry.Text = string.Empty;
 			}
 		}
@@ -111,7 +127,7 @@ namespace CBinding
 		{
 			Gtk.TreeIter iter;
 			libTreeView.Selection.GetSelected (out iter);
-			store.Remove (ref iter);
+			libStore.Remove (ref iter);
 		}
 		
 		private void OnBrowseButtonClick (object sender, EventArgs e)
@@ -119,34 +135,20 @@ namespace CBinding
 			AddLibraryDialog dialog = new AddLibraryDialog ();
 			dialog.Run ();
 			libAddEntry.Text = dialog.Library;
-			OnLibAdded (null, null);
 		}
 		
-		private void DeleteLine (string line, Gtk.TextBuffer buffer)
+		private void OnIncludePathBrowseButtonClick (object sender, EventArgs e)
 		{
-			StringReader reader = new StringReader (buffer.Text);
-			Gtk.TextIter start;
-			Gtk.TextIter end;
-			string tmpline;
-			int lineNum = 0;
-			bool found = false;
-			
-			while ((tmpline = reader.ReadLine ()) != null) {
-				if (tmpline.Equals (line)) {
-					found = true;
-					break;
-				}
-				
-				lineNum++;
-			}
-			
-			reader.Close ();
-			
-			if (found) {
-				start = buffer.GetIterAtLine (lineNum);
-				end = buffer.GetIterAtLine (lineNum + 1);
-				buffer.Delete (ref start, ref end);
-			}
+			AddPathDialog dialog = new AddPathDialog ();
+			dialog.Run ();
+			includePathEntry.Text = dialog.SelectedPath;
+		}
+		
+		private void OnLibPathBrowseButtonClick (object sender, EventArgs e)
+		{
+			AddPathDialog dialog = new AddPathDialog ();
+			dialog.Run ();
+			libPathEntry.Text = dialog.SelectedPath;
 		}
 		
 		public bool Store ()
@@ -156,7 +158,6 @@ namespace CBinding
 			
 			string line;
 			Gtk.TreeIter iter;
-			StringReader reader;
 			
 			if (noWarningRadio.Active)
 				compilationParameters.WarningLevel = WarningLevel.None;
@@ -182,26 +183,28 @@ namespace CBinding
 			
 			compilationParameters.ExtraArguments = extraArgsEntry.Text;
 			
-			store.GetIterFirst (out iter);
+			libStore.GetIterFirst (out iter);
 			configuration.Libs.Clear ();
-			while (store.IterIsValid (iter)) {
-				line = (string)store.GetValue (iter, 0);
+			while (libStore.IterIsValid (iter)) {
+				line = (string)libStore.GetValue (iter, 0);
 				configuration.Libs.Add (line);
-				store.IterNext (ref iter);
+				libStore.IterNext (ref iter);
 			}
-
 			
-			reader = new StringReader (libPathTextView.Buffer.Text);
+			libPathStore.GetIterFirst (out iter);
 			configuration.LibPaths.Clear ();
-			while ((line = reader.ReadLine ()) != null)
+			while (libPathStore.IterIsValid (iter)) {
+				line = (string)libPathStore.GetValue (iter, 0);
 				configuration.LibPaths.Add (line);
-			reader.Close ();
+				libPathStore.IterNext (ref iter);
+			}
 			
-			reader = new StringReader (includePathTextView.Buffer.Text);
-			configuration.Includes.Clear ();
-			while ((line = reader.ReadLine ()) != null)
+			includePathStore.GetIterFirst (out iter);
+			while (includePathStore.IterIsValid (iter)) {
+				line = (string)includePathStore.GetValue (iter, 0);
 				configuration.Includes.Add (line);
-			reader.Close ();
+				includePathStore.IterNext (ref iter);
+			}
 			
 			return true;
 		}

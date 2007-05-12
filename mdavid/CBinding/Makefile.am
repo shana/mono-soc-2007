@@ -24,10 +24,12 @@ FILES = \
 	Gui/CodeGenerationPanel.cs \
 	Gui/CompilerPanel.cs \
 	Gui/AddLibraryDialog.cs \
+	Gui/AddPathDialog.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
 	gtk-gui/CBinding.CompilerPanel.cs \
 	gtk-gui/CBinding.AddLibraryDialog.cs \
+	gtk-gui/CBinding.AddPathDialog.cs \
 	CLanguageBinding.cs \
 	Compiler/ICompiler.cs \
 	Compiler/CCompiler.cs \

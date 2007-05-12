@@ -39,7 +39,6 @@ namespace CBinding
 				active++;
 			}
 
-			// FIXME: set correct active compiler
 			compilerComboBox.Active = active;
 		}
 		

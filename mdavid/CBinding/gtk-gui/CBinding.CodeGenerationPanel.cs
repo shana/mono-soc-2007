@@ -43,13 +43,7 @@ namespace CBinding {
         
         private Gtk.Table table2;
         
-        private Gtk.HBox hbox1;
-        
         private Gtk.Button addLibButton;
-        
-        private Gtk.VSeparator vseparator1;
-        
-        private Gtk.Button browseButton;
         
         private Gtk.Label label8;
         
@@ -59,7 +53,9 @@ namespace CBinding {
         
         private Gtk.TreeView libTreeView;
         
-        private Gtk.Table table3;
+        private Gtk.VBox vbox4;
+        
+        private Gtk.Button browseButton;
         
         private Gtk.Button removeLibButton;
         
@@ -67,31 +63,39 @@ namespace CBinding {
         
         private Gtk.VPaned vpaned1;
         
-        private Gtk.VBox vbox2;
-        
-        private Gtk.Label label9;
-        
-        private Gtk.TextView includePathTextView;
-        
-        private Gtk.HBox hbox2;
-        
-        private Gtk.Entry includePathEntry;
+        private Gtk.Table table3;
         
         private Gtk.Button includePathAddButton;
         
+        private Gtk.Entry includePathEntry;
+        
+        private Gtk.Label label9;
+        
+        private Gtk.ScrolledWindow scrolledwindow2;
+        
+        private Gtk.TreeView includePathTreeView;
+        
+        private Gtk.VBox vbox5;
+        
+        private Gtk.Button includePathBrowseButton;
+        
         private Gtk.Button includePathRemoveButton;
         
-        private Gtk.VBox vbox3;
+        private Gtk.Table table4;
         
         private Gtk.Label label10;
         
-        private Gtk.TextView libPathTextView;
-        
-        private Gtk.HBox hbox3;
+        private Gtk.Button libPathAddButton;
         
         private Gtk.Entry libPathEntry;
         
-        private Gtk.Button libPathAddButton;
+        private Gtk.ScrolledWindow scrolledwindow3;
+        
+        private Gtk.TreeView libPathTreeView;
+        
+        private Gtk.VBox vbox3;
+        
+        private Gtk.Button libPathBrowseButton;
         
         private Gtk.Button libPathRemoveButton;
         
@@ -263,52 +267,25 @@ namespace CBinding {
             this.table2.ColumnSpacing = ((uint)(10));
             this.table2.BorderWidth = ((uint)(3));
             // Container child table2.Gtk.Table+TableChild
-            this.hbox1 = new Gtk.HBox();
-            this.hbox1.Name = "hbox1";
-            // Container child hbox1.Gtk.Box+BoxChild
             this.addLibButton = new Gtk.Button();
             this.addLibButton.CanFocus = true;
             this.addLibButton.Name = "addLibButton";
             this.addLibButton.UseUnderline = true;
             this.addLibButton.Label = Mono.Unix.Catalog.GetString("Add");
-            this.hbox1.Add(this.addLibButton);
-            Gtk.Box.BoxChild w13 = ((Gtk.Box.BoxChild)(this.hbox1[this.addLibButton]));
-            w13.Position = 0;
-            w13.Expand = false;
-            w13.Fill = false;
-            // Container child hbox1.Gtk.Box+BoxChild
-            this.vseparator1 = new Gtk.VSeparator();
-            this.vseparator1.Name = "vseparator1";
-            this.hbox1.Add(this.vseparator1);
-            Gtk.Box.BoxChild w14 = ((Gtk.Box.BoxChild)(this.hbox1[this.vseparator1]));
-            w14.Position = 1;
-            w14.Expand = false;
-            w14.Fill = false;
-            // Container child hbox1.Gtk.Box+BoxChild
-            this.browseButton = new Gtk.Button();
-            this.browseButton.CanFocus = true;
-            this.browseButton.Name = "browseButton";
-            this.browseButton.UseUnderline = true;
-            this.browseButton.Label = Mono.Unix.Catalog.GetString("Browse...");
-            this.hbox1.Add(this.browseButton);
-            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.hbox1[this.browseButton]));
-            w15.Position = 2;
-            w15.Expand = false;
-            w15.Fill = false;
-            this.table2.Add(this.hbox1);
-            Gtk.Table.TableChild w16 = ((Gtk.Table.TableChild)(this.table2[this.hbox1]));
-            w16.LeftAttach = ((uint)(2));
-            w16.RightAttach = ((uint)(3));
-            w16.XOptions = ((Gtk.AttachOptions)(4));
-            w16.YOptions = ((Gtk.AttachOptions)(4));
+            this.table2.Add(this.addLibButton);
+            Gtk.Table.TableChild w13 = ((Gtk.Table.TableChild)(this.table2[this.addLibButton]));
+            w13.LeftAttach = ((uint)(2));
+            w13.RightAttach = ((uint)(3));
+            w13.XOptions = ((Gtk.AttachOptions)(4));
+            w13.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.label8 = new Gtk.Label();
             this.label8.Name = "label8";
             this.label8.LabelProp = Mono.Unix.Catalog.GetString("Library:");
             this.table2.Add(this.label8);
-            Gtk.Table.TableChild w17 = ((Gtk.Table.TableChild)(this.table2[this.label8]));
-            w17.XOptions = ((Gtk.AttachOptions)(4));
-            w17.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w14 = ((Gtk.Table.TableChild)(this.table2[this.label8]));
+            w14.XOptions = ((Gtk.AttachOptions)(4));
+            w14.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.libAddEntry = new Gtk.Entry();
             this.libAddEntry.CanFocus = true;
@@ -316,10 +293,10 @@ namespace CBinding {
             this.libAddEntry.IsEditable = true;
             this.libAddEntry.InvisibleChar = '●';
             this.table2.Add(this.libAddEntry);
-            Gtk.Table.TableChild w18 = ((Gtk.Table.TableChild)(this.table2[this.libAddEntry]));
-            w18.LeftAttach = ((uint)(1));
-            w18.RightAttach = ((uint)(2));
-            w18.YOptions = ((Gtk.AttachOptions)(4));
+            Gtk.Table.TableChild w15 = ((Gtk.Table.TableChild)(this.table2[this.libAddEntry]));
+            w15.LeftAttach = ((uint)(1));
+            w15.RightAttach = ((uint)(2));
+            w15.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table2.Gtk.Table+TableChild
             this.scrolledwindow1 = new Gtk.ScrolledWindow();
             this.scrolledwindow1.CanFocus = true;
@@ -333,37 +310,48 @@ namespace CBinding {
             this.libTreeView.Name = "libTreeView";
             this.scrolledwindow1.Add(this.libTreeView);
             this.table2.Add(this.scrolledwindow1);
-            Gtk.Table.TableChild w20 = ((Gtk.Table.TableChild)(this.table2[this.scrolledwindow1]));
-            w20.TopAttach = ((uint)(1));
-            w20.BottomAttach = ((uint)(2));
-            w20.LeftAttach = ((uint)(1));
-            w20.RightAttach = ((uint)(2));
+            Gtk.Table.TableChild w17 = ((Gtk.Table.TableChild)(this.table2[this.scrolledwindow1]));
+            w17.TopAttach = ((uint)(1));
+            w17.BottomAttach = ((uint)(2));
+            w17.LeftAttach = ((uint)(1));
+            w17.RightAttach = ((uint)(2));
             // Container child table2.Gtk.Table+TableChild
-            this.table3 = new Gtk.Table(((uint)(3)), ((uint)(3)), false);
-            this.table3.Name = "table3";
-            this.table3.RowSpacing = ((uint)(6));
-            this.table3.ColumnSpacing = ((uint)(6));
-            // Container child table3.Gtk.Table+TableChild
+            this.vbox4 = new Gtk.VBox();
+            this.vbox4.Name = "vbox4";
+            this.vbox4.Spacing = 6;
+            // Container child vbox4.Gtk.Box+BoxChild
+            this.browseButton = new Gtk.Button();
+            this.browseButton.CanFocus = true;
+            this.browseButton.Name = "browseButton";
+            this.browseButton.UseUnderline = true;
+            this.browseButton.Label = Mono.Unix.Catalog.GetString("Browse...");
+            this.vbox4.Add(this.browseButton);
+            Gtk.Box.BoxChild w18 = ((Gtk.Box.BoxChild)(this.vbox4[this.browseButton]));
+            w18.Position = 0;
+            w18.Expand = false;
+            w18.Fill = false;
+            // Container child vbox4.Gtk.Box+BoxChild
             this.removeLibButton = new Gtk.Button();
             this.removeLibButton.CanFocus = true;
             this.removeLibButton.Name = "removeLibButton";
             this.removeLibButton.UseUnderline = true;
             this.removeLibButton.Label = Mono.Unix.Catalog.GetString("Remove");
-            this.table3.Add(this.removeLibButton);
-            Gtk.Table.TableChild w21 = ((Gtk.Table.TableChild)(this.table3[this.removeLibButton]));
-            w21.XOptions = ((Gtk.AttachOptions)(4));
-            w21.YOptions = ((Gtk.AttachOptions)(4));
-            this.table2.Add(this.table3);
-            Gtk.Table.TableChild w22 = ((Gtk.Table.TableChild)(this.table2[this.table3]));
-            w22.TopAttach = ((uint)(1));
-            w22.BottomAttach = ((uint)(2));
-            w22.LeftAttach = ((uint)(2));
-            w22.RightAttach = ((uint)(3));
-            w22.XOptions = ((Gtk.AttachOptions)(4));
+            this.vbox4.Add(this.removeLibButton);
+            Gtk.Box.BoxChild w19 = ((Gtk.Box.BoxChild)(this.vbox4[this.removeLibButton]));
+            w19.Position = 1;
+            w19.Expand = false;
+            w19.Fill = false;
+            this.table2.Add(this.vbox4);
+            Gtk.Table.TableChild w20 = ((Gtk.Table.TableChild)(this.table2[this.vbox4]));
+            w20.TopAttach = ((uint)(1));
+            w20.BottomAttach = ((uint)(2));
+            w20.LeftAttach = ((uint)(2));
+            w20.RightAttach = ((uint)(3));
+            w20.XOptions = ((Gtk.AttachOptions)(4));
             this.notebook1.Add(this.table2);
-            Gtk.Notebook.NotebookChild w23 = ((Gtk.Notebook.NotebookChild)(this.notebook1[this.table2]));
-            w23.Position = 1;
-            w23.TabExpand = false;
+            Gtk.Notebook.NotebookChild w21 = ((Gtk.Notebook.NotebookChild)(this.notebook1[this.table2]));
+            w21.Position = 1;
+            w21.TabExpand = false;
             // Notebook tab
             this.label2 = new Gtk.Label();
             this.label2.Name = "label2";
@@ -376,143 +364,187 @@ namespace CBinding {
             this.vpaned1.Position = 172;
             this.vpaned1.BorderWidth = ((uint)(3));
             // Container child vpaned1.Gtk.Paned+PanedChild
-            this.vbox2 = new Gtk.VBox();
-            this.vbox2.Name = "vbox2";
-            this.vbox2.Spacing = 10;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.label9 = new Gtk.Label();
-            this.label9.Name = "label9";
-            this.label9.Xpad = 10;
-            this.label9.Xalign = 0F;
-            this.label9.LabelProp = Mono.Unix.Catalog.GetString("Include:");
-            this.vbox2.Add(this.label9);
-            Gtk.Box.BoxChild w24 = ((Gtk.Box.BoxChild)(this.vbox2[this.label9]));
-            w24.Position = 0;
-            w24.Expand = false;
-            w24.Fill = false;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.includePathTextView = new Gtk.TextView();
-            this.includePathTextView.CanFocus = true;
-            this.includePathTextView.Name = "includePathTextView";
-            this.includePathTextView.Editable = false;
-            this.includePathTextView.CursorVisible = false;
-            this.includePathTextView.LeftMargin = 10;
-            this.vbox2.Add(this.includePathTextView);
-            Gtk.Box.BoxChild w25 = ((Gtk.Box.BoxChild)(this.vbox2[this.includePathTextView]));
-            w25.Position = 1;
-            // Container child vbox2.Gtk.Box+BoxChild
-            this.hbox2 = new Gtk.HBox();
-            this.hbox2.Name = "hbox2";
-            this.hbox2.Spacing = 5;
-            // Container child hbox2.Gtk.Box+BoxChild
-            this.includePathEntry = new Gtk.Entry();
-            this.includePathEntry.CanFocus = true;
-            this.includePathEntry.Name = "includePathEntry";
-            this.includePathEntry.IsEditable = true;
-            this.includePathEntry.InvisibleChar = '●';
-            this.hbox2.Add(this.includePathEntry);
-            Gtk.Box.BoxChild w26 = ((Gtk.Box.BoxChild)(this.hbox2[this.includePathEntry]));
-            w26.Position = 0;
-            // Container child hbox2.Gtk.Box+BoxChild
+            this.table3 = new Gtk.Table(((uint)(2)), ((uint)(3)), false);
+            this.table3.Name = "table3";
+            this.table3.RowSpacing = ((uint)(10));
+            this.table3.ColumnSpacing = ((uint)(10));
+            // Container child table3.Gtk.Table+TableChild
             this.includePathAddButton = new Gtk.Button();
             this.includePathAddButton.CanFocus = true;
             this.includePathAddButton.Name = "includePathAddButton";
             this.includePathAddButton.UseUnderline = true;
             this.includePathAddButton.Label = Mono.Unix.Catalog.GetString("Add");
-            this.hbox2.Add(this.includePathAddButton);
-            Gtk.Box.BoxChild w27 = ((Gtk.Box.BoxChild)(this.hbox2[this.includePathAddButton]));
-            w27.Position = 1;
+            this.table3.Add(this.includePathAddButton);
+            Gtk.Table.TableChild w22 = ((Gtk.Table.TableChild)(this.table3[this.includePathAddButton]));
+            w22.LeftAttach = ((uint)(2));
+            w22.RightAttach = ((uint)(3));
+            w22.XOptions = ((Gtk.AttachOptions)(4));
+            w22.YOptions = ((Gtk.AttachOptions)(4));
+            // Container child table3.Gtk.Table+TableChild
+            this.includePathEntry = new Gtk.Entry();
+            this.includePathEntry.CanFocus = true;
+            this.includePathEntry.Name = "includePathEntry";
+            this.includePathEntry.IsEditable = true;
+            this.includePathEntry.InvisibleChar = '●';
+            this.table3.Add(this.includePathEntry);
+            Gtk.Table.TableChild w23 = ((Gtk.Table.TableChild)(this.table3[this.includePathEntry]));
+            w23.LeftAttach = ((uint)(1));
+            w23.RightAttach = ((uint)(2));
+            w23.YOptions = ((Gtk.AttachOptions)(4));
+            // Container child table3.Gtk.Table+TableChild
+            this.label9 = new Gtk.Label();
+            this.label9.Name = "label9";
+            this.label9.LabelProp = Mono.Unix.Catalog.GetString("Include:");
+            this.table3.Add(this.label9);
+            Gtk.Table.TableChild w24 = ((Gtk.Table.TableChild)(this.table3[this.label9]));
+            w24.XOptions = ((Gtk.AttachOptions)(4));
+            w24.YOptions = ((Gtk.AttachOptions)(4));
+            // Container child table3.Gtk.Table+TableChild
+            this.scrolledwindow2 = new Gtk.ScrolledWindow();
+            this.scrolledwindow2.CanFocus = true;
+            this.scrolledwindow2.Name = "scrolledwindow2";
+            this.scrolledwindow2.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow2.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow2.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child scrolledwindow2.Gtk.Container+ContainerChild
+            this.includePathTreeView = new Gtk.TreeView();
+            this.includePathTreeView.CanFocus = true;
+            this.includePathTreeView.Name = "includePathTreeView";
+            this.scrolledwindow2.Add(this.includePathTreeView);
+            this.table3.Add(this.scrolledwindow2);
+            Gtk.Table.TableChild w26 = ((Gtk.Table.TableChild)(this.table3[this.scrolledwindow2]));
+            w26.TopAttach = ((uint)(1));
+            w26.BottomAttach = ((uint)(2));
+            w26.LeftAttach = ((uint)(1));
+            w26.RightAttach = ((uint)(2));
+            // Container child table3.Gtk.Table+TableChild
+            this.vbox5 = new Gtk.VBox();
+            this.vbox5.Name = "vbox5";
+            this.vbox5.Spacing = 6;
+            // Container child vbox5.Gtk.Box+BoxChild
+            this.includePathBrowseButton = new Gtk.Button();
+            this.includePathBrowseButton.CanFocus = true;
+            this.includePathBrowseButton.Name = "includePathBrowseButton";
+            this.includePathBrowseButton.UseUnderline = true;
+            this.includePathBrowseButton.Label = Mono.Unix.Catalog.GetString("Browse...");
+            this.vbox5.Add(this.includePathBrowseButton);
+            Gtk.Box.BoxChild w27 = ((Gtk.Box.BoxChild)(this.vbox5[this.includePathBrowseButton]));
+            w27.Position = 0;
             w27.Expand = false;
             w27.Fill = false;
-            // Container child hbox2.Gtk.Box+BoxChild
+            // Container child vbox5.Gtk.Box+BoxChild
             this.includePathRemoveButton = new Gtk.Button();
             this.includePathRemoveButton.CanFocus = true;
             this.includePathRemoveButton.Name = "includePathRemoveButton";
             this.includePathRemoveButton.UseUnderline = true;
             this.includePathRemoveButton.Label = Mono.Unix.Catalog.GetString("Remove");
-            this.hbox2.Add(this.includePathRemoveButton);
-            Gtk.Box.BoxChild w28 = ((Gtk.Box.BoxChild)(this.hbox2[this.includePathRemoveButton]));
-            w28.Position = 2;
+            this.vbox5.Add(this.includePathRemoveButton);
+            Gtk.Box.BoxChild w28 = ((Gtk.Box.BoxChild)(this.vbox5[this.includePathRemoveButton]));
+            w28.Position = 1;
             w28.Expand = false;
             w28.Fill = false;
-            this.vbox2.Add(this.hbox2);
-            Gtk.Box.BoxChild w29 = ((Gtk.Box.BoxChild)(this.vbox2[this.hbox2]));
-            w29.Position = 2;
-            w29.Expand = false;
-            w29.Fill = false;
-            this.vpaned1.Add(this.vbox2);
-            Gtk.Paned.PanedChild w30 = ((Gtk.Paned.PanedChild)(this.vpaned1[this.vbox2]));
+            this.table3.Add(this.vbox5);
+            Gtk.Table.TableChild w29 = ((Gtk.Table.TableChild)(this.table3[this.vbox5]));
+            w29.TopAttach = ((uint)(1));
+            w29.BottomAttach = ((uint)(2));
+            w29.LeftAttach = ((uint)(2));
+            w29.RightAttach = ((uint)(3));
+            w29.XOptions = ((Gtk.AttachOptions)(4));
+            this.vpaned1.Add(this.table3);
+            Gtk.Paned.PanedChild w30 = ((Gtk.Paned.PanedChild)(this.vpaned1[this.table3]));
             w30.Resize = false;
             // Container child vpaned1.Gtk.Paned+PanedChild
-            this.vbox3 = new Gtk.VBox();
-            this.vbox3.Name = "vbox3";
-            this.vbox3.Spacing = 10;
-            // Container child vbox3.Gtk.Box+BoxChild
+            this.table4 = new Gtk.Table(((uint)(2)), ((uint)(3)), false);
+            this.table4.Name = "table4";
+            this.table4.RowSpacing = ((uint)(10));
+            this.table4.ColumnSpacing = ((uint)(10));
+            // Container child table4.Gtk.Table+TableChild
             this.label10 = new Gtk.Label();
             this.label10.Name = "label10";
-            this.label10.Xpad = 10;
-            this.label10.Xalign = 0F;
             this.label10.LabelProp = Mono.Unix.Catalog.GetString("Library:");
-            this.vbox3.Add(this.label10);
-            Gtk.Box.BoxChild w31 = ((Gtk.Box.BoxChild)(this.vbox3[this.label10]));
-            w31.Position = 0;
-            w31.Expand = false;
-            w31.Fill = false;
-            // Container child vbox3.Gtk.Box+BoxChild
-            this.libPathTextView = new Gtk.TextView();
-            this.libPathTextView.CanFocus = true;
-            this.libPathTextView.Name = "libPathTextView";
-            this.libPathTextView.Editable = false;
-            this.libPathTextView.CursorVisible = false;
-            this.libPathTextView.LeftMargin = 10;
-            this.vbox3.Add(this.libPathTextView);
-            Gtk.Box.BoxChild w32 = ((Gtk.Box.BoxChild)(this.vbox3[this.libPathTextView]));
-            w32.Position = 1;
-            // Container child vbox3.Gtk.Box+BoxChild
-            this.hbox3 = new Gtk.HBox();
-            this.hbox3.Name = "hbox3";
-            this.hbox3.Spacing = 5;
-            // Container child hbox3.Gtk.Box+BoxChild
-            this.libPathEntry = new Gtk.Entry();
-            this.libPathEntry.CanFocus = true;
-            this.libPathEntry.Name = "libPathEntry";
-            this.libPathEntry.IsEditable = true;
-            this.libPathEntry.InvisibleChar = '●';
-            this.hbox3.Add(this.libPathEntry);
-            Gtk.Box.BoxChild w33 = ((Gtk.Box.BoxChild)(this.hbox3[this.libPathEntry]));
-            w33.Position = 0;
-            // Container child hbox3.Gtk.Box+BoxChild
+            this.table4.Add(this.label10);
+            Gtk.Table.TableChild w31 = ((Gtk.Table.TableChild)(this.table4[this.label10]));
+            w31.XOptions = ((Gtk.AttachOptions)(4));
+            w31.YOptions = ((Gtk.AttachOptions)(4));
+            // Container child table4.Gtk.Table+TableChild
             this.libPathAddButton = new Gtk.Button();
             this.libPathAddButton.CanFocus = true;
             this.libPathAddButton.Name = "libPathAddButton";
             this.libPathAddButton.UseUnderline = true;
             this.libPathAddButton.Label = Mono.Unix.Catalog.GetString("Add");
-            this.hbox3.Add(this.libPathAddButton);
-            Gtk.Box.BoxChild w34 = ((Gtk.Box.BoxChild)(this.hbox3[this.libPathAddButton]));
-            w34.Position = 1;
-            w34.Expand = false;
-            w34.Fill = false;
-            // Container child hbox3.Gtk.Box+BoxChild
+            this.table4.Add(this.libPathAddButton);
+            Gtk.Table.TableChild w32 = ((Gtk.Table.TableChild)(this.table4[this.libPathAddButton]));
+            w32.LeftAttach = ((uint)(2));
+            w32.RightAttach = ((uint)(3));
+            w32.XOptions = ((Gtk.AttachOptions)(4));
+            w32.YOptions = ((Gtk.AttachOptions)(4));
+            // Container child table4.Gtk.Table+TableChild
+            this.libPathEntry = new Gtk.Entry();
+            this.libPathEntry.CanFocus = true;
+            this.libPathEntry.Name = "libPathEntry";
+            this.libPathEntry.IsEditable = true;
+            this.libPathEntry.InvisibleChar = '●';
+            this.table4.Add(this.libPathEntry);
+            Gtk.Table.TableChild w33 = ((Gtk.Table.TableChild)(this.table4[this.libPathEntry]));
+            w33.LeftAttach = ((uint)(1));
+            w33.RightAttach = ((uint)(2));
+            w33.YOptions = ((Gtk.AttachOptions)(4));
+            // Container child table4.Gtk.Table+TableChild
+            this.scrolledwindow3 = new Gtk.ScrolledWindow();
+            this.scrolledwindow3.CanFocus = true;
+            this.scrolledwindow3.Name = "scrolledwindow3";
+            this.scrolledwindow3.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow3.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow3.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child scrolledwindow3.Gtk.Container+ContainerChild
+            this.libPathTreeView = new Gtk.TreeView();
+            this.libPathTreeView.CanFocus = true;
+            this.libPathTreeView.Name = "libPathTreeView";
+            this.scrolledwindow3.Add(this.libPathTreeView);
+            this.table4.Add(this.scrolledwindow3);
+            Gtk.Table.TableChild w35 = ((Gtk.Table.TableChild)(this.table4[this.scrolledwindow3]));
+            w35.TopAttach = ((uint)(1));
+            w35.BottomAttach = ((uint)(2));
+            w35.LeftAttach = ((uint)(1));
+            w35.RightAttach = ((uint)(2));
+            // Container child table4.Gtk.Table+TableChild
+            this.vbox3 = new Gtk.VBox();
+            this.vbox3.Name = "vbox3";
+            this.vbox3.Spacing = 6;
+            // Container child vbox3.Gtk.Box+BoxChild
+            this.libPathBrowseButton = new Gtk.Button();
+            this.libPathBrowseButton.CanFocus = true;
+            this.libPathBrowseButton.Name = "libPathBrowseButton";
+            this.libPathBrowseButton.UseUnderline = true;
+            this.libPathBrowseButton.Label = Mono.Unix.Catalog.GetString("Browse...");
+            this.vbox3.Add(this.libPathBrowseButton);
+            Gtk.Box.BoxChild w36 = ((Gtk.Box.BoxChild)(this.vbox3[this.libPathBrowseButton]));
+            w36.Position = 0;
+            w36.Expand = false;
+            w36.Fill = false;
+            // Container child vbox3.Gtk.Box+BoxChild
             this.libPathRemoveButton = new Gtk.Button();
             this.libPathRemoveButton.CanFocus = true;
             this.libPathRemoveButton.Name = "libPathRemoveButton";
             this.libPathRemoveButton.UseUnderline = true;
             this.libPathRemoveButton.Label = Mono.Unix.Catalog.GetString("Remove");
-            this.hbox3.Add(this.libPathRemoveButton);
-            Gtk.Box.BoxChild w35 = ((Gtk.Box.BoxChild)(this.hbox3[this.libPathRemoveButton]));
-            w35.Position = 2;
-            w35.Expand = false;
-            w35.Fill = false;
-            this.vbox3.Add(this.hbox3);
-            Gtk.Box.BoxChild w36 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbox3]));
-            w36.Position = 2;
-            w36.Expand = false;
-            w36.Fill = false;
-            this.vpaned1.Add(this.vbox3);
+            this.vbox3.Add(this.libPathRemoveButton);
+            Gtk.Box.BoxChild w37 = ((Gtk.Box.BoxChild)(this.vbox3[this.libPathRemoveButton]));
+            w37.Position = 1;
+            w37.Expand = false;
+            w37.Fill = false;
+            this.table4.Add(this.vbox3);
+            Gtk.Table.TableChild w38 = ((Gtk.Table.TableChild)(this.table4[this.vbox3]));
+            w38.TopAttach = ((uint)(1));
+            w38.BottomAttach = ((uint)(2));
+            w38.LeftAttach = ((uint)(2));
+            w38.RightAttach = ((uint)(3));
+            w38.XOptions = ((Gtk.AttachOptions)(4));
+            this.vpaned1.Add(this.table4);
             this.notebook1.Add(this.vpaned1);
-            Gtk.Notebook.NotebookChild w38 = ((Gtk.Notebook.NotebookChild)(this.notebook1[this.vpaned1]));
-            w38.Position = 2;
-            w38.TabExpand = false;
+            Gtk.Notebook.NotebookChild w40 = ((Gtk.Notebook.NotebookChild)(this.notebook1[this.vpaned1]));
+            w40.Position = 2;
+            w40.TabExpand = false;
             // Notebook tab
             this.label3 = new Gtk.Label();
             this.label3.Name = "label3";
