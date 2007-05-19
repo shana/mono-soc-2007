@@ -43,7 +43,7 @@ namespace Ribbons
 			get { return prettyBright; }
 		}
 		
-		public ColorScheme() : this (new Color(244, 244, 244))
+		public ColorScheme() : this (new Color(0.957, 0.957, 0.957))
 		{
 			
 		}
