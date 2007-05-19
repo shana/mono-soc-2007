@@ -30,7 +30,6 @@ FILES = \
 	gtk-gui/CBinding.CompilerPanel.cs \
 	gtk-gui/CBinding.AddLibraryDialog.cs \
 	gtk-gui/CBinding.AddPathDialog.cs \
-	CLanguageBinding.cs \
 	Compiler/ICompiler.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GNUCompiler.cs \
