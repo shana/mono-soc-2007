@@ -49,7 +49,7 @@
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">
-		<ProjectBinding id = "CProject" class = "CBinding.CProjectBinding" />
+		<ProjectBinding id = "CProject" class = "CBinding.CProjectBinding"/>
 	</Extension>
 
 	<Extension path = "/SharpDevelop/Workbench/ProjectOptions/ConfigurationProperties">
@@ -70,12 +70,9 @@
 			    class = "CBinding.CompilerPanelBinding"/>
 		</Condition>
 	</Extension>
-
-	<Extension path = "/SharpDevelop/Workbench/LanguageBindings">
-		<LanguageBinding
-			id = "C"
-			supportedextensions = ".c,.h"
-			class = "CBinding.CLanguageBinding"/>
+	
+	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
+		<NodeBuilder class = "CBinding.ProjectReferencesExtension"/>
 	</Extension>
 
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
