@@ -35,7 +35,7 @@ namespace Ribbons
 				double bandHeight = lblHeight + 2*space;
 				cr.Arc (x1, y1, roundSize - lineWidth15, 0, Math.PI/2);
 				cr.Arc (x0, y1 - lineWidth, roundSize - lineWidth05, Math.PI/2, Math.PI);
-				double bandY = y1 + lineWidth - lineWidth15 - bandHeight;
+				double bandY = y1 + roundSize - 2*lineWidth - bandHeight;
 				cr.LineTo (x0 - roundSize + lineWidth05, bandY);
 				cr.LineTo (x1 + roundSize - lineWidth15, bandY);
 				linGrad = new LinearGradient (0, bandY, 0, bandY + bandHeight);
