@@ -72,9 +72,12 @@
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
-		<NodeBuilder class = "CBinding.ProjectReferencesExtension"/>
+	<!-- Condition not working (It's never true) -->
+		<!--<Condition id = "activelanguage" value = "C">-->
+			<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
+		<!--</Condition>-->
 	</Extension>
-
+	
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
 		<DataType class = "CBinding.CCompilationParameters"/>
 		<DataType class = "CBinding.CProjectConfiguration"/>

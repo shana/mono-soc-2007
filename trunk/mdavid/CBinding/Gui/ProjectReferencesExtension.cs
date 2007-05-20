@@ -2,9 +2,12 @@ using System;
 
 using Mono.Addins;
 
+using MonoDevelop.Components.Commands;
 using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Ide.Gui.Pads.ProjectPad;
+using MonoDevelop.Ide.Commands;
 
 namespace CBinding
 {
@@ -12,16 +15,27 @@ namespace CBinding
 	{
 		public override bool CanBuildNode (Type dataType)
 		{
-			// Just for testing purposes...
-			return true;
+			return typeof(ProjectReferenceCollection).IsAssignableFrom (dataType);
 		}
 		
-		// Can't figure out why this doesn't work
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			// TEST
-			MonoDevelop.Ide.Gui.IdeApp.Services.MessageService.ShowMessage ("This code was called!");
-			label = "pretty label please change";
+			label = "Packages";
 		}
+	}
+	
+	public class ProjectReferencesExtensionCommandHandler : NodeCommandHandler
+	{
+		[CommandHandler (ProjectCommands.AddReference)]
+		public void AddReferenceToProject ()
+		{
+			IdeApp.Services.MessageService.ShowMessage ("Add a package!");
+		}
+		
+		public override void ActivateItem ()
+		{
+			IdeApp.Services.MessageService.ShowMessage ("Add a package!");
+		}
+
 	}
 }

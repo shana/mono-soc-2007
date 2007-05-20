@@ -5,14 +5,14 @@ ASSEMBLY = $(ADDIN_BUILD)/CBinding.dll
 REFS = \
 	-r:System \
 	-r:System.Xml \
-	-r:mscorlib \
 	-r:Mono.Posix \
 	-r:$(top_builddir)/contrib/Mono.Addins.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Core.Gui.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.Gui.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll \
 	$(GTK_SHARP_LIBS)
 	
 
