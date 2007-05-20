@@ -7,12 +7,13 @@ namespace Ribbons
 	{
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
-		public void DrawGroup (Context cr, Rectangle r, RibbonGroup w)
+		public void DrawGroup (Context cr, Rectangle r, Pango.Layout l, RibbonGroup w)
 		{
 			double roundSize = 4.0;
 			double lineWidth = 1.0;
 			double space = 2.0;
 			double lineWidth05 = lineWidth/2, lineWidth15 = 3*lineWidth05;
+			LinearGradient linGrad;
 			
 			double x0 = r.X + roundSize, x1 = r.X + r.Width - roundSize;
 			double y0 = r.Y + roundSize, y1 = r.Y + r.Height - roundSize;
@@ -25,37 +26,47 @@ namespace Ribbons
 			cr.Color = colorScheme.Bright;
 			cr.Stroke ();
 			
-			Pango.Layout layout = new Pango.Layout(w.PangoContext);
-			layout.SetText(w.Label);
-			int lblWidth, lblHeight;
-			layout.GetPixelSize(out lblWidth, out lblHeight);
+			if(l != null)
+			{
+				int lblWidth, lblHeight;
+				Pango.CairoHelper.UpdateLayout (cr, l);
+				l.GetPixelSize(out lblWidth, out lblHeight);
+				
+				double bandHeight = lblHeight + 2*space;
+				cr.Arc (x1, y1, roundSize - lineWidth15, 0, Math.PI/2);
+				cr.Arc (x0, y1 - lineWidth, roundSize - lineWidth05, Math.PI/2, Math.PI);
+				double bandY = y1 + lineWidth - lineWidth15 - bandHeight;
+				cr.LineTo (x0 - roundSize + lineWidth05, bandY);
+				cr.LineTo (x1 + roundSize - lineWidth15, bandY);
+				linGrad = new LinearGradient (0, bandY, 0, bandY + bandHeight);
+				linGrad.AddColorStop (0.0, colorScheme.LightDark);
+				linGrad.AddColorStop (1.0, ColorScheme.GetColor(colorScheme.LightDark, 0.92));
+				cr.Pattern = linGrad;
+				cr.Fill ();
+				
+				cr.Save ();
+				cr.Rectangle (r.X + 2*lineWidth, bandY, r.Width - 4*lineWidth, bandHeight);
+				cr.Clip ();
+				
+				cr.Color = new Color(0, 0, 0);
+				Pango.CairoHelper.UpdateLayout (cr, l);
+				cr.MoveTo (r.X + Math.Max(2*lineWidth, (r.Width - lblWidth) / 2), bandY + space);
+				Pango.CairoHelper.ShowLayout (cr, l);
+				
+				cr.Restore();
+			}
 			
-			double bandHeight = lblHeight + 2*space;
-			cr.Arc (x1, y1, roundSize - lineWidth15, 0, Math.PI/2);
-			cr.Arc (x0, y1 - lineWidth, roundSize - lineWidth05, Math.PI/2, Math.PI);
-			double bandY = y1 + lineWidth - lineWidth15 - bandHeight;
-			cr.LineTo (x0 - roundSize + lineWidth05, bandY);
-			cr.LineTo (x1 + roundSize - lineWidth15, bandY);
-			LinearGradient ribbonGroupBandGradient = new LinearGradient (0, bandY, 0, bandY + bandHeight);
-			ribbonGroupBandGradient.AddColorStop (0.0, colorScheme.LightDark);
-			ribbonGroupBandGradient.AddColorStop (1.0, ColorScheme.GetColor(colorScheme.LightDark, 0.92));
-			cr.Pattern = ribbonGroupBandGradient;
-			cr.Fill ();
-			
-			/*cr.Color = new Color(0, 0, 0);
-			cr.MoveTo (10, bandY);
-			Pango.CairoHelper.ShowLayout(cr, layout);*/
-			
+			cr.MoveTo (x1 + roundSize - lineWidth15, y1);
 			cr.Arc (x1, y1, roundSize - lineWidth15, 0, Math.PI/2);
 			cr.Arc (x0, y1 - lineWidth, roundSize - lineWidth05, Math.PI/2, Math.PI);
 			cr.Arc (x0, y0, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
 			cr.Arc (x1 - lineWidth, y0, roundSize - lineWidth05, 3*Math.PI/2, 0);
 			cr.LineTo (x1 + roundSize - lineWidth15, y1);
 			cr.LineWidth = lineWidth;
-			ribbonGroupBandGradient = new LinearGradient (0, r.Y, 0, r.Y + r.Height - lineWidth);
-			ribbonGroupBandGradient.AddColorStop (0.0, ColorScheme.GetColor(colorScheme.Dark, 1.1));
-			ribbonGroupBandGradient.AddColorStop (1.0, colorScheme.Dark);
-			cr.Pattern = ribbonGroupBandGradient;
+			linGrad = new LinearGradient (0, r.Y, 0, r.Y + r.Height - lineWidth);
+			linGrad.AddColorStop (0.0, ColorScheme.GetColor(colorScheme.Dark, 1.1));
+			linGrad.AddColorStop (1.0, colorScheme.Dark);
+			cr.Pattern = linGrad;
 			cr.Stroke ();
 		}
 		
