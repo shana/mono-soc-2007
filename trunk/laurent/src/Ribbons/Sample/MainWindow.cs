@@ -20,6 +20,7 @@ namespace Sample
 			button0 = new Button();
 			button0.Label = "Test";
 			group = new RibbonGroup ();
+			group.Label = "Summer of Code";
 			//Add (button0);
 			Add (group);
 			
