@@ -1,13 +1,7 @@
 using System;
 
-using Mono.Addins;
-
-using MonoDevelop.Components.Commands;
 using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
-using MonoDevelop.Ide.Gui.Pads.ProjectPad;
-using MonoDevelop.Ide.Commands;
 
 namespace CBinding
 {
@@ -18,24 +12,9 @@ namespace CBinding
 			return typeof(ProjectReferenceCollection).IsAssignableFrom (dataType);
 		}
 		
-		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
+		public override void GetNodeAttributes (ITreeNavigator parentNode, object dataObject, ref NodeAttributes attributes)
 		{
-			label = "Packages";
+			attributes |= NodeAttributes.Hidden;
 		}
-	}
-	
-	public class ProjectReferencesExtensionCommandHandler : NodeCommandHandler
-	{
-		[CommandHandler (ProjectCommands.AddReference)]
-		public void AddReferenceToProject ()
-		{
-			IdeApp.Services.MessageService.ShowMessage ("Add a package!");
-		}
-		
-		public override void ActivateItem ()
-		{
-			IdeApp.Services.MessageService.ShowMessage ("Add a package!");
-		}
-
 	}
 }

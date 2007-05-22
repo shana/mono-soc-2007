@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using System.Collections;
 using System.CodeDom.Compiler;
 
 using MonoDevelop.Core;
@@ -22,6 +23,10 @@ namespace CBinding
 		
 		[ItemProperty]
 		private Language language;
+		
+		[ItemProperty ("Packages")]
+		[ItemProperty ("Package", Scope = 1, ValueType = typeof(string))]
+    	private ArrayList packages = new ArrayList ();
 		
 		public CProject ()
 		{
@@ -151,6 +156,10 @@ namespace CBinding
 						compiler_manager = new GppCompiler ();
 				}
 			}
+		}
+		
+		public ArrayList Packages {
+			get { return packages; }
 		}
 		
 		protected override void OnFileAddedToProject (ProjectFileEventArgs e)
