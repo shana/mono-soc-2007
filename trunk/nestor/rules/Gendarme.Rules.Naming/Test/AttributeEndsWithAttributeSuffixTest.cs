@@ -50,6 +50,12 @@ namespace Test.Rules.Naming {
 	public class CorrectContextStaticAttribute : ContextStaticAttribute {
 	}
 	
+	public class OtherClass {
+	}
+	
+	public class YetAnotherClass : System.Exception {
+	}
+	
 	[TestFixture]
 	public class AttributeEndsWithAttributeSuffixTest {
 		private ITypeRule rule;
@@ -110,13 +116,27 @@ namespace Test.Rules.Naming {
 		}
 		
 		[Test]
-		public void TestVariousLevelInheritanceExternalTypeCorrectName () 
+		public void TestVariousLevelInheritanceExternalTypeUndetermined () 
 		{
 		    type = assembly.MainModule.Types ["Test.Rules.Naming.CorrectContextStaticAttribute"];
 		    messageCollection = rule.CheckType (type, new MinimalRunner ());
 		    Assert.IsNotNull (messageCollection);
 		    Assert.AreEqual (messageCollection.Count, 1);
 		    checkMessageType (messageCollection, MessageType.Warning);
+		}
+		
+		[Test]
+		public void TestOneLevelInheritanceExternalTypeNoApplyed () {
+			type = assembly.MainModule.Types ["Test.Rules.Naming.OtherClass"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+		
+		[Test]
+		public void TestVariousLevelInheritanceExternalTypeNoApplyed () {
+			type = assembly.MainModule.Types ["Test.Rules.Naming.YetAnotherClass"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
 		}
 	}
 }
