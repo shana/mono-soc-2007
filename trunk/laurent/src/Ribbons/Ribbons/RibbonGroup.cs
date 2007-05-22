@@ -4,7 +4,7 @@ using System;
 
 namespace Ribbons
 {
-	public class RibbonGroup : Widget
+	public class RibbonGroup : Bin
 	{
 		protected Theme theme = new Theme ();
 		protected string lbl;
@@ -34,6 +34,36 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			Label = null;
+			HeightRequest = 87;
+			BorderWidth = 0;
+		}
+		
+		protected override void OnSizeRequested (ref Requisition requisition)
+		{
+			base.OnSizeRequested (ref requisition);
+			
+			if(WidthRequest == -1)
+			{
+				if(Child != null && Child.Visible)
+				{
+					Requisition childRequisition = Child.SizeRequest ();
+					requisition.Width = theme.SizeRequestedByGroup (this, lbl_layout, childRequisition).Width; 
+				}
+				else
+				{
+					requisition.Width = theme.SizeRequestedByGroup (this, lbl_layout).Width;
+				}
+			}
+		}
+		
+		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
+		{
+			base.OnSizeAllocated (allocation);
+			
+			if(Child != null && Child.Visible)
+			{
+				Child.SizeAllocate (theme.SizeAllocatedToChildByGroup (this, lbl_layout, allocation));
+			}
 		}
 		
 		protected void Draw (Context cr)
@@ -47,8 +77,8 @@ namespace Ribbons
 			Context cr = Gdk.CairoHelper.Create (this.GdkWindow);
 			
 			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-			cr.Clip();
-			Draw(cr);
+			cr.Clip ();
+			Draw (cr);
 			
 			return base.OnExposeEvent (evnt);
 		}
