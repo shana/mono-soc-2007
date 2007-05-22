@@ -26,6 +26,8 @@ FILES = \
 	Gui/AddLibraryDialog.cs \
 	Gui/AddPathDialog.cs \
 	Gui/ProjectReferencesExtension.cs \
+	Gui/ProjectNodeExtension.cs \
+	Gui/ProjectPackagesFolderNodeBuilder.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
 	gtk-gui/CBinding.CompilerPanel.cs \

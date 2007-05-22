@@ -71,11 +71,27 @@
 		</Condition>
 	</Extension>
 	
+	<ExtensionPoint path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode" name = "Packages folder context menu">
+		<Description>Context menu for packages folder in the solution pad.</Description>
+		<ExtensionNodeSet id = "MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
 	<!-- Condition not working (It's never true) -->
 		<!--<Condition id = "activelanguage" value = "C">-->
 			<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
+			<NodeBuilder id = "ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
+			<NodeBuilder id = "ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
 		<!--</Condition>-->
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Commands">
+		<Command id = "CBinding.CProjectCommands.AddPackage" _label = "Edit Packages..."/>
+	</Extension>
+	
+	<Extension path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode">
+		<!--<CommandItem id = "CBinding.CProjectCommands.AddPackage"/> This throws and exception-->
+		<CommandItem id = "MonoDevelop.Ide.Commands.EditCommands.Paste"/> <!-- And this just doesn't appear -->
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
