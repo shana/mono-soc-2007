@@ -16,20 +16,20 @@ namespace ControlsAll
 
 	public partial class Pane1 : StackPanel
 	{
-		System.Windows.Controls.Button btn, btn1, btn2, btn3, btn4;
+		Mono.System.Windows.Controls.Button btn, btn1, btn2, btn3, btn4;
 		System.Windows.Controls.TextBlock txt;
-		System.Windows.Controls.CheckBox cb;
+		Mono.System.Windows.Controls.CheckBox cb;
 		System.Windows.Controls.ComboBox combo;
 		System.Windows.Controls.ComboBoxItem cbi1, cbi2, cbi3;
 		System.Windows.Controls.ContextMenu contextmenu;
-		System.Windows.Controls.Primitives.ScrollBar hscrollb, vscrollb;
+		Mono.System.Windows.Controls.Primitives.ScrollBar hscrollb, vscrollb;
 		System.Windows.Controls.Menu menu;
 		System.Windows.Controls.MenuItem mi, mia, mib, mib1, mib1a;
-		System.Windows.Controls.Slider hslider;
+		Mono.System.Windows.Controls.Slider hslider;
 		System.Windows.Controls.ListBox lb;
 		System.Windows.Controls.ListBoxItem li1, li2, li3;
-		System.Windows.Controls.RadioButton rb1, rb2, rb3;
-		System.Windows.Controls.Primitives.RepeatButton rpbtn;
+		Mono.System.Windows.Controls.RadioButton rb1, rb2, rb3;
+		Mono.System.Windows.Controls.Primitives.RepeatButton rpbtn;
                 System.Windows.Controls.TextBox txtb;
 		System.Windows.Controls.Primitives.Thumb thumb;
                 System.Windows.Controls.ToolBar tbar, tbar1;
@@ -42,7 +42,7 @@ namespace ControlsAll
 	private void ChangeButton(object sender, RoutedEventArgs e)
 		{
 		spanel2.Children.Clear();
-		btn = new Button();
+		btn = new Mono.System.Windows.Controls.Button();
                 btn.Width = 50;
                 btn.HorizontalAlignment = HorizontalAlignment.Left;
                 btn.Content = "Button";
@@ -56,7 +56,7 @@ namespace ControlsAll
        private void ChangeCheckBox(object sender, RoutedEventArgs e)
 		{
                   spanel2.Children.Clear();
-                  cb = new CheckBox();
+				  cb = new Mono.System.Windows.Controls.CheckBox();
                   cb.Content = "CheckBox";
                   spanel2.Children.Add(cb);
                   txt = new TextBlock();
@@ -88,7 +88,7 @@ namespace ControlsAll
         private void ChangeContextMenu(object sender, RoutedEventArgs e)
         { 
             spanel2.Children.Clear();
-            btn = new Button();
+			btn = new Mono.System.Windows.Controls.Button();
             btn.Width = 150;
             btn.HorizontalAlignment = HorizontalAlignment.Left;
             btn.Content = "Button with ContextMenu";
@@ -109,7 +109,7 @@ namespace ControlsAll
         private void ChangeScrollBar(object sender, RoutedEventArgs e)
         {
             spanel2.Children.Clear();
-            hscrollb = new ScrollBar();
+            hscrollb = new Mono.System.Windows.Controls.Primitives.ScrollBar();
             hscrollb.Orientation = Orientation.Horizontal;
             spanel2.Children.Add(hscrollb);
             txt = new TextBlock();
@@ -120,7 +120,7 @@ namespace ControlsAll
         private void ChangeSlider(object sender, RoutedEventArgs e)
         {
             spanel2.Children.Clear();
-            hslider = new Slider();
+            hslider = new Mono.System.Windows.Controls.Slider();
             hslider.Orientation = Orientation.Horizontal;
             spanel2.Children.Add(hslider);
             txt = new TextBlock();
@@ -181,13 +181,13 @@ namespace ControlsAll
         private void ChangeRadioButton(object sender, RoutedEventArgs e)
         {
             spanel2.Children.Clear();
-            rb1 = new RadioButton();
+			rb1 = new Mono.System.Windows.Controls.RadioButton();
             rb1.Content = "Radio Button 1";
             spanel2.Children.Add(rb1);
-            rb2 = new RadioButton();
+			rb2 = new Mono.System.Windows.Controls.RadioButton();
             rb2.Content = "Radio Button 2";
             spanel2.Children.Add(rb2);
-            rb3 = new RadioButton();
+			rb3 = new Mono.System.Windows.Controls.RadioButton();
             rb3.Content = "Radio Button 3";
             spanel2.Children.Add(rb3);
             txt = new TextBlock();
@@ -198,7 +198,7 @@ namespace ControlsAll
         private void ChangeRepeatButton(object sender, RoutedEventArgs e)
         {
             spanel2.Children.Clear();
-            rpbtn = new RepeatButton();
+			rpbtn = new Mono.System.Windows.Controls.Primitives.RepeatButton();
             rpbtn.Width = 50;
             rpbtn.HorizontalAlignment = HorizontalAlignment.Left;
             rpbtn.Width = (100);
@@ -207,7 +207,7 @@ namespace ControlsAll
             rpbtn.Delay = (100);
             rpbtn.Interval = (50);
             spanel2.Children.Add(rpbtn);
-            btn = new Button();
+			btn = new Mono.System.Windows.Controls.Button();
             btn.Content = "0";
             System.Windows.Controls.Canvas.SetLeft(btn, (120));
             btn.Width = 50;
@@ -250,7 +250,7 @@ namespace ControlsAll
             thumb.Width = 20;
             thumb.HorizontalAlignment = HorizontalAlignment.Left;
             spanel2.Children.Add(thumb);
-            vscrollb = new ScrollBar();
+			vscrollb = new Mono.System.Windows.Controls.Primitives.ScrollBar();
             vscrollb.Orientation = Orientation.Vertical;
             vscrollb.HorizontalAlignment = HorizontalAlignment.Left;
             vscrollb.Width = (20);
@@ -267,20 +267,20 @@ namespace ControlsAll
             spanel2.Children.Clear();
             tbartray = new ToolBarTray();
             tbar = new ToolBar();
-            btn = new Button();
+			btn = new Mono.System.Windows.Controls.Button();
             btn.Content = "File";
             tbar.Items.Add(btn);
-            btn1 = new Button();
+			btn1 = new Mono.System.Windows.Controls.Button();
             btn1.Content = "Edit";
             tbar.Items.Add(btn1);
             tbar1 = new ToolBar();
-            btn2 = new Button();
+			btn2 = new Mono.System.Windows.Controls.Button();
             btn2.Content = "Format";
             tbar1.Items.Add(btn2);
-            btn3 = new Button();
+			btn3 = new Mono.System.Windows.Controls.Button();
             btn3.Content = "View";
             tbar1.Items.Add(btn3);
-            btn4 = new Button();
+			btn4 = new Mono.System.Windows.Controls.Button();
             btn4.Content = "Help";
             tbar1.Items.Add(btn4);
             tbartray.ToolBars.Add(tbar);
@@ -294,7 +294,7 @@ namespace ControlsAll
         private void ChangeToolTip(object sender, RoutedEventArgs e)
         {
             spanel2.Children.Clear();
-            btn = new Button();
+			btn = new Mono.System.Windows.Controls.Button();
             btn.Width = 150;
             btn.HorizontalAlignment = HorizontalAlignment.Left;
             btn.Content = "Button with ToolTip";

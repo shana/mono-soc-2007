@@ -5,10 +5,10 @@
     <TargetType>winexe</TargetType>
     <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
     <ApplicationIcon>App.ico</ApplicationIcon>
-    <ProductVersion>8.0.40903</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <CLRDefaultNamespace>SDKSamples</CLRDefaultNamespace>
-    <ProjectGuid>{32AAFFC0-6E41-44E8-87FA-D82F6C1601E7}</ProjectGuid>
+    <ProjectGuid>{3054F8A8-954F-4DFD-83E3-D1DC2EE3B7DB}</ProjectGuid>
     <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -38,5 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="App.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PresentationFramework\Mono.PresentationFramework.csproj">
+      <Project>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</Project>
+      <Name>Mono.PresentationFramework</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

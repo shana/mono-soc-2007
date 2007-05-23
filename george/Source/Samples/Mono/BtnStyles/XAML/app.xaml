@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="ButtonStyles2.app"
     StartupUri="Pane1.xaml"
+	xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
     >
     <!-- Resources & Styles defined in this section will impact the entire application.  -->
 
 <Application.Resources>
-<Style x:Key="SystemResStyle" TargetType="{x:Type Button}">
+<Style x:Key="SystemResStyle" TargetType="{x:Type mono_sytem_windows_controls:Button}">
     <Setter Property = "Background" Value= 
                        "{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
     <Setter Property = "Foreground" Value= 
@@ -21,7 +22,7 @@
                        "{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}"/>
 </Style>
 
-<Style x:Key="Triggers" TargetType="Button">
+<Style x:Key="Triggers" TargetType="mono_sytem_windows_controls:Button">
     <Style.Triggers>
     <Trigger Property="IsMouseOver" Value="true">
         <Setter Property = "Background" Value="Red"/>
@@ -32,7 +33,7 @@
     </Style.Triggers>
 </Style>
 
-<Style x:Key="Properties" TargetType="Button">
+<Style x:Key="Properties" TargetType="mono_sytem_windows_controls:Button">
     <Setter Property="Foreground" Value="DarkBlue"/>
     <Setter Property="FontSize" Value="16"/>
     <Setter Property="BorderBrush" Value="Brown"/>

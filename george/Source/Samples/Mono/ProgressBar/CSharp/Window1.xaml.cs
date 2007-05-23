@@ -27,14 +27,14 @@ namespace ProgBar
            btn.Background = new LinearGradientBrush(Colors.LightBlue, Colors.SlateBlue, 90);
            btn.Content = "Progress Bar";
            sbar.Items.Add(btn);
-           ProgressBar progbar = new ProgressBar();
+		   Mono.System.Windows.Controls.ProgressBar progbar = new Mono.System.Windows.Controls.ProgressBar();
            progbar.IsIndeterminate = false;
            progbar.Orientation = Orientation.Horizontal;
            progbar.Width = 150;
            progbar.Height = 15;
            Duration duration = new Duration(TimeSpan.FromSeconds(10));
            DoubleAnimation doubleanimation = new DoubleAnimation(100.0, duration);
-           progbar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+		   progbar.BeginAnimation(Mono.System.Windows.Controls.ProgressBar.ValueProperty, doubleanimation);
            sbar.Items.Add(progbar);
           } 
 
@@ -45,7 +45,7 @@ namespace ProgBar
            btn.Background = new LinearGradientBrush(Colors.Pink, Colors.Red, 90);
            btn.Content = "Progress Bar";
            sbar.Items.Add(btn);
-           ProgressBar progbar = new ProgressBar();
+		   Mono.System.Windows.Controls.ProgressBar progbar = new Mono.System.Windows.Controls.ProgressBar();
            progbar.Background = Brushes.Gray;
            progbar.Foreground = Brushes.Red;
            progbar.Width = 150;
@@ -53,7 +53,7 @@ namespace ProgBar
            Duration duration = new Duration(TimeSpan.FromMilliseconds(2000));
            DoubleAnimation doubleanimation = new DoubleAnimation(100.0, duration);
            doubleanimation.RepeatBehavior = new RepeatBehavior(3);
-           progbar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+		   progbar.BeginAnimation(Mono.System.Windows.Controls.ProgressBar.ValueProperty, doubleanimation);
            sbar.Items.Add(progbar);
          }
         private void MakeFive(object sender, RoutedEventArgs e)
@@ -74,14 +74,14 @@ namespace ProgBar
             ImageBrush imagebrush = new ImageBrush(bi);
             btn.Background = imagebrush;
 
-            ProgressBar progbar = new ProgressBar();
+			Mono.System.Windows.Controls.ProgressBar progbar = new Mono.System.Windows.Controls.ProgressBar();
             progbar.Background = imagebrush;
             progbar.Width = 150;
             progbar.Height = 15;
             Duration duration = new Duration(TimeSpan.FromMilliseconds(2000));
             DoubleAnimation doubleanimation = new DoubleAnimation(100.0, duration);
             doubleanimation.RepeatBehavior = new RepeatBehavior(5);
-            progbar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+			progbar.BeginAnimation(Mono.System.Windows.Controls.ProgressBar.ValueProperty, doubleanimation);
             btn.Content = progbar;
             sbar.Items.Add(btn);
          }
@@ -94,13 +94,13 @@ namespace ProgBar
                                                     Colors.SlateBlue, 90);
            btn.Content = "Progress Bar - Forever";
            sbar.Items.Add(btn);
-           ProgressBar progbar = new ProgressBar();
+		   Mono.System.Windows.Controls.ProgressBar progbar = new Mono.System.Windows.Controls.ProgressBar();
            progbar.Width = 150;
            progbar.Height = 15;
            Duration duration = new Duration(TimeSpan.FromSeconds(1));
            DoubleAnimation doubleanimation = new DoubleAnimation(100.0, duration);
            doubleanimation.RepeatBehavior = RepeatBehavior.Forever;
-           progbar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+		   progbar.BeginAnimation(Mono.System.Windows.Controls.ProgressBar.ValueProperty, doubleanimation);
            sbar.Items.Add(progbar);
           
          }

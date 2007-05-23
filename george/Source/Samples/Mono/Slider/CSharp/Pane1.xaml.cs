@@ -20,7 +20,7 @@ namespace SliderExample
  
         void OnClick(object sender, RoutedEventArgs e)
         {
-            Slider hslider = new Slider();
+			Mono.System.Windows.Controls.Slider hslider = new Mono.System.Windows.Controls.Slider();
             hslider.Orientation = Orientation.Horizontal;
             hslider.AutoToolTipPlacement =
               AutoToolTipPlacement.TopLeft;
@@ -39,7 +39,7 @@ namespace SliderExample
 
         void OnClickNonUniform(object sender, RoutedEventArgs e)
         {
-            Slider hslider = new Slider();
+			Mono.System.Windows.Controls.Slider hslider = new Mono.System.Windows.Controls.Slider();
             hslider.Orientation = Orientation.Horizontal;
             hslider.Width = 100;
             hslider.IsMoveToPointEnabled = false;

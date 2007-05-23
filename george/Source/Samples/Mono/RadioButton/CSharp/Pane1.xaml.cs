@@ -22,7 +22,7 @@ namespace RadioButtonSimple
 
                 void WriteText2(object sender, RoutedEventArgs e)
 		{
-	        RadioButton li = (sender as RadioButton);
+					Mono.System.Windows.Controls.RadioButton li = (sender as Mono.System.Windows.Controls.RadioButton);
                 txtb.Text = "You clicked " + li.Content.ToString() + ".";
                 }		
 	}
