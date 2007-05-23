@@ -2,26 +2,27 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="ControlProps.Pane1"
->
+	xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
     
     <TextBlock FontSize = "24.0">Control Properties</TextBlock>
     <TextBlock FontSize = "12.0">Click the buttons to see the properties change.</TextBlock>
-    <Button Name="btn" Background="Red" Click="ChangeBackground">Background</Button>
+	<mono_sytem_windows_controls:Button Name="btn" Background="Red" Click="ChangeBackground">Background</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn1" Foreground="Black" Click="ChangeForeground">Foreground</Button>
+	<mono_sytem_windows_controls:Button Name="btn1" Foreground="Black" Click="ChangeForeground">Foreground</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn2" FontFamily="Arial" Click="ChangeFontFamily">FontFamily</Button>
+	<mono_sytem_windows_controls:Button Name="btn2" FontFamily="Arial" Click="ChangeFontFamily">FontFamily</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn3" FontSize="10.0" Click="ChangeFontSize">FontSize</Button>
+	<mono_sytem_windows_controls:Button Name="btn3" FontSize="10.0" Click="ChangeFontSize">FontSize</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn4" FontStyle="Normal" Click="ChangeFontStyle">FontStyle</Button>
+	<mono_sytem_windows_controls:Button Name="btn4" FontStyle="Normal" Click="ChangeFontStyle">FontStyle</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn5" FontWeight="Normal" Click="ChangeFontWeight">FontWeight</Button>
+	<mono_sytem_windows_controls:Button Name="btn5" FontWeight="Normal" Click="ChangeFontWeight">FontWeight</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn6" BorderBrush="Red" Click="ChangeBorderBrush">BorderBrush</Button>
+	<mono_sytem_windows_controls:Button Name="btn6" BorderBrush="Red" Click="ChangeBorderBrush">BorderBrush</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn7" HorizontalContentAlignment="Left" Click="ChangeHorizontalContentAlignment">HorizontalContentAlignment</Button>
+	<mono_sytem_windows_controls:Button Name="btn7" HorizontalContentAlignment="Left" Click="ChangeHorizontalContentAlignment">HorizontalContentAlignment</mono_sytem_windows_controls:Button>
 
-    <Button Name="btn8" VerticalContentAlignment="Top" Click="ChangeVerticalContentAlignment">VerticalContentAlignment</Button>
+	<mono_sytem_windows_controls:Button Name="btn8" VerticalContentAlignment="Top" Click="ChangeVerticalContentAlignment">VerticalContentAlignment</mono_sytem_windows_controls:Button>
  
+
 </StackPanel>

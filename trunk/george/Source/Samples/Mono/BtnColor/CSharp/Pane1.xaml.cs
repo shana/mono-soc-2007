@@ -20,7 +20,7 @@ namespace ButtonAlign
 		// private void PaneLoaded(object sender, EventArgs e) {}
 		// Sample event handler: 
 		static int newcolor = 0;
-		Button btncsharp;
+		Mono.System.Windows.Controls.Button btncsharp;
 		void OnClick1(object sender, RoutedEventArgs e)
 		{
 			btn1.Background = Brushes.LightBlue;
@@ -95,7 +95,7 @@ namespace ButtonAlign
 		}
 		void OnClick7(object sender, RoutedEventArgs e)
 		{
-                  btncsharp = new Button();
+                  btncsharp = new Mono.System.Windows.Controls.Button();
                   btncsharp.Content = "Created with C# code.";
                   btncsharp.Background = SystemColors.ControlDarkDarkBrush;
                   btncsharp.FontSize = SystemFonts.CaptionFontSize;

@@ -5,12 +5,14 @@
     x:Class="ControlsAll.Pane1"
     Width="500"
     Name="spanel"
-    >
+	xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
+	>
 <TextBlock FontSize="24" Margin="0,0,0,10">Controls</TextBlock>
 <TextBlock TextWrapping="WrapWithOverflow" Margin="0,0,0,10" FontSize="12">This sample displays various controls. Right click the button below to see a list. Choose a control to see its appearance and function.</TextBlock>
-      
-        <Button Name="Button1" Width="200">Right click here for a list of controls.
-        <Button.ContextMenu>
+
+	<mono_sytem_windows_controls:Button Name="Button1" Width="200">
+		Right click here for a list of controls.
+		<mono_sytem_windows_controls:Button.ContextMenu>
         <ContextMenu>
               <MenuItem Header="Button" Click="ChangeButton">
               </MenuItem>    
@@ -41,8 +43,8 @@
               <MenuItem Header="ToolTip" Click="ChangeToolTip">
               </MenuItem>
         </ContextMenu>
-</Button.ContextMenu>
-</Button>
+</mono_sytem_windows_controls:Button.ContextMenu>
+	</mono_sytem_windows_controls:Button>
 
 <StackPanel Name="spanel2" Margin="0, 0, 50, 0">
 </StackPanel>

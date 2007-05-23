@@ -7,7 +7,7 @@
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>SDKSample</RootNamespace>
-    <ProjectGuid>{9D27235F-7635-4B11-B8E1-F92698888265}</ProjectGuid>
+    <ProjectGuid>{F4DF4A0A-950A-4573-B304-F76F81C9BF97}</ProjectGuid>
     <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -25,5 +25,11 @@
   <ItemGroup>
     <ApplicationDefinition Include="app.xaml" />
     <Page Include="Pane1.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PresentationFramework\Mono.PresentationFramework.csproj">
+      <Project>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</Project>
+      <Name>Mono.PresentationFramework</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
