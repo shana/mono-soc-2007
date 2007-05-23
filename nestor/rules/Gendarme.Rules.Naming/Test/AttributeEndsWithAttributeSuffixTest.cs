@@ -122,14 +122,10 @@ namespace Test.Rules.Naming {
 		{
 		    type = assembly.MainModule.Types ["Test.Rules.Naming.CorrectContextStaticAttribute"];
 		    messageCollection = rule.CheckType (type, new MinimalRunner ());
-		    Assert.IsNotNull (messageCollection);
-		    Assert.AreEqual (messageCollection.Count, 1);
-		    checkMessageType (messageCollection, MessageType.Warning);
-		    //This test should be Assert.IsNull (messageCollection), because the 
-		    //System.ContextStaticAttribute class inherits from System.Attribute.
+		    Assert.IsNull (messageCollection);
+		    //The System.ContextStaticAttribute class inherits from System.Attribute.
 		    //But we can retrieve that info from a TypeReference, because now 
 		    //Gendarme doesn't support loading assemblies.
-		    //We use a warning because we don't want produce false positives.
 		}
 		
 		[Test]
@@ -143,14 +139,10 @@ namespace Test.Rules.Naming {
 		public void TestVariousLevelInheritanceExternalTypeNoApplyed () {
 			type = assembly.MainModule.Types ["Test.Rules.Naming.YetAnotherClass"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
-			Assert.IsNotNull (messageCollection);
-		    Assert.AreEqual (messageCollection.Count, 1);
-		    checkMessageType (messageCollection, MessageType.Warning);
-		    //This test should be Assert.IsNull (messageCollection), because the 
-		    //System.Random class doesn't inherit from System.Attribute.
+			Assert.IsNull (messageCollection);
+		    //The System.Random class doesn't inherit from System.Attribute.
 		    //But we can retrieve that info from a TypeReference, because now 
 		    //Gendarme doesn't support loading assemblies.
-		    //We use a warning because we don't want produce false positives.
 		}
 	}
 }
