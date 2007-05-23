@@ -29,8 +29,8 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Private Fields
 		#region Parts
-		global::System.Windows.Controls.Primitives.RepeatButton decrease_repeat_button;
-		global::System.Windows.Controls.Primitives.RepeatButton increase_repeat_button;
+		RepeatButton decrease_repeat_button;
+		RepeatButton increase_repeat_button;
 		Thumb thumb;
 		#endregion
 		List<Visual> visual_children = new List<Visual>(3);
@@ -76,7 +76,7 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Parts
-		public global::System.Windows.Controls.Primitives.RepeatButton DecreaseRepeatButton {
+		public RepeatButton DecreaseRepeatButton {
 			get { return decrease_repeat_button; }
 			set {
 				if (decrease_repeat_button == value)
@@ -95,7 +95,7 @@ namespace System.Windows.Controls.Primitives {
 			}
 		}
 
-		public global::System.Windows.Controls.Primitives.RepeatButton IncreaseRepeatButton {
+		public RepeatButton IncreaseRepeatButton {
 			get { return increase_repeat_button; }
 			set {
 				if (increase_repeat_button == value)
@@ -242,7 +242,7 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Private Methods
-		void Arrange(global::System.Windows.Controls.Primitives.RepeatButton repeatButton, Rect rect) {
+		void Arrange(RepeatButton repeatButton, Rect rect) {
 			if (repeatButton != null)
 				repeatButton.Arrange(rect);
 		}

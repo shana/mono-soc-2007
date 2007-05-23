@@ -1,3 +1,7 @@
 2007-05-23  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Track.cs: Switched to implemented RepeatButton.
+
+2007-05-23  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* RepeatButton.cs, ScrollBar.cs: Let WPF load theme styles automatically.

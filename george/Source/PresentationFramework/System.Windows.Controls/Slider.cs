@@ -2,7 +2,6 @@ using Mono.WindowsPresentationFoundation;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Automation.Peers;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -10,16 +9,18 @@ using System.Windows.Media;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using Mono.System.Windows.Controls.Primitives;
 namespace Mono.System.Windows.Controls {
 #else
+using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	[Localizability(LocalizationCategory.Ignore)]
-	[TemplatePart(Name = "PART_Track", Type = typeof(Mono.System.Windows.Controls.Primitives.Track))]
+	[TemplatePart(Name = "PART_Track", Type = typeof(Track))]
 	[TemplatePart(Name = "PART_SelectionRange", Type = typeof(FrameworkElement))]
-	public class Slider : RangeBase {
+	public class Slider : global::System.Windows.Controls.Primitives.RangeBase {
 		#region Dependency Property Fields
-		public static readonly DependencyProperty AutoToolTipPlacementProperty = DependencyProperty.Register("AutoToolTipPlacement", typeof(AutoToolTipPlacement), typeof(Slider), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		public static readonly DependencyProperty AutoToolTipPlacementProperty = DependencyProperty.Register("AutoToolTipPlacement", typeof(global::System.Windows.Controls.Primitives.AutoToolTipPlacement), typeof(Slider), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((Slider)d).SetUpAutoToolTip();
 		}));
 		public static readonly DependencyProperty AutoToolTipPrecisionProperty = DependencyProperty.Register("AutoToolTipPrecision", typeof(int), typeof(Slider), null, ValidateNonNegativeInteger);
@@ -43,7 +44,7 @@ namespace System.Windows.Controls {
 			instance.AdjustSelectionRange();
 		}), ValidateNonInfinite);
 		public static readonly DependencyProperty TickFrequencyProperty = DependencyProperty.Register("TickFrequency", typeof(double), typeof(Slider), new PropertyMetadata(1D));
-		public static readonly DependencyProperty TickPlacementProperty = DependencyProperty.Register("TickPlacement", typeof(TickPlacement), typeof(Slider));
+		public static readonly DependencyProperty TickPlacementProperty = DependencyProperty.Register("TickPlacement", typeof(global::System.Windows.Controls.Primitives.TickPlacement), typeof(Slider));
 		public static readonly DependencyProperty TicksProperty = DependencyProperty.Register("Ticks", typeof(DoubleCollection), typeof(Slider), new FrameworkPropertyMetadata());
 
 		#endregion
@@ -69,7 +70,7 @@ namespace System.Windows.Controls {
 		double requested_selection_end;
 		#endregion
 		ToolTip auto_tool_tip;
-		Mono.System.Windows.Controls.Primitives.Track track;
+		Track track;
 		#endregion
 
 		#region Static Constructor
@@ -135,8 +136,8 @@ namespace System.Windows.Controls {
 
 		#region Dependency Properties
 		[Bindable(true)]
-		public AutoToolTipPlacement AutoToolTipPlacement {
-			get { return (AutoToolTipPlacement)GetValue(AutoToolTipPlacementProperty); }
+		public global::System.Windows.Controls.Primitives.AutoToolTipPlacement AutoToolTipPlacement {
+			get { return (global::System.Windows.Controls.Primitives.AutoToolTipPlacement)GetValue(AutoToolTipPlacementProperty); }
 			set { SetValue(AutoToolTipPlacementProperty, value); }
 		}
 
@@ -206,8 +207,8 @@ namespace System.Windows.Controls {
 		}
 
 		[Bindable(true)]
-		public TickPlacement TickPlacement {
-			get { return (TickPlacement)GetValue(TickPlacementProperty); }
+		public global::System.Windows.Controls.Primitives.TickPlacement TickPlacement {
+			get { return (global::System.Windows.Controls.Primitives.TickPlacement)GetValue(TickPlacementProperty); }
 			set { SetValue(TickPlacementProperty, value); }
 		}
 
@@ -249,18 +250,18 @@ namespace System.Windows.Controls {
 		#region Public Override Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
-			track = (Mono.System.Windows.Controls.Primitives.Track)GetTemplateChild("PART_Track");
+			track = (Track)GetTemplateChild("PART_Track");
 			if (track == null)
 				return;
-			Utility.SetBinding(track, Mono.System.Windows.Controls.Primitives.Track.MaximumProperty, this, "Maximum");
-			Utility.SetBinding(track, Mono.System.Windows.Controls.Primitives.Track.MinimumProperty, this, "Minimum");
-			Utility.SetBinding(track, Mono.System.Windows.Controls.Primitives.Track.ValueProperty, this, "Value");
-			Utility.SetBinding(track, Mono.System.Windows.Controls.Primitives.Track.OrientationProperty, this, "Orientation");
-			Utility.SetBinding(track, Mono.System.Windows.Controls.Primitives.Track.IsDirectionReversedProperty, this, "IsDirectionReversed");
+			Utility.SetBinding(track, Track.MaximumProperty, this, "Maximum");
+			Utility.SetBinding(track, Track.MinimumProperty, this, "Minimum");
+			Utility.SetBinding(track, Track.ValueProperty, this, "Value");
+			Utility.SetBinding(track, Track.OrientationProperty, this, "Orientation");
+			Utility.SetBinding(track, Track.IsDirectionReversedProperty, this, "IsDirectionReversed");
 			SetSelectionRangeBounds();
 			Bind(track.DecreaseRepeatButton);
 			Bind(track.IncreaseRepeatButton);
-			Mono.System.Windows.Controls.Primitives.TickBar top_tick = GetTopTick();
+			TickBar top_tick = GetTopTick();
 			if (top_tick != null) {
 				Bind(top_tick);
 				Bind(GetBottomTick());
@@ -270,22 +271,22 @@ namespace System.Windows.Controls {
 					GetBottomTick().ReservedSpace = reserved_space;
 				};
 			}
-			Thumb thumb = track.Thumb;
+			global::System.Windows.Controls.Primitives.Thumb thumb = track.Thumb;
 			#region Auto tool tip
 			if (auto_tool_tip != null)
 				SetAutoToolTipPlacementTarget(track);
 			#endregion
 			#region Thumb drag methods
 			//FIXME: Do I need to remove these handlers?
-			thumb.DragStarted += delegate(object sender, DragStartedEventArgs e) {
+			thumb.DragStarted += delegate(object sender, global::System.Windows.Controls.Primitives.DragStartedEventArgs e) {
 				OnThumbDragStarted(e);
 			};
-			
-			thumb.DragDelta += delegate(object sender, DragDeltaEventArgs e) {
+
+			thumb.DragDelta += delegate(object sender, global::System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
 				OnThumbDragDelta(e);
 			};
-			
-			thumb.DragCompleted += delegate(object sender, DragCompletedEventArgs e) {
+
+			thumb.DragCompleted += delegate(object sender, global::System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
 				OnThumbDragCompleted(e);
 			};
 			#endregion
@@ -379,12 +380,12 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-		protected virtual void OnThumbDragCompleted(DragCompletedEventArgs e) {
+		protected virtual void OnThumbDragCompleted(global::System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
 			if (auto_tool_tip != null)
 				auto_tool_tip.IsOpen = false;
 		}
 
-		protected virtual void OnThumbDragDelta(DragDeltaEventArgs e) {
+		protected virtual void OnThumbDragDelta(global::System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
 			if (e.Source == null)
 				return;
 			double value_from_distance = track.ValueFromDistance(e.HorizontalChange, e.VerticalChange);
@@ -396,7 +397,7 @@ namespace System.Windows.Controls {
 				SetAutoToolTipContent();
 		}
 
-		protected virtual void OnThumbDragStarted(DragStartedEventArgs e) {
+		protected virtual void OnThumbDragStarted(global::System.Windows.Controls.Primitives.DragStartedEventArgs e) {
 			if (auto_tool_tip != null) {
 				auto_tool_tip.IsOpen = true;
 				SetAutoToolTipContent();
@@ -413,15 +414,15 @@ namespace System.Windows.Controls {
 			return !double.IsInfinity((double)value);
 		}
 
-		void Bind(Mono.System.Windows.Controls.Primitives.TickBar tickBar) {
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.IsDirectionReversedProperty, this, "IsDirectionReversed");
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.IsSelectionRangeEnabledProperty, this, "IsSelectionRangeEnabled");
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.MaximumProperty, this, "Maximum");
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.MinimumProperty, this, "Minimum");
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.SelectionEndProperty, this, "SelectionEnd");
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.SelectionStartProperty, this, "SelectionStart");
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.TickFrequencyProperty, this, "TickFrequency");
-			Utility.SetBinding(tickBar, Mono.System.Windows.Controls.Primitives.TickBar.TicksProperty, this, "Ticks");
+		void Bind(TickBar tickBar) {
+			Utility.SetBinding(tickBar, TickBar.IsDirectionReversedProperty, this, "IsDirectionReversed");
+			Utility.SetBinding(tickBar, TickBar.IsSelectionRangeEnabledProperty, this, "IsSelectionRangeEnabled");
+			Utility.SetBinding(tickBar, TickBar.MaximumProperty, this, "Maximum");
+			Utility.SetBinding(tickBar, TickBar.MinimumProperty, this, "Minimum");
+			Utility.SetBinding(tickBar, TickBar.SelectionEndProperty, this, "SelectionEnd");
+			Utility.SetBinding(tickBar, TickBar.SelectionStartProperty, this, "SelectionStart");
+			Utility.SetBinding(tickBar, TickBar.TickFrequencyProperty, this, "TickFrequency");
+			Utility.SetBinding(tickBar, TickBar.TicksProperty, this, "Ticks");
 		}
 
 		void Bind(RepeatButton repeatButton) {
@@ -509,7 +510,7 @@ namespace System.Windows.Controls {
 		}
 
 		void SetUpAutoToolTip() {
-			if (AutoToolTipPlacement == AutoToolTipPlacement.None) {
+			if (AutoToolTipPlacement == global::System.Windows.Controls.Primitives.AutoToolTipPlacement.None) {
 				if (auto_tool_tip != null) {
 					auto_tool_tip.IsOpen = false;
 					auto_tool_tip = null;
@@ -520,11 +521,11 @@ namespace System.Windows.Controls {
 					SetAutoToolTipPlacementTarget();
 				}
 				switch (AutoToolTipPlacement) {
-					case AutoToolTipPlacement.TopLeft:
-						auto_tool_tip.Placement = Orientation == Orientation.Horizontal ? PlacementMode.Top : PlacementMode.Left;
+					case global::System.Windows.Controls.Primitives.AutoToolTipPlacement.TopLeft:
+						auto_tool_tip.Placement = Orientation == Orientation.Horizontal ? global::System.Windows.Controls.Primitives.PlacementMode.Top : global::System.Windows.Controls.Primitives.PlacementMode.Left;
 						break;
-					case AutoToolTipPlacement.BottomRight:
-						auto_tool_tip.Placement = Orientation == Orientation.Horizontal ? PlacementMode.Bottom : PlacementMode.Right;
+					case global::System.Windows.Controls.Primitives.AutoToolTipPlacement.BottomRight:
+						auto_tool_tip.Placement = Orientation == Orientation.Horizontal ? global::System.Windows.Controls.Primitives.PlacementMode.Bottom : global::System.Windows.Controls.Primitives.PlacementMode.Right;
 						break;
 				}
 			}
@@ -542,17 +543,17 @@ namespace System.Windows.Controls {
 				SetAutoToolTipPlacementTarget(track);
 		}
 
-		void SetAutoToolTipPlacementTarget(Mono.System.Windows.Controls.Primitives.Track track) {
+		void SetAutoToolTipPlacementTarget(Track track) {
 			auto_tool_tip.PlacementTarget = track.Thumb;
 		}
 
 		#region Parts
-		Mono.System.Windows.Controls.Primitives.TickBar GetTopTick() {
-			return (Mono.System.Windows.Controls.Primitives.TickBar)GetTemplateChild("TopTick");
+		TickBar GetTopTick() {
+			return (TickBar)GetTemplateChild("TopTick");
 		}
 
-		Mono.System.Windows.Controls.Primitives.TickBar GetBottomTick() {
-			return (Mono.System.Windows.Controls.Primitives.TickBar)GetTemplateChild("BottomTick");
+		TickBar GetBottomTick() {
+			return (TickBar)GetTemplateChild("BottomTick");
 		}
 		
 		FrameworkElement GetSelectionRange() {
