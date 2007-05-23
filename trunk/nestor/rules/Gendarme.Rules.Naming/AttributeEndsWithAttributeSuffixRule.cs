@@ -71,9 +71,8 @@ namespace Gendarme.Rules.Naming {
 				}
 				break;
 			case InheritanceResult.Undetermined:
-				Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
-				Message message = new Message ("I can't determine if this type inherits from Attribute.", location, MessageType.Warning);
-				messageCollection.Add (message);
+				//This case is ignored, because the rule can flood with warnings
+				//to the user.
 				break;
 			case InheritanceResult.NoInheritsFromAttribute:
 				break;
