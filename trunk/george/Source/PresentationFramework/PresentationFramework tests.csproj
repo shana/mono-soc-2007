@@ -1,0 +1,79 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{308E0CB4-2A3C-43B8-B341-E116234E6104}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PresentationFramework_tests</RootNamespace>
+    <AssemblyName>PresentationFramework tests</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\..\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug - Implementation' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Implementation</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.0.2, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\..\..\Program Files\NUnit 2.4\bin\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Luna" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Test\System.Windows.Controls.Primitives\BulletDecoratorTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\ButtonBaseTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\TickBarTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\ScrollBarTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\RangeBaseTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\ToggleButtonTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\RepeatButtonTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\TrackTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\BooleanToVisibilityConverterTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\BorderTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\ButtonTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\SliderTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\ProgressBarTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\RadioButtonTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\LabelTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\UIElementTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Mono.PresentationFramework.csproj">
+      <Project>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</Project>
+      <Name>Mono.PresentationFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

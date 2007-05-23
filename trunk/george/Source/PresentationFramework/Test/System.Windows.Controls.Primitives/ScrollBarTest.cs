@@ -1,0 +1,83 @@
+using NUnit.Framework;
+using System.Collections;
+using System.Windows.Media;
+#if Implementation
+using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+namespace Mono.System.Windows.Controls.Primitives {
+#else
+namespace System.Windows.Controls.Primitives {
+#endif
+	[TestFixture]
+	public class ScrollBarTest {
+		[Test]
+		public void Creation() {
+			ScrollBar p = new ScrollBar();
+			Assert.AreEqual(p.Value, 0, "Value");
+			Assert.AreEqual(p.Minimum, 0, "Minimum");
+			Assert.AreEqual(p.Maximum, 1, "Maximum");
+			Assert.AreEqual(p.SmallChange, 0.1, "SmallChange");
+			Assert.AreEqual(p.LargeChange, 1, "LargeChange");
+			Assert.AreEqual(p.Orientation, Orientation.Vertical, "Orientation");
+			Assert.IsNull(p.Track, "Track");
+			Assert.IsTrue(p.IsEnabled, "IsEnabled");
+			Assert.AreEqual(p.CommandBindings.Count, 0, "CommandBindings.Count");
+			Assert.IsNull(p.ContextMenu, "ContextMenu");
+			Assert.IsFalse(p.Focusable, "Focusable");
+		}
+
+		[Test]
+		public void OnApplyTemplate() {
+			ScrollBar p = new ScrollBar();
+			p.OnApplyTemplate();
+			Assert.IsNull(p.Track, "Track");
+			Assert.IsTrue(p.IsEnabled, "IsEnabled");
+			Assert.AreEqual(p.CommandBindings.Count, 0, "CommandBindings.Count");
+			Window w = new Window();
+			w.Content = p;
+			p.OnApplyTemplate();
+			Assert.IsNull(p.Track, "Track 2");
+			Assert.IsTrue(p.IsEnabled, "IsEnabled 2");
+			Assert.AreEqual(p.CommandBindings.Count, 0, "CommandBindings.Count");
+			w.Show();
+			Assert.IsTrue(p.Track.IsEnabled, "Track.IsEnabled");
+			Assert.IsTrue(p.Track.IncreaseRepeatButton.IsEnabled, "Track.IncreaseRepeatButton.IsEnabled");
+		}
+
+		#region IsEnabledCore
+		[Test]
+		public void IsEnabledCore() {
+			new IsEnabledCoreScrollBar();
+		}
+		
+		class IsEnabledCoreScrollBar : ScrollBar {
+			public IsEnabledCoreScrollBar() {
+				Assert.IsTrue(IsEnabledCore, "IsEnabledCore 1");
+				Assert.IsTrue(IsEnabled, "IsEnabled 1");
+				IsEnabled = false;
+				Assert.IsTrue(IsEnabledCore, "IsEnabledCore 2");
+				Assert.IsFalse(IsEnabled, "IsEnabled 2");
+				Minimum = Maximum;
+				Assert.IsFalse(IsEnabledCore, "IsEnabledCore 3");
+				Assert.IsFalse(IsEnabled, "IsEnabled 3");
+				IsEnabled = true;
+				Assert.IsFalse(IsEnabledCore, "IsEnabledCore 4");
+				Assert.IsFalse(IsEnabled, "IsEnabled 4");
+			}
+		}
+		#endregion
+
+		[Test]
+		public void Command() {
+			ScrollBar s = new ScrollBar();
+			ScrollBar.LineDownCommand.Execute(null, s);
+			Assert.AreEqual(s.Value, s.SmallChange, "Value after LineDown");
+			s.Value = s.Maximum;
+			Assert.IsTrue(ScrollBar.LineDownCommand.CanExecute(null, s), "Can execute LineDown");
+			ScrollBar.LineDownCommand.Execute(null, s);
+			Assert.AreEqual(s.Value, s.Maximum, "Value after LineDown 2");
+		}
+	}
+}

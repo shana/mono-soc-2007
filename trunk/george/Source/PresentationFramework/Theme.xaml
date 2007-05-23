@@ -1,0 +1,220 @@
+<ResourceDictionary 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mono_system_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
+	xmlns:mono_system_windows_controls_primitives="clr-namespace:Mono.System.Windows.Controls.Primitives;assembly=Mono.PresentationFramework"
+	>
+	<Brush x:Key="ButtonBackgroundColor">LightYellow</Brush>
+	<Brush x:Key="ButtonBorderColor">Black</Brush>
+	<Brush x:Key="SelectionBorderColor">Blue</Brush>
+	<Brush x:Key="HoverBorderColor">Red</Brush>
+	<Brush x:Key="PressedButtonBackgroundColor">LightGray</Brush>
+	<Brush x:Key="DisabledColor">LightGray</Brush>
+	
+	<Style x:Key="ButtonBaseStyle"
+		TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}"
+		>
+		<Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource ButtonBorderColor}"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}"
+					>
+					<mono_system_windows_controls:Border x:Name="Border" 
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="3"
+						>
+						<mono_system_windows_controls:Border x:Name="Background" 
+							Background="{TemplateBinding Background}"
+							>
+							<ContentPresenter
+								RecognizesAccessKey="True"
+								Margin="{TemplateBinding Padding}"
+								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+								/>
+						</mono_system_windows_controls:Border>
+					</mono_system_windows_controls:Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="Background" Property="Background" Value="{StaticResource PressedButtonBackgroundColor}"/>
+						</Trigger>
+						<Trigger Property="IsKeyboardFocused" Value="True">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SelectionBorderColor}"/>
+						</Trigger>
+						<Trigger Property="mono_system_windows_controls:Button.IsDefaulted" Value="True">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SelectionBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource HoverBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledColor}"/>
+							<Setter TargetName="Background" Property="Background" Value="{StaticResource DisabledColor}"/>
+							<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="{x:Type mono_system_windows_controls:Button}"
+		   BasedOn="{StaticResource ButtonBaseStyle}"
+		   TargetType="{x:Type mono_system_windows_controls:Button}"
+		/>
+	<Style x:Key="{x:Type mono_system_windows_controls_primitives:ToggleButton}"
+		BasedOn="{StaticResource ButtonBaseStyle}"
+		TargetType="{x:Type mono_system_windows_controls_primitives:ToggleButton}"
+		/>
+	<Style x:Key="{x:Type mono_system_windows_controls_primitives:RepeatButton}"
+		BasedOn="{StaticResource ButtonBaseStyle}"
+		TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}"
+		/>
+	<Style x:Key="{x:Type mono_system_windows_controls:CheckBox}"
+		TargetType="{x:Type mono_system_windows_controls:CheckBox}"
+		>
+		<Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource ButtonBorderColor}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:CheckBox}">
+					<mono_system_windows_controls_primitives:BulletDecorator>
+						<mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+							<mono_system_windows_controls:Border x:Name="Border"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								Width="14"
+								Height="14"
+								SnapsToDevicePixels="True"
+								>
+								<mono_system_windows_controls:Border x:Name="Background"
+									Background="{TemplateBinding Background}"
+									Padding="3"
+									>
+									<mono_system_windows_controls:Border x:Name="Check"/>											</mono_system_windows_controls:Border>
+							</mono_system_windows_controls:Border>
+						</mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+						<ContentPresenter
+							RecognizesAccessKey="True"
+							Margin="{TemplateBinding Padding}"
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+							/>
+					</mono_system_windows_controls_primitives:BulletDecorator>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="Background" Property="Background" Value="{StaticResource PressedButtonBackgroundColor}"/>
+						</Trigger>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter TargetName="Check" Property="Background" Value="{StaticResource ButtonBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsKeyboardFocused" Value="True">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SelectionBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource HoverBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledColor}"/>
+							<Setter TargetName="Background" Property="Background" Value="{StaticResource DisabledColor}"/>
+							<Setter TargetName="Check" Property="Background" Value="{StaticResource DisabledColor}"/>
+							<Setter Property="Foreground" Value="{StaticResource DisabledColor}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="{x:Type mono_system_windows_controls:RadioButton}"
+		TargetType="{x:Type mono_system_windows_controls:RadioButton}"
+		>
+		<Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource ButtonBorderColor}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:RadioButton}">
+					<mono_system_windows_controls_primitives:BulletDecorator>
+						<mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+							<mono_system_windows_controls:Border x:Name="Border"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								Width="14"
+								Height="14"
+								SnapsToDevicePixels="True"
+								CornerRadius="7"
+								>
+								<mono_system_windows_controls:Border x:Name="Background"
+									Background="{TemplateBinding Background}"
+									Padding="3"
+									CornerRadius="7"
+									>
+									<mono_system_windows_controls:Border x:Name="Check"
+										CornerRadius="5.5"
+										/>
+								</mono_system_windows_controls:Border>
+							</mono_system_windows_controls:Border>
+						</mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+						<ContentPresenter
+							RecognizesAccessKey="True"
+							Margin="{TemplateBinding Padding}"
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+							/>
+					</mono_system_windows_controls_primitives:BulletDecorator>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="Background" Property="Background" Value="{StaticResource PressedButtonBackgroundColor}"/>
+						</Trigger>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter TargetName="Check" Property="Background" Value="{StaticResource ButtonBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsKeyboardFocused" Value="True">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SelectionBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource HoverBorderColor}"/>
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledColor}"/>
+							<Setter TargetName="Background" Property="Background" Value="{StaticResource DisabledColor}"/>
+							<Setter TargetName="Check" Property="Background" Value="{StaticResource DisabledColor}"/>
+							<Setter Property="Foreground" Value="{StaticResource DisabledColor}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="{x:Type mono_system_windows_controls:ProgressBar}"
+		TargetType="{x:Type mono_system_windows_controls:ProgressBar}"
+		>
+		<Setter Property="BorderBrush" Value="Black"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:ProgressBar}">
+					<mono_system_windows_controls:Border x:Name="PART_Track"
+						Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True"
+                        >
+						<mono_system_windows_controls:Border x:Name="PART_Indicator"
+							Background="Black"
+	                        HorizontalAlignment="Left"
+							/>
+					</mono_system_windows_controls:Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>
