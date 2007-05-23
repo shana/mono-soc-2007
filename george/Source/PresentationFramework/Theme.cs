@@ -6,9 +6,10 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 static class Theme {
-    static ResourceDictionary ResourceDictionary;
-
-    static Theme() {
+	static bool loaded;
+    static public void Load() {
+		if (loaded)
+			return;
 #if UseMicrosoftTheme
 #if Implementation
 		const string ThemeAssemblyName = "Mono.PresentationFramework.Luna.dll";
@@ -35,10 +36,7 @@ static class Theme {
 		assembly = Assembly.GetExecutingAssembly();
 		theme_xaml_file_resource_name = "Mono.PresentationFramework.Theme.xaml";
 #endif
-		ResourceDictionary = (ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name));
+		Application.Current.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name)));
+		loaded = true;
     }
-
-	static public Style GetStyle(object key) {
-		return (Style)ResourceDictionary[key];
-	}
 }

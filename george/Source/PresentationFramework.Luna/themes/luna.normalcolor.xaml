@@ -104,9 +104,9 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
            BasedOn="{StaticResource BaseButtonStyle}"
            TargetType="{x:Type mono_system_windows_controls_primitives:ToggleButton}"/>
 
-	<Style x:Key="{x:Type RepeatButton}"
+	<Style x:Key="{x:Type mono_system_windows_controls_primitives:RepeatButton}"
            BasedOn="{StaticResource BaseButtonStyle}"
-           TargetType="{x:Type RepeatButton}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
 		<Setter Property="Stylus.IsPressAndHoldEnabled"
                 Value="false"/>
 	</Style>

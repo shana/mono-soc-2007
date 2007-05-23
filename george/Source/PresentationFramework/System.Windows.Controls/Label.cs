@@ -12,10 +12,15 @@ namespace System.Windows.Controls {
 		#region Dependency Property Fields
 		public static readonly DependencyProperty TargetProperty = DependencyProperty.Register("Target", typeof(UIElement), typeof(Label));
 		#endregion
-		
+
+		#region Static Constructor
+		static Label() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public Label() {
-			ThemeStyle = Theme.GetStyle(typeof(Label));
 			IsTabStop = false;
             AccessKeyManager.AddAccessKeyPressedHandler(this, delegate(object sender, AccessKeyPressedEventArgs e) {
                 UIElement target = Target;
@@ -39,15 +44,6 @@ namespace System.Windows.Controls {
 #else
 			return new LabelAutomationPeer(this);
 #endif
-		}
-		#endregion
-		
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				Style = value;
-			}
 		}
 		#endregion
 	}

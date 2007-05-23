@@ -1,0 +1,3 @@
+2007-05-23  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Button.cs, CheckBox.cs, Label.cs, ProgressBar.cs, RadioButton.cs, Slider.cs: Let WPF load theme styles automatically.

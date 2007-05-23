@@ -71,4 +71,7 @@
       <Name>Mono.PresentationFramework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Microsoft.Windows.Themes\ChangeLog" />
+  </ItemGroup>
 </Project>

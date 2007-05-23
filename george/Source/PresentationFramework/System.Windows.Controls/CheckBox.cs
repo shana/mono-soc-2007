@@ -12,9 +12,14 @@ namespace System.Windows.Controls {
 #endif
 	[Localizability(LocalizationCategory.CheckBox)]
 	public class CheckBox : ToggleButton {
+		#region Static Constructor
+		static CheckBox() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public CheckBox() {
-			ThemeStyle = Theme.GetStyle(typeof(CheckBox));
 		}
 		#endregion
 
@@ -37,15 +42,6 @@ namespace System.Windows.Controls {
 		protected override void OnKeyDown(KeyEventArgs e) {
 			//WDTDH
 			base.OnKeyDown(e);
-		}
-		#endregion
-		
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				Style = value;
-			}
 		}
 		#endregion
 	}
