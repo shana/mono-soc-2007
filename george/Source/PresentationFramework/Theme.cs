@@ -15,11 +15,15 @@ static class Theme {
 #else
 		const string ThemeAssemblyName = "PresentationFramework.Luna.dll";
 #endif
-		string theme_assembly_file = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, ThemeAssemblyName);
+		string assembly_location = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
+		string theme_assembly_file = Path.Combine(assembly_location, ThemeAssemblyName);
 #if Implementation
-        //HACK: NUnit copies the assemblies to another directory.
-        if (!File.Exists(theme_assembly_file))
-            theme_assembly_file = @"E:\George Giolfan\Development\Others\Mono\SOC\Private test\bin\" + ThemeAssemblyName;
+        //HACK:
+		while (!File.Exists(theme_assembly_file)) {
+			DirectoryInfo parent_directory = Directory.GetParent(assembly_location);
+			assembly_location = parent_directory.FullName;
+			theme_assembly_file = Path.Combine(assembly_location, "Debug" + Path.DirectorySeparatorChar + ThemeAssemblyName);
+		}
 #endif
 #endif
 		Assembly assembly;
