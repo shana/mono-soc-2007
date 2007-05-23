@@ -490,7 +490,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
     <Style x:Key="ScrollBarButton"
-           TargetType="{x:Type RepeatButton}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Focusable"
@@ -499,7 +499,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="false"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
                     <mono_theme:ScrollChrome x:Name="Chrome"
                                         ThemeColor="NormalColor" 
                                         RenderMouseOver="{TemplateBinding IsMouseOver}" 
@@ -530,7 +530,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="HorizontalScrollBarPageButton"
-           TargetType="{x:Type RepeatButton}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Background"
@@ -541,7 +541,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="false"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
                     <Rectangle Name="Bg"
                                Fill="{TemplateBinding Background}"/>
                     <ControlTemplate.Triggers>
@@ -557,7 +557,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="VerticalScrollBarPageButton"
-           TargetType="{x:Type RepeatButton}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Background"
@@ -568,7 +568,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="false"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
                     <Rectangle Name="Bg"
                                Fill="{TemplateBinding Background}"/>
                     <ControlTemplate.Triggers>
@@ -608,18 +608,18 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                             <RowDefinition Height="0.00001*"/>
                             <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
                         </Grid.RowDefinitions>
-                        <RepeatButton Style="{StaticResource ScrollBarButton}"
+                        <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource ScrollBarButton}"
                                       Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineUpCommand}"
                                       mono_theme:ScrollChrome.ScrollGlyph="UpArrow"/>
                         <mono_system_windows_controls_primitives:Track Grid.Row="1"
                                Name="PART_Track"
                                IsDirectionReversed="true">
                             <mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
-                                <RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
+                                <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
                                               Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageUpCommand}"/>
                             </mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
                             <mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
-                                <RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
+                                <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
                                               Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageDownCommand}"/>
                             </mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
                             <mono_system_windows_controls_primitives:Track.Thumb>
@@ -627,7 +627,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                        mono_theme:ScrollChrome.ScrollGlyph="VerticalGripper"/>
                             </mono_system_windows_controls_primitives:Track.Thumb>
                         </mono_system_windows_controls_primitives:Track>
-                        <RepeatButton Style="{StaticResource ScrollBarButton}"
+                        <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource ScrollBarButton}"
                                       Grid.Row="2"
                                       Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineDownCommand}"
                                       mono_theme:ScrollChrome.ScrollGlyph="DownArrow"/>
@@ -658,18 +658,18 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                     <ColumnDefinition Width="0.00001*"/>
                                     <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}"/>
                                 </Grid.ColumnDefinitions>
-                                <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource ScrollBarButton}"
                                               Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineLeftCommand}"
                                               mono_theme:ScrollChrome.ScrollGlyph="LeftArrow"/>
 
                                 <mono_system_windows_controls_primitives:Track Grid.Column="1"
                                        Name="PART_Track">
                                     <mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
-                                        <RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
+                                        <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
                                                       Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageLeftCommand}"/>
                                     </mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
                                     <mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
-                                        <RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
+                                        <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
                                                       Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageRightCommand}"/>
                                     </mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
                                     <mono_system_windows_controls_primitives:Track.Thumb>
@@ -678,7 +678,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                     </mono_system_windows_controls_primitives:Track.Thumb>
                                 </mono_system_windows_controls_primitives:Track>
 
-                                <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                <mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource ScrollBarButton}"
                                               Grid.Column="2"
                                               Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineRightCommand}"
                                               mono_theme:ScrollChrome.ScrollGlyph="RightArrow"/>
@@ -909,7 +909,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 <SolidColorBrush x:Key="HorizontalSliderTrackNormalBackground"
 				 Color="#FFF0EDE0"/>
 <Style x:Key="SliderRepeatButtonStyle"
-	   TargetType="{x:Type RepeatButton}">
+	   TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
 	<Setter Property="OverridesDefaultStyle"
 			Value="true"/>
 	<Setter Property="IsTabStop"
@@ -918,7 +918,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 			Value="false"/>
 	<Setter Property="Template">
 		<Setter.Value>
-			<ControlTemplate TargetType="{x:Type RepeatButton}">
+			<ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:RepeatButton}">
 				<mono_system_windows_controls:Border Background="Transparent"/>
                 </ControlTemplate>
             </Setter.Value>
@@ -1662,11 +1662,11 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 							<mono_system_windows_controls_primitives:Track Grid.Row="1"
                                    Name="PART_Track">
 								<mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
-									<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+									<mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
                                                   Command="{x:Static mono_system_windows_controls:Slider.DecreaseLarge}"/>
 								</mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
 								<mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
-									<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+									<mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
                                                   Command="{x:Static mono_system_windows_controls:Slider.IncreaseLarge}"/>
 								</mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
 								<mono_system_windows_controls_primitives:Track.Thumb>
@@ -1770,11 +1770,11 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 									<mono_system_windows_controls_primitives:Track Grid.Column="1"
                                            Name="PART_Track">
 										<mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
-											<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+											<mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
                                                           Command="{x:Static mono_system_windows_controls:Slider.DecreaseLarge}"/>
 										</mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
 										<mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
-											<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+											<mono_system_windows_controls_primitives:RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
                                                           Command="{x:Static mono_system_windows_controls:Slider.IncreaseLarge}"/>
 										</mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
 										<mono_system_windows_controls_primitives:Track.Thumb>

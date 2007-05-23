@@ -63,7 +63,7 @@ namespace System.Windows.Controls.Primitives {
 			public GetVisualChildTrack() {
 				Thumb = new Thumb();
 				Assert.AreEqual(GetVisualChild(0), Thumb, "GetVisualChild(0) 1");
-				DecreaseRepeatButton = new global::System.Windows.Controls.Primitives.RepeatButton();
+				DecreaseRepeatButton = new RepeatButton();
 				Assert.AreEqual(GetVisualChild(0), Thumb, "GetVisualChild(0) 2");
 				Thumb = Thumb;
 				Assert.AreEqual(GetVisualChild(0), Thumb, "GetVisualChild(0) 2");
