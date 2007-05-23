@@ -29,9 +29,7 @@ namespace System.Windows.Controls.Primitives {
 				Width = 200;
 				Height = 100;
 
-				ScrollChrome c = new ScrollChrome();
-				ScrollChrome.SetScrollGlyph(c, global::Microsoft.Windows.Themes.ScrollGlyph.VerticalGripper);
-				Content = c;
+				Content = new Button();
 			}
 		}
 	}

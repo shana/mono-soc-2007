@@ -74,6 +74,7 @@ namespace System.Windows.Controls {
 
 		#region Static Constructor
 		static Slider() {
+			Theme.Load();
 			#region Command bindings
 			Type type = typeof(Slider);
 			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(DecreaseLarge, delegate(object sender, ExecutedRoutedEventArgs e) {
@@ -116,7 +117,6 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public Slider() {
-			ThemeStyle = Theme.GetStyle(typeof(Slider));
 			Maximum = 10;
 			//FIXME?: Should I do this using CommandManager.RegisterClassInputBinding?
 			KeyDown += delegate(object sender, KeyEventArgs e) {
@@ -400,15 +400,6 @@ namespace System.Windows.Controls {
 			if (auto_tool_tip != null) {
 				auto_tool_tip.IsOpen = true;
 				SetAutoToolTipContent();
-			}
-		}
-		#endregion
-
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				Style = value;
 			}
 		}
 		#endregion

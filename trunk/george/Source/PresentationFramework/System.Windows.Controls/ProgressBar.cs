@@ -18,9 +18,14 @@ namespace System.Windows.Controls {
 
 		#endregion
 
+		#region Static Constructor
+		static ProgressBar() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public ProgressBar() {
-			ThemeStyle = Theme.GetStyle(typeof(ProgressBar));
 			Maximum = 100;
 		}
 		#endregion
@@ -56,15 +61,6 @@ namespace System.Windows.Controls {
 		protected override void OnValueChanged(double oldValue, double newValue) {
 			base.OnValueChanged(oldValue, newValue);
 			SetIndicatorPosition();
-		}
-		#endregion
-
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				Style = value;
-			}
 		}
 		#endregion
 

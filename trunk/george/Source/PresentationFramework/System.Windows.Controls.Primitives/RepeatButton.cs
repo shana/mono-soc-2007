@@ -36,10 +36,15 @@ namespace System.Windows.Controls.Primitives {
 			return (int)value > 0;
 		});
 		#endregion
-		
+
+		#region Static Constructor
+		static RepeatButton() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public RepeatButton() {
-			ThemeStyle = Theme.GetStyle(typeof(RepeatButton));
 			ClickMode = global::System.Windows.Controls.ClickMode.Press;
 			
 			delay_timer.Elapsed += delegate(object sender, ElapsedEventArgs e) {
@@ -131,16 +136,6 @@ namespace System.Windows.Controls.Primitives {
 		void EndRepeatStatus() {
 			delay_timer.Enabled = false;
 			interval_timer.Enabled = false;
-		}
-		#endregion
-
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				object x = this;
-				Style = value;
-			}
 		}
 		#endregion
 	}

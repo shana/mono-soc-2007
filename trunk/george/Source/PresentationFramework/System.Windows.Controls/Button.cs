@@ -22,15 +22,21 @@ namespace System.Windows.Controls {
 		static public readonly DependencyProperty IsDefaultProperty = DependencyProperty.Register("IsDefault", typeof(bool), typeof(Button));
 		#endregion
 
+		#region Static Constructor
+		static Button() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public Button() {
-			ThemeStyle = Theme.GetStyle(typeof(Button));
 			//FIXME: Do this when the parent changes.
 			LayoutUpdated += delegate(object sender, EventArgs e) {
 				bool new_in_tool_bar = Parent is ToolBar;
 				if (new_in_tool_bar != in_tool_bar) {
 					in_tool_bar = new_in_tool_bar;
-					ThemeStyle = Theme.GetStyle(in_tool_bar ? (object)ToolBar.ButtonStyleKey : typeof(Button));
+					//FIXME: Check.
+					Style = in_tool_bar ? (Style)Application.Current.FindResource(ToolBar.ButtonStyleKey) : null;
 				}
 			};
 		}
@@ -66,15 +72,6 @@ namespace System.Windows.Controls {
 #else
 			return new ButtonAutomationPeer(this);
 #endif
-		}
-		#endregion
-
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				Style = value;
-			}
 		}
 		#endregion
 	}

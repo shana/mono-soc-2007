@@ -16,9 +16,14 @@ namespace System.Windows.Controls {
 		static public readonly DependencyProperty GroupNameProperty = DependencyProperty.Register("GroupName", typeof(string), typeof(RadioButton), new PropertyMetadata(string.Empty));
 		#endregion
 
+		#region Static Contstructor
+		static RadioButton() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public RadioButton() {
-			ThemeStyle = Theme.GetStyle(typeof(RadioButton));
 		}
 		#endregion
 
@@ -59,15 +64,6 @@ namespace System.Windows.Controls {
 
 		protected override void OnToggle() {
 			IsChecked = true;
-		}
-		#endregion
-		
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				Style = value;
-			}
 		}
 		#endregion
 	}

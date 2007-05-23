@@ -52,6 +52,7 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Static Constructor
 		static ScrollBar() {
+			Theme.Load();
 			#region Command bindings
 			Type type = typeof(ScrollBar);
 			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(LineDownCommand, ExecuteIncreaseSmall, True));
@@ -80,7 +81,6 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Public Constructors
 		public ScrollBar() {
-			ThemeStyle = Theme.GetStyle(typeof(ScrollBar));
 			Maximum = 1;
 			Orientation = Orientation.Vertical;
 			Focusable = false;
@@ -178,15 +178,6 @@ namespace System.Windows.Controls.Primitives {
 		public event ScrollEventHandler Scroll {
 			add { AddHandler(ScrollEvent, value); }
 			remove { RemoveHandler(ScrollEvent, value); }
-		}
-		#endregion
-		
-		#region Internal Properties
-		//FIXME: This should be used by lower-level classes when they are implemented.
-		internal Style ThemeStyle {
-			set {
-				Style = value;
-			}
 		}
 		#endregion
 
