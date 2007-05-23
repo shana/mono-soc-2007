@@ -1,3 +1,4 @@
+using Mono.WindowsPresentationFoundation;
 using System;
 using System.Windows;
 using System.Windows.Media;
@@ -17,6 +18,11 @@ namespace Microsoft.Windows.Themes {
 		public static readonly DependencyProperty ScrollGlyphProperty = DependencyProperty.RegisterAttached("ScrollGlyph", typeof(ScrollGlyph), typeof(ScrollChrome), new FrameworkPropertyMetadata(ScrollGlyph.None, FrameworkPropertyMetadataOptions.AffectsRender));
 		public static readonly DependencyProperty ThemeColorProperty = DependencyProperty.Register("ThemeColor", typeof(ThemeColor), typeof(ScrollChrome), new FrameworkPropertyMetadata(ThemeColor.NormalColor, FrameworkPropertyMetadataOptions.AffectsRender));
 		#endregion
+		#endregion
+
+		#region Private Fields
+		const double GripperLines = 4;
+		const double GripperLenght = 5;
 		#endregion
 
 		#region Public Constructors
@@ -131,11 +137,19 @@ namespace Microsoft.Windows.Themes {
 					}
 					break;
 				case ScrollGlyph.HorizontalGripper:
-					if (ActualWidth > BorderSize) {
-
-					}
-					break;
 				case ScrollGlyph.VerticalGripper:
+					bool horizontal = glyph == ScrollGlyph.HorizontalGripper;
+					if ((horizontal ? ActualWidth : ActualHeight) - 4 > 2 * GripperLines) {
+						double used_width, used_height;
+						if (horizontal) {
+							used_width = 2 * GripperLines;
+							used_height = GripperLenght;
+						} else {
+							used_width = GripperLenght;
+							used_height = 2 * GripperLines;
+						}
+						DrawGripper(drawingContext, horizontal, new Point((ActualWidth - used_width) / 2, (ActualHeight - used_height) / 2));
+					}
 					break;
 			}
 			#endregion
@@ -171,6 +185,23 @@ namespace Microsoft.Windows.Themes {
 			drawingContext.DrawLine(pen, start, middle);
 			drawingContext.DrawLine(pen, middle, end);
 
+		}
+		
+		void DrawGripper(DrawingContext drawingContext, bool horizontal, Point location) {
+			Pen pen = new Pen(Brushes.White, 1);
+			Pen shadow_pen = new Pen(Brushes.DarkBlue, 1);
+			Point shadow_location = new Point(location.X + 1, location.Y + 1);
+			for (int line = 0; line < GripperLines; line++) {
+				Utility.DrawLine(drawingContext, !horizontal, pen, location, GripperLenght);
+				Utility.DrawLine(drawingContext, !horizontal, shadow_pen, shadow_location, GripperLenght);
+				if (horizontal) {
+					location.X += 2;
+					shadow_location.X += 2;
+				} else {
+					location.Y += 2;
+					shadow_location.Y += 2;
+				}
+			}
 		}
 		#endregion
 	}
