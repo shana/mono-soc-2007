@@ -1,0 +1,34 @@
+Contents
+PresentationFramework - Contains source and VS2005 project files for PresentationFramework.dll and its tests. Should be integrated in Mono under mcs/class/.
+PresentationFramework.Luna - The same for PresentationFramework.Luna.dll
+Private test - Contains a project I use to quickly test something.
+Samples - Contains sample projects from the Windows SDK related to the classes I am implementing.
+ .NET Framework - The original, unmodified versions.
+ Mono - Modified to use the Mono version of WPF classes. I want to have these look and work like the ones in ".NET Framework" directory (when using the modified Microsoft theme).
+
+The Implementation compilation constant:
+defined: The code will run in the current setup.
+not defined: This is how the code should look in the end. Probably does not compile now. Some code that is compiled only in this case assumes internal members.
+Currently, it is always defined for WPF assemblies.
+
+http://www.interact-sw.co.uk/iangblog/2007/02/14/wpfdefaulttemplate
+Basically Microsoft uses internal members to achieve some functionality.
+Some override methods do not currently do anything besides calling the base implementation. They are there both to remind that something is missing and in case somebody decides to use Reflection and expects them.
+
+The themes are documented. My opinion is that they should be matched exactly since somebody can expect them to be the way they are on Microsoft .NET Framework and, for example, derive them and set the foreground color equal or very close to the Mono background color, assuming that the background color is the Microsoft one, rendering the UI unusable. WPF themes are implemented in the PresentationFramework.<theme name> assemblies and are comprised of a XAML file and a set of classes. I tried implementing the functionality of the XAML files in C# (I could still do if needed), but it requires a lot of code (XAML exists exactly for this reason) and somebody may expect to find them since there is unofficial documentation on the web on how to do this (uses include making WPF applications use another theme: http://arbel.net/blog/archive/2006/11/03/Forcing-WPF-to-use-a-specific-Windows-theme.aspx, etc).
+
+Comments:
+HACK: Works for now, but it needs to be done properly,
+TODO: Something is missing, and I know how to do it.
+FIXME: Something is wrong or missing, but I don't know how to fix it.
+WDTDH: What do they do here?
+If they are followed by a question mark, it means I'm not sure.
+
+I also found these on the Web.
+http://notstatic.com/archives/56
+http://learnwpf.com/Posts/Post.aspx?postId=3f1f4b8b-b91a-442d-a531-919de70ac225
+http://www.simplegeek.com/PermaLink.aspx/a09c8a32-b4d0-47ce-8186-0c5e7beae66b
+http://blogs.msdn.com/tims/archive/2007/01/05/comparing-wpf-on-windows-vista-v-windows-xp.aspx
+http://www.wiredprairie.us/journal/2006/09/wpf_decorators_build_your_own.html
+http://blogs.wdevs.com/neil/archive/2007/04/09/19673.aspx
+http://wpfwonderland.wordpress.com/2007/01/02/wpf-tools-stylesnooper/

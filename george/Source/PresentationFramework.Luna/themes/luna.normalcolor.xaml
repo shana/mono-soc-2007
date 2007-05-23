@@ -1,0 +1,1917 @@
+<!-- 
+This is adapted from the Windows SDK.
+-->
+<!--=================================================================
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+Theme Styles For Windows Presentation Foundation Version 3.0.6817.0 
+==================================================================-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"
+                    xmlns:ui="clr-namespace:System.Windows.Documents;assembly=PresentationUI"
+                    xmlns:mono_theme="clr-namespace:Mono.Microsoft.Windows.Themes;assembly=Mono.PresentationFramework.Luna"
+					xmlns:mono_system_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
+					xmlns:mono_system_windows_controls_primitives="clr-namespace:Mono.System.Windows.Controls.Primitives;assembly=Mono.PresentationFramework">
+
+	<Style x:Key="ButtonFocusVisual">
+		<Setter Property="Control.Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Rectangle Margin="3"
+                               StrokeThickness="1"
+                               Stroke="Black"
+                               StrokeDashArray="1 2"
+                               SnapsToDevicePixels="true"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
+
+	<LinearGradientBrush x:Key="ButtonNormalBackgroundFill"
+                        EndPoint="0.5,1"
+                        StartPoint="0.5,0">
+		<LinearGradientBrush.GradientStops>
+			<GradientStop Color="#FFFFFFFF"
+                          Offset="0"/>
+			<GradientStop Color="#FFF0F0EA"
+                          Offset="0.9"/>
+		</LinearGradientBrush.GradientStops>
+	</LinearGradientBrush>
+
+	<SolidColorBrush x:Key="ButtonBorder"
+                 Color="#FF003C74"/>
+	<Style x:Key="BaseButtonStyle"
+           TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}">
+		<Setter Property="FocusVisualStyle"
+                Value="{StaticResource ButtonFocusVisual}"/>
+		<Setter Property="Background"
+                Value="{StaticResource ButtonNormalBackgroundFill}"/>
+		<Setter Property="BorderBrush"
+                Value="{StaticResource ButtonBorder}"/>
+		<Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+		<Setter Property="HorizontalContentAlignment"
+                Value="Center"/>
+		<Setter Property="VerticalContentAlignment"
+                Value="Center"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}">
+					<mono_theme:ButtonChrome x:Name="Chrome"
+                                        ThemeColor="NormalColor"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        Fill="{TemplateBinding Background}"
+                                        RenderDefaulted="{TemplateBinding mono_system_windows_controls:Button.IsDefaulted}"
+                                        RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                        RenderPressed="{TemplateBinding IsPressed}"
+                                        SnapsToDevicePixels="true">
+						<ContentPresenter Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</mono_theme:ButtonChrome>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsKeyboardFocused"
+                                 Value="true">
+							<Setter TargetName="Chrome"
+                                    Property="RenderDefaulted"
+                                    Value="true"/>
+						</Trigger>
+						<Trigger Property="mono_system_windows_controls_primitives:ToggleButton.IsChecked"
+                                 Value="true">
+							<Setter TargetName="Chrome"
+                                    Property="RenderPressed"
+                                    Value="true"/>
+						</Trigger>
+						<Trigger Property="IsEnabled"
+                                 Value="false">
+							<Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
+	<Style x:Key="{x:Type mono_system_windows_controls_primitives:ToggleButton}"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type mono_system_windows_controls_primitives:ToggleButton}"/>
+
+	<Style x:Key="{x:Type RepeatButton}"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type RepeatButton}">
+		<Setter Property="Stylus.IsPressAndHoldEnabled"
+                Value="false"/>
+	</Style>
+
+	<Style x:Key="{x:Type mono_system_windows_controls:Button}"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type mono_system_windows_controls:Button}"/>
+
+
+
+
+	<Style x:Key="CheckRadioFocusVisual">
+		<Setter Property="Control.Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Rectangle Margin="14,0,0,0"
+                               StrokeThickness="1"
+                               Stroke="Black"
+                               StrokeDashArray="1 2"
+                               SnapsToDevicePixels="true"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="EmptyCheckBoxFocusVisual">
+		<Setter Property="Control.Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Rectangle Margin="1"
+                               StrokeThickness="1"
+                               Stroke="Black"
+                               StrokeDashArray="1 2"
+                               SnapsToDevicePixels="true"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
+
+	<LinearGradientBrush x:Key="CheckRadioFillNormal">
+		<LinearGradientBrush.GradientStops>
+			<GradientStop Color="#FFD2D4D2"
+                          Offset="0"/>
+			<GradientStop Color="#FFFFFFFF"
+                          Offset="1"/>
+		</LinearGradientBrush.GradientStops>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="CheckRadioStrokeNormal">
+		<LinearGradientBrush.GradientStops>
+			<GradientStop Color="#FF004C94"
+                          Offset="0"/>
+			<GradientStop Color="#FF003C74"
+                          Offset="1"/>
+		</LinearGradientBrush.GradientStops>
+	</LinearGradientBrush>
+	<Style x:Key="{x:Type mono_system_windows_controls:CheckBox}"
+           TargetType="{x:Type mono_system_windows_controls:CheckBox}">
+		<Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+		<Setter Property="Background"
+                Value="{StaticResource CheckRadioFillNormal}"/>
+		<Setter Property="BorderBrush"
+                Value="{StaticResource CheckRadioStrokeNormal}"/>
+		<Setter Property="BorderThickness"
+                Value="1"/>
+		<Setter Property="FocusVisualStyle"
+                Value="{StaticResource EmptyCheckBoxFocusVisual}"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:CheckBox}">
+					<mono_system_windows_controls_primitives:BulletDecorator Background="Transparent"
+                                     SnapsToDevicePixels="true">
+						<mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+							<mono_theme:BulletChrome Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                IsChecked="{TemplateBinding IsChecked}"
+                                                RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                                RenderPressed="{TemplateBinding IsPressed}"/>
+						</mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+						<ContentPresenter Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</mono_system_windows_controls_primitives:BulletDecorator>
+					<ControlTemplate.Triggers>
+						<Trigger Property="HasContent"
+                                 Value="true">
+							<Setter Property="FocusVisualStyle"
+                                    Value="{StaticResource CheckRadioFocusVisual}"/>
+							<Setter Property="Padding"
+                                    Value="2,0,0,0"/>
+						</Trigger>
+						<Trigger Property="IsEnabled"
+                                 Value="false">
+							<Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<!-- Skipped. -->
+	<LinearGradientBrush x:Key="ProgressBarFill"
+                         EndPoint="0,1"
+                         StartPoint="0,0">
+		<LinearGradientBrush.GradientStops>
+			<GradientStop Color="#ABEDAC"
+                          Offset="0"/>
+			<GradientStop Color="#2ED331"
+                          Offset="0.5"/>
+			<GradientStop Color="#8EE790"
+                          Offset="1"/>
+		</LinearGradientBrush.GradientStops>
+	</LinearGradientBrush>
+
+	<Style x:Key="{x:Type mono_system_windows_controls:ProgressBar}"
+           TargetType="{x:Type mono_system_windows_controls:ProgressBar}">
+		<Setter Property="Foreground"
+                Value="{StaticResource ProgressBarFill}"/>
+		<Setter Property="Background"
+                Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+		<Setter Property="BorderBrush"
+                Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
+		<Setter Property="BorderThickness"
+                Value="1"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:ProgressBar}">
+					<mono_system_windows_controls:Border Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            CornerRadius="3"
+                            SnapsToDevicePixels="true">
+						<mono_system_windows_controls:Border BorderThickness="1,1,1,0"
+                                BorderBrush="#BEBEBE"
+                                CornerRadius="2">
+							<mono_system_windows_controls:Border BorderThickness="1"
+                                    BorderBrush="#EFEFEF"
+                                    CornerRadius="1">
+								<DockPanel x:Name="PART_Track"
+                                           Margin="1,0,0,1"
+                                           LastChildFill="false">
+									<Rectangle x:Name="PART_Indicator">
+										<Rectangle.Fill>
+											<MultiBinding>
+												<MultiBinding.Converter>
+													<theme:ProgressBarBrushConverter/>
+												</MultiBinding.Converter>
+												<Binding Path="Foreground"
+                                                         RelativeSource="{RelativeSource TemplatedParent}"/>
+												<Binding Path="IsIndeterminate"
+                                                         RelativeSource="{RelativeSource TemplatedParent}"/>
+												<Binding Path="ActualWidth"
+                                                         ElementName="PART_Indicator"/>
+												<Binding Path="ActualHeight"
+                                                         ElementName="PART_Indicator"/>
+												<Binding Path="ActualWidth"
+                                                         ElementName="PART_Track"/>
+											</MultiBinding>
+										</Rectangle.Fill>
+									</Rectangle>
+								</DockPanel>
+							</mono_system_windows_controls:Border>
+					</mono_system_windows_controls:Border>
+				</mono_system_windows_controls:Border>
+			</ControlTemplate>
+		</Setter.Value>
+	</Setter>
+	<Style.Triggers>
+		<Trigger Property="Orientation"
+				 Value="Vertical">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type mono_system_windows_controls:ProgressBar}">
+						<mono_system_windows_controls:Border Background="{TemplateBinding Background}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    CornerRadius="3"
+                                    SnapsToDevicePixels="true">
+							<mono_system_windows_controls:Border BorderThickness="1,1,1,0"
+                                        BorderBrush="#BEBEBE"
+                                        CornerRadius="2">
+								<mono_system_windows_controls:Border BorderThickness="1"
+                                            BorderBrush="#EFEFEF"
+                                            CornerRadius="1">
+									<DockPanel x:Name="PART_Track"
+											   Margin="0,0,0,1"
+											   LastChildFill="false">
+										<Decorator x:Name="PART_Indicator"
+												   DockPanel.Dock="Bottom">
+											<Rectangle>
+												<Rectangle.LayoutTransform>
+													<RotateTransform Angle="-90"/>
+												</Rectangle.LayoutTransform>
+												<Rectangle.Fill>
+													<MultiBinding>
+														<MultiBinding.Converter>
+															<theme:ProgressBarBrushConverter/>
+														</MultiBinding.Converter>
+														<Binding Path="Foreground"
+																 RelativeSource="{RelativeSource TemplatedParent}"/>
+														<Binding Path="IsIndeterminate"
+																 RelativeSource="{RelativeSource TemplatedParent}"/>
+														<Binding Path="ActualHeight"
+																 ElementName="PART_Indicator"/>
+														<Binding Path="ActualWidth"
+																 ElementName="PART_Indicator"/>
+														<Binding Path="ActualHeight"
+																 ElementName="PART_Track"/>
+													</MultiBinding>
+												</Rectangle.Fill>
+											</Rectangle>
+										</Decorator>
+									</DockPanel>
+								</mono_system_windows_controls:Border>
+							</mono_system_windows_controls:Border>
+						</mono_system_windows_controls:Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Trigger>
+	</Style.Triggers>
+</Style>
+
+<Style x:Key="{x:Type mono_system_windows_controls:RadioButton}"
+	   TargetType="{x:Type mono_system_windows_controls:RadioButton}">
+	<Setter Property="Foreground"
+			Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+	<Setter Property="Background"
+			Value="{StaticResource CheckRadioFillNormal}"/>
+	<Setter Property="BorderBrush"
+			Value="{StaticResource CheckRadioStrokeNormal}"/>
+	<Setter Property="BorderThickness"
+			Value="1"/>
+	<Setter Property="Template">
+		<Setter.Value>
+			<ControlTemplate TargetType="{x:Type mono_system_windows_controls:RadioButton}">
+				<mono_system_windows_controls_primitives:BulletDecorator Background="Transparent">
+					<mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+						<mono_theme:BulletChrome IsRound="true"
+											Background="{TemplateBinding Background}"
+											BorderBrush="{TemplateBinding BorderBrush}"
+											IsChecked="{TemplateBinding IsChecked}"
+											RenderMouseOver="{TemplateBinding IsMouseOver}"
+											RenderPressed="{TemplateBinding IsPressed}"/>
+					</mono_system_windows_controls_primitives:BulletDecorator.Bullet>
+					<ContentPresenter Margin="{TemplateBinding Padding}"
+									  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+									  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+									  RecognizesAccessKey="True"/>
+				</mono_system_windows_controls_primitives:BulletDecorator>
+				<ControlTemplate.Triggers>
+					<Trigger Property="HasContent"
+							 Value="true">
+						<Setter Property="FocusVisualStyle"
+								Value="{StaticResource CheckRadioFocusVisual}"/>
+						<Setter Property="Padding"
+								Value="2,0,0,0"/>
+					</Trigger>
+					<Trigger Property="IsEnabled"
+							 Value="false">
+						<Setter Property="Foreground"
+								Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+					</Trigger>
+				</ControlTemplate.Triggers>
+			</ControlTemplate>
+		</Setter.Value>
+	</Setter>
+</Style>
+
+<!-- Skipped. -->
+    <SolidColorBrush x:Key="ScrollBarBackground"
+                     Color="#EEEDE5"/>
+    <Pen x:Key="ScrollBarButtonShadowNormal"
+         Thickness="1">
+        <Pen.Brush>
+            <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="0,1">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Color="#00A0B5D3"
+                                  Offset="0"/>
+                    <GradientStop Color="#FFA0B5D3"
+                                  Offset="0.5"/>
+                    <GradientStop Color="#FF7C9FD3"
+                                  Offset="1"/>
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+        </Pen.Brush>
+    </Pen>
+    <Pen x:Key="ScrollBarButtonShadowDisabled"
+         Thickness="1">
+        <Pen.Brush>
+            <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="0,1">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Color="#00CCCCBA"
+                                  Offset="0"/>
+                    <GradientStop Color="#FFCCCCBA"
+                                  Offset="0.5"/>
+                    <GradientStop Color="#FFC4C4AF"
+                                  Offset="1"/>
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+        </Pen.Brush>
+    </Pen>
+    <LinearGradientBrush x:Key="HorizontalScrollBarPageButtonNormal"
+                         StartPoint="0, 0"
+                         EndPoint="0, 1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#EEEDE5"
+                          Offset="0"/>
+            <GradientStop Color="#EEEDE5"
+                          Offset="0.05"/>
+            <GradientStop Color="#F3F1EC"
+                          Offset="0.06"/>
+            <GradientStop Color="#FEFEFE"
+                          Offset="0.94"/>
+            <GradientStop Color="#EEEDE5"
+                          Offset="0.95"/>
+            <GradientStop Color="#EEEDE5"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="HorizontalScrollBarPageButtonPressed"
+                         StartPoint="0, 0"
+                         EndPoint="0, 1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#D7D5C2"
+                          Offset="0"/>
+            <GradientStop Color="#D7D5C2"
+                          Offset="0.05"/>
+            <GradientStop Color="#E3DED3"
+                          Offset="0.06"/>
+            <GradientStop Color="#FDFDF6"
+                          Offset="0.94"/>
+            <GradientStop Color="#D7D5C2"
+                          Offset="0.95"/>
+            <GradientStop Color="#D7D5C2"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalScrollBarPageButtonNormal"
+                         StartPoint="0, 0"
+                         EndPoint="1, 0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#EEEDE5"
+                          Offset="0"/>
+            <GradientStop Color="#EEEDE5"
+                          Offset="0.05"/>
+            <GradientStop Color="#F3F1EC"
+                          Offset="0.06"/>
+            <GradientStop Color="#FEFEFE"
+                          Offset="0.94"/>
+            <GradientStop Color="#EEEDE5"
+                          Offset="0.95"/>
+            <GradientStop Color="#EEEDE5"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalScrollBarPageButtonPressed"
+                         StartPoint="0, 0"
+                         EndPoint="1, 0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#D7D5C2"
+                          Offset="0"/>
+            <GradientStop Color="#D7D5C2"
+                          Offset="0.05"/>
+            <GradientStop Color="#E3DED3"
+                          Offset="0.06"/>
+            <GradientStop Color="#FDFDF6"
+                          Offset="0.94"/>
+            <GradientStop Color="#D7D5C2"
+                          Offset="0.95"/>
+            <GradientStop Color="#D7D5C2"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <Style x:Key="ScrollBarButton"
+           TargetType="{x:Type RepeatButton}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Focusable"
+                Value="false"/>
+        <Setter Property="IsTabStop"
+                Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <mono_theme:ScrollChrome x:Name="Chrome"
+                                        ThemeColor="NormalColor" 
+                                        RenderMouseOver="{TemplateBinding IsMouseOver}" 
+                                        RenderPressed="{TemplateBinding IsPressed}" 
+                                        ScrollGlyph="{TemplateBinding mono_theme:ScrollChrome.ScrollGlyph}"
+                                        SnapsToDevicePixels="true"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ScrollBarThumb"
+           TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="IsTabStop"
+                Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <mono_theme:ScrollChrome x:Name="Chrome"
+                                        ThemeColor="NormalColor" 
+                                        RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                        RenderPressed="{TemplateBinding IsDragging}" 
+                                        ScrollGlyph="{TemplateBinding mono_theme:ScrollChrome.ScrollGlyph}"
+                                        SnapsToDevicePixels="true"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="HorizontalScrollBarPageButton"
+           TargetType="{x:Type RepeatButton}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Background"
+                Value="Transparent"/>
+        <Setter Property="Focusable"
+                Value="false"/>
+        <Setter Property="IsTabStop"
+                Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Rectangle Name="Bg"
+                               Fill="{TemplateBinding Background}"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed"
+                                 Value="true">
+                            <Setter TargetName="Bg"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalScrollBarPageButtonPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="VerticalScrollBarPageButton"
+           TargetType="{x:Type RepeatButton}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Background"
+                Value="Transparent"/>
+        <Setter Property="Focusable"
+                Value="false"/>
+        <Setter Property="IsTabStop"
+                Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Rectangle Name="Bg"
+                               Fill="{TemplateBinding Background}"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed"
+                                 Value="true">
+                            <Setter TargetName="Bg"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalScrollBarPageButtonPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="{x:Type mono_system_windows_controls_primitives:ScrollBar}"
+           TargetType="{x:Type mono_system_windows_controls_primitives:ScrollBar}">
+        <Setter Property="Stylus.IsPressAndHoldEnabled"
+                Value="false"/>
+        <Setter Property="Stylus.IsFlicksEnabled"
+                Value="false"/>
+        <Setter Property="Background"
+                Value="{StaticResource VerticalScrollBarPageButtonNormal}"/>
+        <Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Width"
+                Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
+        <Setter Property="MinWidth"
+                Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:ScrollBar}">
+                    <Grid Background="{TemplateBinding Background}"
+                          SnapsToDevicePixels="true">
+                        <Grid.RowDefinitions>
+                            <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
+                            <RowDefinition Height="0.00001*"/>
+                            <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}"/>
+                        </Grid.RowDefinitions>
+                        <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                      Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineUpCommand}"
+                                      mono_theme:ScrollChrome.ScrollGlyph="UpArrow"/>
+                        <mono_system_windows_controls_primitives:Track Grid.Row="1"
+                               Name="PART_Track"
+                               IsDirectionReversed="true">
+                            <mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
+                                              Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageUpCommand}"/>
+                            </mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+                            <mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
+                                              Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageDownCommand}"/>
+                            </mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+                            <mono_system_windows_controls_primitives:Track.Thumb>
+                                <Thumb Style="{StaticResource ScrollBarThumb}"
+                                       mono_theme:ScrollChrome.ScrollGlyph="VerticalGripper"/>
+                            </mono_system_windows_controls_primitives:Track.Thumb>
+                        </mono_system_windows_controls_primitives:Track>
+                        <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                      Grid.Row="2"
+                                      Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineDownCommand}"
+                                      mono_theme:ScrollChrome.ScrollGlyph="DownArrow"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Orientation"
+                     Value="Horizontal">
+                <Setter Property="Width"
+                        Value="Auto"/>
+                <Setter Property="MinWidth"
+                        Value="0"/>
+                <Setter Property="Background"
+                        Value="{StaticResource HorizontalScrollBarPageButtonNormal}"/>
+                <Setter Property="Height"
+                        Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}"/>
+                <Setter Property="MinHeight"
+                        Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:ScrollBar}">
+                            <Grid Background="{TemplateBinding Background}"
+                                  SnapsToDevicePixels="true">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}"/>
+                                    <ColumnDefinition Width="0.00001*"/>
+                                    <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}"/>
+                                </Grid.ColumnDefinitions>
+                                <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                              Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineLeftCommand}"
+                                              mono_theme:ScrollChrome.ScrollGlyph="LeftArrow"/>
+
+                                <mono_system_windows_controls_primitives:Track Grid.Column="1"
+                                       Name="PART_Track">
+                                    <mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+                                        <RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
+                                                      Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageLeftCommand}"/>
+                                    </mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+                                    <mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+                                        <RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
+                                                      Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageRightCommand}"/>
+                                    </mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+                                    <mono_system_windows_controls_primitives:Track.Thumb>
+                                        <Thumb Style="{StaticResource ScrollBarThumb}"
+                                               mono_theme:ScrollChrome.ScrollGlyph="HorizontalGripper"/>
+                                    </mono_system_windows_controls_primitives:Track.Thumb>
+                                </mono_system_windows_controls_primitives:Track>
+
+                                <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                              Grid.Column="2"
+                                              Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.LineRightCommand}"
+                                              mono_theme:ScrollChrome.ScrollGlyph="RightArrow"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+<!-- Skipped. -->
+<SolidColorBrush x:Key="SliderThumbBackground" Color="#F3F3EF"/>
+<SolidColorBrush x:Key="SliderThumbBackgroundInverted" Color="#F3F3EF"/>
+
+
+<LinearGradientBrush x:Key="HorizontalSliderThumbShadeGradient"
+					StartPoint="0,0"
+					EndPoint="1,0">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#40FFFFFF"
+					  Offset="0"/>
+		<GradientStop Color="#00FFFFFF"
+					  Offset=".3"/>
+		<GradientStop Color="#00000000"
+					  Offset=".7"/>
+		<GradientStop Color="#40000000"
+					  Offset="1"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+
+<LinearGradientBrush x:Key="VerticalSliderThumbShadeGradient"
+					 StartPoint="1,0"
+					 EndPoint="0,0">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#40FFFFFF"
+					  Offset="0"/>
+		<GradientStop Color="#00FFFFFF"
+					  Offset=".3"/>
+		<GradientStop Color="#00000000"
+					  Offset=".7"/>
+		<GradientStop Color="#40000000"
+					  Offset="1"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+
+
+<LinearGradientBrush x:Key="HorizontalSliderTrackNormalBorder"
+					 EndPoint="0,1"
+					 StartPoint="0,0">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#FFAEB1AF"
+					  Offset="0.1"/>
+		<GradientStop Color="White"
+					  Offset=".9"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+
+
+
+<Geometry x:Key="SliderPointedThumbOuterBorderGeometry">
+	M 5,-8 A 1.5 1.5 0 0 0 3.5,-9.5 L -3.5,-9.5 A 1.5 1.5 0 0 0 -5,-8 L -5,5.5 L 0,10.5 L 5,5.5 Z
+
+</Geometry>
+<Geometry x:Key="SliderPointedThumbTopAccentGeometry">
+	M 4.5,-6 L 4.5,-9 L -4.5,-9 L -4.5,-6 Z
+
+</Geometry>
+<Geometry x:Key="SliderPointedThumbBottomAccentGeometry">
+	M 4.5,4 L 0,8.5 L -4.5,4 L -4.5,5 L 0,10 L 4.5,5 Z
+
+</Geometry>
+<Geometry x:Key="SliderThumbOuterBorderGeometry">
+	M 5,-9 A 1.5 1.5 0 0 0 3.5,-10.5 L -3.5,-10.5 A 1.5 1.5 0 0 0 -5,-9 L -5,9 A 1.5 1.5 0 0 0 -3.5,10.5 L 3.5,10.5 A 1.5 1.5 0 0 0 5,9 Z
+
+</Geometry>
+<Geometry x:Key="SliderThumbTopAccentGeometry">
+	M 4.5,-8 L 4.5,-10 L -4.5,-10 L -4.5,-8 Z
+
+</Geometry>
+<Geometry x:Key="SliderThumbBottomAccentGeometry">
+	M 4.5,8 L 4.5,10 L -4.5,10 L -4.5,8 Z
+
+</Geometry>
+<LinearGradientBrush x:Key="HorizontalSliderThumbBorder"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#FFBECBD3"
+					  Offset="0"/>
+		<GradientStop Color="#FF72838D"
+					  Offset="1"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbTopAccent"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#70D66F"
+					  Offset="0"/>
+		<GradientStop Color="#46CA44"
+					  Offset="1"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbBottomAccent"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#46CA44"
+					  Offset="0"/>
+		<GradientStop Color="#1B9B1A"
+					  Offset=".8"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbShadeGradientInverted"
+					 StartPoint="0,0"
+					 EndPoint="1,0">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#40FFFFFF"
+					  Offset="1"/>
+		<GradientStop Color="#00FFFFFF"
+					  Offset=".7"/>
+		<GradientStop Color="#00000000"
+					  Offset=".3"/>
+		<GradientStop Color="#40000000"
+					  Offset="0"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbBorderInverted"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#FFBECBD3"
+					  Offset="1"/>
+		<GradientStop Color="#FF72838D"
+					  Offset="0"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbTopAccentInverted"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#46CA44"
+					  Offset="1"/>
+		<GradientStop Color="#1B9B1A"
+					  Offset="0"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbBottomAccentInverted"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#70D66F"
+					  Offset="1"/>
+		<GradientStop Color="#46CA44"
+					  Offset=".2"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbTopAccentHover"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#FBCE7C"
+					  Offset="0"/>
+		<GradientStop Color="#F7B335"
+					  Offset="1"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbBottomAccentHover"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#FAC055"
+					  Offset="0"/>
+		<GradientStop Color="#C7902A"
+					  Offset=".8"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbTopAccentHoverInverted"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#FAC055"
+					  Offset="1"/>
+		<GradientStop Color="#C7902A"
+					  Offset="0"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbBottomAccentHoverInverted"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#FBCE7C"
+					  Offset="1"/>
+		<GradientStop Color="#F7B335"
+					  Offset=".2"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbTopAccentPressed"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#70BA66"
+					  Offset="0"/>
+		<GradientStop Color="#229412"
+					  Offset="1"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbBottomAccentPressed"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#46A638"
+					  Offset="0"/>
+		<GradientStop Color="#1B770E"
+					  Offset=".8"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<LinearGradientBrush x:Key="HorizontalSliderThumbTopAccentPressedInverted"
+					 StartPoint="0,0"
+					 EndPoint="1,1">
+	<LinearGradientBrush.GradientStops>
+		<GradientStop Color="#46A638"
+					  Offset="1"/>
+		<GradientStop Color="#1B770E"
+					  Offset="0"/>
+	</LinearGradientBrush.GradientStops>
+</LinearGradientBrush>
+<SolidColorBrush x:Key="HorizontalSliderTrackNormalBackground"
+				 Color="#FFF0EDE0"/>
+<Style x:Key="SliderRepeatButtonStyle"
+	   TargetType="{x:Type RepeatButton}">
+	<Setter Property="OverridesDefaultStyle"
+			Value="true"/>
+	<Setter Property="IsTabStop"
+			Value="false"/>
+	<Setter Property="Focusable"
+			Value="false"/>
+	<Setter Property="Template">
+		<Setter.Value>
+			<ControlTemplate TargetType="{x:Type RepeatButton}">
+				<mono_system_windows_controls:Border Background="Transparent"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="HorizontalSliderThumbStyle"
+           TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Height"
+                Value="22"/>
+        <Setter Property="Width"
+                Value="11"/>
+        <Setter Property="Foreground"
+                Value="Green"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Canvas SnapsToDevicePixels="true">
+                        <Canvas.RenderTransform>
+                            <TranslateTransform X="5.5"
+                                                Y="11"/>
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Background"
+                              Fill="{StaticResource SliderThumbBackground}"
+                              Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
+                        <Path x:Name="TopAccent"
+                              Fill="{StaticResource HorizontalSliderThumbTopAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderThumbTopAccentGeometry}"/>
+                        <Path x:Name="BottomAccent"
+                              Fill="{StaticResource HorizontalSliderThumbBottomAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderThumbBottomAccentGeometry}"/>
+                        <Path x:Name="OuterBorder"
+                              Fill="{StaticResource HorizontalSliderThumbShadeGradient}"
+                              Stroke="{StaticResource HorizontalSliderThumbBorder}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="Foreground"
+                                 Value="Orange">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentPressed}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Background"
+                                    Property="Fill"
+                                    Value="#FFF5F4EA"/>
+                            <Setter TargetName="OuterBorder"
+                                    Property="Stroke"
+                                    Value="#FFD6D4C6"/>
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="#FFD2D0C6"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="#FFBCBAAE"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="HorizontalSliderUpThumbStyle"
+           TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Height"
+                Value="22"/>
+        <Setter Property="Width"
+                Value="11"/>
+        <Setter Property="Foreground"
+                Value="Green"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Canvas SnapsToDevicePixels="true">
+                        <Canvas.RenderTransform>
+                            <TransformGroup>
+                                <TransformGroup.Children>
+                                    <TransformCollection>
+                                        <RotateTransform Angle="180"/>
+                                        <TranslateTransform X="5.5"
+                                                            Y="11"/>
+                                    </TransformCollection>
+                                </TransformGroup.Children>
+                            </TransformGroup>
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Background"
+                              Fill="{StaticResource SliderThumbBackgroundInverted}"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                        <Path x:Name="TopAccent"
+                              Fill="{StaticResource HorizontalSliderThumbTopAccentInverted}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbTopAccentGeometry}"/>
+                        <Path x:Name="BottomAccent"
+                              Fill="{StaticResource HorizontalSliderThumbBottomAccentInverted}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbBottomAccentGeometry}"/>
+                        <Path x:Name="OuterBorder"
+                              Fill="{StaticResource HorizontalSliderThumbShadeGradientInverted}"
+                              Stroke="{StaticResource HorizontalSliderThumbBorderInverted}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentHoverInverted}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentHoverInverted}"/>
+                        </Trigger>
+                        <Trigger Property="Foreground"
+                                Value="Orange">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentHoverInverted}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentHoverInverted}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentPressedInverted}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentPressedInverted}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Background"
+                                    Property="Fill"
+                                    Value="#FFF5F4EA"/>
+                            <Setter TargetName="OuterBorder"
+                                    Property="Stroke"
+                                    Value="#FFD6D4C6"/>
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="#BBB9AD"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="HorizontalSliderDownThumbStyle"
+           TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Height"
+                Value="22"/>
+        <Setter Property="Width"
+                Value="11"/>
+        <Setter Property="Foreground"
+                Value="Green"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Canvas SnapsToDevicePixels="true">
+                        <Canvas.RenderTransform>
+                            <TranslateTransform X="5.5"
+                                                Y="11"/>
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Background"
+                              Fill="{StaticResource SliderThumbBackground}"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                        <Path x:Name="TopAccent"
+                              Fill="{StaticResource HorizontalSliderThumbTopAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbTopAccentGeometry}"/>
+                        <Path x:Name="BottomAccent"
+                              Fill="{StaticResource HorizontalSliderThumbBottomAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbBottomAccentGeometry}"/>
+                        <Path x:Name="OuterBorder"
+                              Fill="{StaticResource HorizontalSliderThumbShadeGradient}"
+                              Stroke="{StaticResource HorizontalSliderThumbBorder}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="Foreground"
+                                 Value="Orange">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbTopAccentPressed}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource HorizontalSliderThumbBottomAccentPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Background"
+                                    Property="Fill"
+                                    Value="#FFF5F4EA"/>
+                            <Setter TargetName="OuterBorder"
+                                    Property="Stroke"
+                                    Value="#FFD6D4C6"/>
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="#FFD2D0C6"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <LinearGradientBrush x:Key="VerticalSliderThumbBorder"
+                         StartPoint="1,0"
+                         EndPoint="0,.5">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FFBECBD3"
+                          Offset="0"/>
+            <GradientStop Color="#FF72838D"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbTopAccent"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#70D66F"
+                          Offset="0"/>
+            <GradientStop Color="#46CA44"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbBottomAccent"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#46CA44"
+                          Offset="0"/>
+            <GradientStop Color="#1B9B1A"
+                          Offset=".8"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbShadeGradientInverted"
+                         StartPoint="1,0"
+                         EndPoint="0,0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#40FFFFFF"
+                          Offset="1"/>
+            <GradientStop Color="#00FFFFFF"
+                          Offset=".7"/>
+            <GradientStop Color="#00000000"
+                          Offset=".3"/>
+            <GradientStop Color="#40000000"
+                          Offset="0"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbBorderInverted"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FFBECBD3"
+                          Offset="1"/>
+            <GradientStop Color="#FF72838D"
+                          Offset="0"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbTopAccentInverted"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#46CA44"
+                          Offset="1"/>
+            <GradientStop Color="#1B9B1A"
+                          Offset="0"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbBottomAccentInverted"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#70D66F"
+                          Offset="1"/>
+            <GradientStop Color="#46CA44"
+                          Offset=".2"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbTopAccentHover"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FBCE7C"
+                          Offset="0"/>
+            <GradientStop Color="#F7B335"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbBottomAccentHover"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FAC055"
+                          Offset="0"/>
+            <GradientStop Color="#C7902A"
+                          Offset=".8"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbTopAccentHoverInverted"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FAC055"
+                          Offset="1"/>
+            <GradientStop Color="#C7902A"
+                          Offset="0"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbBottomAccentHoverInverted"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FBCE7C"
+                          Offset="1"/>
+            <GradientStop Color="#F7B335"
+                          Offset=".2"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbTopAccentPressed"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#70BA66"
+                          Offset="0"/>
+            <GradientStop Color="#229412"
+                          Offset="1"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbBottomAccentPressed"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#46A638"
+                          Offset="0"/>
+            <GradientStop Color="#1B770E"
+                          Offset=".8"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalSliderThumbTopAccentPressedInverted"
+                         StartPoint="1,0"
+                         EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#46A638"
+                          Offset="1"/>
+            <GradientStop Color="#1B770E"
+                          Offset="0"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="VerticalSliderTrackNormalBackground"
+                     Color="#FFF0EDE0"/>
+    <LinearGradientBrush x:Key="VerticalSliderTrackNormalBorder"
+                         EndPoint="1,0"
+                         StartPoint="0,0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="#FFAEB1AF"
+                          Offset="0.1"/>
+            <GradientStop Color="White"
+                          Offset=".9"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <Style x:Key="VerticalSliderThumbStyle"
+           TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Width"
+                Value="22"/>
+        <Setter Property="Height"
+                Value="11"/>
+        <Setter Property="Foreground"
+                Value="Green"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Canvas SnapsToDevicePixels="true">
+                        <Canvas.RenderTransform>
+                            <TransformGroup>
+                                <TransformGroup.Children>
+                                    <TransformCollection>
+                                        <RotateTransform Angle="-90"/>
+                                        <TranslateTransform X="11"
+                                                            Y="5.5"/>
+                                    </TransformCollection>
+                                </TransformGroup.Children>
+                            </TransformGroup>
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Background"
+                              Fill="{StaticResource SliderThumbBackgroundInverted}"
+                              Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
+                        <Path x:Name="TopAccent"
+                              Fill="{StaticResource VerticalSliderThumbTopAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderThumbTopAccentGeometry}"/>
+                        <Path x:Name="BottomAccent"
+                              Fill="{StaticResource VerticalSliderThumbBottomAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderThumbBottomAccentGeometry}"/>
+                        <Path x:Name="OuterBorder"
+                              Fill="{StaticResource VerticalSliderThumbShadeGradient}"
+                              Stroke="{StaticResource VerticalSliderThumbBorder}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="Foreground"
+                                 Value="Orange">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentPressed}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Background"
+                                    Property="Fill"
+                                    Value="#FFF5F4EA"/>
+                            <Setter TargetName="OuterBorder"
+                                    Property="Stroke"
+                                    Value="#FFD6D4C6"/>
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="#FFD2D0C6"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="#FFD8D5CB"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="VerticalSliderLeftThumbStyle"
+           TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Width"
+                Value="22"/>
+        <Setter Property="Height"
+                Value="11"/>
+        <Setter Property="Foreground"
+                Value="Green"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Canvas SnapsToDevicePixels="true">
+                        <Canvas.RenderTransform>
+                            <TransformGroup>
+                                <TransformGroup.Children>
+                                    <TransformCollection>
+                                        <RotateTransform Angle="90"/>
+                                        <TranslateTransform X="11"
+                                                            Y="5.5"/>
+                                    </TransformCollection>
+                                </TransformGroup.Children>
+                            </TransformGroup>
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Background"
+                              Fill="{StaticResource SliderThumbBackground}"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                        <Path x:Name="TopAccent"
+                              Fill="{StaticResource VerticalSliderThumbTopAccentInverted}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbTopAccentGeometry}"/>
+                        <Path x:Name="BottomAccent"
+                              Fill="{StaticResource VerticalSliderThumbBottomAccentInverted}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbBottomAccentGeometry}"/>
+                        <Path x:Name="OuterBorder"
+                              Fill="{StaticResource VerticalSliderThumbShadeGradientInverted}"
+                              Stroke="{StaticResource VerticalSliderThumbBorderInverted}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentHoverInverted}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentHoverInverted}"/>
+                        </Trigger>
+                        <Trigger Property="Foreground"
+                                 Value="Orange">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentHoverInverted}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentHoverInverted}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentPressedInverted}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentPressedInverted}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Background"
+                                    Property="Fill"
+                                    Value="#FFF5F4EA"/>
+                            <Setter TargetName="OuterBorder"
+                                    Property="Stroke"
+                                    Value="#FFD6D4C6"/>
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="#BBB9AD"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="VerticalSliderRightThumbStyle"
+           TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle"
+                Value="true"/>
+        <Setter Property="Width"
+                Value="22"/>
+        <Setter Property="Height"
+                Value="11"/>
+        <Setter Property="Foreground"
+                Value="Green"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Canvas SnapsToDevicePixels="true">
+                        <Canvas.RenderTransform>
+                            <TransformGroup>
+                                <TransformGroup.Children>
+                                    <TransformCollection>
+                                        <RotateTransform Angle="-90"/>
+                                        <TranslateTransform X="11"
+                                                            Y="5.5"/>
+                                    </TransformCollection>
+                                </TransformGroup.Children>
+                            </TransformGroup>
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Background"
+                              Fill="{StaticResource SliderThumbBackgroundInverted}"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                        <Path x:Name="TopAccent"
+                              Fill="{StaticResource VerticalSliderThumbTopAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbTopAccentGeometry}"/>
+                        <Path x:Name="BottomAccent"
+                              Fill="{StaticResource VerticalSliderThumbBottomAccent}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbBottomAccentGeometry}"/>
+                        <Path x:Name="OuterBorder"
+                              Fill="{StaticResource VerticalSliderThumbShadeGradient}"
+                              Stroke="{StaticResource VerticalSliderThumbBorder}"
+                              StrokeThickness="1"
+                              Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
+                    </Canvas>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="Foreground"
+                                 Value="Orange">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentHover}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging"
+                                Value="true">
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbTopAccentPressed}"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="{StaticResource VerticalSliderThumbBottomAccentPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter TargetName="Background"
+                                    Property="Fill"
+                                    Value="#FFF5F4EA"/>
+                            <Setter TargetName="OuterBorder"
+                                    Property="Stroke"
+                                    Value="#FFD6D4C6"/>
+                            <Setter TargetName="TopAccent"
+                                    Property="Fill"
+                                    Value="#FFD2D0C6"/>
+                            <Setter TargetName="BottomAccent"
+                                    Property="Fill"
+                                    Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="{x:Type mono_system_windows_controls:Slider}"
+           TargetType="{x:Type mono_system_windows_controls:Slider}">
+        <Setter Property="Stylus.IsPressAndHoldEnabled"
+                Value="false"/>
+        <Setter Property="Background"
+                Value="Transparent"/>
+        <Setter Property="Foreground"
+                Value="#FFA1A192"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls:Slider}">
+					<mono_system_windows_controls:Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"
+                                               MinHeight="{TemplateBinding mono_system_windows_controls:Slider.MinHeight}"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
+							<mono_system_windows_controls_primitives:TickBar x:Name="TopTick"
+                                     Grid.Row="0"
+                                     Visibility="Collapsed"
+                                     Placement="Top"
+                                     Fill="{TemplateBinding Foreground}"
+                                     Height="4"/>
+							<mono_system_windows_controls_primitives:TickBar x:Name="BottomTick"
+                                     Grid.Row="2"
+                                     Visibility="Collapsed"
+                                     Placement="Bottom"
+                                     Fill="{TemplateBinding Foreground}"
+                                     Height="4"/>
+							<mono_system_windows_controls:Border Grid.Row="1"
+                                    Margin="5,0"
+                                    VerticalAlignment="center"
+                                    BorderBrush="{StaticResource HorizontalSliderTrackNormalBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="1"
+                                    Background="{StaticResource HorizontalSliderTrackNormalBackground}"
+                                    Height="4.0">
+
+								<Canvas Margin="-6,-1">
+									<Rectangle x:Name="PART_SelectionRange"
+                                               Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                                               Height="4.0"
+                                               Visibility="Hidden"
+                                               StrokeThickness="1.0"
+                                               Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
+								</Canvas>
+							</mono_system_windows_controls:Border>
+
+							<mono_system_windows_controls_primitives:Track Grid.Row="1"
+                                   Name="PART_Track">
+								<mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+									<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+                                                  Command="{x:Static mono_system_windows_controls:Slider.DecreaseLarge}"/>
+								</mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+								<mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+									<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+                                                  Command="{x:Static mono_system_windows_controls:Slider.IncreaseLarge}"/>
+								</mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+								<mono_system_windows_controls_primitives:Track.Thumb>
+									<Thumb x:Name="Thumb"
+                                           Style="{StaticResource HorizontalSliderThumbStyle}"/>
+								</mono_system_windows_controls_primitives:Track.Thumb>
+							</mono_system_windows_controls_primitives:Track>
+						</Grid>
+					</mono_system_windows_controls:Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="TickPlacement"
+                                 Value="TopLeft">
+							<Setter TargetName="TopTick"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+							<Setter TargetName="Thumb"
+                                    Property="Style"
+                                    Value="{StaticResource HorizontalSliderUpThumbStyle}"/>
+						</Trigger>
+						<Trigger Property="TickPlacement"
+                                 Value="BottomRight">
+							<Setter TargetName="BottomTick"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+							<Setter TargetName="Thumb"
+                                    Property="Style"
+                                    Value="{StaticResource HorizontalSliderDownThumbStyle}"/>
+						</Trigger>
+						<Trigger Property="TickPlacement"
+                                 Value="Both">
+							<Setter TargetName="TopTick"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+							<Setter TargetName="BottomTick"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+						</Trigger>
+						<Trigger Property="IsSelectionRangeEnabled"
+                                 Value="true">
+							<Setter TargetName="PART_SelectionRange"
+                                    Property="Visibility"
+                                    Value="Visible"/>
+						</Trigger>
+						<Trigger Property="IsKeyboardFocused"
+                                 Value="true">
+							<Setter TargetName="Thumb"
+                                    Property="Foreground"
+                                    Value="Orange"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="Orientation"
+                     Value="Vertical">
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="{x:Type mono_system_windows_controls:Slider}">
+							<mono_system_windows_controls:Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="true">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="Auto"
+                                                          MinWidth="{TemplateBinding mono_system_windows_controls:Slider.MinWidth}"/>
+										<ColumnDefinition Width="Auto"/>
+									</Grid.ColumnDefinitions>
+									<mono_system_windows_controls_primitives:TickBar x:Name="LeftTick"
+                                             Grid.Column="0"
+                                             Visibility="Collapsed"
+                                             Placement="Left"
+                                             Fill="{TemplateBinding Foreground}"
+                                             Width="4"/>
+									<mono_system_windows_controls_primitives:TickBar x:Name="RightTick"
+                                             Grid.Column="2"
+                                             Visibility="Collapsed"
+                                             Placement="Right"
+                                             Fill="{TemplateBinding Foreground}"
+                                             Width="4"/>
+									<mono_system_windows_controls:Border Grid.Column="1"
+                                            Margin="0,5"
+                                            HorizontalAlignment="center"
+                                            BorderBrush="{StaticResource VerticalSliderTrackNormalBorder}"
+                                            BorderThickness="1"
+                                            CornerRadius="1"
+                                            Background="{StaticResource VerticalSliderTrackNormalBackground}"
+                                            Width="4.0">
+										<Canvas Margin="-1,-6">
+											<Rectangle x:Name="PART_SelectionRange"
+                                                       Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                                                       Width="4.0"
+                                                       Visibility="Hidden"
+                                                       StrokeThickness="1.0"
+                                                       Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
+										</Canvas>
+
+									</mono_system_windows_controls:Border>
+									<mono_system_windows_controls_primitives:Track Grid.Column="1"
+                                           Name="PART_Track">
+										<mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+											<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+                                                          Command="{x:Static mono_system_windows_controls:Slider.DecreaseLarge}"/>
+										</mono_system_windows_controls_primitives:Track.DecreaseRepeatButton>
+										<mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+											<RepeatButton Style="{StaticResource SliderRepeatButtonStyle}"
+                                                          Command="{x:Static mono_system_windows_controls:Slider.IncreaseLarge}"/>
+										</mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
+										<mono_system_windows_controls_primitives:Track.Thumb>
+											<Thumb x:Name="Thumb"
+                                                   Style="{StaticResource VerticalSliderThumbStyle}"/>
+										</mono_system_windows_controls_primitives:Track.Thumb>
+									</mono_system_windows_controls_primitives:Track>
+
+								</Grid>
+							</mono_system_windows_controls:Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="TickPlacement"
+                                         Value="TopLeft">
+                                    <Setter TargetName="LeftTick"
+                                            Property="Visibility"
+                                            Value="Visible"/>
+                                    <Setter TargetName="Thumb"
+                                            Property="Style"
+                                            Value="{StaticResource VerticalSliderLeftThumbStyle}"/>
+                                </Trigger>
+                                <Trigger Property="TickPlacement"
+                                         Value="BottomRight">
+                                    <Setter TargetName="RightTick"
+                                            Property="Visibility"
+                                            Value="Visible"/>
+                                    <Setter TargetName="Thumb"
+                                            Property="Style"
+                                            Value="{StaticResource VerticalSliderRightThumbStyle}"/>
+                                </Trigger>
+                                <Trigger Property="TickPlacement"
+                                         Value="Both">
+                                    <Setter TargetName="LeftTick"
+                                            Property="Visibility"
+                                            Value="Visible"/>
+                                    <Setter TargetName="RightTick"
+                                            Property="Visibility"
+                                            Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="IsSelectionRangeEnabled"
+                                         Value="true">
+                                    <Setter TargetName="PART_SelectionRange"
+                                            Property="Visibility"
+                                            Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused"
+                                         Value="true">
+                                    <Setter TargetName="Thumb"
+                                            Property="Foreground"
+                                            Value="Orange"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+	<!-- Skipped. -->
+	<SolidColorBrush x:Key="ToolBarButtonHover"
+                     Color="#C1D2EE"/>
+	<SolidColorBrush x:Key="ToolBarButtonHoverBorder"
+                     Color="#316AC5"/>
+	<!-- Skipped. -->
+	<SolidColorBrush x:Key="ToolBarButtonPressed"
+                     Color="#98B5E2"/>
+	<SolidColorBrush x:Key="ToolBarButtonPressedBorder"
+                     Color="#4B4B6F"/>
+	<!-- Skipped. -->
+	<Style x:Key="{x:Static ToolBar.ButtonStyleKey}"
+           TargetType="{x:Type mono_system_windows_controls:Button}">
+		<Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+		<Setter Property="Padding"
+                Value="2"/>
+		<Setter Property="BorderThickness"
+                Value="1"/>
+		<Setter Property="Background"
+                Value="Transparent"/>
+		<Setter Property="BorderBrush"
+                Value="Transparent"/>
+		<Setter Property="HorizontalAlignment"
+                Value="Center"/>
+		<Setter Property="VerticalAlignment"
+                Value="Center"/>
+		<Setter Property="HorizontalContentAlignment"
+                Value="Center"/>
+		<Setter Property="VerticalContentAlignment"
+                Value="Center"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:Button}">
+					<mono_system_windows_controls:Border Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true">
+						<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+					</mono_system_windows_controls:Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver"
+                                 Value="true">
+							<Setter TargetName="Bd"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource ToolBarButtonHoverBorder}"/>
+							<Setter TargetName="Bd"
+                                    Property="Background"
+                                    Value="{StaticResource ToolBarButtonHover}"/>
+						</Trigger>
+						<Trigger Property="IsKeyboardFocused"
+                                 Value="true">
+							<Setter TargetName="Bd"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource ToolBarButtonHoverBorder}"/>
+							<Setter TargetName="Bd"
+                                    Property="Background"
+                                    Value="{StaticResource ToolBarButtonHover}"/>
+						</Trigger>
+						<Trigger Property="IsPressed"
+                                 Value="true">
+							<Setter TargetName="Bd"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource ToolBarButtonPressedBorder}"/>
+							<Setter TargetName="Bd"
+                                    Property="Background"
+                                    Value="{StaticResource ToolBarButtonPressed}"/>
+						</Trigger>
+						<Trigger Property="IsEnabled"
+                                 Value="false">
+							<Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

@@ -1,0 +1,74 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mono.PresentationFramework</RootNamespace>
+    <AssemblyName>Mono.PresentationFramework</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\..\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE;DEBUG;Implementation</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug - Implementation' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Implementation</DefineConstants>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="System.Windows.Controls.Primitives\BulletDecorator.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\TickBar.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\ScrollBar.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\RepeatButton.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\ToggleButton.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\Track.cs" />
+    <Compile Include="System.Windows.Controls\BooleanToVisibilityConverter.cs" />
+    <Compile Include="System.Windows.Controls\Border.cs" />
+    <Compile Include="System.Windows.Controls\Button.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\ButtonBase.cs" />
+    <Compile Include="System.Windows.Controls\CharacterCasing.cs" />
+    <Compile Include="System.Windows.Controls\CheckBox.cs" />
+    <Compile Include="System.Windows.Controls\ClickMode.cs" />
+    <Compile Include="System.Windows.Controls\ContextMenuEventHandler.cs" />
+    <Compile Include="System.Windows.Controls\ContextMenuEventArgs.cs" />
+    <Compile Include="System.Windows.Controls\ProgressBar.cs" />
+    <Compile Include="System.Windows.Controls\RadioButton.cs" />
+    <Compile Include="System.Windows.Controls\Label.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation\Utility.cs" />
+    <Compile Include="System.Windows.Controls\Slider.cs" />
+    <Compile Include="Theme.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Theme.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Read me.txt">
+      <Link>Read me.txt</Link>
+    </Content>
+  </ItemGroup>
+</Project>
