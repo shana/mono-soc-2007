@@ -33,51 +33,40 @@ using Gendarme.Framework;
 
 namespace Gendarme.Rules.Naming {
 	public class AttributeEndsWithAttributeSuffixRule : ITypeRule {
-		private enum InheritanceResult {
-			InheritsFromAttribute,
-			NoInheritsFromAttribute,
-			Undetermined
-		}
 	
-		private InheritanceResult InheritsFromAttribute (TypeReference typeReference)
+		//If the type is defined outside of the assembly I can't get a 
+		//TypeDefinition, then I can't get the BaseType (only in TypeDefinition).
+		//Then, in order to avoid false positives, if we can't determine basetype, 
+		//the method returns false.
+		private bool InheritsFromAttribute (TypeReference typeReference)
 		{
 			if (typeReference is TypeDefinition) {
 				TypeDefinition current = (TypeDefinition) typeReference;
 				while (current.BaseType.FullName != "System.Object") {
 					if (current.BaseType.FullName == "System.Attribute")
-						return InheritanceResult.InheritsFromAttribute;
+						return true;
 					else {
 					    if (current.BaseType is TypeDefinition) 
 					    	current = (TypeDefinition) current.BaseType;
 					    else
-					    	return InheritanceResult.Undetermined;
+					    	return false;
 					}
 				}
-				return InheritanceResult.NoInheritsFromAttribute;
+				return false;
 			}
 			else 
-				return InheritanceResult.Undetermined;
+				return false;
 		}
 		
 		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner)
 		{
 			MessageCollection messageCollection = new MessageCollection ();
-			switch (InheritsFromAttribute (typeDefinition)) {
-			case InheritanceResult.InheritsFromAttribute:
-				if (!typeDefinition.Name.EndsWith ("Attribute")) {
+			if (InheritsFromAttribute (typeDefinition)) {
+			    if (!typeDefinition.Name.EndsWith ("Attribute")) {
 					Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
 					Message message = new Message ("The class name doesn't end with Attribute Suffix", location, MessageType.Error);
 					messageCollection.Add (message);                        
 				}
-				break;
-			case InheritanceResult.Undetermined:
-				//This case is ignored, because the rule can flood with warnings
-				//to the user.
-				break;
-			case InheritanceResult.NoInheritsFromAttribute:
-				break;
-			default:
-				break;
 			}
 			if (messageCollection.Count == 0)
 				return null;
