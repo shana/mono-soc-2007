@@ -74,7 +74,7 @@ namespace Test.Rules.Naming {
 			messageCollection = null;
 		}
 		
-		private void checkMessageType (MessageCollection messageCollection, MessageType messageType) {
+		private void CheckMessageType (MessageCollection messageCollection, MessageType messageType) {
 			IEnumerator enumerator = messageCollection.GetEnumerator ();
 			if (enumerator.MoveNext ()) {
 				Message message = (Message) enumerator.Current;
@@ -89,7 +89,7 @@ namespace Test.Rules.Naming {
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);
-			checkMessageType (messageCollection, MessageType.Error);
+			CheckMessageType (messageCollection, MessageType.Error);
 		}
 		
 		[Test]
@@ -114,7 +114,7 @@ namespace Test.Rules.Naming {
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);
-			checkMessageType (messageCollection, MessageType.Error);
+			CheckMessageType (messageCollection, MessageType.Error);
 		}
 		
 		[Test]
