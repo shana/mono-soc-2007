@@ -1,3 +1,7 @@
+2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Theme.cs: Fixed redundant loading. Fixed for NUnit usage.
+	
 2007-05-23  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Theme.cs: Added theme assembly detection required for running samples or tests with NUnit.
