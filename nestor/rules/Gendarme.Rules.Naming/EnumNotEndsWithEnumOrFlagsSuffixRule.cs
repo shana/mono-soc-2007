@@ -55,26 +55,26 @@ namespace Gendarme.Rules.Naming {
 		
 		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner)
 		{	
-		    MessageCollection messageCollection = new MessageCollection ();
-		    if (typeDefinition.IsEnum) {
-		    	if (!HasFlagsAttribute (typeDefinition)) {
-		    		if (EndsWithEnumSuffix (typeDefinition.Name)) {
-		    			Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
+			MessageCollection messageCollection = new MessageCollection ();
+			if (typeDefinition.IsEnum) {
+				if (!HasFlagsAttribute (typeDefinition)) {
+					if (EndsWithEnumSuffix (typeDefinition.Name)) {
+						Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
 						Message message = new Message ("The class name ends with Enum Suffix", location, MessageType.Error);
 						messageCollection.Add (message);  
-		    		}
-		    	}
-		    	else {
-		    		if (EndsWithFlagsSuffix (typeDefinition.Name)){
-		    			Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
+					}
+				}
+				else {
+					if (EndsWithFlagsSuffix (typeDefinition.Name)){
+						Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
 						Message message = new Message ("The class name ends with Flags Suffix", location, MessageType.Error);
-						messageCollection.Add (message);  
-		    		}
-		    	}
-		    }
-		    if (messageCollection.Count == 0)
-		    	return null;
-		    return messageCollection;
+						messageCollection.Add (message);
+					}
+				}
+			}
+			if (messageCollection.Count == 0)
+				return null;
+			return messageCollection;
 		}
 	}
 }

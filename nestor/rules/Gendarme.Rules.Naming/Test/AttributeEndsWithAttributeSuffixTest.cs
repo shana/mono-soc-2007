@@ -120,12 +120,12 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestVariousLevelInheritanceExternalTypeUndetermined () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.CorrectContextStaticAttribute"];
-		    messageCollection = rule.CheckType (type, new MinimalRunner ());
-		    Assert.IsNull (messageCollection);
-		    //The System.ContextStaticAttribute class inherits from System.Attribute.
-		    //But we can retrieve that info from a TypeReference, because now 
-		    //Gendarme doesn't support loading assemblies.
+			type = assembly.MainModule.Types ["Test.Rules.Naming.CorrectContextStaticAttribute"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+			//The System.ContextStaticAttribute class inherits from System.Attribute.
+			//But we can retrieve that info from a TypeReference, because now 
+			//Gendarme doesn't support loading assemblies.
 		}
 		
 		[Test]
@@ -140,9 +140,9 @@ namespace Test.Rules.Naming {
 			type = assembly.MainModule.Types ["Test.Rules.Naming.YetAnotherClass"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
-		    //The System.Random class doesn't inherit from System.Attribute.
-		    //But we can retrieve that info from a TypeReference, because now 
-		    //Gendarme doesn't support loading assemblies.
+			//The System.Random class doesn't inherit from System.Attribute.
+			//But we can retrieve that info from a TypeReference, because now 
+			//Gendarme doesn't support loading assemblies.
 		}
 	}
 }
