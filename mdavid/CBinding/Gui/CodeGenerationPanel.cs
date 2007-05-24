@@ -200,6 +200,7 @@ namespace CBinding
 			}
 			
 			includePathStore.GetIterFirst (out iter);
+			configuration.Includes.Clear ();
 			while (includePathStore.IterIsValid (iter)) {
 				line = (string)includePathStore.GetValue (iter, 0);
 				configuration.Includes.Add (line);
