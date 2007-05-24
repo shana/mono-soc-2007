@@ -10,6 +10,8 @@ static class Theme {
     static public void Load() {
 		if (loaded)
 			return;
+		else
+			loaded = true;
 #if UseMicrosoftTheme
 #if Implementation
 		const string ThemeAssemblyName = "Mono.PresentationFramework.Luna.dll";
@@ -19,7 +21,7 @@ static class Theme {
 		string assembly_location = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
 		string theme_assembly_file = Path.Combine(assembly_location, ThemeAssemblyName);
 #if Implementation
-        //HACK:
+		//HACK:
 		while (!File.Exists(theme_assembly_file)) {
 			DirectoryInfo parent_directory = Directory.GetParent(assembly_location);
 			assembly_location = parent_directory.FullName;
@@ -36,7 +38,10 @@ static class Theme {
 		assembly = Assembly.GetExecutingAssembly();
 		theme_xaml_file_resource_name = "Mono.PresentationFramework.Theme.xaml";
 #endif
-		Application.Current.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name)));
-		loaded = true;
+		ResourceDictionary resource_dictionary = (ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name));
+		if (Application.Current == null) {
+			new Application();
+		}
+		Application.Current.Resources.MergedDictionaries.Add(resource_dictionary);
     }
 }
