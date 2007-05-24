@@ -98,7 +98,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestCorrectEnumName () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValue"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValue"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
@@ -106,7 +106,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestIncorrectEnumName () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValueEnum"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValueEnum"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);
@@ -116,7 +116,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestCorrectFlagsName () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValues"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValues"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
@@ -124,7 +124,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestIncorrectFlagsName () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValuesFlags"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.ReturnValuesFlags"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);
@@ -134,7 +134,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestIncorrectEnumNameInLower () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.returnvalueenum"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.returnvalueenum"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);
@@ -144,7 +144,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestIncorrectFlagsNameInLower () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.returnvaluesflags"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.returnvaluesflags"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);

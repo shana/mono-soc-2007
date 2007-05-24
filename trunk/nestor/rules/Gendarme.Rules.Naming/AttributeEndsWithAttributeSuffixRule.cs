@@ -46,10 +46,10 @@ namespace Gendarme.Rules.Naming {
 					if (current.BaseType.FullName == "System.Attribute")
 						return true;
 					else {
-					    if (current.BaseType is TypeDefinition) 
-					    	current = (TypeDefinition) current.BaseType;
-					    else
-					    	return false;
+						if (current.BaseType is TypeDefinition) 
+							current = (TypeDefinition) current.BaseType;
+						else
+							return false;
 					}
 				}
 				return false;
@@ -62,7 +62,7 @@ namespace Gendarme.Rules.Naming {
 		{
 			MessageCollection messageCollection = new MessageCollection ();
 			if (InheritsFromAttribute (typeDefinition)) {
-			    if (!typeDefinition.Name.EndsWith ("Attribute")) {
+				if (!typeDefinition.Name.EndsWith ("Attribute")) {
 					Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
 					Message message = new Message ("The class name doesn't end with Attribute Suffix", location, MessageType.Error);
 					messageCollection.Add (message);                        
