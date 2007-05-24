@@ -821,9 +821,11 @@ Shared Object</property>
   <widget class="Gtk.Dialog" id="CBinding.AddLibraryDialog" design-size="649 412">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Add Library</property>
+    <property name="WindowPosition">CenterOnParent</property>
     <property name="Modal">True</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
+    <property name="HasSeparator">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
@@ -887,9 +889,11 @@ Shared Object</property>
   <widget class="Gtk.Dialog" id="CBinding.AddPathDialog" design-size="649 413">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Add Path</property>
+    <property name="WindowPosition">CenterOnParent</property>
     <property name="Modal">True</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
+    <property name="HasSeparator">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
