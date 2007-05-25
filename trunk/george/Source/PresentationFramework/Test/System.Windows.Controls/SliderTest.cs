@@ -449,5 +449,25 @@ namespace System.Windows.Controls {
 		public void CanCallOnApplyTemplateWhenever() {
 			new Slider().OnApplyTemplate();
 		}
+
+		#region HasTrack
+		[Test]
+		public void HasTrack() {
+			new HasTrackSlider();
+		}
+
+		class HasTrackSlider : Slider {
+			public HasTrackSlider() {
+				Assert.IsNull(GetTemplateChild("PART_Track"), "1");
+				ApplyTemplate();
+				Assert.IsNull(GetTemplateChild("PART_Track"), "2");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.IsNotNull(Template, "3");
+				Assert.IsNotNull(GetTemplateChild("PART_Track"), "4");
+			}
+		}
+		#endregion
 	}
 }
