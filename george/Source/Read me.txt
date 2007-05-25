@@ -1,7 +1,7 @@
 Contents
 PresentationFramework - Contains source and VS2005 project files for PresentationFramework.dll and its tests. Should be integrated in Mono under mcs/class/.
 PresentationFramework.Luna - The same for PresentationFramework.Luna.dll
-Private test - Contains a project I use to quickly test something.
+Test - Contains a project I use to quickly test something.
 Samples - Contains sample projects from the Windows SDK related to the classes I am implementing.
  .NET Framework - The original, unmodified versions.
  Mono - Modified to use the Mono version of WPF classes. I want to have these look and work like the ones in ".NET Framework" directory (when using the modified Microsoft theme).
@@ -32,3 +32,4 @@ http://blogs.msdn.com/tims/archive/2007/01/05/comparing-wpf-on-windows-vista-v-w
 http://www.wiredprairie.us/journal/2006/09/wpf_decorators_build_your_own.html
 http://blogs.wdevs.com/neil/archive/2007/04/09/19673.aspx
 http://wpfwonderland.wordpress.com/2007/01/02/wpf-tools-stylesnooper/
+http://wpfwiki.com/
