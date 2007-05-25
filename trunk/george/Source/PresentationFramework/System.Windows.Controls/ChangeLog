@@ -1,3 +1,7 @@
+2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Slider.cs: Removed an incorrect fix.
+
 2007-05-23  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Slider.cs: Switched to implemented RepeatButton.
