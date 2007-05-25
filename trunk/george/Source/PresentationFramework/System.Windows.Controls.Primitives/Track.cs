@@ -221,7 +221,7 @@ namespace System.Windows.Controls.Primitives {
 					thumb_rect = new Rect(ratio * Utility.GetAdjustedSize(finalSize.Width - thumb_size), 0, thumb_size, finalSize.Height);
 				else
 					thumb_rect = new Rect(0, ratio * Utility.GetAdjustedSize(finalSize.Height - thumb_size), finalSize.Width, thumb_size);
-				#region Arrange repeat buttons
+				#region Arrange parts
 				if (horizontal) {
 					if (in_scroll_bar && finalSize.Width < thumb_rect.Right)
 						thumb.Arrange(new Rect(0, 0, 0, 0));
