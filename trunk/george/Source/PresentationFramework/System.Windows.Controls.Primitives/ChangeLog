@@ -1,5 +1,9 @@
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Track.cs: Fixed things broken by the last change.
+
+2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Track.cs: Duplicated very strange Microsoft behavior.
 
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>

@@ -85,15 +85,22 @@ namespace System.Windows.Controls.Primitives {
 			set {
 				if (decrease_repeat_button == value)
 					return;
-				if (decrease_repeat_button != null)
+				if (VisualTreeHelper.GetParent(this) != null && decrease_repeat_button != null)
 					if (in_scroll_bar)
 						throw new IndexOutOfRangeException();
 					else
 						Utility.Hang();
+				if (decrease_repeat_button != null) {
+					visual_children.Remove(decrease_repeat_button);
+					RemoveLogicalChild(decrease_repeat_button);
+					RemoveVisualChild(decrease_repeat_button);
+				}
 				decrease_repeat_button = value;
-				visual_children.Add(decrease_repeat_button);
-				AddLogicalChild(decrease_repeat_button);
-				AddVisualChild(decrease_repeat_button);
+				if (decrease_repeat_button != null) {
+					visual_children.Add(decrease_repeat_button);
+					AddLogicalChild(decrease_repeat_button);
+					AddVisualChild(decrease_repeat_button);
+				}
 			}
 		}
 
@@ -102,15 +109,22 @@ namespace System.Windows.Controls.Primitives {
 			set {
 				if (increase_repeat_button == value)
 					return;
-				if (increase_repeat_button != null)
+				if (VisualTreeHelper.GetParent(this) != null && increase_repeat_button != null)
 					if (in_scroll_bar)
 						throw new IndexOutOfRangeException();
 					else
 						Utility.Hang();
+				if (increase_repeat_button != null) {
+					visual_children.Remove(increase_repeat_button);
+					RemoveLogicalChild(increase_repeat_button);
+					RemoveVisualChild(increase_repeat_button);
+				}
 				increase_repeat_button = value;
-				visual_children.Add(increase_repeat_button);
-				AddLogicalChild(increase_repeat_button);
-				AddVisualChild(increase_repeat_button);
+				if (increase_repeat_button != null) {
+					visual_children.Add(increase_repeat_button);
+					AddLogicalChild(increase_repeat_button);
+					AddVisualChild(increase_repeat_button);
+				}
 			}
 		}
 
@@ -119,15 +133,19 @@ namespace System.Windows.Controls.Primitives {
 			set {
 				if (thumb == value)
 					return;
-				if (thumb != null)
-					if (in_scroll_bar)
-						throw new IndexOutOfRangeException();
-					else
-						Utility.Hang();
+				if (VisualTreeHelper.GetParent(this) != null && thumb != null)
+					Utility.Hang();
+				if (thumb != null) {
+					visual_children.Remove(thumb);
+					RemoveLogicalChild(thumb);
+					RemoveVisualChild(thumb);
+				}
 				thumb = value;
-				visual_children.Add(thumb);
-				AddLogicalChild(thumb);
-				AddVisualChild(thumb);
+				if (thumb != null) {
+					visual_children.Add(thumb);
+					AddLogicalChild(thumb);
+					AddVisualChild(thumb);
+				}
 			}
 		}
 		#endregion
