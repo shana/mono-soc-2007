@@ -17,10 +17,12 @@ REFS = \
 	
 
 FILES = \
+	CLanguageBinding.cs \
 	Project/CCompilationParameters.cs \
 	Project/CProject.cs \
 	Project/CProjectBinding.cs \
 	Project/CProjectConfiguration.cs \
+	Project/ProjectPackageCollection.cs \
 	Gui/CodeGenerationPanel.cs \
 	Gui/CompilerPanel.cs \
 	Gui/AddLibraryDialog.cs \
@@ -28,11 +30,13 @@ FILES = \
 	Gui/ProjectReferencesExtension.cs \
 	Gui/ProjectNodeExtension.cs \
 	Gui/ProjectPackagesFolderNodeBuilder.cs \
+	Gui/EditPackagesDialog.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
 	gtk-gui/CBinding.CompilerPanel.cs \
 	gtk-gui/CBinding.AddLibraryDialog.cs \
 	gtk-gui/CBinding.AddPathDialog.cs \
+	gtk-gui/CBinding.EditPackagesDialog.cs \
 	Compiler/ICompiler.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GNUCompiler.cs \

@@ -51,6 +51,13 @@
 	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">
 		<ProjectBinding id = "CProject" class = "CBinding.CProjectBinding"/>
 	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/LanguageBindings">
+		<LanguageBinding
+			id = "C"
+		    supportedextensions = ".c,.cpp,.h,.hpp"
+		    class = "CBinding.CLanguageBinding"/>
+    </Extension>
 
 	<Extension path = "/SharpDevelop/Workbench/ProjectOptions/ConfigurationProperties">
 		<Condition id = "activelanguage" value = "C">
@@ -78,11 +85,11 @@
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
 	<!-- Condition not working (It's never true) -->
-		<Condition id = "activelanguage" value = "C">
+		<!--<Condition id = "activelanguage" value = "C">-->
 			<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
 			<NodeBuilder id = "ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
 			<NodeBuilder id = "ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
-		</Condition>
+		<!--</Condition>-->
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">
@@ -90,8 +97,7 @@
 	</Extension>
 	
 	<Extension path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode">
-		<!--<CommandItem id = "CBinding.CProjectCommands.AddPackage"/> This throws and exception-->
-		<CommandItem id = "MonoDevelop.Ide.Commands.EditCommands.Paste"/> <!-- And this just doesn't appear -->
+		<CommandItem id = "CBinding.CProjectCommands.AddPackage"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">

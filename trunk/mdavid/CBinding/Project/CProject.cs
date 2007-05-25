@@ -26,7 +26,7 @@ namespace CBinding
 		
 		[ItemProperty ("Packages")]
 		[ItemProperty ("Package", Scope = 1, ValueType = typeof(string))]
-    	private ArrayList packages = new ArrayList ();
+    	private ProjectPackageCollection packages = new ProjectPackageCollection ();
 		
 		public CProject ()
 		{
@@ -158,7 +158,7 @@ namespace CBinding
 			}
 		}
 		
-		public ArrayList Packages {
+		public ProjectPackageCollection Packages {
 			get { return packages; }
 		}
 		
@@ -168,6 +168,14 @@ namespace CBinding
 			
 			if (!IsCompileable (e.ProjectFile.Name))
 				e.ProjectFile.BuildAction = BuildAction.Nothing;
+		}
+		
+		internal void NotifyPackageRemovedFromProject (string package)
+		{
+		}
+		
+		internal void NotifyPackageAddedToProject (string package)
+		{
 		}
 	}
 }
