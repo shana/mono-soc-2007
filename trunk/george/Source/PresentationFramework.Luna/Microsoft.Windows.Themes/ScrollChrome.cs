@@ -89,15 +89,16 @@ namespace Microsoft.Windows.Themes {
 				padded = false;
 			double actual_width_without_padding = ActualWidth - Padding.Left - Padding.Right;
 			double actual_height_without_padding = ActualHeight - Padding.Top - Padding.Bottom;
-
-			#region Shadow
-			Brush shadow_brush = new LinearGradientBrush(Colors.White, Colors.LightBlue, 45);
-			drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(0, 0, actual_width_without_padding, actual_height_without_padding), 3, 3);
-			#endregion
-			#region White
-			if (actual_width_without_padding > 1 && actual_height_without_padding > 1)
-				drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(0, 0, actual_width_without_padding - 1, actual_height_without_padding - 1), 3, 3);
-			#endregion
+			if (HasOuterBorder) {
+				#region Shadow
+				Brush shadow_brush = new LinearGradientBrush(Colors.White, Colors.LightBlue, 45);
+				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(0, 0, actual_width_without_padding, actual_height_without_padding), 3, 3);
+				#endregion
+				#region White
+				if (actual_width_without_padding > 1 && actual_height_without_padding > 1)
+					drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(0, 0, actual_width_without_padding - 1, actual_height_without_padding - 1), 3, 3);
+				#endregion
+			}
 			#region Interior
 			Color interior_color;
 			if (RenderPressed)
@@ -108,11 +109,17 @@ namespace Microsoft.Windows.Themes {
 				interior_color = Colors.LightBlue;
 
 			Brush interior_brush = new LinearGradientBrush(Colors.White, interior_color, 45);
-			const double InteriorBorderDistance = 1.5;
-			double interior_width = actual_width_without_padding - 2 * InteriorBorderDistance - 1;
-			double interior_height = actual_height_without_padding - 2 * InteriorBorderDistance - 1;
+			double interior_width = actual_width_without_padding - 1;
+			double interior_height = actual_height_without_padding - 1;
+			double outer_border_offset;
+			if (HasOuterBorder) {
+				interior_width -= 3;
+				interior_height -= 3;
+				outer_border_offset = 1;
+			} else
+				outer_border_offset = 0;
 			if (interior_width > 0 && interior_height > 0)
-				drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(InteriorBorderDistance, InteriorBorderDistance, interior_width, interior_height), 1, 1);
+				drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(outer_border_offset + 0.5, outer_border_offset + 0.5, interior_width, interior_height), 1, 1);
 			#endregion
 			#region Glyph
 			ScrollGlyph glyph = GetScrollGlyph(this);
