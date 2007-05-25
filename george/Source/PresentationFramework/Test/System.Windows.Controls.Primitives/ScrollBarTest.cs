@@ -79,5 +79,16 @@ namespace System.Windows.Controls.Primitives {
 			ScrollBar.LineDownCommand.Execute(null, s);
 			Assert.AreEqual(s.Value, s.Maximum, "Value after LineDown 2");
 		}
+
+		[Test]
+		public void RepeatButtonCommand() {
+			ScrollBar s = new ScrollBar();
+			Window w = new Window();
+			w.Content = s;
+			w.Show();
+			Assert.AreEqual(s.Track.DecreaseRepeatButton.Command, ScrollBar.PageUpCommand, "Command");
+			Assert.IsNull(s.Track.DecreaseRepeatButton.CommandTarget, "CommandTarget");
+			Assert.IsNull(s.Track.DecreaseRepeatButton.CommandParameter, "CommandParameter");
+		}
 	}
 }

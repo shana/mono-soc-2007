@@ -350,7 +350,10 @@ namespace System.Windows.Controls.Primitives {
 			thumb.Height = 200;
 			track.Thumb = thumb;
 			track.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-			Assert.AreEqual(track.DesiredSize.Width, 100);
+			Assert.AreEqual(track.DesiredSize.Width, 100, "track.DesiredSize.Width");
+			Assert.AreEqual(thumb.DesiredSize.Width, 100, "thumb.DesiredSize.Width");
+			Assert.AreEqual(VisualTreeHelper.GetContentBounds(thumb), Rect.Empty, "VisualTreeHelper.GetContentBounds(thumb)");
+
 		}
 	}
 }

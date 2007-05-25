@@ -44,7 +44,6 @@ namespace System.Windows.Controls {
 
 		#region OnApplyTemplate
 		[Test]
-		[Ignore("Probably because the theme style is simulated.")]
 		public void OnApplyTemplate() {
 			new OnApplyTemplateProgressBar();
 		}
