@@ -1,3 +1,4 @@
+//FIXME: Work properly in a ScrollBar, Slider.
 using Mono.WindowsPresentationFoundation;
 using System;
 using System.ComponentModel;
