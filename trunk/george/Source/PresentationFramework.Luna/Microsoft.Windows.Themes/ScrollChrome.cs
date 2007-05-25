@@ -81,13 +81,22 @@ namespace Microsoft.Windows.Themes {
 		}
 
 		protected override void OnRender(DrawingContext drawingContext) {
+			bool padded;
+			if (Padding.Left != 0 || Padding.Top != 0) {
+				padded = true;
+				drawingContext.PushTransform(new TranslateTransform(Padding.Left, Padding.Top));
+			} else
+				padded = false;
+			double actual_width_without_padding = ActualWidth - Padding.Left - Padding.Right;
+			double actual_height_without_padding = ActualHeight - Padding.Top - Padding.Bottom;
+
 			#region Shadow
 			Brush shadow_brush = new LinearGradientBrush(Colors.White, Colors.LightBlue, 45);
-			drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(0, 0, ActualWidth, ActualHeight), 3, 3);
+			drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(0, 0, actual_width_without_padding, actual_height_without_padding), 3, 3);
 			#endregion
 			#region White
-			if (ActualWidth > 1 && ActualHeight > 1)
-				drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(0, 0, ActualWidth - 1, ActualHeight - 1), 3, 3);
+			if (actual_width_without_padding > 1 && actual_height_without_padding > 1)
+				drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(0, 0, actual_width_without_padding - 1, actual_height_without_padding - 1), 3, 3);
 			#endregion
 			#region Interior
 			Color interior_color;
@@ -100,8 +109,8 @@ namespace Microsoft.Windows.Themes {
 
 			Brush interior_brush = new LinearGradientBrush(Colors.White, interior_color, 45);
 			const double InteriorBorderDistance = 1.5;
-			double interior_width = ActualWidth - 2 * InteriorBorderDistance - 1;
-			double interior_height = ActualHeight - 2 * InteriorBorderDistance - 1;
+			double interior_width = actual_width_without_padding - 2 * InteriorBorderDistance - 1;
+			double interior_height = actual_height_without_padding - 2 * InteriorBorderDistance - 1;
 			if (interior_width > 0 && interior_height > 0)
 				drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(InteriorBorderDistance, InteriorBorderDistance, interior_width, interior_height), 1, 1);
 			#endregion
@@ -115,8 +124,8 @@ namespace Microsoft.Windows.Themes {
 				case ScrollGlyph.RightArrow:
 					const double ArrowWidth = 8;
 					const double ArrowLenght = 6;
-					double usable_width = ActualWidth - BorderSize;
-					double usable_height = ActualHeight - BorderSize;
+					double usable_width = actual_width_without_padding - BorderSize;
+					double usable_height = actual_height_without_padding - BorderSize;
 					double width;
 					double height;
 					switch (glyph) {
@@ -133,13 +142,13 @@ namespace Microsoft.Windows.Themes {
 					if (width > 1 && height > 1) {
 						width -= 1;
 						height -= 1;
-						DrawArrow(drawingContext, glyph, new Rect((ActualWidth - width) / 2, (ActualHeight - height) / 2, width, height));
+						DrawArrow(drawingContext, glyph, new Rect((actual_width_without_padding - width) / 2, (actual_height_without_padding - height) / 2, width, height));
 					}
 					break;
 				case ScrollGlyph.HorizontalGripper:
 				case ScrollGlyph.VerticalGripper:
 					bool horizontal = glyph == ScrollGlyph.HorizontalGripper;
-					if ((horizontal ? ActualWidth : ActualHeight) - 4 > 2 * GripperLines) {
+					if ((horizontal ? actual_width_without_padding : actual_height_without_padding) - 4 > 2 * GripperLines) {
 						double used_width, used_height;
 						if (horizontal) {
 							used_width = 2 * GripperLines;
@@ -148,11 +157,13 @@ namespace Microsoft.Windows.Themes {
 							used_width = GripperLenght;
 							used_height = 2 * GripperLines;
 						}
-						DrawGripper(drawingContext, horizontal, new Point((ActualWidth - used_width) / 2, (ActualHeight - used_height) / 2));
+						DrawGripper(drawingContext, horizontal, new Point((actual_width_without_padding - used_width) / 2, (actual_height_without_padding - used_height) / 2));
 					}
 					break;
 			}
 			#endregion
+			if (padded)
+				drawingContext.Pop();
 		}
 		#endregion
 
