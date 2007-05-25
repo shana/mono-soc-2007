@@ -90,5 +90,15 @@ namespace System.Windows.Controls.Primitives {
 			Assert.IsNull(s.Track.DecreaseRepeatButton.CommandTarget, "CommandTarget");
 			Assert.IsNull(s.Track.DecreaseRepeatButton.CommandParameter, "CommandParameter");
 		}
+
+		[Test]
+		[ExpectedException(typeof(IndexOutOfRangeException))]
+		public void SettingIncreaseRepeatButton() {
+			ScrollBar s = new ScrollBar();
+			Window w = new Window();
+			w.Content = s;
+			w.Show();
+			s.Track.IncreaseRepeatButton = new RepeatButton();
+		}
 	}
 }
