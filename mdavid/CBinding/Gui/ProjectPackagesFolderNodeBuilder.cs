@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 
+using Mono.Addins;
+
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
@@ -14,7 +16,7 @@ namespace CBinding
 	public class ProjectPackagesFolderNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(ArrayList); }
+			get { return typeof(ProjectPackageCollection); }
 		}
 		
 		public override Type CommandHandlerType {
@@ -35,7 +37,7 @@ namespace CBinding
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return ((ArrayList)dataObject).Count > 0;
+			return ((ProjectPackageCollection)dataObject).Count > 0;
 		}
 		
 		public override string ContextMenuAddinPath {
@@ -45,11 +47,11 @@ namespace CBinding
 	
 	public class ProjectPackagesFolderNodeCommandHandler : NodeCommandHandler
 	{
-		
 		[CommandHandler (CProjectCommands.AddPackage)]
 		public void AddPackageToProject ()
 		{
-			MonoDevelop.Ide.Gui.IdeApp.Services.MessageService.ShowMessage ("Add a package");
+			EditPackagesDialog dialog = new EditPackagesDialog ();
+			dialog.Run ();			
 		}
 	}
 }
