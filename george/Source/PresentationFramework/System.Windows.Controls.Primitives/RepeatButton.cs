@@ -78,7 +78,13 @@ namespace System.Windows.Controls.Primitives {
 
         #region Protected Methods
         protected override void OnClick() {
-			//WDTDH
+			//FIXME? I am not very sure about this.
+			if (TemplatedParent != null) {
+				RoutedCommand routed_command = Command as RoutedCommand;
+				if (routed_command != null)
+					if (routed_command.CanExecute(CommandParameter, (IInputElement)TemplatedParent))
+						routed_command.Execute(CommandParameter, (IInputElement)TemplatedParent);
+			}
 			base.OnClick();
         }
 
