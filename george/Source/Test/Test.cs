@@ -17,6 +17,11 @@ namespace System.Windows.Controls.Primitives {
 	class Test {
 		[STAThread]
 		static void Main() {
+			/////////////////////////////////////
+			
+			//return;
+
+			/////////////////////////////////////
 			new Application().Run(new TestWindow());
 		}
 		class TestWindow : Window {
@@ -29,7 +34,7 @@ namespace System.Windows.Controls.Primitives {
 				Width = 200;
 				Height = 100;
 
-				Content = new Button();
+				Content = new ScrollBar();
 			}
 		}
 	}
