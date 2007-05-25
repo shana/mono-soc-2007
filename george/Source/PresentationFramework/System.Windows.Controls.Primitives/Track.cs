@@ -205,11 +205,12 @@ namespace System.Windows.Controls.Primitives {
 				#endregion
 				#region Thumb size
 				double thumb_size;
+				double default_thumb_size = Math.Floor((horizontal ? SystemParameters.HorizontalScrollBarThumbWidth : SystemParameters.VerticalScrollBarThumbHeight) / 2);
 				if (TemplatedParent is ScrollBar) {
-					if (double.IsNaN(ViewportSize))
-						thumb_size = SystemParameters.HorizontalScrollBarThumbWidth / 2D;
+					if (double.IsNaN(ViewportSize) || ViewportSize == 0)
+						thumb_size = default_thumb_size;
 					else
-						thumb_size = Math.Max((horizontal ? finalSize.Width : finalSize.Height) * ViewportSize / (Maximum - Minimum + ViewportSize), SystemParameters.HorizontalScrollBarThumbWidth / 2D);
+						thumb_size = Math.Max((horizontal ? finalSize.Width : finalSize.Height) * ViewportSize / (Maximum - Minimum + ViewportSize), default_thumb_size);
 				} else
 					thumb_size = horizontal ? thumb.DesiredSize.Width : thumb.DesiredSize.Height;
 				if (double.IsNaN(thumb_size) || double.IsInfinity(thumb_size))

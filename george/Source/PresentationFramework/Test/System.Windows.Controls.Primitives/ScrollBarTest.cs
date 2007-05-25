@@ -132,5 +132,18 @@ namespace System.Windows.Controls.Primitives {
 			runner.SetApartmentState(ApartmentState.STA);
 			runner.Start();
 		}
+
+		[Test]
+		public void SnapsToDevicePixels() {
+			ScrollBar s = new ScrollBar();
+			Window w = new Window();
+			w.Content = s;
+			w.Show();
+			Assert.IsFalse(s.SnapsToDevicePixels, "ScrollBar");
+			Assert.IsTrue(s.Track.SnapsToDevicePixels, "Track");
+			Assert.IsTrue(s.Track.Thumb.SnapsToDevicePixels, "Track.Thumb");
+			Assert.IsTrue(s.Track.IncreaseRepeatButton.SnapsToDevicePixels, "Track.IncreaseRepeatButton");
+			Assert.IsTrue(s.Track.DecreaseRepeatButton.SnapsToDevicePixels, "Track.DecreaseRepeatButton");
+		}
 	}
 }
