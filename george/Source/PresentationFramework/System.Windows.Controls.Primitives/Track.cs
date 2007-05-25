@@ -27,6 +27,10 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 		#endregion
 
+		#region Internal Fields
+		internal bool in_scroll_bar;
+		#endregion
+
 		#region Private Fields
 		#region Parts
 		RepeatButton decrease_repeat_button;
@@ -100,17 +104,16 @@ namespace System.Windows.Controls.Primitives {
 			set {
 				if (increase_repeat_button == value)
 					return;
-				if (increase_repeat_button != null) {
-					RemoveLogicalChild(increase_repeat_button);
-					RemoveVisualChild(increase_repeat_button);
-					visual_children.Remove(increase_repeat_button);
-				}
+				//TODO: I need to check if DecreaseRepeatButton and Thumb behave like this.
+				if (increase_repeat_button != null)
+					if (in_scroll_bar)
+						throw new IndexOutOfRangeException();
+					else
+						Utility.Hang();
 				increase_repeat_button = value;
-				if (increase_repeat_button != null) {
-					visual_children.Add(increase_repeat_button);
-					AddLogicalChild(increase_repeat_button);
-					AddVisualChild(increase_repeat_button);
-				}
+				visual_children.Add(increase_repeat_button);
+				AddLogicalChild(increase_repeat_button);
+				AddVisualChild(increase_repeat_button);
 			}
 		}
 

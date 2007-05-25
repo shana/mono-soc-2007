@@ -93,6 +93,7 @@ namespace System.Windows.Controls.Primitives {
 			track = (Track)GetTemplateChild("PART_Track");
 			if (track == null)
 				return;
+			track.in_scroll_bar = true;
 			//FIXME: Move binding to Track.
 			Utility.SetBinding(track, Track.MaximumProperty, this, "Maximum");
 			Utility.SetBinding(track, Track.MinimumProperty, this, "Minimum");
