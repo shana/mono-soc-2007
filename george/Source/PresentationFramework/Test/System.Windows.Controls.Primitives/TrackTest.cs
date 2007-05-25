@@ -423,5 +423,17 @@ namespace System.Windows.Controls.Primitives {
 			runner.SetApartmentState(ApartmentState.STA);
 			runner.Start();
 		}
+
+		[Test]
+		public void PartBounds() {
+			Window w = new Window();
+			Track s = new Track();
+			s.Thumb = new Thumb();
+			w.Content = s;
+			w.Show();
+			s.Value = s.Maximum;
+			Assert.AreEqual(s.Thumb.ActualWidth, 4, "Thumb.ActualWidth");
+			Assert.AreEqual(s.Thumb.ActualHeight, 685, "Thumb.ActualHeight");
+		}
 	}
 }

@@ -1,4 +1,5 @@
 //FIXME: Bind to RangeBase, ScrollBar, Slider properties here (as documented), not in those classes.
+//FIXME: If you drag the Thumb in a ScrollBar and the mouse cursor leaves the ScrollBar, the position of the Thumb is reset.
 using Mono.WindowsPresentationFoundation;
 using System.Collections.Generic;
 using System.Windows.Input;
