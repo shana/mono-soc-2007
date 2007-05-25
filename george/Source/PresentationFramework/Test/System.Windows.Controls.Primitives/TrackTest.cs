@@ -1,6 +1,8 @@
 using NUnit.Framework;
+using System.Threading;
 using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -354,6 +356,28 @@ namespace System.Windows.Controls.Primitives {
 			Assert.AreEqual(thumb.DesiredSize.Width, 100, "thumb.DesiredSize.Width");
 			Assert.AreEqual(VisualTreeHelper.GetContentBounds(thumb), Rect.Empty, "VisualTreeHelper.GetContentBounds(thumb)");
 
+		}
+
+		[Test]
+		public void IncreaseRepeatButton() {
+			Thread runner = new Thread(delegate() {
+				Track s = new Track();
+				Window w = new Window();
+				w.Content = s;
+				w.Show();
+				s.IncreaseRepeatButton = new RepeatButton();
+				Thread current = Thread.CurrentThread;
+				Thread killer = new Thread(delegate() {
+					Thread.Sleep(1000);
+					current.Abort();
+				});
+				killer.Start();
+				s.IncreaseRepeatButton = new RepeatButton();
+				killer.Abort();
+				Assert.Fail();
+			});
+			runner.SetApartmentState(ApartmentState.STA);
+			runner.Start();
 		}
 	}
 }
