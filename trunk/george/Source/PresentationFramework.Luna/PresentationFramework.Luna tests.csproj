@@ -61,13 +61,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\NUnit 2.4.1\bin\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test\Microsoft.Windows.Themes\ButtonChromeTest.cs" />
     <Compile Include="Test\Microsoft.Windows.Themes\ScrollChromeTest.cs" />
     <Compile Include="Test\Microsoft.Windows.Themes\BulletChromeTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\ScrollBarTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\RepeatButtonTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ButtonTest.cs" />
     <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
