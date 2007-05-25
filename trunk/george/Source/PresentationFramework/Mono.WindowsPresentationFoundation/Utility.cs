@@ -158,5 +158,11 @@ namespace Mono.WindowsPresentationFoundation {
 			else
 				drawingContext.DrawLine(pen, new Point(x + offset, y), new Point(x + offset, y + lenght));
 		}
+
+		static public void Hang() {
+			//TODO Prevent optimization.
+			while (true) {
+			}
+		}
 	}
 }
