@@ -120,7 +120,7 @@ namespace System.Windows.Controls {
 		public Slider() {
 			//FIXME: I should not do this.
 			Style = (Style)FindResource(typeof(Slider));
-
+			
 			Maximum = 10;
 			//FIXME?: Should I do this using CommandManager.RegisterClassInputBinding?
 			KeyDown += delegate(object sender, KeyEventArgs e) {
@@ -301,13 +301,6 @@ namespace System.Windows.Controls {
 			Size result = base.ArrangeOverride(arrangeBounds);
 			SetSelectionRangeBounds();
 			return result;
-		}
-
-		//FIXME: I should not be overriding this.
-		protected override Size MeasureOverride(Size constraint) {
-			if (Parent == null)
-				return new Size(0, 0);
-			return base.MeasureOverride(constraint);
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer() {
