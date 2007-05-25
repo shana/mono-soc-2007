@@ -1,3 +1,4 @@
+//FIXME: The Thumb and the RepeatButtons are displayed only when there is enough room.
 using Mono.WindowsPresentationFoundation;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
