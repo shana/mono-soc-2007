@@ -15,6 +15,12 @@ namespace Microsoft.Windows.Themes {
 		}
 
 		[Test]
+		public void Creation() {
+			ScrollChrome c = new ScrollChrome();
+			Assert.IsTrue(c.HasOuterBorder, "HasOuterBorder");
+		}
+
+		[Test]
 		public void MeasureOverride() {
 			ScrollChrome s = new ScrollChrome();
 			s.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
