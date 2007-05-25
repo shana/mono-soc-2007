@@ -432,8 +432,10 @@ namespace System.Windows.Controls.Primitives {
 			w.Content = s;
 			w.Show();
 			s.Value = s.Maximum;
+			w.Width = 100;
+			w.Height = 100;
 			Assert.AreEqual(s.Thumb.ActualWidth, 4, "Thumb.ActualWidth");
-			Assert.AreEqual(s.Thumb.ActualHeight, 685, "Thumb.ActualHeight");
+			Assert.AreEqual(s.Thumb.ActualHeight, 66, "Thumb.ActualHeight");
 		}
 	}
 }
