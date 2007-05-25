@@ -359,7 +359,7 @@ namespace System.Windows.Controls.Primitives {
 		}
 
 		[Test]
-		public void IncreaseRepeatButton() {
+		public void SettingIncreaseRepeatButtonTwice() {
 			Thread runner = new Thread(delegate() {
 				Track s = new Track();
 				Window w = new Window();
@@ -373,6 +373,50 @@ namespace System.Windows.Controls.Primitives {
 				});
 				killer.Start();
 				s.IncreaseRepeatButton = new RepeatButton();
+				killer.Abort();
+				Assert.Fail();
+			});
+			runner.SetApartmentState(ApartmentState.STA);
+			runner.Start();
+		}
+
+		[Test]
+		public void SettingDecreaseRepeatButtonTwice() {
+			Thread runner = new Thread(delegate() {
+				Track s = new Track();
+				Window w = new Window();
+				w.Content = s;
+				w.Show();
+				s.DecreaseRepeatButton = new RepeatButton();
+				Thread current = Thread.CurrentThread;
+				Thread killer = new Thread(delegate() {
+					Thread.Sleep(1000);
+					current.Abort();
+				});
+				killer.Start();
+				s.DecreaseRepeatButton = new RepeatButton();
+				killer.Abort();
+				Assert.Fail();
+			});
+			runner.SetApartmentState(ApartmentState.STA);
+			runner.Start();
+		}
+
+		[Test]
+		public void SettingThumbTwice() {
+			Thread runner = new Thread(delegate() {
+				Track s = new Track();
+				Window w = new Window();
+				w.Content = s;
+				w.Show();
+				s.Thumb = new Thumb();
+				Thread current = Thread.CurrentThread;
+				Thread killer = new Thread(delegate() {
+					Thread.Sleep(1000);
+					current.Abort();
+				});
+				killer.Start();
+				s.Thumb = new Thumb();
 				killer.Abort();
 				Assert.Fail();
 			});

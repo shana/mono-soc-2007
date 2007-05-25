@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections;
+using System.Threading;
 using System.Windows.Media;
 #if Implementation
 using System;
@@ -93,12 +94,43 @@ namespace System.Windows.Controls.Primitives {
 
 		[Test]
 		[ExpectedException(typeof(IndexOutOfRangeException))]
-		public void SettingIncreaseRepeatButton() {
+		public void SettingIncreaseRepeatButtonTwice() {
 			ScrollBar s = new ScrollBar();
 			Window w = new Window();
 			w.Content = s;
 			w.Show();
 			s.Track.IncreaseRepeatButton = new RepeatButton();
+		}
+		
+		[Test]
+		[ExpectedException(typeof(IndexOutOfRangeException))]
+		public void SettingDecreaseRepeatButtonTwice() {
+			ScrollBar s = new ScrollBar();
+			Window w = new Window();
+			w.Content = s;
+			w.Show();
+			s.Track.DecreaseRepeatButton = new RepeatButton();
+		}
+
+		[Test]
+		public void SettingThumbTwice() {
+			Thread runner = new Thread(delegate() {
+				ScrollBar s = new ScrollBar();
+				Window w = new Window();
+				w.Content = s;
+				w.Show();
+				Thread current = Thread.CurrentThread;
+				Thread killer = new Thread(delegate() {
+					Thread.Sleep(1000);
+					current.Abort();
+				});
+				killer.Start();
+				s.Track.Thumb = new Thumb();
+				killer.Abort();
+				Assert.Fail();
+			});
+			runner.SetApartmentState(ApartmentState.STA);
+			runner.Start();
 		}
 	}
 }
