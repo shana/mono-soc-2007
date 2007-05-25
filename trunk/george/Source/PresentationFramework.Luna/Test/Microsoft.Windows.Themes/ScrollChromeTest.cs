@@ -18,6 +18,8 @@ namespace Microsoft.Windows.Themes {
 		public void Creation() {
 			ScrollChrome c = new ScrollChrome();
 			Assert.IsTrue(c.HasOuterBorder, "HasOuterBorder");
+			Assert.AreEqual(c.Padding, new Thickness(0), "Padding");
+			Assert.AreEqual(c.Margin, new Thickness(0), "Margin");
 		}
 
 		[Test]
