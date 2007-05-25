@@ -71,4 +71,7 @@
       <Link>Read me.txt</Link>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ChangeLog" />
+  </ItemGroup>
 </Project>

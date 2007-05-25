@@ -26,6 +26,9 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public ProgressBar() {
+			//FIXME: I should not do this.
+			Style = (Style)FindResource(typeof(ProgressBar));
+
 			Maximum = 100;
 		}
 		#endregion

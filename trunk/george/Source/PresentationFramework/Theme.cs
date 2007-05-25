@@ -6,12 +6,18 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 static class Theme {
-	static bool loaded;
+	static ResourceDictionary resource_dictionary;
     static public void Load() {
-		if (loaded)
-			return;
-		else
-			loaded = true;
+		if (Application.Current == null) {
+			new Application();
+		}
+		if (resource_dictionary != null)
+			if (Application.Current.Resources.MergedDictionaries.Contains(resource_dictionary))
+				return;
+			else {
+				Application.Current.Resources.MergedDictionaries.Add(resource_dictionary);
+				return;
+			}
 #if UseMicrosoftTheme
 #if Implementation
 		const string ThemeAssemblyName = "Mono.PresentationFramework.Luna.dll";
@@ -38,10 +44,7 @@ static class Theme {
 		assembly = Assembly.GetExecutingAssembly();
 		theme_xaml_file_resource_name = "Mono.PresentationFramework.Theme.xaml";
 #endif
-		ResourceDictionary resource_dictionary = (ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name));
-		if (Application.Current == null) {
-			new Application();
-		}
+		resource_dictionary = (ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name));
 		Application.Current.Resources.MergedDictionaries.Add(resource_dictionary);
     }
 }
