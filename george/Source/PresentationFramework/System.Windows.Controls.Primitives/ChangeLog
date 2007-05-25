@@ -1,5 +1,9 @@
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Track.cs: Fixed regression introduced by previous change.
+
+2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Track.cs: Fixed thumb arrangement when the Track is very small.
 
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>

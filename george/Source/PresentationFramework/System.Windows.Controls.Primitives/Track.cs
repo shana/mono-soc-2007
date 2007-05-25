@@ -223,24 +223,24 @@ namespace System.Windows.Controls.Primitives {
 					thumb_rect = new Rect(0, ratio * Utility.GetAdjustedSize(finalSize.Height - thumb_size), finalSize.Width, thumb_size);
 				#region Arrange repeat buttons
 				if (horizontal) {
-					if (finalSize.Width > thumb_rect.Right) {
+					if (in_scroll_bar && finalSize.Width < thumb_rect.Right)
+						thumb.Arrange(new Rect(0, 0, 0, 0));
+					else {
 						Rect left_rect = new Rect(0, 0, thumb_rect.Left, finalSize.Height);
 						Rect right_rect = new Rect(thumb_rect.Right, 0, finalSize.Width - thumb_rect.Right, finalSize.Height);
 						Arrange(decrease_repeat_button, IsDirectionReversed ? right_rect : left_rect);
 						thumb.Arrange(thumb_rect);
 						Arrange(increase_repeat_button, IsDirectionReversed ? left_rect : right_rect);
-					} else {
-						thumb.Arrange(new Rect(0, 0, 0, 0));
 					}
 				} else {
-					if (finalSize.Height > thumb_rect.Bottom) {
+					if (in_scroll_bar && finalSize.Height < thumb_rect.Bottom)
+						thumb.Arrange(new Rect(0, 0, 0, 0));
+					else {
 						Rect top_rect = new Rect(0, 0, finalSize.Width, thumb_rect.Top);
 						Rect bottom_rect = new Rect(0, thumb_rect.Bottom, finalSize.Width, finalSize.Height - thumb_rect.Bottom);
 						Arrange(decrease_repeat_button, IsDirectionReversed ? top_rect : bottom_rect);
 						thumb.Arrange(thumb_rect);
 						Arrange(increase_repeat_button, IsDirectionReversed ? bottom_rect : top_rect);
-					} else {
-						thumb.Arrange(new Rect(0, 0, 0, 0));
 					}
 				}
 				#endregion
