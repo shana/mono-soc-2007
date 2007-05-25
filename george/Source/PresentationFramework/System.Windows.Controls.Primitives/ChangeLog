@@ -1,5 +1,13 @@
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* RepeatButton.cs: Removed a TODO comment.
+
+2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* RepeatButton.cs: Added command execution when it is part of a template.
+
+2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Track.cs: Fixed a comment.
 
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
