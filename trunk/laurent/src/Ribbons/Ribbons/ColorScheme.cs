@@ -58,6 +58,11 @@ namespace Ribbons
 			prettyBright = GetColor (Normal, 1.085);
 		}
 		
+		public static Color SetAlphaChannel(Color C, double Alpha)
+		{
+			return new Color (C.R, C.G, C.B, Alpha);
+		}
+		
 		public static Color GetColor(Color C, double luminance)
 		{
 			double h, s, v;

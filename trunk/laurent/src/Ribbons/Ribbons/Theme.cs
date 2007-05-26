@@ -14,7 +14,7 @@ namespace Ribbons
 		{
 			int lw, lh;
 			l.GetPixelSize (out lw, out lh);
-			return new Gdk.Size (lw + (int)(2 * (2*group_lineWidth)), w.HeightRequest);
+			return new Gdk.Size (lw + (int)(2 * (2*(group_lineWidth+group_space))), w.HeightRequest);
 		}
 		
 		public Gdk.Size SizeRequestedByGroup (RibbonGroup w, Pango.Layout l, Gtk.Requisition childRequisition)
@@ -29,7 +29,7 @@ namespace Ribbons
 			int frame_size = (int)(2*group_lineWidth) + (int)w.BorderWidth;
 			int wi = allocation.Width - 2 * frame_size; 
 			int he = allocation.Height - 2 * frame_size - (lh + (int)(2*group_space)); 
-			return new Gdk.Rectangle (frame_size, frame_size, wi, he);
+			return new Gdk.Rectangle (allocation.X + frame_size, allocation.Y + frame_size, wi, he);
 		}
 		
 		public void DrawGroup (Context cr, Rectangle r, Pango.Layout l, RibbonGroup w)
