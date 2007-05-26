@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ChangeLog" />
+    <None Include="Properties\ChangeLog" />
+    <None Include="System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="System.Windows.Controls\ChangeLog" />
   </ItemGroup>
   <ItemGroup>
