@@ -485,13 +485,17 @@ namespace System.Windows.Controls {
 					size = 0;
 					position = 0;
 				} else {
-					double dimension;
+					double available_size;
 					if (Orientation == Orientation.Horizontal)
-						dimension = track.ActualWidth - track.Thumb.ActualWidth;
+						available_size = track.ActualWidth - track.Thumb.ActualWidth;
 					else
-						dimension = track.ActualHeight - track.Thumb.ActualHeight;
-					size = dimension * (SelectionEnd - SelectionStart) / range_size;
-					position = dimension * (SelectionStart - Minimum) / range_size;
+						available_size = track.ActualHeight - track.Thumb.ActualHeight;
+					double size_ratio = (SelectionEnd - SelectionStart) / range_size;
+					size = available_size * size_ratio;
+					double position_ratio = (SelectionStart - Minimum) / range_size;
+					if (IsDirectionReversed ^ Orientation == Orientation.Vertical)
+						position_ratio = 1 - position_ratio - size_ratio;
+					position = available_size * position_ratio;
 				}
 				//FIXME: Is it always in a Canvas?
 				if (Orientation == Orientation.Horizontal) {
