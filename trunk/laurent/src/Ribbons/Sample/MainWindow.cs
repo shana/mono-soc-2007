@@ -10,22 +10,52 @@ namespace Sample
 		protected bool composeAvailable = false;
 		
 		protected Button button0;
-		protected RibbonGroup group;
+		protected Ribbon ribbon;
+		protected RibbonGroup group0, group1;
 		
 		public MainWindow() : base (WindowType.Toplevel)
 		{
+			VBox master = new VBox ();
+			
 			Title = "Ribbons Sample";
 			AppPaintable = true;
 			
-			button0 = new Button();
-			button0.Label = "Test";
-			group = new RibbonGroup ();
-			group.Label = "Summer of Code";
-			//Add (button0);
-			Add (group);
+			button0 = new Button ();
+			button0.Label = "Hello World";
+			
+			group0 = new RibbonGroup ();
+			group0.Label = "Summer of Code";
+			group0.Child = button0;
+			
+			group1 = new RibbonGroup ();
+			group1.Label = "I will be back";
+			
+			HBox page0 = new HBox (false, 2);
+			page0.PackStart (group0, false, false, 0);
+			page0.PackStart (group1, false, false, 0);
+			
+			HBox page1 = new HBox (false, 2);
+			
+			HBox page2 = new HBox (false, 2);
+			
+			Label pageLabel0 = new Label ("Page 1");
+			Label pageLabel1 = new Label ("Page 2");
+			Label pageLabel2 = new Label ("Page 3");
+			
+			ribbon = new Ribbon ();
+			ribbon.AppendPage (page0, pageLabel0);
+			ribbon.AppendPage (page1, pageLabel1);
+			ribbon.AppendPage (page2, pageLabel2);
+			
+			TextView txt = new TextView ();
+			
+			master.PackStart (ribbon, false, false, 0);
+			master.PackStart (txt, true, true, 0);
+			
+			Add (master);
 			
 			ScreenChanged += Window_OnScreenChanged;
-			Window_OnScreenChanged(this, null);
+			Window_OnScreenChanged (this, null);
 			ExposeEvent += Window_OnExpose;
 			DeleteEvent += Window_OnDelete;
 			
@@ -37,13 +67,13 @@ namespace Sample
 		private void Window_OnExpose(object sender, ExposeEventArgs args)
 		{
 			Gdk.EventExpose evnt = args.Event;
-			Context cr = Gdk.CairoHelper.Create(GdkWindow);
+			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			
-			cr.Rectangle(evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
 			if(composeAvailable)
-				cr.SetSourceRGBA(0, 1, 0, 0.5);
+				cr.SetSourceRGBA (0, 1, 0, 0.5);
 			else
-				cr.SetSourceRGB(0, 1, 0);
+				cr.SetSourceRGB (0, 1, 0);
 			cr.Fill();
 			
 			args.RetVal = false;
@@ -62,7 +92,7 @@ namespace Sample
 		
 		private void Window_OnDelete(object send, DeleteEventArgs args)
 		{
-			Application.Quit();
+			Application.Quit ();
 			args.RetVal = true;
 		}
 	}
