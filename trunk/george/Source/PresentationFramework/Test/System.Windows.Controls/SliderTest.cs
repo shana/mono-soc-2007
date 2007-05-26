@@ -469,5 +469,39 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region Delay
+		[Test]
+		public void Delay() {
+			new DelaySlider();
+		}
+
+		class DelaySlider : Slider {
+			public DelaySlider() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Delay += 1;
+				Assert.AreEqual(Delay, ((Track)GetTemplateChild("PART_Track")).IncreaseRepeatButton.Delay);
+			}
+		}
+		#endregion
+
+		#region Interval
+		[Test]
+		public void Interval() {
+			new IntervalSlider();
+		}
+
+		class IntervalSlider : Slider {
+			public IntervalSlider() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Interval += 1;
+				Assert.AreEqual(Interval, ((Track)GetTemplateChild("PART_Track")).IncreaseRepeatButton.Interval);
+			}
+		}
+		#endregion
 	}
 }
