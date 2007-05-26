@@ -42,7 +42,7 @@ static class Theme {
 		theme_xaml_file_resource_name = "themes.luna.normalcolor.xaml";
 #else
 		assembly = Assembly.GetExecutingAssembly();
-		theme_xaml_file_resource_name = "Mono.PresentationFramework.Theme.xaml";
+		theme_xaml_file_resource_name = "themes.generic.xaml";
 #endif
 		resource_dictionary = (ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name));
 		Application.Current.Resources.MergedDictionaries.Add(resource_dictionary);

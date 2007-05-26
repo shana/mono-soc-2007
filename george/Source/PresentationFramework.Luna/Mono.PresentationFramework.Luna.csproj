@@ -8,8 +8,7 @@
     <ProjectGuid>{B5A23654-EB68-420E-B396-B238176D7F30}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <AssemblyName>Mono.PresentationFramework.Luna</AssemblyName>
     <StartupObject>
     </StartupObject>
