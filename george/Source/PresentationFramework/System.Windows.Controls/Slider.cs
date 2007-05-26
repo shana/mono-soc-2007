@@ -472,7 +472,6 @@ namespace System.Windows.Controls {
 		/// Called when <see cref="SelectionStart"/> or <see cref="SelectionEnd"/> change, or the control changes its size.
 		/// </remarks>
 		void SetSelectionRangeBounds() {
-			//TODO: Respect IsDirectionReversed.
 			FrameworkElement selection_range = GetSelectionRange();
 			if (selection_range == null)
 				return;
