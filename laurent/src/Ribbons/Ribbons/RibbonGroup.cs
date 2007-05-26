@@ -34,7 +34,7 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			Label = null;
-			HeightRequest = 87;
+			HeightRequest = 90;
 			BorderWidth = 0;
 		}
 		
