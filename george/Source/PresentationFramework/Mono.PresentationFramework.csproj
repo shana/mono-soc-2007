@@ -72,8 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ChangeLog" />
-    <EmbeddedResource Include="generic.xaml" />
     <None Include="System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="System.Windows.Controls\ChangeLog" />
+    <EmbeddedResource Include="themes\generic.xaml" />
   </ItemGroup>
 </Project>
