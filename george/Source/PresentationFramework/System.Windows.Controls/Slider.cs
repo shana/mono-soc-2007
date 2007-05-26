@@ -423,7 +423,6 @@ namespace System.Windows.Controls {
 
 		void Bind(RepeatButton repeatButton) {
 			Utility.SetBinding(repeatButton, RepeatButton.DelayProperty, this, "Delay");
-			//FIXME?: Should I do this? Track documentation only mentions Delay.
 			Utility.SetBinding(repeatButton, RepeatButton.IntervalProperty, this, "Interval");
 		}
 
