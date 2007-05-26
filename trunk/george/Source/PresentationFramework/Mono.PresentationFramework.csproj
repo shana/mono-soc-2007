@@ -32,7 +32,7 @@
     <DebugType>Full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -42,8 +42,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System.Windows.Controls.Primitives\BulletDecorator.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\ButtonBase.cs" />
     <Compile Include="System.Windows.Controls.Primitives\TickBar.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ScrollBar.cs" />
     <Compile Include="System.Windows.Controls.Primitives\RepeatButton.cs" />
@@ -52,7 +53,6 @@
     <Compile Include="System.Windows.Controls\BooleanToVisibilityConverter.cs" />
     <Compile Include="System.Windows.Controls\Border.cs" />
     <Compile Include="System.Windows.Controls\Button.cs" />
-    <Compile Include="System.Windows.Controls.Primitives\ButtonBase.cs" />
     <Compile Include="System.Windows.Controls\CharacterCasing.cs" />
     <Compile Include="System.Windows.Controls\CheckBox.cs" />
     <Compile Include="System.Windows.Controls\ClickMode.cs" />
@@ -72,8 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ChangeLog" />
-    <None Include="System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="System.Windows.Controls\ChangeLog" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="themes\generic.xaml" />
   </ItemGroup>
 </Project>

@@ -80,4 +80,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.WinFX.targets" />
 </Project>
