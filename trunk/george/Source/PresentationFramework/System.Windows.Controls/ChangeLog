@@ -1,5 +1,9 @@
 2007-05-26  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Slider.cs: Removed TODO left from previous change.
+
+2007-05-26  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Slider.cs: Fixed to support IsDirectionReversed and Orientation.
 
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
