@@ -71,6 +71,7 @@ namespace Ribbons
 				pages.Insert (Position, p);
 			
 			if(pages.Count == 1) Page = 0;
+			else p.Label.ModifyFg (StateType.Normal, unselectedTabFgColor);
 		}
 		
 		public void RemovePage (int PageNumber)
@@ -218,8 +219,6 @@ namespace Ribbons
 			
 			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
 			cr.Clip ();
-			cr.Color = new Color(0.5, 1, 0.5);
-			cr.Paint();
 			Draw(cr);
 			
 			return base.OnExposeEvent (evnt);

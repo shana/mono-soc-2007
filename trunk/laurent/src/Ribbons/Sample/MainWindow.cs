@@ -69,12 +69,13 @@ namespace Sample
 			Gdk.EventExpose evnt = args.Event;
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			
-			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
 			if(composeAvailable)
-				cr.SetSourceRGBA (0, 1, 0, 0.5);
+				cr.SetSourceRGBA (1, 1, 1, 0.3);
 			else
-				cr.SetSourceRGB (0, 1, 0);
-			cr.Fill();
+				cr.SetSourceRGB (0, 0, 0);
+			
+			cr.Operator = Operator.Source;
+			cr.Paint ();
 			
 			args.RetVal = false;
 		}
