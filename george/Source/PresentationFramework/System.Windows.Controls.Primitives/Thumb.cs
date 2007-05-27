@@ -40,6 +40,7 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Public Constructors
 		public Thumb() {
+			Focusable = false;
 			//FIXME
 			//Style = (Style)FindResource(typeof(Thumb));
 		}
