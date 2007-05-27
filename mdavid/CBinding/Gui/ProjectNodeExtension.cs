@@ -17,8 +17,7 @@ namespace CBinding
 		{
 			CProject p = dataObject as CProject;
 			
-			// FIXME: Correctly move builder so that Packages is on top
-			builder.MoveToParent (typeof(CProject));
+			// FIXME: Add child on top of other nodes
 			builder.AddChild (p.Packages);
 		}
 	}
