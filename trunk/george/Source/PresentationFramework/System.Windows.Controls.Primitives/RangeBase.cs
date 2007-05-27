@@ -19,7 +19,14 @@ namespace System.Windows.Controls.Primitives {
 		}), Validate);
 		public static readonly DependencyProperty SmallChangeProperty = DependencyProperty.Register("SmallChange", typeof(double), typeof(RangeBase), new PropertyMetadata(0.1D));
 		public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(RangeBase), new PropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			((RangeBase)d).OnValueChanged((double)e.OldValue, (double)e.NewValue);
+			RangeBase i = (RangeBase)d;
+			double new_value = (double)e.NewValue;
+			if (new_value < i.Minimum)
+				i.Value = i.Minimum;
+			else if (new_value > i.Maximum)
+				i.Value = i.Maximum;
+			else
+				i.OnValueChanged((double)e.OldValue, new_value);
 		}), Validate);
 		#endregion
 
