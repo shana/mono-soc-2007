@@ -1,5 +1,9 @@
 2007-05-27  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* RangeBase.cs: Added.
+
+2007-05-27  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Thumb.cs: Fixed some using statements.
 
 2007-05-27  George Giolfan  <georgegiolfan@yahoo.com>
