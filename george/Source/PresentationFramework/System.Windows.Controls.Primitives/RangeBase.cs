@@ -12,14 +12,30 @@ namespace System.Windows.Controls.Primitives {
 		#region Dependency Properties
 		public static readonly DependencyProperty LargeChangeProperty = DependencyProperty.Register("LargeChange", typeof(double), typeof(RangeBase), new PropertyMetadata(1D));
 		public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(RangeBase), new PropertyMetadata(1D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			((RangeBase)d).OnMaximumChanged((double)e.OldValue, (double)e.NewValue);
+			RangeBase i = (RangeBase)d;
+			double new_value = (double)e.NewValue;
+			if (i.Value > new_value) {
+				i.ignore_value_change = true;
+				i.Value = new_value;
+				i.ignore_value_change = false;
+			}
+			i.OnMaximumChanged((double)e.OldValue, new_value);
 		}), Validate);
 		public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(RangeBase), new PropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			((RangeBase)d).OnMinimumChanged((double)e.OldValue, (double)e.NewValue);
+			RangeBase i = (RangeBase)d;
+			double new_value = (double)e.NewValue;
+			if (i.Value < new_value) {
+				i.ignore_value_change = true;
+				i.Value = new_value;
+				i.ignore_value_change = false;
+			}
+			i.OnMinimumChanged((double)e.OldValue, (double)e.NewValue);
 		}), Validate);
 		public static readonly DependencyProperty SmallChangeProperty = DependencyProperty.Register("SmallChange", typeof(double), typeof(RangeBase), new PropertyMetadata(0.1D));
 		public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(RangeBase), new PropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			RangeBase i = (RangeBase)d;
+			if (i.ignore_value_change)
+				return;
 			double new_value = (double)e.NewValue;
 			if (new_value < i.Minimum)
 				i.Value = i.Minimum;
@@ -33,6 +49,10 @@ namespace System.Windows.Controls.Primitives {
 		#region Routed Events
 		public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Bubble, typeof(RoutedPropertyChangedEventHandler<double>), typeof(RangeBase));
 		#endregion
+		#endregion
+
+		#region Private Fields
+		bool ignore_value_change;
 		#endregion
 
 		#region Protected Constructors
