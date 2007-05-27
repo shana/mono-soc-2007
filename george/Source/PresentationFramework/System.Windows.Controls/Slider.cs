@@ -18,7 +18,7 @@ namespace System.Windows.Controls {
 	[Localizability(LocalizationCategory.Ignore)]
 	[TemplatePart(Name = "PART_Track", Type = typeof(Track))]
 	[TemplatePart(Name = "PART_SelectionRange", Type = typeof(FrameworkElement))]
-	public class Slider : global::System.Windows.Controls.Primitives.RangeBase {
+	public class Slider : RangeBase {
 		#region Dependency Property Fields
 		public static readonly DependencyProperty AutoToolTipPlacementProperty = DependencyProperty.Register("AutoToolTipPlacement", typeof(global::System.Windows.Controls.Primitives.AutoToolTipPlacement), typeof(Slider), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((Slider)d).SetUpAutoToolTip();

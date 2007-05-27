@@ -1,12 +1,13 @@
 using System.Windows.Automation.Peers;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
 #if Implementation
 using System.Windows;
 using System.Windows.Controls;
+using Mono.System.Windows.Controls.Primitives;
 namespace Mono.System.Windows.Controls {
 #else
+using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	[TemplatePart(Name = "PART_Track", Type = typeof(FrameworkElement))]
