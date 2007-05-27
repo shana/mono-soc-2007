@@ -511,14 +511,14 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="ScrollBarThumb"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="IsTabStop"
                 Value="false"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
                     <mono_theme:ScrollChrome x:Name="Chrome"
                                         ThemeColor="NormalColor" 
                                         RenderMouseOver="{TemplateBinding IsMouseOver}"
@@ -623,7 +623,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                               Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageDownCommand}"/>
                             </mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
                             <mono_system_windows_controls_primitives:Track.Thumb>
-                                <Thumb Style="{StaticResource ScrollBarThumb}"
+                                <mono_system_windows_controls_primitives:Thumb Style="{StaticResource ScrollBarThumb}"
                                        mono_theme:ScrollChrome.ScrollGlyph="VerticalGripper"/>
                             </mono_system_windows_controls_primitives:Track.Thumb>
                         </mono_system_windows_controls_primitives:Track>
@@ -673,7 +673,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                                       Command="{x:Static mono_system_windows_controls_primitives:ScrollBar.PageRightCommand}"/>
                                     </mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
                                     <mono_system_windows_controls_primitives:Track.Thumb>
-                                        <Thumb Style="{StaticResource ScrollBarThumb}"
+                                        <mono_system_windows_controls_primitives:Thumb Style="{StaticResource ScrollBarThumb}"
                                                mono_theme:ScrollChrome.ScrollGlyph="HorizontalGripper"/>
                                     </mono_system_windows_controls_primitives:Track.Thumb>
                                 </mono_system_windows_controls_primitives:Track>
@@ -925,7 +925,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="HorizontalSliderThumbStyle"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Height"
@@ -936,7 +936,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="Green"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
                     <Canvas SnapsToDevicePixels="true">
                         <Canvas.RenderTransform>
                             <TranslateTransform X="5.5"
@@ -1008,7 +1008,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="HorizontalSliderUpThumbStyle"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Height"
@@ -1019,7 +1019,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="Green"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
                     <Canvas SnapsToDevicePixels="true">
                         <Canvas.RenderTransform>
                             <TransformGroup>
@@ -1098,7 +1098,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="HorizontalSliderDownThumbStyle"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Height"
@@ -1109,7 +1109,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="Green"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
                     <Canvas SnapsToDevicePixels="true">
                         <Canvas.RenderTransform>
                             <TranslateTransform X="5.5"
@@ -1337,7 +1337,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
     <Style x:Key="VerticalSliderThumbStyle"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Width"
@@ -1348,7 +1348,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="Green"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
                     <Canvas SnapsToDevicePixels="true">
                         <Canvas.RenderTransform>
                             <TransformGroup>
@@ -1427,7 +1427,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="VerticalSliderLeftThumbStyle"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Width"
@@ -1438,7 +1438,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="Green"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
                     <Canvas SnapsToDevicePixels="true">
                         <Canvas.RenderTransform>
                             <TransformGroup>
@@ -1517,7 +1517,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
     <Style x:Key="VerticalSliderRightThumbStyle"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
         <Setter Property="OverridesDefaultStyle"
                 Value="true"/>
         <Setter Property="Width"
@@ -1528,7 +1528,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                 Value="Green"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Thumb}">
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
                     <Canvas SnapsToDevicePixels="true">
                         <Canvas.RenderTransform>
                             <TransformGroup>
@@ -1670,7 +1670,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                                   Command="{x:Static mono_system_windows_controls:Slider.IncreaseLarge}"/>
 								</mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
 								<mono_system_windows_controls_primitives:Track.Thumb>
-									<Thumb x:Name="Thumb"
+									<mono_system_windows_controls_primitives:Thumb x:Name="Thumb"
                                            Style="{StaticResource HorizontalSliderThumbStyle}"/>
 								</mono_system_windows_controls_primitives:Track.Thumb>
 							</mono_system_windows_controls_primitives:Track>
@@ -1778,7 +1778,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                                           Command="{x:Static mono_system_windows_controls:Slider.IncreaseLarge}"/>
 										</mono_system_windows_controls_primitives:Track.IncreaseRepeatButton>
 										<mono_system_windows_controls_primitives:Track.Thumb>
-											<Thumb x:Name="Thumb"
+											<mono_system_windows_controls_primitives:Thumb x:Name="Thumb"
                                                    Style="{StaticResource VerticalSliderThumbStyle}"/>
 										</mono_system_windows_controls_primitives:Track.Thumb>
 									</mono_system_windows_controls_primitives:Track>
@@ -1914,4 +1914,35 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<!-- Skipped. -->
+    <Style x:Key="{x:Type mono_system_windows_controls_primitives:Thumb}"
+           TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
+        <Setter Property="Stylus.IsPressAndHoldEnabled"
+                Value="false"/>
+        <Setter Property="Background"
+                Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Setter Property="Foreground"
+                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Border BorderThickness="0,0,1,1"
+                                    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
+                            <Border BorderThickness="0,0,1,1"
+                                    Margin="1"
+                                    Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+                                    BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+                            <Border Margin="2"
+                                    Background="{TemplateBinding Background}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

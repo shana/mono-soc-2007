@@ -274,7 +274,7 @@ namespace System.Windows.Controls {
 					GetBottomTick().ReservedSpace = reserved_space;
 				};
 			}
-			global::System.Windows.Controls.Primitives.Thumb thumb = track.Thumb;
+			Thumb thumb = track.Thumb;
 			#region Auto tool tip
 			if (auto_tool_tip != null)
 				SetAutoToolTipPlacementTarget(track);

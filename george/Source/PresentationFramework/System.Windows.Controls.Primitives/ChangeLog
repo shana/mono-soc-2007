@@ -1,3 +1,7 @@
+2007-05-27  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Thumb.cs: Added.
+
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* RepeatButton.cs: Removed a TODO comment.
