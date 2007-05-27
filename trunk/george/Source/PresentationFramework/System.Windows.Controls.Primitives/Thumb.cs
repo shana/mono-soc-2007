@@ -29,6 +29,7 @@ namespace System.Windows.Controls.Primitives {
 		#region Private Fields
 		double initial_position_x, initial_position_y;
 		double last_delta_position_x, last_delta_position_y;
+		bool ignore_mouse_move;
 		#endregion
 
 		#region Static Constructor
@@ -73,7 +74,9 @@ namespace System.Windows.Controls.Primitives {
 		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
 			base.OnMouseLeftButtonDown(e);
 			Focus();
+			ignore_mouse_move = true;
 			CaptureMouse();
+			ignore_mouse_move = false;
 			IsDraggingInternal = true;
 			Point mouse_position = e.MouseDevice.GetPosition(this);
 			initial_position_x = mouse_position.X;
@@ -96,6 +99,8 @@ namespace System.Windows.Controls.Primitives {
 
 		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
+			if (ignore_mouse_move)
+				return;
 			if (IsFocused && IsMouseCaptured) {
 				Point mouse_position = e.MouseDevice.GetPosition(this);
 				last_delta_position_x = mouse_position.X - initial_position_x;
