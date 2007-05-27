@@ -64,5 +64,10 @@ namespace System.Windows.Controls.Primitives {
 			}
 		}
 		#endregion
-    }
+
+		[Test]
+		public void Focusable() {
+			Assert.IsFalse(new Thumb().Focusable);
+		}
+	}
 }
