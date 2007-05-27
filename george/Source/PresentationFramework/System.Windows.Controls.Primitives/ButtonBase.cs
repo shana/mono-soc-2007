@@ -163,6 +163,7 @@ namespace System.Windows.Controls.Primitives {
 		#region Protected Methods
 		protected virtual void OnClick() {
 			RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+			//FIXME: Execute only for CommandTarget.
 			if (Command != null && Command.CanExecute(CommandParameter))
 				Command.Execute(CommandParameter);
 		}
