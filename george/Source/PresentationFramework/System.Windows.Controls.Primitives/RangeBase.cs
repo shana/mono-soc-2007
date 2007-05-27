@@ -13,14 +13,14 @@ namespace System.Windows.Controls.Primitives {
 		public static readonly DependencyProperty LargeChangeProperty = DependencyProperty.Register("LargeChange", typeof(double), typeof(RangeBase), new PropertyMetadata(1D));
 		public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(RangeBase), new PropertyMetadata(1D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((RangeBase)d).OnMaximumChanged((double)e.OldValue, (double)e.NewValue);
-		}));
+		}), Validate);
 		public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(RangeBase), new PropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((RangeBase)d).OnMinimumChanged((double)e.OldValue, (double)e.NewValue);
-		}));
+		}), Validate);
 		public static readonly DependencyProperty SmallChangeProperty = DependencyProperty.Register("SmallChange", typeof(double), typeof(RangeBase), new PropertyMetadata(0.1D));
 		public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(RangeBase), new PropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((RangeBase)d).OnValueChanged((double)e.OldValue, (double)e.NewValue);
-		}));
+		}), Validate);
 		#endregion
 
 		#region Routed Events
@@ -91,6 +91,12 @@ namespace System.Windows.Controls.Primitives {
 			remove { RemoveHandler(ValueChangedEvent, value); }
 		}
 		#endregion
+		#endregion
+
+		#region Private Methods
+		static bool Validate(object value) {
+			return !double.IsInfinity((double)value); 
+		}
 		#endregion
 	}
 }
