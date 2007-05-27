@@ -41,5 +41,24 @@ namespace System.Windows.Controls.Primitives {
 			}
 		}
 		#endregion
+
+		#region MaximumAdjustsValue
+		[Test]
+		public void MaximumAdjustsValue() {
+			new MaximumAdjustsValueRangeBase();
+		}
+		class MaximumAdjustsValueRangeBase : RangeBase {
+			public MaximumAdjustsValueRangeBase() {
+				Maximum = Value - 1;
+				Assert.AreEqual(Value, Maximum, "Value");
+				Assert.AreEqual(call_count, 0, "OnValueChanged calls");
+			}
+			int call_count;
+			protected override void OnValueChanged(double oldValue, double newValue) {
+				base.OnValueChanged(oldValue, newValue);
+				call_count++;
+			}
+		}
+		#endregion
 	}
 }
