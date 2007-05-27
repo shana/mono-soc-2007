@@ -102,7 +102,7 @@ namespace System.Windows.Controls.Primitives {
 			base.OnMouseMove(e);
 			if (ignore_mouse_move)
 				return;
-			if (IsFocused && IsMouseCaptured) {
+			if (IsMouseCaptured) {
 				Point mouse_position = e.MouseDevice.GetPosition(this);
 				last_delta_position_x = mouse_position.X - initial_position_x;
 				last_delta_position_y = mouse_position.Y - initial_position_y;
