@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <stetic-interface>
+  <configuration>
+    <images-root-path>../</images-root-path>
+  </configuration>
   <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="505 400">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.Notebook" id="notebook1">
         <property name="MemberName" />
         <property name="CanFocus">True</property>
+        <property name="CurrentPage">0</property>
         <child>
           <widget class="Gtk.Table" id="table1">
             <property name="MemberName" />
@@ -964,8 +968,8 @@ Shared Object</property>
           <widget class="Gtk.VPaned" id="vpaned1">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Position">180</property>
-            <property name="BorderWidth">3</property>
+            <property name="Position">209</property>
+            <property name="BorderWidth">6</property>
             <child>
               <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
                 <property name="MemberName" />
@@ -974,7 +978,7 @@ Shared Object</property>
                 <property name="HscrollbarPolicy">Automatic</property>
                 <property name="ShadowType">In</property>
                 <child>
-                  <widget class="Gtk.TreeView" id="treeview1">
+                  <widget class="Gtk.TreeView" id="packageTreeView">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
                   </widget>
@@ -1020,7 +1024,7 @@ Shared Object</property>
                     <property name="HscrollbarPolicy">Automatic</property>
                     <property name="ShadowType">In</property>
                     <child>
-                      <widget class="Gtk.TreeView" id="treeview2">
+                      <widget class="Gtk.TreeView" id="selectedPackagesTreeView">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                       </widget>

@@ -17,7 +17,7 @@ namespace CBinding {
         
         private Gtk.ScrolledWindow scrolledwindow1;
         
-        private Gtk.TreeView treeview1;
+        private Gtk.TreeView packageTreeView;
         
         private Gtk.Table table1;
         
@@ -25,7 +25,7 @@ namespace CBinding {
         
         private Gtk.ScrolledWindow scrolledwindow2;
         
-        private Gtk.TreeView treeview2;
+        private Gtk.TreeView selectedPackagesTreeView;
         
         private Gtk.VBox vbox2;
         
@@ -49,8 +49,8 @@ namespace CBinding {
             this.vpaned1 = new Gtk.VPaned();
             this.vpaned1.CanFocus = true;
             this.vpaned1.Name = "vpaned1";
-            this.vpaned1.Position = 180;
-            this.vpaned1.BorderWidth = ((uint)(3));
+            this.vpaned1.Position = 209;
+            this.vpaned1.BorderWidth = ((uint)(6));
             // Container child vpaned1.Gtk.Paned+PanedChild
             this.scrolledwindow1 = new Gtk.ScrolledWindow();
             this.scrolledwindow1.CanFocus = true;
@@ -59,10 +59,10 @@ namespace CBinding {
             this.scrolledwindow1.HscrollbarPolicy = ((Gtk.PolicyType)(1));
             this.scrolledwindow1.ShadowType = ((Gtk.ShadowType)(1));
             // Container child scrolledwindow1.Gtk.Container+ContainerChild
-            this.treeview1 = new Gtk.TreeView();
-            this.treeview1.CanFocus = true;
-            this.treeview1.Name = "treeview1";
-            this.scrolledwindow1.Add(this.treeview1);
+            this.packageTreeView = new Gtk.TreeView();
+            this.packageTreeView.CanFocus = true;
+            this.packageTreeView.Name = "packageTreeView";
+            this.scrolledwindow1.Add(this.packageTreeView);
             this.vpaned1.Add(this.scrolledwindow1);
             Gtk.Paned.PanedChild w3 = ((Gtk.Paned.PanedChild)(this.vpaned1[this.scrolledwindow1]));
             w3.Resize = false;
@@ -88,10 +88,10 @@ namespace CBinding {
             this.scrolledwindow2.HscrollbarPolicy = ((Gtk.PolicyType)(1));
             this.scrolledwindow2.ShadowType = ((Gtk.ShadowType)(1));
             // Container child scrolledwindow2.Gtk.Container+ContainerChild
-            this.treeview2 = new Gtk.TreeView();
-            this.treeview2.CanFocus = true;
-            this.treeview2.Name = "treeview2";
-            this.scrolledwindow2.Add(this.treeview2);
+            this.selectedPackagesTreeView = new Gtk.TreeView();
+            this.selectedPackagesTreeView.CanFocus = true;
+            this.selectedPackagesTreeView.Name = "selectedPackagesTreeView";
+            this.scrolledwindow2.Add(this.selectedPackagesTreeView);
             this.table1.Add(this.scrolledwindow2);
             Gtk.Table.TableChild w6 = ((Gtk.Table.TableChild)(this.table1[this.scrolledwindow2]));
             w6.TopAttach = ((uint)(1));
@@ -115,8 +115,8 @@ namespace CBinding {
             w8.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w9 = new Gtk.Image();
-            w9.Name = "image4";
-            w9.Pixbuf = Gtk.IconTheme.Default.LoadIcon("gtk-remove", 16, 0);
+            w9.Name = "image81";
+            w9.Pixbuf = Stetic.IconLoader.LoadIcon("gtk-remove", 16);
             w8.Add(w9);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w11 = new Gtk.Label();
