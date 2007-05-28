@@ -937,11 +937,11 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
-                    <Canvas SnapsToDevicePixels="true">
-                        <Canvas.RenderTransform>
+                    <mono_system_windows_controls:Canvas SnapsToDevicePixels="true">
+                        <mono_system_windows_controls:Canvas.RenderTransform>
                             <TranslateTransform X="5.5"
                                                 Y="11"/>
-                        </Canvas.RenderTransform>
+                        </mono_system_windows_controls:Canvas.RenderTransform>
                         <Path x:Name="Background"
                               Fill="{StaticResource SliderThumbBackground}"
                               Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
@@ -958,7 +958,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                               Stroke="{StaticResource HorizontalSliderThumbBorder}"
                               StrokeThickness="1"
                               Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
-                    </Canvas>
+                    </mono_system_windows_controls:Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="true">
@@ -1020,8 +1020,8 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
-                    <Canvas SnapsToDevicePixels="true">
-                        <Canvas.RenderTransform>
+                    <mono_system_windows_controls:Canvas SnapsToDevicePixels="true">
+                        <mono_system_windows_controls:Canvas.RenderTransform>
                             <TransformGroup>
                                 <TransformGroup.Children>
                                     <TransformCollection>
@@ -1031,7 +1031,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                     </TransformCollection>
                                 </TransformGroup.Children>
                             </TransformGroup>
-                        </Canvas.RenderTransform>
+                        </mono_system_windows_controls:Canvas.RenderTransform>
                         <Path x:Name="Background"
                               Fill="{StaticResource SliderThumbBackgroundInverted}"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
@@ -1048,7 +1048,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                               Stroke="{StaticResource HorizontalSliderThumbBorderInverted}"
                               StrokeThickness="1"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
-                    </Canvas>
+                    </mono_system_windows_controls:Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="true">
@@ -1110,11 +1110,11 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
-                    <Canvas SnapsToDevicePixels="true">
-                        <Canvas.RenderTransform>
+                    <mono_system_windows_controls:Canvas SnapsToDevicePixels="true">
+                        <mono_system_windows_controls:Canvas.RenderTransform>
                             <TranslateTransform X="5.5"
                                                 Y="11"/>
-                        </Canvas.RenderTransform>
+                        </mono_system_windows_controls:Canvas.RenderTransform>
                         <Path x:Name="Background"
                               Fill="{StaticResource SliderThumbBackground}"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
@@ -1131,7 +1131,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                               Stroke="{StaticResource HorizontalSliderThumbBorder}"
                               StrokeThickness="1"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
-                    </Canvas>
+                    </mono_system_windows_controls:Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="true">
@@ -1349,8 +1349,8 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
-                    <Canvas SnapsToDevicePixels="true">
-                        <Canvas.RenderTransform>
+                    <mono_system_windows_controls:Canvas SnapsToDevicePixels="true">
+                        <mono_system_windows_controls:Canvas.RenderTransform>
                             <TransformGroup>
                                 <TransformGroup.Children>
                                     <TransformCollection>
@@ -1360,7 +1360,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                     </TransformCollection>
                                 </TransformGroup.Children>
                             </TransformGroup>
-                        </Canvas.RenderTransform>
+                        </mono_system_windows_controls:Canvas.RenderTransform>
                         <Path x:Name="Background"
                               Fill="{StaticResource SliderThumbBackgroundInverted}"
                               Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
@@ -1377,7 +1377,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                               Stroke="{StaticResource VerticalSliderThumbBorder}"
                               StrokeThickness="1"
                               Data="{StaticResource SliderThumbOuterBorderGeometry}"/>
-                    </Canvas>
+                    </mono_system_windows_controls:Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="true">
@@ -1439,8 +1439,8 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
-                    <Canvas SnapsToDevicePixels="true">
-                        <Canvas.RenderTransform>
+                    <mono_system_windows_controls:Canvas SnapsToDevicePixels="true">
+                        <mono_system_windows_controls:Canvas.RenderTransform>
                             <TransformGroup>
                                 <TransformGroup.Children>
                                     <TransformCollection>
@@ -1450,7 +1450,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                     </TransformCollection>
                                 </TransformGroup.Children>
                             </TransformGroup>
-                        </Canvas.RenderTransform>
+                        </mono_system_windows_controls:Canvas.RenderTransform>
                         <Path x:Name="Background"
                               Fill="{StaticResource SliderThumbBackground}"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
@@ -1467,7 +1467,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                               Stroke="{StaticResource VerticalSliderThumbBorderInverted}"
                               StrokeThickness="1"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
-                    </Canvas>
+                    </mono_system_windows_controls:Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="true">
@@ -1529,8 +1529,8 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:Thumb}">
-                    <Canvas SnapsToDevicePixels="true">
-                        <Canvas.RenderTransform>
+                    <mono_system_windows_controls:Canvas SnapsToDevicePixels="true">
+                        <mono_system_windows_controls:Canvas.RenderTransform>
                             <TransformGroup>
                                 <TransformGroup.Children>
                                     <TransformCollection>
@@ -1540,7 +1540,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                     </TransformCollection>
                                 </TransformGroup.Children>
                             </TransformGroup>
-                        </Canvas.RenderTransform>
+                        </mono_system_windows_controls:Canvas.RenderTransform>
                         <Path x:Name="Background"
                               Fill="{StaticResource SliderThumbBackgroundInverted}"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
@@ -1557,7 +1557,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                               Stroke="{StaticResource VerticalSliderThumbBorder}"
                               StrokeThickness="1"
                               Data="{StaticResource SliderPointedThumbOuterBorderGeometry}"/>
-                    </Canvas>
+                    </mono_system_windows_controls:Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="true">
@@ -1649,14 +1649,14 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                     Background="{StaticResource HorizontalSliderTrackNormalBackground}"
                                     Height="4.0">
 
-								<Canvas Margin="-6,-1">
+								<mono_system_windows_controls:Canvas Margin="-6,-1">
 									<Rectangle x:Name="PART_SelectionRange"
                                                Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
                                                Height="4.0"
                                                Visibility="Hidden"
                                                StrokeThickness="1.0"
                                                Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
-								</Canvas>
+								</mono_system_windows_controls:Canvas>
 							</mono_system_windows_controls:Border>
 
 							<mono_system_windows_controls_primitives:Track Grid.Row="1"
@@ -1757,14 +1757,14 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                                             CornerRadius="1"
                                             Background="{StaticResource VerticalSliderTrackNormalBackground}"
                                             Width="4.0">
-										<Canvas Margin="-1,-6">
+										<mono_system_windows_controls:Canvas Margin="-1,-6">
 											<Rectangle x:Name="PART_SelectionRange"
                                                        Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
                                                        Width="4.0"
                                                        Visibility="Hidden"
                                                        StrokeThickness="1.0"
                                                        Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
-										</Canvas>
+										</mono_system_windows_controls:Canvas>
 
 									</mono_system_windows_controls:Border>
 									<mono_system_windows_controls_primitives:Track Grid.Column="1"
