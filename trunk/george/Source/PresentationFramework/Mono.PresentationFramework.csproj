@@ -37,6 +37,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -55,6 +56,7 @@
     <Compile Include="System.Windows.Controls\BooleanToVisibilityConverter.cs" />
     <Compile Include="System.Windows.Controls\Border.cs" />
     <Compile Include="System.Windows.Controls\Button.cs" />
+    <Compile Include="System.Windows.Controls\Canvas.cs" />
     <Compile Include="System.Windows.Controls\CharacterCasing.cs" />
     <Compile Include="System.Windows.Controls\CheckBox.cs" />
     <Compile Include="System.Windows.Controls\ClickMode.cs" />
