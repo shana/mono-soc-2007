@@ -1,3 +1,5 @@
+// This will not work right now as Panel has some internal members.
+using System.Collections;
 using System.ComponentModel;
 using System.Windows.Media;
 #if Implementation
@@ -10,14 +12,16 @@ namespace System.Windows.Controls {
 	public class Canvas : Panel {
 		#region Public Fields
 		#region Dependency Properties
-		public static readonly DependencyProperty BottomProperty = DependencyProperty.RegisterAttached("Bottom", typeof(double), typeof(Canvas), new PropertyMetadata(double.NaN));
-		public static readonly DependencyProperty LeftProperty = DependencyProperty.RegisterAttached("Left", typeof(double), typeof(Canvas), new PropertyMetadata(double.NaN));
-		public static readonly DependencyProperty RightProperty = DependencyProperty.RegisterAttached("Right", typeof(double), typeof(Canvas), new PropertyMetadata(double.NaN));
-		public static readonly DependencyProperty TopProperty = DependencyProperty.RegisterAttached("Top", typeof(double), typeof(Canvas), new PropertyMetadata(double.NaN));
+		#region Attached Properties
+		public static readonly DependencyProperty BottomProperty = DependencyProperty.RegisterAttached("Bottom", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(double.NaN));
+		public static readonly DependencyProperty LeftProperty = DependencyProperty.RegisterAttached("Left", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(double.NaN));
+		public static readonly DependencyProperty RightProperty = DependencyProperty.RegisterAttached("Right", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(double.NaN));
+		public static readonly DependencyProperty TopProperty = DependencyProperty.RegisterAttached("Top", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(double.NaN));
+		#endregion
 		#endregion
 		#endregion
 
-		#region Public Constructorsc
+		#region Public Constructors
 		public Canvas() {
 		}
 		#endregion
@@ -66,6 +70,27 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
+			//FIXME: Implement Z order.
+			foreach (UIElement element in Children) {
+				Point position = new Point();
+				Size size = element.DesiredSize;
+				double value;
+				value = GetLeft(element);
+				if (double.IsNaN(value)) {
+					value = GetRight(element);
+					if (!double.IsNaN(value))
+						position.X = value - size.Width;
+				} else
+					position.X = value;
+				value = GetTop(element);
+				if (double.IsNaN(value)) {
+					value = GetBottom(element);
+					if (!double.IsNaN(value))
+						position.Y = value - size.Height;
+				} else
+					position.Y = value;
+				element.Arrange(new Rect(position, size));
+			}
 			return base.ArrangeOverride(finalSize);
 		}
 
@@ -74,7 +99,19 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
+			if (double.IsInfinity(availableSize.Width) || double.IsInfinity(availableSize.Height))
+				foreach (UIElement element in Children)
+					element.Measure(availableSize);
 			return base.MeasureOverride(availableSize);
+		}
+		#endregion
+
+		#region Private Methods
+		static bool Contains(IEnumerator collection, object value) {
+			foreach (object element in collection)
+				if (element == value)
+					return true;
+			return false;
 		}
 		#endregion
 	}

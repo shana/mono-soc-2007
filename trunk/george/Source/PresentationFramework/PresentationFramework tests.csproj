@@ -65,6 +65,7 @@
     <Compile Include="Test\System.Windows.Controls\ButtonTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Test\System.Windows.Controls\CanvasTest.cs" />
     <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
     <Compile Include="Test\System.Windows.Controls\SliderTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ProgressBarTest.cs" />

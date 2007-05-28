@@ -34,7 +34,11 @@ namespace System.Windows.Controls.Primitives {
 				Width = 200;
 				Height = 100;
 
-				Content = new ScrollBar();
+				Canvas canvas = new Canvas();
+				Button b = new Button();
+				b.Content = "123";
+				canvas.Children.Add(b);
+				Content = canvas;
 			}
 		}
 	}
