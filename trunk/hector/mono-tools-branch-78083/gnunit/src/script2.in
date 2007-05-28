@@ -1,0 +1,2 @@
+#!/bin/sh
+exec @RUNTIME@ @mono_two_instdir@/@exe_file@ "$@"
