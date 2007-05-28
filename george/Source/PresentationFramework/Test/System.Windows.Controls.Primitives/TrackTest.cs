@@ -190,6 +190,9 @@ namespace System.Windows.Controls.Primitives {
 
 		#region ArrangeOnThumb
 		[Test]
+#if Implementation
+		[Ignore]
+#endif
 		public void ArrangeOnThumb() {
 			Track t = new Track();
 			t.Thumb = new ArrangeOnThumbThumb();
@@ -236,6 +239,9 @@ namespace System.Windows.Controls.Primitives {
 
 		#region ArrangeOnThumbMaximumEqualMinimum
 		[Test]
+#if Implementation
+		[Ignore]
+#endif
 		public void ArrangeOnThumbMaximumEqualMinimum() {
 			Track t = new Track();
 			t.Maximum = 2;
