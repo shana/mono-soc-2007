@@ -1,0 +1,63 @@
+<Type Name="GenericBase&lt;U&gt;" FullName="Mono.DocTest.Generic.GenericBase&lt;U&gt;">
+  <TypeSignature Language="C#" Value="public class GenericBase&lt;U&gt;" />
+  <AssemblyInfo>
+    <AssemblyName>DocTest</AssemblyName>
+    <AssemblyVersion>0.0.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <TypeParameters>
+    <TypeParameter>U</TypeParameter>
+  </TypeParameters>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public GenericBase ();" />
+      <MemberType>Constructor</MemberType>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="BaseMethod&lt;S&gt;">
+      <MemberSignature Language="C#" Value="public U BaseMethod&lt;S&gt; (S genericParameter);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>U</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="genericParameter" Type="S" />
+      </Parameters>
+      <Docs>
+        <typeparam name="S">To be added.</typeparam>
+        <param name="genericParameter">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="op_Explicit">
+      <MemberSignature Language="C#" Value="public static U op_Explicit (Mono.DocTest.Generic.GenericBase&lt;U&gt; list);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>U</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="list" Type="Mono.DocTest.Generic.GenericBase&lt;U&gt;" />
+      </Parameters>
+      <Docs>
+        <param name="list">To be added.</param>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <typeparam name="U">To be added.</typeparam>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>

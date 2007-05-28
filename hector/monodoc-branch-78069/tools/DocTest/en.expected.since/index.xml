@@ -1,0 +1,40 @@
+<Overview>
+  <Assemblies>
+    <Assembly Name="DocTest" Version="2.0.0.0">
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.Runtime.CompilerServices.RuntimeCompatibility(WrapNonExceptionThrows=true)</AttributeName>
+        </Attribute>
+      </Attributes>
+    </Assembly>
+  </Assemblies>
+  <Remarks>To be added.</Remarks>
+  <Copyright>To be added.</Copyright>
+  <Types>
+    <Namespace Name="Mono.DocTest">
+      <Type Name="IProcess" />
+      <Type Name="DocAttribute" />
+      <Type Name="DocValueType" />
+      <Type Name="Widget" />
+      <Type Name="Widget+IMenuItem" />
+      <Type Name="Widget+NestedClass" />
+      <Type Name="Widget+NestedClass`1" DisplayName="Widget+NestedClass&lt;T&gt;" />
+      <Type Name="Widget+Del" />
+      <Type Name="Widget+Direction" />
+      <Type Name="UseLists" />
+      <Type Name="Color" />
+      <Type Name="AddedType" />
+    </Namespace>
+    <Namespace Name="System">
+      <Type Name="Environment" />
+      <Type Name="Environment+SpecialFolder" />
+    </Namespace>
+    <Namespace Name="Mono.DocTest.Generic">
+      <Type Name="GenericBase`1" DisplayName="GenericBase&lt;U&gt;" />
+      <Type Name="MyList`1" DisplayName="MyList&lt;T&gt;" />
+      <Type Name="MyList`1+Helper`2" DisplayName="MyList&lt;T&gt;+Helper&lt;U,V&gt;" />
+      <Type Name="MyList`2" DisplayName="MyList&lt;A,B&gt;" />
+    </Namespace>
+  </Types>
+  <Title>DocTest</Title>
+</Overview>

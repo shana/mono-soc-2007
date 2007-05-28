@@ -1,0 +1,5 @@
+XmlSchema error: Invalid start element: :extra XML URI: file:///area-51/Projects/mono-HEAD/monodoc/tools/DocTest/en.expected.importslashdoc/Mono.DocTest/Widget.xml . Line 418, Position 6.
+XmlSchema error: Element declaration for extra is missing. XML URI: file:///area-51/Projects/mono-HEAD/monodoc/tools/DocTest/en.expected.importslashdoc/Mono.DocTest/Widget.xml . Line 418, Position 6.
+XmlSchema error: Invalid start element: :altmember XML URI: file:///area-51/Projects/mono-HEAD/monodoc/tools/DocTest/en.expected.importslashdoc/Mono.DocTest/Widget.xml . Line 419, Position 6.
+XmlSchema error: Invalid end element: Docs XML URI: file:///area-51/Projects/mono-HEAD/monodoc/tools/DocTest/en.expected.importslashdoc/Mono.DocTest/Widget.xml . Line 420, Position 5.
+Total validation errors: 4
