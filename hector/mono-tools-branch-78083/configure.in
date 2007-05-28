@@ -1,0 +1,112 @@
+AC_INIT(README)
+AC_CANONICAL_SYSTEM
+AM_INIT_AUTOMAKE(mono-tools, 1.2.4)
+AM_MAINTAINER_MODE
+
+AC_PROG_INSTALL
+
+dnl C# compiler
+AC_PATH_PROG(MCS, mcs, no)
+AC_PATH_PROG(GMCS, gmcs, no)
+AC_PATH_PROG(RUNTIME, mono, no)
+
+CS="C#"
+if test "x$MCS" = "xno"  ; then
+	dnl AC_MSG_ERROR([You need to install a C# compiler])
+	AC_MSG_ERROR([No $CS compiler found])
+fi
+
+if test "x$RUNTIME" = "xno" ; then
+	AC_MSG_ERROR([No runtime found])
+fi
+
+dnl resgen
+AC_PATH_PROG(RESGEN, resgen, no)
+if test "x$RESGEN" = "xno"  ; then
+	AC_MSG_ERROR([resgen not found in $PATH])
+fi
+
+AC_SUBST(MCS)
+AC_SUBST(RUNTIME)
+AC_SUBST(RESGEN)
+
+PKG_CHECK_MODULES(NUNIT, mono-nunit)
+AC_SUBST(NUNIT_LIBS)
+
+PKG_CHECK_MODULES(MONODOC, monodoc)
+AC_SUBST(MONODOC_LIBS)
+
+
+PKG_CHECK_MODULES(GTK_SHARP, gtk-sharp-2.0 glade-sharp-2.0 gconf-sharp-2.0)
+#PKG_CHECK_MODULES(GTK_SHARP, gtk-sharp glade-sharp gconf-sharp)
+AC_SUBST(GTK_SHARP_LIBS)
+
+
+PKG_CHECK_MODULES(GTKHTML_SHARP, gtkhtml-sharp-2.0, enable_gtkhtml=yes, enable_gtkhtml=no)
+AC_SUBST(GTKHTML_SHARP_LIBS)
+AM_CONDITIONAL(ENABLE_GTKHTML, test "x$enable_gtkhtml" = "xyes")
+
+
+PKG_CHECK_MODULES(GECKO_SHARP, gecko-sharp-2.0, enable_gecko=yes, enable_gecko=no)
+AC_SUBST(GECKO_SHARP_LIBS)
+AM_CONDITIONAL(ENABLE_GECKO, test "x$enable_gecko" = "xyes")
+
+if test "x$enable_gecko" = "xyes"; then
+   # get the mozilla home directory
+   MOZILLA_HOME="`$PKG_CONFIG --variable=libdir mozilla-gtkmozembed`"
+   AC_SUBST(MOZILLA_HOME)
+fi
+
+
+if test "x$enable_gtkhtml$enable_gecko" = "xnono" ; then
+   AC_MSG_ERROR([no HTML display found. You need either gtkhtml or gecko])
+fi
+
+dnl Intl
+GETTEXT_PACKAGE=mono-tools
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
+ALL_LINGUAS="da es fr ca pt_BR"
+AM_GLIB_GNU_GETTEXT
+
+GNUNIT_VERSION=0.5
+AC_SUBST(GNUNIT_VERSION)
+
+
+AC_OUTPUT([
+Makefile
+gnunit/Makefile
+gnunit/art/Makefile
+gnunit/src/Makefile
+gnunit/src/AssemblyInfo.cs
+gnunit/src/catalog.cs
+docbrowser/Makefile
+docbrowser/monodoc
+docbrowser/AssemblyInfo.cs
+po/Makefile.in
+asn1view/Makefile
+asn1view/art/Makefile
+asn1view/gtk/Makefile
+asn1view/common/Makefile
+ilcontrast/Makefile
+ilcontrast/ilcontrast
+create-native-map/Makefile
+create-native-map/bin/Makefile
+create-native-map/lib/Makefile
+create-native-map/lib/create-native-map/Makefile
+create-native-map/lib/pkgconfig/Makefile
+create-native-map/lib/pkgconfig/create-native-map.pc
+create-native-map/man/Makefile
+create-native-map/src/Makefile
+])
+
+echo "---"
+echo "Configuration summary"
+echo ""
+echo "   * Installation prefix = $prefix"
+echo "   * gecko-sharp.dll = $enable_gecko"
+echo ""
+echo "      NOTE: if any of the above say 'no' you may install the"
+echo "            corresponding development packages for them, rerun"
+echo "            autogen.sh to include them in the build."
+echo ""
