@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -46,6 +47,87 @@ namespace System.Windows.Controls {
 				return null;
 			}
 		}
+		#endregion
 
+		#region Protected Properties
+		protected override int VisualChildrenCount {
+			get {
+				return base.VisualChildrenCount;
+			}
+		}
+		#endregion
+
+		#region Protected Internal Properties
+		protected internal virtual bool HasLogicalOrientation {
+			get {
+				return false;
+			}
+		}
+
+		protected internal UIElementCollection InternalChildren {
+			get {
+				return null;
+			}
+		}
+
+		protected override IEnumerator LogicalChildren {
+			get {
+				return base.LogicalChildren;
+			}
+		}
+
+		protected internal virtual Orientation LogicalOrientation {
+			get {
+				return Orientation.Horizontal;
+			}
+		}
+		#endregion
+
+		#region Public Methods
+		#region Attached Properties
+		public static int GetZIndex(UIElement element) {
+			return (int)element.GetValue(ZIndexProperty);
+		}
+
+		public static void SetZIndex(UIElement element, int value) {
+			element.SetValue(ZIndexProperty, value);
+		}
+		#endregion
+
+		public bool ShouldSerializeChildren() {
+			return false;
+		}
+		#endregion
+
+		#region Protected Methods
+		protected virtual UIElementCollection CreateUIElementCollection(FrameworkElement logicalParent) {
+			return null;
+		}
+
+		protected override Visual GetVisualChild(int index) {
+			return base.GetVisualChild(index);
+		}
+
+		protected virtual void OnIsItemsHostChanged(bool oldIsItemsHost, bool newIsItemsHost) {
+		}
+
+		protected override void OnRender(DrawingContext drawingContext) {
+			base.OnRender(drawingContext);
+		}
+
+		protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved) {
+			base.OnVisualChildrenChanged(visualAdded, visualRemoved);
+		}
+		#endregion
+
+		#region Explicit Interface Implementations
+		#region IAddChild
+		void IAddChild.AddChild(object value) {
+		}
+
+		void IAddChild.AddText(string text) {
+		}
+		#endregion
+		#endregion
 	}
 }

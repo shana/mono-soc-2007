@@ -1,3 +1,7 @@
+2007-05-29  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Canvas.cs, Panel.cs: Finished stubbing.
+
 2007-05-28  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Canvas.cs: Added.
