@@ -69,7 +69,6 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
-			//FIXME: Implement Z order.
 			foreach (UIElement element in Children) {
 				Point position = new Point();
 				Size size = element.DesiredSize;
@@ -94,7 +93,11 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Geometry GetLayoutClip(Size layoutSlotSize) {
-			return base.GetLayoutClip(layoutSlotSize);
+			if (ClipToBounds)
+				//FIXME
+				return new RectangleGeometry();
+			else
+				return null;
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {

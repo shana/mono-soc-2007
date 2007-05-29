@@ -35,9 +35,18 @@ namespace System.Windows.Controls.Primitives {
 				Height = 100;
 
 				Canvas canvas = new Canvas();
-				Button b = new Button();
-				b.Content = "123";
-				canvas.Children.Add(b);
+				
+				Button b1 = new Button();
+				b1.Content = "111111";
+				Canvas.SetLeft(b1, 11);
+				canvas.Children.Add(b1);
+				Canvas.SetZIndex(b1, 1);
+
+				Button b2 = new Button();
+				b2.Content = "222222";
+				Canvas.SetLeft(b2, 22);
+				canvas.Children.Add(b2);
+				
 				Content = canvas;
 			}
 		}

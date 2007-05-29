@@ -63,5 +63,21 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region GetLayoutClip
+		[Test]
+		public void GetLayoutClip() {
+			new GetLayoutClipCanvas();
+		}
+
+		class GetLayoutClipCanvas : Canvas {
+			public GetLayoutClipCanvas() {
+				Assert.IsFalse(ClipToBounds, "ClipToBounds");
+				Assert.IsNotNull(GetLayoutClip(new Size(100, 100)), "1");
+				ClipToBounds = false;
+				Assert.IsNull(GetLayoutClip(new Size(100, 100)), "2");
+			}
+		}
+		#endregion
 	}
 }
