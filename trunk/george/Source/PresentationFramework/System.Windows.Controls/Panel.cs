@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Markup;
@@ -16,15 +17,22 @@ namespace System.Windows.Controls {
 		#region Public Fields
 		#region Dependency Properties
 		public static readonly DependencyProperty BackgroundProperty = DependencyProperty.Register("Background", typeof(Brush), typeof(Panel));
-		public static readonly DependencyProperty IsItemsHostProperty = DependencyProperty.Register("IsItemsHost", typeof(bool), typeof(Panel));
+		public static readonly DependencyProperty IsItemsHostProperty = DependencyProperty.Register("IsItemsHost", typeof(bool), typeof(Panel), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			((Panel)d).OnIsItemsHostChanged((bool)e.OldValue, (bool)e.NewValue);
+		}));
 		#region Attached Properties
 		public static readonly DependencyProperty ZIndexProperty = DependencyProperty.RegisterAttached("ZIndex", typeof(int), typeof(Panel));
 		#endregion
 		#endregion
 		#endregion
 
+		#region Private Fields
+		UIElementCollection children;
+		#endregion
+
 		#region Protected Constructors
 		protected Panel() {
+			children = CreateUIElementCollection(this);
 		}
 		#endregion
 
@@ -43,43 +51,31 @@ namespace System.Windows.Controls {
 		#endregion
 
 		public UIElementCollection Children {
-			get {
-				return null;
-			}
+			get { return children; }
 		}
 		#endregion
 
 		#region Protected Properties
 		protected override int VisualChildrenCount {
-			get {
-				return base.VisualChildrenCount;
-			}
+			get { return children.Count; }
 		}
 		#endregion
 
 		#region Protected Internal Properties
 		protected internal virtual bool HasLogicalOrientation {
-			get {
-				return false;
-			}
+			get { return false; }
 		}
 
 		protected internal UIElementCollection InternalChildren {
-			get {
-				return null;
-			}
+			get { return Children; }
 		}
 
 		protected override IEnumerator LogicalChildren {
-			get {
-				return base.LogicalChildren;
-			}
+			get { return Children.GetEnumerator(); }
 		}
 
 		protected internal virtual Orientation LogicalOrientation {
-			get {
-				return Orientation.Horizontal;
-			}
+			get { return Orientation.Vertical; }
 		}
 		#endregion
 
@@ -95,17 +91,17 @@ namespace System.Windows.Controls {
 		#endregion
 
 		public bool ShouldSerializeChildren() {
-			return false;
+			return Children != null && Children.Count > 1;
 		}
 		#endregion
 
 		#region Protected Methods
 		protected virtual UIElementCollection CreateUIElementCollection(FrameworkElement logicalParent) {
-			return null;
+			return new UIElementCollection(this, logicalParent);
 		}
 
 		protected override Visual GetVisualChild(int index) {
-			return base.GetVisualChild(index);
+			return children[index];
 		}
 
 		protected virtual void OnIsItemsHostChanged(bool oldIsItemsHost, bool newIsItemsHost) {
@@ -117,6 +113,7 @@ namespace System.Windows.Controls {
 
 		protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved) {
 			base.OnVisualChildrenChanged(visualAdded, visualRemoved);
+			//FIXME: Recalculate ZIndex here.
 		}
 		#endregion
 
@@ -131,3 +128,4 @@ namespace System.Windows.Controls {
 		#endregion
 	}
 }
+*/

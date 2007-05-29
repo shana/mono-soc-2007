@@ -1,5 +1,10 @@
 2007-05-29  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Canvas.cs: Fixed measurement.
+	* Panel.cs: Disabled as it is not complete yet and Canvas can work without it.
+
+2007-05-29  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Canvas.cs, Panel.cs: Finished stubbing.
 
 2007-05-28  George Giolfan  <georgegiolfan@yahoo.com>

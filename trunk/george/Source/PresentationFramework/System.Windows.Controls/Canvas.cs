@@ -1,4 +1,3 @@
-// This will not work right now as Panel has some internal members.
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Media;
@@ -99,9 +98,8 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			if (double.IsInfinity(availableSize.Width) || double.IsInfinity(availableSize.Height))
-				foreach (UIElement element in Children)
-					element.Measure(availableSize);
+			foreach (UIElement element in Children)
+				element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 			return base.MeasureOverride(availableSize);
 		}
 		#endregion
