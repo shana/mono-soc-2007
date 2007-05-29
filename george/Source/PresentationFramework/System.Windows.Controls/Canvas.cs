@@ -105,14 +105,5 @@ namespace System.Windows.Controls {
 			return base.MeasureOverride(availableSize);
 		}
 		#endregion
-
-		#region Private Methods
-		static bool Contains(IEnumerator collection, object value) {
-			foreach (object element in collection)
-				if (element == value)
-					return true;
-			return false;
-		}
-		#endregion
 	}
 }
