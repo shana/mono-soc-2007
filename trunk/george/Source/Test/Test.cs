@@ -33,9 +33,9 @@ namespace System.Windows.Controls.Primitives {
 #endif
 				Width = 200;
 				Height = 100;
-
+				Canvas container = new Canvas();
 				Canvas canvas = new Canvas();
-				
+				container.Children.Add(canvas);
 				Button b1 = new Button();
 				b1.Content = "111111";
 				Canvas.SetLeft(b1, 11);
@@ -47,7 +47,11 @@ namespace System.Windows.Controls.Primitives {
 				Canvas.SetLeft(b2, 22);
 				canvas.Children.Add(b2);
 				
-				Content = canvas;
+				
+				container.Background = Brushes.Green;
+				canvas.ClipToBounds = true;
+				canvas.Background = Brushes.Red;
+				Content = container;
 			}
 		}
 	}

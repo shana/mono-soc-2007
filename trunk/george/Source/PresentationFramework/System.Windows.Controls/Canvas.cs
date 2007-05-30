@@ -94,8 +94,7 @@ namespace System.Windows.Controls {
 
 		protected override Geometry GetLayoutClip(Size layoutSlotSize) {
 			if (ClipToBounds)
-				//FIXME
-				return new RectangleGeometry();
+				return new RectangleGeometry(new Rect(0, 0, ActualWidth, ActualHeight));
 			else
 				return null;
 		}

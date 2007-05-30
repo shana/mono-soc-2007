@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Windows.Media;
 #if Implementation
 using System.Windows;
 using System.Windows.Controls;
@@ -73,9 +74,16 @@ namespace System.Windows.Controls {
 		class GetLayoutClipCanvas : Canvas {
 			public GetLayoutClipCanvas() {
 				Assert.IsFalse(ClipToBounds, "ClipToBounds");
-				Assert.IsNotNull(GetLayoutClip(new Size(100, 100)), "1");
+				Assert.IsNull(GetLayoutClip(new Size(100, 100)), "1");
 				ClipToBounds = false;
 				Assert.IsNull(GetLayoutClip(new Size(100, 100)), "2");
+				ClipToBounds = true;
+				Geometry result = GetLayoutClip(new Size(100, 100));
+				Assert.IsNotNull(result, "3");
+				Assert.IsTrue(result.GetType() == typeof(RectangleGeometry), "3 - type");
+				RectangleGeometry rectangle = result as RectangleGeometry;
+				Assert.AreEqual(rectangle.Rect, new Rect(0, 0, 0, 0), "3 - Rect");
+
 			}
 		}
 		#endregion
