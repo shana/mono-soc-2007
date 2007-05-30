@@ -1,0 +1,6 @@
+2007-05-30  Jeff Tickle  <jeff at jeff tickle dot com>  0.1.2
+
+	Imported into mono-soc-2007 Subversion and picked an arbitrary version
+	number that indicates there has been one release and two significant
+	updates since that release; those updates would be pressure sensitivity
+	and the abstracting of the Stroke classes.
