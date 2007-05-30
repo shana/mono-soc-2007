@@ -1,0 +1,21 @@
+<ui>
+    <toolbar name="ControlBar">
+        <toolitem name="Clear" action="HandwritingClearAction" />
+        <toolitem name="Export" action="HandwritingExportAction" />
+        <toolitem name="Save" action="HandwritingSaveAction" />
+        <toolitem name="Open" action="HandwritingOpenAction" />
+        <separator />
+        <toolitem name="Undo" action="HandwritingUndoAction" />
+        <toolitem name="Redo" action="HandwritingRedoAction" />
+        <separator />
+        <toolitem name="Yellow" action="HandwritingYellowToggle" />
+        <separator />
+        <toolitem name="WideRule" action="HandwritingWideRuleToggle" />
+        <toolitem name="HorizontalRule" action="HandwritingHorizontalRuleToggle" />
+        <toolitem name="VerticalRule" action="HandwritingVerticalRuleToggle" />
+        <separator />
+        <toolitem name="LeftMargin" action="HandwritingLeftMarginToggle" />
+        <separator />
+        <toolitem name="BindingHoles" action="HandwritingBindingHolesToggle" />
+    </toolbar>
+</ui>
