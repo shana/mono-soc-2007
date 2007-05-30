@@ -1,0 +1,15 @@
+//
+// AssemblyInfo.cs.in for project 'bush'  
+//
+// Authors:
+//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+//
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
+[assembly: AssemblyVersion("@VERSION@")]
+[assembly: AssemblyTitle ("Virtual Paper")]
+[assembly: AssemblyDescription ("Virtual Paper for your Tablet PC")]
+[assembly: AssemblyCopyright ("Copyright (c) 2007 Jeff Tickle")]
+[assembly: AssemblyCompany ("Jeff Tickle")]
+

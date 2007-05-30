@@ -1,0 +1,2 @@
+#!/bin/sh
+exec @MONO@ @prefix@/lib/virtualpaper/virtualpaper.exe $MONO_EXTRA_ARGS "$@"
