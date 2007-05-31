@@ -1,5 +1,9 @@
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Panel.cs: Added ZIndex support.
+
+2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Panel.cs: Added background rendering.
 
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
