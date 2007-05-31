@@ -1,3 +1,7 @@
+2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* SrollBarTest.cs, TrackTest.cs: Changed some test timings that seemed to cause hangs sometimes.
+
 2007-05-28  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TrackTest.cs: Added [Ignore] to some test I can't fix now.
