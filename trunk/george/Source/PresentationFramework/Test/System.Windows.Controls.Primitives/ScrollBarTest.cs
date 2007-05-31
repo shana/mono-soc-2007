@@ -121,7 +121,7 @@ namespace System.Windows.Controls.Primitives {
 				w.Show();
 				Thread current = Thread.CurrentThread;
 				Thread killer = new Thread(delegate() {
-					Thread.Sleep(1000);
+					Thread.Sleep(5000);
 					current.Abort();
 				});
 				killer.Start();

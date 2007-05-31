@@ -374,7 +374,7 @@ namespace System.Windows.Controls.Primitives {
 				s.IncreaseRepeatButton = new RepeatButton();
 				Thread current = Thread.CurrentThread;
 				Thread killer = new Thread(delegate() {
-					Thread.Sleep(1000);
+					Thread.Sleep(5000);
 					current.Abort();
 				});
 				killer.Start();
@@ -396,7 +396,7 @@ namespace System.Windows.Controls.Primitives {
 				s.DecreaseRepeatButton = new RepeatButton();
 				Thread current = Thread.CurrentThread;
 				Thread killer = new Thread(delegate() {
-					Thread.Sleep(1000);
+					Thread.Sleep(5000);
 					current.Abort();
 				});
 				killer.Start();
@@ -418,7 +418,7 @@ namespace System.Windows.Controls.Primitives {
 				s.Thumb = new Thumb();
 				Thread current = Thread.CurrentThread;
 				Thread killer = new Thread(delegate() {
-					Thread.Sleep(1000);
+					Thread.Sleep(5000);
 					current.Abort();
 				});
 				killer.Start();
