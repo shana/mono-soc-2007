@@ -15,7 +15,7 @@ namespace System.Windows.Controls {
 	public abstract class Panel : FrameworkElement, IAddChild {
 		#region Public Fields
 		#region Dependency Properties
-		public static readonly DependencyProperty BackgroundProperty = DependencyProperty.Register("Background", typeof(Brush), typeof(Panel));
+		public static readonly DependencyProperty BackgroundProperty = DependencyProperty.Register("Background", typeof(Brush), typeof(Panel), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 		public static readonly DependencyProperty IsItemsHostProperty = DependencyProperty.Register("IsItemsHost", typeof(bool), typeof(Panel), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((Panel)d).OnIsItemsHostChanged((bool)e.OldValue, (bool)e.NewValue);
 		}));
@@ -108,6 +108,8 @@ namespace System.Windows.Controls {
 
 		protected override void OnRender(DrawingContext drawingContext) {
 			base.OnRender(drawingContext);
+			if (Background != null)
+				drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
 		}
 
 		protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved) {
