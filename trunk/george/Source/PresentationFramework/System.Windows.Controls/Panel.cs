@@ -1,4 +1,3 @@
-/*
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Markup;
@@ -91,7 +90,7 @@ namespace System.Windows.Controls {
 		#endregion
 
 		public bool ShouldSerializeChildren() {
-			return Children != null && Children.Count > 1;
+			return Children != null && Children.Count > 0;
 		}
 		#endregion
 
@@ -128,4 +127,3 @@ namespace System.Windows.Controls {
 		#endregion
 	}
 }
-*/

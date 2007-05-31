@@ -1,3 +1,7 @@
+2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Panel.cs: Fixed typo in ShouldSerializeChildren().
+
 2007-05-29  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Canvas.cs: Fixed measurement.
