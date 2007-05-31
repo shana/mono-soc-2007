@@ -98,5 +98,33 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region ZIndex
+		[Test]
+		public void ZIndex() {
+			new ZIndexPanel();
+		}
+
+		class ZIndexPanel : Panel {
+			public ZIndexPanel() {
+				Button b1 = new Button();
+				Assert.AreEqual(GetZIndex(b1), 0, "1");
+				Children.Add(b1);
+				Assert.AreEqual(GetZIndex(b1), 0, "2");
+				Button b2 = new Button();
+				Assert.AreEqual(GetZIndex(b2), 0, "3");
+				SetZIndex(b2, -1);
+				Assert.AreEqual(GetZIndex(b2), -1, "4");
+				Children.Add(b2);
+				Assert.AreEqual(GetZIndex(b2), -1, "5");
+				Assert.AreEqual(Children[1], b2, "6");
+				Assert.AreEqual(InternalChildren[1], b2, "6 1");
+				Assert.AreEqual(GetVisualChild(1), b1, "6 3");
+				Button b3 = new Button();
+				Children.Add(b3);
+				Assert.AreEqual(GetZIndex(b3), 0, "7");
+			}
+		}
+		#endregion
 	}
 }
