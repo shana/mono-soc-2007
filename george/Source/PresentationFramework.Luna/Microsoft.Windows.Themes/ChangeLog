@@ -1,3 +1,7 @@
+2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ScrollChrome.cs: Fixed non-glyph rendering.
+
 2007-05-25  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ScrollChrome.cs: Fixed HasOuterBorder support.
