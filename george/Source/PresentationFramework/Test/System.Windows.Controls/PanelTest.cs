@@ -1,6 +1,8 @@
 using NUnit.Framework;
+using System.Windows.Markup;
 using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 namespace Mono.System.Windows.Controls {
@@ -136,6 +138,28 @@ namespace System.Windows.Controls {
 		class FocusablePanel : Panel {
 			public FocusablePanel() {
 				Assert.IsFalse(Focusable);
+			}
+		}
+		#endregion
+
+		#region IAddChild
+		[Test]
+#if Implementation
+		[Ignore("Not documented")]
+#endif
+		public void IAddChild() {
+			new IAddChildPanel();
+		}
+
+		class IAddChildPanel : Panel {
+			public IAddChildPanel() {
+				((IAddChild)this).AddText(string.Empty);
+				Assert.AreEqual(Children.Count, 0, "1");
+				try {
+					((IAddChild)this).AddText("Test");
+					Assert.Fail("2");
+				} catch (ArgumentException) {
+				}
 			}
 		}
 		#endregion
