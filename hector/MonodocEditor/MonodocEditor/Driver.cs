@@ -1,9 +1,12 @@
-// /home/hector/Projects/mono-soc-2007/hector/MonodocEditor/MonodocEditor/Main.cs created with MonoDevelop
-// User: hector at 7:38 AM 5/31/2007
 //
+// Driver.cs: Main class of app.
 //
+// Author:
+//   Hector E. Gomez M (hectorgm@ciencias.unam.mx)
 //
-// project created on 5/31/2007 at 7:38 AM
+// (C) 2007 Hector E. Gomez M
+//
+
 using System;
 using Gtk;
 
