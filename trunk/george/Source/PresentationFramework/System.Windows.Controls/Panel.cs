@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Markup;
 using System.Windows.Media;
 #if Implementation
@@ -100,7 +102,26 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Visual GetVisualChild(int index) {
-			return children[index];
+			SortedDictionary<int, List<UIElement>> groups = new SortedDictionary<int, List<UIElement>>();
+			foreach (UIElement child in Children) {
+				int z_index = GetZIndex(child);
+				List<UIElement> group;
+				if (!groups.TryGetValue(z_index, out group)) {
+					group = new List<UIElement>();
+					groups.Add(z_index, group);
+				}
+				group.Add(child);
+			}
+			int children_passed_so_far = 0;
+			foreach (List<UIElement> group in groups.Values) {
+				int possible_index = index - children_passed_so_far;
+				if (possible_index < group.Count)
+					return group[possible_index];
+				else
+					children_passed_so_far += group.Count;
+			}
+			Debug.Fail("This should never be reached.");
+			return null;
 		}
 
 		protected virtual void OnIsItemsHostChanged(bool oldIsItemsHost, bool newIsItemsHost) {
@@ -114,7 +135,7 @@ namespace System.Windows.Controls {
 
 		protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved) {
 			base.OnVisualChildrenChanged(visualAdded, visualRemoved);
-			//FIXME: Recalculate ZIndex here.
+			//FIXME?: Recalculate ZIndex here.
 		}
 		#endregion
 
