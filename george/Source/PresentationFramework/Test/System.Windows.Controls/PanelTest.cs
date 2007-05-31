@@ -70,7 +70,6 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-
 		#region HasLogicalOrientation
 		[Test]
 		public void HasLogicalOrientation() {
@@ -81,6 +80,21 @@ namespace System.Windows.Controls {
 			public HasLogicalOrientationPanel() {
 				Assert.IsFalse(HasLogicalOrientation, "HasLogicalOrientation");
 				Assert.AreEqual(LogicalOrientation, Orientation.Vertical, "LogicalOrientation");
+			}
+		}
+		#endregion
+
+		#region ShouldSerializeChildren
+		[Test]
+		public void ShouldSerializeChildren() {
+			new ShouldSerializeChildrenPanel();
+		}
+
+		class ShouldSerializeChildrenPanel : Panel {
+			public ShouldSerializeChildrenPanel() {
+				Assert.IsFalse(ShouldSerializeChildren(), "1");
+				Children.Add(new Button());
+				Assert.IsTrue(ShouldSerializeChildren(), "2");
 			}
 		}
 		#endregion
