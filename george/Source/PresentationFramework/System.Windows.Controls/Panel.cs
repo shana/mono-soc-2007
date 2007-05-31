@@ -18,7 +18,7 @@ namespace System.Windows.Controls {
 		#region Public Fields
 		#region Dependency Properties
 		public static readonly DependencyProperty BackgroundProperty = DependencyProperty.Register("Background", typeof(Brush), typeof(Panel), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
-		public static readonly DependencyProperty IsItemsHostProperty = DependencyProperty.Register("IsItemsHost", typeof(bool), typeof(Panel), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		public static readonly DependencyProperty IsItemsHostProperty = DependencyProperty.Register("IsItemsHost", typeof(bool), typeof(Panel), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.NotDataBindable, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((Panel)d).OnIsItemsHostChanged((bool)e.OldValue, (bool)e.NewValue);
 		}));
 		#region Attached Properties
