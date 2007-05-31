@@ -1,0 +1,11 @@
+2007-05-31  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonodocEditor/AssemblyInfo.cs, MonodocEditor/Driver.cs,
+	  MonodocEditor/MainWindow.cs, MonodocEditor/MonodocEditor.mdp,
+	  MonodocEditor/Main.cs: Change of the header for the source code of
+	  the proyect, the Main.cs file was renamed to Driver.cs too.
+	* MonodocEditor/gtk-gui/MainWindow.cs,
+	  MonodocEditor/gtk-gui/generated.cs: Regenerated code from stetic.
+	* MonodocEditor/ChangeLog, ChangeLog: Changelog for the root of the
+	  proyect.
+

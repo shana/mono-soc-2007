@@ -11,4 +11,20 @@
 
 
 public partial class MainWindow {
+    
+    protected virtual void Build() {
+        Stetic.Gui.Initialize();
+        // Widget MainWindow
+        this.Events = ((Gdk.EventMask)(0));
+        this.Name = "MainWindow";
+        this.Title = Mono.Unix.Catalog.GetString("MainWindow");
+        this.WindowPosition = ((Gtk.WindowPosition)(4));
+        if ((this.Child != null)) {
+            this.Child.ShowAll();
+        }
+        this.DefaultWidth = 400;
+        this.DefaultHeight = 300;
+        this.Show();
+        this.DeleteEvent += new Gtk.DeleteEventHandler(this.OnDeleteEvent);
+    }
 }
