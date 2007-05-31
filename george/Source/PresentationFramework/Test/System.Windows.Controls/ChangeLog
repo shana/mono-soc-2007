@@ -1,5 +1,9 @@
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* PanelTest.cs: Added Focusable test.
+
+2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* PanelTest.cs: Added ZIndex test.
 
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
