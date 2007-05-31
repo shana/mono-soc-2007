@@ -140,6 +140,7 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Explicit Interface Implementations
+		//FIXME: This is not documented.
 		#region IAddChild
 		void IAddChild.AddChild(object value) {
 		}
