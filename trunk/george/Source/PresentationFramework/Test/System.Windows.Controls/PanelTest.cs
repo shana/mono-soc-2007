@@ -126,5 +126,18 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+		
+		#region Focusable
+		[Test]
+		public void Focusable() {
+			new FocusablePanel();
+		}
+
+		class FocusablePanel : Panel {
+			public FocusablePanel() {
+				Assert.IsFalse(Focusable);
+			}
+		}
+		#endregion
 	}
 }
