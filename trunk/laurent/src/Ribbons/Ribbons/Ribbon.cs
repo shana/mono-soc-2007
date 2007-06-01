@@ -234,7 +234,8 @@ namespace Ribbons
 			RibbonPage p = curPage;
 			if(p != null)
 			{
-				Color c = ColorScheme.GetColor(colorScheme.Bright, 0.92);
+				//Color c = ColorScheme.GetColor(colorScheme.Bright, 0.92);
+				Color c = colorScheme.Normal;
 				
 				/*** PAGE ***/
 				
@@ -253,7 +254,7 @@ namespace Ribbons
 
 				/*** DARK BORDER ***/
 				cr.LineWidth = lineWidth;
-				cr.Color = ColorScheme.GetColor(colorScheme.Bright, 0.90);
+				cr.Color = ColorScheme.GetColorAbsolute (colorScheme.Bright, 0.3);
 				cr.Stroke ();
 				
 				y0 = Math.Round(y0 + (y1 - y0) * 0.25);
@@ -276,7 +277,7 @@ namespace Ribbons
 				x0 = r.X; x1 = r.X + r.Width;
 				y0 = r.Y; y1 = r.Y + r.Height + lineWidth;
 				
-				/*** BACKGOUND ***/
+				/*** TAB :: BACKGROUND ***/
 				
 				cr.MoveTo (x0 + lineWidth05, y1);
 				cr.LineTo (x0 + lineWidth05, y0 + roundSize);
@@ -285,14 +286,12 @@ namespace Ribbons
 				cr.LineTo (x1 - lineWidth05, y1);
 				
 				linGrad = new LinearGradient (0, y0, 0, y1);
-				linGrad.AddColorStop (0.0, colorScheme.Bright);
+				linGrad.AddColorStop (0.0, colorScheme.PrettyBright);
 				linGrad.AddColorStop (1.0, c);
 				cr.Pattern = linGrad;
 				cr.Fill ();
 				
-				y1 -= 1.0;
-				
-				/*** DARK BORDER ***/
+				/*** TAB :: DARK BORDER ***/
 				
 				cr.MoveTo (x0 + lineWidth05, y1);
 				cr.LineTo (x0 + lineWidth05, y0 + roundSize);
@@ -301,10 +300,12 @@ namespace Ribbons
 				cr.LineTo (x1 - lineWidth05, y1);
 				
 				cr.LineWidth = lineWidth;
-				cr.Color = ColorScheme.GetColor(colorScheme.Bright, 0.90);
+				cr.Color = ColorScheme.GetColorRelative (colorScheme.Bright, -0.1);
 				cr.Stroke ();
 				
-				/*** HIGHLIGHT ***/
+				y1 -= 1.0;
+				
+				/*** TAB :: HIGHLIGHT ***/
 				
 				cr.MoveTo (x0 + lineWidth15, y1);
 				cr.LineTo (x0 + lineWidth15, y0 + roundSize);
@@ -319,7 +320,7 @@ namespace Ribbons
 				cr.Pattern = linGrad;
 				cr.Stroke ();
 				
-				/*** SHADOW ***/
+				/*** TAB :: SHADOW ***/
 				
 				cr.MoveTo (x0 - lineWidth05, y1);
 				cr.LineTo (x0 - lineWidth05, y0 + roundSize);
