@@ -68,6 +68,7 @@
     <Compile Include="System.Windows.Controls\Label.cs" />
     <Compile Include="Mono.WindowsPresentationFoundation\Utility.cs" />
     <Compile Include="System.Windows.Controls\Slider.cs" />
+    <Compile Include="System.Windows.Controls\TabControl.cs" />
     <Compile Include="Theme.cs" />
   </ItemGroup>
   <ItemGroup>

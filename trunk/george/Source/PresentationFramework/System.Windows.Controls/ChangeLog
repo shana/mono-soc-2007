@@ -1,3 +1,7 @@
+2007-06-01  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs: Added.
+
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Panel.cs: Gave up on implementing IAddChild members for now.

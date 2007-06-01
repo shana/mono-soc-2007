@@ -74,23 +74,23 @@
       Creating a Slider with a selection range.
     </TextBlock>
 
-    <Button Margin="10, 10, 3, 3" Grid.Column="0" Grid.Row="7" Click="OnClick"        
+	  <mono_sytem_windows_controls:Button Margin="10, 10, 3, 3" Grid.Column="0" Grid.Row="7" Click="OnClick"        
      HorizontalAlignment="Left">
       Click me to create a Slider with C# code.
-    </Button>
-    <TextBlock Margin="10, 10, 3, 3" Grid.Column="1" Grid.Row="7" FontSize="12" 
-        VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
-      Creating a Slider with C# where the values increase from right
-      to left.
-    </TextBlock>
+    </mono_sytem_windows_controls:Button>
+  <TextBlock Margin="10, 10, 3, 3" Grid.Column="1" Grid.Row="7" FontSize="12"
+	  VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
+	  Creating a Slider with C# where the values increase from right
+	  to left.
+  </TextBlock>
 
-    <Button Margin="10, 10, 3, 3" Grid.Column="0" Grid.Row="9" 
+  <mono_sytem_windows_controls:Button Margin="10, 10, 3, 3" Grid.Column="0" Grid.Row="9"
             Click="OnClickNonUniform" HorizontalAlignment="Left">
-      <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap">
-        Click me to create a Slider with C# code and
-        non-uniform tick marks.
-      </TextBlock>
-    </Button>
+	  <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap">
+		  Click me to create a Slider with C# code and
+		  non-uniform tick marks.
+	  </TextBlock>
+  </mono_sytem_windows_controls:Button>
     <TextBlock Margin="10, 10, 3, 3" Grid.Column="1" Grid.Row="9" FontSize="12" 
         VerticalAlignment="Center" TextWrapping="WrapWithOverflow">
       Creating a Slider with C# with tick marks at non-uniform
