@@ -34,6 +34,7 @@
   <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
     <ExportedWidgets>
       <Widget>Ribbons.RibbonButton</Widget>
+      <Widget>Ribbons.Label</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
 </Project>

@@ -45,7 +45,7 @@ namespace Ribbons
 				cr.Rectangle (r.X + 2*lineWidth, bandY, r.Width - 4*lineWidth, bandHeight);
 				cr.Clip ();
 				
-				cr.Color = new Color(0, 0, 0);
+				cr.Color = new Color(1, 1, 1);
 				Pango.CairoHelper.UpdateLayout (cr, l);
 				cr.MoveTo (r.X + Math.Max(2*lineWidth, (r.Width - lblWidth) / 2), bandY + space);
 				Pango.CairoHelper.ShowLayout (cr, l);
@@ -65,6 +65,14 @@ namespace Ribbons
 			linGrad.AddColorStop (1.0, colorScheme.PrettyDark);
 			cr.Pattern = linGrad;
 			cr.Stroke ();
+		}
+		
+		public Gdk.Color GetForecolorForRibbonTabs (bool Selected)
+		{
+			if(Selected)
+				return new Gdk.Color (0, 0, 0);
+			else
+				return new Gdk.Color (255, 255, 255);
 		}
 		
 		public void DrawRibbon (Context cr, Gdk.Rectangle bodyAllocation, double roundSize, double lineWidth, Ribbon widget)
@@ -97,19 +105,31 @@ namespace Ribbons
 
 				/*** DARK BORDER ***/
 				cr.LineWidth = lineWidth;
-				cr.Color = ColorScheme.GetColorAbsolute (colorScheme.Bright, 0.3);
+				cr.Color = ColorScheme.GetColorAbsolute (colorScheme.Normal, 0.75);
 				cr.Stroke ();
 				
-				y0 = Math.Round(y0 + (y1 - y0) * 0.25);
+				/*** GLASS EFFECT ***/
+				double ymid = Math.Round(y0 + (y1 - y0) * 0.25);
+				
+				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth, Math.PI, 3*Math.PI/2);
+				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth, 3*Math.PI/2, 0);
+				cr.LineTo (x1 - lineWidth, ymid);
+				cr.LineTo (x0 + lineWidth, ymid);
+				cr.LineTo (x0 + lineWidth, y0 + roundSize);
+				linGrad = new LinearGradient (0, y0, 0, ymid);
+				linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.0));
+				linGrad.AddColorStop (1.0, new Color (0, 0, 0, 0.075));
+				cr.Pattern = linGrad;
+				cr.Fill ();
+				
 				cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth, Math.PI/2, Math.PI);
-				cr.LineTo (x0 + lineWidth, y0);
-				cr.LineTo (x1 - lineWidth, y0);
+				cr.LineTo (x0 + lineWidth, ymid);
+				cr.LineTo (x1 - lineWidth, ymid);
 				cr.Arc (x1 - roundSize, y1 - roundSize, roundSize - lineWidth, 0, Math.PI/2);
 				cr.LineTo (x0 + roundSize, y1 - lineWidth);
-				
-				linGrad = new LinearGradient (0, y0, 0, y1);
-				linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.05));
-				linGrad.AddColorStop (0.66, new Color (0, 0, 0, 0.0));
+				linGrad = new LinearGradient (0, ymid, 0, y1);
+				linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.1));
+				linGrad.AddColorStop (0.5, new Color (0, 0, 0, 0.0));
 				cr.Pattern = linGrad;
 				cr.Fill ();
 				
