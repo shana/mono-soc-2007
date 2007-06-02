@@ -5,39 +5,45 @@ namespace Ribbons
 {
 	public class ColorScheme
 	{
-		private Color dark, lightDark, normal, lightBright, bright, prettyBright;
+		private Color prettyDark, dark, lightDark, normal, lightBright, bright, prettyBright;
 
-		public Color Dark	// 0.75
+		public Color PrettyDark
+		{
+			set { prettyDark = value; }
+			get { return prettyDark; }
+		}
+
+		public Color Dark
 		{
 			set { dark = value; }
 			get { return dark; }
 		}
 
-		public Color LightDark	// 0.975
+		public Color LightDark
 		{
 			set { lightDark = value; }
 			get { return lightDark; }
 		}
 
-		public Color Normal	// 1.000
+		public Color Normal
 		{
 			set { normal = value; }
 			get { return normal; }
 		}
 
-		public Color LightBright	// 1.025
+		public Color LightBright
 		{
 			set { lightBright = value; }
 			get { return lightBright; }
 		}
 
-		public Color Bright	// 1.075
+		public Color Bright
 		{
 			set { bright = value; }
 			get { return bright; }
 		}
 
-		public Color PrettyBright	// 1.085
+		public Color PrettyBright
 		{
 			set { prettyBright = value; }
 			get { return prettyBright; }
@@ -53,8 +59,9 @@ namespace Ribbons
 		
 		public ColorScheme (Color Normal)
 		{
-			dark = GetColorRelative (Normal, -0.4);
-			lightDark = GetColorRelative (Normal, -0.1);
+			prettyDark = GetColorRelative (Normal, -0.4);
+			dark = GetColorRelative (Normal, -0.1);
+			lightDark = GetColorRelative (Normal, -0.05);
 			normal = Normal;
 			lightBright = GetColorRelative (Normal, 0.05);
 			bright = GetColorRelative (Normal, 0.1);

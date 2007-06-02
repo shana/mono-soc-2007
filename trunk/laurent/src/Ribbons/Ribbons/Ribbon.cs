@@ -7,6 +7,7 @@ namespace Ribbons
 {
 	public class Ribbon : Container
 	{
+		protected Theme theme = new Theme ();
 		private List<RibbonPage> pages;
 		private RibbonPage curPage;
 		private Gdk.Rectangle bodyAllocation, pageAllocation;
@@ -104,6 +105,11 @@ namespace Ribbons
 			return pages[Position].Page;
 		}
 		
+		public RibbonPage GetNthRibbonPage (int Position)
+		{
+			return pages[Position];
+		}
+		
 		public void PrevPage ()
 		{
 			int i = Page;
@@ -174,7 +180,7 @@ namespace Ribbons
 				alloc.X = x;
 				alloc.Y = y;
 				alloc.Width = req.Width + horizPadding;
-				p.LabelAllocation = alloc;
+				p.SetLabelAllocation (alloc);
 				
 				maxH = Math.Max(maxH, req.Height);
 				x += alloc.Width;
@@ -185,7 +191,7 @@ namespace Ribbons
 			{
 				Gdk.Rectangle alloc = p.LabelAllocation;
 				alloc.Height = maxH;
-				p.LabelAllocation = alloc;
+				p.SetLabelAllocation (alloc);
 				
 				alloc.X += horizPadding >> 1;
 				alloc.Y += vertPadding >> 1;
@@ -226,115 +232,10 @@ namespace Ribbons
 		
 		protected void Draw (Context cr)
 		{
-			double lineWidth05 = lineWidth / 2;
-			double lineWidth15 = 3 * lineWidth05;
-			double x0, x1, y0, y1;
-			LinearGradient linGrad;
-			
-			RibbonPage p = curPage;
-			if(p != null)
-			{
-				//Color c = ColorScheme.GetColor(colorScheme.Bright, 0.92);
-				Color c = colorScheme.Normal;
-				
-				/*** PAGE ***/
-				
-				x0 = bodyAllocation.X; x1 = bodyAllocation.X + bodyAllocation.Width;
-				y0 = bodyAllocation.Y; y1 = bodyAllocation.Y + bodyAllocation.Height;
-				
-				cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth05, Math.PI/2, Math.PI);
-				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
-				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth05, 3*Math.PI/2, 0);
-				cr.Arc (x1 - roundSize, y1 - roundSize, roundSize - lineWidth05, 0, Math.PI/2);
-				cr.LineTo (x0 + roundSize, y1 - lineWidth05);
-				
-				/*** BACKGOUND ***/
-				cr.Color = c;
-				cr.FillPreserve ();
-
-				/*** DARK BORDER ***/
-				cr.LineWidth = lineWidth;
-				cr.Color = ColorScheme.GetColorAbsolute (colorScheme.Bright, 0.3);
-				cr.Stroke ();
-				
-				y0 = Math.Round(y0 + (y1 - y0) * 0.25);
-				cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth, Math.PI/2, Math.PI);
-				cr.LineTo (x0 + lineWidth, y0);
-				cr.LineTo (x1 - lineWidth, y0);
-				cr.Arc (x1 - roundSize, y1 - roundSize, roundSize - lineWidth, 0, Math.PI/2);
-				cr.LineTo (x0 + roundSize, y1 - lineWidth);
-				
-				linGrad = new LinearGradient (0, y0, 0, y1);
-				linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.05));
-				linGrad.AddColorStop (0.66, new Color (0, 0, 0, 0.0));
-				cr.Pattern = linGrad;
-				cr.Fill ();
-				
-				/*** TAB ***/
-				
-				Gdk.Rectangle r = p.LabelAllocation;
-				
-				x0 = r.X; x1 = r.X + r.Width;
-				y0 = r.Y; y1 = r.Y + r.Height + lineWidth;
-				
-				/*** TAB :: BACKGROUND ***/
-				
-				cr.MoveTo (x0 + lineWidth05, y1);
-				cr.LineTo (x0 + lineWidth05, y0 + roundSize);
-				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
-				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth05, 3*Math.PI/2, 0);
-				cr.LineTo (x1 - lineWidth05, y1);
-				
-				linGrad = new LinearGradient (0, y0, 0, y1);
-				linGrad.AddColorStop (0.0, colorScheme.PrettyBright);
-				linGrad.AddColorStop (1.0, c);
-				cr.Pattern = linGrad;
-				cr.Fill ();
-				
-				/*** TAB :: DARK BORDER ***/
-				
-				cr.MoveTo (x0 + lineWidth05, y1);
-				cr.LineTo (x0 + lineWidth05, y0 + roundSize);
-				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
-				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth05, 3*Math.PI/2, 0);
-				cr.LineTo (x1 - lineWidth05, y1);
-				
-				cr.LineWidth = lineWidth;
-				cr.Color = ColorScheme.GetColorRelative (colorScheme.Bright, -0.1);
-				cr.Stroke ();
-				
-				y1 -= 1.0;
-				
-				/*** TAB :: HIGHLIGHT ***/
-				
-				cr.MoveTo (x0 + lineWidth15, y1);
-				cr.LineTo (x0 + lineWidth15, y0 + roundSize);
-				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth15, Math.PI, 3*Math.PI/2);
-				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth15, 3*Math.PI/2, 0);
-				cr.LineTo (x1 - lineWidth15, y1);
-				
-				cr.LineWidth = lineWidth;
-				linGrad = new LinearGradient (0, y0+lineWidth, 0, y1);
-				linGrad.AddColorStop (0.0, colorScheme.PrettyBright);
-				linGrad.AddColorStop (1.0, ColorScheme.SetAlphaChannel (colorScheme.Bright, 0));
-				cr.Pattern = linGrad;
-				cr.Stroke ();
-				
-				/*** TAB :: SHADOW ***/
-				
-				cr.MoveTo (x0 - lineWidth05, y1);
-				cr.LineTo (x0 - lineWidth05, y0 + roundSize);
-				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize + lineWidth05, Math.PI, 3*Math.PI/2);
-				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize + lineWidth05, 3*Math.PI/2, 0);
-				cr.LineTo (x1 + lineWidth05, y1);
-				
-				cr.LineWidth = lineWidth;
-				cr.Color = new Color (0, 0, 0, 0.2);
-				cr.Stroke ();
-			}
+			theme.DrawRibbon (cr, bodyAllocation, roundSize, lineWidth, this);
 		}
 		
-		private class RibbonPage
+		public class RibbonPage
 		{
 			private Ribbon parent;
 			private Widget label, page;
@@ -364,7 +265,7 @@ namespace Ribbons
 			
 			public Gdk.Rectangle LabelAllocation
 			{
-				set { labelAlloc = value; }
+				//set { labelAlloc = value; }
 				get { return labelAlloc; }
 			}
 			
@@ -375,14 +276,9 @@ namespace Ribbons
 				this.Page = Page;
 			}
 			
-			public void Map ()
+			internal void SetLabelAllocation (Gdk.Rectangle r)
 			{
-				page.Map ();
-			}
-			
-			public void Unmap ()
-			{
-				page.Unmap ();
+				labelAlloc = r;
 			}
 		}
 	}
