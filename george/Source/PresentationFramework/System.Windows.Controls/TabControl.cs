@@ -80,7 +80,11 @@ namespace System.Windows.Controls {
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer() {
-			return base.OnCreateAutomationPeer();
+#if Implementation
+			return null;
+#else
+			return new TabControlAutomationPeer(this);
+#endif
 		}
 
 		protected override void OnInitialized(EventArgs e) {
