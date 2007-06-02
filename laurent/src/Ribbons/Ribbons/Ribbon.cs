@@ -12,21 +12,18 @@ namespace Ribbons
 		private RibbonPage curPage;
 		private Gdk.Rectangle bodyAllocation, pageAllocation;
 		
-		private Gdk.Color selectedTabFgColor = new Gdk.Color(0, 0, 0);
-		private Gdk.Color unselectedTabFgColor = new Gdk.Color(1, 1, 1);
-		
 		public int Page
 		{
 			set
 			{
 				if(curPage != null)
 				{
-					curPage.Label.ModifyFg (StateType.Normal, unselectedTabFgColor);
+					curPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
 				}
 				curPage = pages[value];
 				if(curPage != null)
 				{
-					curPage.Label.ModifyFg (StateType.Normal, selectedTabFgColor);
+					curPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (true));
 				}
 			}
 			get
@@ -72,7 +69,7 @@ namespace Ribbons
 				pages.Insert (Position, p);
 			
 			if(pages.Count == 1) Page = 0;
-			else p.Label.ModifyFg (StateType.Normal, unselectedTabFgColor);
+			else p.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
 		}
 		
 		public void RemovePage (int PageNumber)
