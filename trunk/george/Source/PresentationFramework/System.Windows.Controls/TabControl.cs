@@ -24,6 +24,12 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
+		#region Static Constructor
+		static TabControl() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public TabControl() {
 		}

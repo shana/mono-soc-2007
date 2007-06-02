@@ -1,5 +1,9 @@
 2007-06-02  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabControl.cs: Added a static constructor to ensure the theme styles are loaded before the class is used.
+
+2007-06-02  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabControl.cs: Implemented OnCreateAutomationPeer.
 
 2007-06-02  George Giolfan  <georgegiolfan@yahoo.com>
