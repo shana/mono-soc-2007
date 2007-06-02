@@ -62,6 +62,7 @@
     <Compile Include="Microsoft.Windows.Themes\ButtonChrome.cs" />
     <Compile Include="Microsoft.Windows.Themes\BulletChrome.cs" />
     <Compile Include="Microsoft.Windows.Themes\ScrollChrome.cs" />
+    <None Include="themes\ChangeLog" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="themes\luna.normalcolor.xaml" />
