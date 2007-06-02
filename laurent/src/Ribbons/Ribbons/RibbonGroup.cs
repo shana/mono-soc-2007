@@ -10,6 +10,9 @@ namespace Ribbons
 		protected string lbl;
 		protected Pango.Layout lbl_layout;
 		
+		protected double lineWidth = 1.0;
+		protected double space = 2.0;
+		
 		public string Label
 		{
 			set
@@ -47,11 +50,13 @@ namespace Ribbons
 				if(Child != null && Child.Visible)
 				{
 					Requisition childRequisition = Child.SizeRequest ();
-					requisition.Width = theme.SizeRequestedByGroup (this, lbl_layout, childRequisition).Width; 
+					requisition.Width = childRequisition.Width + (int)(2 * (2*lineWidth + BorderWidth));
 				}
 				else
 				{
-					requisition.Width = theme.SizeRequestedByGroup (this, lbl_layout).Width;
+					int lw, lh;
+					lbl_layout.GetPixelSize (out lw, out lh);
+					requisition.Width = lw + (int)(2 * (2*(lineWidth+space)));
 				}
 			}
 		}
@@ -62,14 +67,20 @@ namespace Ribbons
 			
 			if(Child != null && Child.Visible)
 			{
-				Child.SizeAllocate (theme.SizeAllocatedToChildByGroup (this, lbl_layout, allocation));
+				int lw, lh;
+				lbl_layout.GetPixelSize (out lw, out lh);
+				int frame_size = (int)(2*lineWidth) + (int)BorderWidth;
+				int wi = allocation.Width - 2 * frame_size; 
+				int he = allocation.Height - 2 * frame_size - (lh + (int)(2*space)); 
+				Gdk.Rectangle r = new Gdk.Rectangle (allocation.X + frame_size, allocation.Y + frame_size, wi, he);
+				Child.SizeAllocate (r);
 			}
 		}
 		
 		protected void Draw (Context cr)
 		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
-			theme.DrawGroup (cr, rect, lbl_layout, this);
+			theme.DrawGroup (cr, rect, 4.0, lineWidth, space, lbl_layout, this);
 		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
