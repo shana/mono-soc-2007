@@ -68,6 +68,7 @@
     </Compile>
     <Compile Include="Test\System.Windows.Controls\CanvasTest.cs" />
     <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\TabControlTest.cs" />
     <Compile Include="Test\System.Windows.Controls\PanelTest.cs" />
     <Compile Include="Test\System.Windows.Controls\SliderTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ProgressBarTest.cs" />

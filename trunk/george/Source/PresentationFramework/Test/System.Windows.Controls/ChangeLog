@@ -1,3 +1,7 @@
+2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControlTest.cs: Added.
+
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* PanelTest.cs: Added IAddChild test.
