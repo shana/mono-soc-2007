@@ -102,7 +102,7 @@ namespace Microsoft.Windows.Themes {
 			} else {
 				if (Child != null)
 					Child.Measure(new Size(Utility.GetAdjustedSize(constraint.Width - 2 * BorderSize), Utility.GetAdjustedSize(constraint.Height - 2 * BorderSize)));
-				return constraint;
+				return new Size(2 * BorderSize, 2 * BorderSize);
 			}
 		}
 		#endregion
