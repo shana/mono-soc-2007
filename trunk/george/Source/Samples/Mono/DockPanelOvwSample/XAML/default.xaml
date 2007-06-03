@@ -1,6 +1,6 @@
 <!-- <Snippet1> -->
-<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowTitle="DockPanel Sample">
-  <DockPanel LastChildFill="True">
+<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowTitle="DockPanel Sample" xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
+  <mono_sytem_windows_controls:DockPanel LastChildFill="True">
     <Border Height="25" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
       <TextBlock Foreground="Black">Dock = "Top"</TextBlock>
     </Border>
@@ -16,6 +16,6 @@
     <Border Background="White" BorderBrush="Black" BorderThickness="1">
       <TextBlock Foreground="Black">This content will "Fill" the remaining space</TextBlock>
     </Border>
-  </DockPanel>
+  </mono_sytem_windows_controls:DockPanel>
 </Page>
 <!-- </Snippet1> -->
