@@ -1,5 +1,9 @@
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* DockPanel.cs: Implemented MeasureOverride, ArrangeOverride.
+	
+2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* DockPanel.cs: Added.
 
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
