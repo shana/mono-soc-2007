@@ -1,5 +1,9 @@
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* DockPanel.cs: Added.
+
+2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabControl.cs: Various fixes. I give up for now because I do not understand how it works.
 
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
