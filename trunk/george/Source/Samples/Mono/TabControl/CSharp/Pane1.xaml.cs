@@ -17,12 +17,12 @@ namespace TabControl
     public partial class Pane1 : StackPanel
     {
 
-        System.Windows.Controls.TabControl tabcon;
+        Mono.System.Windows.Controls.TabControl tabcon;
         System.Windows.Controls.TabItem ti1, ti2, ti3;
 
         void OnClick(object sender, RoutedEventArgs e)
         {
-            tabcon = new System.Windows.Controls.TabControl();
+			tabcon = new Mono.System.Windows.Controls.TabControl();
             ti1 = new TabItem();
             ti1.Header = "Background";
             tabcon.Items.Add(ti1);
