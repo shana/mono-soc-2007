@@ -79,9 +79,22 @@ namespace System.Windows.Controls {
 		protected override Size MeasureOverride(Size availableSize) {
 			if (Children.Count == 0)
 				return new Size(0, 0);
-			if (double.IsInfinity(availableSize.Width))
-				return new Size(0, 0);
-			else {
+			if (double.IsInfinity(availableSize.Width)) {
+				Size desired_size = new Size();
+				foreach (UIElement element in Children) {
+					element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+					switch (GetDock(element)) {
+					case Dock.Left:
+					case Dock.Right:
+						desired_size.Width += element.DesiredSize.Width;
+						break;
+					default:
+						desired_size.Height += element.DesiredSize.Height;
+						break;
+					}
+				}
+				return desired_size;
+			} else {
 				Size remaining_size = new Size(availableSize.Width, availableSize.Height);
 				foreach (UIElement element in Children) {
 					element.Measure(remaining_size);
@@ -95,7 +108,7 @@ namespace System.Windows.Controls {
 						break;
 					}
 				}
-				return availableSize;
+				return new Size(availableSize.Width - remaining_size.Width, availableSize.Height - remaining_size.Height);
 			}
 		}
 		#endregion

@@ -1,5 +1,9 @@
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* DockPanel.cs: Attempted to fix MeasureOverride.
+
+2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* DockPanel.cs: Fixed MeasureOverride, ArrangeOverride.
 
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
