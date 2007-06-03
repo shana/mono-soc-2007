@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.PresentationFramework", "PresentationFramework\Mono.PresentationFramework.csproj", "{7E667176-D940-4B73-9CE1-D5A01A9DB05E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabControlSimple", "Samples\Mono\TabControl\CSharp\TabControlSimple.csproj", "{9213633E-345A-4311-9300-900B2B3B49DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Implementation|Any CPU = Debug - Implementation|Any CPU
@@ -125,6 +127,12 @@ Global
 		{7E667176-D940-4B73-9CE1-D5A01A9DB05E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E667176-D940-4B73-9CE1-D5A01A9DB05E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E667176-D940-4B73-9CE1-D5A01A9DB05E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9213633E-345A-4311-9300-900B2B3B49DE}.Debug - Implementation|Any CPU.ActiveCfg = Debug|Any CPU
+		{9213633E-345A-4311-9300-900B2B3B49DE}.Debug - Implementation|Any CPU.Build.0 = Debug|Any CPU
+		{9213633E-345A-4311-9300-900B2B3B49DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9213633E-345A-4311-9300-900B2B3B49DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9213633E-345A-4311-9300-900B2B3B49DE}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9213633E-345A-4311-9300-900B2B3B49DE}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
