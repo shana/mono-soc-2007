@@ -8,7 +8,7 @@ namespace System.Windows.Controls {
 	public class DockPanel : Panel {
 		#region Public Fields
 		#region Dependency Properties
-		public static readonly DependencyProperty LastChildFillProperty = DependencyProperty.Register("LastChildFill", typeof(Dock), typeof(DockPanel));
+		public static readonly DependencyProperty LastChildFillProperty = DependencyProperty.Register("LastChildFill", typeof(bool), typeof(DockPanel), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsArrange));
 		#endregion
 		#region Attached Properties
 		public static readonly DependencyProperty DockProperty = DependencyProperty.RegisterAttached("Dock", typeof(Dock), typeof(DockPanel));
