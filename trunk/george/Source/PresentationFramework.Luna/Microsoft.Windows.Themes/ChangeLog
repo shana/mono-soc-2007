@@ -1,3 +1,7 @@
+2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ButtonChrome.cs: Fixed MeasureOverride.
+
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ScrollChrome.cs: Fixed non-glyph rendering.
