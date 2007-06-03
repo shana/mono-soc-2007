@@ -142,9 +142,6 @@ namespace System.Windows.Controls {
 		}
 
 		[Test]
-#if Implementation
-		[Ignore("I don't know why only this fails. It may have something to do with the way NUnit copies assemblies.")]
-#endif
 		public void VeryStrangeThing() {
 			Button b = new Button();
 			b.Content = "123";
@@ -182,6 +179,17 @@ namespace System.Windows.Controls {
 				Size result = MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity));
 				Assert.AreEqual(result.Width, 0, "Width");
 				Assert.AreEqual(result.Height, 0, "Height");
+				result = MeasureOverride(new Size(100, 100));
+				Assert.AreEqual(result.Width, 0, "Width 2");
+				Assert.AreEqual(result.Height, 0, "Height 2");
+				Window w = new Window();
+				Canvas c = new Canvas();
+				w.Content = c;
+				w.Show();
+				c.Children.Add(this);
+				result = MeasureOverride(new Size(100, 100));
+				Assert.AreEqual(result.Width, 0, "Width 3");
+				Assert.AreEqual(result.Height, 0, "Height 3");
 			}
 		}
 		#endregion
