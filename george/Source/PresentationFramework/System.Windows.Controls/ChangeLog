@@ -1,3 +1,7 @@
+2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs: Fixed default value of TabStripPlacement.
+
 2007-06-02  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControl.cs: Added a static constructor to ensure the theme styles are loaded before the class is used.
