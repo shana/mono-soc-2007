@@ -1,0 +1,21 @@
+<Combine name="MonoImageProcessing" fileversion="2.0" outputpath="./build/bin/" MakePkgConfig="False" MakeLibPC="True">
+  <Configurations active="Debug">
+    <Configuration name="Debug" ctype="CombineConfiguration">
+      <Entry build="True" name="MonoImageProcessing" configuration="Debug" />
+      <Entry build="True" name="MonoVision" configuration="Debug" />
+    </Configuration>
+    <Configuration name="Release" ctype="CombineConfiguration">
+      <Entry build="True" name="MonoImageProcessing" configuration="Release" />
+      <Entry build="True" name="MonoVision" configuration="Release" />
+    </Configuration>
+  </Configurations>
+  <DeployTargets />
+  <StartMode startupentry="MonoVision" single="True">
+    <Execute type="None" entry="MonoImageProcessing" />
+    <Execute type="None" entry="MonoVision" />
+  </StartMode>
+  <Entries>
+    <Entry filename="./MonoImageProcessing/MonoImageProcessing.mdp" />
+    <Entry filename="./MonoVision/MonoVision.mdp" />
+  </Entries>
+</Combine>
