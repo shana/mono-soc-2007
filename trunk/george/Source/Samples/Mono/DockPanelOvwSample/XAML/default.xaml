@@ -1,16 +1,16 @@
 <!-- <Snippet1> -->
 <Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" WindowTitle="DockPanel Sample" xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
   <mono_sytem_windows_controls:DockPanel LastChildFill="True">
-    <Border Height="25" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
+    <Border Height="25" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" mono_sytem_windows_controls:DockPanel.Dock="Top">
       <TextBlock Foreground="Black">Dock = "Top"</TextBlock>
     </Border>
-    <Border Height="25" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
+    <Border Height="25" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" mono_sytem_windows_controls:DockPanel.Dock="Top">
       <TextBlock Foreground="Black">Dock = "Top"</TextBlock>
     </Border>
-    <Border Height="25" Background="LemonChiffon" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+    <Border Height="25" Background="LemonChiffon" BorderBrush="Black" BorderThickness="1" mono_sytem_windows_controls:DockPanel.Dock="Bottom">
       <TextBlock Foreground="Black">Dock = "Bottom"</TextBlock>
     </Border>
-    <Border Width="200" Background="PaleGreen" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+    <Border Width="200" Background="PaleGreen" BorderBrush="Black" BorderThickness="1" mono_sytem_windows_controls:DockPanel.Dock="Left">
       <TextBlock Foreground="Black">Dock = "Left"</TextBlock>
     </Border>
     <Border Background="White" BorderBrush="Black" BorderThickness="1">
