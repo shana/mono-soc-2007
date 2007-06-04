@@ -81,7 +81,9 @@ namespace System.Windows.Controls {
 				return new Size(0, 0);
 			if (double.IsInfinity(availableSize.Width)) {
 				Size desired_size = new Size();
-				foreach (UIElement element in Children) {
+				UIElement element;
+				for (int child_index = 0; child_index < Children.Count - 2; child_index++) {
+					element = Children[child_index];
 					element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 					switch (GetDock(element)) {
 					case Dock.Left:
@@ -93,6 +95,9 @@ namespace System.Windows.Controls {
 						break;
 					}
 				}
+				element = Children[Children.Count - 1];
+				desired_size.Width += element.DesiredSize.Width;
+				desired_size.Height += element.DesiredSize.Height;
 				return desired_size;
 			} else {
 				Size remaining_size = new Size(availableSize.Width, availableSize.Height);

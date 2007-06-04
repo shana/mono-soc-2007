@@ -138,7 +138,7 @@ namespace Mono.WindowsPresentationFoundation {
 			const double maximum_rate = 30;
 			return (int)(1000 / (minimum_rate + (maximum_rate - minimum_rate) / 31 * SystemParameters.KeyboardSpeed));
 		}
-		
+
 		static public double GetAdjustedSize(double size) {
 			return size >= 0 ? size : 0;
 		}
@@ -152,7 +152,7 @@ namespace Mono.WindowsPresentationFoundation {
 		static public void DrawLine(DrawingContext drawingContext, bool horizontal, Pen pen, Point location, double lenght) {
 			double x = Math.Floor(location.X);
 			double y = Math.Floor(location.Y);
-			double offset = pen.Thickness/ 2;
+			double offset = pen.Thickness / 2;
 			if (horizontal)
 				drawingContext.DrawLine(pen, new Point(x, y + offset), new Point(x + lenght, y + offset));
 			else
@@ -163,6 +163,12 @@ namespace Mono.WindowsPresentationFoundation {
 			//TODO Prevent optimization.
 			while (true) {
 			}
+		}
+
+		public static void LoadLunaTheme() {
+			const int WindowsVistaMajorVersion = 6;
+			if (Environment.OSVersion.Version.Major == WindowsVistaMajorVersion)
+				Application.Current.Resources.MergedDictionaries.Add(Application.LoadComponent(new Uri("PresentationFramework.Luna;V3.0.0.0;31bf3856ad364e35;component\\themes/luna.normalcolor.xaml", UriKind.Relative)) as ResourceDictionary);
 		}
 	}
 }

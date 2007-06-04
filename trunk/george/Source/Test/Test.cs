@@ -1,3 +1,4 @@
+using Mono.WindowsPresentationFoundation;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -17,12 +18,9 @@ namespace System.Windows.Controls.Primitives {
 	class Test {
 		[STAThread]
 		static void Main() {
-			/////////////////////////////////////
-			
-			//return;
-
-			/////////////////////////////////////
-			new Application().Run(new TestWindow());
+			new Application();
+			Utility.LoadLunaTheme();
+			Application.Current.Run(new TestWindow());
 		}
 		class TestWindow : Window {
 			public TestWindow() {
@@ -33,25 +31,13 @@ namespace System.Windows.Controls.Primitives {
 #endif
 				Width = 200;
 				Height = 100;
-				Canvas container = new Canvas();
-				Canvas canvas = new Canvas();
-				container.Children.Add(canvas);
-				Button b1 = new Button();
-				b1.Content = "111111";
-				Canvas.SetLeft(b1, 11);
-				canvas.Children.Add(b1);
-				Canvas.SetZIndex(b1, 1);
-
-				Button b2 = new Button();
-				b2.Content = "222222";
-				Canvas.SetLeft(b2, 22);
-				canvas.Children.Add(b2);
-				
-				
-				container.Background = Brushes.Green;
-				canvas.ClipToBounds = true;
-				canvas.Background = Brushes.Red;
-				Content = container;
+				Canvas c = new Canvas();
+				DockPanel d = new DockPanel();
+				c.Children.Add(d);
+				Button b = new Button();
+				b.Content = "Test";
+				d.Children.Add(b);
+				Content = c;
 			}
 		}
 	}
