@@ -82,7 +82,7 @@ namespace System.Windows.Controls {
 			if (double.IsInfinity(availableSize.Width)) {
 				Size desired_size = new Size();
 				UIElement element;
-				for (int child_index = 0; child_index < Children.Count - 2; child_index++) {
+				for (int child_index = 0; child_index < Children.Count - 1; child_index++) {
 					element = Children[child_index];
 					element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 					switch (GetDock(element)) {
@@ -96,6 +96,7 @@ namespace System.Windows.Controls {
 					}
 				}
 				element = Children[Children.Count - 1];
+				element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 				desired_size.Width += element.DesiredSize.Width;
 				desired_size.Height += element.DesiredSize.Height;
 				return desired_size;
