@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Test\Microsoft.Windows.Themes\ChangeLog" />
+    <None Include="Test\System.Windows.Controls\ChangeLog" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.WinFX.targets" />
 </Project>
