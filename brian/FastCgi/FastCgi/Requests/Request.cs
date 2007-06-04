@@ -1,29 +1,30 @@
-/***********************************************************************
- *                                                                     *
- *  Copyright (c) 2007 Brian Nickel <brian.nickel@gmail.com            *
- *                                                                     *
- *  Permission is hereby granted, free of charge, to any person        *
- *  obtaining a copy of this software and associated documentation     *
- *  files (the "Software"), to deal in the Software without            *
- *  restriction, including without limitation the rights to use,       *
- *  copy, modify, merge, publish, distribute, sublicense, and/or sell  *
- *  copies of the Software, and to permit persons to whom the          *
- *  Software is furnished to do so, subject to the following           *
- *  conditions:                                                        *
- *                                                                     *
- *  The above copyright notice and this permission notice shall be     *
- *  included in all copies or substantial portions of the Software.    *
- *                                                                     *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,    *
- *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES    *
- *  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND           *
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT        *
- *  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,       *
- *  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING       *
- *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR      *
- *  OTHER DEALINGS IN THE SOFTWARE.                                    *
- *                                                                     *
- ***********************************************************************/
+//
+// Requests/Request.cs: Handles FastCGI requests.
+//
+// Author:
+//   Brian Nickel (brian.nickel@gmail.com)
+//
+// Copyright (C) 2007 Brian Nickel
+// 
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 using System;
 using System.Collections;
@@ -34,15 +35,16 @@ namespace FastCgi
 	public class Request
 	{
 		#region Delegates
-		public delegate void DataReceivedHandler  (Request sender, byte [] data);
+		public delegate void DataReceivedHandler  (Request sender,
+		                                           byte [] data);
 		public delegate void DataCompletedHandler (Request sender);
 		#endregion
 		
 		
 		
 		#region Private Variables
-		ushort     requestID;
-		Connection connection;
+		private ushort     requestID;
+		private Connection connection;
 		#endregion
 		
 		
@@ -63,21 +65,38 @@ namespace FastCgi
 		// must be completed and the final farewell must be send so
 		// the HTTP server can finish its response.
 		
-		public void CompleteRequest (int appStatus, ProtocolStatus protocolStatus)
+		public void CompleteRequest (int appStatus,
+		                             ProtocolStatus protocolStatus)
 		{
+			// Data is no longer needed.
+			DataNeeded = false;
+			
 			// Close the standard output if it was opened.
-			if (stdoutSent)
-				SendStreamData (RecordType.StandardOutput, new byte [0]);
+			if (stdout_sent)
+				SendStreamData (RecordType.StandardOutput,
+					new byte [0]);
 			
 			// Close the standard error if it was opened.
-			if (stderrSent)
-				SendStreamData (RecordType.StandardError,  new byte [0]);
+			if (stderr_sent)
+				SendStreamData (RecordType.StandardError,
+					new byte [0]);
 			
 			connection.EndRequest (requestID, appStatus, protocolStatus);
 		}
 		
-		private bool dataNeeded = true;
-		public bool DataNeeded {get {return dataNeeded;} protected set {dataNeeded = value;}}
+		public void AbortRequest (string message)
+		{
+			SendErrorText (message);
+			Logger.Write (LogLevel.Error, message);
+			CompleteRequest (-1, ProtocolStatus.RequestComplete);
+		}
+		
+		private bool data_needed = true;
+		
+		public bool DataNeeded {
+			get {return data_needed;}
+			protected set {data_needed = value;}
+		}
 		#endregion
 		
 		
@@ -91,8 +110,8 @@ namespace FastCgi
 		
 		protected event DataCompletedHandler ParameterDataCompleted;
 		
-		ArrayList  parameterData  = new ArrayList ();
-		Hashtable  parameterTable = new Hashtable ();
+		ArrayList  parameter_data  = new ArrayList ();
+		Hashtable  parameter_table = new Hashtable ();
 		
 		public void AddParameterData (byte [] data)
 		{
@@ -103,14 +122,14 @@ namespace FastCgi
 			// When all the parameter data is received, it is acted
 			// on and the _parameter_data object is nullified.
 			// Further data suggests a problem with the HTTP server.
-			if (parameterData == null)
+			if (parameter_data == null)
 				throw new Exception ("Data already completed.");
 			
 			// If data was provided, append it to that already
 			// received, and exit.
 			if (data.Length > 0)
 			{
-				parameterData.AddRange (data);
+				parameter_data.AddRange (data);
 				return;
 			}
 			
@@ -118,22 +137,33 @@ namespace FastCgi
 			// of data. When it is received, the data can then be
 			// examined and worked on.
 			
-			data = (byte []) parameterData.ToArray (typeof (byte));
+			data = (byte []) parameter_data.ToArray (typeof (byte));
 			
 			// Read name/value pairs from the data.
 			int index = 0;
-			NameValuePair pair;
-			while (NameValuePair.TryParse (data, ref index, out pair))
+			while (index < data.Length)
 			{
-				if (parameterTable.ContainsKey (pair.Name))
-					Logger.Write (LogLevel.Warning, "A duplicate name/value pair was detected.");
+				NameValuePair pair;
+				try
+				{
+					pair = new NameValuePair (data, ref index);
+				}
+				catch (ArgumentOutOfRangeException)
+				{
+					AbortRequest ("Error parsing parameters. Aborting.");
+					return;
+				}
+				
+				if (parameter_table.ContainsKey (pair.Name))
+					Logger.Write (LogLevel.Warning,
+						"A duplicate name/value pair was detected.");
 				else
-					parameterTable.Add (pair.Name, pair.Value);
+					parameter_table.Add (pair.Name, pair.Value);
 			}
 			
 			// The parameter data is no longer needed and can be
 			// sent to the garbage collector.
-			parameterData = null;
+			parameter_data = null;
 			
 			// Inform listeners of the completion.
 			if (ParameterDataCompleted != null)
@@ -146,15 +176,15 @@ namespace FastCgi
 		
 		public string GetParameter (string parameter)
 		{
-			if (parameterTable.ContainsKey (parameter))
-				return (string) parameterTable [parameter];
+			if (parameter_table.ContainsKey (parameter))
+				return (string) parameter_table [parameter];
 			
 			return null;
 		}
 		
 		public IDictionary GetParameters ()
 		{
-			return parameterTable;
+			return parameter_table;
 		}
 		#endregion
 		
@@ -168,7 +198,7 @@ namespace FastCgi
 		protected event DataReceivedHandler  InputDataReceived;
 		protected event DataCompletedHandler InputDataCompleted;
 		
-		private bool inputDataCompleted = false;
+		private bool input_data_completed = false;
 		
 		public void AddInputData (byte [] data)
 		{
@@ -177,7 +207,7 @@ namespace FastCgi
 				throw new ArgumentNullException ("data");
 			
 			// There should be no data following a zero byte record.
-			if (inputDataCompleted)
+			if (input_data_completed)
 				throw new Exception ("Data already completed.");
 			
 			if (data.Length > 0)
@@ -189,7 +219,7 @@ namespace FastCgi
 			else
 			{
 				// Inform listeners of the completion.
-				inputDataCompleted = true;
+				input_data_completed = true;
 				if (InputDataCompleted != null)
 					InputDataCompleted (this);
 			}
@@ -206,7 +236,7 @@ namespace FastCgi
 		protected event DataReceivedHandler  FileDataReceived;
 		protected event DataCompletedHandler FileDataCompleted;
 		
-		private bool fileDataCompleted = false;
+		private bool file_data_completed = false;
 		
 		public void AddFileData (byte [] data)
 		{
@@ -215,7 +245,7 @@ namespace FastCgi
 				throw new ArgumentNullException ("data");
 			
 			// There should be no data following a zero byte record.
-			if (fileDataCompleted)
+			if (file_data_completed)
 				throw new Exception ("Data already completed.");
 			
 			if (data.Length > 0)
@@ -227,7 +257,7 @@ namespace FastCgi
 			else
 			{
 				// Inform listeners of the completion.
-				fileDataCompleted = true;
+				file_data_completed = true;
 				if (FileDataCompleted != null)
 					FileDataCompleted (this);
 			}
@@ -241,7 +271,7 @@ namespace FastCgi
 		// Output provides the contents of the web page or file,
 		// including HTTP headers.
 		
-		bool stdoutSent = false;
+		bool stdout_sent = false;
 		
 		public void SendOutputData (byte [] data)
 		{
@@ -251,7 +281,7 @@ namespace FastCgi
 			if (data.Length == 0)
 				return;
 			
-			stdoutSent = true;
+			stdout_sent = true;
 			
 			SendStreamData (RecordType.StandardOutput, data);
 		}
@@ -273,7 +303,7 @@ namespace FastCgi
 		
 		// Error provides error text to the HTTP server.
 		
-		bool stderrSent = false;
+		bool stderr_sent = false;
 		
 		public void SendErrorData (byte [] data)
 		{
@@ -283,7 +313,7 @@ namespace FastCgi
 			if (data.Length == 0)
 				return;
 			
-			stderrSent = true;
+			stderr_sent = true;
 			
 			SendStreamData (RecordType.StandardError, data);
 		}
