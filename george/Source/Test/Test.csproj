@@ -41,6 +41,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PresentationFramework\Mono.WindowsPresentationFoundation\Utility.cs">
+      <Link>Utility.cs</Link>
+    </Compile>
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
