@@ -1,29 +1,30 @@
-/***********************************************************************
- *                                                                     *
- *  Copyright (c) 2007 Brian Nickel <brian.nickel@gmail.com            *
- *                                                                     *
- *  Permission is hereby granted, free of charge, to any person        *
- *  obtaining a copy of this software and associated documentation     *
- *  files (the "Software"), to deal in the Software without            *
- *  restriction, including without limitation the rights to use,       *
- *  copy, modify, merge, publish, distribute, sublicense, and/or sell  *
- *  copies of the Software, and to permit persons to whom the          *
- *  Software is furnished to do so, subject to the following           *
- *  conditions:                                                        *
- *                                                                     *
- *  The above copyright notice and this permission notice shall be     *
- *  included in all copies or substantial portions of the Software.    *
- *                                                                     *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,    *
- *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES    *
- *  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND           *
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT        *
- *  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,       *
- *  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING       *
- *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR      *
- *  OTHER DEALINGS IN THE SOFTWARE.                                    *
- *                                                                     *
- ***********************************************************************/
+//
+// Record.cs: Represents the FastCGI BeginRequestBody structure.
+//
+// Author:
+//   Brian Nickel (brian.nickel@gmail.com)
+//
+// Copyright (C) 2007 Brian Nickel
+// 
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 using System;
 
@@ -45,18 +46,33 @@ namespace FastCgi
 	
 	public struct BeginRequestBody
 	{
-		ushort _role;
-		byte   _flags;
+		#region Private Properties
+		private Role              role;
+		private BeginRequestFlags flags;
+		#endregion
+		
+		
+		#region Constructors
 		public BeginRequestBody(Record record)
 		{
-			if (record.Content.Length != 8)
-				throw new ArgumentException ("8 bytes expected.", "record");
+			if (record.Body.Length != 8)
+				throw new ArgumentException
+				("8 bytes expected.", "record");
 			
-			_role  = Record.ReadUInt16 (record.Content, 0);
-			_flags = record.Content [2];
+			role  = (Role) Record.ReadUInt16 (record.Body, 0);
+			flags = (BeginRequestFlags) record.Body [2];
+		}
+		#endregion
+		
+		
+		#region Public Properties
+		public Role Role {
+			get {return role;}
 		}
 		
-		public Role Role {get {return (Role) _role;}}
-		public BeginRequestFlags Flags {get {return (BeginRequestFlags) _flags;}}
+		public BeginRequestFlags Flags {
+			get {return flags;}
+		}
+		#endregion
 	}
 }

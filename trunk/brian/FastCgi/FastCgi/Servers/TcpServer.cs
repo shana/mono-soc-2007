@@ -1,29 +1,30 @@
-/***********************************************************************
- *                                                                     *
- *  Copyright (c) 2007 Brian Nickel <brian.nickel@gmail.com            *
- *                                                                     *
- *  Permission is hereby granted, free of charge, to any person        *
- *  obtaining a copy of this software and associated documentation     *
- *  files (the "Software"), to deal in the Software without            *
- *  restriction, including without limitation the rights to use,       *
- *  copy, modify, merge, publish, distribute, sublicense, and/or sell  *
- *  copies of the Software, and to permit persons to whom the          *
- *  Software is furnished to do so, subject to the following           *
- *  conditions:                                                        *
- *                                                                     *
- *  The above copyright notice and this permission notice shall be     *
- *  included in all copies or substantial portions of the Software.    *
- *                                                                     *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,    *
- *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES    *
- *  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND           *
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT        *
- *  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,       *
- *  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING       *
- *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR      *
- *  OTHER DEALINGS IN THE SOFTWARE.                                    *
- *                                                                     *
- ***********************************************************************/
+//
+// Server/TcpServer.cs: Handles TCP connections.
+//
+// Author:
+//   Brian Nickel (brian.nickel@gmail.com)
+//
+// Copyright (C) 2007 Brian Nickel
+// 
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 using System;
 using System.Net;
@@ -33,24 +34,27 @@ namespace FastCgi
 {
 	public class TcpServer : Server
 	{
-		private IPEndPoint bindAddress;
+		private IPEndPoint bind_address;
 		
 		public TcpServer (IPAddress address, int port)
 		{
 			if (address == IPAddress.Any)
 				address = IPAddress.Loopback;
 			
-			bindAddress = new IPEndPoint (address, port);
+			bind_address = new IPEndPoint (address, port);
 		}
 		
 		protected override Socket CreateSocket ()
 		{
-			if (bindAddress == null)
-				throw new InvalidOperationException ("No address/port to listen");
+			if (bind_address == null)
+				throw new InvalidOperationException
+					("No address/port to listen");
 
-			Socket listen_socket = new Socket (AddressFamily.InterNetwork, SocketType.Stream,
-							ProtocolType.IP);
-			listen_socket.Bind (bindAddress);
+			Socket listen_socket = new Socket
+				(AddressFamily.InterNetwork,
+				SocketType.Stream, ProtocolType.IP);
+			
+			listen_socket.Bind (bind_address);
 			return listen_socket;
 		}
 	}

@@ -1,0 +1,18 @@
+2007-06-04 Brian Nickel <brian.nickel@gmail.com>
+
+	* FastCgi/Responders/: Renamed to "Requests".
+	* FastCgi/FastCgi.mdp: Automatic changes.
+	
+	* FastCgi/Structures/NameValuePair.cs: Replaced TryParse() with a
+	constructor and switched to System.Encoding.Default.
+	
+	* FastCgi/Structures/BeginRequestBody.cs:
+	* FastCgi/Structures/EndRequestBody.cs:
+	* FastCgi/Structures/Record.cs:
+	* FastCgi/Connection.cs:
+	* FastCgi/Logger.cs:
+	* FastCgi/Main.cs:
+	* FastCgi/Servers/TcpServer.cs:
+	* FastCgi/Servers/Server.cs:
+	* FastCgi/Requests/Request.cs:
+	* FastCgi/Requests/ResponderRequest.cs: Applied Mono Coding Guidelines.
