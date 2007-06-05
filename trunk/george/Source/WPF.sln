@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.PresentationFramework"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabControlSimple", "Samples\Mono\TabControl\CSharp\TabControlSimple.csproj", "{9213633E-345A-4311-9300-900B2B3B49DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockPanel_Ovw_sample", "Samples\Mono\DockPanelOvwSample\XAML\DockPanel_Ovw_sample.csproj", "{2C94D4A9-1F71-4A44-9E9C-7913E41F5735}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Implementation|Any CPU = Debug - Implementation|Any CPU
@@ -66,6 +68,7 @@ Global
 		{5EBB825F-7ACD-40C5-A094-B3986C567558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EBB825F-7ACD-40C5-A094-B3986C567558}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32AAFFC0-6E41-44E8-87FA-D82F6C1601E7}.Debug - Implementation|Any CPU.ActiveCfg = Debug|Any CPU
+		{32AAFFC0-6E41-44E8-87FA-D82F6C1601E7}.Debug - Implementation|Any CPU.Build.0 = Debug|Any CPU
 		{32AAFFC0-6E41-44E8-87FA-D82F6C1601E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32AAFFC0-6E41-44E8-87FA-D82F6C1601E7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{32AAFFC0-6E41-44E8-87FA-D82F6C1601E7}.Release|Any CPU.Build.0 = Debug|Any CPU
@@ -133,6 +136,12 @@ Global
 		{9213633E-345A-4311-9300-900B2B3B49DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9213633E-345A-4311-9300-900B2B3B49DE}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{9213633E-345A-4311-9300-900B2B3B49DE}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{2C94D4A9-1F71-4A44-9E9C-7913E41F5735}.Debug - Implementation|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C94D4A9-1F71-4A44-9E9C-7913E41F5735}.Debug - Implementation|Any CPU.Build.0 = Debug|Any CPU
+		{2C94D4A9-1F71-4A44-9E9C-7913E41F5735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C94D4A9-1F71-4A44-9E9C-7913E41F5735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C94D4A9-1F71-4A44-9E9C-7913E41F5735}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C94D4A9-1F71-4A44-9E9C-7913E41F5735}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
