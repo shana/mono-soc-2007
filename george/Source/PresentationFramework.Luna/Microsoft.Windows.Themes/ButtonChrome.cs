@@ -14,13 +14,15 @@ namespace Microsoft.Windows.Themes {
 		const int BorderSize = 4;
 		#endregion
 
-		#region Dependency Property Fields
+		#region Public Fields
+		#region Dependency Properties
 		static public readonly DependencyProperty BorderBrushProperty = DependencyProperty.Register("BorderBrush", typeof(Brush), typeof(ButtonChrome), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty FillProperty = DependencyProperty.Register("Fill", typeof(Brush), typeof(ButtonChrome), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty RenderDefaultedProperty = DependencyProperty.Register("RenderDefaulted", typeof(bool), typeof(ButtonChrome), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.Register("RenderMouseOver", typeof(bool), typeof(ButtonChrome), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty RenderPressedProperty = DependencyProperty.Register("RenderPressed", typeof(bool), typeof(ButtonChrome), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty ThemeColorProperty = DependencyProperty.Register("ThemeColor", typeof(ThemeColor), typeof(ButtonChrome));
+		#endregion
 		#endregion
 
 		#region Public Constructors
@@ -93,16 +95,15 @@ namespace Microsoft.Windows.Themes {
 			return arrangeSize;
 		}
 
-		//FIXME?: This probably needs more work.
 		protected override Size MeasureOverride(Size constraint) {
-			if (TemplatedParent != null && ((ContentControl)TemplatedParent).Content == null)
-				return new Size(0, 0);
-			if (double.IsInfinity(constraint.Width) || double.IsInfinity(constraint.Height)) {
-				return Utility.GetSize(base.MeasureOverride(constraint), BorderSize, constraint);
-			} else {
-				if (Child != null)
-					Child.Measure(new Size(Utility.GetAdjustedSize(constraint.Width - 2 * BorderSize), Utility.GetAdjustedSize(constraint.Height - 2 * BorderSize)));
+			if (Child == null)
 				return new Size(2 * BorderSize, 2 * BorderSize);
+			if (double.IsInfinity(constraint.Width) || double.IsInfinity(constraint.Height)) {
+				Child.Measure(constraint);
+				return Utility.GetSize(Child.DesiredSize, BorderSize, constraint);
+			} else {
+				Child.Measure(new Size(Utility.GetAdjustedSize(constraint.Width - 2 * BorderSize), Utility.GetAdjustedSize(constraint.Height - 2 * BorderSize)));
+				return constraint;
 			}
 		}
 		#endregion
@@ -129,6 +130,6 @@ namespace Microsoft.Windows.Themes {
 			}
 			return new Rect(left + borderSize.Left, top + borderSize.Top, width, height);
 		}
-        #endregion
+		#endregion
 	}
 }
