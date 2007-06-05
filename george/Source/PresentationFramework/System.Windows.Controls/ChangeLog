@@ -1,5 +1,9 @@
 2007-06-05  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* StackPanel.cs: Attempted an implementation of ArrangeOverride, MeasureOverride.
+
+2007-06-05  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* StackPanel.cs: Implemented LogicalOrientation, HasLogicalOrientation.
 
 2007-06-05  George Giolfan  <georgegiolfan@yahoo.com>

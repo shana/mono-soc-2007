@@ -1,4 +1,6 @@
+using Mono.WindowsPresentationFoundation;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -37,11 +39,31 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
-			return base.ArrangeOverride(finalSize);
+			double used_size = 0;
+			bool horizontal = Orientation == Orientation.Horizontal;
+			foreach (UIElement child in Children) {
+				child.Arrange(horizontal ? new Rect(used_size, 0, child.DesiredSize.Width, ActualHeight) : new Rect(0, used_size, ActualWidth, child.DesiredSize.Height));
+				used_size += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
+			}
+			return finalSize;
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			return base.MeasureOverride(availableSize);
+			if (double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height)) {
+				double size_in_orientation_direction = 0;
+				double size_in_other_direction = 0;
+				bool horizontal = Orientation == Orientation.Horizontal;
+				foreach (UIElement child in Children) {
+					child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+					size_in_orientation_direction += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
+					size_in_other_direction = Math.Max(size_in_other_direction, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
+				}
+				return horizontal ? new Size(size_in_orientation_direction, size_in_other_direction) : new Size(size_in_other_direction, size_in_orientation_direction);
+			} else {
+				foreach (UIElement child in Children)
+					child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				return availableSize;
+			}
 		}
 		#endregion
 
