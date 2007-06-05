@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="StackPanel_layout.Window1"
-    Title="StackPanel Sample">
+    Title="StackPanel Sample"
+	xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
 	<Border BorderBrush="Black" Background="White" BorderThickness="2">
         <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
           <Grid.ColumnDefinitions>
@@ -47,14 +48,14 @@
                     <ListBoxItem>Stretch</ListBoxItem>
                 </ListBox>
 
-	        <StackPanel Grid.ColumnSpan="6" Grid.Row="3" Name="sp1" Background="Yellow">
-                <Button>Button One</Button>
-                <Button>Button Two</Button>
-                <Button>Button Three</Button>
-                <Button>Button Four</Button>
-                <Button>Button Five</Button>
-                <Button>Button Six</Button>
-    	    </StackPanel>
+			<mono_sytem_windows_controls:StackPanel Grid.ColumnSpan="6" Grid.Row="3" Name="sp1" Background="Yellow">
+				<mono_sytem_windows_controls:Button>Button One</mono_sytem_windows_controls:Button>
+				<mono_sytem_windows_controls:Button>Button Two</mono_sytem_windows_controls:Button>
+				<mono_sytem_windows_controls:Button>Button Three</mono_sytem_windows_controls:Button>
+				<mono_sytem_windows_controls:Button>Button Four</mono_sytem_windows_controls:Button>
+				<mono_sytem_windows_controls:Button>Button Five</mono_sytem_windows_controls:Button>
+				<mono_sytem_windows_controls:Button>Button Six</mono_sytem_windows_controls:Button>
+    	    </mono_sytem_windows_controls:StackPanel>
         </Grid>
 	</Border>
 </Window>
