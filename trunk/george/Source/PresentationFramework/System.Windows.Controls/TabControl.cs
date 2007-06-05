@@ -112,11 +112,11 @@ namespace System.Windows.Controls {
 
 		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
 			base.OnItemsChanged(e);
-			if (e.NewItems.Count >= 1) {
-				TabItem tab_item = e.NewItems[0] as TabItem;
-				if (tab_item != null)
-					;
-			}
+			//if (e.NewItems.Count >= 1) {
+			//    TabItem tab_item = e.NewItems[0] as TabItem;
+			//    if (tab_item != null)
+			//        ;
+			//}
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e) {
