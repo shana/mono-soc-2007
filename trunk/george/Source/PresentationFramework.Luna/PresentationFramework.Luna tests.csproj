@@ -68,13 +68,23 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PresentationFramework\Mono.WindowsPresentationFoundation\Utility.cs">
+      <Link>Mono.WindowsPresentationFoundation\Utility.cs</Link>
+    </Compile>
+    <Compile Include="..\PresentationFramework\Test\System.Windows.Controls\Utility.cs">
+      <Link>Test\System.Windows.Controls\Utility.cs</Link>
+    </Compile>
     <Compile Include="Test\Microsoft.Windows.Themes\ButtonChromeTest.cs" />
     <Compile Include="Test\Microsoft.Windows.Themes\ScrollChromeTest.cs" />
     <Compile Include="Test\Microsoft.Windows.Themes\BulletChromeTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\ScrollBarTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\RepeatButtonTest.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\SetUpFixture.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\TrackTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ButtonTest.cs" />
     <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\ProgressBarTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\SetUpFixture.cs" />
     <Compile Include="Test\System.Windows.Controls\SliderTest.cs" />
   </ItemGroup>
   <ItemGroup>
