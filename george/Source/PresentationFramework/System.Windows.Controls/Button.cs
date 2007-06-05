@@ -1,4 +1,4 @@
-//FIXME: When in a tool bar, it does not display keyboard focus cues.
+//FIXME: When in a tool bar, it does not display keyboard focus cues properly.
 using System;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
@@ -12,14 +12,16 @@ using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	public class Button : ButtonBase {
-		#region Private Fields
-		bool in_tool_bar;
-		#endregion
-
-		#region Dependency Property Fields
+		#region Public Fields
+		#region Dependency Properties
 		static public readonly DependencyProperty IsCancelProperty = DependencyProperty.Register("IsCancel", typeof(bool), typeof(Button));
 		static public readonly DependencyProperty IsDefaultedProperty = DependencyProperty.RegisterReadOnly("IsDefaulted", typeof(bool), typeof(Button), new PropertyMetadata()).DependencyProperty;
 		static public readonly DependencyProperty IsDefaultProperty = DependencyProperty.Register("IsDefault", typeof(bool), typeof(Button));
+		#endregion
+		#endregion
+
+		#region Private Fields
+		bool in_tool_bar;
 		#endregion
 
 		#region Static Constructor
@@ -43,6 +45,7 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Public Properties
+		#region Dependency Properties
 		public bool IsCancel { 
 			get { return (bool)GetValue(IsCancelProperty); }
 			set { SetValue(IsCancelProperty, value); }
@@ -57,10 +60,10 @@ namespace System.Windows.Controls {
 			get { return (bool)GetValue(IsDefaultedProperty); }
 		}
 		#endregion
+		#endregion
 
 		#region Protected Methods
 		protected override void OnClick() {
-			//WDTDH
 			base.OnClick();
 			if (in_tool_bar)
 				Keyboard.Focus(null);
