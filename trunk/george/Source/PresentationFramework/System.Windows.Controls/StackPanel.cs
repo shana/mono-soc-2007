@@ -27,15 +27,11 @@ namespace System.Windows.Controls {
 
 		#region Protected Properties
 		protected internal override bool HasLogicalOrientation {
-			get {
-				return base.HasLogicalOrientation;
-			}
+			get { return true; }
 		}
 
 		protected internal override Orientation LogicalOrientation {
-			get {
-				return base.LogicalOrientation;
-			}
+			get { return Orientation; }
 		}
 		#endregion
 
