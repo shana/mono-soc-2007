@@ -1,3 +1,7 @@
+2007-06-05  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ButtonTest.cs: Added DockPanel test.
+
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* DockPanelTest.cs: Expanded MeasureOverride test, added ButtonMeasureOverride test.

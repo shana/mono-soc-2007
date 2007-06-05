@@ -127,5 +127,27 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region DockPanel
+		[Test]
+		public void DockPanel() {
+			new DockPanelButton();
+		}
+
+		class DockPanelButton : Button {
+			public DockPanelButton() {
+				Window w = new Window();
+				DockPanel p = new DockPanel();
+				w.Content = p;
+				p.Children.Add(this);
+				w.Show();
+				Assert.AreEqual(result.Width, 8);
+			}
+			Size result;
+			protected override Size MeasureOverride(Size constraint) {
+				return result = base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
 	}
 }
