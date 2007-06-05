@@ -41,7 +41,7 @@ namespace System.Windows.Controls {
 			static bool called;
 			static Size measure_constraint;
 			static Size measure_result;
-			class TestButton : Button {
+			class TestButton : global::System.Windows.Controls.Button {
 				protected override Size MeasureOverride(Size constraint) {
 					if (should_record) {
 						called = true;
@@ -69,7 +69,62 @@ namespace System.Windows.Controls {
 				Window w = new Window();
 				w.Show();
 				w.Content = this;
-				Assert.AreEqual(MeasureOverride(new Size(100, 100)).Width, 0, "2");
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)).Width, 0, "3");
+				Measure(new Size(100, 100));
+				Assert.IsTrue(called, "4");
+				Assert.AreEqual(measure_constraint.Width, 100, "5");
+				Assert.AreEqual(measure_result.Width, 0, "6");
+
+			}
+			bool called;
+			Size measure_constraint;
+			Size measure_result;
+			protected override Size MeasureOverride(Size constraint) {
+				called = true;
+				return measure_result = base.MeasureOverride(measure_constraint = constraint);
+			}
+		}
+		#endregion
+
+		#region Simplified
+		[Test]
+		public void Simplified() {
+			new SimplifiedButton();
+		}
+
+		class SimplifiedButton : global::System.Windows.Controls.Button {
+			public SimplifiedButton() {
+				Window w = new Window();
+				DockPanel p = new DockPanel();
+				w.Content = p;
+				p.Children.Add(this);
+				w.Show();
+				Assert.AreEqual(result.Width, 8);
+			}
+			Size result;
+			protected override Size MeasureOverride(Size constraint) {
+				return result = base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
+
+		#region DockPanelCallsApplyTemplate
+		[Test]
+		public void DockPanelCallsApplyTemplate() {
+			new DockPanel().Children.Add(new DockPanelCallsApplyTemplateButton());
+			Assert.IsFalse(DockPanelCallsApplyTemplateButton.Called, "1");
+			Window w = new Window();
+			DockPanel p = new DockPanel();
+			w.Content = p;
+			p.Children.Add(new DockPanelCallsApplyTemplateButton());
+			Assert.IsFalse(DockPanelCallsApplyTemplateButton.Called, "2");
+		}
+
+		class DockPanelCallsApplyTemplateButton : Button {
+			static public bool Called;
+			public override void OnApplyTemplate() {
+				Called = true;
+				base.OnApplyTemplate();
 			}
 		}
 		#endregion
