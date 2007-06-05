@@ -1,5 +1,9 @@
 2007-06-05  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* StackPanel.cs: Added.
+
+2007-06-05  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabControl.cs: Disabled some code that caused an exception.
 
 2007-06-05  George Giolfan  <georgegiolfan@yahoo.com>
