@@ -32,10 +32,10 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(measure_constraint.Width, 100, "4 1");
 				Assert.AreEqual(measure_constraint.Height, 100, "4 1 2");
 				Assert.IsTrue(called, "4 2");
-				Assert.AreEqual(measure_result.Width, 8, "4 3");
-				Assert.AreEqual(result.Width, 8, "4");
+				Assert.AreEqual(measure_result.Width, Utility.GetEmptyButtonSize(), "4 3");
+				Assert.AreEqual(result.Width, Utility.GetEmptyButtonSize(), "4");
 				result = MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity));
-				Assert.AreEqual(result.Width, 8, "5");
+				Assert.AreEqual(result.Width, Utility.GetEmptyButtonSize(), "5");
 			}
 			static bool should_record;
 			static bool called;
@@ -99,7 +99,7 @@ namespace System.Windows.Controls {
 				w.Content = p;
 				p.Children.Add(this);
 				w.Show();
-				Assert.AreEqual(result.Width, 8);
+				Assert.AreEqual(result.Width, Utility.GetEmptyButtonSize());
 			}
 			Size result;
 			protected override Size MeasureOverride(Size constraint) {

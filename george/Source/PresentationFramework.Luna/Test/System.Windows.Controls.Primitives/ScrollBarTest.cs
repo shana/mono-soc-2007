@@ -19,5 +19,16 @@ namespace System.Windows.Controls.Primitives {
 			Assert.AreEqual(s.Track.Thumb.ActualWidth, 17, "Track.Thumb.ActualWidth");
 			Assert.AreEqual(s.Track.Thumb.ActualHeight, 8, "Track.Thumb.ActualHeight");
 		}
+
+		[Test]
+		public void OnApplyTemplate() {
+			ScrollBar p = new ScrollBar();
+			Window w = new Window();
+			w.Content = p;
+			p.OnApplyTemplate();
+			w.Show();
+			Assert.IsTrue(p.Track.IsEnabled, "Track.IsEnabled");
+			Assert.IsTrue(p.Track.IncreaseRepeatButton.IsEnabled, "Track.IncreaseRepeatButton.IsEnabled");
+		}
 	}
 }

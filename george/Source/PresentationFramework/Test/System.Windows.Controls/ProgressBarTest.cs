@@ -21,27 +21,6 @@ namespace System.Windows.Controls {
 			Assert.AreEqual(p.LargeChange, 1, "LargeChange");
 		}
 
-		#region Sizing
-		[Test]
-		public void Sizing() {
-			new SizingProgressBar();
-		}
-
-		class SizingProgressBar : ProgressBar {
-			public SizingProgressBar() {
-				Window w = new Window();
-				w.Content = this;
-				w.Show();
-				FrameworkElement track = (FrameworkElement)GetTemplateChild("PART_Track");
-				FrameworkElement indicator = (FrameworkElement)GetTemplateChild("PART_Indicator");
-				Value = 30;
-				Assert.AreEqual(indicator.Width, track.ActualWidth * Value / Maximum, "Value");
-				Minimum = 10;
-				Assert.AreEqual(indicator.Width, track.ActualWidth * Value / Maximum, "Minimum");
-			}
-		}
-		#endregion
-
 		#region OnApplyTemplate
 		[Test]
 		public void OnApplyTemplate() {

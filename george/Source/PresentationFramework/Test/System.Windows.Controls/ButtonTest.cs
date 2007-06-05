@@ -141,7 +141,7 @@ namespace System.Windows.Controls {
 				w.Content = p;
 				p.Children.Add(this);
 				w.Show();
-				Assert.AreEqual(result.Width, 8);
+				Assert.AreEqual(result.Width, Utility.GetEmptyButtonSize());
 			}
 			Size result;
 			protected override Size MeasureOverride(Size constraint) {

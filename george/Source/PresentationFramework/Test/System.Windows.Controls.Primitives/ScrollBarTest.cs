@@ -43,8 +43,6 @@ namespace System.Windows.Controls.Primitives {
 			Assert.IsTrue(p.IsEnabled, "IsEnabled 2");
 			Assert.AreEqual(p.CommandBindings.Count, 0, "CommandBindings.Count");
 			w.Show();
-			Assert.IsTrue(p.Track.IsEnabled, "Track.IsEnabled");
-			Assert.IsTrue(p.Track.IncreaseRepeatButton.IsEnabled, "Track.IncreaseRepeatButton.IsEnabled");
 		}
 
 		#region IsEnabledCore

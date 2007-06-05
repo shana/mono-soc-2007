@@ -76,6 +76,7 @@
     <Compile Include="Test\System.Windows.Controls\RadioButtonTest.cs" />
     <Compile Include="Test\System.Windows.Controls\LabelTest.cs" />
     <Compile Include="Test\System.Windows.Controls\UIElementTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Mono.PresentationFramework.csproj">
