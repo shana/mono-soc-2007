@@ -31,13 +31,6 @@ namespace System.Windows.Controls.Primitives {
 #endif
 				Width = 200;
 				Height = 100;
-				Canvas c = new Canvas();
-				DockPanel d = new DockPanel();
-				c.Children.Add(d);
-				Button b = new Button();
-				b.Content = "Test";
-				d.Children.Add(b);
-				Content = c;
 			}
 		}
 	}
