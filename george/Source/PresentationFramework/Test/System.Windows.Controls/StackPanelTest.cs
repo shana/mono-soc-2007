@@ -52,5 +52,39 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region Measure
+		[Test]
+		public void Measure() {
+			new MeasureStackPanel();
+		}
+
+		class MeasureStackPanel : StackPanel {
+			static bool called;
+			static Size measure_constraint;
+
+			public MeasureStackPanel() {
+				Size result = MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(result.Width, 0, "1");
+				Assert.AreEqual(result.Height, 0, "2");
+				TestButton button = new TestButton();
+				Children.Add(button);
+				result = MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(result.Width, Utility.GetEmptyButtonSize(), "3");
+				Assert.AreEqual(result.Height, Utility.GetEmptyButtonSize(), "4");
+				Assert.IsTrue(called, "5");
+				called = false;
+				Assert.IsTrue(double.IsPositiveInfinity(measure_constraint.Width), "6");
+				Assert.IsTrue(double.IsPositiveInfinity(measure_constraint.Height), "7");
+			}
+			
+			class TestButton : global::System.Windows.Controls.Button {
+				protected override Size MeasureOverride(Size constraint) {
+					called = true;
+					return base.MeasureOverride(measure_constraint = constraint);
+				}
+			}
+		}
+		#endregion
 	}
 }
