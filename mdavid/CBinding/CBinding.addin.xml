@@ -84,12 +84,9 @@
 	</ExtensionPoint>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
-	<!-- Condition not working (It's never true) -->
-		<!--<Condition id = "activelanguage" value = "C">-->
-			<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
-			<NodeBuilder id = "ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
-			<NodeBuilder id = "ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
-		<!--</Condition>-->
+		<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
+		<NodeBuilder id = "ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
+		<NodeBuilder id = "ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">
