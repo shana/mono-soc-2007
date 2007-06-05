@@ -77,6 +77,11 @@ namespace Microsoft.Windows.Themes {
 			b = new ButtonChrome();
 			b.Measure(new Size(100, 100));
 			Assert.AreEqual(b.DesiredSize.Width, 8, "1");
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+			b.Measure(new Size(100, 100));
+			Assert.AreEqual(b.DesiredSize.Width, 8, "2");
 		}
 	}
 }
