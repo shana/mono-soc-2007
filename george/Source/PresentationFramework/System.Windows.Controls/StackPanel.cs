@@ -15,6 +15,14 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
+		#region Static Constructor
+		static StackPanel() {
+			//FIXME: I should not do this.
+			HorizontalAlignmentProperty.OverrideMetadata(typeof(StackPanel), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch, FrameworkPropertyMetadataOptions.AffectsMeasure));
+			VerticalAlignmentProperty.OverrideMetadata(typeof(StackPanel), new FrameworkPropertyMetadata(VerticalAlignment.Stretch, FrameworkPropertyMetadataOptions.AffectsMeasure));
+		}
+		#endregion
+
 		#region Public Constructors
 		public StackPanel() {
 		}
@@ -49,21 +57,22 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			if (double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height)) {
-				double size_in_orientation_direction = 0;
-				double size_in_other_direction = 0;
-				bool horizontal = Orientation == Orientation.Horizontal;
-				foreach (UIElement child in Children) {
-					child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-					size_in_orientation_direction += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
-					size_in_other_direction = Math.Max(size_in_other_direction, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
-				}
-				return horizontal ? new Size(size_in_orientation_direction, size_in_other_direction) : new Size(size_in_other_direction, size_in_orientation_direction);
-			} else {
-				foreach (UIElement child in Children)
-					child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-				return availableSize;
+			double size_in_orientation_direction = 0;
+			double size_in_other_direction = 0;
+			bool horizontal = Orientation == Orientation.Horizontal;
+			foreach (UIElement child in Children) {
+				child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				size_in_orientation_direction += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
+				size_in_other_direction = Math.Max(size_in_other_direction, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
 			}
+			Size result = horizontal ? new Size(size_in_orientation_direction, size_in_other_direction) : new Size(size_in_other_direction, size_in_orientation_direction);
+			if (!(double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height))) {
+				if (HorizontalAlignment == HorizontalAlignment.Stretch)
+					result.Width = availableSize.Width;
+				if (VerticalAlignment == VerticalAlignment.Stretch)
+					result.Height = availableSize.Height;
+			}
+			return result;
 		}
 		#endregion
 
