@@ -1,6 +1,7 @@
 <!-- <Snippet1> -->
 <Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      WindowTitle="StackPanel vs. DockPanel">
+      WindowTitle="StackPanel vs. DockPanel"
+	  xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
   <Grid Width="175" Height="150">
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
@@ -9,18 +10,18 @@
       <RowDefinition />
       <RowDefinition />
     </Grid.RowDefinitions>
-    
-    <DockPanel Grid.Column="0" Grid.Row="0">
-      <Image Source="smiley_stackpanel.png" />
-      <Image Source="smiley_stackpanel.png" />
-      <Image Source="smiley_stackpanel.png" Stretch="Fill"/>
-    </DockPanel>
 
-    <StackPanel Grid.Column="0" Grid.Row="1"  Orientation="Horizontal">
+	  <mono_sytem_windows_controls:DockPanel Grid.Column="0" Grid.Row="0">
       <Image Source="smiley_stackpanel.png" />
       <Image Source="smiley_stackpanel.png" />
       <Image Source="smiley_stackpanel.png" Stretch="Fill"/>
-    </StackPanel>
+    </mono_sytem_windows_controls:DockPanel>
+
+	  <mono_sytem_windows_controls:StackPanel Grid.Column="0" Grid.Row="1"  Orientation="Horizontal">
+      <Image Source="smiley_stackpanel.png" />
+      <Image Source="smiley_stackpanel.png" />
+      <Image Source="smiley_stackpanel.png" Stretch="Fill"/>
+    </mono_sytem_windows_controls:StackPanel>
     </Grid>
 </Page>
 <!-- </Snippet1> -->
