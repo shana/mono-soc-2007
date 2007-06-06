@@ -42,7 +42,7 @@ namespace System.Windows.Controls {
 			double used_size = 0;
 			bool horizontal = Orientation == Orientation.Horizontal;
 			foreach (UIElement child in Children) {
-				child.Arrange(horizontal ? new Rect(used_size, 0, child.DesiredSize.Width, ActualHeight) : new Rect(0, used_size, ActualWidth, child.DesiredSize.Height));
+				child.Arrange(horizontal ? new Rect(used_size, 0, child.DesiredSize.Width, DesiredSize.Height) : new Rect(0, used_size, DesiredSize.Width, child.DesiredSize.Height));
 				used_size += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
 			}
 			return finalSize;
