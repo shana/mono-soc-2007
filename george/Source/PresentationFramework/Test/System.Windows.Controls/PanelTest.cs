@@ -163,5 +163,12 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void AlignmentMetadata() {
+			PropertyMetadata framework_element_metadata = FrameworkElement.HorizontalAlignmentProperty.GetMetadata(typeof(FrameworkElement));
+			PropertyMetadata panel_metadata = FrameworkElement.HorizontalAlignmentProperty.GetMetadata(typeof(Panel));
+			Assert.AreSame(framework_element_metadata, panel_metadata);
+		}
 	}
 }
