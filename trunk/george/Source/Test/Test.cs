@@ -19,7 +19,7 @@ namespace System.Windows.Controls.Primitives {
 		[STAThread]
 		static void Main() {
 			new Application();
-			Utility.LoadLunaTheme();
+			//Utility.LoadLunaTheme();
 			Application.Current.Run(new TestWindow());
 		}
 		class TestWindow : Window {
@@ -31,6 +31,20 @@ namespace System.Windows.Controls.Primitives {
 #endif
 				Width = 200;
 				Height = 100;
+
+				StackPanel s = new StackPanel();
+				for (int i = 1; i <= 10; i++)
+					s.Children.Add(new TestButton(i));
+				ScrollViewer v = new ScrollViewer();
+				v.CanContentScroll = true;
+				v.Content = s;
+				Content = v;
+			}
+
+			class TestButton : Button {
+				public TestButton(int i) {
+					Content = "Test" + i;
+				}
 			}
 		}
 	}
