@@ -15,6 +15,10 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
+		#region Private Fields
+		ScrollViewer scroll_owner;
+		#endregion
+
 		#region Static Constructor
 		static StackPanel() {
 			//FIXME: I should not do this.
@@ -162,12 +166,8 @@ namespace System.Windows.Controls {
 		}
 
 		public ScrollViewer ScrollOwner {
-			get {
-				throw new global::System.Exception("The method or operation is not implemented.");
-			}
-			set {
-				throw new global::System.Exception("The method or operation is not implemented.");
-			}
+			get { return scroll_owner; }
+			set { scroll_owner = value; }
 		}
 
 		public void SetHorizontalOffset(double offset) {
