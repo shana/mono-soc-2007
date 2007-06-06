@@ -120,5 +120,10 @@ namespace System.Windows.Controls {
 			PropertyMetadata stack_panel_metadata = FrameworkElement.HorizontalAlignmentProperty.GetMetadata(typeof(StackPanel));
 			Assert.AreSame(panel_metadata, stack_panel_metadata);
 		}
+
+		[Test]
+		public void ClipToBounds() {
+			Assert.IsFalse(new StackPanel().ClipToBounds);
+		}
 	}
 }
