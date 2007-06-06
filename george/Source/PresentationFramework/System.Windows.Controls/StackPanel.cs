@@ -1,4 +1,5 @@
 using Mono.WindowsPresentationFoundation;
+using System.Windows.Media;
 #if Implementation
 using System;
 using System.Windows;
@@ -53,9 +54,15 @@ namespace System.Windows.Controls {
 		protected override Size ArrangeOverride(Size finalSize) {
 			double used_size = 0;
 			bool horizontal = Orientation == Orientation.Horizontal;
+			double available_size = horizontal ? finalSize.Width : finalSize.Height;
 			foreach (UIElement child in Children) {
-				child.Arrange(horizontal ? new Rect(used_size, 0, Math.Min(child.DesiredSize.Width, finalSize.Width - used_size), DesiredSize.Height) : new Rect(0, used_size, DesiredSize.Width, Math.Min(child.DesiredSize.Height, finalSize.Height - used_size)));
-				used_size += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
+				double child_size = horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
+				if (ScrollOwner == null)
+					child_size = Math.Min(child_size, available_size - used_size);
+				child.Arrange(horizontal ? new Rect(used_size, 0, child_size, DesiredSize.Height) : new Rect(0, used_size, DesiredSize.Width, child_size));
+				used_size += child_size;
+				if (used_size == available_size)
+					break;
 			}
 			return finalSize;
 		}
@@ -129,8 +136,9 @@ namespace System.Windows.Controls {
 			throw new global::System.Exception("The method or operation is not implemented.");
 		}
 
-		public Rect MakeVisible(global::System.Windows.Media.Visual visual, Rect rectangle) {
-			throw new global::System.Exception("The method or operation is not implemented.");
+		public Rect MakeVisible(Visual visual, Rect rectangle) {
+			//FIXME
+			return Rect.Empty;
 		}
 
 		public void MouseWheelDown() {

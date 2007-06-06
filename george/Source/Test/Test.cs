@@ -19,7 +19,7 @@ namespace System.Windows.Controls.Primitives {
 		[STAThread]
 		static void Main() {
 			new Application();
-			//Utility.LoadLunaTheme();
+			Utility.LoadLunaTheme();
 			Application.Current.Run(new TestWindow());
 		}
 		class TestWindow : Window {
