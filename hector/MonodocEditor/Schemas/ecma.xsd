@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!-- definition of simple elements -->
+<xs:element name="AssemblyName" type="xs:string"/>
+<xs:element name="AssemblyPublicKey" type="xs:string"/>
+<xs:element name="AssemblyVersion" type="xs:string"/>
+<xs:element name="AssemblyCulture" type="xs:string"/>
+<xs:element name="AttibuteName" type="xs:string"/>
+<xs:element name="Excluded" type="xs:boolean"/>
+<xs:element name="ExcludedTypeName" type="xs:string"/>
+<xs:element name="ExcludedLibraryName" type="xs:string"/>
+<xs:element name="MemberOfLibrary" type="xs:string"/>
+<xs:element name="ThreadingSafeStatement" type="xs:string"/>
+
+<!-- definition of attributes -->
+<xs:attribute name="Library" type="xs:NMTOKEN"/>
+<xs:attribute name="Name" type="xs:string"/>
+<xs:attribute name="FullName" type="xs:string"/>
+<xs:attribute name="FullNameSP" type="xs:string"/>
+<xs:attribute name="Language" type="xs:string" />
+<xs:attribute name="Value" type="xs:string"/>
+<xs:attribute name="cref" type="xs:string"/>
+<xs:attribute name="langword" type="xs:string"/>
+<xs:attribute name="quality" type="xs:boolean" default="false"/>
+<xs:attribute name="subset" type="xs:string" fixed="none"/>
+<xs:attribute name="quality" type="xs:boolean" default="false"/>
+
+<!-- definition of complex elements -->
+<xs:element name="list">
+  <xs:complexType>
+    <xs:choice minOccurs="0">
+      <xs:element ref="listheader"/>
+      <xs:element ref="item" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute ref="type" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="block">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="see"/>
+      <xs:element ref="para"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="list"/>
+      <xs:element ref="block"/>
+      <xs:element ref="c"/>
+      <xs:element ref="subscript"/>
+      <xs:element ref="code"/>
+      <xs:element ref="sup"/>
+      <xs:element ref="pi"/>
+    </xs:choice>
+    <xs:attribute ref="subset" use="required"/>
+    <xs:attribute ref="type" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="see">
+  <xs:complexType>
+    <xs:attribute ref="cref"/>
+    <xs:attribute ref="langword"/>
+    <xs:attribute ref="quality"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="para">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="see"/>
+      <xs:element ref="block"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="c"/>
+      <xs:element ref="onequarter"/>
+      <xs:element ref="superscript"/>
+      <xs:element ref="sup"/>
+      <xs:element ref="permille"/>
+      <xs:element ref="SPAN"/>
+      <xs:element ref="list"/>
+      <xs:element ref="pi"/>
+      <xs:element ref="theta"/>
+      <xs:element ref="sub"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="summary">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="para"/>
+      <xs:element ref="see"/>
+      <xs:element ref="block"/>
+      <xs:element ref="list"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Docs">
+  <xs:complexType>
+    <xs:sequence minOccurs="0">
+      <xs:element ref="summary"/>
+      <xs:element ref="altmember"/>
+      <xs:element ref="altcompliant"/>
+      <xs:element ref="param" maxOccurs="unbounded" />
+      <xs:element ref="returns"/>
+      <xs:element ref="value"/>
+      <xs:element ref="exception" maxOccurs="unbounded"/>
+      <xs:element ref="threadsafe"/>
+      <xs:element ref="remarks"/>
+      <xs:element ref="example"/>
+      <xs:element ref="permision"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Attribute">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="AttributeName"/>
+      <xs:element ref="Excluded"/>
+      <xs:element ref="ExcludedTypeName" minOccurs="0"/>
+      <xs:element ref="ExcludedLibraryName" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Attributes">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="Attribute" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="AssemblyInfo">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="AssemblyName"/>
+      <xs:element ref="AssemblyPublicKey"/>
+      <xs:element ref="AssemblyVersion"/>
+      <xs:element ref="AssemblyCulture"/>
+      <xs:element ref="Attributes"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="TypeSignature">
+  <xs:complexType>
+    <xs:attribute ref="Language" use="required"/>
+    <xs:attribute ref="Value" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Type">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="TypeSignature" maxOccurs="unbounded"/>
+      <xs:element ref="MemberOfLibrary"/>
+      <xs:element ref="AssemblyInfo"/>
+      <xs:element ref="ThreadingSafeStatement" minOccurs="0"/>
+      <xs:element ref="Docs"/>
+      <xs:element ref="Base"/>
+      <xs:element ref="Interfaces"/>
+      <xs:element ref="Attributes" minOccurs="0"/>
+      <xs:element ref="Members"/>
+      <xs:element ref="TypeExcluded"/>
+    </xs:sequence>
+    <xs:attribute ref="Name" use="required"/>
+    <xs:attribute ref="FullName" use="required"/>
+    <xs:attribute ref="FullNameSP" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Types">
+  <xs:complexType>
+    <xs:choice>
+      <xs:element ref="Type" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute ref="Library" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="Libraries">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="Types" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
