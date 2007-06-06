@@ -86,5 +86,32 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region Alignment
+		[Test]
+		public void Alignment() {
+			new AlignmentStackPanel();
+		}
+
+		class AlignmentStackPanel : StackPanel {
+			public AlignmentStackPanel() {
+				Window window = new Window();
+				global::System.Windows.Controls.DockPanel dock_panel = new global::System.Windows.Controls.DockPanel();
+				window.Content = dock_panel;
+				window.Show();
+				dock_panel.Children.Add(this);
+				HorizontalAlignment = HorizontalAlignment.Center;
+				Size result = MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(result.Width, 0, "1");
+				Assert.AreEqual(result.Height, 0, "2");
+				Children.Add(new global::System.Windows.Controls.Button());
+				result = MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(result.Width, Utility.GetEmptyButtonSize(), "3");
+				Assert.AreEqual(result.Height, Utility.GetEmptyButtonSize(), "4");
+				Assert.AreEqual(ActualWidth, Utility.GetEmptyButtonSize(), "5");
+				Assert.AreEqual(ActualHeight, dock_panel.ActualHeight, "6");
+			}
+		}
+		#endregion
 	}
 }
