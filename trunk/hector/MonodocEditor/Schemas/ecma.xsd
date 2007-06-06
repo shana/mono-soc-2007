@@ -12,6 +12,7 @@
 <xs:element name="ExcludedLibraryName" type="xs:string"/>
 <xs:element name="MemberOfLibrary" type="xs:string"/>
 <xs:element name="ThreadingSafeStatement" type="xs:string"/>
+<xs:element name="i" type="xs:string"/>
 
 <!-- definition of attributes -->
 <xs:attribute name="Library" type="xs:NMTOKEN"/>
@@ -25,8 +26,275 @@
 <xs:attribute name="quality" type="xs:boolean" default="false"/>
 <xs:attribute name="subset" type="xs:string" fixed="none"/>
 <xs:attribute name="quality" type="xs:boolean" default="false"/>
+<xs:attribute name="name" type="xs:string"/>
+<xs:attribute name="term" type="xs:string"/>
+<xs:attribute name="lang" type="xs:string"/>
+<xs:attribute name="SampleID" type="xs:string"/>
+<xs:attribute name="SnippetID" type="xs:string"/>
 
 <!-- definition of complex elements -->
+<xs:element name="permission">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="see"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="para"/>
+      <xs:element ref="block"/>
+    </xs:choice>
+    <xs:attribute ref="cref" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="codelink">
+  <xs:complexType>
+    <xs:attribute ref="SampleID" use="required"/>
+    <xs:attribute ref="SnippetID" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="example">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="para"/>
+      <xs:element ref="code"/>
+      <xs:element ref="c"/>
+      <xs:element ref="codelink"/>
+      <xs:element ref="see"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="remarks">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="para"/>
+      <xs:element ref="block"/>
+      <xs:element ref="list"/>
+      <xs:element ref="c"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="see"/>
+      <xs:element ref="pre"/>
+      <xs:element ref="SPAN"/>
+      <xs:element ref="code"/>
+      <xs:element ref="PRE"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="threadsafe">
+  <xs:complexType>
+    <xs:choice>
+      <xs:element ref="para" maxOccurs="unbounded"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="exception">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="paramref"/>
+      <xs:element ref="see"/>
+      <xs:element ref="para"/>
+      <xs:element ref="SPAN"/>
+      <xs:element ref="block"/>
+    </xs:choice>
+    <xs:attribute ref="cref" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="value">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="para"/>
+      <xs:element ref="list"/>
+      <xs:element ref="see"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="returns">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="para"/>
+      <xs:element ref="list"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="see"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="param">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="c"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="see"/>
+      <xs:element ref="block"/>
+      <xs:element ref="para"/>
+      <xs:element ref="SPAN"/>
+    </xs:choice>
+    <xs:attribute ref="name" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="altcomplaint">
+  <xs:complexType>
+    <xs:attribute ref="cref" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="altmember">
+  <xs:complexType>
+    <xs:attribute ref="cref" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="SPAN">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="para"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="SPAN"/>
+      <xs:element ref="see"/>
+      <xs:element ref="block"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="code">
+  <xs:complexType>
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute ref="lang"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="sub">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="paramref"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="sup">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="i"/>
+      <xs:element ref="paramref"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="subscript">
+  <xs:complexType>
+    <xs:attribute ref="term" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="superscript">
+  <xs:complexType>
+    <xs:attribute ref="term" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="pre">
+  <xs:complexType>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="PRE">
+  <xs:complexType>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="permille">
+  <xs:complexType>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="theta">
+  <xs:complexType>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="pi">
+  <xs:complexType>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="onequarter">
+  <xs:complexType>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="c">
+  <xs:complexType mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="para"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="code"/>
+      <xs:element ref="see"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="paramref">
+  <xs:complexType>
+    <xs:attribute ref="name" use="required"/>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="description">
+  <xs:complexType mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="SPAN"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="para"/>
+      <xs:element ref="see"/>
+      <xs:element ref="c"/>
+      <xs:element ref="permille"/>
+      <xs:element ref="block"/>
+      <xs:element ref="sub"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="term">
+  <xs:complexType mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="block"/>
+      <xs:element ref="see"/>
+      <xs:element ref="paramref"/>
+      <xs:element ref="para"/>
+      <xs:element ref="c"/>
+      <xs:element ref="sup"/>
+      <xs:element ref="pi"/>
+      <xs:element ref="theta"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="listheader">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="term"/>
+      <xs:element ref="description" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="item">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="term"/>
+      <xs:element ref="description" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
 <xs:element name="list">
   <xs:complexType>
     <xs:choice minOccurs="0">
