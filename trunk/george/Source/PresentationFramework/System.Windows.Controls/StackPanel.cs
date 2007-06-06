@@ -50,7 +50,7 @@ namespace System.Windows.Controls {
 			double used_size = 0;
 			bool horizontal = Orientation == Orientation.Horizontal;
 			foreach (UIElement child in Children) {
-				child.Arrange(horizontal ? new Rect(used_size, 0, child.DesiredSize.Width, DesiredSize.Height) : new Rect(0, used_size, DesiredSize.Width, child.DesiredSize.Height));
+				child.Arrange(horizontal ? new Rect(used_size, 0, Math.Min(child.DesiredSize.Width, finalSize.Width - used_size), DesiredSize.Height) : new Rect(0, used_size, DesiredSize.Width, Math.Min(child.DesiredSize.Height, finalSize.Height - used_size)));
 				used_size += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
 			}
 			return finalSize;
@@ -69,8 +69,14 @@ namespace System.Windows.Controls {
 			if (!(double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height))) {
 				if (HorizontalAlignment == HorizontalAlignment.Stretch)
 					result.Width = availableSize.Width;
+				else
+					if (result.Width > availableSize.Width)
+						result.Width = availableSize.Width;
 				if (VerticalAlignment == VerticalAlignment.Stretch)
 					result.Height = availableSize.Height;
+				else
+					if (result.Height > availableSize.Height)
+						result.Height = availableSize.Height;
 			}
 			return result;
 		}
@@ -81,18 +87,14 @@ namespace System.Windows.Controls {
 			get {
 				throw new global::System.Exception("The method or operation is not implemented.");
 			}
-			set {
-				throw new global::System.Exception("The method or operation is not implemented.");
-			}
+			set { }
 		}
 
 		public bool CanVerticallyScroll {
 			get {
 				throw new global::System.Exception("The method or operation is not implemented.");
 			}
-			set {
-				throw new global::System.Exception("The method or operation is not implemented.");
-			}
+			set { }
 		}
 
 		public double ExtentHeight {
