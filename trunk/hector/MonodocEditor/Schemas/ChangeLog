@@ -1,3 +1,9 @@
+2007-06-07  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
+
+	* ecma.xsd: Full schema for ECMA documentation.
+	* monodoc-ecma.xsd: Full schema used by monodoc tools for Mono Documentation, based
+	in ECMA.
+
 2007-06-05  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
 
 	* ecma.xsd: XML Schema for the ECMA documentacion of the Base Class Library defined in ECMA-335.
