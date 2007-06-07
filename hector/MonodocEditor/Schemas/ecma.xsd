@@ -21,29 +21,29 @@
   <xs:attribute name="type" type="xs:string" />
   <xs:attribute name="Type" type="xs:string" />
 
-  <!-- definition of simple elements -->
-  <xs:element name="AssemblyName" type="xs:string"/>
-  <xs:element name="AssemblyPublicKey" type="xs:string"/>
-  <xs:element name="AssemblyVersion" type="xs:string"/>
-  <xs:element name="AssemblyCulture" type="xs:string"/>
-  <xs:element name="BaseTypeName" type="xs:string"/>
-  <xs:element name="Excluded" type="xs:boolean"/>
-  <xs:element name="ExcludedBaseTypeName" type="xs:string"/>
-  <xs:element name="ExcludedLibrary" type="xs:string"/>
-  <xs:element name="ExcludedLibraryName" type="xs:string"/>
-  <xs:element name="ExcludedTypeName" type="xs:string"/>
-  <xs:element name="AttibuteName" type="xs:string"/>
-  <xs:element name="i" type="xs:string"/>
-  <xs:element name="InterfaceName" type="xs:string"/>
-  <xs:element name="MemberOfLibrary" type="xs:string"/>
-  <xs:element name="MemberType" type="xs:string"/>
-  <xs:element name="MemberValue" type="xs:string"/>
-  <xs:element name="ReturnType" type="xs:string"/>
-  <xs:element name="TypeExcluded" type="xs:boolean" default="0"/>
-  <xs:element name="ThreadingSafeStatement" type="xs:string"/>
+  <!-- define simple ECMA elements -->
+  <xs:element name="AssemblyName" type="xs:string" />
+  <xs:element name="AssemblyPublicKey" type="xs:string" />
+  <xs:element name="AssemblyVersion" type="xs:string" />
+  <xs:element name="AssemblyCulture" type="xs:string" />
+  <xs:element name="AttributeName" type="xs:string" />
+  <xs:element name="BaseTypeName" type="xs:string" />
+  <xs:element name="Excluded" type="xs:boolean" />
+  <xs:element name="ExcludedBaseTypeName" type="xs:string" />
+  <xs:element name="ExcludedLibrary" type="xs:string" />
+  <xs:element name="ExcludedLibraryName" type="xs:string" />
+  <xs:element name="ExcludedTypeName" type="xs:string" />
+  <xs:element name="i" type="xs:string" />
+  <xs:element name="InterfaceName" type="xs:string" />
+  <xs:element name="MemberOfLibrary" type="xs:string" />
+  <xs:element name="MemberType" type="xs:string" />
+  <xs:element name="MemberValue" type="xs:string" />
+  <xs:element name="ReturnType" type="xs:string" />
+  <xs:element name="TypeExcluded" type="xs:boolean" default="0" />
+  <xs:element name="ThreadingSafeStatement" type="xs:string" />
 
-  <!-- definition of complex elements -->
-  <xs:element name="altcomplaint">
+  <!-- define complex ECMA elements -->
+  <xs:element name="altcompliant">
     <xs:complexType>
       <xs:attribute ref="cref" use="required"/>
     </xs:complexType>
@@ -99,16 +99,16 @@
   <xs:element name="block">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="c"/>
-        <xs:element ref="code"/>
-        <xs:element ref="list"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="see"/>
-        <xs:element ref="subscript"/>
-        <xs:element ref="sup"/>
-        <xs:element ref="pi"/>
+        <xs:element ref="block" />
+        <xs:element ref="c" />
+        <xs:element ref="code" />
+        <xs:element ref="list" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="see" />
+        <xs:element ref="subscript" />
+        <xs:element ref="sup" />
+        <xs:element ref="pi" />
       </xs:choice>
       <xs:attribute ref="subset" use="required"/>
       <xs:attribute ref="type" use="required"/>
@@ -118,10 +118,10 @@
   <xs:element name="c">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="code"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="see"/>
+        <xs:element ref="code" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="see" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -139,14 +139,14 @@
   <xs:element name="description">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="c"/>
-        <xs:element ref="block"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="para"/>
-        <xs:element ref="SPAN"/>
-        <xs:element ref="see"/>
-        <xs:element ref="sub"/>
-        <xs:element ref="permille"/>
+        <xs:element ref="c" />
+        <xs:element ref="block" />
+        <xs:element ref="paramref" />
+        <xs:element ref="para" />
+        <xs:element ref="SPAN" />
+        <xs:element ref="see" />
+        <xs:element ref="sub" />
+        <xs:element ref="permille" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -154,17 +154,17 @@
   <xs:element name="Docs">
     <xs:complexType>
       <xs:sequence minOccurs="0">
-        <xs:element ref="summary"/>
-        <xs:element ref="altmember"/>
-        <xs:element ref="altcompliant"/>
+        <xs:element ref="summary" />
+        <xs:element ref="altmember" />
+        <xs:element ref="altcompliant" />
         <xs:element ref="param" maxOccurs="unbounded" />
-        <xs:element ref="returns"/>
-        <xs:element ref="value"/>
-        <xs:element ref="exception" maxOccurs="unbounded"/>
-        <xs:element ref="threadsafe"/>
-        <xs:element ref="remarks"/>
-        <xs:element ref="example"/>
-        <xs:element ref="permision"/>
+        <xs:element ref="returns" />
+        <xs:element ref="value" />
+        <xs:element ref="exception" maxOccurs="unbounded" />
+        <xs:element ref="threadsafe" />
+        <xs:element ref="remarks" />
+        <xs:element ref="example" />
+        <xs:element ref="permision" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -172,11 +172,11 @@
   <xs:element name="example">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="para"/>
-        <xs:element ref="code"/>
-        <xs:element ref="c"/>
-        <xs:element ref="codelink"/>
-        <xs:element ref="see"/>
+        <xs:element ref="para" />
+        <xs:element ref="code" />
+        <xs:element ref="c" />
+        <xs:element ref="codelink" />
+        <xs:element ref="see" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -184,38 +184,38 @@
   <xs:element name="exception">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="see"/>
-        <xs:element ref="SPAN"/>
+        <xs:element ref="block" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="see" />
+        <xs:element ref="SPAN" />
       </xs:choice>
-      <xs:attribute ref="cref" use="required"/>
+      <xs:attribute ref="cref" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="Interface">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="InterfaceName"/>
-        <xs:element ref="Excluded"/>
+        <xs:element ref="InterfaceName" />
+        <xs:element ref="Excluded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="Interfaces">
     <xs:complexType>
-      <xs:choice>
-        <xs:element ref="Interface" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:choice>
+      <xs:sequence>
+        <xs:element ref="Interface" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="item">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="term"/>
-        <xs:element ref="description" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="term" />
+        <xs:element ref="description" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -231,50 +231,50 @@
   <xs:element name="list">
     <xs:complexType>
       <xs:sequence minOccurs="0">
-        <xs:element ref="listheader"/>
-        <xs:element ref="item" maxOccurs="unbounded"/>
+        <xs:element ref="listheader" />
+        <xs:element ref="item" maxOccurs="unbounded" />
       </xs:sequence>
-      <xs:attribute ref="type" use="required"/>
+      <xs:attribute ref="type" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="listheader">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="term"/>
-        <xs:element ref="description" maxOccurs="unbounded"/>
+        <xs:element ref="term" />
+        <xs:element ref="description" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="MemberSignature">
     <xs:complexType>
-      <xs:attribute ref="Language" use="required"/>
-      <xs:attribute ref="Value" use="required"/>
+      <xs:attribute ref="Language" use="required" />
+      <xs:attribute ref="Value" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="Member">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="MemberSignature" maxOccurs="unbounded"/>
-        <xs:element ref="MemberType"/>
-        <xs:element ref="Attributes" minOccurs="0"/>
-        <xs:element ref="ReturnValue"/>
-        <xs:element ref="Parameters"/>
-        <xs:element ref="MemberValue" minOccurs="0"/>
-        <xs:element ref="Docs"/>
-        <xs:element ref="Excluded"/>
-        <xs:element ref="ExcludedLibrary" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="MemberSignature" maxOccurs="unbounded" />
+        <xs:element ref="MemberType" />
+        <xs:element ref="Attributes" minOccurs="0" />
+        <xs:element ref="ReturnValue" />
+        <xs:element ref="Parameters" />
+        <xs:element ref="MemberValue" minOccurs="0" />
+        <xs:element ref="Docs" />
+        <xs:element ref="Excluded" />
+        <xs:element ref="ExcludedLibrary" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
-      <xs:attribute ref="MemberName" use="required"/>
+      <xs:attribute ref="MemberName" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="Members">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="Member" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Member" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -282,19 +282,19 @@
   <xs:element name="para">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="see"/>
-        <xs:element ref="list"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="c"/>
-        <xs:element ref="onequarter"/>
-        <xs:element ref="sub"/>
-        <xs:element ref="sup"/>
-        <xs:element ref="SPAN"/>
-        <xs:element ref="superscript"/>
-        <xs:element ref="permille"/>
-        <xs:element ref="pi"/>
-        <xs:element ref="theta"/>
+        <xs:element ref="block" />
+        <xs:element ref="see" />
+        <xs:element ref="list" />
+        <xs:element ref="paramref" />
+        <xs:element ref="c" />
+        <xs:element ref="onequarter" />
+        <xs:element ref="sub" />
+        <xs:element ref="sup" />
+        <xs:element ref="SPAN" />
+        <xs:element ref="superscript" />
+        <xs:element ref="permille" />
+        <xs:element ref="pi" />
+        <xs:element ref="theta" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -302,37 +302,37 @@
   <xs:element name="param">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="c"/>
-        <xs:element ref="see"/>
-        <xs:element ref="block"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="para"/>
-        <xs:element ref="SPAN"/>
+        <xs:element ref="c" />
+        <xs:element ref="see" />
+        <xs:element ref="block" />
+        <xs:element ref="paramref" />
+        <xs:element ref="para" />
+        <xs:element ref="SPAN" />
       </xs:choice>
-      <xs:attribute ref="name" use="required"/>
+      <xs:attribute ref="name" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="paramref">
     <xs:complexType>
-      <xs:attribute ref="name" use="required"/>
+      <xs:attribute ref="name" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="Parameter">
-    <xs:complexType >
+    <xs:complexType>
       <xs:sequence>
-        <xs:element ref="Attributes" minOccurs="0"/>
+        <xs:element ref="Attributes" minOccurs="0" />
       </xs:sequence>
-      <xs:attribute ref="Name" use="required"/>
-      <xs:attribute ref="Type" use="required"/>
+      <xs:attribute ref="Name" use="required" />
+      <xs:attribute ref="Type" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="Parameters">
-    <xs:complexType >
+    <xs:complexType>
       <xs:sequence>
-        <xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -340,28 +340,28 @@
   <xs:element name="permission">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="see"/>
+        <xs:element ref="block" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="see" />
       </xs:choice>
-      <xs:attribute ref="cref" use="required"/>
+      <xs:attribute ref="cref" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="remarks">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="c"/>
-        <xs:element ref="code"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="see"/>
-        <xs:element ref="list"/>
-        <xs:element ref="SPAN"/>
-        <xs:element ref="pre"/>
-        <xs:element ref="PRE"/>
+        <xs:element ref="block" />
+        <xs:element ref="c" />
+        <xs:element ref="code" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="see" />
+        <xs:element ref="list" />
+        <xs:element ref="SPAN" />
+        <xs:element ref="pre" />
+        <xs:element ref="PRE" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -369,10 +369,10 @@
   <xs:element name="returns">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="list"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="see"/>
+        <xs:element ref="list" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="see" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -380,27 +380,27 @@
   <xs:element name="ReturnValue">
     <xs:complexType>
       <xs:choice>
-        <xs:element ref="ReturnType" minOccurs="0"/>
+        <xs:element ref="ReturnType" minOccurs="0" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="see">
     <xs:complexType>
-      <xs:attribute ref="cref"/>
-      <xs:attribute ref="langword"/>
-      <xs:attribute ref="qualify"/>
+      <xs:attribute ref="cref" />
+      <xs:attribute ref="langword" />
+      <xs:attribute ref="qualify" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="SPAN">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="see"/>
-        <xs:element ref="SPAN"/>
+        <xs:element ref="block" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="see" />
+        <xs:element ref="SPAN"  />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -422,10 +422,10 @@
   <xs:element name="summary">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="para"/>
-        <xs:element ref="see"/>
-        <xs:element ref="list"/>
+        <xs:element ref="block" />
+        <xs:element ref="para" />
+        <xs:element ref="see" />
+        <xs:element ref="list" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -433,31 +433,31 @@
   <xs:element name="sup">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="i"/>
-        <xs:element ref="paramref"/>
+        <xs:element ref="paramref" />
+        <xs:element ref="i" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="term">
     <xs:complexType mixed="true">
-      <xs:sequence minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="block"/>
-        <xs:element ref="c"/>
-        <xs:element ref="see"/>
-        <xs:element ref="para"/>
-        <xs:element ref="paramref"/>
-        <xs:element ref="sup"/>
-        <xs:element ref="pi"/>
-        <xs:element ref="theta"/>
-      </xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="block" />
+        <xs:element ref="c" />
+        <xs:element ref="see" />
+        <xs:element ref="para" />
+        <xs:element ref="paramref" />
+        <xs:element ref="sup" />
+        <xs:element ref="pi" />
+        <xs:element ref="theta" />
+      </xs:choice>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="threadsafe">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="para" maxOccurs="unbounded"/>
+        <xs:element ref="para" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -465,45 +465,45 @@
   <xs:element name="Type">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="TypeSignature" maxOccurs="unbounded"/>
-        <xs:element ref="MemberOfLibrary"/>
-        <xs:element ref="AssemblyInfo"/>
-        <xs:element ref="ThreadingSafeStatement" minOccurs="0"/>
-        <xs:element ref="Docs"/>
-        <xs:element ref="Base"/>
-        <xs:element ref="Interfaces"/>
-        <xs:element ref="Attributes" minOccurs="0"/>
-        <xs:element ref="Members"/>
-        <xs:element ref="TypeExcluded"/>
+        <xs:element ref="TypeSignature" maxOccurs="unbounded" />
+        <xs:element ref="MemberOfLibrary" />
+        <xs:element ref="AssemblyInfo" />
+        <xs:element ref="ThreadingSafeStatement" minOccurs="0" />
+        <xs:element ref="Docs" />
+        <xs:element ref="Base" />
+        <xs:element ref="Interfaces" />
+        <xs:element ref="Attributes" minOccurs="0" />
+        <xs:element ref="Members" />
+        <xs:element ref="TypeExcluded" />
       </xs:sequence>
-      <xs:attribute ref="Name" use="required"/>
-      <xs:attribute ref="FullName" use="required"/>
-      <xs:attribute ref="FullNameSP" use="required"/>
+      <xs:attribute ref="Name" use="required" />
+      <xs:attribute ref="FullName" use="required" />
+      <xs:attribute ref="FullNameSP" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="Types">
     <xs:complexType>
       <xs:choice>
-        <xs:element ref="Type" maxOccurs="unbounded"/>
+        <xs:element ref="Type" maxOccurs="unbounded" />
       </xs:choice>
-      <xs:attribute ref="Library" use="required"/>
+      <xs:attribute ref="Library" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="TypeSignature">
     <xs:complexType>
-      <xs:attribute ref="Language" use="required"/>
-      <xs:attribute ref="Value" use="required"/>
+      <xs:attribute ref="Language" use="required" />
+      <xs:attribute ref="Value" use="required" />
     </xs:complexType>
   </xs:element>
 
   <xs:element name="value">
     <xs:complexType mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="para"/>
-        <xs:element ref="list"/>
-        <xs:element ref="see"/>
+        <xs:element ref="para" />
+        <xs:element ref="list" />
+        <xs:element ref="see" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
