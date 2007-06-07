@@ -238,7 +238,7 @@ namespace CBinding
 			
 			foreach (ProjectFile f in projectFiles) {
 				if (f.BuildAction == BuildAction.Compile) {
-					objectFiles.Append (Path.ChangeExtension (f.Name, ".o"));
+					objectFiles.Append (Path.ChangeExtension (f.Name, ".o") + " ");
 				}
 			}
 			
