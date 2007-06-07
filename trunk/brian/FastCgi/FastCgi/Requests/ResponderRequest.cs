@@ -42,11 +42,10 @@ namespace FastCgi
 		public ResponderRequest (ushort requestID, Connection connection)
 			: base (requestID, connection)
 		{
-			if (!IsSupported)
+			if (!connection.Server.SupportsResponder)
 				throw new Exception ();
 			
-			responder = (IResponder) Activator.CreateInstance
-				(responder_type, new object [] {this});
+			responder = connection.Server.CreateResponder (this);
 			
 			InputDataReceived  += OnInputDataReceived;
 			InputDataCompleted += OnInputDataCompleted;
@@ -64,7 +63,7 @@ namespace FastCgi
 					("CONTENT_LENGTH");
 				if (length_text == null)
 				{
-					AbortRequest ("Content length parameter missing. Aborting.");
+					AbortRequest ("Content length parameter missing.");
 					return;
 				}
 				
@@ -76,7 +75,7 @@ namespace FastCgi
 				}
 				catch
 				{
-					AbortRequest ("Content length parameter not an integer. Aborting.");
+					AbortRequest ("Content length parameter not an integer.");
 					return;
 				}
 				
@@ -85,7 +84,7 @@ namespace FastCgi
 			
 			if (write_index + data.Length > input_data.Length)
 			{
-				AbortRequest ("Input data exceeds content length. Aborting.");
+				AbortRequest ("Input data exceeds content length.");
 				return;
 			}
 			
@@ -95,35 +94,15 @@ namespace FastCgi
 		
 		private void OnInputDataCompleted (Request sender)
 		{
-			if (write_index < input_data.Length)
-			{
-				AbortRequest ("Insufficient input data received. Aborting.");
+			DataNeeded = false;
+			if (write_index < input_data.Length) {
+				AbortRequest ("Insufficient input data received.");
 				return;
 			}
 			
-			DataNeeded = false;
 			int appStatus = responder.Process ();
 			CompleteRequest (appStatus, ProtocolStatus.RequestComplete);
 		}
-		
-		private static System.Type responder_type = null;
-		public static void SetResponder (System.Type responder)
-		{
-			if (!responder.IsSubclassOf (typeof (IResponder)))
-				throw new ArgumentException
-					("Responder must implement the FastCgi.IResponder interface.",
-					"responder");
-			
-			if (responder.GetConstructor
-				(new System.Type[] {typeof (ResponderRequest)}) == null)
-				throw new ArgumentException
-					("Responder must contain constructor 'ctor(ResponderRequest)'",
-					"responder");
-			
-			responder_type = responder;
-		}
-		
-		public static bool IsSupported {get {return responder_type != null;}}
 	}
 	
 	public interface IResponder

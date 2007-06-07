@@ -1,3 +1,30 @@
+2007-06-07 Brian Nickel <brian.nickel@gmail.com>
+
+	* FastCgi/Structures/NameValuePair.cs: Reworked NameValuePair to support
+	a user specified encoding. Moved the parsing of collection to internal
+	"static IDictionary FromData (byte [] data)". Added support for
+	rendering a collection.
+	
+	* FastCgi/Connection.cs: Added support for rejecting requests if too
+	many are occuring simulaneously. Added support for "FCGI_GET_VALUES"
+	requests. Inform the server when a request has been completed. Prevent
+	accepting requests if the maximum number of requests has been reached.
+	
+	* FastCgi/Main.cs: Use new server specific API for registering the
+	responder.
+	
+	* FastCgi/Servers/Server.cs: Added support for limiting connections and
+	requests, and enabling/disabling multiplexing. Added support for FastCGI
+	style server.GetValues. Prevent accepting if the maximum number of
+	connections has been reached. Moved responder registration from
+	ResponderRequest to allow for per-server responders.
+	
+	* FastCgi/Requests/Request.cs: Replaced name/value parsing with 
+	NameValuePair.FromData.
+	
+	* FastCgi/Requests/ResponderRequest.cs: Moved responder registration to
+	Server.
+
 2007-06-04 Brian Nickel <brian.nickel@gmail.com>
 
 	* FastCgi/Responders/: Renamed to "Requests".

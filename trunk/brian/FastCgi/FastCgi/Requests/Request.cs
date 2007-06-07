@@ -87,6 +87,8 @@ namespace FastCgi
 		public void AbortRequest (string message)
 		{
 			SendErrorText (message);
+			Logger.Write (LogLevel.Error,
+				"Aborting request. Reason follows:");
 			Logger.Write (LogLevel.Error, message);
 			CompleteRequest (-1, ProtocolStatus.RequestComplete);
 		}
@@ -110,8 +112,8 @@ namespace FastCgi
 		
 		protected event DataCompletedHandler ParameterDataCompleted;
 		
-		ArrayList  parameter_data  = new ArrayList ();
-		Hashtable  parameter_table = new Hashtable ();
+		ArrayList   parameter_data  = new ArrayList ();
+		IDictionary parameter_table = null;
 		
 		public void AddParameterData (byte [] data)
 		{
@@ -139,35 +141,19 @@ namespace FastCgi
 			
 			data = (byte []) parameter_data.ToArray (typeof (byte));
 			
-			// Read name/value pairs from the data.
-			int index = 0;
-			while (index < data.Length)
-			{
-				NameValuePair pair;
-				try
-				{
-					pair = new NameValuePair (data, ref index);
-				}
-				catch (ArgumentOutOfRangeException)
-				{
-					AbortRequest ("Error parsing parameters. Aborting.");
-					return;
-				}
-				
-				if (parameter_table.ContainsKey (pair.Name))
-					Logger.Write (LogLevel.Warning,
-						"A duplicate name/value pair was detected.");
-				else
-					parameter_table.Add (pair.Name, pair.Value);
+			try {
+				parameter_table = NameValuePair.FromData (data);
+				// The parameter data is no longer needed and
+				// can be sent to the garbage collector.
+				parameter_data = null;
+			
+				// Inform listeners of the completion.
+				if (ParameterDataCompleted != null)
+					ParameterDataCompleted (this);
+			} catch {
+				AbortRequest ("Error parsing parameters.");
 			}
 			
-			// The parameter data is no longer needed and can be
-			// sent to the garbage collector.
-			parameter_data = null;
-			
-			// Inform listeners of the completion.
-			if (ParameterDataCompleted != null)
-				ParameterDataCompleted (this);
 		}
 		
 		// The GetParameter and GetParameters methods are analogous to
@@ -176,7 +162,8 @@ namespace FastCgi
 		
 		public string GetParameter (string parameter)
 		{
-			if (parameter_table.ContainsKey (parameter))
+			if (parameter_table != null &&
+				parameter_table.Contains (parameter))
 				return (string) parameter_table [parameter];
 			
 			return null;

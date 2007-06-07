@@ -46,6 +46,10 @@ namespace FastCgi {
 			this.server = server;
 		}
 		
+		public int RequestCount {
+			get {return requests.Count;}
+		}
+		
 		public void Start ()
 		{
 			Logger.Write (LogLevel.Notice, "Receving records...");
@@ -69,9 +73,16 @@ namespace FastCgi {
 					
 					BeginRequestBody body = new BeginRequestBody
 						(record);
+						
+					if (!server.CanRequest)
+					{
+						EndRequest (record.RequestID, 0,
+							ProtocolStatus.Overloaded);
+						break;
+					}
 					
 					if (body.Role == Role.Responder &&
-						ResponderRequest.IsSupported)
+						server.SupportsResponder)
 						request = new ResponderRequest
 							(record.RequestID, this);
 					
@@ -90,7 +101,21 @@ namespace FastCgi {
 					
 					keepAlive = keepAlive ||
 						(body.Flags & BeginRequestFlags.KeepAlive) != 0;
+					
+				break;
 				
+				case RecordType.GetValues:
+					byte [] response_data;
+					
+					try {
+						IDictionary pairs_in  = NameValuePair.FromData (record.Body);
+						IDictionary pairs_out = server.GetValues (pairs_in.Keys);
+						response_data = NameValuePair.ToData (pairs_out);
+					} catch {
+						response_data = new byte [0];
+					}
+					
+					SendResponse (RecordType.GetValuesResult, record.RequestID, response_data);
 				break;
 			
 				case RecordType.Params:
@@ -164,8 +189,12 @@ namespace FastCgi {
 			
 			if (requests.Count == 0 && !keepAlive) {
 				socket.Close ();
-//				server.EndConnection ();
+				server.EndConnection (this);
 			}
+		}
+		
+		public Server Server {
+			get {return server;}
 		}
 	}
 }

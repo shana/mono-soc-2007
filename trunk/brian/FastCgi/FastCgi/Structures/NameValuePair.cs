@@ -28,13 +28,15 @@
 
 using System;
 using System.Text;
+using System.Collections;
 
 namespace FastCgi {
 	public struct NameValuePair {
 		
 		#region Private Properties
-		string name;
-		string value;
+		private string name;
+		private string value;
+		private static Encoding encoding = Encoding.Default;
 		#endregion
 		
 		
@@ -56,18 +58,27 @@ namespace FastCgi {
 			if (data == null)
 				throw new ArgumentNullException ("data");
 			
+			// Name/value pairs are stored with their lengths first,
+			// then their contents.
+			
+			// Lengths are stored in 1 or 4 bytes depending on the
+			// size of the contents.
 			int name_length  = ReadLength (data, ref index);
 			int value_length = ReadLength (data, ref index);
 			
+			// Do a sanity check on the size of the data.
 			if (index + name_length + value_length > data.Length)
 				throw new ArgumentOutOfRangeException ("index");
 			
-			this.name = Encoding.Default.GetString (data, index,
-				name_length);
+			// Make sure the encoding doesn't change while running.
+			Encoding enc = encoding;
+			
+			// Read the name.
+			this.name = enc.GetString (data, index, name_length);
 			index += name_length;
 			
-			this.value = Encoding.Default.GetString (data, index,
-				value_length);
+			// Read the value.
+			this.value = enc.GetString (data, index, value_length);
 			index += value_length;
 		}
 		#endregion
@@ -84,22 +95,137 @@ namespace FastCgi {
 		#endregion
 		
 		
+		#region Public Static Properties
+		public static Encoding Encoding {
+			get {return encoding;}
+			set {encoding = value != null ? value : Encoding.Default;}
+		}
+		#endregion
+		
+		
+		#region Public Static Methods
+		public static IDictionary FromData (byte [] data)
+		{
+			// Specialized.NameValueCollection would probably be
+			// better, but it doesn't implement IDictionary.
+			Hashtable pairs = new Hashtable ();
+			int index = 0;
+			
+			// Loop through the array, reading pairs at a specified
+			// position until the end is reached.
+			
+			while (index < data.Length) {
+				NameValuePair pair = new NameValuePair
+					(data, ref index);
+				
+				if (pairs.ContainsKey (pair.Name))
+					Logger.Write (LogLevel.Warning,
+						"A duplicate name/value pair was detected.");
+				else
+					pairs.Add (pair.Name, pair.Value);
+			}
+			
+			return pairs;
+		}
+		
+		public static byte [] ToData (IDictionary pairs)
+		{
+			if (pairs == null)
+				throw new ArgumentNullException ("pairs");
+			
+			// Make sure the encoding doesn't change while running.
+			Encoding enc = encoding;
+			
+			// Get the total size of the new array and validate the
+			// contents of "pairs".
+			
+			int total_size = 0;
+			foreach (object key in pairs.Keys)
+			{
+				string name = key as string;
+				string value = pairs [key] as string;
+				
+				// Sanity check: "pairs" must only contain
+				// strings.
+				if (name == null || value == null)
+					throw new ArgumentException (
+						"Dictionary must only contain string values.",
+						"pairs");
+				
+				int name_length = enc.GetByteCount (name);
+				int value_length = enc.GetByteCount (value);
+				
+				total_size += name_length > 0x7F ? 4 : 1;
+				total_size += value_length > 0x7F ? 4 : 1;
+				total_size += name_length + value_length;
+			}
+			
+			byte [] data = new byte [total_size];
+			
+			// Fill the data array with the data.
+			int index = 0;
+			foreach (object key in pairs.Keys)
+			{
+				string name = key as string;
+				string value = pairs [key] as string;
+				
+				int name_length = enc.GetByteCount (name);
+				int value_length = enc.GetByteCount (value);
+				
+				WriteLength (data, ref index, name_length);
+				WriteLength (data, ref index, value_length);
+				index += enc.GetBytes (name, 0, name.Length, data, index);
+				index += enc.GetBytes (value, 0, value.Length, data, index);
+			}
+			
+			return data;
+		}
+		#endregion
+		
 		#region Private Static Methods
 		private static int ReadLength (byte [] data, ref int index)
 		{
+			if (index < 0)
+				throw new ArgumentOutOfRangeException ("index");
+			
 			if (index >= data.Length)
 				throw new ArgumentOutOfRangeException ("index");
+			
+			// Lengths are stored in either 1 or 4 bytes. For
+			// lengths under 128 bytes, which are the most common, a
+			// single byte is used.
 			
 			if (data [index] < 0x80)
 				return data [index++];
 			
-			if (index + 4 >= data.Length)
+			// If the MSB for the size byte is set (value >= 0x80),
+			// a 4 byte value is used. However, the MSB in the first
+			// byte is not included, as it was used as an indicator.
+			
+			if (index > data.Length - 4)
 				throw new ArgumentOutOfRangeException ("index");
 			
 			return (0x7F & (int) data [index++]) << 24
 				+ ((int) data [index++]) << 16
 				+ ((int) data [index++]) <<  8
 				+ ((int) data [index++]);
+		}
+		
+		private static void WriteLength (byte [] data, ref int index,
+		                                 int length)
+		{
+			if (index > data.Length - (length < 0x80 ? 1 : 4))
+				throw new ArgumentOutOfRangeException ("index");
+			
+			if (length < 0x80) {
+				data [index++] = (byte) length;
+				return;
+			}
+			
+			data [index++] = (byte) ((length & 0x7F000000) >> 24);
+			data [index++] = (byte) ((length & 0xFF0000) >> 16);
+			data [index++] = (byte) ((length & 0xFF00) >> 8);
+			data [index++] = (byte)  (length & 0xFF);
 		}
 		#endregion
 	}

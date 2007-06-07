@@ -36,8 +36,6 @@ namespace FastCgi
 	{
 		public static void Main(string[] args)
 		{
-			ResponderRequest.SetResponder (typeof (TestResponder));
-			
 			Logger.Open ("log.txt");
 			Logger.Level = LogLevel.All;
 			
@@ -53,6 +51,7 @@ namespace FastCgi
 			}
 			
 			Server server = new TcpServer (IPAddress.Any, 1234);
+			server.SetResponder (typeof (TestResponder));
 			server.Start ();
 			Console.WriteLine ("Hit Return to stop the server.");
 			Console.ReadLine ();
