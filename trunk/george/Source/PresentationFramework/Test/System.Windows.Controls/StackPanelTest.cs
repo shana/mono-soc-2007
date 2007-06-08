@@ -143,6 +143,21 @@ namespace System.Windows.Controls {
 		}
 
 		[Test]
+		public void InScrollViewerCanContentScroll() {
+			Window window = new Window();
+			ScrollViewer scroll_viewer = new ScrollViewer();
+			scroll_viewer.CanContentScroll = true;
+			window.Content = scroll_viewer;
+			StackPanel stack_panel = new StackPanel();
+			scroll_viewer.Content = stack_panel;
+			global::System.Windows.Controls.Button button = new global::System.Windows.Controls.Button();
+			stack_panel.Children.Add(button);
+			window.Show();
+			Assert.AreEqual(button.ActualWidth, scroll_viewer.ViewportWidth, "1");
+			Assert.AreEqual(button.ActualWidth, stack_panel.ActualWidth, "2");
+		}
+
+		[Test]
 		public void NotInScrollViewer() {
 			Window window = new Window();
 			StackPanel stack_panel = new StackPanel();
@@ -173,6 +188,34 @@ namespace System.Windows.Controls {
 		}
 
 		class SizeInScrollViewerStackPanel : StackPanel {
+			public Size MeasureResult;
+			protected override Size MeasureOverride(Size availableSize) {
+				return MeasureResult = base.MeasureOverride(availableSize);
+			}
+		}
+		#endregion
+
+		#region SizeInScrollViewerCanContentScroll
+		[Test]
+		public void SizeInScrollViewerCanContentScroll() {
+			Window window = new Window();
+			ScrollViewer scroll_viewer = new ScrollViewer();
+			scroll_viewer.CanContentScroll = true;
+			window.Content = scroll_viewer;
+			SizeInScrollViewerCanContentScrollStackPanel stack_panel = new SizeInScrollViewerCanContentScrollStackPanel();
+			scroll_viewer.Content = stack_panel;
+			global::System.Windows.Controls.Button button = new global::System.Windows.Controls.Button();
+			stack_panel.Children.Add(button);
+			window.Show();
+			Assert.AreEqual(stack_panel.ActualWidth, scroll_viewer.ViewportWidth, "1");
+			Assert.AreEqual(stack_panel.ActualHeight, scroll_viewer.ActualHeight, "2");
+			Assert.AreEqual(stack_panel.DesiredSize.Width, Utility.GetEmptyButtonSize(), "3");
+			Assert.AreEqual(stack_panel.DesiredSize.Height, Utility.GetEmptyButtonSize(), "4");
+			Assert.AreEqual(stack_panel.MeasureResult.Width, Utility.GetEmptyButtonSize(), "5");
+			Assert.AreEqual(stack_panel.MeasureResult.Height, Utility.GetEmptyButtonSize(), "6");
+		}
+
+		class SizeInScrollViewerCanContentScrollStackPanel : StackPanel {
 			public Size MeasureResult;
 			protected override Size MeasureOverride(Size availableSize) {
 				return MeasureResult = base.MeasureOverride(availableSize);

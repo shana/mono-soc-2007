@@ -1,5 +1,9 @@
 2007-06-08  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* StackPanelTest.cs: Added some ScrollViewer-related tests.
+
+2007-06-08  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* StackPanelTest.cs: Added tests for IScrollInfo.
 
 2007-06-07  George Giolfan  <georgegiolfan@yahoo.com>
