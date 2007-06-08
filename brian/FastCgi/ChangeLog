@@ -1,3 +1,24 @@
+2007-06-08 Brian Nickel <brian.nickel@gmail.com>
+
+	* FastCgi/Structures/NameValuePair.cs: Use new Logger.Write for better
+	output.
+	
+	* FastCgi/Connection.cs: Reject multiplexed requests if disabled. Rename
+	Start to Run. Add Stop to end the connection properly.
+	
+	* FastCgi/Logger.cs: Incorporate the string formatter into "Write".
+	
+	* FastCgi/Main.cs: Update for API changes.
+	
+	* FastCgi/Servers/Server.cs: Use code from
+	Mono.WebServer.ApplicationServer to allow the server thread to run in
+	the background. Fix some bugs which were causing the server to hang.
+	
+	* FastCgi/Requests/Request.cs: Add properties: Server and RequestID.
+	
+	* FastCgi/Requests/ResponderRequest.cs: Check if input_data == null.
+	Use QueueUserWorkItem when multiplexing.
+
 2007-06-07 Brian Nickel <brian.nickel@gmail.com>
 
 	* FastCgi/Structures/NameValuePair.cs: Reworked NameValuePair to support

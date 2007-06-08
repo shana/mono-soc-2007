@@ -120,7 +120,8 @@ namespace FastCgi {
 				
 				if (pairs.ContainsKey (pair.Name))
 					Logger.Write (LogLevel.Warning,
-						"A duplicate name/value pair was detected.");
+						"Server.GetValues: Duplicate name, '{0}', encountered.",
+						pair.Name);
 				else
 					pairs.Add (pair.Name, pair.Value);
 			}
