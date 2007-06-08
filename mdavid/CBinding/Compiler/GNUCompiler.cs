@@ -75,8 +75,8 @@ namespace CBinding
 			
 			args.Append ("-O" + cp.OptimizationLevel + " ");
 			
-			if (cp.ExtraArguments != null && cp.ExtraArguments.Length > 0)
-				args.Append (cp.ExtraArguments + " ");
+			if (cp.ExtraCompilerArguments != null && cp.ExtraCompilerArguments.Length > 0)
+				args.Append (cp.ExtraCompilerArguments + " ");
 			
 			if (configuration.Includes != null)
 				foreach (string inc in configuration.Includes)
@@ -121,6 +121,11 @@ namespace CBinding
 			string objectFiles = ObjectFiles (projectFiles);
 			string pkgargs = GeneratePkgArgs (packages);
 			StringBuilder args = new StringBuilder ();
+			CCompilationParameters cp =
+				(CCompilationParameters)configuration.CompilationParameters;
+			
+			if (cp.ExtraLinkerArguments != null && cp.ExtraLinkerArguments.Length > 0)
+				args.Append (cp.ExtraLinkerArguments + " ");
 			
 			if (configuration.LibPaths != null)
 				foreach (string libpath in configuration.LibPaths)
@@ -173,6 +178,11 @@ namespace CBinding
 			string objectFiles = ObjectFiles (projectFiles);
 			string pkgargs = GeneratePkgArgs (packages);
 			StringBuilder args = new StringBuilder ();
+			CCompilationParameters cp =
+				(CCompilationParameters)configuration.CompilationParameters;
+			
+			if (cp.ExtraLinkerArguments != null && cp.ExtraLinkerArguments.Length > 0)
+				args.Append (cp.ExtraLinkerArguments + " ");
 			
 			if (configuration.LibPaths != null)
 				foreach (string libpath in configuration.LibPaths)

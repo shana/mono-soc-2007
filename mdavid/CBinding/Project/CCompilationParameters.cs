@@ -48,13 +48,16 @@ namespace CBinding
 	public class CCompilationParameters : ICloneable
 	{		
 		[ItemProperty ("WarningLevel")]
-		private WarningLevel warningLevel = WarningLevel.Normal;
+		private WarningLevel warning_level = WarningLevel.Normal;
 		
 		[ItemProperty ("OptimizationLevel")]
 		private int optimization = 0;
 		
-		[ItemProperty ("ExtraArguments")]
-		private string extraargs = string.Empty;
+		[ItemProperty ("ExtraCompilerArguments")]
+		private string extra_compiler_args = string.Empty;
+		
+		[ItemProperty ("ExtraLinkerArguments")]
+		private string extra_linker_args = string.Empty;
 		
 		public object Clone ()
 		{
@@ -62,8 +65,8 @@ namespace CBinding
 		}
 		
 		public WarningLevel WarningLevel {
-			get { return warningLevel; }
-			set { warningLevel = value; }
+			get { return warning_level; }
+			set { warning_level = value; }
 		}
 		
 		public int OptimizationLevel {
@@ -76,9 +79,14 @@ namespace CBinding
 			}
 		}
 		
-		public string ExtraArguments {
-			get { return extraargs; }
-			set { extraargs = value; }
+		public string ExtraCompilerArguments {
+			get { return extra_compiler_args; }
+			set { extra_compiler_args = value; }
+		}
+		
+		public string ExtraLinkerArguments {
+			get { return extra_linker_args; }
+			set { extra_linker_args = value; }
 		}
 	}
 }

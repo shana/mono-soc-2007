@@ -40,7 +40,9 @@ namespace CBinding {
             // Widget CBinding.EditPackagesDialog
             this.Name = "CBinding.EditPackagesDialog";
             this.Title = Mono.Unix.Catalog.GetString("Edit packages");
+            this.WindowPosition = ((Gtk.WindowPosition)(4));
             this.Modal = true;
+            this.HasSeparator = false;
             // Internal child CBinding.EditPackagesDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
@@ -68,9 +70,6 @@ namespace CBinding {
             w3.Resize = false;
             // Container child vpaned1.Gtk.Paned+PanedChild
             this.table1 = new Gtk.Table(((uint)(2)), ((uint)(2)), false);
-            this.table1.Name = "table1";
-            this.table1.RowSpacing = ((uint)(6));
-            this.table1.ColumnSpacing = ((uint)(6));
             // Container child table1.Gtk.Table+TableChild
             this.label1 = new Gtk.Label();
             this.label1.Name = "label1";
@@ -115,7 +114,7 @@ namespace CBinding {
             w8.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w9 = new Gtk.Image();
-            w9.Name = "image5";
+            w9.Name = "image2";
             w9.Pixbuf = Stetic.IconLoader.LoadIcon("gtk-remove", 16);
             w8.Add(w9);
             // Container child GtkHBox.Gtk.Container+ContainerChild

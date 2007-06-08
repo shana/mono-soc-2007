@@ -24,7 +24,9 @@ namespace CBinding {
             // Widget CBinding.AddPathDialog
             this.Name = "CBinding.AddPathDialog";
             this.Title = Mono.Unix.Catalog.GetString("Add Path");
+            this.WindowPosition = ((Gtk.WindowPosition)(4));
             this.Modal = true;
+            this.HasSeparator = false;
             // Internal child CBinding.AddPathDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
