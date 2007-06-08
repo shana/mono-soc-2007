@@ -32,16 +32,16 @@ namespace System.Windows.Controls.Primitives {
 				Width = 200;
 				Height = 100;
 
+				ScrollViewer v = new ScrollViewer();
 				StackPanel s = new StackPanel();
 				for (int i = 1; i <= 10; i++)
 					s.Children.Add(new TestButton(i));
-				ScrollViewer v = new ScrollViewer();
-				v.CanContentScroll = true;
 				v.Content = s;
+				//v.CanContentScroll = true;
 				Content = v;
 			}
 
-			class TestButton : Button {
+			class TestButton : global::System.Windows.Controls.Button {
 				public TestButton(int i) {
 					Content = "Test" + i;
 				}
