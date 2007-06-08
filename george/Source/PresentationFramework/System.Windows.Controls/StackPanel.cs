@@ -108,27 +108,34 @@ namespace System.Windows.Controls {
 			#endregion
 			Size result = orientation_is_horizontal ? new Size(physical_extent_size_in_orientation_direction, physical_extent_size_in_other_direction) : new Size(physical_extent_size_in_other_direction, physical_extent_size_in_orientation_direction);
 			#region Compute extent and viewport sizes
-			extent_size = result;
-			viewport_size = availableSize;
+			Size new_extent_size = result;
+			Size new_viewport_size = availableSize;
 			double logical_extent_size_in_orientation_direction = Children.Count;
 			if (logical_viewport_size_in_orientation_direction == Uninitialized)
 				logical_viewport_size_in_orientation_direction = Children.Count;
 			if (orientation_is_horizontal) {
-				extent_size.Width = logical_extent_size_in_orientation_direction;
-				viewport_size.Width = logical_viewport_size_in_orientation_direction;
+				new_extent_size.Width = logical_extent_size_in_orientation_direction;
+				new_viewport_size.Width = logical_viewport_size_in_orientation_direction;
 			} else {
-				extent_size.Height = logical_extent_size_in_orientation_direction;
-				viewport_size.Height = logical_viewport_size_in_orientation_direction;
+				new_extent_size.Height = logical_extent_size_in_orientation_direction;
+				new_viewport_size.Height = logical_viewport_size_in_orientation_direction;
+			}
+			bool should_invalidate_scroll_info = false;
+			if (extent_size != new_extent_size) {
+				extent_size = new_extent_size;
+				should_invalidate_scroll_info = true;
+			}
+			if (viewport_size != new_viewport_size) {
+				viewport_size = new_viewport_size;
+				should_invalidate_scroll_info = true;
 			}
 			#endregion
 			#region Invalidate scroll info
-			//TODO: Do this only when extent_size and viewport_size change.
-			if (ScrollOwner != null)
+			if (should_invalidate_scroll_info && ScrollOwner != null)
 				ScrollOwner.InvalidateScrollInfo();
 			#endregion
 			#region Adjust result to respect stretch alignment and available size
 			if (!(double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height))) {
-				//TODO: Is this needed for both directions?
 				if (!ContentScroll) {
 					if (HorizontalAlignment == HorizontalAlignment.Stretch)
 						result.Width = availableSize.Width;
@@ -234,22 +241,18 @@ namespace System.Windows.Controls {
 		}
 
 		public Rect MakeVisible(Visual visual, Rect rectangle) {
-			if (ContentScroll) {
-				//FIXME
-				int child_index = Children.IndexOf((UIElement)visual);
-				bool horizontal = Orientation == Orientation.Horizontal;
-				int logical_offset = horizontal ? logical_offset_width : logical_offset_height;
-				if (child_index < logical_offset)
-					SetOffset(horizontal, child_index);
-				else {
-					double viewport = horizontal ? viewport_size.Width : viewport_size.Height;
-					if (child_index >= logical_offset + viewport)
-						SetOffset(horizontal, child_index - viewport + 1);
-				}
-			} else {
-				//FIXME
+			if (!ContentScroll)
+				return Rect.Empty;
+			int child_index = Children.IndexOf((UIElement)visual);
+			bool horizontal = Orientation == Orientation.Horizontal;
+			int logical_offset = horizontal ? logical_offset_width : logical_offset_height;
+			if (child_index < logical_offset)
+				SetOffset(horizontal, child_index);
+			else {
+				double viewport = horizontal ? viewport_size.Width : viewport_size.Height;
+				if (child_index >= logical_offset + viewport)
+					SetOffset(horizontal, child_index - viewport + 1);
 			}
-			//FIXME
 			return Rect.Empty;
 		}
 
