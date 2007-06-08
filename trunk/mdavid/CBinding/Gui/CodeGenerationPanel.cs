@@ -94,7 +94,9 @@ namespace CBinding
 				break;
 			}
 			
-			extraArgsEntry.Text = compilationParameters.ExtraArguments;
+			extraArgsEntry.Text = compilationParameters.ExtraCompilerArguments;
+			
+			extraLinkerArgsEntry.Text = compilationParameters.ExtraLinkerArguments;
 			
 			foreach (string lib in configuration.Libs)
 				libStore.AppendValues (lib);
@@ -212,7 +214,9 @@ namespace CBinding
 				break;
 			}
 			
-			compilationParameters.ExtraArguments = extraArgsEntry.Text;
+			compilationParameters.ExtraCompilerArguments = extraArgsEntry.Text;
+			
+			compilationParameters.ExtraLinkerArguments = extraLinkerArgsEntry.Text;
 			
 			libStore.GetIterFirst (out iter);
 			configuration.Libs.Clear ();
