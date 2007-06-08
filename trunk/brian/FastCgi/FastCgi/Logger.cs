@@ -68,6 +68,16 @@ namespace FastCgi
 			}
 		}
 		
+		public static void Write (LogLevel level, IFormatProvider provider, string format, params object [] args)
+		{
+			Write (level, string.Format (provider, format, args));
+		}
+				
+		public static void Write (LogLevel level, string format, params object [] args)
+		{
+			Write (level, CultureInfo.CurrentCulture, format, args);
+		}
+		
 		public static void Write (LogLevel level, string message)
 		{
 			if (writer == null)

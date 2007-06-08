@@ -42,17 +42,18 @@ namespace FastCgi
 			Logger.Write (LogLevel.Notice, "Starting server:");
 			foreach (string arg in args)
 			{
-				Logger.Write (LogLevel.Notice, "   Argument: " + arg);
+				Logger.Write (LogLevel.Notice, "   Argument: {0}", arg);
 			}
 			
-			foreach (string s in System.Environment.GetEnvironmentVariables ().Keys)
+			foreach (string key in System.Environment.GetEnvironmentVariables ().Keys)
 			{
-				Logger.Write (LogLevel.Notice, "   Environ:  " + s + ": " + System.Environment.GetEnvironmentVariable (s));
+				Logger.Write (LogLevel.Notice, "   Environ:  {0}: {1}",
+					key, Environment.GetEnvironmentVariable (key));
 			}
 			
 			Server server = new TcpServer (IPAddress.Any, 1234);
 			server.SetResponder (typeof (TestResponder));
-			server.Start ();
+			server.Start (true);
 			Console.WriteLine ("Hit Return to stop the server.");
 			Console.ReadLine ();
 			

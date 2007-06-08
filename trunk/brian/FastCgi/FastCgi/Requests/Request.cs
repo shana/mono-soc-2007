@@ -99,6 +99,14 @@ namespace FastCgi
 			get {return data_needed;}
 			protected set {data_needed = value;}
 		}
+		
+		public Server Server {
+			get {return connection.Server;}
+		}
+		
+		public ushort RequestID {
+			get {return requestID;}
+		}
 		#endregion
 		
 		

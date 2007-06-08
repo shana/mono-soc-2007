@@ -50,7 +50,7 @@ namespace FastCgi {
 			get {return requests.Count;}
 		}
 		
-		public void Start ()
+		public void Run ()
 		{
 			Logger.Write (LogLevel.Notice, "Receving records...");
 			
@@ -60,11 +60,13 @@ namespace FastCgi {
 					(record.RequestID) ? requests [record.RequestID] : null);
 				
 				Logger.Write (LogLevel.Notice,
-					" Record received (" + record.Type + ", " + record.RequestID + ") " + (request == null ? "[NEW]" : "[EXISTING]"));
+					" Record received ({0}, {1}, {2}) [{3}]",
+					record.Type, record.RequestID,
+					record.Body.Length,
+					request == null ? "NEW" : "EXISTING");
 				
 				switch (record.Type) {
 				case RecordType.BeginRequest:
-				
 					if (request != null) {
 						stop = true;
 						Logger.Write (LogLevel.Error, "Request with given ID already exists. Terminating connection.");
@@ -73,9 +75,14 @@ namespace FastCgi {
 					
 					BeginRequestBody body = new BeginRequestBody
 						(record);
-						
-					if (!server.CanRequest)
-					{
+					
+					if (!server.MultiplexConnections && UnfinishedRequests) {
+						EndRequest (record.RequestID, 0,
+							ProtocolStatus.CantMultiplexConnections);
+						break;
+					}
+					
+					if (!server.CanRequest) {
 						EndRequest (record.RequestID, 0,
 							ProtocolStatus.Overloaded);
 						break;
@@ -88,7 +95,8 @@ namespace FastCgi {
 					
 					if (request == null) {
 						Logger.Write (LogLevel.Warning,
-							"Unknown role (" + body.Role + ").");
+							"Unknown role ({0}).",
+							body.Role);
 						EndRequest (record.RequestID, 0,
 							ProtocolStatus.UnknownRole);
 						break;
@@ -187,10 +195,17 @@ namespace FastCgi {
 				}
 			}
 			
-			if (requests.Count == 0 && !keepAlive) {
+			if (requests.Count == 0 && (!keepAlive || stop)) {
 				socket.Close ();
 				server.EndConnection (this);
 			}
+		}
+		
+		public void Stop () {
+			stop = true;
+			foreach (Request req in new ArrayList (requests))
+				EndRequest (req.RequestID, -1,
+					ProtocolStatus.RequestComplete);
 		}
 		
 		public Server Server {

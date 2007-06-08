@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Net.Sockets;
 using System.Globalization;
+using System.Threading;
 
 namespace FastCgi
 {
@@ -42,17 +43,17 @@ namespace FastCgi
 		public ResponderRequest (ushort requestID, Connection connection)
 			: base (requestID, connection)
 		{
-			if (!connection.Server.SupportsResponder)
+			if (!Server.SupportsResponder)
 				throw new Exception ();
 			
-			responder = connection.Server.CreateResponder (this);
+			responder = Server.CreateResponder (this);
 			
 			InputDataReceived  += OnInputDataReceived;
 			InputDataCompleted += OnInputDataCompleted;
 		}
 		
 		public byte [] InputData {
-			get {return input_data;}
+			get {return input_data != null ? input_data : new byte [0];}
 		}
 		
 		private void OnInputDataReceived (Request sender, byte [] data)
@@ -95,11 +96,19 @@ namespace FastCgi
 		private void OnInputDataCompleted (Request sender)
 		{
 			DataNeeded = false;
-			if (write_index < input_data.Length) {
+			if (input_data != null && (write_index < input_data.Length)) {
 				AbortRequest ("Insufficient input data received.");
 				return;
 			}
 			
+			if (Server.MultiplexConnections)
+				ThreadPool.QueueUserWorkItem (Worker);
+			else
+				Worker (null);
+		}
+		
+		private void Worker (object state)
+		{
 			int appStatus = responder.Process ();
 			CompleteRequest (appStatus, ProtocolStatus.RequestComplete);
 		}

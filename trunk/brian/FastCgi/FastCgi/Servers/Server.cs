@@ -38,7 +38,9 @@ namespace FastCgi
 	{
 		private ArrayList connections = new ArrayList ();
 		private Socket listen_socket;
+		private bool started = false;
 		private bool accepting = false;
+		private Thread runner;
 		private object accept_lock = new object ();
 		private AsyncCallback accept_cb;
 		private int  max_connections       = int.MaxValue;
@@ -78,19 +80,53 @@ namespace FastCgi
 			set {multiplex_connections = value;}
 		}
 		
-		public void Start ()
+		public void Start (bool background)
 		{
-			Logger.Write (LogLevel.Notice, "Server.Start () [ENTER]");
+			if (started)
+				throw new InvalidOperationException ("The server is already started.");
+			
 			listen_socket = CreateSocket ();
 			listen_socket.Blocking = false;
 			listen_socket.Listen (500);
+			
+			runner = new Thread (new ThreadStart (RunServer));
+			runner.IsBackground = background;
+			runner.Start ();
+		}
+		
+		void RunServer ()
+		{
+			started = true;
 			accept_cb = new AsyncCallback (OnAccept);
 			listen_socket.BeginAccept (accept_cb, null);
-			Logger.Write (LogLevel.Notice, "Server.Start () [EXIT]");
+			if (runner.IsBackground)
+				return;
+
+			while (true) // Just sleep until we're aborted.
+				Thread.Sleep (1000000);
+		}
+		
+		public void Stop ()
+		{
+			if (!started)
+				throw new InvalidOperationException (
+					"The server is not started.");
+
+			started = false;
+			runner.Abort ();
+			listen_socket.Close ();
+			foreach (Connection c in new ArrayList (connections)) {
+				EndConnection (c);
+			}
 		}
 		
 		public void EndConnection (Connection connection)
 		{
+			if (connection == null)
+				throw new ArgumentNullException ("connection");
+			
+			connection.Stop ();
+			
 			if (connections.Contains (connection))
 				connections.Remove (connection);
 			
@@ -99,11 +135,11 @@ namespace FastCgi
 		}
 		
 		public bool CanAccept {
-			get {return ConnectionCount < max_connections;}
+			get {return started && ConnectionCount < max_connections;}
 		}
 		
 		public bool CanRequest {
-			get {return RequestCount < max_requests;}
+			get {return started && RequestCount < max_requests;}
 		}
 		
 		public int ConnectionCount {
@@ -115,6 +151,7 @@ namespace FastCgi
 				int requests = 0;
 				foreach (Connection c in connections)
 					requests += c.RequestCount;
+				
 				return requests;
 			}
 		}
@@ -126,7 +163,8 @@ namespace FastCgi
 				
 				if (pairs.ContainsKey (key)) {
 					Logger.Write (LogLevel.Warning,
-						"Server.GetValues: Duplicate name, '" + key + "', encountered.");
+						"Server.GetValues: Duplicate name, '{0}', encountered.",
+						key);
 					continue;
 				}
 				
@@ -156,7 +194,8 @@ namespace FastCgi
 				
 				if (value == null) {
 					Logger.Write (LogLevel.Warning,
-						"Server.GetValues: Unknown name, '" + name + "', encountered.");
+						"Server.GetValues: Unknown name, '{0}', encountered.",
+						key);
 					continue;
 				}
 				
@@ -179,7 +218,7 @@ namespace FastCgi
 				Socket accepted = listen_socket.EndAccept (ares);
 				accepted.Blocking = true;
 				connection = new Connection (accepted, this);
-				connections.Add (connections);
+				connections.Add (connection);
 			} catch {
 			}
 			
@@ -187,7 +226,7 @@ namespace FastCgi
 				BeginAccept ();
 			
 			if (connection != null)
-				connection.Start ();
+				connection.Run ();
 			
 			Logger.Write (LogLevel.Notice, "Server.OnAccept () [EXIT]");
 		}
@@ -203,7 +242,19 @@ namespace FastCgi
 		private System.Type responder_type = null;
 		public void SetResponder (System.Type responder)
 		{
-			if (!responder.IsSubclassOf (typeof (IResponder)))
+			if (responder == null)
+			{
+				responder_type = responder;
+				return;
+			}
+			
+			int i = 0;
+			System.Type [] faces = responder.GetInterfaces ();
+			System.Type iresp_type = typeof (IResponder);
+			while (i < faces.Length && faces [i] != iresp_type)
+				i ++;
+			
+			if (i == faces.Length)
 				throw new ArgumentException
 					("Responder must implement the FastCgi.IResponder interface.",
 					"responder");
@@ -220,7 +271,7 @@ namespace FastCgi
 		public IResponder CreateResponder (ResponderRequest request)
 		{
 			return (IResponder) Activator.CreateInstance
-				(responder_type, new object [] {this});
+				(responder_type, new object [] {request});
 		}
 		
 		public bool SupportsResponder {get {return responder_type != null;}}
