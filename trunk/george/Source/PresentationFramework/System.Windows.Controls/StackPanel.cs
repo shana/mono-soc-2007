@@ -79,7 +79,7 @@ namespace System.Windows.Controls {
 				double child_size = horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
 				if (ScrollOwner == null)
 					child_size = Math.Min(child_size, available_size - used_size);
-				child.Arrange(horizontal ? new Rect(used_size, 0, child_size, DesiredSize.Height) : new Rect(0, used_size, DesiredSize.Width, child_size));
+				child.Arrange(horizontal ? new Rect(used_size, 0, child_size, finalSize.Height) : new Rect(0, used_size, finalSize.Width, child_size));
 				used_size += child_size;
 				if (used_size == available_size)
 					break;
@@ -128,16 +128,19 @@ namespace System.Windows.Controls {
 			#endregion
 			#region Adjust result to respect stretch alignment and available size
 			if (!(double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height))) {
-				if (HorizontalAlignment == HorizontalAlignment.Stretch)
-					result.Width = availableSize.Width;
-				else
-					if (result.Width > availableSize.Width)
+				//TODO: Is this needed for both directions?
+				if (!ContentScroll) {
+					if (HorizontalAlignment == HorizontalAlignment.Stretch)
 						result.Width = availableSize.Width;
-				if (VerticalAlignment == VerticalAlignment.Stretch)
-					result.Height = availableSize.Height;
-				else
-					if (result.Height > availableSize.Height)
+					else
+						if (result.Width > availableSize.Width)
+							result.Width = availableSize.Width;
+					if (VerticalAlignment == VerticalAlignment.Stretch)
 						result.Height = availableSize.Height;
+					else
+						if (result.Height > availableSize.Height)
+							result.Height = availableSize.Height;
+				}
 			}
 			#endregion
 			return result;

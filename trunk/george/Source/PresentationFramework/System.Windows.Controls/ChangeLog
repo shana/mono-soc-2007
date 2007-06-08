@@ -1,5 +1,9 @@
 2007-06-08  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* StackPanel.cs: Fixed layout.
+
+2007-06-08  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* StackPanel.cs: Implemented most of IScrollInfo.
 
 2007-06-06  George Giolfan  <georgegiolfan@yahoo.com>
