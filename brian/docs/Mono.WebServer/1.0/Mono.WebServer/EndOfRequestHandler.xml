@@ -1,0 +1,21 @@
+<Type Name="EndOfRequestHandler" FullName="Mono.WebServer.EndOfRequestHandler">
+  <TypeSignature Language="C#" Value="public delegate void EndOfRequestHandler(MonoWorkerRequest request);" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Delegate</BaseTypeName>
+  </Base>
+  <Parameters>
+    <Parameter Name="request" Type="Mono.WebServer.MonoWorkerRequest" />
+  </Parameters>
+  <ReturnValue>
+    <ReturnType>System.Void</ReturnType>
+  </ReturnValue>
+  <Docs>
+    <param name="request">To be added.</param>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>

@@ -1,0 +1,51 @@
+<Type Name="XSPWorkerRequest" FullName="Mono.WebServer.XSPWorkerRequest">
+  <TypeSignature Language="C#" Value="public class XSPWorkerRequest : Mono.WebServer.MonoWorkerRequest" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer2</AssemblyName>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>Mono.WebServer.MonoWorkerRequest</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XSPWorkerRequest (int requestId, Mono.WebServer.XSPRequestBroker requestBroker, Mono.WebServer.IApplicationHost appHost, System.Net.EndPoint localEP, System.Net.EndPoint remoteEP, string verb, string path, string queryString, string protocol, byte[] inputBuffer, IntPtr socket, bool secure);" />
+      <MemberType>Constructor</MemberType>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+        <Parameter Name="requestBroker" Type="Mono.WebServer.XSPRequestBroker" />
+        <Parameter Name="appHost" Type="Mono.WebServer.IApplicationHost" />
+        <Parameter Name="localEP" Type="System.Net.EndPoint" />
+        <Parameter Name="remoteEP" Type="System.Net.EndPoint" />
+        <Parameter Name="verb" Type="System.String" />
+        <Parameter Name="path" Type="System.String" />
+        <Parameter Name="queryString" Type="System.String" />
+        <Parameter Name="protocol" Type="System.String" />
+        <Parameter Name="inputBuffer" Type="System.Byte[]" />
+        <Parameter Name="socket" Type="System.IntPtr" />
+        <Parameter Name="secure" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">To be added.</param>
+        <param name="requestBroker">To be added.</param>
+        <param name="appHost">To be added.</param>
+        <param name="localEP">To be added.</param>
+        <param name="remoteEP">To be added.</param>
+        <param name="verb">To be added.</param>
+        <param name="path">To be added.</param>
+        <param name="queryString">To be added.</param>
+        <param name="protocol">To be added.</param>
+        <param name="inputBuffer">To be added.</param>
+        <param name="socket">To be added.</param>
+        <param name="secure">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>
