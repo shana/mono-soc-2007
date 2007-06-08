@@ -1,0 +1,36 @@
+<Type Name="Paths" FullName="Mono.WebServer.Paths">
+  <TypeSignature Language="C#" Value="public class Paths" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer2</AssemblyName>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Object</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName="GetPathsFromUri">
+      <MemberSignature Language="C#" Value="public static void GetPathsFromUri (string uri, out string realUri, out string pathInfo);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="uri" Type="System.String" />
+        <Parameter Name="realUri" Type="System.String&amp;" RefType="out" />
+        <Parameter Name="pathInfo" Type="System.String&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="uri">To be added.</param>
+        <param name="realUri">To be added.</param>
+        <param name="pathInfo">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>

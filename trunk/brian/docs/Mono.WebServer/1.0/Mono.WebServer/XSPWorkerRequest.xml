@@ -1,0 +1,51 @@
+<Type Name="XSPWorkerRequest" FullName="Mono.WebServer.XSPWorkerRequest">
+  <TypeSignature Language="C#" Value="public class XSPWorkerRequest : Mono.WebServer.MonoWorkerRequest" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>Mono.WebServer.MonoWorkerRequest</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XSPWorkerRequest (int requestId, Mono.WebServer.XSPRequestBroker requestBroker, Mono.WebServer.IApplicationHost appHost, System.Net.EndPoint localEP, System.Net.EndPoint remoteEP, string verb, string path, string queryString, string protocol, byte[] inputBuffer, IntPtr socket, bool secure);" />
+      <MemberType>Constructor</MemberType>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+        <Parameter Name="requestBroker" Type="Mono.WebServer.XSPRequestBroker" />
+        <Parameter Name="appHost" Type="Mono.WebServer.IApplicationHost" />
+        <Parameter Name="localEP" Type="System.Net.EndPoint" />
+        <Parameter Name="remoteEP" Type="System.Net.EndPoint" />
+        <Parameter Name="verb" Type="System.String" />
+        <Parameter Name="path" Type="System.String" />
+        <Parameter Name="queryString" Type="System.String" />
+        <Parameter Name="protocol" Type="System.String" />
+        <Parameter Name="inputBuffer" Type="System.Byte[]" />
+        <Parameter Name="socket" Type="System.IntPtr" />
+        <Parameter Name="secure" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the new request as is used by <paramref name="requestBroker" />.</param>
+        <param name="requestBroker">A <see cref="T:Mono.WebServer.XSPRequestBroker" /> containing the request broker used to mannage the new instance.</param>
+        <param name="appHost">A <see cref="T:Mono.WebServer.IApplicationHost" /> containing the application host that created the new instance.</param>
+        <param name="localEP">A <see cref="T:System.Net.EndPoint" /> containing the local endpoint of the connection.</param>
+        <param name="remoteEP">A <see cref="T:System.Net.EndPoint" /> containing the remote endpoint of the connection.</param>
+        <param name="verb">A <see cref="T:System.String" /> containing the HTTP request verb used in making the request. (eg. "GET", "POST", "PUSH", ...)</param>
+        <param name="path">A <see cref="T:System.String" /> containing the path used in making the request.</param>
+        <param name="queryString">A <see cref="T:System.String" /> containing the query string used in making the request.</param>
+        <param name="protocol">A <see cref="T:System.String" /> containing the protocol used in making the request. (eg. "HTTP/1.1")</param>
+        <param name="inputBuffer">A <see cref="T:System.Byte[]" /> to use when reading input from the request broker.</param>
+        <param name="socket">A <see cref="T:System.IntPtr" /> containing the raw socket used for the new request.</param>
+        <param name="secure">A <see cref="T:System.Boolean" /> indicating whether or not the connection is secure.</param>
+        <summary>Constructs and initializes a new instance of <see cref="T:Mono.WebServer.XSPWorkerRequest" /> with a collection of parameters.</summary>
+        <remarks />
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>This class processes ASP.NET requests produced by a <see cref="T:Mono.WebServer.XSPApplicationHost" />.</summary>
+    <remarks>There should be no reason for using this class. It is used primarily by <see cref="T:Mono.WebServer.XSPWebSource" />.</remarks>
+  </Docs>
+</Type>

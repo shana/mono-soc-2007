@@ -1,0 +1,218 @@
+<Type Name="ApplicationServer" FullName="Mono.WebServer.ApplicationServer">
+  <TypeSignature Language="C#" Value="public class ApplicationServer : MarshalByRefObject" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.MarshalByRefObject</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public ApplicationServer (Mono.WebServer.WebSource source);" />
+      <MemberType>Constructor</MemberType>
+      <Parameters>
+        <Parameter Name="source" Type="Mono.WebServer.WebSource" />
+      </Parameters>
+      <Docs>
+        <param name="source">A <see cref="T:Mono.WebServer.WebSource" /> to provide request management for the new instance.</param>
+        <summary>Constructs and initializes a new instance of <see cref="T:Mono.WebServer.ApplicationServer" /> for a specified web source.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddApplication">
+      <MemberSignature Language="C#" Value="public void AddApplication (string vhost, int vport, string vpath, string fullPath);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="vhost" Type="System.String" />
+        <Parameter Name="vport" Type="System.Int32" />
+        <Parameter Name="vpath" Type="System.String" />
+        <Parameter Name="fullPath" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="vhost">A <see cref="T:System.String" /> specifying what host names to use the application on. A "*" at the beginning is treated as a wildcard and <see langword="null" /> indicates the application will be used for all hosts.</param>
+        <param name="vport">A <see cref="T:System.Int32" /> specifying what ports to use the application on. A value of -1 indicates that application will be used for all ports.</param>
+        <param name="vpath">A <see cref="T:System.String" /> specifying what virtual path to use the application on.</param>
+        <param name="fullPath">A <see cref="T:System.String" /> specifying the path within the file system at which the file is stored.</param>
+        <summary>Adds an application to the current instance.</summary>
+        <remarks><para>The <paramref name="vhost" /> and <paramref name="vport" /> fields should be used when a single server is run with multiple host names. For example, the following application will only run on "blog.myhost.com":</para>
+
+<example>
+  <code lang="C#">myServer.AddApplications("blog.myhost.com", -1, "/", "/path/to/blog/software");</code>
+</example></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddApplicationsFromCommandLine">
+      <MemberSignature Language="C#" Value="public void AddApplicationsFromCommandLine (string applications);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="applications" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="applications">A <see cref="T:System.String" /> containing applications in a command-line friendly format: "<c>[[hostname:]port:]VPath:realpath,[[hostname:]port:]VPath:realpath,</c>..."</param>
+        <summary>Adds applications from a command-line friendly format.</summary>
+        <remarks><para>In servers provided by the Mono Project (tm), applications are passed to the command line via the "<c>--applications</c>" argument.</para>
+
+<para><block subset="none" type="note">
+See <see cref="M:Mono.WebServer.ApplicationServer.AddApplication(System.String,System.Int32,System.String,System.String)" /> for a more in depth expanation of the parameters.
+</block></para></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddApplicationsFromConfigDirectory">
+      <MemberSignature Language="C#" Value="public void AddApplicationsFromConfigDirectory (string directoryName);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="directoryName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="directoryName">A <see cref="T:System.String" /> specifying a directory to load configurations from.</param>
+        <summary>Adds applications by loading configurations from a directory.</summary>
+        <remarks><para>This method loads applications from all files in the specified directory with the ".webapp" extension. To load a single file, use <see cref="M:Mono.WebServer.ApplicationServer.AddApplicationsFromConfigFile(System.String)" />.</para></remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddApplicationsFromConfigFile">
+      <MemberSignature Language="C#" Value="public void AddApplicationsFromConfigFile (string fileName);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="fileName" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="fileName">A <see cref="T:System.String" /> specifying a "webapp" file to load applications from.</param>
+        <summary>Adds applications from a "webapp" configuration file.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="DestroyHost">
+      <MemberSignature Language="C#" Value="public void DestroyHost (Mono.WebServer.IApplicationHost host);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="host" Type="Mono.WebServer.IApplicationHost" />
+      </Parameters>
+      <Docs>
+        <param name="host">A <see cref="T:Mono.WebServer.IApplicationHost" /> to be destroyed.</param>
+        <summary>Removes and disassociates a <see cref="T:Mono.WebServer.IApplicationHost" /> from the application it is hosting.</summary>
+        <remarks>This function merely disconnects the host from it's application so it can be garbage collected. If another request is made of the application, a new host will be created.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetApplicationForPath">
+      <MemberSignature Language="C#" Value="public Mono.WebServer.VPathToHost GetApplicationForPath (string vhost, int port, string path, bool defaultToRoot);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.WebServer.VPathToHost</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="vhost" Type="System.String" />
+        <Parameter Name="port" Type="System.Int32" />
+        <Parameter Name="path" Type="System.String" />
+        <Parameter Name="defaultToRoot" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="vhost">A <see cref="T:System.String" /> specifying what hostnames to check for. If <see langword="null" />, the hostname will not be check.</param>
+        <param name="port">A <see cref="T:System.Int32" /> specifying what ports to check for. If -1, the port will not be check.</param>
+        <param name="path">A <see cref="T:System.String" /> specifying what virtual path to check for the application.</param>
+        <param name="defaultToRoot">A <see cref="T:System.Boolean" /> specifying whether or not to check for the application on the default path, "/", if no matching application is found.</param>
+        <summary>Gets the application to use for a specified path and host.</summary>
+        <returns>The <see cref="Mono.WebServer.VPathToHost" /> that best matches the given path, or <see langword="null" /> if there was no match.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ReuseSocket">
+      <MemberSignature Language="C#" Value="public void ReuseSocket (System.Net.Sockets.Socket sock, int reuses);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="sock" Type="System.Net.Sockets.Socket" />
+        <Parameter Name="reuses" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="sock">A <see cref="T:System.Net.Sockets.Socket" /> with a pending request.</param>
+        <param name="reuses">A <see cref="T:System.Int32" /> specifying the number of times the socket has previously been used.</param>
+        <summary>Reuses an existing socket to handle an additional request.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Start">
+      <MemberSignature Language="C#" Value="public bool Start (bool bgThread);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="bgThread" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="bgThread">A <see cref="T:System.Boolean" /> specifying whether or not the server should run as a background or foreground thread.</param>
+        <summary>Starts the server as either a background or foreground threadk.</summary>
+        <returns>A <see cref="T:System.Boolean" /> indicating whether or not the server was started successfully. </returns>
+        <remarks><para><block subset="none" type="note">Background threads are identical to
+   foreground threads except for the fact that background threads do not
+   prevent a process from terminating. Once all foreground threads belonging to a
+   process have terminated, the execution engine ends the process by invoking
+<see cref="M:System.Threading.Thread.Abort(System.Object)" /> on any background threads that
+   
+   are
+   still alive. </block></para>
+
+See <see cref="P:System.Threading.Thread.IsBackground" />.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Stop">
+      <MemberSignature Language="C#" Value="public void Stop ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Stops the server thread.</summary>
+        <remarks>In addition to stopping the server thread, the listening socket is closed and unloads any virtual hosts created by the server socket.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UnloadAll">
+      <MemberSignature Language="C#" Value="public void UnloadAll ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Unloads all virtual hosts created by the server thread.</summary>
+        <remarks>It should be unneccessary to call this function as it is automatically evoked by <see cref="M:Mono.WebServer.ApplicationServer.Stop()" />.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Verbose">
+      <MemberSignature Language="C#" Value="public bool Verbose { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets and sets whether the server should output verbose information about its action.</summary>
+        <value>A <see cref="T:System.Boolean" /> specifying whether the server should output verbose information about its action.</value>
+        <remarks>If <see langword="true" />, the server will output information on registered applications and any additional output from the workers.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>This class runs and manages an ASP.NET application server.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>

@@ -1,0 +1,102 @@
+<Type Name="XSPWebSource" FullName="Mono.WebServer.XSPWebSource">
+  <TypeSignature Language="C#" Value="public class XSPWebSource : Mono.WebServer.WebSource" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer2</AssemblyName>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>Mono.WebServer.WebSource</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XSPWebSource (System.Net.IPAddress address, int port);" />
+      <MemberType>Constructor</MemberType>
+      <Parameters>
+        <Parameter Name="address" Type="System.Net.IPAddress" />
+        <Parameter Name="port" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="address">To be added.</param>
+        <param name="port">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XSPWebSource (System.Net.IPAddress address, int port, Mono.Security.Protocol.Tls.SecurityProtocolType securityProtocol, System.Security.Cryptography.X509Certificates.X509Certificate cert, Mono.Security.Protocol.Tls.PrivateKeySelectionCallback keyCB, bool allowClientCert, bool requireClientCert);" />
+      <MemberType>Constructor</MemberType>
+      <Parameters>
+        <Parameter Name="address" Type="System.Net.IPAddress" />
+        <Parameter Name="port" Type="System.Int32" />
+        <Parameter Name="securityProtocol" Type="Mono.Security.Protocol.Tls.SecurityProtocolType" />
+        <Parameter Name="cert" Type="System.Security.Cryptography.X509Certificates.X509Certificate" />
+        <Parameter Name="keyCB" Type="Mono.Security.Protocol.Tls.PrivateKeySelectionCallback" />
+        <Parameter Name="allowClientCert" Type="System.Boolean" />
+        <Parameter Name="requireClientCert" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="address">To be added.</param>
+        <param name="port">To be added.</param>
+        <param name="securityProtocol">To be added.</param>
+        <param name="cert">To be added.</param>
+        <param name="keyCB">To be added.</param>
+        <param name="allowClientCert">To be added.</param>
+        <param name="requireClientCert">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetListenAddress">
+      <MemberSignature Language="C#" Value="public void SetListenAddress (int port);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="port" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="port">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetListenAddress">
+      <MemberSignature Language="C#" Value="public void SetListenAddress (System.Net.IPAddress address, int port);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="address" Type="System.Net.IPAddress" />
+        <Parameter Name="port" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="address">To be added.</param>
+        <param name="port">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetListenAddress">
+      <MemberSignature Language="C#" Value="public void SetListenAddress (System.Net.IPEndPoint bindAddress);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="bindAddress" Type="System.Net.IPEndPoint" />
+      </Parameters>
+      <Docs>
+        <param name="bindAddress">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>

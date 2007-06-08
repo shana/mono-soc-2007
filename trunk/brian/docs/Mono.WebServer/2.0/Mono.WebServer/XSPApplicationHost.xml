@@ -1,0 +1,65 @@
+<Type Name="XSPApplicationHost" FullName="Mono.WebServer.XSPApplicationHost">
+  <TypeSignature Language="C#" Value="public class XSPApplicationHost : Mono.WebServer.BaseApplicationHost" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer2</AssemblyName>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>Mono.WebServer.BaseApplicationHost</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XSPApplicationHost ();" />
+      <MemberType>Constructor</MemberType>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ProcessRequest">
+      <MemberSignature Language="C#" Value="public void ProcessRequest (int reqId, long localEPAddr, int localEPPort, long remoteEPAdds, int remoteEPPort, string verb, string path, string queryString, string protocol, byte[] inputBuffer, string redirect, IntPtr socket, Mono.WebServer.SslInformations ssl);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="reqId" Type="System.Int32" />
+        <Parameter Name="localEPAddr" Type="System.Int64" />
+        <Parameter Name="localEPPort" Type="System.Int32" />
+        <Parameter Name="remoteEPAdds" Type="System.Int64" />
+        <Parameter Name="remoteEPPort" Type="System.Int32" />
+        <Parameter Name="verb" Type="System.String" />
+        <Parameter Name="path" Type="System.String" />
+        <Parameter Name="queryString" Type="System.String" />
+        <Parameter Name="protocol" Type="System.String" />
+        <Parameter Name="inputBuffer" Type="System.Byte[]" />
+        <Parameter Name="redirect" Type="System.String" />
+        <Parameter Name="socket" Type="System.IntPtr" />
+        <Parameter Name="ssl" Type="Mono.WebServer.SslInformations" />
+      </Parameters>
+      <Docs>
+        <param name="reqId">To be added.</param>
+        <param name="localEPAddr">To be added.</param>
+        <param name="localEPPort">To be added.</param>
+        <param name="remoteEPAdds">To be added.</param>
+        <param name="remoteEPPort">To be added.</param>
+        <param name="verb">To be added.</param>
+        <param name="path">To be added.</param>
+        <param name="queryString">To be added.</param>
+        <param name="protocol">To be added.</param>
+        <param name="inputBuffer">To be added.</param>
+        <param name="redirect">To be added.</param>
+        <param name="socket">To be added.</param>
+        <param name="ssl">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>

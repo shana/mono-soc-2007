@@ -1,0 +1,180 @@
+<Type Name="BaseRequestBroker" FullName="Mono.WebServer.BaseRequestBroker">
+  <TypeSignature Language="C#" Value="public class BaseRequestBroker : MarshalByRefObject, Mono.WebServer.IRequestBroker" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.MarshalByRefObject</BaseTypeName>
+  </Base>
+  <Interfaces>
+    <Interface>
+      <InterfaceName>Mono.WebServer.IRequestBroker</InterfaceName>
+    </Interface>
+  </Interfaces>
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public BaseRequestBroker ();" />
+      <MemberType>Constructor</MemberType>
+      <Parameters />
+      <Docs>
+        <summary>Constructs and initializes a new instance of <see cref="T:Mono.WebServer.BaseRequestBroker" /> with the default values.</summary>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="Close">
+      <MemberSignature Language="C#" Value="public void Close (int requestId);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to close.</param>
+        <summary>Closes a request with a given ID.</summary>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="Flush">
+      <MemberSignature Language="C#" Value="public void Flush (int requestId);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to flush.</param>
+        <summary>Flushes the output data for a specified request.</summary>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="GetWorker">
+      <MemberSignature Language="C#" Value="public Mono.WebServer.Worker GetWorker (int requestId);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.WebServer.Worker</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to find.</param>
+        <summary>Gets the worker for a specified request.</summary>
+        <returns>A <see cref="T:Mono.WebServer.Worker" /> containing the worker for the specified request, or <see langword="null" /> if the request was not found.</returns>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="IsConnected">
+      <MemberSignature Language="C#" Value="public bool IsConnected (int requestId);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to check.</param>
+        <summary>Gets whether or not a given request is connected.</summary>
+        <returns>A <see cref="T:System.Boolean" /> indicating whether or not the request is connected. A value of <see langword="false" /> indicated either that the request is not connected or that the request was not found.</returns>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="Read">
+      <MemberSignature Language="C#" Value="public int Read (int requestId, int size, out byte[] buffer);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+        <Parameter Name="size" Type="System.Int32" />
+        <Parameter Name="buffer" Type="System.Byte[]&amp;" RefType="out" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to read from.</param>
+        <param name="size">A <see cref="T:System.Int32" /> specifying the number of bytes to read.</param>
+        <param name="buffer">A <see cref="T:System.Byte[]" /> containing the data that was read.</param>
+        <summary>Reads data from a specified request and populates a buffer.</summary>
+        <returns>A <see cref="T:System.Int32" /> indicating the number of bytes read.</returns>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="RegisterRequest">
+      <MemberSignature Language="C#" Value="public int RegisterRequest (Mono.WebServer.Worker worker);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="worker" Type="Mono.WebServer.Worker" />
+      </Parameters>
+      <Docs>
+        <param name="worker">A <see cref="T:Mono.WebServer.Worker" /> to register.</param>
+        <summary>Registers a request with the current instance.</summary>
+        <returns>A <see cref="T:System.Int32" /> containing the request ID as registered by the current instance.</returns>
+        <remarks>The request ID is used for performing operations on the worker.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="UnregisterRequest">
+      <MemberSignature Language="C#" Value="public void UnregisterRequest (int id);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="id" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="id">A <see cref="T:System.Int32" /> containing the ID of the request to unregister.</param>
+        <summary>Unregisters a request from the current instance and releases the request ID.</summary>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="ValidRequest">
+      <MemberSignature Language="C#" Value="protected bool ValidRequest (int requestId);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to check.</param>
+        <summary>Validates a specified request.</summary>
+        <returns>A <see cref="T:System.Boolean" /> indicating whether or not the request is valid.</returns>
+        <remarks />
+      </Docs>
+    </Member>
+    <Member MemberName="Write">
+      <MemberSignature Language="C#" Value="public void Write (int requestId, byte[] buffer, int position, int size);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+        <Parameter Name="buffer" Type="System.Byte[]" />
+        <Parameter Name="position" Type="System.Int32" />
+        <Parameter Name="size" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to write to.</param>
+        <param name="buffer">A <see cref="T:System.Byte[]" /> containing the data to write.</param>
+        <param name="position">A <see cref="T:System.Int32" /> indicating at what position in <paramref name="buffer" /> to start writing.</param>
+        <param name="size">A <see cref="T:System.Int32" /> specifying the number of bytes to write.</param>
+        <summary>Writes response data to a specified request.</summary>
+        <remarks />
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>This class provides a base for brokering requests.</summary>
+    <remarks />
+  </Docs>
+</Type>

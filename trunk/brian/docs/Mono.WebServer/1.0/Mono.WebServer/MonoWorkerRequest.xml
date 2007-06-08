@@ -1,0 +1,210 @@
+<Type Name="MonoWorkerRequest" FullName="Mono.WebServer.MonoWorkerRequest">
+  <TypeSignature Language="C#" Value="public abstract class MonoWorkerRequest : System.Web.Hosting.SimpleWorkerRequest" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>System.Web.Hosting.SimpleWorkerRequest</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public MonoWorkerRequest (Mono.WebServer.IApplicationHost appHost);" />
+      <MemberType>Constructor</MemberType>
+      <Parameters>
+        <Parameter Name="appHost" Type="Mono.WebServer.IApplicationHost" />
+      </Parameters>
+      <Docs>
+        <param name="appHost">A <see cref="T:Mono.WebServer.IApplicationHost" /> containing information about the application environment.</param>
+        <summary>Constructs and initializes a new instance of <see cref="T:Mono.WebServer.MonoWorkerRequest" /> for a specified application host.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="AddServerVariable">
+      <MemberSignature Language="C#" Value="public void AddServerVariable (string name, string value);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="name" Type="System.String" />
+        <Parameter Name="value" Type="System.String" />
+      </Parameters>
+      <Docs>
+        <param name="name">To be added.</param>
+        <param name="value">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="client_raw">
+      <MemberSignature Language="C#" Value="protected byte[] client_raw;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ClientCertificate">
+      <MemberSignature Language="C#" Value="public System.Security.Cryptography.X509Certificates.X509Certificate ClientCertificate { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Security.Cryptography.X509Certificates.X509Certificate</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Encoding">
+      <MemberSignature Language="C#" Value="protected virtual System.Text.Encoding Encoding { set; get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Text.Encoding</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <value>To be added.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="EndOfRequestEvent">
+      <MemberSignature Language="C#" Value="public event Mono.WebServer.EndOfRequestHandler EndOfRequestEvent;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.WebServer.EndOfRequestHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetRequestData">
+      <MemberSignature Language="C#" Value="protected abstract bool GetRequestData ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="HeaderEncoding">
+      <MemberSignature Language="C#" Value="protected virtual System.Text.Encoding HeaderEncoding { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Text.Encoding</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the encoding used when getting the response headers.</summary>
+        <value>The <see cref="T:System.Text.Encoding" /> to use when encoding the response headers.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="MapPathEvent">
+      <MemberSignature Language="C#" Value="public event Mono.WebServer.MapPathEventHandler MapPathEvent;" />
+      <MemberType>Event</MemberType>
+      <ReturnValue>
+        <ReturnType>Mono.WebServer.MapPathEventHandler</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Raised when the current instance requires a path to be mapped.</summary>
+        <remarks>An event handler used to map the path should read the value stored in <see cref="P:Mono.WebServer.MapPathEventArgs.Path" /> and, if the path is mapped, store the mapped path in <see cref="P:Mono.WebServer.MapPathEventArgs.MappedPath" />.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ProcessRequest">
+      <MemberSignature Language="C#" Value="public void ProcessRequest ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>Processes the request contained in the current instance with the HTTP Runtime.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="ReadRequestData">
+      <MemberSignature Language="C#" Value="public bool ReadRequestData ();" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Boolean</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <returns>To be added.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="RequestId">
+      <MemberSignature Language="C#" Value="public abstract int RequestId { get; };" />
+      <MemberType>Property</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>Gets the request ID of the current instance as assigned by the request broker.</summary>
+        <value>A <see cref="T:System.Int32" /> specifying the unique ID of the current instance as used by its request broker.</value>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SendFromStream">
+      <MemberSignature Language="C#" Value="protected void SendFromStream (System.IO.Stream stream, long offset, long length);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="stream" Type="System.IO.Stream" />
+        <Parameter Name="offset" Type="System.Int64" />
+        <Parameter Name="length" Type="System.Int64" />
+      </Parameters>
+      <Docs>
+        <param name="stream">To be added.</param>
+        <param name="offset">To be added.</param>
+        <param name="length">To be added.</param>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="server_raw">
+      <MemberSignature Language="C#" Value="protected byte[] server_raw;" />
+      <MemberType>Field</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Byte[]</ReturnType>
+      </ReturnValue>
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="SetClientCertificate">
+      <MemberSignature Language="C#" Value="public void SetClientCertificate (byte[] rawcert);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="rawcert" Type="System.Byte[]" />
+      </Parameters>
+      <Docs>
+        <param name="rawcert">A <see cref="T:System.Byte[]" /> containing a raw certificate.</param>
+        <summary>Sets the client certificate data for the current instance.</summary>
+        <remarks>The certificate data is needed in a secure context. For example, it could be <see cref="P:Mono.WebServer.SslInformations.RawClientCertificate" />.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>

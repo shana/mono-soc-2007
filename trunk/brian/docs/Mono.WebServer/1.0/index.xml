@@ -1,0 +1,50 @@
+<Overview>
+  <Assemblies>
+    <Assembly Name="Mono.WebServer" Version="0.1.0.0">
+      <Attributes>
+        <Attribute>
+          <AttributeName>System.Reflection.AssemblyCompany("Novell, Inc.")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Reflection.AssemblyCopyright("(c) 2002-2005 Novell, Inc.")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Reflection.AssemblyDescription("Classes for embedding an ASP.NET server in your application .NET 1.1")</AttributeName>
+        </Attribute>
+        <Attribute>
+          <AttributeName>System.Reflection.AssemblyTitle("Mono.WebServer")</AttributeName>
+        </Attribute>
+      </Attributes>
+    </Assembly>
+  </Assemblies>
+  <Remarks>To be added.</Remarks>
+  <Copyright>To be added.</Copyright>
+  <Types>
+    <Namespace Name="Mono.WebServer">
+      <Type Name="ApplicationServer" />
+      <Type Name="VPathToHost" />
+      <Type Name="HttpErrors" />
+      <Type Name="Paths" />
+      <Type Name="BaseApplicationHost" />
+      <Type Name="BaseRequestBroker" />
+      <Type Name="IApplicationHost" />
+      <Type Name="IRequestBroker" />
+      <Type Name="RequestData" />
+      <Type Name="InitialWorkerRequest" />
+      <Type Name="WebSource" />
+      <Type Name="Worker" />
+      <Type Name="LingeringNetworkStream" />
+      <Type Name="MapPathEventArgs" />
+      <Type Name="MonoWorkerRequest" />
+      <Type Name="XSPWebSource" />
+      <Type Name="XSPRequestBroker" />
+      <Type Name="XSPApplicationHost" />
+      <Type Name="SslInformations" />
+      <Type Name="XSPWorkerRequest" />
+      <Type Name="WebTrace" />
+      <Type Name="MapPathEventHandler" />
+      <Type Name="EndOfRequestHandler" />
+    </Namespace>
+  </Types>
+  <Title>Mono.WebServer</Title>
+</Overview>

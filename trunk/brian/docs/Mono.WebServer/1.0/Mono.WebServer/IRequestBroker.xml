@@ -1,0 +1,13 @@
+<Type Name="IRequestBroker" FullName="Mono.WebServer.IRequestBroker">
+  <TypeSignature Language="C#" Value="public interface IRequestBroker" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Interfaces />
+  <Members />
+  <Docs>
+    <summary>This interface provides a basis for brokering requests.</summary>
+    <remarks>This interface is intentionally left empty, as each request broker is specific to the implementation.</remarks>
+  </Docs>
+</Type>

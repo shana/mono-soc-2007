@@ -1,0 +1,59 @@
+<Type Name="XSPRequestBroker" FullName="Mono.WebServer.XSPRequestBroker">
+  <TypeSignature Language="C#" Value="public class XSPRequestBroker : Mono.WebServer.BaseRequestBroker" />
+  <AssemblyInfo>
+    <AssemblyName>Mono.WebServer</AssemblyName>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+  </AssemblyInfo>
+  <Base>
+    <BaseTypeName>Mono.WebServer.BaseRequestBroker</BaseTypeName>
+  </Base>
+  <Interfaces />
+  <Members>
+    <Member MemberName=".ctor">
+      <MemberSignature Language="C#" Value="public XSPRequestBroker ();" />
+      <MemberType>Constructor</MemberType>
+      <Parameters />
+      <Docs>
+        <summary>Constructs and initalizes a new instance of <see cref="T:Mono.WebServer.XSPRequestBroker" />.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="Close">
+      <MemberSignature Language="C#" Value="public void Close (int requestId, bool keepAlive);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+        <Parameter Name="keepAlive" Type="System.Boolean" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to close.</param>
+        <param name="keepAlive">A <see cref="T:System.Boolean" /> specifying whether or not the connection should be kept alive after the request is closed.</param>
+        <summary>Closes a request, optionally keeping the connection alive.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+    <Member MemberName="GetReuseCount">
+      <MemberSignature Language="C#" Value="public int GetReuseCount (int requestId);" />
+      <MemberType>Method</MemberType>
+      <ReturnValue>
+        <ReturnType>System.Int32</ReturnType>
+      </ReturnValue>
+      <Parameters>
+        <Parameter Name="requestId" Type="System.Int32" />
+      </Parameters>
+      <Docs>
+        <param name="requestId">A <see cref="T:System.Int32" /> containing the ID of the request to check.</param>
+        <summary>Gets the number of reuses available for a specified request.</summary>
+        <returns>A <see cref="T:System.Int32" /> containing the number of reuses available for the specified request. A value of zero indicates that either the request was not found or it has no remaining reuses.</returns>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
+  </Members>
+  <Docs>
+    <summary>To be added.</summary>
+    <remarks>To be added.</remarks>
+  </Docs>
+</Type>
