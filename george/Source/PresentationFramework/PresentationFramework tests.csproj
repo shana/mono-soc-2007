@@ -79,6 +79,7 @@
     <Compile Include="Test\System.Windows.Controls\LabelTest.cs" />
     <Compile Include="Test\System.Windows.Controls\UIElementTest.cs" />
     <Compile Include="Test\System.Windows.Controls\Utility.cs" />
+    <Compile Include="Test\Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Mono.PresentationFramework.csproj">
