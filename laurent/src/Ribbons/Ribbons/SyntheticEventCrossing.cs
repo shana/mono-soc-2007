@@ -34,8 +34,8 @@ namespace Ribbons
 		
 		public Window Window
 		{
-			set { window = value.Handle; }
-			get { return new Window(window); }
+			set { window = value == null ? IntPtr.Zero : value.Handle; }
+			get { return window == IntPtr.Zero ? null : new Window(window); }
 		}
 		
 		public byte SendEvent
@@ -44,10 +44,10 @@ namespace Ribbons
 			get { return send_event; }
 		}
 		
-		public Window SubWindow
+		public Window Subwindow
 		{
-			set { subwindow = value.Handle; }
-			get { return new Window(subwindow); }
+			set { subwindow = value == null ? IntPtr.Zero : value.Handle; }
+			get { return subwindow == IntPtr.Zero ? null : new Window(subwindow); }
 		}
 		
 		public UInt32 Time
