@@ -4,11 +4,11 @@ using Gtk;
 
 namespace Ribbons
 {
-	public class SmartWindow : Window
+	public class SyntheticWindow : Window
 	{
 		private List<Widget> lastHoveredWidgets;
 		
-		public SmartWindow (WindowType type) : base (type)
+		public SyntheticWindow (WindowType type) : base (type)
 		{
 			lastHoveredWidgets = new List<Gtk.Widget> ();
 		}
