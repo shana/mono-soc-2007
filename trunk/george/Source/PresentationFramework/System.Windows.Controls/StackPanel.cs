@@ -30,14 +30,6 @@ namespace System.Windows.Controls {
 		int logical_offset_height;
 		#endregion
 
-		#region Static Constructor
-		static StackPanel() {
-			//FIXME: I should not do this.
-			HorizontalAlignmentProperty.OverrideMetadata(typeof(StackPanel), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch, FrameworkPropertyMetadataOptions.AffectsMeasure));
-			VerticalAlignmentProperty.OverrideMetadata(typeof(StackPanel), new FrameworkPropertyMetadata(VerticalAlignment.Stretch, FrameworkPropertyMetadataOptions.AffectsMeasure));
-		}
-		#endregion
-
 		#region Public Constructors
 		public StackPanel() {
 		}
@@ -135,19 +127,11 @@ namespace System.Windows.Controls {
 				ScrollOwner.InvalidateScrollInfo();
 			#endregion
 			#region Adjust result to respect stretch alignment and available size
-			if (!(double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height))) {
-				if (!ContentScroll) {
-					if (HorizontalAlignment == HorizontalAlignment.Stretch)
-						result.Width = availableSize.Width;
-					else
-						if (result.Width > availableSize.Width)
-							result.Width = availableSize.Width;
-					if (VerticalAlignment == VerticalAlignment.Stretch)
-						result.Height = availableSize.Height;
-					else
-						if (result.Height > availableSize.Height)
-							result.Height = availableSize.Height;
-				}
+			if (!(double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height)) && !ContentScroll) {
+				if (result.Width > availableSize.Width)
+					result.Width = availableSize.Width;
+				if (result.Height > availableSize.Height)
+					result.Height = availableSize.Height;
 			}
 			#endregion
 			return result;

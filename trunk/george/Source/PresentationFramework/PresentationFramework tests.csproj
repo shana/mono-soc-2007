@@ -87,4 +87,7 @@
       <Name>Mono.PresentationFramework</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Test\ChangeLog" />
+  </ItemGroup>
 </Project>
