@@ -1,5 +1,9 @@
 2007-06-09  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* StackPanelTest.cs: Added Stretch, Stretch2, MakeVisible tests.
+
+2007-06-09  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ButtonTest.cs: Added Panel, ToolBar tests.
 
 2007-06-08  George Giolfan  <georgegiolfan@yahoo.com>

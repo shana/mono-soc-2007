@@ -531,5 +531,85 @@ namespace System.Windows.Controls {
 			w.Show();
 			Assert.AreEqual(p.RenderTransform, TranslateTransform.Identity);
 		}
+
+		[Test]
+		public void Stretch() {
+			Window window = new Window();
+			window.Show();
+			Grid grid = new Grid();
+			window.Content = grid;
+			StackPanel stack_panel = new StackPanel();
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.Children.Add(stack_panel);
+			Assert.AreEqual(stack_panel.ActualWidth, grid.ActualWidth / 2);
+		}
+
+		[Test]
+		public void Stretch2() {
+			Window window = new Window();
+			window.Show();
+			Grid grid = new Grid();
+			window.Content = grid;
+			StackPanel stack_panel = new StackPanel();
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.RowDefinitions.Add(new RowDefinition());
+			grid.RowDefinitions.Add(new RowDefinition());
+			grid.Children.Add(new global::System.Windows.Controls.Button());
+			grid.Children.Add(stack_panel);
+			Grid.SetRow(stack_panel, 1);
+			Grid.SetRow(stack_panel, 1);
+			Assert.AreEqual(stack_panel.ActualWidth, grid.ActualWidth / 2);
+		}
+
+		[Test]
+		public void MakeVisible() {
+			StackPanel p = new StackPanel();
+			Rect result = p.MakeVisible(null, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "1 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "2");
+			result = p.MakeVisible(null, new Rect(100, 100, 100, 100));
+			Assert.AreEqual(p.VerticalOffset, 0, "3 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "3");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "4");
+			global::System.Windows.Controls.Button b = new global::System.Windows.Controls.Button();
+			p.Children.Add(b);
+			result = p.MakeVisible(b, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "5 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "5");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "6");
+			ScrollViewer v = new ScrollViewer();
+			v.Content = p;
+			result = p.MakeVisible(null, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "7 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "7");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "8");
+			result = p.MakeVisible(b, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "9 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "9");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "10");
+			v.CanContentScroll = true;
+			result = p.MakeVisible(null, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "11 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "11");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "12");
+			result = p.MakeVisible(b, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "13 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "13");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "14");
+			Window w = new Window();
+			w.Content = v;
+			w.Show();
+			result = p.MakeVisible(null, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "15 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "15");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "16");
+			result = p.MakeVisible(b, Rect.Empty);
+			Assert.AreEqual(p.VerticalOffset, 0, "17 1");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Width), "17");
+			Assert.IsTrue(double.IsNegativeInfinity(result.Height), "18");
+		}
 	}
 }
