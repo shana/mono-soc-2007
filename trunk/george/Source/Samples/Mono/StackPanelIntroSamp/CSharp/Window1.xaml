@@ -49,12 +49,12 @@
                 </ListBox>
 
 			<mono_sytem_windows_controls:StackPanel Grid.ColumnSpan="6" Grid.Row="3" Name="sp1" Background="Yellow">
-				<mono_sytem_windows_controls:Button>Button One</mono_sytem_windows_controls:Button>
-				<mono_sytem_windows_controls:Button>Button Two</mono_sytem_windows_controls:Button>
-				<mono_sytem_windows_controls:Button>Button Three</mono_sytem_windows_controls:Button>
-				<mono_sytem_windows_controls:Button>Button Four</mono_sytem_windows_controls:Button>
-				<mono_sytem_windows_controls:Button>Button Five</mono_sytem_windows_controls:Button>
-				<mono_sytem_windows_controls:Button>Button Six</mono_sytem_windows_controls:Button>
+				<Button>Button One</Button>
+				<Button>Button Two</Button>
+				<Button>Button Three</Button>
+				<Button>Button Four</Button>
+				<Button>Button Five</Button>
+				<Button>Button Six</Button>
     	    </mono_sytem_windows_controls:StackPanel>
         </Grid>
 	</Border>
