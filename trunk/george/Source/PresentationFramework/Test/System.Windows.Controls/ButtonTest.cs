@@ -137,7 +137,7 @@ namespace System.Windows.Controls {
 		class DockPanelButton : Button {
 			public DockPanelButton() {
 				Window w = new Window();
-				DockPanel p = new DockPanel();
+				global::System.Windows.Controls.DockPanel p = new global::System.Windows.Controls.DockPanel();
 				w.Content = p;
 				p.Children.Add(this);
 				w.Show();
@@ -149,5 +149,42 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+		
+		#region Panel
+		[Test]
+		public void Panel() {
+			new PanelButton();
+		}
+
+		class PanelButton : Button {
+			Size result;
+
+			public PanelButton() {
+				Window w = new Window();
+				TestPanel p = new TestPanel();
+				w.Content = p;
+				p.Children.Add(this);
+				w.Show();
+				Assert.AreEqual(result.Width, 0);
+			}
+
+
+			protected override Size MeasureOverride(Size constraint) {
+				return result = base.MeasureOverride(constraint);
+			}
+
+			class TestPanel : Panel {
+			}
+		}
+		#endregion
+
+		[Test]
+		public void ToolBar() {
+			Button b = new Button();
+			Assert.IsNull(b.Style, "1");
+			ToolBar t = new ToolBar();
+			t.Items.Add(b);
+			Assert.IsNull(b.Style, "2");
+		}
 	}
 }
