@@ -9,8 +9,10 @@ namespace Mono.System.Windows.Controls {
 namespace System.Windows.Controls {
 #endif
 	public class Label : ContentControl {
-		#region Dependency Property Fields
-		public static readonly DependencyProperty TargetProperty = DependencyProperty.Register("Target", typeof(UIElement), typeof(Label));
+		#region Public Fields
+		#region Dependency Properties
+		public static readonly DependencyProperty TargetProperty = DependencyProperty.Register("Target", typeof(UIElement), typeof(Label), new FrameworkPropertyMetadata());
+		#endregion
 		#endregion
 
 		#region Static Constructor

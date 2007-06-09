@@ -10,8 +10,8 @@ namespace System.Windows.Controls.Primitives {
 	public abstract class RangeBase : Control {
 		#region Public Fields
 		#region Dependency Properties
-		public static readonly DependencyProperty LargeChangeProperty = DependencyProperty.Register("LargeChange", typeof(double), typeof(RangeBase), new PropertyMetadata(1D));
-		public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(RangeBase), new PropertyMetadata(1D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		public static readonly DependencyProperty LargeChangeProperty = DependencyProperty.Register("LargeChange", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(1D));
+		public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(1D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			RangeBase i = (RangeBase)d;
 			double new_value = (double)e.NewValue;
 			if (i.Value > new_value) {
@@ -21,7 +21,7 @@ namespace System.Windows.Controls.Primitives {
 			}
 			i.OnMaximumChanged((double)e.OldValue, new_value);
 		}), Validate);
-		public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(RangeBase), new PropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			RangeBase i = (RangeBase)d;
 			double new_value = (double)e.NewValue;
 			if (i.Value < new_value) {
@@ -31,8 +31,8 @@ namespace System.Windows.Controls.Primitives {
 			}
 			i.OnMinimumChanged((double)e.OldValue, (double)e.NewValue);
 		}), Validate);
-		public static readonly DependencyProperty SmallChangeProperty = DependencyProperty.Register("SmallChange", typeof(double), typeof(RangeBase), new PropertyMetadata(0.1D));
-		public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(RangeBase), new PropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		public static readonly DependencyProperty SmallChangeProperty = DependencyProperty.Register("SmallChange", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(0.1D));
+		public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(0D, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			RangeBase i = (RangeBase)d;
 			if (i.ignore_value_change)
 				return;

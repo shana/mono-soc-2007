@@ -16,6 +16,12 @@ namespace System.Windows.Controls.Primitives {
 		static public readonly DependencyProperty BackgroundProperty = Panel.BackgroundProperty;
 		#endregion
 
+		#region Static Constructor
+		static BulletDecorator() {
+			BackgroundProperty.OverrideMetadata(typeof(BulletDecorator), new FrameworkPropertyMetadata());
+		}
+		#endregion
+
 		#region Public Constructors
 		public BulletDecorator() {
 			//WDTDH

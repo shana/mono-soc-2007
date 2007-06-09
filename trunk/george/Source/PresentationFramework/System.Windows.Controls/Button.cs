@@ -14,9 +14,9 @@ namespace System.Windows.Controls {
 	public class Button : ButtonBase {
 		#region Public Fields
 		#region Dependency Properties
-		static public readonly DependencyProperty IsCancelProperty = DependencyProperty.Register("IsCancel", typeof(bool), typeof(Button));
-		static public readonly DependencyProperty IsDefaultedProperty = DependencyProperty.RegisterReadOnly("IsDefaulted", typeof(bool), typeof(Button), new PropertyMetadata()).DependencyProperty;
-		static public readonly DependencyProperty IsDefaultProperty = DependencyProperty.Register("IsDefault", typeof(bool), typeof(Button));
+		static public readonly DependencyProperty IsCancelProperty = DependencyProperty.Register("IsCancel", typeof(bool), typeof(Button), new FrameworkPropertyMetadata());
+		static public readonly DependencyProperty IsDefaultedProperty = DependencyProperty.RegisterReadOnly("IsDefaulted", typeof(bool), typeof(Button), new FrameworkPropertyMetadata()).DependencyProperty;
+		static public readonly DependencyProperty IsDefaultProperty = DependencyProperty.Register("IsDefault", typeof(bool), typeof(Button), new FrameworkPropertyMetadata());
 		#endregion
 		#endregion
 
@@ -37,7 +37,7 @@ namespace System.Windows.Controls {
 				bool new_in_tool_bar = Parent is ToolBar;
 				if (new_in_tool_bar != in_tool_bar) {
 					in_tool_bar = new_in_tool_bar;
-					//FIXME: Check.
+					//FIXME: I should not do this.
 					Style = in_tool_bar ? (Style)Application.Current.FindResource(ToolBar.ButtonStyleKey) : null;
 				}
 			};

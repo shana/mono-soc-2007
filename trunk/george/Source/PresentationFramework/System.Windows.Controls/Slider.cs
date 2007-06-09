@@ -19,18 +19,19 @@ namespace System.Windows.Controls {
 	[TemplatePart(Name = "PART_Track", Type = typeof(Track))]
 	[TemplatePart(Name = "PART_SelectionRange", Type = typeof(FrameworkElement))]
 	public class Slider : RangeBase {
-		#region Dependency Property Fields
-		public static readonly DependencyProperty AutoToolTipPlacementProperty = DependencyProperty.Register("AutoToolTipPlacement", typeof(global::System.Windows.Controls.Primitives.AutoToolTipPlacement), typeof(Slider), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		#region Public Fields
+		#region Dependency Properties
+		public static readonly DependencyProperty AutoToolTipPlacementProperty = DependencyProperty.Register("AutoToolTipPlacement", typeof(global::System.Windows.Controls.Primitives.AutoToolTipPlacement), typeof(Slider), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((Slider)d).SetUpAutoToolTip();
 		}));
-		public static readonly DependencyProperty AutoToolTipPrecisionProperty = DependencyProperty.Register("AutoToolTipPrecision", typeof(int), typeof(Slider), null, ValidateNonNegativeInteger);
-		public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(int), typeof(Slider), new PropertyMetadata(Utility.GetSystemDelay()), ValidateNonNegativeInteger);
-		public static readonly DependencyProperty IntervalProperty = DependencyProperty.Register("Interval", typeof(int), typeof(Slider), new PropertyMetadata(Utility.GetSystemInterval()), ValidateNonNegativeInteger);
-		public static readonly DependencyProperty IsDirectionReversedProperty = DependencyProperty.Register("IsDirectionReversed", typeof(bool), typeof(Slider));
-		public static readonly DependencyProperty IsMoveToPointEnabledProperty = DependencyProperty.Register("IsMoveToPointEnabled", typeof(bool), typeof(Slider));
-		public static readonly DependencyProperty IsSelectionRangeEnabledProperty = DependencyProperty.Register("IsSelectionRangeEnabled", typeof(bool), typeof(Slider));
-		public static readonly DependencyProperty IsSnapToTickEnabledProperty = DependencyProperty.Register("IsSnapToTickEnabled", typeof(bool), typeof(Slider));
-		public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(Slider));
+		public static readonly DependencyProperty AutoToolTipPrecisionProperty = DependencyProperty.Register("AutoToolTipPrecision", typeof(int), typeof(Slider), new FrameworkPropertyMetadata(), ValidateNonNegativeInteger);
+		public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(int), typeof(Slider), new FrameworkPropertyMetadata(Utility.GetSystemDelay()), ValidateNonNegativeInteger);
+		public static readonly DependencyProperty IntervalProperty = DependencyProperty.Register("Interval", typeof(int), typeof(Slider), new FrameworkPropertyMetadata(Utility.GetSystemInterval()), ValidateNonNegativeInteger);
+		public static readonly DependencyProperty IsDirectionReversedProperty = DependencyProperty.Register("IsDirectionReversed", typeof(bool), typeof(Slider), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty IsMoveToPointEnabledProperty = DependencyProperty.Register("IsMoveToPointEnabled", typeof(bool), typeof(Slider), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty IsSelectionRangeEnabledProperty = DependencyProperty.Register("IsSelectionRangeEnabled", typeof(bool), typeof(Slider), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty IsSnapToTickEnabledProperty = DependencyProperty.Register("IsSnapToTickEnabled", typeof(bool), typeof(Slider), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(Slider), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty SelectionEndProperty = DependencyProperty.Register("SelectionEnd", typeof(double), typeof(Slider), new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			Slider instance = (Slider)d;
 			if (!instance.adjusting_properties)
@@ -43,10 +44,10 @@ namespace System.Windows.Controls {
 				instance.requested_selection_start = (double)e.NewValue;
 			instance.AdjustSelectionRange();
 		}), ValidateNonInfinite);
-		public static readonly DependencyProperty TickFrequencyProperty = DependencyProperty.Register("TickFrequency", typeof(double), typeof(Slider), new PropertyMetadata(1D));
-		public static readonly DependencyProperty TickPlacementProperty = DependencyProperty.Register("TickPlacement", typeof(global::System.Windows.Controls.Primitives.TickPlacement), typeof(Slider));
+		public static readonly DependencyProperty TickFrequencyProperty = DependencyProperty.Register("TickFrequency", typeof(double), typeof(Slider), new FrameworkPropertyMetadata(1D));
+		public static readonly DependencyProperty TickPlacementProperty = DependencyProperty.Register("TickPlacement", typeof(global::System.Windows.Controls.Primitives.TickPlacement), typeof(Slider), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty TicksProperty = DependencyProperty.Register("Ticks", typeof(DoubleCollection), typeof(Slider), new FrameworkPropertyMetadata());
-
+		#endregion
 		#endregion
 
 		#region Private Fields
