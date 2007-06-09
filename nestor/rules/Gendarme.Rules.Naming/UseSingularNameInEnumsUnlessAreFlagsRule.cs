@@ -33,8 +33,8 @@ using Gendarme.Framework;
 
 namespace Gendarme.Rules.Naming {
 	public class UseSingularNameInEnumsUnlessAreFlagsRule : ITypeRule {
-	    
-	    private bool HasFlagsAttribute (TypeDefinition typeDefinition) 
+		
+		private bool HasFlagsAttribute (TypeDefinition typeDefinition) 
 		{
 			foreach (CustomAttribute customAttribute in typeDefinition.CustomAttributes) {
 				if (customAttribute.Constructor.DeclaringType.FullName == "System.FlagsAttribute")
@@ -42,26 +42,26 @@ namespace Gendarme.Rules.Naming {
 			}
 			return false;
 		}
-	    
-	    private bool IsPlural (string typeName) {
-	    	return typeName.EndsWith ("s") || typeName.ToLower ().EndsWith ("s");
-	    }
-	    
-	    public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner)
-	    {
-	        MessageCollection messageCollection = new MessageCollection ();
-	        if (typeDefinition.IsEnum) {
-	            if (!HasFlagsAttribute (typeDefinition)) {
-	            	if (IsPlural (typeDefinition.Name)) {
-	            		Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
+		
+		private bool IsPlural (string typeName) {
+			return typeName.EndsWith ("s") || typeName.ToLower ().EndsWith ("s");
+		}
+		
+		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner)
+		{
+			MessageCollection messageCollection = new MessageCollection ();
+			if (typeDefinition.IsEnum) {
+				if (!HasFlagsAttribute (typeDefinition)) {
+					if (IsPlural (typeDefinition.Name)) {
+						Location location = new Location (typeDefinition.FullName, typeDefinition.Name, 0);
 						Message message = new Message ("The enum has a plural name.", location, MessageType.Error);
-						messageCollection.Add (message); 
-	            	}
-	            }
-	        }
-	        if (messageCollection.Count == 0)
-	        	return null;
-	        return messageCollection;
-	    }
+						messageCollection.Add (message);
+					}
+				}
+			}
+			if (messageCollection.Count == 0)
+				return null;
+			return messageCollection;
+		}
 	}
 }

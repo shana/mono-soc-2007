@@ -88,7 +88,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestEnumHasSingularName () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.DayOfWeek"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.DayOfWeek"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
@@ -96,7 +96,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestEnumHasPluralName () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.DateTimeKinds"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.DateTimeKinds"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);
@@ -106,7 +106,7 @@ namespace Test.Rules.Naming {
 		[Test]
 		public void TestFlagsAllowedToHavePluralNames () 
 		{
-		    type = assembly.MainModule.Types ["Test.Rules.Naming.StringSplitOptions"];
+			type = assembly.MainModule.Types ["Test.Rules.Naming.StringSplitOptions"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
