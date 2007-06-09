@@ -22,7 +22,7 @@ namespace System.Windows.Controls {
 			((Panel)d).OnIsItemsHostChanged((bool)e.OldValue, (bool)e.NewValue);
 		}));
 		#region Attached Properties
-		public static readonly DependencyProperty ZIndexProperty = DependencyProperty.RegisterAttached("ZIndex", typeof(int), typeof(Panel));
+		public static readonly DependencyProperty ZIndexProperty = DependencyProperty.RegisterAttached("ZIndex", typeof(int), typeof(Panel), new FrameworkPropertyMetadata());
 		#endregion
 		#endregion
 		#endregion

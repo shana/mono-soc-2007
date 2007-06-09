@@ -13,10 +13,12 @@ namespace System.Windows.Controls {
 	[TemplatePart(Name = "PART_Track", Type = typeof(FrameworkElement))]
 	[TemplatePart(Name = "PART_Indicator", Type = typeof(FrameworkElement))]
 	public class ProgressBar : RangeBase {
-		#region Dependency Property Fields
-		public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register("IsIndeterminate", typeof(bool), typeof(ProgressBar));
-		public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(ProgressBar));
+		#region Public Fields
+		#region Dependency Properties
+		public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register("IsIndeterminate", typeof(bool), typeof(ProgressBar), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(ProgressBar), new FrameworkPropertyMetadata());
 
+		#endregion
 		#endregion
 
 		#region Static Constructor

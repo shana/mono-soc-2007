@@ -9,21 +9,23 @@ namespace Mono.System.Windows.Controls.Primitives {
 namespace System.Windows.Controls.Primitives {
 #endif
 	public class ToggleButton : ButtonBase {
-		#region Routed Event Fields
-		static public readonly RoutedEvent CheckedEvent = EventManager.RegisterRoutedEvent("Checked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ToggleButton));
-		static public readonly RoutedEvent IndeterminateEvent = EventManager.RegisterRoutedEvent("Indeterminate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ToggleButton));
-		static public readonly RoutedEvent UncheckedEvent = EventManager.RegisterRoutedEvent("Unchecked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ToggleButton));
-		#endregion
-
-		#region Dependency Property Fields
-		static public readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register("IsChecked", typeof(bool?), typeof(ToggleButton), new PropertyMetadata(false, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		#region Public Fields
+		#region Dependency Properties
+		static public readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register("IsChecked", typeof(bool?), typeof(ToggleButton), new FrameworkPropertyMetadata(false, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             bool? old_value = (bool?)e.OldValue;
             bool? new_value = (bool?)e.NewValue;
             if (new_value != old_value)
                 ((ToggleButton)d).RaiseIsCheckedValueEvent(new_value);
 		}));
 
-		static public readonly DependencyProperty IsThreeStateProperty = DependencyProperty.Register("IsThreeState", typeof(bool), typeof(ToggleButton));
+		static public readonly DependencyProperty IsThreeStateProperty = DependencyProperty.Register("IsThreeState", typeof(bool), typeof(ToggleButton), new FrameworkPropertyMetadata());
+		#endregion
+
+		#region Routed Events
+		static public readonly RoutedEvent CheckedEvent = EventManager.RegisterRoutedEvent("Checked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ToggleButton));
+		static public readonly RoutedEvent IndeterminateEvent = EventManager.RegisterRoutedEvent("Indeterminate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ToggleButton));
+		static public readonly RoutedEvent UncheckedEvent = EventManager.RegisterRoutedEvent("Unchecked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ToggleButton));
+		#endregion
 		#endregion
 
 		#region Public Constructors
@@ -33,6 +35,7 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Public Properties
+		#region Dependency Properties
 		[TypeConverter(typeof(NullableBoolConverter))]
 		[Localizability(LocalizationCategory.None, Readability=Readability.Unreadable)]
 		public bool? IsChecked {
@@ -45,6 +48,7 @@ namespace System.Windows.Controls.Primitives {
 			get { return (bool)GetValue(IsThreeStateProperty); }
 			set { SetValue(IsThreeStateProperty, value); }
 		}
+		#endregion
 		#endregion
 
 		#region Public Methods
@@ -95,6 +99,7 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Public Events
+		#region Routed Events
 		public event RoutedEventHandler Checked {
 			add { AddHandler(CheckedEvent, value); }
 			remove { RemoveHandler(CheckedEvent, value); }
@@ -109,6 +114,7 @@ namespace System.Windows.Controls.Primitives {
 			add { AddHandler(UncheckedEvent, value); }
 			remove { RemoveHandler(UncheckedEvent, value); }
 		}
+		#endregion
 		#endregion
 
 		#region Private Methods

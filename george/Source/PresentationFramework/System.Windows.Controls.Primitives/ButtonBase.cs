@@ -10,19 +10,21 @@ namespace System.Windows.Controls.Primitives {
 #endif
 	[Localizability(LocalizationCategory.Button)]
 	public abstract class ButtonBase : ContentControl, ICommandSource {
-		#region Routed Event Fields
-		public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ButtonBase));
-		#endregion
-
-		#region Dependency Property Fields
-		public static readonly DependencyProperty ClickModeProperty = DependencyProperty.Register("ClickMode", typeof(ClickMode), typeof(ButtonBase));
-		public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(ButtonBase));
-		public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(ButtonBase));
-		public static readonly DependencyProperty CommandTargetProperty = DependencyProperty.Register("CommandTarget", typeof(IInputElement), typeof(ButtonBase));
-		public static readonly DependencyPropertyKey IsPressedPropertyKey = DependencyProperty.RegisterReadOnly("IsPressed", typeof(bool), typeof(ButtonBase), new PropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		#region Public Fields
+		#region Dependency Properties
+		public static readonly DependencyProperty ClickModeProperty = DependencyProperty.Register("ClickMode", typeof(ClickMode), typeof(ButtonBase), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(ButtonBase), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(ButtonBase), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty CommandTargetProperty = DependencyProperty.Register("CommandTarget", typeof(IInputElement), typeof(ButtonBase), new FrameworkPropertyMetadata());
+		public static readonly DependencyPropertyKey IsPressedPropertyKey = DependencyProperty.RegisterReadOnly("IsPressed", typeof(bool), typeof(ButtonBase), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((ButtonBase)d).OnIsPressedChanged(e);
 		}));
 		public static readonly DependencyProperty IsPressedProperty = IsPressedPropertyKey.DependencyProperty;
+		#endregion
+
+		#region Routed Events
+		public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ButtonBase));
+		#endregion
 		#endregion
 
 		#region Private Fields
@@ -40,6 +42,7 @@ namespace System.Windows.Controls.Primitives {
 		}
 		#endregion
 
+		#region Public Properties
 		#region Dependency Properties
 		[Bindable(true)]
 		public ClickMode ClickMode {
@@ -71,6 +74,7 @@ namespace System.Windows.Controls.Primitives {
 			get { return (bool)GetValue(IsPressedProperty); }
 		}
 		#endregion
+		#endregion
 
 		#region Protected Properties
 		protected override bool IsEnabledCore {
@@ -78,10 +82,20 @@ namespace System.Windows.Controls.Primitives {
 		}
 		#endregion
 
-		#region Protected Override Methods
+		#region Protected Methods
 		protected override void OnAccessKey(AccessKeyEventArgs e) {
 			base.OnAccessKey(e);
 			OnClick();
+		}
+
+		protected virtual void OnClick() {
+			RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+			//FIXME: Execute only for CommandTarget.
+			if (Command != null && Command.CanExecute(CommandParameter))
+				Command.Execute(CommandParameter);
+		}
+
+		protected virtual void OnIsPressedChanged(DependencyPropertyChangedEventArgs e) {
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e) {
@@ -160,24 +174,13 @@ namespace System.Windows.Controls.Primitives {
 		}
 		#endregion
 
-		#region Protected Methods
-		protected virtual void OnClick() {
-			RaiseEvent(new RoutedEventArgs(ClickEvent, this));
-			//FIXME: Execute only for CommandTarget.
-			if (Command != null && Command.CanExecute(CommandParameter))
-				Command.Execute(CommandParameter);
-		}
-
-		protected virtual void OnIsPressedChanged(DependencyPropertyChangedEventArgs e) {
-			//WDTDH?
-		}
-		#endregion
-
-		#region Routed Event
+		#region Public Events
+		#region Routed Events
 		public event RoutedEventHandler Click {
 			add { AddHandler(ClickEvent, value); }
 			remove { RemoveHandler(ClickEvent, value); }
 		}
+		#endregion
 		#endregion
 
 		#region Private Properties
@@ -186,13 +189,13 @@ namespace System.Windows.Controls.Primitives {
 		}
 		#endregion
 
-		#region Static Private Methods
+		#region Private Methods
 		static bool RectangleContainsPoint(double x, double y, double width, double height, Point point) {
 			return point.X >= x && point.X <= x + width && point.Y >= y && point.Y <= y + height;
 		}
 		#endregion
 
-		#region Static Internal Methods
+		#region Internal Methods
 		static internal bool IsButtonKey(KeyEventArgs e) {
 			return e.Key == Key.Enter || e.Key == Key.Space;
 		}

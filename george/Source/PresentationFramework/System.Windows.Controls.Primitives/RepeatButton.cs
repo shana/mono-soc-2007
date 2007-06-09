@@ -14,13 +14,9 @@ namespace Mono.System.Windows.Controls.Primitives {
 namespace System.Windows.Controls.Primitives {
 #endif
 	public class RepeatButton : ButtonBase {
-		#region Private Fields
-		global::System.Timers.Timer delay_timer = new global::System.Timers.Timer();
-		global::System.Timers.Timer interval_timer = new global::System.Timers.Timer();
-		#endregion
-
-		#region Dependency Property Fields
-		public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(int), typeof(RepeatButton), new PropertyMetadata(Utility.GetSystemDelay(), delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		#region Public Fields
+		#region Dependency Properties
+		public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(int), typeof(RepeatButton), new FrameworkPropertyMetadata(Utility.GetSystemDelay(), delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			int value = (int)e.NewValue;
 			//FIXME?: Support 0 value
 			if (value == 0)
@@ -30,11 +26,17 @@ namespace System.Windows.Controls.Primitives {
 			return (int)value > -1;
 		});
 
-		public static readonly DependencyProperty IntervalProperty = DependencyProperty.Register("Interval", typeof(int), typeof(RepeatButton), new PropertyMetadata(Utility.GetSystemInterval(), delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		public static readonly DependencyProperty IntervalProperty = DependencyProperty.Register("Interval", typeof(int), typeof(RepeatButton), new FrameworkPropertyMetadata(Utility.GetSystemInterval(), delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((RepeatButton)d).interval_timer.Interval = (int)e.NewValue;
 		}), delegate(object value) {
 			return (int)value > 0;
 		});
+		#endregion
+		#endregion
+
+		#region Private Fields
+		global::System.Timers.Timer delay_timer = new global::System.Timers.Timer();
+		global::System.Timers.Timer interval_timer = new global::System.Timers.Timer();
 		#endregion
 
 		#region Static Constructor

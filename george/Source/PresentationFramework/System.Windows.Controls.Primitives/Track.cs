@@ -17,13 +17,13 @@ namespace System.Windows.Controls.Primitives {
 	public class Track : FrameworkElement {
 		#region Public Fields
 		#region Dependency Properties
-		static public readonly DependencyProperty IsDirectionReversedProperty = DependencyProperty.Register("IsDirectionReversed", typeof(bool), typeof(Track));
+		static public readonly DependencyProperty IsDirectionReversedProperty = DependencyProperty.Register("IsDirectionReversed", typeof(bool), typeof(Track), new FrameworkPropertyMetadata());
 		static public readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(Track), new FrameworkPropertyMetadata(1D, FrameworkPropertyMetadataOptions.AffectsArrange));
 		static public readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(Track), new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsArrange));
 		//LAMESPEC: In Windows SDK Feb 2007 the default value is Orientation.Vertical. I have confirmation that it is wrong.
 		static public readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(Track), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure));
 		static public readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(Track), new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsArrange));
-		static public readonly DependencyProperty ViewportSizeProperty = DependencyProperty.Register("ViewportSize", typeof(double), typeof(Track), new PropertyMetadata(double.NaN));
+		static public readonly DependencyProperty ViewportSizeProperty = DependencyProperty.Register("ViewportSize", typeof(double), typeof(Track), new FrameworkPropertyMetadata(double.NaN));
 
 		#endregion
 		#endregion
