@@ -77,14 +77,14 @@ namespace System.Windows.Controls {
 				if (double.IsNaN(value)) {
 					value = GetRight(element);
 					if (!double.IsNaN(value))
-						position.X = value - size.Width;
+						position.X = finalSize.Width - value - size.Width;
 				} else
 					position.X = value;
 				value = GetTop(element);
 				if (double.IsNaN(value)) {
 					value = GetBottom(element);
 					if (!double.IsNaN(value))
-						position.Y = value - size.Height;
+						position.Y = finalSize.Height - value - size.Height;
 				} else
 					position.Y = value;
 				element.Arrange(new Rect(position, size));
