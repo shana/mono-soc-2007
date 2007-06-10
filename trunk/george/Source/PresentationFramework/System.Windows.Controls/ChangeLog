@@ -1,5 +1,9 @@
 2007-06-10  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* DockPanel.cs: Added call to InvalidateArrange on Dock property change.
+
+2007-06-10  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Canvas.cs: Fixed ArrangeOverride.
 
 2007-06-09  George Giolfan  <georgegiolfan@yahoo.com>
