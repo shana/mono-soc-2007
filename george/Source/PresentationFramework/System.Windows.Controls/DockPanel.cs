@@ -10,7 +10,15 @@ namespace System.Windows.Controls {
 		#region Dependency Properties
 		public static readonly DependencyProperty LastChildFillProperty = DependencyProperty.Register("LastChildFill", typeof(bool), typeof(DockPanel), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsArrange));
 		#region Attached Properties
-		public static readonly DependencyProperty DockProperty = DependencyProperty.RegisterAttached("Dock", typeof(Dock), typeof(DockPanel), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty DockProperty = DependencyProperty.RegisterAttached("Dock", typeof(Dock), typeof(DockPanel), new FrameworkPropertyMetadata(Dock.Left, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			FrameworkElement framework_element = d as FrameworkElement;
+			if (framework_element == null)
+				return;
+			DockPanel dock_panel = framework_element.Parent as DockPanel;
+			if (dock_panel == null)
+				return;
+			dock_panel.InvalidateArrange();
+		}));
 		#endregion
 		#endregion
 		#endregion
