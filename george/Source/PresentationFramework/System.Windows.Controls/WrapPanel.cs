@@ -105,17 +105,16 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			bool horizontal = Orientation == Orientation.Horizontal;
 			if (double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height)) {
-				Size result = new Size();
+				double width = 0;
+				double height = 0;
 				foreach (UIElement child in Children) {
 					child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-					if (horizontal)
-						result.Width += child.DesiredSize.Width;
-					else
-						result.Height += child.DesiredSize.Height;
+					Size desired_size = GetDesiredChildSize(child);
+					width += desired_size.Width;
+					height = Math.Max(height, desired_size.Height);
 				}
-				return result;
+				return (Orientation == Orientation.Horizontal) ? new Size(width, height) : new Size(height, width);
 			} else {
 				foreach (UIElement child in Children)
 					child.Measure(availableSize);
