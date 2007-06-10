@@ -1,3 +1,7 @@
+2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* WrapPanel.cs: Implemented ArrangeOverride, MeasureOverride.
+
 2007-06-10  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* DockPanel.cs: Added call to InvalidateArrange on Dock property change.
