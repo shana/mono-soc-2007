@@ -128,5 +128,16 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void DockProperty() {
+			FrameworkPropertyMetadata metadata = (FrameworkPropertyMetadata)DockPanel.DockProperty.DefaultMetadata;
+			Assert.IsFalse(metadata.AffectsArrange, "AffectsArrange");
+			Assert.IsFalse(metadata.AffectsMeasure, "AffectsMeasure");
+			Assert.IsFalse(metadata.AffectsParentArrange, "AffectsParentArrange");
+			Assert.IsFalse(metadata.AffectsParentMeasure, "AffectsParentMeasure");
+			Assert.IsFalse(metadata.AffectsRender, "AffectsRender");
+			Assert.IsNotNull(metadata.PropertyChangedCallback);
+		}
 	}
 }
