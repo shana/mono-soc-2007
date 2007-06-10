@@ -5,7 +5,6 @@
     <TargetType>winexe</TargetType>
     <Configuration>Release</Configuration>
     <HostInBrowser>False</HostInBrowser>
-    
     <SchemaVersion>2.0</SchemaVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <ProjectGuid>{E52486E1-B58E-4497-95A7-A10130403348}</ProjectGuid>
@@ -31,5 +30,11 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="UIAutomationTypes" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PresentationFramework\Mono.PresentationFramework.csproj">
+      <Project>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</Project>
+      <Name>Mono.PresentationFramework</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
