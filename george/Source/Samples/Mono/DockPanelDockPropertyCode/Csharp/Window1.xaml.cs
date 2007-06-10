@@ -12,49 +12,49 @@ namespace dockpanel_dockprop_cs
 
         public void OnClick1(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect1, Dock.Left);
+            Mono.System.Windows.Controls.DockPanel.SetDock(rect1, Dock.Left);
             Txt1.Text = "The Dock Property of the LightCoral Rectangle is set to Left";
         }
         
         public void OnClick2(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect1, Dock.Right);
+			Mono.System.Windows.Controls.DockPanel.SetDock(rect1, Dock.Right);
             Txt1.Text = "The Dock Property of the LightCoral Rectangle is set to Right";
         }
 
         public void OnClick3(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect1, Dock.Top);
+			Mono.System.Windows.Controls.DockPanel.SetDock(rect1, Dock.Top);
             Txt1.Text = "The Dock Property of the LightCoral Rectangle is set to Top";
         }
 
         public void OnClick4(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect1, Dock.Bottom);
+			Mono.System.Windows.Controls.DockPanel.SetDock(rect1, Dock.Bottom);
             Txt1.Text = "The Dock Property of the LightCoral Rectangle is set to Bottom";
         }
 
         public void OnClick5(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect2, Dock.Left);
+			Mono.System.Windows.Controls.DockPanel.SetDock(rect2, Dock.Left);
             Txt2.Text = "The Dock Property of the LightSkyBlue Rectangle is set to Left";
         }
 
         public void OnClick6(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect2, Dock.Right);
+			Mono.System.Windows.Controls.DockPanel.SetDock(rect2, Dock.Right);
             Txt2.Text = "The Dock Property of the LightSkyBlue Rectangle is set to Right";
         }
 
         public void OnClick7(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect2, Dock.Top);
+			Mono.System.Windows.Controls.DockPanel.SetDock(rect2, Dock.Top);
             Txt2.Text = "The Dock Property of the LightSkyBlue Rectangle is set to Top";
         }
 
         public void OnClick8(object sender, RoutedEventArgs e)
         {
-            DockPanel.SetDock(rect2, Dock.Bottom);
+			Mono.System.Windows.Controls.DockPanel.SetDock(rect2, Dock.Bottom);
             Txt2.Text = "The Dock Property of the LightSkyBlue Rectangle is set to Bottom";
         }
 
