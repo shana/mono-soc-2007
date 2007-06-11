@@ -117,6 +117,7 @@ namespace CBinding {
             this.notebook1.CurrentPage = 0;
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.table1 = new Gtk.Table(((uint)(5)), ((uint)(2)), false);
+            this.table1.Name = "table1";
             this.table1.RowSpacing = ((uint)(10));
             this.table1.ColumnSpacing = ((uint)(10));
             this.table1.BorderWidth = ((uint)(3));
