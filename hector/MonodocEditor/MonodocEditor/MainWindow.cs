@@ -22,4 +22,9 @@ public partial class MainWindow: Gtk.Window
 		Application.Quit ();
 		a.RetVal = true;
 	}
+
+	protected virtual void OnQuitActivated(object sender, System.EventArgs e)
+	{
+		Application.Quit ();
+	}
 }
