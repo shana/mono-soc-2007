@@ -10,11 +10,11 @@
 using System;
 using Gtk;
 
-public partial class MainWindow: Gtk.Window
-{	
-	public MainWindow (): base (Gtk.WindowType.Toplevel)
+namespace Monodoc.Editor {
+public partial class EditorWindow : Gtk.Window {	
+	public EditorWindow () : base (Gtk.WindowType.Toplevel)
 	{
-		Build ();
+		this.Build ();
 	}
 	
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
@@ -30,5 +30,7 @@ public partial class MainWindow: Gtk.Window
 
 	protected virtual void OnOpenActivated(object sender, System.EventArgs e)
 	{
+		OpenDocDialog dialog = new OpenDocDialog ();
 	}
+}
 }

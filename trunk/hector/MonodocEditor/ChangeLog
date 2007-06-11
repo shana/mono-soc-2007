@@ -1,5 +1,18 @@
 2007-06-11  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* MonodocEditor/Driver.cs, MonodocEditor/MainWindow.cs,
+	  MonodocEditor/EditorWindow.cs, MonodocEditor/gtk-gui/MainWindow.cs,
+	  MonodocEditor/gtk-gui/gui.stetic,
+	  MonodocEditor/gtk-gui/Monodoc.Editor.EditorWindow.cs: Changed
+	  MainWindow to EditorWindow. Changed the namespace to
+	  Monodoc.Editor.
+	* MonodocEditor/MonodocEditor.mdp,
+	  MonodocEditor/gtk-gui/Monodoc.Editor.OpenDocDialog.cs,
+	  MonodocEditor/OpenDocDialog.cs: Added a FileSelector to open XML
+	  file to edit.
+
+2007-06-11  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* MonodocEditor/AssemblyInfo.cs: Defined some attributes for the
 	  assembly.
 	* MonodocEditor/Driver.cs, MonodocEditor/MainWindow.cs,
