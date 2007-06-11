@@ -55,9 +55,13 @@ namespace CBinding
 			
 			// TODO: Read from all directories in the pkg env variable
 			
-			string[] dirs = Environment.GetEnvironmentVariable ("PKG_CONFIG_PATH").Split(':');
+			string pkg_path = Environment.GetEnvironmentVariable ("PKG_CONFIG_PATH");
+			string[] dirs = null;
 			
-			if (dirs.Length > 0) {
+			if (pkg_path != null)
+				dirs = pkg_path.Split (':');
+			
+			if (dirs != null && dirs.Length > 0) {
 				foreach (string dir in dirs) {
 					DirectoryInfo di = new DirectoryInfo (dir);
 					FileInfo[] availablePackages = di.GetFiles ("*.pc");
