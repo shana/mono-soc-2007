@@ -1,3 +1,7 @@
+2007-06-12  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabPanelTest.cs: Expanded Measure* tests.
+
 2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabPanelTest.cs: Added.
