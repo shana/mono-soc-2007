@@ -47,6 +47,7 @@
     <Compile Include="System.Windows.Controls.Primitives\BulletDecorator.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ButtonBase.cs" />
     <Compile Include="System.Windows.Controls.Primitives\RangeBase.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\TabPanel.cs" />
     <Compile Include="System.Windows.Controls.Primitives\Thumb.cs" />
     <Compile Include="System.Windows.Controls.Primitives\TickBar.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ScrollBar.cs" />
