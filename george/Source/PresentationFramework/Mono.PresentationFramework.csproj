@@ -72,6 +72,7 @@
     <Compile Include="System.Windows.Controls\Slider.cs" />
     <Compile Include="System.Windows.Controls\StackPanel.cs" />
     <Compile Include="System.Windows.Controls\TabControl.cs" />
+    <Compile Include="System.Windows.Controls\TabItem.cs" />
     <Compile Include="System.Windows.Controls\WrapPanel.cs" />
     <Compile Include="Theme.cs" />
   </ItemGroup>
