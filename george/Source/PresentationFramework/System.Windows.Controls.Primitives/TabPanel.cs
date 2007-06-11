@@ -46,7 +46,9 @@ namespace System.Windows.Controls.Primitives {
 					double width_ratio = available_width / used_width;
 					used_width = 0;
 					foreach (UIElement current_row_element in current_row_elements) {
-						child_width = GetDesiredChildWidth(current_row_element) * width_ratio;
+						child_width = GetDesiredChildWidth(current_row_element); 
+						if (rows != 1)
+							child_width *= width_ratio;
 						current_row_element.Arrange(horizontal ? new Rect(used_width, used_height, child_width, row_height) : new Rect(used_height, used_width, row_height, child_width));
 						used_width += child_width;
 					}
