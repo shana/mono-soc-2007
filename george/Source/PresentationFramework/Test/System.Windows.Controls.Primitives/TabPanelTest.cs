@@ -30,6 +30,8 @@ namespace System.Windows.Controls.Primitives {
 				Assert.IsTrue(double.IsPositiveInfinity(measure_constraint.Height), "3");
 				Assert.AreEqual(measure_result.Width, 27, "4");
 				Assert.AreEqual(measure_result.Height, 5, "5");
+				Assert.AreEqual(DesiredSize.Width, 27, "6");
+				Assert.AreEqual(DesiredSize.Height, 5, "7");
 			}
 
 			class TestTabItem : global::System.Windows.Controls.TabItem {
@@ -60,6 +62,8 @@ namespace System.Windows.Controls.Primitives {
 				Assert.AreEqual(measure_constraint.Height, 100, "3");
 				Assert.AreEqual(measure_result.Width, 27, "4");
 				Assert.AreEqual(measure_result.Height, 5, "5");
+				Assert.AreEqual(DesiredSize.Width, 27, "6");
+				Assert.AreEqual(DesiredSize.Height, 5, "7");
 			}
 
 			class TestTabItem : global::System.Windows.Controls.TabItem {
