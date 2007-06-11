@@ -16,6 +16,8 @@ public partial class MainWindow {
     
     private Gtk.Action Quit;
     
+    private Gtk.Action Open;
+    
     private Gtk.VBox vbox1;
     
     private Gtk.MenuBar menubar1;
@@ -35,6 +37,9 @@ public partial class MainWindow {
         this.Quit = new Gtk.Action("Quit", Mono.Unix.Catalog.GetString("_Quit"), null, "gtk-quit");
         this.Quit.ShortLabel = Mono.Unix.Catalog.GetString("_Quit");
         w2.Add(this.Quit, null);
+        this.Open = new Gtk.Action("Open", Mono.Unix.Catalog.GetString("_Open"), null, "gtk-open");
+        this.Open.ShortLabel = Mono.Unix.Catalog.GetString("_Open");
+        w2.Add(this.Open, null);
         w1.InsertActionGroup(w2, 0);
         this.AddAccelGroup(w1.AccelGroup);
         this.Name = "MainWindow";
@@ -45,7 +50,7 @@ public partial class MainWindow {
         this.vbox1.Name = "vbox1";
         this.vbox1.Spacing = 6;
         // Container child vbox1.Gtk.Box+BoxChild
-        w1.AddUiFromString("<ui><menubar name='menubar1'><menu action='File'><menuitem action='Quit'/></menu></menubar></ui>");
+        w1.AddUiFromString("<ui><menubar name='menubar1'><menu action='File'><menuitem action='Open'/><menuitem action='Quit'/></menu></menubar></ui>");
         this.menubar1 = ((Gtk.MenuBar)(w1.GetWidget("/menubar1")));
         this.menubar1.Name = "menubar1";
         this.vbox1.Add(this.menubar1);
@@ -78,5 +83,6 @@ public partial class MainWindow {
         this.Show();
         this.DeleteEvent += new Gtk.DeleteEventHandler(this.OnDeleteEvent);
         this.Quit.Activated += new System.EventHandler(this.OnQuitActivated);
+        this.Open.Activated += new System.EventHandler(this.OnOpenActivated);
     }
 }

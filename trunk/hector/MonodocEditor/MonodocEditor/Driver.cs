@@ -10,16 +10,14 @@
 using System;
 using Gtk;
 
-namespace MonodocEditor
-{
-	class MainClass
+namespace Monodoc.Editor {
+class MainClass {
+	public static void Main (string[] args)
 	{
-		public static void Main (string[] args)
-		{
-			Application.Init ();
-			MainWindow win = new MainWindow ();
-			win.Show ();
-			Application.Run ();
-		}
+		Application.Init ();
+		MainWindow win = new MainWindow ();
+		win.Show ();
+		Application.Run ();
 	}
+}
 }
