@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Globalization;
 
 using Mono.Cecil;
 using Gendarme.Framework;
@@ -44,7 +45,8 @@ namespace Gendarme.Rules.Naming {
 		}
 		
 		private bool IsPlural (string typeName) {
-			return typeName.EndsWith ("s") || typeName.ToLower ().EndsWith ("s");
+			int stringComparation = String.Compare (typeName, typeName.Length -1, "s", 0, 1, true, CultureInfo.CurrentCulture);
+			return stringComparation == 0? true : false;
 		}
 		
 		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner)
