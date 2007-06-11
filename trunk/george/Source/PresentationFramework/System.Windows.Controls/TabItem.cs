@@ -16,6 +16,12 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
+		#region Static Constructor
+		static TabItem() {
+			Theme.Load();
+		}
+		#endregion
+
 		#region Public Constructors
 		public TabItem() {
 		}

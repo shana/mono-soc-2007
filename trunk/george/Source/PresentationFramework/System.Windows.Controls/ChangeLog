@@ -1,5 +1,9 @@
 2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabItem.cs: Made it load the theme.
+
+2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabItem.cs: Added.
 
 2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
