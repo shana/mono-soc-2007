@@ -34,6 +34,7 @@ namespace System.Windows.Controls.Primitives {
 					rows++;
 				}
 			}
+			bool should_expand = rows != 1;
 			double used_height = 0;
 			List<UIElement> current_row_elements = new List<UIElement>();
 			double average_width = total_width / rows;
@@ -43,11 +44,15 @@ namespace System.Windows.Controls.Primitives {
 				used_width += child_width;
 				current_row_elements.Add(child);
 				if (child_index == Children.Count - 1 || used_width > average_width || (used_width + GetDesiredChildWidth(Children[child_index + 1]) > available_width && used_width != 0)) {
-					double width_ratio = available_width / used_width;
+					double width_ratio;
+					if (should_expand)
+						width_ratio = available_width / used_width;
+					else
+						width_ratio = 0;
 					used_width = 0;
 					foreach (UIElement current_row_element in current_row_elements) {
-						child_width = GetDesiredChildWidth(current_row_element); 
-						if (rows != 1)
+						child_width = GetDesiredChildWidth(current_row_element);
+						if (should_expand)
 							child_width *= width_ratio;
 						current_row_element.Arrange(horizontal ? new Rect(used_width, used_height, child_width, row_height) : new Rect(used_height, used_width, row_height, child_width));
 						used_width += child_width;

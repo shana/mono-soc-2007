@@ -1,5 +1,9 @@
 2007-06-12  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabPanel.cs: Minor improvement of ArrangeOverride.
+
+2007-06-12  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabPanel.cs: Fixed ArrangeOverride.
 
 2007-06-12  George Giolfan  <georgegiolfan@yahoo.com>
