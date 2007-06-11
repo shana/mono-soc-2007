@@ -44,7 +44,8 @@ namespace Gendarme.Rules.Naming {
 			return false;
 		}
 		
-		private bool IsPlural (string typeName) {
+		private bool IsPlural (string typeName) 
+		{
 			int stringComparation = String.Compare (typeName, typeName.Length -1, "s", 0, 1, true, CultureInfo.CurrentCulture);
 			return stringComparation == 0;
 		}
