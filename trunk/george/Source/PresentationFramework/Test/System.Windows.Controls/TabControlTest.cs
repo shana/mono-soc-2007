@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Windows.Data;
 #if Implementation
 using System;
 using System.Windows;
@@ -76,5 +77,10 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void TabStripPlacementBinding() {
+			Assert.IsNull(BindingOperations.GetBinding(new TabControl(), TabControl.TabStripPlacementProperty));
+		}
 	}
 }
