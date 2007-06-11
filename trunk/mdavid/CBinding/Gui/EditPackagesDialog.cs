@@ -54,14 +54,31 @@ namespace CBinding
 			packageTreeView.AppendColumn ("Package", new Gtk.CellRendererText (), "text", 1);
 			
 			// TODO: Read from all directories in the pkg env variable
-			DirectoryInfo di = new DirectoryInfo (@"/usr/lib/pkgconfig");
-			FileInfo[] availablePackages = di.GetFiles ("*.pc");
 			
-			foreach (FileInfo f in availablePackages) {
-				// TODO: filter packages
-				// TODO: project packages should be true
-				string name = f.Name.Substring (0, f.Name.LastIndexOf ('.'));
-				packageListStore.AppendValues (false, name);
+			string[] dirs = Environment.GetEnvironmentVariable ("PKG_CONFIG_PATH").Split(':');
+			
+			if (dirs.Length > 0) {
+				foreach (string dir in dirs) {
+					DirectoryInfo di = new DirectoryInfo (dir);
+					FileInfo[] availablePackages = di.GetFiles ("*.pc");
+					
+					foreach (FileInfo f in availablePackages) {
+						// TODO: filter packages
+						// TODO: project packages should be true
+						string name = f.Name.Substring (0, f.Name.LastIndexOf ('.'));
+						packageListStore.AppendValues (false, name);
+					}
+				}
+			} else {
+				DirectoryInfo di = new DirectoryInfo (@"/usr/lib/pkgconfig");
+				FileInfo[] availablePackages = di.GetFiles ("*.pc");
+				
+				foreach (FileInfo f in availablePackages) {
+					// TODO: filter packages
+					// TODO: project packages should be true
+					string name = f.Name.Substring (0, f.Name.LastIndexOf ('.'));
+					packageListStore.AppendValues (false, name);
+				}
 			}
 			
 			buttonOk.Clicked += OnOkButtonClick;

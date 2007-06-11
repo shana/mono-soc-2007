@@ -306,6 +306,7 @@ Shared Object</property>
           <widget class="Gtk.Table" id="table2">
             <property name="MemberName" />
             <property name="NRows">2</property>
+            <property name="NColumns">3</property>
             <property name="RowSpacing">10</property>
             <property name="ColumnSpacing">10</property>
             <property name="BorderWidth">3</property>
@@ -480,6 +481,7 @@ Shared Object</property>
               <widget class="Gtk.Table" id="table3">
                 <property name="MemberName" />
                 <property name="NRows">2</property>
+                <property name="NColumns">3</property>
                 <property name="RowSpacing">10</property>
                 <property name="ColumnSpacing">10</property>
                 <child>
@@ -637,6 +639,7 @@ Shared Object</property>
               <widget class="Gtk.Table" id="table4">
                 <property name="MemberName" />
                 <property name="NRows">2</property>
+                <property name="NColumns">3</property>
                 <property name="RowSpacing">10</property>
                 <property name="ColumnSpacing">10</property>
                 <child>
@@ -810,6 +813,10 @@ Shared Object</property>
     <child>
       <widget class="Gtk.Table" id="table2">
         <property name="MemberName" />
+        <property name="NRows">3</property>
+        <property name="NColumns">3</property>
+        <property name="RowSpacing">6</property>
+        <property name="ColumnSpacing">6</property>
         <child>
           <placeholder />
         </child>
@@ -862,11 +869,9 @@ Shared Object</property>
   <widget class="Gtk.Dialog" id="CBinding.AddLibraryDialog" design-size="649 412">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Add Library</property>
-    <property name="WindowPosition">CenterOnParent</property>
     <property name="Modal">True</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
-    <property name="HasSeparator">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
@@ -930,11 +935,9 @@ Shared Object</property>
   <widget class="Gtk.Dialog" id="CBinding.AddPathDialog" design-size="649 413">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Add Path</property>
-    <property name="WindowPosition">CenterOnParent</property>
     <property name="Modal">True</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
-    <property name="HasSeparator">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
@@ -998,11 +1001,9 @@ Shared Object</property>
   <widget class="Gtk.Dialog" id="CBinding.EditPackagesDialog" design-size="580 449">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Edit packages</property>
-    <property name="WindowPosition">CenterOnParent</property>
     <property name="Modal">True</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
-    <property name="HasSeparator">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
@@ -1011,7 +1012,7 @@ Shared Object</property>
           <widget class="Gtk.VPaned" id="vpaned1">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Position">209</property>
+            <property name="Position">183</property>
             <property name="BorderWidth">6</property>
             <child>
               <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
@@ -1036,6 +1037,8 @@ Shared Object</property>
                 <property name="MemberName" />
                 <property name="NRows">2</property>
                 <property name="NColumns">2</property>
+                <property name="RowSpacing">6</property>
+                <property name="ColumnSpacing">6</property>
                 <child>
                   <placeholder />
                 </child>
