@@ -1,5 +1,14 @@
 2007-06-11  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* MonodocEditor/AssemblyInfo.cs: Defined some attributes for the
+	  assembly.
+	* MonodocEditor/Driver.cs, MonodocEditor/MainWindow.cs,
+	  MonodocEditor/gtk-gui/MainWindow.cs,
+	  MonodocEditor/gtk-gui/gui.stetic: Added an Open action to File
+	  Menu.
+
+2007-06-11  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* MonodocEditor/MainWindow.cs, MonodocEditor/MonodocEditor.mdp,
 	  MonodocEditor/gtk-gui/MainWindow.cs,
 	  MonodocEditor/gtk-gui/gui.stetic: Added a Menubar, Status Bar to

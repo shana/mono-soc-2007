@@ -14,6 +14,13 @@
         <property name="StockId">gtk-quit</property>
         <signal name="Activated" handler="OnQuitActivated" />
       </action>
+      <action id="Open">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Open</property>
+        <property name="ShortLabel" translatable="yes">_Open</property>
+        <property name="StockId">gtk-open</property>
+        <signal name="Activated" handler="OnOpenActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
@@ -28,6 +35,7 @@
             <property name="MemberName" />
             <node name="menubar1" type="Menubar">
               <node type="Menu" action="File">
+                <node type="Menuitem" action="Open" />
                 <node type="Menuitem" action="Quit" />
               </node>
             </node>

@@ -27,4 +27,8 @@ public partial class MainWindow: Gtk.Window
 	{
 		Application.Quit ();
 	}
+
+	protected virtual void OnOpenActivated(object sender, System.EventArgs e)
+	{
+	}
 }
