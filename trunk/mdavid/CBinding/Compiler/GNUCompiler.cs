@@ -83,6 +83,8 @@ namespace CBinding
 					args.Append ("-I" + inc + " ");
 			
 			foreach (ProjectFile f in projectFiles) {
+				if (f.Subtype == Subtype.Directory) continue;
+				
 				if (f.BuildAction == BuildAction.Compile)
 					res = DoCompilation (f, args.ToString (), monitor, cr);
 				else
@@ -90,7 +92,7 @@ namespace CBinding
 				
 				if (!res) break;
 			}
-			
+
 			if (res) {
 				switch (configuration.CompileTarget)
 				{
@@ -137,21 +139,32 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Generating binary...");
 			
-			// temp
-			monitor.Log.WriteLine (
-				"using: " + linkerCommand + " -o " + outputName + " " + objectFiles +
-				" " + args.ToString () + " " + pkgargs);
+			string command = linkerCommand + " -o " + outputName + " " +
+				objectFiles + " " + args.ToString () + " " + pkgargs;
 			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-				linkerCommand, "-o " + outputName + " " + objectFiles + " " +
-				args.ToString () + " " + pkgargs,
-				null, null);
-			p.WaitForExit ();
+			monitor.Log.WriteLine ("using: " + command);
 			
-			StringBuilder error = new StringBuilder ();
+			Process process = new Process ();
 			
-			while (p.StandardError.EndOfStream == false)
-				error.Append (p.StandardError.ReadLine () + "\n");
+			process.StartInfo.FileName = "bash";
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardInput = true;
+			process.StartInfo.RedirectStandardError = true;
+			
+			process.Start ();
+			
+			process.StandardInput.WriteLine (command);
+			process.StandardInput.Close ();
+			
+			process.WaitForExit ();
+			
+			string line;
+			StringWriter error = new StringWriter ();
+			
+			while ((line = process.StandardError.ReadLine ()) != null)
+				error.WriteLine (line);
+			
+			monitor.Log.WriteLine (error.ToString ());
 			
 			ParseLinkerOutput (error.ToString (), cr);
 		}
@@ -194,21 +207,32 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Generating shared object...");
 			
-			// temp
-			monitor.Log.WriteLine (
-				"using: " + linkerCommand + " -shared -o " + outputName + " " +
-				objectFiles + " " + args.ToString () + " " + pkgargs);
+			string command = linkerCommand + " -shared -o " + outputName + " " +
+				objectFiles + " " + args.ToString () + " " + pkgargs;
 			
-			Process p = Runtime.ProcessService.StartProcess (
-				linkerCommand, "-shared -o " + outputName + " " + objectFiles +
-				" " + args.ToString () + " " + pkgargs,
-				null, null);
-			p.WaitForExit ();
+			monitor.Log.WriteLine ("using: " + command);
 			
-			StringBuilder error = new StringBuilder ();
+			Process process = new Process ();
 			
-			while (p.StandardError.EndOfStream == false)
-				error.Append (p.StandardError.ReadLine () + "\n");
+			process.StartInfo.FileName = "bash";
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardInput = true;
+			process.StartInfo.RedirectStandardError = true;
+			
+			process.Start ();
+			
+			process.StandardInput.WriteLine (command);
+			process.StandardInput.Close ();
+			
+			process.WaitForExit ();
+			
+			string line;
+			StringWriter error = new StringWriter ();
+			
+			while ((line = process.StandardError.ReadLine ()) != null)
+				error.WriteLine (line);
+			
+			monitor.Log.WriteLine (error.ToString ());
 			
 			ParseLinkerOutput (error.ToString (), cr);
 		}
@@ -221,25 +245,36 @@ namespace CBinding
 		                            CompilerResults cr)
 		{			
 			string outputName = Path.ChangeExtension (file.Name, ".o");
+			string command = compilerCommand + " " + file.Name + " " + args +
+				"-c -o " + outputName;
 			
-			monitor.Log.WriteLine (
-				"using: " + compilerCommand + " " + file.Name + " " + args +
-				"-c -o " + outputName);
+			monitor.Log.WriteLine ("using: " + command);
 			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-				compilerCommand, file.Name + " " + args + "-c -o " + outputName,
-				null, null);
-				
-			p.WaitForExit ();
+			Process process = new Process ();
 			
-			StringBuilder error = new StringBuilder ();
+			process.StartInfo.FileName = "bash";
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardInput = true;
+			process.StartInfo.RedirectStandardError = true;
 			
-			while (p.StandardError.EndOfStream == false)
-				error.Append (p.StandardError.ReadLine () + "\n");
+			process.Start ();
+			
+			process.StandardInput.WriteLine (command);
+			process.StandardInput.Close ();
+			
+			process.WaitForExit ();
+			
+			string line;
+			StringWriter error = new StringWriter ();
+			
+			while ((line = process.StandardError.ReadLine ()) != null)
+				error.WriteLine (line);
+			
+			monitor.Log.WriteLine (error.ToString ());
 			
 			ParseCompilerOutput (error.ToString (), cr);
 			
-			return p.ExitCode == 0;
+			return process.ExitCode == 0;
 		}
 		
 		private string ObjectFiles (ProjectFileCollection projectFiles)
@@ -269,6 +304,7 @@ namespace CBinding
 			reader.Close ();
 		}
 		
+		// FIXME: needs to be improved
 		private CompilerError CreateErrorFromErrorString (string errorString)
 		{
 			CompilerError error = new CompilerError ();
