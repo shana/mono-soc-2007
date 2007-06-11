@@ -63,21 +63,15 @@ namespace System.Windows.Controls.Primitives {
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			if (double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height)) {
-				bool horizontal = GetHorizontal();
-				double used_width = 0;
-				double maximum_height = 0;
-				foreach (UIElement child in Children) {
-					child.Measure(availableSize);
-					used_width += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
-					maximum_height = Math.Max(maximum_height, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
-				}
-				return horizontal ? new Size(used_width, maximum_height) : new Size(maximum_height, used_width);
-			} else {
-				foreach (UIElement child in Children)
-					child.Measure(availableSize);
-				return availableSize;
+			bool horizontal = GetHorizontal();
+			double used_width = 0;
+			double maximum_height = 0;
+			foreach (UIElement child in Children) {
+				child.Measure(availableSize);
+				used_width += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
+				maximum_height = Math.Max(maximum_height, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
 			}
+			return horizontal ? new Size(used_width, maximum_height) : new Size(maximum_height, used_width);
 		}
 		#endregion
 

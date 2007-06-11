@@ -1,3 +1,7 @@
+2007-06-12  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabPanel.cs: Fixed MeasureOverride.
+
 2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabPanel.cs: An attempt at implementing the layout logic.
