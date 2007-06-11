@@ -58,7 +58,7 @@ namespace System.Windows.Controls {
 				current_row_elements.Add(child);
 				used_width += desired_child_size.Width;
 				current_row_height = Math.Max(current_row_height, desired_child_size.Height);
-				if ((used_width + desired_child_size.Width > available_row_width && used_width != 0) || child_index == Children.Count - 1) {
+				if (child_index == Children.Count - 1 || (used_width + GetDesiredChildSize(Children[child_index + 1]).Width > available_row_width && used_width != 0)) {
 					used_width = 0;
 					foreach (UIElement current_row_element in current_row_elements) {
 						desired_child_size = GetDesiredChildSize(current_row_element);
