@@ -74,7 +74,8 @@ namespace Test.Rules.Naming {
 			messageCollection = null;
 		}
 		
-		private void CheckMessageType (MessageCollection messageCollection, MessageType messageType) {
+		private void CheckMessageType (MessageCollection messageCollection, MessageType messageType) 
+		{
 			IEnumerator enumerator = messageCollection.GetEnumerator ();
 			if (enumerator.MoveNext ()) {
 				Message message = (Message) enumerator.Current;
@@ -101,7 +102,8 @@ namespace Test.Rules.Naming {
 		}
 		
 		[Test]
-		public void TestVariousLevelInheritanceCorrectName () {
+		public void TestVariousLevelInheritanceCorrectName () 
+		{
 			type = assembly.MainModule.Types ["Test.Rules.Naming.OtherAttribute"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
@@ -129,14 +131,16 @@ namespace Test.Rules.Naming {
 		}
 		
 		[Test]
-		public void TestOneLevelInheritanceExternalTypeNoApplyed () {
+		public void TestOneLevelInheritanceExternalTypeNoApplyed () 
+		{
 			type = assembly.MainModule.Types ["Test.Rules.Naming.OtherClass"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
 		
 		[Test]
-		public void TestVariousLevelInheritanceExternalTypeNoApplyed () {
+		public void TestVariousLevelInheritanceExternalTypeNoApplyed () 
+		{
 			type = assembly.MainModule.Types ["Test.Rules.Naming.YetAnotherClass"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);

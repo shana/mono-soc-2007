@@ -68,7 +68,8 @@ namespace Test.Rules.Naming {
 			messageCollection = null;
 		}
 		
-		private void CheckMessageType (MessageCollection messageCollection, MessageType messageType) {
+		private void CheckMessageType (MessageCollection messageCollection, MessageType messageType) 
+		{
 			IEnumerator enumerator = messageCollection.GetEnumerator ();
 			if (enumerator.MoveNext ()) {
 				Message message = (Message) enumerator.Current;
