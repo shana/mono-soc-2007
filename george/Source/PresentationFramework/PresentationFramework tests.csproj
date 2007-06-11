@@ -54,6 +54,7 @@
     <Compile Include="Test\System.Windows.Controls.Primitives\ButtonBaseTest.cs" />
     <None Include="Test\System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="Test\System.Windows.Controls\ChangeLog" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\TabPanelTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\ThumbTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\TickBarTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\ScrollBarTest.cs" />
@@ -68,6 +69,7 @@
     </Compile>
     <Compile Include="Test\System.Windows.Controls\CanvasTest.cs" />
     <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\TabItemTest.cs" />
     <Compile Include="Test\System.Windows.Controls\WrapPanelTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ScrollViewerTest.cs" />
     <Compile Include="Test\System.Windows.Controls\StackPanelTest.cs" />

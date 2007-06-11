@@ -1,3 +1,7 @@
+2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabPanelTest.cs: Added.
+
 2007-05-31  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* SrollBarTest.cs, TrackTest.cs: Changed some test timings that seemed to cause hangs sometimes.
