@@ -1,5 +1,9 @@
 2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabPanel.cs: An attempt at implementing the layout logic.
+
+2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabPanel.cs: Added.
 
 2007-05-27  George Giolfan  <georgegiolfan@yahoo.com>
