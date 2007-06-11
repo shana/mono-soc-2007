@@ -11,8 +11,21 @@ namespace System.Windows.Controls {
 	public class TabItem : HeaderedContentControl {
 		#region Public Fields
 		#region Dependency Properties
-		public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(TabItem), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty TabStripPlacementProperty = DependencyProperty.RegisterReadOnly("TabStripPlacement", typeof(Dock), typeof(TabItem)).DependencyProperty; 
+		public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(TabItem), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			TabItem i = (TabItem)d;
+			if ((bool)e.NewValue)
+				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
+			else
+				i.OnUnselected(new RoutedEventArgs(UnselectedEvent, i));
+		}));
+		public static readonly DependencyProperty TabStripPlacementProperty = DependencyProperty.RegisterReadOnly("TabStripPlacement", typeof(Dock), typeof(TabItem), new FrameworkPropertyMetadata(Dock.Top)).DependencyProperty; 
+		#endregion
+		#endregion
+
+		#region Private Fields
+		#region Routed Events
+		static readonly RoutedEvent SelectedEvent = EventManager.RegisterRoutedEvent("Selected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TabItem));
+		static readonly RoutedEvent UnselectedEvent = EventManager.RegisterRoutedEvent("Unselected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TabItem));
 		#endregion
 		#endregion
 
@@ -59,7 +72,11 @@ namespace System.Windows.Controls {
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer() {
-			return base.OnCreateAutomationPeer();
+#if Implementation
+			return null;
+#else
+			return new TabItemAutomationPeer(this);
+#endif
 		}
 
 		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
