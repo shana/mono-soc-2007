@@ -48,49 +48,49 @@ namespace CBinding
 			this.project = project;
 		}
 		
-		public Package this[int index] {
-			get { return (Package)List[index]; }
+		public ProjectPackage this[int index] {
+			get { return (ProjectPackage)List[index]; }
 			set { List[index] = value; }
 		}
 		
-		public int Add (Package package)
+		public int Add (ProjectPackage package)
 		{
 			return List.Add (package);
 		}
 		
-		public void AddRange (Package[] packages)
+		public void AddRange (ProjectPackage[] packages)
 		{
-			foreach (Package p in packages)
+			foreach (ProjectPackage p in packages)
 				List.Add (p);
 		}
 		
 		public void AddRange (ProjectPackageCollection packages)
 		{
-			foreach (Package p in packages)
+			foreach (ProjectPackage p in packages)
 				List.Add (p);
 		}
 		
-		public bool Contains (Package package)
+		public bool Contains (ProjectPackage package)
 		{
 			return List.Contains (package);
 		}
 		
-		public void CopyTo (Package[] array, int index)
+		public void CopyTo (ProjectPackage[] array, int index)
 		{
 			List.CopyTo (array, index);
 		}
 		
-		public int IndexOf (Package package)
+		public int IndexOf (ProjectPackage package)
 		{
 			return List.IndexOf (package);
 		}
 		
-		public void Insert (int index, Package package)
+		public void Insert (int index, ProjectPackage package)
 		{
 			List.Insert (index, package);
 		}
 		
-		public void Remove (Package package)
+		public void Remove (ProjectPackage package)
 		{
 			List.Remove (package);
 		}
@@ -103,7 +103,7 @@ namespace CBinding
 		protected override void OnClear ()
 		{
 			if (project != null) {
-				foreach (Package package in (ArrayList)InnerList) {
+				foreach (ProjectPackage package in (ArrayList)InnerList) {
 					project.NotifyPackageRemovedFromProject (package);
 				}
 			}
@@ -112,25 +112,25 @@ namespace CBinding
 		protected override void OnInsertComplete (int index, object value)
 		{
 			if (project != null)
-				project.NotifyPackageAddedToProject ((Package)value);
+				project.NotifyPackageAddedToProject ((ProjectPackage)value);
 		}
 		
 		protected override void OnRemoveComplete (int index, object value)
 		{
 			if (project != null)
-				project.NotifyPackageRemovedFromProject ((Package)value);
+				project.NotifyPackageRemovedFromProject ((ProjectPackage)value);
 		}
 		
 		protected override void OnSet (int index, object oldValue, object newValue)
 		{
 			if (project != null)
-				project.NotifyPackageRemovedFromProject ((Package)oldValue);
+				project.NotifyPackageRemovedFromProject ((ProjectPackage)oldValue);
 		}
 		
 		protected override void OnSetComplete (int index, object oldValue, object newValue)
 		{
 			if (project != null)
-				project.NotifyPackageAddedToProject ((Package)newValue);
+				project.NotifyPackageAddedToProject ((ProjectPackage)newValue);
 		}
 	}
 	
@@ -145,8 +145,8 @@ namespace CBinding
 			enumerator = temp.GetEnumerator ();
 		}
 		
-		public Package Current {
-			get { return (Package)enumerator.Current; }
+		public ProjectPackage Current {
+			get { return (ProjectPackage)enumerator.Current; }
 		}
 		
 		object IEnumerator.Current {

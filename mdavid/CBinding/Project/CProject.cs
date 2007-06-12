@@ -58,13 +58,18 @@ namespace CBinding
 		
     	private ProjectPackageCollection packages = new ProjectPackageCollection ();
 		
+		public event ProjectPackageEventHandler PackageAddedToProject;
+		public event ProjectPackageEventHandler PackageRemovedFromProject;
+		
 		public CProject ()
 		{
+			packages.SetProject (this);
 		}
 		
 		public CProject (ProjectCreateInformation info,
 		                 XmlElement projectOptions, string language)
 		{
+			packages.SetProject (this);
 			string binPath = ".";
 			
 			if (info != null) {
@@ -192,6 +197,10 @@ namespace CBinding
 		[ItemProperty ("Packages")]
 		public ProjectPackageCollection Packages {
 			get { return packages; }
+			set {
+				packages = value;
+				packages.SetProject (this);
+			}
 		}
 		
 		protected override void OnFileAddedToProject (ProjectFileEventArgs e)
@@ -202,12 +211,14 @@ namespace CBinding
 				e.ProjectFile.BuildAction = BuildAction.Nothing;
 		}
 		
-		internal void NotifyPackageRemovedFromProject (Package package)
+		internal void NotifyPackageRemovedFromProject (ProjectPackage package)
 		{
+			PackageRemovedFromProject (this, new ProjectPackageEventArgs (this, package));
 		}
 		
-		internal void NotifyPackageAddedToProject (Package package)
+		internal void NotifyPackageAddedToProject (ProjectPackage package)
 		{
+			PackageAddedToProject (this, new ProjectPackageEventArgs (this, package));
 		}
 	}
 }

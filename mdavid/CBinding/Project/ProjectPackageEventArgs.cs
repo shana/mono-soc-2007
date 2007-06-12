@@ -1,5 +1,5 @@
 //
-// CCompiler.cs: asbtract class that provides some basic implementation for ICompiler
+// ProjectPackageEventArgs.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -29,48 +29,29 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Text;
-using System.CodeDom.Compiler;
-
-using MonoDevelop.Core;
-using MonoDevelop.Projects;
+using System;
 
 namespace CBinding
 {
-	public abstract class CCompiler : ICompiler
+	public delegate void ProjectPackageEventHandler (object sender, ProjectPackageEventArgs e);
+	
+	public class ProjectPackageEventArgs
 	{
-		protected string compilerCommand;
-		protected string linkerCommand;
+		CProject project;
+		ProjectPackage package;
 		
-		public abstract string Name {
-			get;
-		}
-			
-		public abstract Language Language {
-			get;
-		}
-		
-		public abstract ICompilerResult Compile (
-			ProjectFileCollection projectFiles,
-		    ProjectPackageCollection packages,
-		    CProjectConfiguration configuration,
-		    IProgressMonitor monitor);
-		    
-		protected abstract void ParseCompilerOutput (string errorString, CompilerResults cr);
-		
-		protected abstract void ParseLinkerOutput (string errorString, CompilerResults cr);
-		
-		protected string GeneratePkgArgs (ProjectPackageCollection packages)
+		public ProjectPackageEventArgs(CProject project, ProjectPackage package)
 		{
-			if (packages == null || packages.Count < 1)
-				return string.Empty;
-			
-			StringBuilder libs = new StringBuilder ();
-			
-			foreach (ProjectPackage p in packages)
-				libs.Append (p.Name + " ");
-			
-			return string.Format ("`pkg-config --cflags --libs {0}`", libs.ToString ().Trim ());
+			this.project = project;
+			this.package = package;
+		}
+		
+		public CProject Project {
+			get { return project; }
+		}
+		
+		public ProjectPackage Package {
+			get { return package; }
 		}
 	}
 }

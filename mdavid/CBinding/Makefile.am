@@ -23,7 +23,8 @@ FILES = \
 	Project/CProjectBinding.cs \
 	Project/CProjectConfiguration.cs \
 	Project/ProjectPackageCollection.cs \
-	Project/Package.cs \
+	Project/ProjectPackage.cs \
+	Project/ProjectPackageEventArgs.cs \
 	Gui/CodeGenerationPanel.cs \
 	Gui/CompilerPanel.cs \
 	Gui/AddLibraryDialog.cs \
@@ -32,7 +33,7 @@ FILES = \
 	Gui/ProjectNodeExtension.cs \
 	Gui/ProjectPackagesFolderNodeBuilder.cs \
 	Gui/EditPackagesDialog.cs \
-	Gui/PackageNodeBuilder.cs \
+	Gui/ProjectPackageNodeBuilder.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
 	gtk-gui/CBinding.CompilerPanel.cs \
