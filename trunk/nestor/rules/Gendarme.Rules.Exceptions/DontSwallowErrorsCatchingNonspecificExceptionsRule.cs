@@ -74,7 +74,7 @@ namespace Gendarme.Rules.Exceptions {
 						if (IsForbiddenTypeInCatches (catchTypeName)) {
 							if (!ContainsThrowInstruction (exceptionHandler)) {
 								Location location = new Location (methodDefinition.Name, methodDefinition.Name, exceptionHandler.HandlerStart.Offset);
-								Message message = new Message ("The method contains a forbidden type catch.", location, MessageType.Error);
+								Message message = new Message ("Do not swallow errors catching nonspecific exceptions.", location, MessageType.Error);
 								messageCollection.Add (message);
 							}
 						}
