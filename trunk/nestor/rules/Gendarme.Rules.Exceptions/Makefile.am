@@ -34,14 +34,14 @@ uninstall-hook:
 exceptions_test_sources = *.cs
 exceptions_test_build_sources = $(addprefix $(srcdir)/Test/, $(exceptions_test_sources))
 
-Test.Rules.exceptions.dll: $(exceptions_rules_build_sources)
+Test.Rules.Exceptions.dll: $(exceptions_rules_build_sources)
 	$(MCS) -target:library -pkg:mono-cecil -pkg:mono-nunit -r:../lib/Gendarme.Framework.dll \
 		-r:Gendarme.Rules.Exceptions.dll -out:$@ $(exceptions_test_build_sources)
 
-test: Gendarme.Rules.Exceptions.dll Test.Rules.exceptions.dll
+test: Gendarme.Rules.Exceptions.dll Test.Rules.Exceptions.dll
 
-run-test: Gendarme.Rules.Exceptions.dll Test.Rules.exceptions.dll
-	MONO_PATH=../lib/:$(CECIL_PATH):$(MONO_PATH) nunit-console Test.Rules.exceptions.dll
+run-test: Gendarme.Rules.Exceptions.dll Test.Rules.Exceptions.dll
+	MONO_PATH=../lib/:$(CECIL_PATH):$(MONO_PATH) nunit-console Test.Rules.Exceptions.dll
 
 self-test: test
 	gendarme Gendarme.Rules.Exceptions.dll
