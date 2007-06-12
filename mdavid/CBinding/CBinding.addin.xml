@@ -83,10 +83,16 @@
 		<ExtensionNodeSet id = "MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
+	<ExtensionPoint path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode" name = "Package context menu">
+		<Description>Context menu for a package in the solution pad.</Description>
+		<ExtensionNodeSet id = "MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
 		<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
 		<NodeBuilder id = "ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
 		<NodeBuilder id = "ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
+		<NodeBuilder id = "PackageNodeBuilder" class = "CBinding.PackageNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">
@@ -97,12 +103,17 @@
 		<CommandItem id = "CBinding.CProjectCommands.AddPackage"/>
 	</Extension>
 	
+	<Extension path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode">
+		<CommandItem id = "MonoDevelop.Ide.Commands.EditCommands.Delete"/>
+	</Extension>
+	
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
 		<DataType class = "CBinding.CCompilationParameters"/>
 		<DataType class = "CBinding.CProjectConfiguration"/>
 		<DataType class = "CBinding.CProject"/>
 		<DataType class = "CBinding.GccCompiler"/>
 		<DataType class = "CBinding.GppCompiler"/>
+		<DataType class = "CBinding.Package"/>
 	</Extension>
 	
 </AddIn>

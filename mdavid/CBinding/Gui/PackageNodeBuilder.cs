@@ -1,5 +1,5 @@
 //
-// ProjectPackagesFolderNodeBuilder.cs: Node to control the packages in the project
+// PackageNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,80 +30,59 @@
 //
 
 using System;
-using System.Collections;
 
 using Mono.Addins;
 
-using MonoDevelop.Components.Commands;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
-using MonoDevelop.Ide.Gui.Pads.ProjectPad;
-using MonoDevelop.Ide.Gui;
+using MonoDevelop.Components.Commands;
+using MonoDevelop.Ide.Commands;
 
 namespace CBinding
 {
-	public enum CProjectCommands {
-		AddPackage
-	}
-	
-	public class ProjectPackagesFolderNodeBuilder : TypeNodeBuilder
+	public class PackageNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(ProjectPackageCollection); }
+			get { return typeof(Package); }
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof(ProjectPackagesFolderNodeCommandHandler); }
+			get { return typeof(PackageNodeCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return "Packages";
-		}
-		
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
-		{
-			label = "Packages";
-			icon = Context.GetIcon (Stock.OpenReferenceFolder);
-			closedIcon = Context.GetIcon (Stock.ClosedReferenceFolder);
-		}
-		
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
-		{
-			return ((ProjectPackageCollection)dataObject).Count > 0;
-		}
-		
-		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
-		{
-			ProjectPackageCollection packages = (ProjectPackageCollection)dataObject;
-			
-			foreach (Package p in packages)
-				treeBuilder.AddChild (p);
+			return ((Package)dataObject).Name;
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode"; }
+			get { return "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode"; }
 		}
 		
-		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
+		public override void BuildNode (ITreeBuilder treeBuilder,
+		                                object dataObject,
+		                                ref string label,
+		                                ref Gdk.Pixbuf icon,
+		                                ref Gdk.Pixbuf closedIcon)
 		{
-			return -1;
+			label = ((Package)dataObject).Name;
+			icon = Context.GetIcon (Stock.Reference);
 		}
 	}
 	
-	public class ProjectPackagesFolderNodeCommandHandler : NodeCommandHandler
+	public class PackageNodeCommandHandler : NodeCommandHandler
 	{
-		[CommandHandler (CProjectCommands.AddPackage)]
-		public void AddPackageToProject ()
+		[CommandHandler (EditCommands.Delete)]
+		public void RomovePackage ()
 		{
+			Package package = (Package)CurrentNode.DataItem;
 			CProject project = (CProject)CurrentNode.GetParentDataItem (
 			    typeof(CProject), false);
 			
-			EditPackagesDialog dialog = new EditPackagesDialog (project);
-			dialog.Run ();			
+			project.Packages.Remove (package);
 			
 			IdeApp.ProjectOperations.SaveProject (project);
-			CurrentNode.Expanded = true;
 		}
 	}
 }

@@ -33,6 +33,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Collections;
+using System.ComponentModel;
 using System.CodeDom.Compiler;
 
 using MonoDevelop.Core;
@@ -55,8 +56,6 @@ namespace CBinding
 		[ItemProperty]
 		private Language language;
 		
-		[ItemProperty ("Packages")]
-		[ItemProperty ("Package", Scope = 1, ValueType = typeof(string))]
     	private ProjectPackageCollection packages = new ProjectPackageCollection ();
 		
 		public CProject ()
@@ -189,6 +188,8 @@ namespace CBinding
 			}
 		}
 		
+		[Browsable(false)]
+		[ItemProperty ("Packages")]
 		public ProjectPackageCollection Packages {
 			get { return packages; }
 		}
@@ -201,11 +202,11 @@ namespace CBinding
 				e.ProjectFile.BuildAction = BuildAction.Nothing;
 		}
 		
-		internal void NotifyPackageRemovedFromProject (string package)
+		internal void NotifyPackageRemovedFromProject (Package package)
 		{
 		}
 		
-		internal void NotifyPackageAddedToProject (string package)
+		internal void NotifyPackageAddedToProject (Package package)
 		{
 		}
 	}

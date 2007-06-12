@@ -86,7 +86,7 @@ namespace CBinding
 				if (f.Subtype == Subtype.Directory) continue;
 				
 				if (f.BuildAction == BuildAction.Compile)
-					res = DoCompilation (f, args.ToString (), monitor, cr);
+					res = DoCompilation (f, args.ToString (), packages, monitor, cr);
 				else
 					res = true;
 				
@@ -139,32 +139,29 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Generating binary...");
 			
-			string command = linkerCommand + " -o " + outputName + " " +
-				objectFiles + " " + args.ToString () + " " + pkgargs;
+			string command = string.Format ("{0} -o {1} {2} {3} {4}",
+			    linkerCommand, outputName, objectFiles, args.ToString (), pkgargs);
 			
 			monitor.Log.WriteLine ("using: " + command);
 			
-			Process process = new Process ();
+			ProcessWrapper p = Runtime.ProcessService.StartProcess (
+			    "bash", null, null, (ProcessEventHandler)null, null, null, true);
 			
-			process.StartInfo.FileName = "bash";
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.RedirectStandardInput = true;
-			process.StartInfo.RedirectStandardError = true;
-			
-			process.Start ();
-			
-			process.StandardInput.WriteLine (command);
-			process.StandardInput.Close ();
-			
-			process.WaitForExit ();
+			p.StandardInput.WriteLine (command);
+			p.StandardInput.Close ();
+			p.WaitForExit ();
 			
 			string line;
 			StringWriter error = new StringWriter ();
 			
-			while ((line = process.StandardError.ReadLine ()) != null)
+			while ((line = p.StandardError.ReadLine ()) != null)
 				error.WriteLine (line);
 			
 			monitor.Log.WriteLine (error.ToString ());
+			
+			ParseCompilerOutput (error.ToString (), cr);
+			
+			error.Close ();
 			
 			ParseLinkerOutput (error.ToString (), cr);
 		}
@@ -207,32 +204,29 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Generating shared object...");
 			
-			string command = linkerCommand + " -shared -o " + outputName + " " +
-				objectFiles + " " + args.ToString () + " " + pkgargs;
+			string command = string.Format ("{0} -shared -o {1} {2} {3} {4}",
+			    linkerCommand, outputName, objectFiles, args.ToString (), pkgargs);
 			
 			monitor.Log.WriteLine ("using: " + command);
 			
-			Process process = new Process ();
+			ProcessWrapper p = Runtime.ProcessService.StartProcess (
+			    "bash", null, null, (ProcessEventHandler)null, null, null, true);
 			
-			process.StartInfo.FileName = "bash";
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.RedirectStandardInput = true;
-			process.StartInfo.RedirectStandardError = true;
-			
-			process.Start ();
-			
-			process.StandardInput.WriteLine (command);
-			process.StandardInput.Close ();
-			
-			process.WaitForExit ();
+			p.StandardInput.WriteLine (command);
+			p.StandardInput.Close ();
+			p.WaitForExit ();
 			
 			string line;
 			StringWriter error = new StringWriter ();
 			
-			while ((line = process.StandardError.ReadLine ()) != null)
+			while ((line = p.StandardError.ReadLine ()) != null)
 				error.WriteLine (line);
 			
 			monitor.Log.WriteLine (error.ToString ());
+			
+			ParseCompilerOutput (error.ToString (), cr);
+			
+			error.Close ();
 			
 			ParseLinkerOutput (error.ToString (), cr);
 		}
@@ -241,40 +235,38 @@ namespace CBinding
 		/// Compiles a source file into object code
 		/// </summary>
 		private bool DoCompilation (ProjectFile file, string args,
+		                            ProjectPackageCollection packages,
 		                            IProgressMonitor monitor,
 		                            CompilerResults cr)
 		{			
 			string outputName = Path.ChangeExtension (file.Name, ".o");
-			string command = compilerCommand + " " + file.Name + " " + args +
-				"-c -o " + outputName;
+			string pkgargs = GeneratePkgArgs (packages);
+			
+			string command = String.Format("{0} {1} {2} -c -o {3} {4}",
+			    compilerCommand, file.Name, args,outputName, pkgargs);
 			
 			monitor.Log.WriteLine ("using: " + command);
 			
-			Process process = new Process ();
+			ProcessWrapper p = Runtime.ProcessService.StartProcess (
+			    "bash", null, null, (ProcessEventHandler)null, null, null, true);
 			
-			process.StartInfo.FileName = "bash";
-			process.StartInfo.UseShellExecute = false;
-			process.StartInfo.RedirectStandardInput = true;
-			process.StartInfo.RedirectStandardError = true;
-			
-			process.Start ();
-			
-			process.StandardInput.WriteLine (command);
-			process.StandardInput.Close ();
-			
-			process.WaitForExit ();
+			p.StandardInput.WriteLine (command);
+			p.StandardInput.Close ();
+			p.WaitForExit ();
 			
 			string line;
 			StringWriter error = new StringWriter ();
 			
-			while ((line = process.StandardError.ReadLine ()) != null)
+			while ((line = p.StandardError.ReadLine ()) != null)
 				error.WriteLine (line);
 			
 			monitor.Log.WriteLine (error.ToString ());
 			
 			ParseCompilerOutput (error.ToString (), cr);
 			
-			return process.ExitCode == 0;
+			error.Close ();
+			
+			return p.ExitCode == 0;
 		}
 		
 		private string ObjectFiles (ProjectFileCollection projectFiles)
