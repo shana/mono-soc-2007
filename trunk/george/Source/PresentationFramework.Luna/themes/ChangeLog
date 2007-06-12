@@ -1,3 +1,7 @@
+2007-06-12  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* luna.normalcolor.xaml: Switched to implemented TabPanel.
+
 2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* luna.normalcolor.xaml: Added TabItem style.

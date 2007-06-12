@@ -1990,7 +1990,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                             <RowDefinition x:Name="RowDefinition1"
                                            Height="*"/>
                         </Grid.RowDefinitions>
-                        <TabPanel x:Name="HeaderPanel"
+                        <mono_system_windows_controls_primitives:TabPanel x:Name="HeaderPanel"
                                   Panel.ZIndex ="1" 
                                   KeyboardNavigation.TabIndex="1"
                                   Grid.Column="0"
