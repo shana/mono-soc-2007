@@ -43,7 +43,8 @@ namespace Gendarme.Rules.Exceptions {
 		//}
 		private string[] forbiddenTypeInCatches = {"System.Exception", "System.SystemException", "System.Object"};
 	
-		private bool IsForbiddenTypeInCatches (string typeName) {
+		private bool IsForbiddenTypeInCatches (string typeName) 
+		{
 			foreach (String forbiddenTypeName in forbiddenTypeInCatches) {
 				if (typeName.Equals (forbiddenTypeName)) {
 					return true;
@@ -52,7 +53,8 @@ namespace Gendarme.Rules.Exceptions {
 			return false;
 		}
 		
-		private bool ContainsThrowInstruction (ExceptionHandler exceptionHandler) {
+		private bool ContainsThrowInstruction (ExceptionHandler exceptionHandler) 
+		{
 			Instruction currentInstruction = exceptionHandler.HandlerStart;
 			while (currentInstruction != null) {
 				if (currentInstruction.OpCode.FlowControl == FlowControl.Throw) {
