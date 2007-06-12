@@ -55,12 +55,12 @@ namespace CBinding
 			packageTreeView.Model = packageListStore;
 			packageTreeView.HeadersVisible = true;
 			packageTreeView.AppendColumn ("", package_toggle, "active", 0);
-			packageTreeView.AppendColumn ("Package", new Gtk.CellRendererText (), "text", 1);
+			packageTreeView.AppendColumn ("ProjectPackage", new Gtk.CellRendererText (), "text", 1);
 			packageTreeView.AppendColumn ("Version", new Gtk.CellRendererText (), "text", 2);
 			
 			selectedPackagesTreeView.Model = selectedPackagesListStore;
 			selectedPackagesTreeView.HeadersVisible = true;
-			selectedPackagesTreeView.AppendColumn ("Package", new Gtk.CellRendererText (), "text", 0);
+			selectedPackagesTreeView.AppendColumn ("ProjectPackage", new Gtk.CellRendererText (), "text", 0);
 			selectedPackagesTreeView.AppendColumn ("Version", new Gtk.CellRendererText (), "text", 1);
 			
 			string pkg_path = Environment.GetEnvironmentVariable ("PKG_CONFIG_PATH");
@@ -114,7 +114,7 @@ namespace CBinding
 			bool has_elem = selectedPackagesListStore.GetIterFirst (out iter);
 			while (has_elem) {
 				string package = (string)selectedPackagesListStore.GetValue (iter, 0);
-				project.Packages.Add (new Package(package));
+				project.Packages.Add (new ProjectPackage(package));
 				if (!selectedPackagesListStore.IterNext (ref iter)) break;
 			}
 			
@@ -205,7 +205,7 @@ namespace CBinding
 		{
 			bool exists = false;
 			
-			foreach (Package p in project.Packages) {
+			foreach (ProjectPackage p in project.Packages) {
 				if (package.Equals (p.Name)) {
 					exists = true;
 					break;

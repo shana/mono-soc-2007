@@ -1,5 +1,5 @@
 //
-// PackageNodeBuilder.cs
+// ProjectPackageNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -41,10 +41,10 @@ using MonoDevelop.Ide.Commands;
 
 namespace CBinding
 {
-	public class PackageNodeBuilder : TypeNodeBuilder
+	public class ProjectPackageNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(Package); }
+			get { return typeof(ProjectPackage); }
 		}
 		
 		public override Type CommandHandlerType {
@@ -53,7 +53,7 @@ namespace CBinding
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return ((Package)dataObject).Name;
+			return ((ProjectPackage)dataObject).Name;
 		}
 		
 		public override string ContextMenuAddinPath {
@@ -66,7 +66,7 @@ namespace CBinding
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			label = ((Package)dataObject).Name;
+			label = ((ProjectPackage)dataObject).Name;
 			icon = Context.GetIcon (Stock.Reference);
 		}
 	}
@@ -76,7 +76,7 @@ namespace CBinding
 		[CommandHandler (EditCommands.Delete)]
 		public void RomovePackage ()
 		{
-			Package package = (Package)CurrentNode.DataItem;
+			ProjectPackage package = (ProjectPackage)CurrentNode.DataItem;
 			CProject project = (CProject)CurrentNode.GetParentDataItem (
 			    typeof(CProject), false);
 			

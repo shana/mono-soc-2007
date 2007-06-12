@@ -48,12 +48,33 @@ namespace CBinding
 	
 	public class ProjectPackagesFolderNodeBuilder : TypeNodeBuilder
 	{
+		ProjectPackageEventHandler addedHandler;
+		ProjectPackageEventHandler removedHandler;
+		private bool registered = false;
+		private CProject my_project;
+		
 		public override Type NodeDataType {
 			get { return typeof(ProjectPackageCollection); }
 		}
 		
 		public override Type CommandHandlerType {
 			get { return typeof(ProjectPackagesFolderNodeCommandHandler); }
+		}
+		
+		protected override void Initialize ()
+		{
+			addedHandler = (ProjectPackageEventHandler)Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnAddPackage));
+			removedHandler = (ProjectPackageEventHandler)Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnRemovePackage));
+		}
+		
+		public override void Dispose ()
+		{
+			if (registered)
+			{
+				my_project.PackageAddedToProject -= addedHandler;
+				my_project.PackageRemovedFromProject -= removedHandler;
+				registered = false;
+			}
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -63,6 +84,15 @@ namespace CBinding
 		
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
+			if (!registered)
+			{
+				registered = true;
+				my_project = (CProject)treeBuilder.GetParentDataItem (typeof(CProject), false);
+				my_project.PackageAddedToProject += addedHandler;
+				my_project.PackageRemovedFromProject += removedHandler;
+				IdeApp.Services.MessageService.ShowMessage ("registration");
+			}
+			
 			label = "Packages";
 			icon = Context.GetIcon (Stock.OpenReferenceFolder);
 			closedIcon = Context.GetIcon (Stock.ClosedReferenceFolder);
@@ -77,7 +107,7 @@ namespace CBinding
 		{
 			ProjectPackageCollection packages = (ProjectPackageCollection)dataObject;
 			
-			foreach (Package p in packages)
+			foreach (ProjectPackage p in packages)
 				treeBuilder.AddChild (p);
 		}
 		
@@ -88,6 +118,22 @@ namespace CBinding
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
 			return -1;
+		}
+		
+		private void OnAddPackage (object sender, ProjectPackageEventArgs e)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (e.Project.Packages);
+			if (builder != null)
+				builder.AddChild (e.Package);
+		}
+		
+		private void OnRemovePackage (object sender, ProjectPackageEventArgs e)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (e.Project.Packages);
+			if (builder != null) {
+				if (builder.FindChild (e.Package))
+					builder.Remove ();
+			}
 		}
 	}
 	

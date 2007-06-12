@@ -1,5 +1,5 @@
 //
-// Package.cs: A pkg-config package
+// ProjectPackage.cs: A pkg-config package
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -35,17 +35,17 @@ using MonoDevelop.Projects.Serialization;
 
 namespace CBinding
 {
-	public class Package
+	public class ProjectPackage
 	{
 		[ItemProperty ("name")]
 		private string name;
 		
-		public Package (string name)
+		public ProjectPackage (string name)
 		{
 			this.name = name;
 		}
 		
-		public Package ()
+		public ProjectPackage ()
 		{
 		}
 		
@@ -56,7 +56,7 @@ namespace CBinding
 		
 		public override bool Equals (object o)
 		{
-			Package other = o as Package;
+			ProjectPackage other = o as ProjectPackage;
 			
 			if (other == null) return false;
 			
@@ -67,24 +67,5 @@ namespace CBinding
 		{
 			return base.GetHashCode ();
 		}
-		
-//		DataCollection ICustomDataItem.Serialize (ITypeSerializer handler)
-//		{
-//			DataCollection data = handler.Serialize (this);
-//			
-//			data.Add (new DataValue ("name", name));
-//
-//			return data;
-//		}
-//		
-//		void ICustomDataItem.Deserialize (ITypeSerializer handler, DataCollection data)
-//		{
-//			DataValue name_value = data.Extract ("name") as DataValue;
-//			handler.Deserialize (this, data);
-//			
-//			if (name_value != null) {
-//				name = name_value.Value;
-//			}
-//		}
 	}
 }

@@ -83,7 +83,7 @@
 		<ExtensionNodeSet id = "MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode" name = "Package context menu">
+	<ExtensionPoint path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode" name = "ProjectPackage context menu">
 		<Description>Context menu for a package in the solution pad.</Description>
 		<ExtensionNodeSet id = "MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
@@ -92,7 +92,7 @@
 		<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
 		<NodeBuilder id = "ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
 		<NodeBuilder id = "ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
-		<NodeBuilder id = "PackageNodeBuilder" class = "CBinding.PackageNodeBuilder"/>
+		<NodeBuilder id = "ProjectPackageNodeBuilder" class = "CBinding.ProjectPackageNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">
@@ -113,7 +113,7 @@
 		<DataType class = "CBinding.CProject"/>
 		<DataType class = "CBinding.GccCompiler"/>
 		<DataType class = "CBinding.GppCompiler"/>
-		<DataType class = "CBinding.Package"/>
+		<DataType class = "CBinding.ProjectPackage"/>
 	</Extension>
 	
 </AddIn>
