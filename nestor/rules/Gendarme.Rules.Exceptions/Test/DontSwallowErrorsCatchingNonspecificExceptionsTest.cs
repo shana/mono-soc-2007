@@ -160,7 +160,7 @@ namespace Test.Rules.Exceptions {
 		[Test]
 		public void NotSwallowCatchingSpecificExceptionTest () 
 		{
-		    method = type.Methods.GetMethod ("NotSwallowCatchingSpecificException", Type.EmptyTypes);
+			method = type.Methods.GetMethod ("NotSwallowCatchingSpecificException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection); 
 		}
@@ -255,16 +255,18 @@ namespace Test.Rules.Exceptions {
 				Console.WriteLine (exception.Message);
 				Console.WriteLine (exception);
 				throw exception;
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
 			}
 		}
 		
 		public void NotSwallowCatchingSpecificException () 
 		{
-		    try {
-		    	File.Open ("foo.txt", FileMode.Open);
-		    }
-		    catch (FileNotFoundException exception) {
-		    }
+			try {
+				File.Open ("foo.txt", FileMode.Open);
+			}
+			catch (FileNotFoundException exception) {
+			}
 		}
 	}
 }
