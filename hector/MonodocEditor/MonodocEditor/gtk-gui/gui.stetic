@@ -24,6 +24,7 @@
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
+    <property name="WindowPosition">None</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
       <widget class="Gtk.VBox" id="vbox1">
@@ -80,10 +81,9 @@
   </widget>
   <widget class="Gtk.Dialog" id="Monodoc.Editor.OpenDocDialog" design-size="629 448">
     <property name="MemberName" />
-    <property name="WindowPosition">CenterOnParent</property>
+    <property name="Title" translatable="yes">window1</property>
     <property name="Buttons">2</property>
     <property name="HelpButton">False</property>
-    <property name="HasSeparator">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
@@ -130,10 +130,10 @@
             <property name="CanFocus">True</property>
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
-            <property name="StockId">gtk-ok</property>
+            <property name="StockId">gtk-open</property>
             <property name="IsDialogButton">True</property>
-            <property name="ResponseId">-5</property>
-            <property name="label">gtk-ok</property>
+            <property name="ResponseId">-3</property>
+            <property name="label">gtk-open</property>
           </widget>
           <packing>
             <property name="Position">1</property>

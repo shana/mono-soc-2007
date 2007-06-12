@@ -1,5 +1,5 @@
 //
-// MainWindow.cs: Main window of the app.
+// OpenDocDialog.cs: Dialog to open a XML file.
 //
 // Author:
 //   Hector E. Gomez M (hectorgm@ciencias.unam.mx)
