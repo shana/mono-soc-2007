@@ -23,13 +23,13 @@ namespace System.Windows.Controls.Primitives {
 			double total_width = 0;
 			int rows = 0;
 			double available_width = horizontal ? finalSize.Width : finalSize.Height;
-			for (int child_index = 0; child_index < Children.Count; child_index++) {
-				UIElement child = Children[child_index];
+			for (int child_index = 0; child_index < InternalChildren.Count; child_index++) {
+				UIElement child = InternalChildren[child_index];
 				row_height = Math.Max(row_height, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
 				double child_width  = GetDesiredChildWidth(child);
 				total_width += child_width;
 				used_width += child_width;
-				if (child_index == Children.Count - 1 || used_width > available_width) {
+				if (child_index == InternalChildren.Count - 1 || used_width > available_width) {
 					used_width = 0;
 					rows++;
 				}
@@ -38,12 +38,12 @@ namespace System.Windows.Controls.Primitives {
 			double used_height = 0;
 			List<UIElement> current_row_elements = new List<UIElement>();
 			double average_width = total_width / rows;
-			for (int child_index = 0; child_index < Children.Count; child_index++) {
-				UIElement child = Children[child_index];
+			for (int child_index = 0; child_index < InternalChildren.Count; child_index++) {
+				UIElement child = InternalChildren[child_index];
 				double child_width = GetDesiredChildWidth(child);
 				used_width += child_width;
 				current_row_elements.Add(child);
-				if (child_index == Children.Count - 1 || used_width > average_width || (used_width + GetDesiredChildWidth(Children[child_index + 1]) > available_width && used_width != 0)) {
+				if (child_index == InternalChildren.Count - 1 || used_width > average_width || (used_width + GetDesiredChildWidth(InternalChildren[child_index + 1]) > available_width && used_width != 0)) {
 					double width_ratio;
 					if (should_expand)
 						width_ratio = available_width / used_width;
@@ -73,7 +73,7 @@ namespace System.Windows.Controls.Primitives {
 			bool horizontal = GetHorizontal();
 			double used_width = 0;
 			double maximum_height = 0;
-			foreach (UIElement child in Children) {
+			foreach (UIElement child in InternalChildren) {
 				child.Measure(availableSize);
 				used_width += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
 				maximum_height = Math.Max(maximum_height, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);

@@ -66,8 +66,8 @@ namespace System.Windows.Controls {
 				logical_offset_width = adjusted_logical_offset;
 			else
 				logical_offset_height = adjusted_logical_offset;
-			for (int child_index = adjusted_logical_offset; child_index < Children.Count; child_index++) {
-				UIElement child = Children[child_index];
+			for (int child_index = adjusted_logical_offset; child_index < InternalChildren.Count; child_index++) {
+				UIElement child = InternalChildren[child_index];
 				double child_size = horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
 				if (ScrollOwner == null)
 					child_size = Math.Min(child_size, available_size - used_size);
@@ -86,11 +86,11 @@ namespace System.Windows.Controls {
 			const double Uninitialized = -1;
 			double logical_viewport_size_in_orientation_direction = Uninitialized;
 			double physical_viewport_size_in_orientation_direction = orientation_is_horizontal ? availableSize.Width : availableSize.Height;
-			physical_child_offsets = new double[Children.Count];
+			physical_child_offsets = new double[InternalChildren.Count];
 			#region Measure children and store extent and offsets size
-			for (int child_index = 0; child_index < Children.Count; child_index++) {
+			for (int child_index = 0; child_index < InternalChildren.Count; child_index++) {
 				physical_child_offsets[child_index] = physical_extent_size_in_orientation_direction;
-				UIElement child = Children[child_index];
+				UIElement child = InternalChildren[child_index];
 				child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 				physical_extent_size_in_orientation_direction += orientation_is_horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
 				physical_extent_size_in_other_direction = Math.Max(physical_extent_size_in_other_direction, orientation_is_horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
@@ -102,9 +102,9 @@ namespace System.Windows.Controls {
 			#region Compute extent and viewport sizes
 			Size new_extent_size = result;
 			Size new_viewport_size = availableSize;
-			double logical_extent_size_in_orientation_direction = Children.Count;
+			double logical_extent_size_in_orientation_direction = InternalChildren.Count;
 			if (logical_viewport_size_in_orientation_direction == Uninitialized)
-				logical_viewport_size_in_orientation_direction = Children.Count;
+				logical_viewport_size_in_orientation_direction = InternalChildren.Count;
 			if (orientation_is_horizontal) {
 				new_extent_size.Width = logical_extent_size_in_orientation_direction;
 				new_viewport_size.Width = logical_viewport_size_in_orientation_direction;
@@ -227,7 +227,7 @@ namespace System.Windows.Controls {
 		public Rect MakeVisible(Visual visual, Rect rectangle) {
 			if (!ContentScroll)
 				return Rect.Empty;
-			int child_index = Children.IndexOf((UIElement)visual);
+			int child_index = InternalChildren.IndexOf((UIElement)visual);
 			bool horizontal = Orientation == Orientation.Horizontal;
 			int logical_offset = horizontal ? logical_offset_width : logical_offset_height;
 			if (child_index < logical_offset)
