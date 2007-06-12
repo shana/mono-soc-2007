@@ -168,7 +168,7 @@ namespace Test.Rules.Exceptions {
 		[Test]
 		public void NotSwallowThrowingANewExceptionTest () 
 		{
-		    method = type.Methods.GetMethod ("NotSwallowThrowingANewException", Type.EmptyTypes);
+			method = type.Methods.GetMethod ("NotSwallowThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection); 
 		}
@@ -176,7 +176,7 @@ namespace Test.Rules.Exceptions {
 		[Test]
 		public void NotSwallowCatchingAllThrowingANewExceptionTest () 
 		{
-		    method = type.Methods.GetMethod ("NotSwallowCatchingAllThrowingANewException", Type.EmptyTypes);
+			method = type.Methods.GetMethod ("NotSwallowCatchingAllThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection); 
 		}
@@ -184,7 +184,7 @@ namespace Test.Rules.Exceptions {
 		[Test]
 		public void NotSwallowCatchingTypeExceptionThrowingANewExceptionTest () 
 		{
-		    method = type.Methods.GetMethod ("NotSwallowCatchingTypeExceptionThrowingANewException", Type.EmptyTypes);
+			method = type.Methods.GetMethod ("NotSwallowCatchingTypeExceptionThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection); 
 		}
@@ -192,7 +192,7 @@ namespace Test.Rules.Exceptions {
 		[Test]
 		public void NotSwallowCatchingSystemExceptionThrowingANewExceptionTest () 
 		{
-		    method = type.Methods.GetMethod ("NotSwallowCatchingSystemExceptionThrowingANewException", Type.EmptyTypes);
+			method = type.Methods.GetMethod ("NotSwallowCatchingSystemExceptionThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection); 
 		}
@@ -304,7 +304,7 @@ namespace Test.Rules.Exceptions {
 		public void NotSwallowThrowingANewException () 
 		{
 			try { 
-			    File.Open ("foo.txt", FileMode.Open);
+				File.Open ("foo.txt", FileMode.Open);
 			}
 			catch (Exception exception) {
 				throw new SystemException ("Message");
@@ -323,7 +323,7 @@ namespace Test.Rules.Exceptions {
 		
 		public void NotSwallowCatchingTypeExceptionThrowingANewException ()
 		{
-		   try { 
+			try { 
 				File.Open ("foo.txt", FileMode.Open);
 			}
 			catch (Exception) {
@@ -333,7 +333,7 @@ namespace Test.Rules.Exceptions {
 		
 		public void NotSwallowCatchingSystemExceptionThrowingANewException () 
 		{
-		    try { 
+			try { 
 				File.Open ("foo.txt", FileMode.Open);
 			}
 			catch (System.Exception exception) {
