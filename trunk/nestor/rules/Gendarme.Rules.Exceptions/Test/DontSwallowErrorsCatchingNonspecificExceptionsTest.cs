@@ -306,7 +306,7 @@ namespace Test.Rules.Exceptions {
 			catch (Exception exception) {
 				Console.WriteLine (exception.Message);
 				Console.WriteLine (exception);
-				throw exception;
+				throw;
 				Console.WriteLine (exception.Message);
 				Console.WriteLine (exception);
 			}
