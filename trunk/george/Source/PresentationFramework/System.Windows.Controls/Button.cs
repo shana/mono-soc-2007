@@ -41,7 +41,8 @@ namespace System.Windows.Controls {
 				if (new_in_tool_bar != in_tool_bar) {
 					in_tool_bar = new_in_tool_bar;
 					//FIXME: I should not do this.
-					Style = in_tool_bar ? (Style)Application.Current.FindResource(ToolBar.ButtonStyleKey) : null;
+					DefaultStyleKey = in_tool_bar ? (object)"Mono ToolBar.ButtonStyleKey" : typeof(Button);
+					//Style = in_tool_bar ? (Style)Application.Current.FindResource(ToolBar.ButtonStyleKey) : null;
 				}
 			};
 		}
