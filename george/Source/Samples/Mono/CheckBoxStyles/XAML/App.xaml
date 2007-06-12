@@ -3,15 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="SDKSample.App"
     StartupUri="Window1.xaml"
+    xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
     >
     <!-- Resources & Styles defined in this section will impact the entire application.  -->
 <Application.Resources>
-<Style x:Key="SystemResStyle" TargetType="{x:Type CheckBox}">
+<Style x:Key="SystemResStyle" TargetType="{x:Type mono_sytem_windows_controls:CheckBox}">
     <Setter Property = "Background" Value= "{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
     <Setter Property = "Foreground" Value= "{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"/>
 </Style>
 
-<Style x:Key="Triggers" TargetType="{x:Type CheckBox}">
+<Style x:Key="Triggers" TargetType="{x:Type mono_sytem_windows_controls:CheckBox}">
 <Style.Triggers>
     <Trigger Property="CheckBox.IsPressed" Value="true">
 	   <Setter Property = "Foreground" Value="Green"/>
@@ -22,7 +23,7 @@
 </Style.Triggers>
 </Style>
 
-<Style x:Key="Properties" TargetType="{x:Type CheckBox}">
+<Style x:Key="Properties" TargetType="{x:Type mono_sytem_windows_controls:CheckBox}">
     <Setter Property = "Background" Value= "Purple"/>
     <Setter Property = "Foreground" Value= "Green"/>
     <Setter Property = "BorderBrush" Value= "Black"/>
