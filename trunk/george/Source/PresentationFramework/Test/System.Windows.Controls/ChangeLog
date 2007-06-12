@@ -1,3 +1,7 @@
+2007-06-13  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControlTest.cs: Added Style test.
+
 2007-06-12  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControlTest.cs: Added Item and following tests.
