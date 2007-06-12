@@ -166,9 +166,33 @@ namespace Test.Rules.Exceptions {
 		}
 		
 		[Test]
-		public void NotSwallowThrowingANewExceptionText () 
+		public void NotSwallowThrowingANewExceptionTest () 
 		{
 		    method = type.Methods.GetMethod ("NotSwallowThrowingANewException", Type.EmptyTypes);
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection); 
+		}
+		
+		[Test]
+		public void NotSwallowCatchingAllThrowingANewExceptionTest () 
+		{
+		    method = type.Methods.GetMethod ("NotSwallowCatchingAllThrowingANewException", Type.EmptyTypes);
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection); 
+		}
+		
+		[Test]
+		public void NotSwallowCatchingTypeExceptionThrowingANewExceptionTest () 
+		{
+		    method = type.Methods.GetMethod ("NotSwallowCatchingTypeExceptionThrowingANewException", Type.EmptyTypes);
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection); 
+		}
+		
+		[Test]
+		public void NotSwallowCatchingSystemExceptionThrowingANewExceptionTest () 
+		{
+		    method = type.Methods.GetMethod ("NotSwallowCatchingSystemExceptionThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection); 
 		}
@@ -284,6 +308,36 @@ namespace Test.Rules.Exceptions {
 			}
 			catch (Exception exception) {
 				throw new SystemException ("Message");
+			}
+		}
+		
+		public void NotSwallowCatchingAllThrowingANewException ()
+		{
+			try { 
+				File.Open ("foo.txt", FileMode.Open);
+			}
+			catch {
+				throw new Exception ("Message");
+			}
+		}
+		
+		public void NotSwallowCatchingTypeExceptionThrowingANewException ()
+		{
+		   try { 
+				File.Open ("foo.txt", FileMode.Open);
+			}
+			catch (Exception) {
+				throw new Exception ("Message");
+			}
+		}
+		
+		public void NotSwallowCatchingSystemExceptionThrowingANewException () 
+		{
+		    try { 
+				File.Open ("foo.txt", FileMode.Open);
+			}
+			catch (System.Exception exception) {
+				throw new Exception ("Message");
 			}
 		}
 	}
