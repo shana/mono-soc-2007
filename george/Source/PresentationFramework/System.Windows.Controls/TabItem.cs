@@ -31,7 +31,10 @@ namespace System.Windows.Controls {
 
 		#region Static Constructor
 		static TabItem() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(TabItem), new FrameworkPropertyMetadata(typeof(TabItem)));
 		}
 		#endregion
 

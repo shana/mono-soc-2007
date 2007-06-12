@@ -17,7 +17,10 @@ namespace System.Windows.Controls {
 
 		#region Static Constructor
 		static Label() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(Label), new FrameworkPropertyMetadata(typeof(Label)));
 		}
 		#endregion
 

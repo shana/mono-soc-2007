@@ -41,7 +41,10 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Static Constructor
 		static RepeatButton() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(RepeatButton), new FrameworkPropertyMetadata(typeof(RepeatButton)));
 		}
 		#endregion
 

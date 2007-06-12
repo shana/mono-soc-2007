@@ -34,15 +34,16 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Static Constructor
 		static Thumb() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(Thumb), new FrameworkPropertyMetadata(typeof(Thumb)));
 		}
 		#endregion
 
 		#region Public Constructors
 		public Thumb() {
 			Focusable = false;
-			//FIXME
-			//Style = (Style)FindResource(typeof(Thumb));
 		}
 		#endregion
 

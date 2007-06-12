@@ -33,6 +33,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.WinFX.targets" />
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -88,6 +89,6 @@
     <None Include="System.Windows.Controls\ChangeLog" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="themes\generic.xaml" />
+    <Page Include="themes\generic.xaml" />
   </ItemGroup>
 </Project>

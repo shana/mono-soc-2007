@@ -18,7 +18,10 @@ namespace System.Windows.Controls {
 
 		#region Static Contstructor
 		static RadioButton() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(RadioButton), new FrameworkPropertyMetadata(typeof(RadioButton)));
 		}
 		#endregion
 
