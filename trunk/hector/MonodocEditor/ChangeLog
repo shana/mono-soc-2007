@@ -1,3 +1,15 @@
+2007-06-12  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonodocEditor/EditorWindow.cs,
+	  MonodocEditor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  MonodocEditor/gtk-gui/Monodoc.Editor.OpenDocDialog.cs,
+	  MonodocEditor/gtk-gui/gui.stetic: GUI code added to get a
+	  Filechooser when the open action is activated.
+	* MonodocEditor/OpenDocDialog.cs, MonodocEditor.mds: Minor changes.
+	* EcmaUtils/MyClass.cs, EcmaUtils/AssemblyInfo.cs,
+	  EcmaUtils/EcmaUtils.mdp: Added to the solution the project for the
+	  library that will hold the classes to manipulate de XML documents.
+
 2007-06-11  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MonodocEditor/Driver.cs, MonodocEditor/MainWindow.cs,

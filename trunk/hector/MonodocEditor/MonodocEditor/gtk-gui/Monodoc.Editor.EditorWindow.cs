@@ -45,6 +45,7 @@ namespace Monodoc.Editor {
             this.AddAccelGroup(w1.AccelGroup);
             this.Name = "Monodoc.Editor.EditorWindow";
             this.Title = Mono.Unix.Catalog.GetString("MainWindow");
+            this.WindowPosition = ((Gtk.WindowPosition)(0));
             // Container child Monodoc.Editor.EditorWindow.Gtk.Container+ContainerChild
             this.vbox1 = new Gtk.VBox();
             this.vbox1.Name = "vbox1";

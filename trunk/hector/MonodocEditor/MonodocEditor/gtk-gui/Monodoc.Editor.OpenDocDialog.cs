@@ -23,8 +23,7 @@ namespace Monodoc.Editor {
             Stetic.Gui.Initialize();
             // Widget Monodoc.Editor.OpenDocDialog
             this.Name = "Monodoc.Editor.OpenDocDialog";
-            this.WindowPosition = ((Gtk.WindowPosition)(4));
-            this.HasSeparator = false;
+            this.Title = Mono.Unix.Catalog.GetString("window1");
             // Internal child Monodoc.Editor.OpenDocDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
@@ -60,8 +59,8 @@ namespace Monodoc.Editor {
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.UseStock = true;
             this.buttonOk.UseUnderline = true;
-            this.buttonOk.Label = "gtk-ok";
-            this.AddActionWidget(this.buttonOk, -5);
+            this.buttonOk.Label = "gtk-open";
+            this.AddActionWidget(this.buttonOk, -3);
             Gtk.ButtonBox.ButtonBoxChild w5 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonOk]));
             w5.Position = 1;
             w5.Expand = false;
