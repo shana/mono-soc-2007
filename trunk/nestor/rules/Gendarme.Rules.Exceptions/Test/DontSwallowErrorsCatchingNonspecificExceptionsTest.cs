@@ -165,6 +165,14 @@ namespace Test.Rules.Exceptions {
 			Assert.IsNull (messageCollection); 
 		}
 		
+		[Test]
+		public void NotSwallowThrowingANewExceptionText () 
+		{
+		    method = type.Methods.GetMethod ("NotSwallowThrowingANewException", Type.EmptyTypes);
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection); 
+		}
+		
 		//Methods for make the tests
 		public void SwallowErrorsCatchingExceptionEmptyCatchBlock () 
 		{
@@ -266,6 +274,16 @@ namespace Test.Rules.Exceptions {
 				File.Open ("foo.txt", FileMode.Open);
 			}
 			catch (FileNotFoundException exception) {
+			}
+		}
+		
+		public void NotSwallowThrowingANewException () 
+		{
+			try { 
+			    File.Open ("foo.txt", FileMode.Open);
+			}
+			catch (Exception exception) {
+				throw new SystemException ("Message");
 			}
 		}
 	}
