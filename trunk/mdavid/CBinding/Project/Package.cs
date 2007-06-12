@@ -1,5 +1,5 @@
 //
-// CCompiler.cs: asbtract class that provides some basic implementation for ICompiler
+// Package.cs: A pkg-config package
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -29,48 +29,62 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Text;
-using System.CodeDom.Compiler;
+using System;
 
-using MonoDevelop.Core;
-using MonoDevelop.Projects;
+using MonoDevelop.Projects.Serialization;
 
 namespace CBinding
 {
-	public abstract class CCompiler : ICompiler
+	public class Package
 	{
-		protected string compilerCommand;
-		protected string linkerCommand;
+		[ItemProperty ("name")]
+		private string name;
 		
-		public abstract string Name {
-			get;
-		}
-			
-		public abstract Language Language {
-			get;
-		}
-		
-		public abstract ICompilerResult Compile (
-			ProjectFileCollection projectFiles,
-		    ProjectPackageCollection packages,
-		    CProjectConfiguration configuration,
-		    IProgressMonitor monitor);
-		    
-		protected abstract void ParseCompilerOutput (string errorString, CompilerResults cr);
-		
-		protected abstract void ParseLinkerOutput (string errorString, CompilerResults cr);
-		
-		protected string GeneratePkgArgs (ProjectPackageCollection packages)
+		public Package (string name)
 		{
-			if (packages == null || packages.Count < 1)
-				return string.Empty;
-			
-			StringBuilder libs = new StringBuilder ();
-			
-			foreach (Package p in packages)
-				libs.Append (p.Name + " ");
-			
-			return string.Format ("`pkg-config --cflags --libs {0}`", libs.ToString ().Trim ());
+			this.name = name;
 		}
+		
+		public Package ()
+		{
+		}
+		
+		public string Name {
+			get { return name; }
+			set { name = value; }
+		}
+		
+		public override bool Equals (object o)
+		{
+			Package other = o as Package;
+			
+			if (other == null) return false;
+			
+			return other.Name.Equals (name);
+		}
+		
+		public override int GetHashCode ()
+		{
+			return base.GetHashCode ();
+		}
+		
+//		DataCollection ICustomDataItem.Serialize (ITypeSerializer handler)
+//		{
+//			DataCollection data = handler.Serialize (this);
+//			
+//			data.Add (new DataValue ("name", name));
+//
+//			return data;
+//		}
+//		
+//		void ICustomDataItem.Deserialize (ITypeSerializer handler, DataCollection data)
+//		{
+//			DataValue name_value = data.Extract ("name") as DataValue;
+//			handler.Deserialize (this, data);
+//			
+//			if (name_value != null) {
+//				name = name_value.Value;
+//			}
+//		}
 	}
 }
