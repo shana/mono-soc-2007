@@ -154,8 +154,20 @@ namespace Test.Rules.Exceptions {
 		{
 			method = type.Methods.GetMethod ("NotSwallowRethrowingException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (messageCollection.Count, 1);
+			CheckMessageType (messageCollection, MessageType.Error);
+		}
+		
+		
+		[Test]
+		public void NotSwallowRethrowingGeneralExceptionTest () 
+		{
+			method = type.Methods.GetMethod ("NotSwallowRethrowingGeneralException", Type.EmptyTypes);
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection); 
 		}
+		
 		
 		[Test]
 		public void NotSwallowCatchingSpecificExceptionTest () 
@@ -170,7 +182,9 @@ namespace Test.Rules.Exceptions {
 		{
 			method = type.Methods.GetMethod ("NotSwallowThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
-			Assert.IsNull (messageCollection); 
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (messageCollection.Count, 1);
+			CheckMessageType (messageCollection, MessageType.Error);
 		}
 		
 		[Test]
@@ -178,7 +192,9 @@ namespace Test.Rules.Exceptions {
 		{
 			method = type.Methods.GetMethod ("NotSwallowCatchingAllThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
-			Assert.IsNull (messageCollection); 
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (messageCollection.Count, 1);
+			CheckMessageType (messageCollection, MessageType.Error);
 		}
 		
 		[Test]
@@ -186,7 +202,9 @@ namespace Test.Rules.Exceptions {
 		{
 			method = type.Methods.GetMethod ("NotSwallowCatchingTypeExceptionThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
-			Assert.IsNull (messageCollection); 
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (messageCollection.Count, 1);
+			CheckMessageType (messageCollection, MessageType.Error);
 		}
 		
 		[Test]
@@ -194,7 +212,9 @@ namespace Test.Rules.Exceptions {
 		{
 			method = type.Methods.GetMethod ("NotSwallowCatchingSystemExceptionThrowingANewException", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
-			Assert.IsNull (messageCollection); 
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (messageCollection.Count, 1);
+			CheckMessageType (messageCollection, MessageType.Error);
 		}
 		
 		//Methods for make the tests
@@ -276,6 +296,19 @@ namespace Test.Rules.Exceptions {
 			}
 			catch {
 				Console.WriteLine ("Has happened an exception.");
+			}
+		}
+		
+		public void NotSwallowRethrowingGeneralException () {
+			try { 
+				File.Open ("foo.txt", FileMode.Open);
+			}
+			catch (Exception exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+				throw exception;
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
 			}
 		}
 		
