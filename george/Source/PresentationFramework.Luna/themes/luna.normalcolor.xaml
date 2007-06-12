@@ -1843,7 +1843,8 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 	<SolidColorBrush x:Key="ToolBarButtonPressedBorder"
                      Color="#4B4B6F"/>
 	<!-- Skipped. -->
-	<Style x:Key="{x:Static ToolBar.ButtonStyleKey}"
+	<!--TODO: Change this back when ToolBar is implemented-->
+	<Style x:Key="Mono ToolBar.ButtonStyleKey"
            TargetType="{x:Type mono_system_windows_controls:Button}">
 		<Setter Property="Foreground"
                 Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>

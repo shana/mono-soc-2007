@@ -1,3 +1,7 @@
+2007-06-13  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Button.cs: Changed the way the theme style is changed when the Button is in a ToolBar.
+
 2007-06-11  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabItem.cs: Implemented OnCreateAutomationPeer, OnSelected, OnUnselected.
