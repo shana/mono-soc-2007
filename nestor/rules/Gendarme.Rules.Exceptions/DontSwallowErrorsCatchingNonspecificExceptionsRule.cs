@@ -53,14 +53,11 @@ namespace Gendarme.Rules.Exceptions {
 			return false;
 		}
 		
-		private bool ContainsThrowInstruction (ExceptionHandler exceptionHandler) 
+		private bool ThrowsGeneralException (ExceptionHandler exceptionHandler) 
 		{
-			Instruction currentInstruction = exceptionHandler.HandlerStart;
-			while (currentInstruction != null) {
-				if (currentInstruction.OpCode.FlowControl == FlowControl.Throw) {
+			for (Instruction currentInstruction = exceptionHandler.HandlerStart; currentInstruction != exceptionHandler.HandlerEnd; currentInstruction = currentInstruction.Next) {
+				if (currentInstruction.OpCode.Name.Equals ("rethrow"))
 					return true;
-				}
-				currentInstruction = currentInstruction.Next;
 			}
 			return false;
 		}
@@ -74,7 +71,7 @@ namespace Gendarme.Rules.Exceptions {
 					if (exceptionHandler.Type == ExceptionHandlerType.Catch) {
 						string catchTypeName = exceptionHandler.CatchType.FullName;
 						if (IsForbiddenTypeInCatches (catchTypeName)) {
-							if (!ContainsThrowInstruction (exceptionHandler)) {
+							if (!ThrowsGeneralException (exceptionHandler)) {
 								Location location = new Location (methodDefinition.Name, methodDefinition.Name, exceptionHandler.HandlerStart.Offset);
 								Message message = new Message ("Do not swallow errors catching nonspecific exceptions.", location, MessageType.Error);
 								messageCollection.Add (message);
