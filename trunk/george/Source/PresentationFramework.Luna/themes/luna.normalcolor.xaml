@@ -11,7 +11,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"
                     xmlns:ui="clr-namespace:System.Windows.Documents;assembly=PresentationUI"
-                    xmlns:mono_theme="clr-namespace:Mono.Microsoft.Windows.Themes;assembly=Mono.PresentationFramework.Luna"
+                    xmlns:mono_theme="clr-namespace:Mono.Microsoft.Windows.Themes"
 					xmlns:mono_system_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
 					xmlns:mono_system_windows_controls_primitives="clr-namespace:Mono.System.Windows.Controls.Primitives;assembly=Mono.PresentationFramework">
 

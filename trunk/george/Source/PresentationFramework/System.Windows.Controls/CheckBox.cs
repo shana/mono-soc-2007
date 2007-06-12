@@ -14,7 +14,10 @@ namespace System.Windows.Controls {
 	public class CheckBox : ToggleButton {
 		#region Static Constructor
 		static CheckBox() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(CheckBox), new FrameworkPropertyMetadata(typeof(CheckBox)));
 		}
 		#endregion
 

@@ -23,15 +23,15 @@ namespace System.Windows.Controls {
 
 		#region Static Constructor
 		static ProgressBar() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(ProgressBar), new FrameworkPropertyMetadata(typeof(ProgressBar)));
 		}
 		#endregion
 
 		#region Public Constructors
 		public ProgressBar() {
-			//FIXME: I should not do this.
-			Style = (Style)FindResource(typeof(ProgressBar));
-
 			Maximum = 100;
 		}
 		#endregion

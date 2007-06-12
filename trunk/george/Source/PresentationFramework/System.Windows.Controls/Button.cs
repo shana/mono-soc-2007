@@ -26,7 +26,10 @@ namespace System.Windows.Controls {
 
 		#region Static Constructor
 		static Button() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(Button), new FrameworkPropertyMetadata(typeof(Button)));
 		}
 		#endregion
 

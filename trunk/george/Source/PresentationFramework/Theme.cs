@@ -1,50 +1,28 @@
-#define UseMicrosoftTheme
-using System;
-using System.Configuration;
-using System.IO;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Markup;
-static class Theme {
-	static ResourceDictionary resource_dictionary;
-    static public void Load() {
-		if (Application.Current == null) {
-			new Application();
-		}
-		if (resource_dictionary != null)
-			if (Application.Current.Resources.MergedDictionaries.Contains(resource_dictionary))
-				return;
-			else {
-				Application.Current.Resources.MergedDictionaries.Add(resource_dictionary);
-				return;
-			}
-#if UseMicrosoftTheme
 #if Implementation
+using System.Reflection;
+using System.IO;
+static class Theme {
+	/// <summary>
+	/// Makes sure that the theme works.
+	/// </summary>
+	/// <remarks>
+	/// Now the assemblies are not placed in the GAC, so when a Visual Studio project only references this one, WPF will not automatically find the theme assembly since it will look in the directory where Visual Studio builds the project. To work, projects will need to have their build directory in a subdirectory of the directory containing the Debug directory in which both this and the theme assembly are built.
+	/// </remarks>
+    static public void Load() {
 		const string ThemeAssemblyName = "Mono.PresentationFramework.Luna.dll";
-#else
-		const string ThemeAssemblyName = "PresentationFramework.Luna.dll";
-#endif
 		string assembly_location = new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName;
 		string theme_assembly_file = Path.Combine(assembly_location, ThemeAssemblyName);
-#if Implementation
-		//HACK:
-		while (!File.Exists(theme_assembly_file)) {
-			DirectoryInfo parent_directory = Directory.GetParent(assembly_location);
-			assembly_location = parent_directory.FullName;
-			theme_assembly_file = Path.Combine(assembly_location, "Debug" + Path.DirectorySeparatorChar + ThemeAssemblyName);
+		if (!File.Exists(theme_assembly_file)) {
+			while (true) {
+				DirectoryInfo parent_directory = Directory.GetParent(assembly_location);
+				assembly_location = parent_directory.FullName;
+				string file_name = Path.Combine(assembly_location, "Debug" + Path.DirectorySeparatorChar + ThemeAssemblyName);
+				if (File.Exists(file_name)) {
+					File.Copy(file_name, theme_assembly_file);
+					break;
+				}
+			}
 		}
-#endif
-#endif
-		Assembly assembly;
-		string theme_xaml_file_resource_name;
-#if UseMicrosoftTheme
-		assembly = Assembly.LoadFile(theme_assembly_file);
-		theme_xaml_file_resource_name = "themes.luna.normalcolor.xaml";
-#else
-		assembly = Assembly.GetExecutingAssembly();
-		theme_xaml_file_resource_name = "themes.generic.xaml";
-#endif
-		resource_dictionary = (ResourceDictionary)XamlReader.Load(assembly.GetManifestResourceStream(theme_xaml_file_resource_name));
-		Application.Current.Resources.MergedDictionaries.Add(resource_dictionary);
     }
 }
+#endif

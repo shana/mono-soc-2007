@@ -76,7 +76,10 @@ namespace System.Windows.Controls {
 
 		#region Static Constructor
 		static Slider() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(Slider), new FrameworkPropertyMetadata(typeof(Slider)));
 			#region Command bindings
 			Type type = typeof(Slider);
 			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(DecreaseLarge, delegate(object sender, ExecutedRoutedEventArgs e) {
@@ -119,9 +122,6 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public Slider() {
-			//FIXME: I should not do this.
-			Style = (Style)FindResource(typeof(Slider));
-			
 			Maximum = 10;
 			//FIXME?: Should I do this using CommandManager.RegisterClassInputBinding?
 			KeyDown += delegate(object sender, KeyEventArgs e) {

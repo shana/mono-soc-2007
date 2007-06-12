@@ -53,7 +53,10 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Static Constructor
 		static ScrollBar() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(ScrollBar), new FrameworkPropertyMetadata(typeof(ScrollBar)));
 			#region Command bindings
 			Type type = typeof(ScrollBar);
 			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(LineDownCommand, ExecuteIncreaseSmall, True));

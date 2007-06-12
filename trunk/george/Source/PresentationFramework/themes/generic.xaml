@@ -1,8 +1,8 @@
 <ResourceDictionary 
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:mono_system_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
-	xmlns:mono_system_windows_controls_primitives="clr-namespace:Mono.System.Windows.Controls.Primitives;assembly=Mono.PresentationFramework"
+	xmlns:mono_system_windows_controls="clr-namespace:Mono.System.Windows.Controls"
+	xmlns:mono_system_windows_controls_primitives="clr-namespace:Mono.System.Windows.Controls.Primitives"
 	>
 	<Brush x:Key="ButtonBackgroundColor">LightYellow</Brush>
 	<Brush x:Key="ButtonBorderColor">Black</Brush>
