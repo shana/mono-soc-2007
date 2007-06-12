@@ -69,7 +69,7 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
-			foreach (UIElement element in Children) {
+			foreach (UIElement element in InternalChildren) {
 				Point position = new Point();
 				Size size = element.DesiredSize;
 				double value;
@@ -100,7 +100,7 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			foreach (UIElement element in Children)
+			foreach (UIElement element in InternalChildren)
 				element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 			return base.MeasureOverride(availableSize);
 		}

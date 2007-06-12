@@ -52,11 +52,11 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
-			if (Children.Count != 0) {
+			if (InternalChildren.Count != 0) {
 				Rect remaining_rect = new Rect(new Point(0, 0), finalSize);
-				int children_to_lay_out_normally = Children.Count - (LastChildFill ? 1 : 0);
+				int children_to_lay_out_normally = InternalChildren.Count - (LastChildFill ? 1 : 0);
 				for (int child_index = 0; child_index < children_to_lay_out_normally; child_index++) {
-					UIElement element = Children[child_index];
+					UIElement element = InternalChildren[child_index];
 					switch (GetDock(element)) {
 					case Dock.Left:
 						element.Arrange(new Rect(remaining_rect.Left, remaining_rect.Top, element.DesiredSize.Width, remaining_rect.Height));
@@ -79,19 +79,19 @@ namespace System.Windows.Controls {
 					}
 				}
 				if (LastChildFill)
-					Children[Children.Count - 1].Arrange(remaining_rect);
+					InternalChildren[InternalChildren.Count - 1].Arrange(remaining_rect);
 			}
 			return finalSize;
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			if (Children.Count == 0)
+			if (InternalChildren.Count == 0)
 				return new Size(0, 0);
 			if (double.IsInfinity(availableSize.Width)) {
 				Size desired_size = new Size();
 				UIElement element;
-				for (int child_index = 0; child_index < Children.Count - 1; child_index++) {
-					element = Children[child_index];
+				for (int child_index = 0; child_index < InternalChildren.Count - 1; child_index++) {
+					element = InternalChildren[child_index];
 					element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 					switch (GetDock(element)) {
 					case Dock.Left:
@@ -103,14 +103,14 @@ namespace System.Windows.Controls {
 						break;
 					}
 				}
-				element = Children[Children.Count - 1];
+				element = InternalChildren[InternalChildren.Count - 1];
 				element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 				desired_size.Width += element.DesiredSize.Width;
 				desired_size.Height += element.DesiredSize.Height;
 				return desired_size;
 			} else {
 				Size remaining_size = new Size(availableSize.Width, availableSize.Height);
-				foreach (UIElement element in Children) {
+				foreach (UIElement element in InternalChildren) {
 					element.Measure(remaining_size);
 					switch (GetDock(element)) {
 					case Dock.Left:
