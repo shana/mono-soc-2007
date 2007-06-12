@@ -53,4 +53,6 @@ rules/Makefile
 rules/AssemblyInfo.cs
 rules/Gendarme.Rules.Naming/Makefile
 rules/Gendarme.Rules.Naming/Test/Makefile
+rules/Gendarme.Rules.Exceptions/Makefile
+rules/Gendarme.Rules.Exceptions/Test/Makefile
 ])
