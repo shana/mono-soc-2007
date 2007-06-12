@@ -190,5 +190,20 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region Style
+		[Test]
+		public void Style() {
+			new StyleTabControl();
+		}
+
+		class StyleTabControl : TabControl {
+			public StyleTabControl() {
+				Assert.AreEqual(DefaultStyleKey, typeof(TabControl), "1");
+				Assert.AreSame(DefaultStyleKeyProperty.GetMetadata(this), DefaultStyleKeyProperty.GetMetadata(typeof(TabControl)), "2");
+
+			}
+		}
+		#endregion
 	}
 }
