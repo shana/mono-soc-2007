@@ -29,17 +29,62 @@
 using System;
 
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Gendarme.Framework;
 
 namespace Gendarme.Rules.Exceptions {
 	public class DontSwallowErrorsCatchingNonspecificExceptions : IMethodRule {
-	    public MessageCollection CheckMethod (MethodDefinition methodDefinition, Runner runner)
-	    {
-	        MessageCollection messageCollection = new MessageCollection ();
-	        
-	        if (messageCollection.Count == 0)
-	        	return null;
-	        return messageCollection;
-	    }
+		
+		//Added System.Object because is the code behind the following block:
+		//try {
+		//	File.Open (foo, bar);
+		//}
+		//catch {
+		//}
+		private string[] forbiddenTypeInCatches = {"System.Exception", "System.SystemException", "System.Object"};
+	
+		private bool IsForbiddenTypeInCatches (string typeName) {
+			foreach (String forbiddenTypeName in forbiddenTypeInCatches) {
+				if (typeName.Equals (forbiddenTypeName)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		private bool ContainsThrowInstruction (ExceptionHandler exceptionHandler) {
+			Instruction currentInstruction = exceptionHandler.HandlerStart;
+			while (currentInstruction != null) {
+				if (currentInstruction.OpCode.FlowControl == FlowControl.Throw) {
+					return true;
+				}
+				currentInstruction = currentInstruction.Next;
+			}
+			return false;
+		}
+	
+		public MessageCollection CheckMethod (MethodDefinition methodDefinition, Runner runner)
+		{
+			MessageCollection messageCollection = new MessageCollection ();
+			if (methodDefinition.HasBody) {
+				ExceptionHandlerCollection exceptionHandlerCollection = methodDefinition.Body.ExceptionHandlers;
+				foreach (ExceptionHandler exceptionHandler in exceptionHandlerCollection) {
+					if (exceptionHandler.Type == ExceptionHandlerType.Catch) {
+						string catchTypeName = exceptionHandler.CatchType.FullName;
+						if (IsForbiddenTypeInCatches (catchTypeName)) {
+							if (!ContainsThrowInstruction (exceptionHandler)) {
+								Location location = new Location (methodDefinition.Name, methodDefinition.Name, exceptionHandler.HandlerStart.Offset);
+								Message message = new Message ("The method contains a forbidden type catch.", location, MessageType.Error);
+								messageCollection.Add (message);
+							}
+						}
+					}
+				}
+			}
+			
+			if (messageCollection.Count == 0)
+				return null;
+			return messageCollection;
+		}
 	}
 }
