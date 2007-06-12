@@ -5,7 +5,7 @@ using Gdk;
 namespace Ribbons
 {
 	[StructLayout(LayoutKind.Sequential)]
-	public class SyntheticEventCrossing
+	public struct SyntheticEventCrossing
 	{
 		[MarshalAs(UnmanagedType.SysInt)]
 		private int type;	// GdkEventType
@@ -35,19 +35,19 @@ namespace Ribbons
 		public Window Window
 		{
 			set { window = value == null ? IntPtr.Zero : value.Handle; }
-			get { return window == IntPtr.Zero ? null : new Window(window); }
+			get { return window == IntPtr.Zero ? null : new Window (window); }
 		}
 		
-		public byte SendEvent
+		public bool SendEvent
 		{
-			set { send_event = value; }
-			get { return send_event; }
+			set { send_event = value ? (byte)1 : (byte)0; }
+			get { return send_event != 0; }
 		}
 		
 		public Window Subwindow
 		{
 			set { subwindow = value == null ? IntPtr.Zero : value.Handle; }
-			get { return subwindow == IntPtr.Zero ? null : new Window(subwindow); }
+			get { return subwindow == IntPtr.Zero ? null : new Window (subwindow); }
 		}
 		
 		public UInt32 Time
