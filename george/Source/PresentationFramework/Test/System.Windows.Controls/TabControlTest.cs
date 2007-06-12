@@ -1,11 +1,14 @@
 using NUnit.Framework;
 using System.Windows.Data;
+using System.Windows.Input;
 #if Implementation
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using Mono.System.Windows.Controls.Primitives;
 namespace Mono.System.Windows.Controls {
 #else
+using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	[TestFixture]
@@ -82,5 +85,110 @@ namespace System.Windows.Controls {
 		public void TabStripPlacementBinding() {
 			Assert.IsNull(BindingOperations.GetBinding(new TabControl(), TabControl.TabStripPlacementProperty));
 		}
+
+		#region Items
+		[Test]
+		public void Items() {
+			new ItemsTabControl();
+		}
+
+		class ItemsTabControl : TabControl{
+			public ItemsTabControl() {
+				Window window = new Window();
+				window.Content = this;
+				window.Show();
+				TabItem tab_item = new TabItem();
+				Items.Add(tab_item);
+				Assert.AreSame(HeaderPanel.Children[0], tab_item);
+			}
+
+			TabPanel HeaderPanel {
+				get {
+					return (TabPanel)GetTemplateChild("HeaderPanel");
+				}
+			}
+		}
+		#endregion
+
+		#region Template
+		[Test]
+		public void Template() {
+			new TemplateTabControl();
+		}
+
+		class TemplateTabControl : TabControl {
+			public TemplateTabControl() {
+				Window window = new Window();
+				window.Content = this;
+				window.Show();
+				Assert.IsNotNull(HeaderPanel);
+			}
+
+			TabPanel HeaderPanel {
+				get {
+					return (TabPanel)GetTemplateChild("HeaderPanel");
+				}
+			}
+		}
+		#endregion
+
+		#region OnInitializedCallsOnApplyTemplate
+		[Test]
+		public void OnInitializedCallsOnApplyTemplate() {
+			new OnInitializedCallsOnApplyTemplateTabControl();
+		}
+
+		class OnInitializedCallsOnApplyTemplateTabControl : TabControl {
+			bool should_set_called;
+			bool called;
+
+			public OnInitializedCallsOnApplyTemplateTabControl() {
+				Window window = new Window();
+				window.Content = this;
+				window.Show();
+				Assert.IsFalse(called);
+			}
+
+			protected override void OnInitialized(EventArgs e) {
+				should_set_called = true;
+				base.OnInitialized(e);
+				should_set_called = false;
+			}
+
+			public override void OnApplyTemplate() {
+				if (should_set_called)
+				called = true;
+				base.OnApplyTemplate();
+			}
+		}
+		#endregion
+
+		#region OnApplyTemplateUpdatesSelectedProperties
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties() {
+			new OnApplyTemplateUpdatesSelectedPropertiesTabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedPropertiesTabControl : TabControl {
+			bool call;
+			public OnApplyTemplateUpdatesSelectedPropertiesTabControl() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				call = true;
+				OnApplyTemplate();
+				Assert.AreNotEqual((string)SelectedContent, "Test", "2");
+			}
+
+			public override void OnApplyTemplate() {
+				if (call)
+					base.OnApplyTemplate();
+			}
+		}
+		#endregion
 	}
 }
