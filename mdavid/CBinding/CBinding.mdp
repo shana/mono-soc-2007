@@ -70,6 +70,6 @@
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Components, Version=0.13.0.0, Culture=neutral" />
   </References>
-  <GtkDesignInfo partialTypes="True" />
   <Deployment.LinuxDeployData scriptName="cbinding" />
+  <GtkDesignInfo partialTypes="True" />
 </Project>

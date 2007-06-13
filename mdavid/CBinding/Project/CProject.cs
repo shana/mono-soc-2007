@@ -36,6 +36,8 @@ using System.Collections;
 using System.ComponentModel;
 using System.CodeDom.Compiler;
 
+using Mono.Addins;
+
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 using MonoDevelop.Projects.Serialization;
@@ -91,6 +93,8 @@ namespace CBinding
 			
 			CProjectConfiguration configuration =
 				(CProjectConfiguration)CreateConfiguration ("Debug");
+			
+			(configuration.CompilationParameters as CCompilationParameters).ExtraCompilerArguments = "-DDEBUG ";			
 				
 			Configurations.Add (configuration);
 			
@@ -98,12 +102,14 @@ namespace CBinding
 				(CProjectConfiguration)CreateConfiguration ("Release");
 				
 			configuration.DebugMode = false;
+			((CCompilationParameters)configuration.CompilationParameters).OptimizationLevel = 3;
 			Configurations.Add (configuration);
 			
 			foreach (CProjectConfiguration c in Configurations) {
 				c.OutputDirectory = Path.Combine (binPath, c.Name);
 				c.SourceDirectory = BaseDirectory;
 				c.Output = Name;
+				CCompilationParameters parameters = c.CompilationParameters as CCompilationParameters;
 				
 				if (projectOptions != null) {
 					if (projectOptions.Attributes["Target"] != null) {
@@ -114,6 +120,16 @@ namespace CBinding
 					if (projectOptions.Attributes["PauseConsoleOutput"] != null) {
 						c.PauseConsoleOutput = bool.Parse (
 							projectOptions.Attributes["PauseConsoleOutput"].InnerText);
+					}
+					if (projectOptions.Attributes["CompilerArgs"].InnerText != null) {
+						if (parameters != null) {
+							parameters.ExtraCompilerArguments += projectOptions.Attributes["CompilerArgs"].InnerText;
+						}
+					}
+					if (projectOptions.Attributes["LinkerArgs"].InnerText != null) {
+						if (parameters != null) {
+							parameters.ExtraLinkerArguments += projectOptions.Attributes["LinkerArgs"].InnerText;
+						}
 					}
 				}
 			}			

@@ -32,6 +32,8 @@
 using System;
 using System.IO;
 
+using Mono.Addins;
+
 namespace CBinding
 {
 	public partial class EditPackagesDialog : Gtk.Dialog
@@ -103,6 +105,7 @@ namespace CBinding
 			
 			buttonOk.Clicked += OnOkButtonClick;
 			buttonCancel.Clicked += OnCancelButtonClick;
+			removeButton.Clicked += OnRemoveButtonClick;
 		}
 		
 		private void OnOkButtonClick (object sender, EventArgs e)
@@ -124,6 +127,17 @@ namespace CBinding
 		private void OnCancelButtonClick (object sender, EventArgs e)
 		{
 			Destroy ();
+		}
+		
+		private void OnRemoveButtonClick (object sender, EventArgs e)
+		{
+			Gtk.TreeIter iter;
+			
+			selectedPackagesTreeView.Selection.GetSelected (out iter);
+			
+			if (!selectedPackagesListStore.IterIsValid (iter)) return;
+			
+			selectedPackagesListStore.Remove (ref iter);
 		}
 		
 		private void OnPackageToggled (object sender, Gtk.ToggledArgs args)

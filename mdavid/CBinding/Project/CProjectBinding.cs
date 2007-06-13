@@ -30,6 +30,9 @@
 //
 
 using System.Xml;
+
+using Mono.Addins;
+
 using MonoDevelop.Projects;
 
 namespace CBinding

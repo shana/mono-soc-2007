@@ -2,7 +2,7 @@
 <Template
 	originator   = "Marcos David Marin Amador" 
     created      = "04/12/2007"
-    lastModified = "04/17/2007">
+    lastModified = "06/13/2007">
 	
 	<!-- Template Header -->
 	<TemplateConfiguration>
@@ -16,7 +16,11 @@
 	<!-- Template Content -->
 	<Combine name = "${ProjectName}" directory = ".">
 		<Project name = "${ProjectName}" directory = "." type = "C/C++">
-			<Options Target = "Bin" PauseConsoleOutput = "True"/>
+			<Options
+				Target = "Bin"
+				PauseConsoleOutput = "True"
+				CompilerArgs = "-D_MONODEVELOP_"
+				LinkerArgs = ""/>
 		</Project>
 	</Combine>
 </Template>

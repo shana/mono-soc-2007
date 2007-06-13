@@ -31,6 +31,8 @@
 
 using System;
 
+using Mono.Addins;
+
 namespace CBinding
 {
 	public delegate void ProjectPackageEventHandler (object sender, ProjectPackageEventArgs e);

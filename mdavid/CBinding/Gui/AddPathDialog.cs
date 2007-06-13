@@ -33,6 +33,8 @@
 using System;
 using System.IO;
 
+using Mono.Addins;
+
 namespace CBinding
 {
 	public partial class AddPathDialog : Gtk.Dialog

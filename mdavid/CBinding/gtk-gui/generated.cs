@@ -69,7 +69,7 @@ namespace Stetic {
         }
     }
     
-    public class IconLoader {
+    internal class IconLoader {
         
         public static Gdk.Pixbuf LoadIcon(string name, int sz) {
             try {
