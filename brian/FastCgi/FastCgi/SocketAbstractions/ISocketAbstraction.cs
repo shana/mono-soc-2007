@@ -1,5 +1,5 @@
 //
-// Record.cs: Represents the FastCGI BeginRequestBody structure.
+// SocketAbstractions/ISocketAbstraction.cs: Abstracts socket operations.
 //
 // Author:
 //   Brian Nickel (brian.nickel@gmail.com)
@@ -30,49 +30,14 @@ using System;
 
 namespace Mono.FastCgi
 {
-	public enum Role : ushort
+	public interface ISocketAbstraction
 	{
-		Responder  = 1,
-		Authorizer = 2,
-		Filter     = 3
-	}
-	
-	[Flags]
-	public enum BeginRequestFlags : byte
-	{
-		None      = 0,
-		KeepAlive = 1
-	}
-	
-	public struct BeginRequestBody
-	{
-		#region Private Properties
-		private Role              role;
-		private BeginRequestFlags flags;
-		#endregion
-		
-		
-		#region Constructors
-		public BeginRequestBody(Record record)
-		{
-			if (record.Body.Length != 8)
-				throw new ArgumentException
-				("8 bytes expected.", "record");
-			
-			role  = (Role) Record.ReadUInt16 (record.Body, 0);
-			flags = (BeginRequestFlags) record.Body [2];
-		}
-		#endregion
-		
-		
-		#region Public Properties
-		public Role Role {
-			get {return role;}
-		}
-		
-		public BeginRequestFlags Flags {
-			get {return flags;}
-		}
-		#endregion
+		void Close ();
+		int Receive (byte [] buffer);
+		int Send (byte [] data);
+		bool Blocking {get; set;}
+		void Listen (int backlog);
+		IAsyncResult BeginAccept (AsyncCallback callback, object state);
+		ISocketAbstraction EndAccept (IAsyncResult asyncResult);
 	}
 }

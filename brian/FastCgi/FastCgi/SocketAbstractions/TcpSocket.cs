@@ -1,5 +1,5 @@
 //
-// Server/TcpServer.cs: Handles TCP connections.
+// SocketAbstractions/TcpSocket.cs: Provides support for bound TCP sockets.
 //
 // Author:
 //   Brian Nickel (brian.nickel@gmail.com)
@@ -30,32 +30,20 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace FastCgi
+namespace Mono.FastCgi
 {
-	public class TcpServer : Server
+	public class TcpSocket : StandardSocket
 	{
-		private IPEndPoint bind_address;
-		
-		public TcpServer (IPAddress address, int port)
+		public TcpSocket (IPEndPoint localEndPoint)
+			: base (AddressFamily.InterNetwork, SocketType.Stream,
+			        ProtocolType.IP, localEndPoint)
 		{
-			if (address == IPAddress.Any)
-				address = IPAddress.Loopback;
-			
-			bind_address = new IPEndPoint (address, port);
 		}
 		
-		protected override Socket CreateSocket ()
+		public TcpSocket (IPAddress address, int port)
+			: this (new IPEndPoint (address == IPAddress.Any ?
+				IPAddress.Loopback : address, port))
 		{
-			if (bind_address == null)
-				throw new InvalidOperationException
-					("No address/port to listen");
-
-			Socket listen_socket = new Socket
-				(AddressFamily.InterNetwork,
-				SocketType.Stream, ProtocolType.IP);
-			
-			listen_socket.Bind (bind_address);
-			return listen_socket;
 		}
 	}
 }

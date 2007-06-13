@@ -30,7 +30,7 @@ using System;
 using System.Collections;
 using System.Net.Sockets;
 
-namespace FastCgi
+namespace Mono.FastCgi
 {
 	public class Request
 	{
@@ -74,12 +74,12 @@ namespace FastCgi
 			// Close the standard output if it was opened.
 			if (stdout_sent)
 				SendStreamData (RecordType.StandardOutput,
-					new byte [0]);
+					new byte [0], 0);
 			
 			// Close the standard error if it was opened.
 			if (stderr_sent)
 				SendStreamData (RecordType.StandardError,
-					new byte [0]);
+					new byte [0], 0);
 			
 			connection.EndRequest (requestID, appStatus, protocolStatus);
 		}
@@ -268,7 +268,7 @@ namespace FastCgi
 		
 		bool stdout_sent = false;
 		
-		public void SendOutputData (byte [] data)
+		public void SendOutputData (byte [] data, int length)
 		{
 			if (data == null)
 				throw new ArgumentNullException ("data");
@@ -278,7 +278,12 @@ namespace FastCgi
 			
 			stdout_sent = true;
 			
-			SendStreamData (RecordType.StandardOutput, data);
+			SendStreamData (RecordType.StandardOutput, data, length);
+		}
+		
+		public void SendOutputData (byte [] data)
+		{
+			SendOutputData (data, data.Length);
 		}
 		
 		public void SendOutputText (string text)
@@ -300,7 +305,7 @@ namespace FastCgi
 		
 		bool stderr_sent = false;
 		
-		public void SendErrorData (byte [] data)
+		public void SendErrorData (byte [] data, int length)
 		{
 			if (data == null)
 				throw new ArgumentNullException ("data");
@@ -310,7 +315,12 @@ namespace FastCgi
 			
 			stderr_sent = true;
 			
-			SendStreamData (RecordType.StandardError, data);
+			SendStreamData (RecordType.StandardError, data, length);
+		}
+		
+		public void SendErrorData (byte [] data)
+		{
+			SendErrorData (data, data.Length);
 		}
 		
 		public void SendErrorText (string text)
@@ -327,25 +337,28 @@ namespace FastCgi
 		
 		
 		#region Private Methods
-		private void SendStreamData (RecordType type, byte [] data)
+		private void SendStreamData (RecordType type, byte [] data, int length)
 		{
 			// Records are only able to hold 65535 bytes of data. If
 			// larger data is to be sent, it must be broken into
 			// smaller components.
 			
-			if (data.Length <= 0xFFFF)
+			if (length > data.Length)
+				length = data.Length;
+			
+			if (length == data.Length && length < 0xFFFF)
 				connection.SendResponse (type, requestID, data);
 			else
 			{
 				int index = 0;
-				byte [] data_part = new byte [0xFFFF];
-				while (index < data.Length)
+				byte [] data_part = new byte [System.Math.Min (0xFFFF, length)];
+				while (index < length)
 				{
-					int length = (index + 0xFFFF < data.Length) ? 0xFFFF : (data.Length - index);
-					if (length != data_part.Length)
-						data_part = new byte [length];
+					int chunk_length = (index + 0xFFFF < length) ? 0xFFFF : (length - index);
+					if (chunk_length != data_part.Length)
+						data_part = new byte [chunk_length];
 					
-					Array.Copy (data, index, data_part, 0, length);
+					Array.Copy (data, index, data_part, 0, chunk_length);
 					connection.SendResponse (type, requestID, data_part);
 				}
 			}

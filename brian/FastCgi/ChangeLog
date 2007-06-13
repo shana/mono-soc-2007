@@ -1,5 +1,64 @@
 2007-06-08 Brian Nickel <brian.nickel@gmail.com>
 
+	* FastCgi/FastCgi/FastCgi.mdp: Build as library.
+	
+	* FastCgi/FastCgi/AssemblyInfo.cs: Added title and description.
+	
+	* FastCgi/FastCgi/Structures/BeginRequestBody.cs: Changed namespace.
+	
+	* FastCgi/FastCgi/Structures/EndRequestBody.cs: Changed namespace.
+	
+	* FastCgi/FastCgi/Structures/Record.cs: Use ISocketAbstraction instead
+	of Socket.
+	
+	* FastCgi/FastCgi/Structures/NameValuePair.cs: Changed namespace.
+	
+	* FastCgi/FastCgi/Connection.cs: Use ISocketAbstraction instead of
+	Socket.
+	
+	* FastCgi/FastCgi/Logger.cs: Don't constantly flush and don't throw an
+	exception if no output file was specified.
+	
+	* FastCgi/FastCgi/SocketAbstractions/ISocketAbstraction.cs: Added.
+	Wraps around socket implementations.
+	
+	* FastCgi/FastCgi/SocketAbstractions/TcpSocket.cs: Added. Handles
+	standard TCP sockets.
+	
+	* FastCgi/FastCgi/SocketAbstractions/StandardSocket.cs: Added. Handles
+	managed sockets.
+	
+	* FastCgi/FastCgi/Main.cs: Deleted. Project is now a library.
+	
+	* FastCgi/FastCgi/Servers: Deleted. Servers have been refactored to
+	handle different socket types rather than a different socket superclass
+	for each type of socket.
+	
+	* FastCgi/FastCgi/Server.cs: Moved from Servers/
+	
+	* FastCgi/FastCgi/Requests/Request.cs: Include data length in 
+	SendStreamData to support data passed from a buffer.
+	
+	* FastCgi/FastCgi/Requests/ResponderRequest.cs: Don't close the request
+	if the appStatus == int.MinValue. This affords the IResponder the
+	opportunity to create its own thread.
+	
+	* FastCgi/FastCgi.mds: Automatic changes.
+	
+	* AND THE COOL PART:
+	
+	* FastCgi/Mono.WebServer.FastCgi/AssemblyInfo.cs:
+	* FastCgi/Mono.WebServer.FastCgi/WebSource.cs:
+	* FastCgi/Mono.WebServer.FastCgi/ApplicationHost.cs:
+	* FastCgi/Mono.WebServer.FastCgi/Responder.cs:
+	* FastCgi/Mono.WebServer.FastCgi/WorkerRequest.cs:
+	* FastCgi/Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp:
+	* FastCgi/Mono.WebServer.FastCgi/server.cs: Added. This is a web server
+	implementation built on top of Mono.WebServer and Mono.FastCgi providing
+	ASP.NET support.
+
+2007-06-08 Brian Nickel <brian.nickel@gmail.com>
+
 	* FastCgi/Structures/NameValuePair.cs: Use new Logger.Write for better
 	output.
 	

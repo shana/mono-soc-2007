@@ -1,5 +1,6 @@
 //
-// Record.cs: Represents the FastCGI BeginRequestBody structure.
+// WebSource.cs: Provides a shell implementation of Mono.WebServer.WebSource
+// for ApplicationServer to get the IApplicationHost type from.
 //
 // Author:
 //   Brian Nickel (brian.nickel@gmail.com)
@@ -28,51 +29,37 @@
 
 using System;
 
-namespace Mono.FastCgi
-{
-	public enum Role : ushort
-	{
-		Responder  = 1,
-		Authorizer = 2,
-		Filter     = 3
-	}
+namespace Mono.WebServer.FastCgi {
 	
-	[Flags]
-	public enum BeginRequestFlags : byte
-	{
-		None      = 0,
-		KeepAlive = 1
-	}
+	// FIXME: This class could be removed if
+	// Mono.WebServer.ApplicationServer is broken into two classes:
+		// * ApplicationManager to handle application hosts, and
+		// * ApplicationServer, a subclass of ApplicationManager that
+		//   adds on server support.
 	
-	public struct BeginRequestBody
-	{
-		#region Private Properties
-		private Role              role;
-		private BeginRequestFlags flags;
-		#endregion
-		
-		
-		#region Constructors
-		public BeginRequestBody(Record record)
+	public class WebSource : Mono.WebServer.WebSource {
+		public WebSource ()
 		{
-			if (record.Body.Length != 8)
-				throw new ArgumentException
-				("8 bytes expected.", "record");
-			
-			role  = (Role) Record.ReadUInt16 (record.Body, 0);
-			flags = (BeginRequestFlags) record.Body [2];
-		}
-		#endregion
-		
-		
-		#region Public Properties
-		public Role Role {
-			get {return role;}
 		}
 		
-		public BeginRequestFlags Flags {
-			get {return flags;}
+		public override IRequestBroker CreateRequestBroker()
+		{
+			return null;
 		}
-		#endregion
+		
+		public override System.Type GetApplicationHostType()
+		{
+			return typeof(ApplicationHost);
+		}
+		
+		public override Worker CreateWorker(System.Net.Sockets.Socket socket, ApplicationServer server)
+		{
+			return null;
+		}
+		
+		public override System.Net.Sockets.Socket CreateSocket()
+		{
+			return null;
+		}
 	}
 }

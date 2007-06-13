@@ -28,19 +28,18 @@
 
 using System;
 using System.Collections;
-using System.Net.Sockets;
 
-namespace FastCgi {
+namespace Mono.FastCgi {
 	public class Connection {
 		private Hashtable requests = new Hashtable ();
 		private bool      keepAlive;
-		private Socket    socket;
+		private ISocketAbstraction    socket;
 		private Server    server;
 		private bool      stop = false;
 		
 		private object    requestLock = new object ();
 		
-		public Connection (Socket socket, Server server)
+		public Connection (ISocketAbstraction socket, Server server)
 		{
 			this.socket = socket;
 			this.server = server;

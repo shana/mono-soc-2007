@@ -28,9 +28,8 @@
 
 using System;
 using System.Collections;
-using System.Net.Sockets;
 
-namespace FastCgi {
+namespace Mono.FastCgi {
 	public enum RecordType : byte {
 		None            =  0,
 		BeginRequest    =  1,
@@ -62,7 +61,7 @@ namespace FastCgi {
 		
 		
 		#region Constructors
-		public Record (Socket socket)
+		public Record (ISocketAbstraction socket)
 		{
 			if (socket == null)
 				throw new ArgumentNullException ("socket");
@@ -75,8 +74,7 @@ namespace FastCgi {
 			// Read the 8 byte record header. If 8 bytes aren't
 			// read, the stream is corrupted and an exception is
 			// thrown.
-			if (socket.Receive (buffer, HeaderSize,
-				System.Net.Sockets.SocketFlags.None) < HeaderSize)
+			if (socket.Receive (buffer) < HeaderSize)
 				throw new Exception ();
 			
 			// Check that a valid type is given.
@@ -96,17 +94,14 @@ namespace FastCgi {
 			// Read the record data, and throw an exception if the
 			// complete data cannot be read.
 			if (body_length > 0) {
-				if (socket.Receive (body_data, body_length,
-					SocketFlags.None) < body_length)
+				if (socket.Receive (body_data) < body_length)
 					throw new Exception ();
 			}
 			
 			// Read the padding data, and throw an exception if the
 			// complete padding cannot be read.
 			if (padding_length > 0) {
-				if (socket.Receive (padding_buffer,
-					padding_length, SocketFlags.None)
-					< padding_length)
+				if (socket.Receive (padding_buffer) < padding_length)
 					throw new Exception ();
 			}
 		}
@@ -151,7 +146,7 @@ namespace FastCgi {
 			       "\n   Content Length: " + Body.Length;
 		}
 		
-		public void Send (Socket socket)
+		public void Send (ISocketAbstraction socket)
 		{
 			if (body_data.Length > 0xFFFF)
 				throw new ArgumentException
