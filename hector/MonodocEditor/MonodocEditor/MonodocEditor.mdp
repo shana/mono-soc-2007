@@ -34,6 +34,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </References>
-  <Deployment.LinuxDeployData scriptName="monodoceditor" />
+  <Deployment.LinuxDeployData scriptName="monodoc-editor" />
   <GtkDesignInfo partialTypes="True" />
 </Project>

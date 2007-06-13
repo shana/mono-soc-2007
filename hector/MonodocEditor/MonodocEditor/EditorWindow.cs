@@ -17,18 +17,18 @@ public partial class EditorWindow : Gtk.Window {
 		this.Build ();
 	}
 	
-	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
+	private void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
 		Application.Quit ();
 		a.RetVal = true;
 	}
 
-	protected virtual void OnQuitActivated(object sender, System.EventArgs e)
+	private void OnQuitActivated(object sender, System.EventArgs e)
 	{
 		Application.Quit ();
 	}
 
-	protected virtual void OnOpenActivated(object sender, System.EventArgs e)
+	private void OnOpenActivated(object sender, System.EventArgs e)
 	{
 		OpenDocDialog dialog = new OpenDocDialog ();	
 		dialog.Run ();
