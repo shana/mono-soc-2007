@@ -51,11 +51,19 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.TextView" id="docEditView">
+          <widget class="Gtk.ScrolledWindow" id="scrolledwindow2">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Text" translatable="yes" />
-            <property name="WrapMode">Word</property>
+            <property name="VscrollbarPolicy">Automatic</property>
+            <property name="HscrollbarPolicy">Automatic</property>
+            <property name="ShadowType">In</property>
+            <child>
+              <widget class="Gtk.TextView" id="docEditView">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Text" translatable="yes" />
+              </widget>
+            </child>
           </widget>
           <packing>
             <property name="Position">1</property>

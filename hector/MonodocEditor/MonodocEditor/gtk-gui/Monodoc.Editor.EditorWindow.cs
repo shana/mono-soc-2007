@@ -23,6 +23,8 @@ namespace Monodoc.Editor {
         
         private Gtk.MenuBar menubar1;
         
+        private Gtk.ScrolledWindow scrolledwindow2;
+        
         private Gtk.TextView docEditView;
         
         private Gtk.Statusbar statusbar1;
@@ -60,22 +62,29 @@ namespace Monodoc.Editor {
             w3.Expand = false;
             w3.Fill = false;
             // Container child vbox1.Gtk.Box+BoxChild
+            this.scrolledwindow2 = new Gtk.ScrolledWindow();
+            this.scrolledwindow2.CanFocus = true;
+            this.scrolledwindow2.Name = "scrolledwindow2";
+            this.scrolledwindow2.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow2.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow2.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child scrolledwindow2.Gtk.Container+ContainerChild
             this.docEditView = new Gtk.TextView();
             this.docEditView.CanFocus = true;
             this.docEditView.Name = "docEditView";
-            this.docEditView.WrapMode = ((Gtk.WrapMode)(2));
-            this.vbox1.Add(this.docEditView);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox1[this.docEditView]));
-            w4.Position = 1;
+            this.scrolledwindow2.Add(this.docEditView);
+            this.vbox1.Add(this.scrolledwindow2);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox1[this.scrolledwindow2]));
+            w5.Position = 1;
             // Container child vbox1.Gtk.Box+BoxChild
             this.statusbar1 = new Gtk.Statusbar();
             this.statusbar1.Name = "statusbar1";
             this.statusbar1.Spacing = 6;
             this.vbox1.Add(this.statusbar1);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox1[this.statusbar1]));
-            w5.Position = 2;
-            w5.Expand = false;
-            w5.Fill = false;
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox1[this.statusbar1]));
+            w6.Position = 2;
+            w6.Expand = false;
+            w6.Fill = false;
             this.Add(this.vbox1);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
