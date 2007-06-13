@@ -1,5 +1,17 @@
 2007-06-12  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* MonodocEditor/monodoc.png, MonodocEditor/MonodocEditor.mdp,
+	  MonodocEditor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  MonodocEditor/gtk-gui/gui.stetic: Using the same icon that monodoc
+	  uses for app.
+	* MonodocEditor/EditorWindow.cs,
+	  MonodocEditor/gtk-gui/Monodoc.Editor.OpenDocDialog.cs,
+	  MonodocEditor/OpenDocDialog.cs: Adding some filters, events to the
+	  OpenDoc dialog.
+	* Packages.mdse: Adding package info for the editor.
+
+2007-06-12  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* MonodocEditor/EditorWindow.cs,
 	  MonodocEditor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
 	  MonodocEditor/gtk-gui/Monodoc.Editor.OpenDocDialog.cs,

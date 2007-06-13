@@ -13,7 +13,7 @@ namespace Monodoc.Editor {
     
     public partial class OpenDocDialog {
         
-        private Gtk.FileChooserWidget filechooserwidget1;
+        private Gtk.FileChooserWidget openFileDialog;
         
         private Gtk.Button buttonCancel;
         
@@ -23,16 +23,15 @@ namespace Monodoc.Editor {
             Stetic.Gui.Initialize();
             // Widget Monodoc.Editor.OpenDocDialog
             this.Name = "Monodoc.Editor.OpenDocDialog";
-            this.Title = Mono.Unix.Catalog.GetString("window1");
             // Internal child Monodoc.Editor.OpenDocDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
             w1.BorderWidth = ((uint)(2));
             // Container child dialog1_VBox.Gtk.Box+BoxChild
-            this.filechooserwidget1 = new Gtk.FileChooserWidget(((Gtk.FileChooserAction)(0)));
-            this.filechooserwidget1.Name = "filechooserwidget1";
-            w1.Add(this.filechooserwidget1);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.filechooserwidget1]));
+            this.openFileDialog = new Gtk.FileChooserWidget(((Gtk.FileChooserAction)(0)));
+            this.openFileDialog.Name = "openFileDialog";
+            w1.Add(this.openFileDialog);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.openFileDialog]));
             w2.Position = 0;
             // Internal child Monodoc.Editor.OpenDocDialog.ActionArea
             Gtk.HButtonBox w3 = this.ActionArea;
@@ -71,6 +70,9 @@ namespace Monodoc.Editor {
             this.DefaultWidth = 629;
             this.DefaultHeight = 448;
             this.Show();
+            this.openFileDialog.FileActivated += new System.EventHandler(this.OnOpenFileDialogFileActivated);
+            this.buttonCancel.Clicked += new System.EventHandler(this.OnButtonCancelClicked);
+            this.buttonOk.Clicked += new System.EventHandler(this.OnButtonOkClicked);
         }
     }
 }
