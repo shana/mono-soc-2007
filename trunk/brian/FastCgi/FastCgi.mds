@@ -14,7 +14,7 @@
     <Execute type="None" entry="Mono.WebServer.FastCgi" />
   </StartMode>
   <Entries>
-    <Entry filename="./FastCgi/FastCgi.mdp" />
+    <Entry filename="./Mono.FastCgi/Mono.FastCgi.mdp" />
     <Entry filename="./Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp" />
   </Entries>
 </Combine>
