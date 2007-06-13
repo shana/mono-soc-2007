@@ -34,6 +34,8 @@ public partial class EditorWindow : Gtk.Window {
 		OpenDocDialog dialog = new OpenDocDialog ();	
 		dialog.Run ();
 		EcmaReader ecmaReader = new EcmaReader (dialog.Document);
+		
+		docEditView.Buffer.Text = ecmaReader.Text;
 	}
 }
 }

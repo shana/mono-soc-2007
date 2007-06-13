@@ -36,6 +36,12 @@ public class EcmaReader {
 		}
 	}
 	
+	public string Text {
+		get {
+			return document.OuterXml;
+		}
+	}
+	
 	private XmlValidatingReader GetValidatingReader (XmlReader reader)
 	{
 		XmlValidatingReader valReader;

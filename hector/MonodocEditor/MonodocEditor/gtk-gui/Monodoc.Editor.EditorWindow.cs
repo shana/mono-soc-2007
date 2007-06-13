@@ -23,7 +23,7 @@ namespace Monodoc.Editor {
         
         private Gtk.MenuBar menubar1;
         
-        private Gtk.TextView textview1;
+        private Gtk.TextView docEditView;
         
         private Gtk.Statusbar statusbar1;
         
@@ -60,11 +60,12 @@ namespace Monodoc.Editor {
             w3.Expand = false;
             w3.Fill = false;
             // Container child vbox1.Gtk.Box+BoxChild
-            this.textview1 = new Gtk.TextView();
-            this.textview1.CanFocus = true;
-            this.textview1.Name = "textview1";
-            this.vbox1.Add(this.textview1);
-            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox1[this.textview1]));
+            this.docEditView = new Gtk.TextView();
+            this.docEditView.CanFocus = true;
+            this.docEditView.Name = "docEditView";
+            this.docEditView.WrapMode = ((Gtk.WrapMode)(2));
+            this.vbox1.Add(this.docEditView);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox1[this.docEditView]));
             w4.Position = 1;
             // Container child vbox1.Gtk.Box+BoxChild
             this.statusbar1 = new Gtk.Statusbar();
