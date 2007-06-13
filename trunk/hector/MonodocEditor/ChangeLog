@@ -1,5 +1,10 @@
 2007-06-13  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* MonodocEditor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  MonodocEditor/gtk-gui/gui.stetic: Added an ScrolledWindow.
+
+2007-06-13  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* MonodocEditor/EditorWindow.cs,
 	  MonodocEditor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
 	  MonodocEditor/gtk-gui/gui.stetic, EcmaUtils/EcmaReader.cs: Working
