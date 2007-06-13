@@ -1,3 +1,8 @@
+2007-06-13  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonodocEditor/EditorWindow.cs, MonodocEditor/MonodocEditor.mdp: Minor
+	  changes.
+
 2007-06-12  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MonodocEditor/monodoc.png, MonodocEditor/MonodocEditor.mdp,
