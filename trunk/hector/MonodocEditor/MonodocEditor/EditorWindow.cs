@@ -9,9 +9,10 @@
 
 using System;
 using Gtk;
+using Monodoc.EcmaUtils;
 
 namespace Monodoc.Editor {
-public partial class EditorWindow : Gtk.Window {	
+public partial class EditorWindow : Gtk.Window {
 	public EditorWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		this.Build ();
@@ -32,6 +33,7 @@ public partial class EditorWindow : Gtk.Window {
 	{
 		OpenDocDialog dialog = new OpenDocDialog ();	
 		dialog.Run ();
+		EcmaReader ecmaReader = new EcmaReader (dialog.Document);
 	}
 }
 }
