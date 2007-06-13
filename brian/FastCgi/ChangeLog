@@ -1,4 +1,8 @@
-2007-06-08 Brian Nickel <brian.nickel@gmail.com>
+2007-06-13 Brian Nickel <brian.nickel@gmail.com>
+
+	* MOVED: FastCgi/FastCgi -> FastCgi/Mono.FastCgi
+
+2007-06-13 Brian Nickel <brian.nickel@gmail.com>
 
 	* FastCgi/FastCgi/FastCgi.mdp: Build as library.
 	
