@@ -44,8 +44,8 @@ namespace Monodoc.Editor {
             w1.InsertActionGroup(w2, 0);
             this.AddAccelGroup(w1.AccelGroup);
             this.Name = "Monodoc.Editor.EditorWindow";
-            this.Title = Mono.Unix.Catalog.GetString("MainWindow");
-            this.WindowPosition = ((Gtk.WindowPosition)(0));
+            this.Title = Mono.Unix.Catalog.GetString("Monodoc Documentation Editor");
+            this.Icon = Gdk.Pixbuf.LoadFromResource("monodoc.png");
             // Container child Monodoc.Editor.EditorWindow.Gtk.Container+ContainerChild
             this.vbox1 = new Gtk.VBox();
             this.vbox1.Name = "vbox1";
