@@ -1,5 +1,5 @@
 //
-// Server/Server.cs: Handles connections.
+// Server.cs: Accepts connections.
 //
 // Author:
 //   Brian Nickel (brian.nickel@gmail.com)
@@ -27,17 +27,16 @@
 //
 
 using System;
-using System.Net.Sockets;
 using System.Threading;
 using System.Collections;
 using System.Globalization;
 
-namespace FastCgi
+namespace Mono.FastCgi
 {
-	public abstract class Server
+	public class Server
 	{
 		private ArrayList connections = new ArrayList ();
-		private Socket listen_socket;
+		private ISocketAbstraction listen_socket;
 		private bool started = false;
 		private bool accepting = false;
 		private Thread runner;
@@ -46,12 +45,11 @@ namespace FastCgi
 		private int  max_connections       = int.MaxValue;
 		private int  max_requests          = int.MaxValue;
 		private bool multiplex_connections = false;
-	   	
-		protected Server ()
-		{
-		}
 		
-		protected abstract Socket CreateSocket ();
+		public Server (ISocketAbstraction socket)
+		{
+			this.listen_socket = socket;
+		}
 		
 		public int MaxConnections {
 			get {return max_connections;}
@@ -85,7 +83,6 @@ namespace FastCgi
 			if (started)
 				throw new InvalidOperationException ("The server is already started.");
 			
-			listen_socket = CreateSocket ();
 			listen_socket.Blocking = false;
 			listen_socket.Listen (500);
 			
@@ -215,7 +212,7 @@ namespace FastCgi
 			}
 			
 			try {
-				Socket accepted = listen_socket.EndAccept (ares);
+				ISocketAbstraction accepted = listen_socket.EndAccept (ares);
 				accepted.Blocking = true;
 				connection = new Connection (accepted, this);
 				connections.Add (connection);

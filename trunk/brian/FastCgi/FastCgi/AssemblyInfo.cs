@@ -7,9 +7,8 @@ using System.Runtime.CompilerServices;
 // change them to the information which is associated with the assembly
 // you compile.
 
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyTitle("Mono.FastCgi Library")]
+[assembly: AssemblyDescription("A .NET implementation of the FastCGI 1.0 Specification")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("2007 Brian Nickel")]

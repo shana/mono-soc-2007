@@ -31,7 +31,7 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 
-namespace FastCgi
+namespace Mono.FastCgi
 {
 	[Flags]
 	public enum LogLevel
@@ -81,8 +81,7 @@ namespace FastCgi
 		public static void Write (LogLevel level, string message)
 		{
 			if (writer == null)
-				throw new InvalidOperationException
-					("Cannot write to closed streams.");
+				return;
 			
 			if ((Level & level) == LogLevel.None)
 				return;
@@ -95,8 +94,6 @@ namespace FastCgi
 			
 			lock (write_lock) {
 				writer.WriteLine (text);
-				Console.WriteLine (text);
-				writer.Flush ();
 			}
 		}
 		
@@ -106,6 +103,7 @@ namespace FastCgi
 				if (writer == null)
 					return;
 				
+				writer.Flush ();
 				writer.Close ();
 				writer = null;
 			}

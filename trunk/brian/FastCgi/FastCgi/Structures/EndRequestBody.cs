@@ -28,7 +28,7 @@
 
 using System;
 
-namespace FastCgi
+namespace Mono.FastCgi
 {
 	public enum ProtocolStatus : byte
 	{

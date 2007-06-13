@@ -32,7 +32,7 @@ using System.Net.Sockets;
 using System.Globalization;
 using System.Threading;
 
-namespace FastCgi
+namespace Mono.FastCgi
 {
 	public class ResponderRequest : Request
 	{
@@ -110,12 +110,14 @@ namespace FastCgi
 		private void Worker (object state)
 		{
 			int appStatus = responder.Process ();
-			CompleteRequest (appStatus, ProtocolStatus.RequestComplete);
+			if (appStatus != int.MinValue)
+				CompleteRequest (appStatus, ProtocolStatus.RequestComplete);
 		}
 	}
 	
 	public interface IResponder
 	{
+		ResponderRequest Request {get;}
 		int Process ();
 	}
 }

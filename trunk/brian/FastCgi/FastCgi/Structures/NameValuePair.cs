@@ -30,7 +30,7 @@ using System;
 using System.Text;
 using System.Collections;
 
-namespace FastCgi {
+namespace Mono.FastCgi {
 	public struct NameValuePair {
 		
 		#region Private Properties
