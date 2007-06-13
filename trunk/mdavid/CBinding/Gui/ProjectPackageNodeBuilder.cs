@@ -74,7 +74,7 @@ namespace CBinding
 	public class PackageNodeCommandHandler : NodeCommandHandler
 	{
 		[CommandHandler (EditCommands.Delete)]
-		public void RomovePackage ()
+		public void RomoveItem ()
 		{
 			ProjectPackage package = (ProjectPackage)CurrentNode.DataItem;
 			CProject project = (CProject)CurrentNode.GetParentDataItem (

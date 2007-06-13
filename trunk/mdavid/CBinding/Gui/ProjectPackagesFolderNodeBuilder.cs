@@ -90,7 +90,6 @@ namespace CBinding
 				my_project = (CProject)treeBuilder.GetParentDataItem (typeof(CProject), false);
 				my_project.PackageAddedToProject += addedHandler;
 				my_project.PackageRemovedFromProject += removedHandler;
-				IdeApp.Services.MessageService.ShowMessage ("registration");
 			}
 			
 			label = "Packages";

@@ -29,7 +29,7 @@ namespace CBinding {
         
         private Gtk.VBox vbox2;
         
-        private Gtk.Button button40;
+        private Gtk.Button removeButton;
         
         private Gtk.Button buttonCancel;
         
@@ -102,11 +102,11 @@ namespace CBinding {
             this.vbox2.Name = "vbox2";
             this.vbox2.Spacing = 6;
             // Container child vbox2.Gtk.Box+BoxChild
-            this.button40 = new Gtk.Button();
-            this.button40.CanFocus = true;
-            this.button40.Name = "button40";
-            this.button40.UseUnderline = true;
-            // Container child button40.Gtk.Container+ContainerChild
+            this.removeButton = new Gtk.Button();
+            this.removeButton.CanFocus = true;
+            this.removeButton.Name = "removeButton";
+            this.removeButton.UseUnderline = true;
+            // Container child removeButton.Gtk.Container+ContainerChild
             Gtk.Alignment w7 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
             w7.Name = "GtkAlignment";
             // Container child GtkAlignment.Gtk.Container+ContainerChild
@@ -115,7 +115,7 @@ namespace CBinding {
             w8.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w9 = new Gtk.Image();
-            w9.Name = "image15";
+            w9.Name = "image9";
             w9.Pixbuf = Stetic.IconLoader.LoadIcon("gtk-remove", 16);
             w8.Add(w9);
             // Container child GtkHBox.Gtk.Container+ContainerChild
@@ -124,9 +124,9 @@ namespace CBinding {
             w11.LabelProp = "";
             w8.Add(w11);
             w7.Add(w8);
-            this.button40.Add(w7);
-            this.vbox2.Add(this.button40);
-            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox2[this.button40]));
+            this.removeButton.Add(w7);
+            this.vbox2.Add(this.removeButton);
+            Gtk.Box.BoxChild w15 = ((Gtk.Box.BoxChild)(this.vbox2[this.removeButton]));
             w15.Position = 0;
             w15.Expand = false;
             w15.Fill = false;

@@ -32,6 +32,8 @@
 using System.Text;
 using System.CodeDom.Compiler;
 
+using Mono.Addins;
+
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 

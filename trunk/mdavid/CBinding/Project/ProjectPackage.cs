@@ -31,6 +31,8 @@
 
 using System;
 
+using Mono.Addins;
+
 using MonoDevelop.Projects.Serialization;
 
 namespace CBinding

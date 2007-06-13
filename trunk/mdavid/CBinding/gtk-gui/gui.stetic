@@ -1092,7 +1092,7 @@ Shared Object</property>
                     <property name="MemberName" />
                     <property name="Spacing">6</property>
                     <child>
-                      <widget class="Gtk.Button" id="button40">
+                      <widget class="Gtk.Button" id="removeButton">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="Type">TextAndIcon</property>
