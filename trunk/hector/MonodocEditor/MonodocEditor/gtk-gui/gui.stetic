@@ -51,10 +51,11 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.TextView" id="textview1">
+          <widget class="Gtk.TextView" id="docEditView">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="Text" translatable="yes" />
+            <property name="WrapMode">Word</property>
           </widget>
           <packing>
             <property name="Position">1</property>
