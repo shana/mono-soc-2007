@@ -8,7 +8,7 @@ namespace Mono.System.Windows.Controls.Primitives {
 #else
 namespace System.Windows.Controls.Primitives {
 #endif
-	public class TabPanel : Panel {
+	public class TabPanel : global::System.Windows.Controls.Panel {
 		#region Public Constructors
 		public TabPanel() {
 		}
