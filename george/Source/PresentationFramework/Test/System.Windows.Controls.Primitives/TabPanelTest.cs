@@ -43,6 +43,21 @@ namespace System.Windows.Controls.Primitives {
 		}
 		#endregion
 
+		#region MeasureAutoEmpty
+		[Test]
+		public void MeasureAutoEmpty() {
+			new MeasureAutoEmptyTabPanel();
+		}
+
+		class MeasureAutoEmptyTabPanel : TabPanel {
+			public MeasureAutoEmptyTabPanel() {
+				Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(DesiredSize.Width, 0, "1");
+				Assert.AreEqual(DesiredSize.Height, 0, "2");
+			}
+		}
+		#endregion
+
 		#region Measure
 		[Test]
 		public void Measure() {
@@ -71,6 +86,21 @@ namespace System.Windows.Controls.Primitives {
 					called = true;
 					return measure_result = base.MeasureOverride(measure_constraint = constraint);
 				}
+			}
+		}
+		#endregion
+
+		#region MeasureEmpty
+		[Test]
+		public void MeasureEmpty() {
+			new MeasureEmptyTabPanel();
+		}
+
+		class MeasureEmptyTabPanel : TabPanel {
+			public MeasureEmptyTabPanel() {
+				Measure(new Size(100, 100));
+				Assert.AreEqual(DesiredSize.Width, 0, "1");
+				Assert.AreEqual(DesiredSize.Height, 0, "2");
 			}
 		}
 		#endregion
