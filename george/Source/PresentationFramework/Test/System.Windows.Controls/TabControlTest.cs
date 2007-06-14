@@ -92,7 +92,7 @@ namespace System.Windows.Controls {
 			new ItemsTabControl();
 		}
 
-		class ItemsTabControl : TabControl{
+		class ItemsTabControl : TabControl {
 			public ItemsTabControl() {
 				Window window = new Window();
 				window.Content = this;
@@ -202,6 +202,30 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(DefaultStyleKey, typeof(TabControl), "1");
 				Assert.AreSame(DefaultStyleKeyProperty.GetMetadata(this), DefaultStyleKeyProperty.GetMetadata(typeof(TabControl)), "2");
 
+			}
+		}
+		#endregion
+
+		#region OnApplyTemplateAddsItemsToTabPanel
+		[Test]
+		public void OnApplyTemplateAddsItemsToTabPanel() {
+			new OnApplyTemplateAddsItemsToTabPanelTabControl();
+		}
+
+		class OnApplyTemplateAddsItemsToTabPanelTabControl : TabControl {
+			public OnApplyTemplateAddsItemsToTabPanelTabControl() {
+				Window window = new Window();
+				window.Content = this;
+				window.Show();
+				Items.Add(new TabItem());
+				Assert.AreEqual(Items.Count, 1, "1");
+				Assert.AreEqual(HeaderPanel.Children.Count, 1, "2");
+			}
+
+			TabPanel HeaderPanel {
+				get {
+					return (TabPanel)GetTemplateChild("HeaderPanel");
+				}
 			}
 		}
 		#endregion
