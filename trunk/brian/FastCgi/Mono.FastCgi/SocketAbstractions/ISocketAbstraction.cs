@@ -1,5 +1,5 @@
 //
-// SocketAbstractions/ISocketAbstraction.cs: Abstracts socket operations.
+// SocketAbstractions/Socket.cs: Abstracts socket operations.
 //
 // Author:
 //   Brian Nickel (brian.nickel@gmail.com)
@@ -30,14 +30,15 @@ using System;
 
 namespace Mono.FastCgi
 {
-	public interface ISocketAbstraction
+	public abstract class Socket
 	{
-		void Close ();
-		int Receive (byte [] buffer);
-		int Send (byte [] data);
-		bool Blocking {get; set;}
-		void Listen (int backlog);
-		IAsyncResult BeginAccept (AsyncCallback callback, object state);
-		ISocketAbstraction EndAccept (IAsyncResult asyncResult);
+		public abstract void Close ();
+		public abstract int Receive (byte [] buffer);
+		public abstract int Send (byte [] data);
+		public abstract bool Blocking {get; set;}
+		public abstract void Listen (int backlog);
+		public abstract IAsyncResult BeginAccept (AsyncCallback callback, object state);
+		public abstract Socket EndAccept (IAsyncResult asyncResult);
+		public abstract bool Connected {get;}
 	}
 }

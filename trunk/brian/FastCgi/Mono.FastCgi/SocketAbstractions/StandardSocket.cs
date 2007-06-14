@@ -28,16 +28,14 @@
 //
 
 using System;
-using System.Net;
-using System.Net.Sockets;
 
 namespace Mono.FastCgi
 {
-	public class StandardSocket : ISocketAbstraction
+	internal class StandardSocket : Socket
 	{
-		private Socket socket;
+		private System.Net.Sockets.Socket socket;
 		
-		public StandardSocket (Socket socket)
+		public StandardSocket (System.Net.Sockets.Socket socket)
 		{
 			if (socket == null)
 				throw new ArgumentNullException ("socket");
@@ -45,54 +43,59 @@ namespace Mono.FastCgi
 			this.socket = socket;
 		}
 		
-		public StandardSocket (AddressFamily addressFamily,
-		                       SocketType socketType,
-		                       ProtocolType protocolType,
-		                       EndPoint localEndPoint)
+		public StandardSocket (System.Net.Sockets.AddressFamily addressFamily,
+		                       System.Net.Sockets.SocketType socketType,
+		                       System.Net.Sockets.ProtocolType protocolType,
+		                       System.Net.EndPoint localEndPoint)
 		{
 			if (localEndPoint == null)
 				throw new ArgumentNullException ("localEndPoint");
 			
-			socket = new Socket (addressFamily, socketType,
+			socket = new System.Net.Sockets.Socket (addressFamily, socketType,
 				protocolType);
 			
 			socket.Bind (localEndPoint);
 		}
 		
-		public void Close ()
+		public override void Close ()
 		{
 			socket.Close ();
 		}
 		
-		public int Receive (byte [] buffer)
+		public override int Receive (byte [] buffer)
 		{
 			return socket.Receive (buffer);
 		}
 		
-		public int Send (byte [] data)
+		public override int Send (byte [] data)
 		{
 			return socket.Send (data);
 		}
 		
-		public bool Blocking {
+		public override bool Blocking {
 			get {return socket.Blocking;}
 			set {socket.Blocking = value;}
 		}
 		
-		public void Listen (int backlog)
+		public override void Listen (int backlog)
 		{
 			socket.Listen (backlog);
 		}
 		
-		public IAsyncResult BeginAccept (AsyncCallback callback,
+		public override IAsyncResult BeginAccept (AsyncCallback callback,
 		                                 object state)
 		{
 			return socket.BeginAccept (callback, state);
 		}
 		
-		public ISocketAbstraction EndAccept (IAsyncResult asyncResult)
+		public override Socket EndAccept (IAsyncResult asyncResult)
 		{
 			return new StandardSocket (socket.EndAccept (asyncResult));
 		}
+		
+		public override bool Connected {
+			get {return socket.Connected;}
+		}
+
 	}
 }

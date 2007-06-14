@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections;
-using System.Net.Sockets;
 
 namespace Mono.FastCgi
 {
@@ -106,6 +105,10 @@ namespace Mono.FastCgi
 		
 		public ushort RequestID {
 			get {return requestID;}
+		}
+		
+		public bool IsConnected {
+			get {return connection.IsConnected;}
 		}
 		#endregion
 		

@@ -30,16 +30,34 @@ using System;
 using System.Collections;
 
 namespace Mono.FastCgi {
-	public class Connection {
-		private Hashtable requests = new Hashtable ();
-		private bool      keepAlive;
-		private ISocketAbstraction    socket;
-		private Server    server;
-		private bool      stop = false;
+	/// <summary>
+	///    Handles a FastCGI connection by processing records and
+	///    calling responders.
+	/// </summary>
+	public class Connection
+	{
+		#region Private Fields
 		
-		private object    requestLock = new object ();
+		// Collection of requests.
+		private ArrayList requests = new ArrayList ();
 		
-		public Connection (ISocketAbstraction socket, Server server)
+		// Socket to work with.
+		private Socket socket;
+		
+		// Calling server.
+		private Server server;
+		
+		// Keep connection alive.
+		private bool keep_alive;
+		
+		// Listen
+		private bool stop;
+		
+		// Lock for modifying requests.
+		private object request_lock = new object ();
+		#endregion
+		
+		public Connection (Socket socket, Server server)
 		{
 			this.socket = socket;
 			this.server = server;
@@ -49,14 +67,17 @@ namespace Mono.FastCgi {
 			get {return requests.Count;}
 		}
 		
+		public bool IsConnected {
+			get {return socket.Connected;}
+		}
+		
 		public void Run ()
 		{
 			Logger.Write (LogLevel.Notice, "Receving records...");
 			
 			do {
 				Record record = new Record (socket);
-				Request request = (Request) (requests.ContainsKey
-					(record.RequestID) ? requests [record.RequestID] : null);
+				Request request = GetRequest (record.RequestID);
 				
 				Logger.Write (LogLevel.Notice,
 					" Record received ({0}, {1}, {2}) [{3}]",
@@ -101,13 +122,11 @@ namespace Mono.FastCgi {
 						break;
 					}
 					
-					lock (requestLock) {
-						requests.Add (record.RequestID,
-							request);
+					lock (request_lock) {
+						requests.Add (request);
 					}
 					
-					keepAlive = keepAlive ||
-						(body.Flags & BeginRequestFlags.KeepAlive) != 0;
+					keep_alive = (body.Flags & BeginRequestFlags.KeepAlive) != 0;
 					
 				break;
 				
@@ -159,14 +178,13 @@ namespace Mono.FastCgi {
 				break;
 				}
 			}
-			while (!stop && (UnfinishedRequests || keepAlive));
+			while (!stop && (UnfinishedRequests || keep_alive));
 		}
 		
 		private bool UnfinishedRequests {
 			get {
-				foreach (Request request in requests.Values)
-					if (request != null &&
-						request.DataNeeded == true)
+				foreach (Request request in requests)
+					if (request.DataNeeded)
 						return true;
 				
 				return false;
@@ -176,7 +194,8 @@ namespace Mono.FastCgi {
 		public void SendResponse (RecordType type, ushort requestID,
 		                          byte [] bodyData)
 		{
-			new Record (1, type, requestID, bodyData).Send (socket);
+			if (IsConnected)
+				new Record (1, type, requestID, bodyData).Send (socket);
 		}
 		
 		public void EndRequest (ushort requestID, int appStatus,
@@ -185,22 +204,26 @@ namespace Mono.FastCgi {
 			EndRequestBody body = new EndRequestBody (appStatus,
 				protocolStatus);
 			
-			new Record (1, RecordType.EndRequest, requestID,
-				body.Data).Send (socket);
+			if (IsConnected)
+				new Record (1, RecordType.EndRequest, requestID,
+					body.Data).Send (socket);
 			
-			if (requests.ContainsKey (requestID)) {
-				lock (requestLock) {
-					requests.Remove (requestID);
+			int index = GetRequestIndex (requestID);
+			
+			if (index >= 0) {
+				lock (request_lock) {
+					requests.RemoveAt (index);
 				}
 			}
 			
-			if (requests.Count == 0 && (!keepAlive || stop)) {
+			if (requests.Count == 0 && (!keep_alive || stop)) {
 				socket.Close ();
 				server.EndConnection (this);
 			}
 		}
 		
-		public void Stop () {
+		public void Stop ()
+		{
 			stop = true;
 			foreach (Request req in new ArrayList (requests))
 				EndRequest (req.RequestID, -1,
@@ -209,6 +232,25 @@ namespace Mono.FastCgi {
 		
 		public Server Server {
 			get {return server;}
+		}
+		
+		private Request GetRequest (ushort requestID)
+		{
+			foreach (Request request in requests)
+				if (request.RequestID == requestID)
+					return request;
+			
+			return null;
+		}
+		
+		private int GetRequestIndex (ushort requestID)
+		{
+			int i = 0;
+			int count = requests.Count;
+			while (i < count && (requests [i] as Request).RequestID != requestID)
+				i ++;
+			
+			return (i != count) ? i : -1;
 		}
 	}
 }

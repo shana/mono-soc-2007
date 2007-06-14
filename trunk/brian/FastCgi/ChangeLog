@@ -1,5 +1,63 @@
 2007-06-14 Brian Nickel <brian.nickel@gmail.com>
 
+	* Mono.FastCgi/Structures/Record.cs: Use Mono.FastCgi.Socket instead of
+	ISocketAbstraction.
+	
+	* Mono.FastCgi/Connection.cs: Use ArrayList instead of HashTable.
+	Properly case private fields. Check that socket is connected before 
+	writing.
+	
+	* Mono.FastCgi/SocketFactory.cs: ADDED. This class creates sockets,
+	hiding the internal types used for creating sockets. (This will be very
+	helpful for refactoring later.)
+	
+	* Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs: Change to 
+	abstract Socket class. This is Marek's idea to simplify refactoring
+	later.
+	
+	* Mono.FastCgi/SocketAbstractions/TcpSocket.cs: Make internal.
+	
+	* Mono.FastCgi/SocketAbstractions/StandardSocket.cs: Make internal.
+	
+	* Mono.FastCgi/Mono.FastCgi.mdp: Automatic changes.
+	
+	* Mono.FastCgi/Server.cs: Make things nice and pretty. Regions, XML 
+	documentation, all that jazz.
+	
+	* Mono.FastCgi/Requests/Request.cs: Add IsConnected.
+	
+	* Mono.FastCgi/Requests/ResponderRequest.cs: Remove System.Net.Sockets
+	
+	* Mono.WebServer/MonoWorkerRequest.cs: Remove unnecessary protected
+	properties.
+	
+	* Mono.WebServer/Mono.WebServer.mdp: Automatic changes.
+	
+	* Mono.WebServer/ApplicationServer.cs: Make subclass of
+	ApplicationManager. Move management functionality to ApplicationManager.
+	
+	* Mono.WebServer/BaseApplicationHost.cs: Check before casting broker as
+	BaseRequestBroker.
+	
+	* Mono.WebServer/ApplicationManager.cs: ADDED. This removes application
+	management logic from Application server. It removes the dependency on
+	WebSource.
+	
+	* Mono.WebServer/IApplicationHost.cs: Use ApplicationManager.
+	
+	* Mono.WebServer.FastCgi/ApplicationHost.cs: Use BaseApplicationHost
+	again as it is no longer tied to BaseApplicationBroker.
+	
+	* Mono.WebServer.FastCgi/Responder.cs: Expose IsConnected.
+	
+	* Mono.WebServer.FastCgi/WorkerRequest.cs: Support IsClientConnected ().
+	
+	* Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp: Automatic changes.
+	
+	* Mono.WebServer.FastCgi/server.cs: Use ApplicationManager.
+
+2007-06-14 Brian Nickel <brian.nickel@gmail.com>
+
 	* ADDED: Mono.WebServer (local copy)
 
 2007-06-13 Brian Nickel <brian.nickel@gmail.com>

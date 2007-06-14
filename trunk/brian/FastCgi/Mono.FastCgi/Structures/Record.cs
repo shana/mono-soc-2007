@@ -61,7 +61,7 @@ namespace Mono.FastCgi {
 		
 		
 		#region Constructors
-		public Record (ISocketAbstraction socket)
+		public Record (Socket socket)
 		{
 			if (socket == null)
 				throw new ArgumentNullException ("socket");
@@ -146,7 +146,7 @@ namespace Mono.FastCgi {
 			       "\n   Content Length: " + Body.Length;
 		}
 		
-		public void Send (ISocketAbstraction socket)
+		public void Send (Socket socket)
 		{
 			if (body_data.Length > 0xFFFF)
 				throw new ArgumentException

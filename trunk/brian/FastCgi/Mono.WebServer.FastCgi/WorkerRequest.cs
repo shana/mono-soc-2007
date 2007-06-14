@@ -199,8 +199,7 @@ namespace Mono.WebServer.FastCgi
 
 		public override bool IsClientConnected ()
 		{
-			// FIXME: Handle server shutdown.
-			return true;
+			return responder.IsConnected;
 		}
 
 		string uri_path = null;
