@@ -170,5 +170,77 @@ namespace System.Windows.Controls {
 			PropertyMetadata panel_metadata = FrameworkElement.HorizontalAlignmentProperty.GetMetadata(typeof(Panel));
 			Assert.AreSame(framework_element_metadata, panel_metadata);
 		}
+
+		#region IsItemsHost
+		[Test]
+		[ExpectedException(ExceptionType = typeof(InvalidOperationException), ExpectedMessage="A panel with IsItemsHost=\"true\" is not nested in an ItemsControl. Panel must be nested in ItemsControl to get and show items.")]
+		public void IsItemsHostChildren() {
+			IsItemsHostPanel p = new IsItemsHostPanel();
+			object dummy = p.Children;
+		}
+		
+		[Test]
+		[ExpectedException(ExceptionType = typeof(InvalidOperationException), ExpectedMessage = "A panel with IsItemsHost=\"true\" is not nested in an ItemsControl. Panel must be nested in ItemsControl to get and show items.")]
+		public void IsItemsHostInternalChildren() {
+			IsItemsHostPanel p = new IsItemsHostPanel();
+			p.GetInternalChildren();
+		}
+
+		[Test]
+		public void InItemsControl() {
+			TestItemsControl items_control = new TestItemsControl();
+			ControlTemplate items_control_template = new ControlTemplate(typeof(TestItemsControl));
+			FrameworkElementFactory panel_factory = new FrameworkElementFactory(typeof(IsItemsHostPanel));
+			panel_factory.Name = "Panel";
+			items_control_template.VisualTree = panel_factory;
+			items_control.Template = items_control_template;
+			Button button = new Button();
+			items_control.Items.Add(button);
+			Assert.IsNull(items_control.GetPanel());
+			items_control.ApplyTemplate();
+			UIElementCollection children = items_control.GetPanel().Children;
+			Assert.AreEqual(children.Count, 1, "2");
+			Assert.AreSame(children, items_control.GetPanel().Children, "3");
+			Assert.AreSame(children, items_control.GetPanel().GetInternalChildren(), "4");
+			items_control.GetPanel().IsItemsHost = false;
+			Assert.AreSame(children, items_control.GetPanel().Children, "5");
+			Assert.AreSame(children, items_control.GetPanel().GetInternalChildren(), "6");
+			Assert.AreEqual(items_control.GetPanel().Children.Count, 0, "7");
+			items_control.GetPanel().IsItemsHost = true;
+			Assert.AreSame(children, items_control.GetPanel().Children, "8");
+			Assert.AreSame(children, items_control.GetPanel().GetInternalChildren(), "9");
+			Assert.AreEqual(items_control.GetPanel().Children.Count, 1, "10");
+			Assert.AreSame(items_control.GetPanel().Children[0], button, "11");
+			items_control.GetPanel().CallOnIsItemsHostChanged = false;
+			items_control.GetPanel().IsItemsHost = false;
+			Assert.AreSame(children, items_control.GetPanel().Children, "12");
+			Assert.AreSame(children, items_control.GetPanel().GetInternalChildren(), "13");
+			Assert.AreEqual(items_control.GetPanel().Children.Count, 0, "14");
+			Assert.AreEqual(children.GetType(), typeof(UIElementCollection), "15");
+		}
+
+		class IsItemsHostPanel : Panel {
+			public bool CallOnIsItemsHostChanged = true;
+
+			public IsItemsHostPanel() {
+				IsItemsHost = true;
+			}
+
+			public object GetInternalChildren() {
+				return InternalChildren;
+			}
+
+			protected override void OnIsItemsHostChanged(bool oldIsItemsHost, bool newIsItemsHost) {
+				if (CallOnIsItemsHostChanged)
+					base.OnIsItemsHostChanged(oldIsItemsHost, newIsItemsHost);
+			}
+		}
+
+		class TestItemsControl : ItemsControl {
+			public IsItemsHostPanel GetPanel() {
+				return (IsItemsHostPanel)GetTemplateChild("Panel");
+			}
+		}
+		#endregion
 	}
 }
