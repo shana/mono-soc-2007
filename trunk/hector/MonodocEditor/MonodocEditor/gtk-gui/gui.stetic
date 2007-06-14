@@ -145,7 +145,7 @@
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-open</property>
             <property name="IsDialogButton">True</property>
-            <property name="ResponseId">-3</property>
+            <property name="ResponseId">-1</property>
             <signal name="Clicked" handler="OnButtonOkClicked" />
             <property name="label">gtk-open</property>
           </widget>

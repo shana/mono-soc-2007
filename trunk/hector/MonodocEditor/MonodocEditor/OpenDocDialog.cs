@@ -41,7 +41,11 @@ public partial class OpenDocDialog : Gtk.Dialog {
 	{
 		filename = openFileDialog.Filename;
 		Console.WriteLine ("Filename: "  + filename);
-		Destroy ();
+		
+		if (Directory.Exists (filename))
+			openFileDialog.SetCurrentFolder (filename);
+		else
+			Destroy ();
 	}
 
 	private void OnOpenFileDialogFileActivated (object sender, System.EventArgs e)
