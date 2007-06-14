@@ -19,8 +19,8 @@ public class EcmaReader {
 	
 	public EcmaReader (string filePath)
 	{
-		if (filePath.Equals (String.Empty))
-			throw new ArgumentException ("Error: An empty path was given.");
+		if (!File.Exists (filePath))
+			throw new ArgumentException ("Error: An invalid path was given.");
 		
 		document = new XmlDocument ();
 		
@@ -50,6 +50,7 @@ public class EcmaReader {
 		XmlValidatingReader valReader;
 		XmlSchema schema;
 		Stream xsdStream;
+		Type type;
 		
 		valReader = new XmlValidatingReader (reader);
 		valReader.ValidationType = ValidationType.Schema;
@@ -57,8 +58,10 @@ public class EcmaReader {
 		// Set the validation event handler
 		valReader.ValidationEventHandler += new ValidationEventHandler (ValidationCallBack);
 		
-		xsdStream = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("monodoc-ecma.xsd");
-		schema = XmlSchema.Read (xsdStream, null);
+		type = Type.GetType ("Monodoc.EcmaUtils.EcmaReader");
+		xsdStream = Assembly.GetAssembly (type).GetManifestResourceStream ("monodoc-ecma.xsd");
+		
+		schema = XmlSchema.Read (xsdStream, ValidationCallBack);
 		schema.Compile (null);
 		valReader.Schemas.Add (schema);
 		
