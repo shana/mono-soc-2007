@@ -32,11 +32,7 @@ run-test: test
 	cd ..;
 
 self-test: all
-	cd framework;	\
-	make self-test;	\
-	cd ../console;	\
-	make self-test;	\
-	cd ../rules;	\
+	cd rules;	\
 	make self-test;	\
 	cd ..
 
