@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows.Markup;
 using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -19,7 +20,16 @@ namespace System.Windows.Controls {
 		#region Dependency Properties
 		public static readonly DependencyProperty BackgroundProperty = DependencyProperty.Register("Background", typeof(Brush), typeof(Panel), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 		public static readonly DependencyProperty IsItemsHostProperty = DependencyProperty.Register("IsItemsHost", typeof(bool), typeof(Panel), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.NotDataBindable, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			((Panel)d).OnIsItemsHostChanged((bool)e.OldValue, (bool)e.NewValue);
+			Panel i = (Panel)d;
+			i.OnIsItemsHostChanged((bool)e.OldValue, (bool)e.NewValue);
+			List<UIElement> current_children = new List<UIElement>();
+			foreach (UIElement child in i.children)
+				current_children.Add(child);
+			i.children.Clear();
+			if (i.children_for_the_other_is_items_host_value != null)
+				foreach (UIElement child in i.children_for_the_other_is_items_host_value)
+					i.children.Add(child);
+			i.children_for_the_other_is_items_host_value = current_children;
 		}));
 		#region Attached Properties
 		public static readonly DependencyProperty ZIndexProperty = DependencyProperty.RegisterAttached("ZIndex", typeof(int), typeof(Panel), new FrameworkPropertyMetadata());
@@ -29,6 +39,7 @@ namespace System.Windows.Controls {
 
 		#region Private Fields
 		UIElementCollection children;
+		List<UIElement> children_for_the_other_is_items_host_value;
 		#endregion
 
 		#region Protected Constructors
@@ -52,7 +63,15 @@ namespace System.Windows.Controls {
 		#endregion
 
 		public UIElementCollection Children {
-			get { return children; }
+			get {
+				if (IsItemsHost) {
+					ItemsControl items_control = TemplatedParent as ItemsControl;
+					if (items_control == null)
+						throw new InvalidOperationException("A panel with IsItemsHost=\"true\" is not nested in an ItemsControl. Panel must be nested in ItemsControl to get and show items.");
+					return children;
+				} else
+					return children; 
+			}
 		}
 		#endregion
 
