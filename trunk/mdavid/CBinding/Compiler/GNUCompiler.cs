@@ -123,7 +123,7 @@ namespace CBinding
 		                     IProgressMonitor monitor, string outputName)
 		{
 			string objectFiles = ObjectFiles (projectFiles);
-			string pkgargs = GeneratePkgArgs (packages);
+			string pkgargs = GeneratePkgLinkerArgs (packages);
 			StringBuilder args = new StringBuilder ();
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
@@ -188,7 +188,7 @@ namespace CBinding
 		                               IProgressMonitor monitor, string outputName)
 		{
 			string objectFiles = ObjectFiles (projectFiles);
-			string pkgargs = GeneratePkgArgs (packages);
+			string pkgargs = GeneratePkgLinkerArgs (packages);
 			StringBuilder args = new StringBuilder ();
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
@@ -242,7 +242,7 @@ namespace CBinding
 		                            CompilerResults cr)
 		{			
 			string outputName = Path.ChangeExtension (file.Name, ".o");
-			string pkgargs = GeneratePkgArgs (packages);
+			string pkgargs = GeneratePkgCompilerArgs (packages);
 			
 			string command = String.Format("{0} {1} {2} -c -o {3} {4}",
 			    compilerCommand, file.Name, args,outputName, pkgargs);

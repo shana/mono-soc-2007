@@ -39,6 +39,8 @@ using System.CodeDom.Compiler;
 using Mono.Addins;
 
 using MonoDevelop.Core;
+using MonoDevelop.Core.Execution;
+using MonoDevelop.Core.ProgressMonitoring;
 using MonoDevelop.Projects;
 using MonoDevelop.Projects.Serialization;
 
@@ -172,7 +174,44 @@ namespace CBinding
 		protected override void DoExecute (IProgressMonitor monitor,
 		                                   ExecutionContext context)
 		{
-			// TODO: implement
+			CProjectConfiguration conf = (CProjectConfiguration)ActiveConfiguration;
+			string command = conf.Output;
+			string args = conf.CommandLineParameters;
+			string dir = Path.GetFullPath (conf.OutputDirectory);
+			string platform = "Native";
+			bool pause = conf.PauseConsoleOutput;
+			IConsole console;
+			
+			monitor.Log.WriteLine ("Running project...");
+			
+//			MonoDevelop.Ide.Gui.IdeApp.Services.MessageService.ShowMessage (
+//			    "command: " + command + "\n" +
+//			    "args: " + args + "\n" +
+//			    "dir: " + dir);
+			
+			if (conf.ExternalConsole)
+				console = context.ExternalConsoleFactory.CreateConsole (!pause);
+			else
+				console = context.ConsoleFactory.CreateConsole (!pause);
+			
+			AggregatedOperationMonitor operationMonitor = new AggregatedOperationMonitor (monitor);
+			
+			IExecutionHandler handler = context.ExecutionHandlerFactory.CreateExecutionHandler (platform);
+			
+			if (handler == null) {
+				monitor.ReportError ("Can not execute \"" + command + "\". The selected execution mode is not supported in the " + platform + " platform.", null);
+				return;
+			}
+			
+			IProcessAsyncOperation op = handler.Execute (command, args, dir, console);
+			
+			operationMonitor.AddOperation (op);
+			op.WaitForCompleted ();
+			
+			monitor.Log.WriteLine ("The operation exited with code: {0}", op.ExitCode);
+			
+			operationMonitor.Dispose ();			
+			console.Dispose ();			    
 		}
 		
 		public override string GetOutputFileName ()
