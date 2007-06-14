@@ -62,7 +62,7 @@ namespace CBinding
 		
 		protected abstract void ParseLinkerOutput (string errorString, CompilerResults cr);
 		
-		protected string GeneratePkgArgs (ProjectPackageCollection packages)
+		protected string GeneratePkgLinkerArgs (ProjectPackageCollection packages)
 		{
 			if (packages == null || packages.Count < 1)
 				return string.Empty;
@@ -72,7 +72,20 @@ namespace CBinding
 			foreach (ProjectPackage p in packages)
 				libs.Append (p.Name + " ");
 			
-			return string.Format ("`pkg-config --cflags --libs {0}`", libs.ToString ().Trim ());
+			return string.Format ("`pkg-config --libs {0}`", libs.ToString ().Trim ());
+		}
+		
+		protected string GeneratePkgCompilerArgs (ProjectPackageCollection packages)
+		{
+			if (packages == null || packages.Count < 1)
+				return string.Empty;
+			
+			StringBuilder libs = new StringBuilder ();
+			
+			foreach (ProjectPackage p in packages)
+				libs.Append (p.Name + " ");
+			
+			return string.Format ("`pkg-config --cflags {0}`", libs.ToString ().Trim ());
 		}
 	}
 }
