@@ -39,7 +39,7 @@ namespace Mono.WebServer
 		string VPath { get; }	
 		AppDomain Domain { get; }	
 		IRequestBroker RequestBroker { get; set; }
-		ApplicationServer Server { get; set; }
+		ApplicationManager Server { get; set; }
 		void Unload ();
 	}
 	

@@ -83,15 +83,15 @@ namespace Mono.WebServer
 	{
 		IApplicationHost appHostBase;
 		Encoding encoding;
-		Encoding headerEncoding;
+		/* Encoding headerEncoding; */
 		byte [] queryStringBytes;
 		string hostVPath;
 		string hostPath;
 		EndOfSendNotification end_send;
 		object end_send_data;
 
-		protected byte[] server_raw;
-		protected byte[] client_raw;
+		/* byte[] server_raw; */
+		byte[] client_raw;
 		X509Certificate client_cert;
 		NameValueCollection server_variables;
 		bool inUnhandledException;

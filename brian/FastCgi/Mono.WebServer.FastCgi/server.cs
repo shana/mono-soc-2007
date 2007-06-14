@@ -169,11 +169,11 @@ namespace Mono.WebServer.FastCgi
 			}
 		}
 		
-		private static ApplicationServer appserver;
+		private static ApplicationManager appmanager;
 		public static ApplicationHost GetApplicationForPath (string vhost,
 			int port, string path,  bool defaultToRoot)
 		{
-			return appserver.GetApplicationForPath (vhost, port,
+			return appmanager.GetApplicationForPath (vhost, port,
 				path, defaultToRoot).AppHost as ApplicationHost;
 		}
 		
@@ -301,30 +301,30 @@ namespace Mono.WebServer.FastCgi
 
 			rootDir = Directory.GetCurrentDirectory ();
 			
-			ISocketAbstraction socket;
+			Socket socket;
 			
 			if (useTCP) {
-				socket = new TcpSocket (ipaddr, port);
+				socket = SocketFactory.CreateTcpSocket (ipaddr, port);
 			} else {
 				// FIXME: Add file socket support.
 				throw new NotImplementedException ("To be added.");
 			}
 
-			appserver = new ApplicationServer (new WebSource());
-			appserver.Verbose = verbose;
+			appmanager = new ApplicationManager (typeof (ApplicationHost));
+			appmanager.Verbose = verbose;
 
 			Console.WriteLine (Assembly.GetExecutingAssembly ().GetName ().Name);
 			if (apps != null)
-				appserver.AddApplicationsFromCommandLine (apps);
+				appmanager.AddApplicationsFromCommandLine (apps);
 
 			if (appConfigFile != null)
-				appserver.AddApplicationsFromConfigFile (appConfigFile);
+				appmanager.AddApplicationsFromConfigFile (appConfigFile);
 
 			if (appConfigDir != null)
-				appserver.AddApplicationsFromConfigDirectory (appConfigDir);
+				appmanager.AddApplicationsFromConfigDirectory (appConfigDir);
 
 			if (!master && apps == null && appConfigDir == null && appConfigFile == null)
-				appserver.AddApplicationsFromCommandLine ("/:.");
+				appmanager.AddApplicationsFromCommandLine ("/:.");
 			if (!useTCP) {
 				Console.WriteLine ("Listening on: {0}", filename);
 			} else

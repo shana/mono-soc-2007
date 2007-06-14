@@ -104,5 +104,9 @@ namespace Mono.WebServer.FastCgi
 		{
 			request.CompleteRequest (appStatus, ProtocolStatus.RequestComplete);
 		}
+		
+		public bool IsConnected {
+			get {return request.IsConnected;}
+		}
 	}
 }

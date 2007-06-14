@@ -27,22 +27,20 @@
 //
 
 using System;
-using System.Net;
-using System.Net.Sockets;
 
 namespace Mono.FastCgi
 {
-	public class TcpSocket : StandardSocket
+	internal class TcpSocket : StandardSocket
 	{
-		public TcpSocket (IPEndPoint localEndPoint)
-			: base (AddressFamily.InterNetwork, SocketType.Stream,
-			        ProtocolType.IP, localEndPoint)
+		public TcpSocket (System.Net.IPEndPoint localEndPoint)
+			: base (System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream,
+			        System.Net.Sockets.ProtocolType.IP, localEndPoint)
 		{
 		}
 		
-		public TcpSocket (IPAddress address, int port)
-			: this (new IPEndPoint (address == IPAddress.Any ?
-				IPAddress.Loopback : address, port))
+		public TcpSocket (System.Net.IPAddress address, int port)
+			: this (new System.Net.IPEndPoint (address == System.Net.IPAddress.Any ?
+				System.Net.IPAddress.Loopback : address, port))
 		{
 		}
 	}

@@ -32,93 +32,15 @@ using Mono.WebServer;
 
 namespace Mono.WebServer.FastCgi
 {
-	public class ApplicationHost : MarshalByRefObject, IApplicationHost
+	public class ApplicationHost : BaseApplicationHost
 	{
-		string path;
-		string vpath;
-		EndOfRequestHandler endOfRequest;
-		ApplicationServer appserver;
-		
 		public ApplicationHost ()
 		{
-			endOfRequest = new EndOfRequestHandler (EndOfRequest);
-			AppDomain.CurrentDomain.DomainUnload += new EventHandler (OnUnload);
 		}
 		
 		public void ProcessRequest (Responder responder)
 		{
-			WorkerRequest mwr = new WorkerRequest (responder, this);
-			if (!mwr.ReadRequestData ()) {
-				EndOfRequest (mwr);
-				return;
-			}
-			
-			mwr.EndOfRequestEvent += endOfRequest;
-			try {
-				mwr.ProcessRequest ();
-			} catch (Exception ex) { // should "never" happen
-				// we don't know what the request state is,
-				// better write the exception to the console
-				// than forget it.
-				Console.WriteLine ("Unhandled exception: {0}", ex);
-				EndOfRequest (mwr);
-			}
-		}
-		
-		public void Unload ()
-		{
-			System.Web.HttpRuntime.UnloadAppDomain ();
-		}
-
-		public void OnUnload (object o, EventArgs args)
-		{
-			appserver.DestroyHost (this);
-		}
-
-		public override object InitializeLifetimeService ()
-		{
-			return null; // who wants to live forever?
-		}
-
-		public ApplicationServer Server {
-			get { return appserver; }
-			set { appserver = value; }
-		}
-		
-		public string Path {
-			get {
-				if (path == null)
-					path = AppDomain.CurrentDomain.GetData (".appPath").ToString ();
-
-				return path;
-			}
-		}
-
-		public string VPath {
-			get {
-				if (vpath == null)
-					vpath = AppDomain.CurrentDomain.GetData (".appVPath").ToString ();
-
-				return vpath;
-			}
-		}
-
-		public AppDomain Domain {
-			get { return AppDomain.CurrentDomain; }
-		}
-		
-		public IRequestBroker RequestBroker
-		{
-			get { return null; }
-			set { }
-		}
-		
-		public void EndOfRequest (MonoWorkerRequest mwr)
-		{
-			try {
-				mwr.CloseConnection ();
-			} catch {
-			}
+			ProcessRequest (new WorkerRequest (responder, this));
 		}
 	}
 }

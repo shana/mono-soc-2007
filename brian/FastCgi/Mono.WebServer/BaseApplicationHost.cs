@@ -37,7 +37,7 @@ namespace Mono.WebServer
 		string vpath;
 		IRequestBroker requestBroker;
 		EndOfRequestHandler endOfRequest;
-		ApplicationServer appserver;
+		ApplicationManager appserver;
 		
 		public BaseApplicationHost ()
 		{
@@ -60,7 +60,7 @@ namespace Mono.WebServer
 			return null; // who wants to live forever?
 		}
 
-		public ApplicationServer Server {
+		public ApplicationManager Server {
 			get { return appserver; }
 			set { appserver = value; }
 		}
@@ -118,7 +118,8 @@ namespace Mono.WebServer
 				mwr.CloseConnection ();
 			} catch {
 			} finally {
-				((BaseRequestBroker) requestBroker).UnregisterRequest (mwr.RequestId);
+				if (requestBroker != null && requestBroker is BaseRequestBroker)
+					((BaseRequestBroker) requestBroker).UnregisterRequest (mwr.RequestId);
 			}
 		}
 	}
