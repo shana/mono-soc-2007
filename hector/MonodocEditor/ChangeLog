@@ -1,5 +1,14 @@
 2007-06-14  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* EcmaUtils/Test, EcmaUtils/Test/TestEcmaReader.cs,
+	  EcmaUtils/Test/Examples, EcmaUtils/Test/Examples/Accel.xml,
+	  EcmaUtils/Test.cs, EcmaUtils/EcmaUtils.mdp: Adding unit test
+	  infrastructure.
+	* EcmaUtils/EcmaReader.cs: Changed the form of getting the EcmaUtils
+	  assembly to get the XSD stream.
+
+2007-06-14  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* MonodocEditor/EditorWindow.cs, MonodocEditor/MonodocEditor.mdp,
 	  MonodocEditor/gtk-gui/Monodoc.Editor.OpenDocDialog.cs,
 	  MonodocEditor/gtk-gui/gui.stetic, MonodocEditor/OpenDocDialog.cs:
