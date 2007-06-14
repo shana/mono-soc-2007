@@ -1,3 +1,12 @@
+2007-06-14  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonodocEditor/EditorWindow.cs, MonodocEditor/MonodocEditor.mdp,
+	  MonodocEditor/gtk-gui/Monodoc.Editor.OpenDocDialog.cs,
+	  MonodocEditor/gtk-gui/gui.stetic, MonodocEditor/OpenDocDialog.cs:
+	  Minor changes to the Open File Dialog.
+	* EcmaUtils/EcmaReader.cs: Throw an exception if the path given is
+	  empty.
+
 2007-06-13  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MonodocEditor/gtk-gui/Monodoc.Editor.EditorWindow.cs,

@@ -31,11 +31,15 @@ public partial class EditorWindow : Gtk.Window {
 
 	private void OnOpenActivated(object sender, System.EventArgs e)
 	{
-		OpenDocDialog dialog = new OpenDocDialog ();	
+		OpenDocDialog dialog = new OpenDocDialog ();
 		dialog.Run ();
-		EcmaReader ecmaReader = new EcmaReader (dialog.Document);
 		
-		docEditView.Buffer.Text = ecmaReader.Text;
+		try {
+			EcmaReader ecmaReader = new EcmaReader (dialog.Document);
+			docEditView.Buffer.Text = ecmaReader.Text;
+		} catch (ArgumentException argexp) {
+			Console.WriteLine (argexp.Message);
+		}
 	}
 }
 }

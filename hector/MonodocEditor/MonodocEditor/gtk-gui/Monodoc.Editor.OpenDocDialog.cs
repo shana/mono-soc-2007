@@ -59,7 +59,7 @@ namespace Monodoc.Editor {
             this.buttonOk.UseStock = true;
             this.buttonOk.UseUnderline = true;
             this.buttonOk.Label = "gtk-open";
-            this.AddActionWidget(this.buttonOk, -3);
+            w3.Add(this.buttonOk);
             Gtk.ButtonBox.ButtonBoxChild w5 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonOk]));
             w5.Position = 1;
             w5.Expand = false;

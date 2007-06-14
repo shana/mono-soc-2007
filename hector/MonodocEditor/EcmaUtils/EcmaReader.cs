@@ -19,6 +19,9 @@ public class EcmaReader {
 	
 	public EcmaReader (string filePath)
 	{
+		if (filePath.Equals (String.Empty))
+			throw new ArgumentException ("Error: An empty path was given.");
+		
 		document = new XmlDocument ();
 		
 		try {
