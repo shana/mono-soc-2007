@@ -42,3 +42,6 @@ http://blogs.msdn.com/bencon/archive/2006/12/09/iscrollinfo-tutorial-part-iv.asp
 
 Themes
 http://pavanpodila.spaces.live.com/blog/cns!9c9e888164859398!135.entry
+
+Panel.IsItemsHost
+http://www.beacosta.com/Archive/2005_10_01_bcosta_archive.html
