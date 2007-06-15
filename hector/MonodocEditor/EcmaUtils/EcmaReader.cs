@@ -1,4 +1,4 @@
-///
+//
 // EcmaReader.cs: Class that reads an Monodoc XML Documentation.
 //
 // Author:
