@@ -87,8 +87,18 @@ namespace CBinding
 			foreach (ProjectFile f in projectFiles) {
 				if (f.Subtype == Subtype.Directory) continue;
 				
-				if (f.BuildAction == BuildAction.Compile)
-					res = DoCompilation (f, args.ToString (), packages, monitor, cr);
+				if (f.BuildAction == BuildAction.Compile) {
+					bool compile = false;
+					string objectFile = Path.ChangeExtension (f.Name, ".o");
+					
+					if (!File.Exists (objectFile))
+						compile = true;
+					else if (File.GetLastWriteTime (objectFile) < File.GetLastWriteTime (f.Name))
+					    compile = true;
+					
+					if (compile)
+						res = DoCompilation (f, args.ToString (), packages, monitor, cr);
+				}
 				else
 					res = true;
 				
