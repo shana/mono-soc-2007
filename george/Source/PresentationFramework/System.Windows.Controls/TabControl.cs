@@ -1,20 +1,20 @@
-// It does not work. Maybe some of the logic is in TabItem, TabPanel, etc.
 using Mono.WindowsPresentationFoundation;
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
-using System.Windows.Controls.Primitives;
 #if Implementation
 using System.Windows;
 using System.Windows.Controls;
+using Mono.System.Windows.Controls.Primitives;
 namespace Mono.System.Windows.Controls {
 #else
+using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
-	[StyleTypedProperty(Property="ItemContainerStyle", StyleTargetType=typeof(TabItem))]
-	[TemplatePart(Name="PART_SelectedContentHost", Type=typeof(ContentPresenter))]
+	[StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(TabItem))]
+	[TemplatePart(Name = "PART_SelectedContentHost", Type = typeof(ContentPresenter))]
 	public class TabControl : global::System.Windows.Controls.Primitives.Selector {
 		#region Public Fields
 		#region Dependency Properties
@@ -29,12 +29,18 @@ namespace System.Windows.Controls {
 
 		#region Static Constructor
 		static TabControl() {
+#if Implementation
 			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(TabControl), new FrameworkPropertyMetadata(typeof(TabControl)));
 		}
 		#endregion
 
 		#region Public Constructors
 		public TabControl() {
+			ItemContainerGenerator.StatusChanged += delegate(object sender, EventArgs e) {
+				EnsureATabItemIsSelected();
+			};
 		}
 		#endregion
 
@@ -49,22 +55,22 @@ namespace System.Windows.Controls {
 			get { return (DataTemplateSelector)GetValue(ContentTemplateSelectorProperty); }
 			set { SetValue(ContentTemplateSelectorProperty, value); }
 		}
-		
+
 		public object SelectedContent {
 			get { return GetValue(SelectedContentProperty); }
 			set { SetValue(SelectedContentProperty, value); }
 		}
-		
+
 		public DataTemplate SelectedContentTemplate {
 			get { return (DataTemplate)GetValue(SelectedContentTemplateProperty); }
 			set { SetValue(SelectedContentTemplateProperty, value); }
 		}
-		
+
 		public DataTemplateSelector SelectedContentTemplateSelector {
 			get { return (DataTemplateSelector)GetValue(SelectedContentTemplateSelectorProperty); }
 			set { SetValue(SelectedContentTemplateSelectorProperty, value); }
 		}
-		
+
 		[Bindable(true)]
 		public Dock TabStripPlacement {
 			get { return (Dock)GetValue(TabStripPlacementProperty); }
@@ -76,14 +82,6 @@ namespace System.Windows.Controls {
 		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
-			//ContentPresenter selected_content_host = GetTemplateChild("PART_SelectedContentHost") as ContentPresenter;
-			//if (selected_content_host == null)
-			//    return;
-			//Utility.SetBinding(selected_content_host, ContentPresenter.ContentTemplateProperty, this, "ContentTemplate");
-			//Utility.SetBinding(selected_content_host, ContentPresenter.ContentTemplateSelectorProperty, this, "ContentTemplateSelector");
-
-			if (SelectedItem != null)
-				SetSelectedPropertiesValue((TabItem)SelectedItem);
 		}
 		#endregion
 
@@ -106,41 +104,64 @@ namespace System.Windows.Controls {
 
 		protected override void OnInitialized(EventArgs e) {
 			base.OnInitialized(e);
-			if (SelectedItem != null)
-				SetSelectedPropertiesValue((TabItem)SelectedItem);
 		}
 
 		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
 			base.OnItemsChanged(e);
-			//if (e.NewItems.Count >= 1) {
-			//    TabItem tab_item = e.NewItems[0] as TabItem;
-			//    if (tab_item != null)
-			//        ;
-			//}
+			EnsureATabItemIsSelected();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>
+		/// This is not where selecting the tab in response to the keys happens.
+		/// </remarks>
 		protected override void OnKeyDown(KeyEventArgs e) {
+			if (
+				(e.Key == Key.Tab && e.KeyboardDevice.Modifiers == ModifierKeys.Control) ||
+				(e.Key == Key.Tab && e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift)) ||
+				(e.Key == Key.Home && e.KeyboardDevice.Modifiers == ModifierKeys.None) ||
+				(e.Key == Key.End && e.KeyboardDevice.Modifiers == ModifierKeys.None))
+				e.Handled = true;
 			base.OnKeyDown(e);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="e"></param>
+		/// <remarks>
+		/// If the user clicks a tab, this method is called. The content area is updated here.
+		/// </remarks>
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
 			base.OnSelectionChanged(e);
-			//if (Parent == null)
-			//	return;
-			if (e.AddedItems.Count == 0)
-				return;
-			TabItem tab_item = e.AddedItems[0] as TabItem;
-			if (tab_item == null)
-				return;
-			SetSelectedPropertiesValue(tab_item);
+			TabItem selectedTabItem = GetTabItemForItem(SelectedItem);
+			SelectedContent = selectedTabItem == null ? null : selectedTabItem.Content;
+			SelectedContentTemplate = selectedTabItem == null ? ContentTemplate : selectedTabItem.ContentTemplate ?? ContentTemplate;
+			SelectedContentTemplateSelector = selectedTabItem == null ? ContentTemplateSelector : selectedTabItem.ContentTemplateSelector ?? ContentTemplateSelector;
 		}
 		#endregion
 
 		#region Private Methods
-		void SetSelectedPropertiesValue(TabItem selectedTabItem) {
-			SelectedContent = selectedTabItem.Content;
-			SelectedContentTemplate = selectedTabItem.ContentTemplate ?? ContentTemplate;
-			SelectedContentTemplateSelector = selectedTabItem.ContentTemplateSelector ?? ContentTemplateSelector;
+		void EnsureATabItemIsSelected() {
+			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+				return;
+			if (Items.Count == 0)
+				return;
+			for (int item_index = 0; item_index < Items.Count; item_index++)
+				if (GetTabItemForItemAtIndex(item_index).IsSelected)
+					return;
+			GetTabItemForItemAtIndex(0).IsSelected = true;
+		}
+
+		TabItem GetTabItemForItem(object item) {
+			return (TabItem)ItemContainerGenerator.ContainerFromItem(item);
+		}
+
+		TabItem GetTabItemForItemAtIndex(int index) {
+			return (TabItem)ItemContainerGenerator.ContainerFromIndex(index);
 		}
 		#endregion
 	}
