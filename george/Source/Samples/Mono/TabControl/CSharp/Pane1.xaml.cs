@@ -18,18 +18,18 @@ namespace TabControl
     {
 
         Mono.System.Windows.Controls.TabControl tabcon;
-        System.Windows.Controls.TabItem ti1, ti2, ti3;
+		Mono.System.Windows.Controls.TabItem ti1, ti2, ti3;
 
         void OnClick(object sender, RoutedEventArgs e)
         {
 			tabcon = new Mono.System.Windows.Controls.TabControl();
-            ti1 = new TabItem();
+			ti1 = new Mono.System.Windows.Controls.TabItem();
             ti1.Header = "Background";
             tabcon.Items.Add(ti1);
-            ti2 = new TabItem();
+			ti2 = new Mono.System.Windows.Controls.TabItem();
             ti2.Header = "Foreground";
             tabcon.Items.Add(ti2);
-            ti3 = new TabItem();
+			ti3 = new Mono.System.Windows.Controls.TabItem();
             ti3.Header = "FontFamily";
             tabcon.Items.Add(ti3);
 

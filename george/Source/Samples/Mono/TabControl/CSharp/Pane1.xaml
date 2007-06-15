@@ -35,24 +35,24 @@
     <DockPanel Margin="30, 10, 3, 3" Grid.Column="0" Grid.Row="2">
 
       <mono_sytem_windows_controls:TabControl TabStripPlacement="Top" Margin="0, 0, 0, 10">
-        <TabItem Name="tabIitemContent" Header="TabItem with Buttons">
+        <mono_sytem_windows_controls:TabItem Name="tabIitemContent" Header="TabItem with Buttons">
           <StackPanel>
             <Button Content="_OK"/>
             <Button Content="_Cancel"/>
           </StackPanel>
-        </TabItem>
+        </mono_sytem_windows_controls:TabItem>
 
-        <TabItem Name="backgroundcolor" Header="Background">
-          <TabItem.Content>Background property information goes here.</TabItem.Content>
-        </TabItem>
+        <mono_sytem_windows_controls:TabItem Name="backgroundcolor" Header="Background">
+          <mono_sytem_windows_controls:TabItem.Content>Background property information goes here.</mono_sytem_windows_controls:TabItem.Content>
+        </mono_sytem_windows_controls:TabItem>
 
-        <TabItem Name="foregroundcolor" Header="Foreground">
-          <TabItem.Content>Foreground property information goes here.</TabItem.Content>
-        </TabItem>
+        <mono_sytem_windows_controls:TabItem Name="foregroundcolor" Header="Foreground">
+          <mono_sytem_windows_controls:TabItem.Content>Foreground property information goes here.</mono_sytem_windows_controls:TabItem.Content>
+        </mono_sytem_windows_controls:TabItem>
 
-        <TabItem Name="bordercolor" Header="BorderColor">
-          <TabItem.Content>Border color property information goes here.</TabItem.Content>
-        </TabItem>
+        <mono_sytem_windows_controls:TabItem Name="bordercolor" Header="BorderColor">
+          <mono_sytem_windows_controls:TabItem.Content>Border color property information goes here.</mono_sytem_windows_controls:TabItem.Content>
+        </mono_sytem_windows_controls:TabItem>
       </mono_sytem_windows_controls:TabControl>
 
     </DockPanel>
@@ -63,21 +63,21 @@
 
     <DockPanel Margin="30, 10, 3, 3" Grid.Column="0" Grid.Row="3">
       <mono_sytem_windows_controls:TabControl TabStripPlacement="Left" Margin="0, 0, 0, 10">
-        <TabItem Name="fontweight" Header="FontWeight">
-          <TabItem.Content>
+        <mono_sytem_windows_controls:TabItem Name="fontweight" Header="FontWeight">
+          <mono_sytem_windows_controls:TabItem.Content>
             <TextBlock TextWrapping="WrapWithOverflow">
               FontWeight property information goes here.
             </TextBlock>
-          </TabItem.Content>
-        </TabItem>
+          </mono_sytem_windows_controls:TabItem.Content>
+        </mono_sytem_windows_controls:TabItem>
 
-        <TabItem Name="fontsize" Header="FontSize">
-          <TabItem.Content>
+        <mono_sytem_windows_controls:TabItem Name="fontsize" Header="FontSize">
+          <mono_sytem_windows_controls:TabItem.Content>
             <TextBlock TextWrapping="WrapWithOverflow">
               FontSize property information goes here.
             </TextBlock>
-          </TabItem.Content>
-        </TabItem>
+          </mono_sytem_windows_controls:TabItem.Content>
+        </mono_sytem_windows_controls:TabItem>
       </mono_sytem_windows_controls:TabControl>
     </DockPanel>
     <TextBlock Margin="10, 10, 3, 3" Grid.Column="1" Grid.Row="3" FontSize="12" 
