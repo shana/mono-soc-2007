@@ -41,7 +41,7 @@ namespace CBinding
 	{
 		string path;
 		
-		public AddPathDialog ()
+		public AddPathDialog (string currentDir)
 		{
 			this.Build ();
 			
@@ -50,7 +50,7 @@ namespace CBinding
 			filter.AddMimeType ("x-directory/normal");
 			filter.Name = "Folders";
 			
-			filechooserwidget1.SetCurrentFolder ("/usr");
+			filechooserwidget1.SetCurrentFolder (currentDir);
 			filechooserwidget1.AddFilter (filter);
 			
 			buttonOk.Clicked += OnOkButtonClick;

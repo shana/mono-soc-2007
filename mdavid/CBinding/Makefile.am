@@ -34,12 +34,14 @@ FILES = \
 	Gui/ProjectPackagesFolderNodeBuilder.cs \
 	Gui/EditPackagesDialog.cs \
 	Gui/ProjectPackageNodeBuilder.cs \
+	Gui/OutputOptionsPanel.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
 	gtk-gui/CBinding.CompilerPanel.cs \
 	gtk-gui/CBinding.AddLibraryDialog.cs \
 	gtk-gui/CBinding.AddPathDialog.cs \
 	gtk-gui/CBinding.EditPackagesDialog.cs \
+	gtk-gui/CBinding.OutputOptionsPanel.cs \
 	Compiler/ICompiler.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GNUCompiler.cs \
