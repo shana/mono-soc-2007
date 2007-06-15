@@ -57,8 +57,11 @@ namespace CBinding
 			StringBuilder args = new StringBuilder ();
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());
 			bool res = false;
-			string outputName = configuration.OutputDirectory + "/" +
-				configuration.CompiledOutputName;
+			
+			string outputName = string.Format ("{0}/{1}",
+			    configuration.OutputDirectory,
+			    configuration.CompiledOutputName);
+			
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
 			

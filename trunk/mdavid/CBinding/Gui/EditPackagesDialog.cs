@@ -31,6 +31,7 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 using Mono.Addins;
 
@@ -64,17 +65,11 @@ namespace CBinding
 			
 			selectedPackagesTreeView.Model = selectedPackagesListStore;
 			selectedPackagesTreeView.HeadersVisible = true;
-			selectedPackagesTreeView.AppendColumn ("ProjectPackage", textRenderer, "text", 0);
+			selectedPackagesTreeView.AppendColumn ("Package", textRenderer, "text", 0);
 			selectedPackagesTreeView.AppendColumn ("Version", textRenderer, "text", 1);
 			
-			string pkg_path = Environment.GetEnvironmentVariable ("PKG_CONFIG_PATH");
-			string[] dirs = null;
-			
-			if (pkg_path != null)
-				dirs = pkg_path.Split (':');
-			
-			if (dirs != null && dirs.Length > 0) {
-				foreach (string dir in dirs) {
+			foreach (string dir in ScanDirs ()) {
+				if (Directory.Exists (dir)) {				
 					DirectoryInfo di = new DirectoryInfo (dir);
 					FileInfo[] availablePackages = di.GetFiles ("*.pc");
 					
@@ -89,25 +84,35 @@ namespace CBinding
 							selectedPackagesListStore.AppendValues (name, version);
 					}
 				}
-			} else {
-				DirectoryInfo di = new DirectoryInfo (@"/usr/lib/pkgconfig");
-				FileInfo[] availablePackages = di.GetFiles ("*.pc");
-				
-				foreach (FileInfo f in availablePackages) {
-					if (!IsValidPackage (f.FullName)) continue;
-					string name = f.Name.Substring (0, f.Name.LastIndexOf ('.'));
-					string version = GetPackageVersion (f.FullName);
-					bool inProject = IsInProject (name);
-					packageListStore.AppendValues (inProject, name, version);
-					
-					if (inProject)
-						selectedPackagesListStore.AppendValues (name, version);
-				}
 			}
 			
 			buttonOk.Clicked += OnOkButtonClick;
 			buttonCancel.Clicked += OnCancelButtonClick;
 			removeButton.Clicked += OnRemoveButtonClick;
+		}
+		
+		private string[] ScanDirs ()
+		{
+			List<string> dirs = new List<string> ();
+			string pkg_var = Environment.GetEnvironmentVariable ("PKG_CONFIG_PATH");
+			string[] pkg_paths;
+			
+			dirs.Add ("/usr/lib/pkgconfig");
+			dirs.Add ("/usr/share/pkgconfig");
+			dirs.Add ("/usr/local/lib/pkgconfig");
+			dirs.Add ("/usr/local/share/pkgconfig");
+			
+			if (pkg_var == null) return dirs.ToArray ();
+			
+			pkg_paths = pkg_var.Split (':');
+			
+			foreach (string dir in pkg_paths) {
+				if (!dirs.Contains (dir)) {
+					dirs.Add (dir);
+				}
+			}
+			
+			return dirs.ToArray ();
 		}
 		
 		private void OnOkButtonClick (object sender, EventArgs e)

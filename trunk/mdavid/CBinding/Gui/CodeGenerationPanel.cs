@@ -56,17 +56,19 @@ namespace CBinding
 			configuration = (CProjectConfiguration)customizationObject.GetProperty ("Config");
 			compilationParameters = (CCompilationParameters)configuration.CompilationParameters;
 			
+			Gtk.CellRendererText textRenderer = new Gtk.CellRendererText ();
+			
 			libTreeView.Model = libStore;
 			libTreeView.HeadersVisible = false;
-			libTreeView.AppendColumn ("Library", new Gtk.CellRendererText (), "text", 0);
+			libTreeView.AppendColumn ("Library", textRenderer, "text", 0);
 			
 			libPathTreeView.Model = libPathStore;
 			libPathTreeView.HeadersVisible = false;
-			libPathTreeView.AppendColumn ("Library", new Gtk.CellRendererText (), "text", 0);
+			libPathTreeView.AppendColumn ("Library", textRenderer, "text", 0);
 			
 			includePathTreeView.Model = includePathStore;
 			includePathTreeView.HeadersVisible = false;
-			includePathTreeView.AppendColumn ("Include", new Gtk.CellRendererText (), "text", 0);
+			includePathTreeView.AppendColumn ("Include", textRenderer, "text", 0);
 			
 			switch (compilationParameters.WarningLevel)
 			{
@@ -174,14 +176,14 @@ namespace CBinding
 		
 		private void OnIncludePathBrowseButtonClick (object sender, EventArgs e)
 		{
-			AddPathDialog dialog = new AddPathDialog ();
+			AddPathDialog dialog = new AddPathDialog ("/usr/include");
 			dialog.Run ();
 			includePathEntry.Text = dialog.SelectedPath;
 		}
 		
 		private void OnLibPathBrowseButtonClick (object sender, EventArgs e)
 		{
-			AddPathDialog dialog = new AddPathDialog ();
+			AddPathDialog dialog = new AddPathDialog ("/usr/lib");
 			dialog.Run ();
 			libPathEntry.Text = dialog.SelectedPath;
 		}
@@ -250,7 +252,7 @@ namespace CBinding
 	
 	public class CodeGenerationPanelBinding : AbstractOptionPanel
 	{
-		CodeGenerationPanel panel;
+		private CodeGenerationPanel panel;
 		
 		public override void LoadPanelContents ()
 		{
