@@ -59,7 +59,9 @@ namespace System.Windows.Controls {
 		class GetContainerForItemOverrideTabControl : TabControl {
 			public GetContainerForItemOverrideTabControl() {
 				object result = GetContainerForItemOverride();
-				Assert.AreEqual(result.GetType(), typeof(TabItem));
+				TabItem tab_item = result as TabItem;
+				Assert.IsNotNull(tab_item, "1");
+				Assert.IsNull(tab_item.Parent, "2");
 			}
 		}
 		#endregion
@@ -229,5 +231,26 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void Focusable() {
+			TabControl t = new TabControl();
+			Assert.IsTrue(t.Focusable);
+		}
+
+		[Test]
+		public void ItemsStoresThings() {
+			TabControl t = new TabControl();
+			t.Items.Add("Test");
+			Assert.AreEqual(t.Items[0], "Test");
+		}
+
+		[Test]
+		public void GeneratedTabItem() {
+			TabControl t = new TabControl();
+			t.Items.Add("Test");
+			TabItem tab_item = (TabItem)t.ItemContainerGenerator.ContainerFromIndex(0);
+			Assert.IsNull(tab_item);
+		}
 	}
 }
