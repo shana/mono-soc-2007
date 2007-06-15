@@ -184,11 +184,6 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Running project...");
 			
-//			MonoDevelop.Ide.Gui.IdeApp.Services.MessageService.ShowMessage (
-//			    "command: " + command + "\n" +
-//			    "args: " + args + "\n" +
-//			    "dir: " + dir);
-			
 			if (conf.ExternalConsole)
 				console = context.ExternalConsoleFactory.CreateConsole (!pause);
 			else
@@ -196,22 +191,26 @@ namespace CBinding
 			
 			AggregatedOperationMonitor operationMonitor = new AggregatedOperationMonitor (monitor);
 			
-			IExecutionHandler handler = context.ExecutionHandlerFactory.CreateExecutionHandler (platform);
-			
-			if (handler == null) {
-				monitor.ReportError ("Can not execute \"" + command + "\". The selected execution mode is not supported in the " + platform + " platform.", null);
-				return;
+			try {
+				IExecutionHandler handler = context.ExecutionHandlerFactory.CreateExecutionHandler (platform);
+				
+				if (handler == null) {
+					monitor.ReportError ("Cannot execute \"" + command + "\". The selected execution mode is not supported in the " + platform + " platform.", null);
+					return;
+				}
+				
+				IProcessAsyncOperation op = handler.Execute (Path.Combine (dir, command), args, dir, console);
+				
+				operationMonitor.AddOperation (op);
+				op.WaitForCompleted ();
+				
+				monitor.Log.WriteLine ("The operation exited with code: {0}", op.ExitCode);
+			} catch (Exception ex) {
+				monitor.ReportError ("Cannot execute \"" + command + "\"", ex);
+			} finally {			
+				operationMonitor.Dispose ();			
+				console.Dispose ();
 			}
-			
-			IProcessAsyncOperation op = handler.Execute (command, args, dir, console);
-			
-			operationMonitor.AddOperation (op);
-			op.WaitForCompleted ();
-			
-			monitor.Log.WriteLine ("The operation exited with code: {0}", op.ExitCode);
-			
-			operationMonitor.Dispose ();			
-			console.Dispose ();			    
 		}
 		
 		public override string GetOutputFileName ()

@@ -39,8 +39,8 @@ namespace CBinding
 	public partial class EditPackagesDialog : Gtk.Dialog
 	{
 		// TODO: add perhaps an icon?
-		private Gtk.TreeStore packageListStore = new Gtk.TreeStore (typeof(bool), typeof(string), typeof(string));
-		private Gtk.TreeStore selectedPackagesListStore = new Gtk.TreeStore (typeof(string), typeof(string));
+		private Gtk.ListStore packageListStore = new Gtk.ListStore (typeof(bool), typeof(string), typeof(string));
+		private Gtk.ListStore selectedPackagesListStore = new Gtk.ListStore (typeof(string), typeof(string));
 		private CProject project;
 		
 		public EditPackagesDialog(CProject project)
@@ -54,16 +54,18 @@ namespace CBinding
 			package_toggle.Toggled += OnPackageToggled;
 			package_toggle.Xalign = 0;
 			
+			Gtk.CellRendererText textRenderer = new Gtk.CellRendererText ();
+			
 			packageTreeView.Model = packageListStore;
 			packageTreeView.HeadersVisible = true;
 			packageTreeView.AppendColumn ("", package_toggle, "active", 0);
-			packageTreeView.AppendColumn ("ProjectPackage", new Gtk.CellRendererText (), "text", 1);
-			packageTreeView.AppendColumn ("Version", new Gtk.CellRendererText (), "text", 2);
+			packageTreeView.AppendColumn ("ProjectPackage", textRenderer, "text", 1);
+			packageTreeView.AppendColumn ("Version", textRenderer, "text", 2);
 			
 			selectedPackagesTreeView.Model = selectedPackagesListStore;
 			selectedPackagesTreeView.HeadersVisible = true;
-			selectedPackagesTreeView.AppendColumn ("ProjectPackage", new Gtk.CellRendererText (), "text", 0);
-			selectedPackagesTreeView.AppendColumn ("Version", new Gtk.CellRendererText (), "text", 1);
+			selectedPackagesTreeView.AppendColumn ("ProjectPackage", textRenderer, "text", 0);
+			selectedPackagesTreeView.AppendColumn ("Version", textRenderer, "text", 1);
 			
 			string pkg_path = Environment.GetEnvironmentVariable ("PKG_CONFIG_PATH");
 			string[] dirs = null;
