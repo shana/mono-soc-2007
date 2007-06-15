@@ -1,3 +1,7 @@
+2007-06-15  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs, TabItem.cs: Partially implemented.
+
 2007-06-14  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Panel.cs: Some changes to support IsItemsHost (incomplete).
