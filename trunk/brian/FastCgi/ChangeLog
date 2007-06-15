@@ -1,3 +1,8 @@
+2007-06-15 Brian Nickel <brian.nickel@gmail.com>
+
+	* Mono.FastCgi/Logger.cs: Made singleton to take advantage of
+	destructor. Documented completely.
+
 2007-06-14 Brian Nickel <brian.nickel@gmail.com>
 
 	* Mono.FastCgi/Structures/Record.cs: Use Mono.FastCgi.Socket instead of
