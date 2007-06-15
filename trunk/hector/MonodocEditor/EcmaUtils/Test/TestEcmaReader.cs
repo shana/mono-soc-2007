@@ -1,4 +1,4 @@
-///
+//
 // TestEcmaReader.cs: Test unit for EcmaReader class.
 //
 // Author:
