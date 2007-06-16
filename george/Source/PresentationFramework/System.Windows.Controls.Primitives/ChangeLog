@@ -1,5 +1,9 @@
 2007-06-16  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabPanel.cs: Fixed multiple row layout.
+
+2007-06-16  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabPanel.cs: Fixed MeasureOverride.
 
 2007-06-14  George Giolfan  <georgegiolfan@yahoo.com>
