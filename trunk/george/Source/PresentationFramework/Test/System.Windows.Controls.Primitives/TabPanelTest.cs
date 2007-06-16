@@ -121,5 +121,18 @@ namespace System.Windows.Controls.Primitives {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void LimitedWidth() {
+			TabPanel t = new TabPanel();
+			for (int i = 0; i < 5; i++) {
+				TabItem tab_item = new TabItem();
+				tab_item.Width = 100;
+				t.Children.Add(tab_item);
+			}
+			t.Measure(new Size(100, double.PositiveInfinity));
+			Assert.AreEqual(t.DesiredSize.Width, 100, "1");
+			Assert.AreEqual(t.DesiredSize.Height, 25, "2");
+		}
 	}
 }
