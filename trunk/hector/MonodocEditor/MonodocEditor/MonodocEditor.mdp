@@ -35,6 +35,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Project" localcopy="True" refto="EcmaUtils" />
   </References>
-  <GtkDesignInfo partialTypes="True" />
   <Deployment.LinuxDeployData scriptName="monodoc-editor" />
+  <GtkDesignInfo partialTypes="True" />
 </Project>

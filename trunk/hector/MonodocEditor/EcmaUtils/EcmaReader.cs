@@ -39,9 +39,21 @@ public class EcmaReader {
 		}
 	}
 	
+	public XmlDocument Document {
+		get {
+			return document;
+		}
+	}
+	
 	public string Text {
 		get {
 			return document.OuterXml;
+		}
+	}
+	
+	public bool Valid {
+		get {
+			return val_success;
 		}
 	}
 	
