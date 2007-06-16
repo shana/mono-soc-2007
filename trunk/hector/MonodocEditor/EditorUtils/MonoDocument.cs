@@ -9,7 +9,7 @@
 using System;
 using System.Xml;
 
-namespace Monodoc.EcmaUtils {
+namespace Monodoc.EditorUtils {
 public class MonoDocument {
 	private XmlDocument document;
 	private XmlNode root_element;

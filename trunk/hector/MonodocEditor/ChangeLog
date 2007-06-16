@@ -1,6 +1,16 @@
 2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MonodocEditor/EditorWindow.cs, MonodocEditor/MonodocEditor.mdp,
+	  Packages.mdse, MonodocEditor.mds, EditorUtils/AssemblyInfo.cs,
+	  EditorUtils/Test/TestMonoDocument.cs,
+	  EditorUtils/Test/TestEcmaReader.cs, EditorUtils/Test.cs,
+	  EditorUtils/EcmaUtils.mdp, EditorUtils/EditorUtils.mdp,
+	  EditorUtils/MonoDocument.cs, EditorUtils/EcmaReader.cs: Changed
+	  name of subproject EcmaUtils to EditorUtils.
+
+2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonodocEditor/EditorWindow.cs, MonodocEditor/MonodocEditor.mdp,
 	  EcmaUtils/MonoDocument.cs, EcmaUtils/EcmaReader.cs: Added the
 	  MonoDocument class.
 

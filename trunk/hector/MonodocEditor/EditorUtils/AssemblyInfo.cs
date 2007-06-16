@@ -10,10 +10,10 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("EcmaUtils")]
-[assembly: AssemblyDescription("Library with classes to create, modify and handle ECMA-based Documentation.")]
+[assembly: AssemblyTitle("EditorUtils")]
+[assembly: AssemblyDescription("Library with classes to create, modify and handle Monodoc Documentation.")]
 [assembly: AssemblyCompany("Mono Project")]
-[assembly: AssemblyProduct("EcmaUtils")]
+[assembly: AssemblyProduct("EditorUtils")]
 [assembly: AssemblyCopyright("2007 Hector E. Gomez M")]
 //[assembly: AssemblyConfiguration("")]
 //[assembly: AssemblyTrademark("")]
