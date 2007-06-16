@@ -32,6 +32,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.CodeDom.Compiler;
 
@@ -311,31 +312,44 @@ namespace CBinding
 			reader.Close ();
 		}
 		
+		private static Regex withColRegex = new Regex (
+		    @"^\s*(?<file>.*):(?<line>\d*):(?<column>\d*):\s*(?<level>.*)\s*:\s(?<message>.*)",
+		    RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+		private static Regex noColRegex = new Regex (
+		    @"^\s*(?<file>.*):(?<line>\d*):\s*(?<level>.*)\s*:\s(?<message>.*)",
+		    RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+		
 		// FIXME: needs to be improved
 		private CompilerError CreateErrorFromErrorString (string errorString)
 		{
 			CompilerError error = new CompilerError ();
-			string[] split;
 			
-			split = errorString.Split(new char[] { ':' });
+			Match withColMatch = withColRegex.Match (errorString);
 			
-			if (split.Length < 4)
-				return null;
-			
-			if (split.Length == 4) {
-				error.FileName = split[0];
-				error.Line = int.Parse (split[1]);
-				error.IsWarning = split[2].Equals ("warning");
-				error.ErrorText = split[3];
-			} else {
-				error.FileName = split[0];
-				error.Line = int.Parse (split[1]);
-				error.Column = int.Parse (split[2]);
-				error.IsWarning = split[3].Contains ("warning");
-				error.ErrorText = split[4];
+			if (withColMatch.Success)
+			{
+				error.FileName = withColMatch.Groups["file"].Value;
+				error.Line = int.Parse (withColMatch.Groups["line"].Value);
+				error.Column = int.Parse (withColMatch.Groups["column"].Value);
+				error.IsWarning = withColMatch.Groups["level"].Value.Equals ("warning");
+				error.ErrorText = withColMatch.Groups["message"].Value;
+				
+				return error;
 			}
 			
-			return error;
+			Match noColMatch = noColRegex.Match (errorString);
+			
+			if (noColMatch.Success)
+			{
+				error.FileName = noColMatch.Groups["file"].Value;
+				error.Line = int.Parse (noColMatch.Groups["line"].Value);
+				error.IsWarning = noColMatch.Groups["level"].Value.Equals ("warning");
+				error.ErrorText = noColMatch.Groups["message"].Value;
+				
+				return error;
+			}
+			
+			return null;
 		}
 		
 		protected override void ParseLinkerOutput (string errorString, CompilerResults cr)
