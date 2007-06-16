@@ -1,3 +1,9 @@
+2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonodocEditor/EditorWindow.cs, MonodocEditor/MonodocEditor.mdp,
+	  EcmaUtils/MonoDocument.cs, EcmaUtils/EcmaReader.cs: Added the
+	  MonoDocument class.
+
 2007-06-14  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* EcmaUtils/Test/TestMonoDocument.cs, EcmaUtils/Test/TestEcmaReader.cs,
