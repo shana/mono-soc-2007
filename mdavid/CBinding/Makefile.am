@@ -50,6 +50,7 @@ FILES = \
 
 RES = \
 	icons/C.File.Empty \
+	icons/C.Source.File.Empty \
 	icons/C.Project.Empty \
 	icons/Cpp.Project.Empty \
 	templates/EmptyCProject.xpt.xml \
