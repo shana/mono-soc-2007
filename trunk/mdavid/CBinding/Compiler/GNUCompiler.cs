@@ -319,7 +319,6 @@ namespace CBinding
 		    @"^\s*(?<file>.*):(?<line>\d*):\s*(?<level>.*)\s*:\s(?<message>.*)",
 		    RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 		
-		// FIXME: needs to be improved
 		private CompilerError CreateErrorFromErrorString (string errorString)
 		{
 			CompilerError error = new CompilerError ();
@@ -366,7 +365,7 @@ namespace CBinding
 			reader.Close ();
 		}
 		
-		// FIXME: needs to be improved
+		// FIXME: needs to be improved UPDATE: or does it...?
 		private CompilerError CreateLinkerErrorFromErrorString (string errorString)
 		{
 			CompilerError error = new CompilerError ();

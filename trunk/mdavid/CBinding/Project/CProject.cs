@@ -116,8 +116,8 @@ namespace CBinding
 				if (projectOptions != null) {
 					if (projectOptions.Attributes["Target"] != null) {
 						c.CompileTarget = (CBinding.CompileTarget)Enum.Parse (
-						     typeof(CBinding.CompileTarget),
-							 projectOptions.Attributes["Target"].InnerText);
+						    typeof(CBinding.CompileTarget),
+						    projectOptions.Attributes["Target"].InnerText);
 					}
 					if (projectOptions.Attributes["PauseConsoleOutput"] != null) {
 						c.PauseConsoleOutput = bool.Parse (

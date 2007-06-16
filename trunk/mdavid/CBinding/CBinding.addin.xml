@@ -44,8 +44,12 @@
 			resource = "res:C.Project.Empty"/>
     	<Icon
     		id = "CFile"
-			extensions = ".c"
+			extensions = ".h"
 			resource = "res:C.File.Empty"/>
+		<Icon
+    		id = "CSourceFile"
+			extensions = ".c,.cpp"
+			resource = "res:C.Source.File.Empty"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">
