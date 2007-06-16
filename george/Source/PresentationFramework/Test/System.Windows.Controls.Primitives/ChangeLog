@@ -1,3 +1,7 @@
+2007-06-16  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabPanelTest.cs: Added LimitedWidth test.
+
 2007-06-14  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabPanelTest.cs: Added Measure*Empty tests.
