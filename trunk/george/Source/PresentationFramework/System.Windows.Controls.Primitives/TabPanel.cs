@@ -71,14 +71,26 @@ namespace System.Windows.Controls.Primitives {
 
 		protected override Size MeasureOverride(Size availableSize) {
 			bool horizontal = GetHorizontal();
-			double used_width = 0;
-			double maximum_height = 0;
-			foreach (UIElement child in InternalChildren) {
+			double available_width = horizontal ? availableSize.Width : availableSize.Height;
+			double width = 0;
+			double height = 0;
+			int rows = 0;
+			bool limited_width = !double.IsPositiveInfinity(available_width) && double.IsPositiveInfinity(horizontal ? availableSize.Height : availableSize.Width);
+			for (int child_index = 0; child_index < InternalChildren.Count; child_index++) {
+				UIElement child = InternalChildren[child_index];
 				child.Measure(availableSize);
-				used_width += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
-				maximum_height = Math.Max(maximum_height, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
+				width += horizontal ? child.DesiredSize.Width : child.DesiredSize.Height;
+				if (limited_width && (width >= available_width || child_index == InternalChildren.Count - 1)) {
+					width = 0;
+					rows++;
+				}
+				height = Math.Max(height, horizontal ? child.DesiredSize.Height : child.DesiredSize.Width);
 			}
-			return horizontal ? new Size(used_width, maximum_height) : new Size(maximum_height, used_width);
+			if (limited_width) {
+				width = available_width;
+				height *= rows;
+			}
+			return horizontal ? new Size(width, height) : new Size(height, width);
 		}
 		#endregion
 
