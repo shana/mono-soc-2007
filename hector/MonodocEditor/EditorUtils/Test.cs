@@ -9,7 +9,7 @@
 using System;
 using System.IO;
 
-namespace Monodoc.EcmaUtils {
+namespace Monodoc.EditorUtils {
 public class Test {
 		
 	public static string PathOfTestFiles ()

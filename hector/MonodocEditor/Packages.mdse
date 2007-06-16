@@ -5,7 +5,7 @@
         <ChildEntries>
           <Entry>./MonodocEditor/MonodocEditor.mdp</Entry>
           <Entry>./Packages.mdse</Entry>
-          <Entry>./EcmaUtils/EcmaUtils.mdp</Entry>
+          <Entry>./EditorUtils/EditorUtils.mdp</Entry>
         </ChildEntries>
       </Builder>
     </Package>

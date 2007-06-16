@@ -9,7 +9,7 @@
 
 using System;
 using Gtk;
-using Monodoc.EcmaUtils;
+using Monodoc.EditorUtils;
 
 namespace Monodoc.Editor {
 public partial class EditorWindow : Gtk.Window {

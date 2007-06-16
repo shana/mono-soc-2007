@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Reflection;
 
-namespace Monodoc.EcmaUtils {
+namespace Monodoc.EditorUtils {
 public class EcmaReader {
 	private XmlDocument document;
 	private bool val_success = true;
@@ -70,7 +70,7 @@ public class EcmaReader {
 		// Set the validation event handler
 		valReader.ValidationEventHandler += new ValidationEventHandler (ValidationCallBack);
 		
-		type = Type.GetType ("Monodoc.EcmaUtils.EcmaReader");
+		type = Type.GetType ("Monodoc.EditorUtils.EcmaReader");
 		xsdStream = Assembly.GetAssembly (type).GetManifestResourceStream ("monodoc-ecma.xsd");
 		
 		schema = XmlSchema.Read (xsdStream, ValidationCallBack);

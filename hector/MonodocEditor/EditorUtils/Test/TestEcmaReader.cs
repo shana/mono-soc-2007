@@ -10,7 +10,7 @@ using System;
 using System.IO;
 using NUnit.Framework;
 
-namespace Monodoc.EcmaUtils {
+namespace Monodoc.EditorUtils {
 [TestFixture()]
 public class TestEcmaReader {
 	
@@ -24,7 +24,7 @@ public class TestEcmaReader {
 		
 		filePath = Test.PathOfTestFiles ();
 		pathTest = Path.Combine (filePath, "Examples");
-		type = Type.GetType ("Monodoc.EcmaUtils.EcmaReader");
+		type = Type.GetType ("Monodoc.EditorUtils.EcmaReader");
 	}
 	
 	[Test()]
