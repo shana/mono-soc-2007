@@ -1,3 +1,7 @@
+2007-06-16  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabPanel.cs: Fixed MeasureOverride.
+
 2007-06-14  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabPanel.cs: Switched to Microsoft Panel as it needs to interact with ItemsControl and I don't know how to do that.
