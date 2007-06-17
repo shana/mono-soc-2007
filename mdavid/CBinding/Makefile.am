@@ -16,46 +16,47 @@ REFS = \
 	$(GTK_SHARP_LIBS)
 	
 
-FILES = \
+FILES =  \
 	CLanguageBinding.cs \
+	Compiler/CCompiler.cs \
+	Compiler/GccCompiler.cs \
+	Compiler/GNUCompiler.cs \
+	Compiler/GppCompiler.cs \
+	Compiler/ICompiler.cs \
+	gtk-gui/CBinding.AddLibraryDialog.cs \
+	gtk-gui/CBinding.AddPathDialog.cs \
+	gtk-gui/CBinding.CodeGenerationPanel.cs \
+	gtk-gui/CBinding.CompilerPanel.cs \
+	gtk-gui/CBinding.EditPackagesDialog.cs \
+	gtk-gui/CBinding.OutputOptionsPanel.cs \
+	gtk-gui/generated.cs \
+	Gui/AddLibraryDialog.cs \
+	Gui/AddPathDialog.cs \
+	Gui/CodeGenerationPanel.cs \
+	Gui/CompilerPanel.cs \
+	Gui/EditPackagesDialog.cs \
+	Gui/OutputOptionsPanel.cs \
+	Gui/ProjectNodeExtension.cs \
+	Gui/ProjectPackageNodeBuilder.cs \
+	Gui/ProjectPackagesFolderNodeBuilder.cs \
+	Gui/ProjectReferencesExtension.cs \
 	Project/CCompilationParameters.cs \
 	Project/CProject.cs \
 	Project/CProjectBinding.cs \
 	Project/CProjectConfiguration.cs \
-	Project/ProjectPackageCollection.cs \
+	Project/CProjectServiceExtension.cs \
 	Project/ProjectPackage.cs \
-	Project/ProjectPackageEventArgs.cs \
-	Gui/CodeGenerationPanel.cs \
-	Gui/CompilerPanel.cs \
-	Gui/AddLibraryDialog.cs \
-	Gui/AddPathDialog.cs \
-	Gui/ProjectReferencesExtension.cs \
-	Gui/ProjectNodeExtension.cs \
-	Gui/ProjectPackagesFolderNodeBuilder.cs \
-	Gui/EditPackagesDialog.cs \
-	Gui/ProjectPackageNodeBuilder.cs \
-	Gui/OutputOptionsPanel.cs \
-	gtk-gui/generated.cs \
-	gtk-gui/CBinding.CodeGenerationPanel.cs \
-	gtk-gui/CBinding.CompilerPanel.cs \
-	gtk-gui/CBinding.AddLibraryDialog.cs \
-	gtk-gui/CBinding.AddPathDialog.cs \
-	gtk-gui/CBinding.EditPackagesDialog.cs \
-	gtk-gui/CBinding.OutputOptionsPanel.cs \
-	Compiler/ICompiler.cs \
-	Compiler/CCompiler.cs \
-	Compiler/GNUCompiler.cs \
-	Compiler/GccCompiler.cs \
-	Compiler/GppCompiler.cs
+	Project/ProjectPackageCollection.cs \
+	Project/ProjectPackageEventArgs.cs
 
-RES = \
+RES =  \
 	icons/C.File.Empty \
-	icons/C.Source.File.Empty \
 	icons/C.Project.Empty \
+	icons/C.Source.File.Empty \
 	icons/Cpp.Project.Empty \
-	templates/EmptyCProject.xpt.xml \
 	templates/EmptyCFile.xft.xml \
-	templates/EmptyCppProject.xpt.xml
+	templates/EmptyCppProject.xpt.xml \
+	templates/EmptyCProject.xpt.xml
 
 ADDIN = CBinding.addin.xml
 

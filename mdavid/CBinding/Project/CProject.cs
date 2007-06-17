@@ -216,7 +216,7 @@ namespace CBinding
 		public override string GetOutputFileName ()
 		{
 			CProjectConfiguration conf = (CProjectConfiguration)ActiveConfiguration;
-			return conf.Name;
+			return conf.OutputDirectory + "/" + conf.Output;
 		}
 		
 		public override IConfiguration CreateConfiguration (string name)
