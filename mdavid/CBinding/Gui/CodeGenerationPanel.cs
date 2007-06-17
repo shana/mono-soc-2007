@@ -98,9 +98,13 @@ namespace CBinding
 				break;
 			}
 			
-			extraArgsEntry.Text = compilationParameters.ExtraCompilerArguments;
+			extraCompilerTextView.Buffer.Text = SingleLineToMultiline (
+			    compilationParameters.ExtraCompilerArguments);
 			
-			extraLinkerArgsEntry.Text = compilationParameters.ExtraLinkerArguments;
+			extraLinkerTextView.Buffer.Text = SingleLineToMultiline (
+			    compilationParameters.ExtraLinkerArguments);
+			
+			defineSymbolsTextEntry.Text = compilationParameters.DefineSymbols;
 			
 			foreach (string lib in configuration.Libs)
 				libStore.AppendValues (lib);
@@ -120,6 +124,16 @@ namespace CBinding
 			browseButton.Clicked += OnBrowseButtonClick;
 			includePathBrowseButton.Clicked += OnIncludePathBrowseButtonClick;
 			libPathBrowseButton.Clicked += OnLibPathBrowseButtonClick;
+		}
+		
+		private string SingleLineToMultiline (string line)
+		{
+			return line.Replace (' ', '\n');
+		}
+		
+		private string MultilineToSingle (string multiline)
+		{
+			return multiline.Replace ('\n', ' ');
 		}
 		
 		private void OnIncludePathAdded (object sender, EventArgs e)
@@ -218,9 +232,13 @@ namespace CBinding
 				break;
 			}
 			
-			compilationParameters.ExtraCompilerArguments = extraArgsEntry.Text;
+			compilationParameters.ExtraCompilerArguments = MultilineToSingle (
+			    extraCompilerTextView.Buffer.Text);
 			
-			compilationParameters.ExtraLinkerArguments = extraLinkerArgsEntry.Text;
+			compilationParameters.ExtraLinkerArguments = MultilineToSingle (
+			    extraLinkerTextView.Buffer.Text);
+			
+			compilationParameters.DefineSymbols = defineSymbolsTextEntry.Text;
 			
 			libStore.GetIterFirst (out iter);
 			configuration.Libs.Clear ();

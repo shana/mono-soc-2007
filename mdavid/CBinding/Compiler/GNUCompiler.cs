@@ -85,6 +85,9 @@ namespace CBinding
 			if (cp.ExtraCompilerArguments != null && cp.ExtraCompilerArguments.Length > 0)
 				args.Append (cp.ExtraCompilerArguments + " ");
 			
+			if (cp.DefineSymbols != null && cp.DefineSymbols.Length > 0)
+				args.Append (ProcessDefineSymbols (cp.DefineSymbols) + " ");
+			
 			if (configuration.Includes != null)
 				foreach (string inc in configuration.Includes)
 					args.Append ("-I" + inc + " ");
@@ -252,6 +255,25 @@ namespace CBinding
 			error.Close ();
 			
 			ParseLinkerOutput (error.ToString (), cr);
+		}
+		
+		private string ProcessDefineSymbols (string symbols)
+		{
+			StringBuilder processed = new StringBuilder (symbols);
+			
+			// Take care of multi adyacent spaces
+			for (int i = 0; i < processed.Length; i++) {
+				if (i + 1 < processed.Length &&
+				    processed[i] == ' ' &&
+				    processed[i + 1] == ' ') {
+					processed.Remove (i--, 1);
+				}
+			}
+			
+			return processed.ToString ()
+				            .Trim ()
+				            .Replace (" ", " -D")
+				            .Insert (0, "-D");
 		}
 		
 		/// <summary>

@@ -1,0 +1,7 @@
+2007-06-17  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Gui/CodeGenerationPanel.cs, Project/CCompilationParameters.cs,
+	  Project/CProject.cs, Compiler/GNUCompiler.cs: The extra compiler
+	  and extra linker options is now shown is an TextView in the code
+	  generation panel and I added define symbols support.
+

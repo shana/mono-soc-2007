@@ -96,7 +96,7 @@ namespace CBinding
 			CProjectConfiguration configuration =
 				(CProjectConfiguration)CreateConfiguration ("Debug");
 			
-			(configuration.CompilationParameters as CCompilationParameters).ExtraCompilerArguments = "-DDEBUG ";			
+			((CCompilationParameters)configuration.CompilationParameters).DefineSymbols = "DEBUG MONODEVELOP";		
 				
 			Configurations.Add (configuration);
 			
@@ -105,6 +105,7 @@ namespace CBinding
 				
 			configuration.DebugMode = false;
 			((CCompilationParameters)configuration.CompilationParameters).OptimizationLevel = 3;
+			((CCompilationParameters)configuration.CompilationParameters).DefineSymbols = "MONODEVELOP";
 			Configurations.Add (configuration);
 			
 			foreach (CProjectConfiguration c in Configurations) {
@@ -125,12 +126,12 @@ namespace CBinding
 					}
 					if (projectOptions.Attributes["CompilerArgs"].InnerText != null) {
 						if (parameters != null) {
-							parameters.ExtraCompilerArguments += projectOptions.Attributes["CompilerArgs"].InnerText;
+							parameters.ExtraCompilerArguments = projectOptions.Attributes["CompilerArgs"].InnerText;
 						}
 					}
 					if (projectOptions.Attributes["LinkerArgs"].InnerText != null) {
 						if (parameters != null) {
-							parameters.ExtraLinkerArguments += projectOptions.Attributes["LinkerArgs"].InnerText;
+							parameters.ExtraLinkerArguments = projectOptions.Attributes["LinkerArgs"].InnerText;
 						}
 					}
 				}
