@@ -1,5 +1,15 @@
 2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Added two new classes to
+	  project.
+	* Monodoc.Editor.Gui/DocumentTagTable.cs: Added DocumentTagTable based
+	  in Gtk.TextTagTable.
+	* Monodoc.Editor.Gui/DocumentEditor.cs: Minor changes.
+	* Monodoc.Editor.Gui/DocumentBuffer.cs: Added DocumentBuffer class that
+	  is based in Gtk.TextBuffer.
+
+2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor/EditorWindow.cs, Monodoc.Editor/Monodoc.Editor.mdp,
 	  Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
 	  Monodoc.Editor/gtk-gui/gui.stetic: Using DocumentEditor in
