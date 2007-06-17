@@ -51,6 +51,7 @@ namespace System.Windows.Controls.Primitives {
 		[Bindable(true)]
 		public bool IsDragging {
 			get { return (bool)GetValue(IsDraggingProperty); }
+			private set { SetValue(IsDraggingPropertyKey, value); }
 		}
 
 		#endregion
@@ -79,7 +80,7 @@ namespace System.Windows.Controls.Primitives {
 			ignore_mouse_move = true;
 			CaptureMouse();
 			ignore_mouse_move = false;
-			IsDraggingInternal = true;
+			IsDragging = true;
 			Point mouse_position = e.MouseDevice.GetPosition(this);
 			initial_position_x = mouse_position.X;
 			initial_position_y = mouse_position.Y;
@@ -92,7 +93,7 @@ namespace System.Windows.Controls.Primitives {
 		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
 			base.OnMouseLeftButtonUp(e);
 			ReleaseMouseCapture();
-			IsDraggingInternal = false;
+			IsDragging = false;
 			DragCompletedEventArgs event_args = new DragCompletedEventArgs(last_delta_position_x, last_delta_position_y, false);
 			event_args.RoutedEvent = DragCompletedEvent;
 			RaiseEvent(event_args);
@@ -129,12 +130,6 @@ namespace System.Windows.Controls.Primitives {
 		public event DragStartedEventHandler DragStarted {
 			add { AddHandler(DragStartedEvent, value); }
 			remove { RemoveHandler(DragStartedEvent, value); }
-		}
-		#endregion
-
-		#region Private Properties
-		bool IsDraggingInternal {
-			set { SetValue(IsDraggingPropertyKey, value); }
 		}
 		#endregion
 	}

@@ -72,6 +72,7 @@ namespace System.Windows.Controls.Primitives {
 
 		public bool IsPressed {
 			get { return (bool)GetValue(IsPressedProperty); }
+			private set { SetValue(IsPressedPropertyKey, value); }
 		}
 		#endregion
 		#endregion
@@ -101,7 +102,7 @@ namespace System.Windows.Controls.Primitives {
 		protected override void OnKeyDown(KeyEventArgs e) {
 			base.OnKeyDown(e);
 			if (IsButtonKey(e)) {
-				IsPressedInternal = true;
+				IsPressed = true;
 				if (ClickMode == ClickMode.Press)
 					OnClick();
 			}
@@ -109,7 +110,7 @@ namespace System.Windows.Controls.Primitives {
 
 		protected override void OnKeyUp(KeyEventArgs e) {
 			base.OnKeyUp(e);
-			IsPressedInternal = false;
+			IsPressed = false;
 			if (IsButtonKey(e))
 				if (ClickMode == ClickMode.Release)
 					OnClick();
@@ -123,13 +124,13 @@ namespace System.Windows.Controls.Primitives {
 		protected override void OnLostMouseCapture(MouseEventArgs e) {
 			base.OnLostMouseCapture(e);
 			should_set_is_pressed_when_the_mouse_is_over_it = false;
-			IsPressedInternal = false;
+			IsPressed = false;
 		}
 
 		protected override void OnMouseEnter(MouseEventArgs e) {
 			base.OnMouseEnter(e);
 			if (ClickMode == ClickMode.Hover) {
-				IsPressedInternal = true;
+				IsPressed = true;
 				OnClick();
 			}
 		}
@@ -137,7 +138,7 @@ namespace System.Windows.Controls.Primitives {
 		protected override void OnMouseLeave(MouseEventArgs e) {
 			base.OnMouseLeave(e);
 			if (ClickMode == ClickMode.Hover)
-				IsPressedInternal = false;
+				IsPressed = false;
 		}
 
 		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
@@ -165,7 +166,7 @@ namespace System.Windows.Controls.Primitives {
 		protected override void OnMouseMove(MouseEventArgs e) {
 			base.OnMouseMove(e);
 			if (should_set_is_pressed_when_the_mouse_is_over_it)
-				IsPressedInternal = RectangleContainsPoint(0, 0, ActualWidth, ActualHeight, e.GetPosition(this));
+				IsPressed = RectangleContainsPoint(0, 0, ActualWidth, ActualHeight, e.GetPosition(this));
 		}
 
 		protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
@@ -181,12 +182,6 @@ namespace System.Windows.Controls.Primitives {
 			remove { RemoveHandler(ClickEvent, value); }
 		}
 		#endregion
-		#endregion
-
-		#region Private Properties
-		bool IsPressedInternal {
-			set { SetValue(IsPressedPropertyKey, value); }
-		}
 		#endregion
 
 		#region Private Methods
