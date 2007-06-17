@@ -1,5 +1,5 @@
 //
-// DocumentEditor.cs: Main window of the app.
+// DocumentEditor.cs: TextView based class that represent the editor for Monodoc documentation..
 //
 // Author:
 //   Hector E. Gomez M (hectorgm@ciencias.unam.mx)
@@ -11,12 +11,12 @@ using System;
 using Gtk;
 
 namespace Monodoc.Editor.Gui {
-public partial class DocumentEditor : TextView {
+public class DocumentEditor : TextView {
 	public DocumentEditor (TextBuffer buffer) : base (buffer)
 	{
 	}
 	
-	public DocumentEditor () : base (new TextBuffer (null))
+	public DocumentEditor () : base (new DocumentBuffer ())
 	{
 	}
 }
