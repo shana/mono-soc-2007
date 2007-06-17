@@ -1,24 +1,24 @@
-<Combine name="Monodoc.Editor" fileversion="2.0" outputpath="./build/bin/">
+<Combine name="Monodoc.Editor" fileversion="2.0">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Monodoc.Editor" configuration="Debug" />
-      <Entry build="True" name="EditorUtils" configuration="Debug" />
+      <Entry build="True" name="Monodoc.Editor.Utils" configuration="Debug" />
       <Entry build="True" name="Packages" configuration="" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Monodoc.Editor" configuration="Release" />
-      <Entry build="True" name="EditorUtils" configuration="Release" />
+      <Entry build="True" name="Monodoc.Editor.Utils" configuration="Release" />
       <Entry build="True" name="Packages" configuration="" />
     </Configuration>
   </Configurations>
   <StartMode startupentry="Monodoc.Editor" single="True">
     <Execute type="None" entry="Monodoc.Editor" />
-    <Execute type="None" entry="EditorUtils" />
+    <Execute type="None" entry="Monodoc.Editor.Utils" />
     <Execute type="None" entry="Packages" />
   </StartMode>
   <Entries>
     <Entry filename="./Monodoc.Editor/Monodoc.Editor.mdp" />
-    <Entry filename="./EditorUtils/EditorUtils.mdp" />
+    <Entry filename="./Monodoc.Editor.Utils/Monodoc.Editor.Utils.mdp" />
     <Entry filename="./Packages.mdse" />
   </Entries>
 </Combine>
