@@ -33,6 +33,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.CodeDom.Compiler;
 
@@ -136,7 +137,9 @@ namespace CBinding
 		                     CompilerResults cr,
 		                     IProgressMonitor monitor, string outputName)
 		{
-			string objectFiles = ObjectFiles (projectFiles);
+			if (!NeedsUpdate (projectFiles, outputName)) return;
+			
+			string objectFiles = StringArrayToSingleString (ObjectFiles (projectFiles));
 			string pkgargs = GeneratePkgLinkerArgs (packages);
 			StringBuilder args = new StringBuilder ();
 			CCompilationParameters cp =
@@ -185,7 +188,9 @@ namespace CBinding
 		private void MakeStaticLibrary (ProjectFileCollection projectFiles,
 		                                IProgressMonitor monitor, string outputName)
 		{
-			string objectFiles = ObjectFiles (projectFiles);
+			if (!NeedsUpdate (projectFiles, outputName)) return;
+			
+			string objectFiles = StringArrayToSingleString (ObjectFiles (projectFiles));
 			
 			monitor.Log.WriteLine ("Generating static library...");
 			
@@ -201,7 +206,9 @@ namespace CBinding
 		                               CompilerResults cr,
 		                               IProgressMonitor monitor, string outputName)
 		{
-			string objectFiles = ObjectFiles (projectFiles);
+			if (!NeedsUpdate (projectFiles, outputName)) return;
+			
+			string objectFiles = StringArrayToSingleString (ObjectFiles (projectFiles));
 			string pkgargs = GeneratePkgLinkerArgs (packages);
 			StringBuilder args = new StringBuilder ();
 			CCompilationParameters cp =
@@ -285,17 +292,42 @@ namespace CBinding
 			return p.ExitCode == 0;
 		}
 		
-		private string ObjectFiles (ProjectFileCollection projectFiles)
+		private string[] ObjectFiles (ProjectFileCollection projectFiles)
 		{
-			StringBuilder objectFiles = new StringBuilder ();
+			List<string> objectFiles = new List<string> ();
 			
 			foreach (ProjectFile f in projectFiles) {
 				if (f.BuildAction == BuildAction.Compile) {
-					objectFiles.Append (Path.ChangeExtension (f.Name, ".o") + " ");
+					objectFiles.Add (Path.ChangeExtension (f.Name, ".o"));
 				}
 			}
 			
-			return objectFiles.ToString ();
+			return objectFiles.ToArray ();
+		}
+		
+		private string StringArrayToSingleString (string[] array)
+		{
+			StringBuilder str = new StringBuilder ();
+			
+			foreach (string s in array) {
+				str.Append (s + " ");
+			}
+			
+			return str.ToString ();
+		}
+		
+		private bool NeedsUpdate (ProjectFileCollection projectFiles,
+		                          string target)
+		{
+			if (!File.Exists (target))
+				return true;
+			
+			foreach (string obj in ObjectFiles (projectFiles))
+				if (File.Exists (obj) &&
+				    File.GetLastWriteTime (obj) > File.GetLastWriteTime (target))
+					return true;
+			
+			return false;
 		}
 		
 		protected override void ParseCompilerOutput (string errorString, CompilerResults cr)
