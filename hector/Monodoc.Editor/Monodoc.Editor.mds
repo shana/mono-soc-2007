@@ -4,21 +4,25 @@
       <Entry build="True" name="Monodoc.Editor" configuration="Debug" />
       <Entry build="True" name="Monodoc.Editor.Utils" configuration="Debug" />
       <Entry build="True" name="Packages" configuration="" />
+      <Entry build="True" name="Monodoc.Editor.Gui" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Monodoc.Editor" configuration="Release" />
       <Entry build="True" name="Monodoc.Editor.Utils" configuration="Release" />
       <Entry build="True" name="Packages" configuration="" />
+      <Entry build="True" name="Monodoc.Editor.Gui" configuration="Release" />
     </Configuration>
   </Configurations>
   <StartMode startupentry="Monodoc.Editor" single="True">
     <Execute type="None" entry="Monodoc.Editor" />
     <Execute type="None" entry="Monodoc.Editor.Utils" />
     <Execute type="None" entry="Packages" />
+    <Execute type="None" entry="Monodoc.Editor.Gui" />
   </StartMode>
   <Entries>
     <Entry filename="./Monodoc.Editor/Monodoc.Editor.mdp" />
     <Entry filename="./Monodoc.Editor.Utils/Monodoc.Editor.Utils.mdp" />
     <Entry filename="./Packages.mdse" />
+    <Entry filename="./Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp" />
   </Entries>
 </Combine>
