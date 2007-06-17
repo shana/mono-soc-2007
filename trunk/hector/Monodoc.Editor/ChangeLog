@@ -1,3 +1,7 @@
+2007-06-16  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
+
+	* Monodoc.Editor.mds:  Changed the MonodocEditor to Monodoc.Editor.
+
 2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MonodocEditor/EditorWindow.cs, MonodocEditor/MonodocEditor.mdp,
