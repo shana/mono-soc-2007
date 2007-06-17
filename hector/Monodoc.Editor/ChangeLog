@@ -1,5 +1,14 @@
 2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor/EditorWindow.cs: Testing Deserialize method.
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs,
+	  Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Added
+	  DocumentBufferArchiver that handles the deserialization of an XM
+	  string stream to a TextBuffer.
+	* Monodoc.Editor.Gui/DocumentTagTable.cs: Typo.
+
+2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor.Utils/Test/Examples/WrapMode.xml,
 	  Monodoc.Editor.Utils/Monodoc.Editor.Utils.mdp: Added WrapMode.xml
 	  doc for test purposes.

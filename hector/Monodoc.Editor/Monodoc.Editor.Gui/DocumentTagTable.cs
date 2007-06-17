@@ -1,4 +1,3 @@
-
 //
 // DocumentTagTable.cs: TextTagTable based class that represent the table of tags for a buffer.
 //
