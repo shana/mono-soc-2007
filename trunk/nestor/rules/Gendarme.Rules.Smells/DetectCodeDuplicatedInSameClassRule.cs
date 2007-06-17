@@ -150,16 +150,17 @@ namespace Gendarme.Rules.Smells {
 			return existsRepliedInstructions;
 		}
 	
-		private bool ContainsSameCode (MethodBody currentMethodBody, MethodBody targetMethodBody) {
-			IList currentInstructionCollections = FillInstructionCollectionsFrom (currentMethodBody);
-			IList targetInstructionCollections = FillInstructionCollectionsFrom (targetMethodBody);
+		private bool ContainsSameCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
+			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
+				IList currentInstructionCollections = FillInstructionCollectionsFrom (currentMethod.Body);
+				IList targetInstructionCollections = FillInstructionCollectionsFrom (targetMethod.Body);
 			
-			foreach (IList currentInstructionSet in currentInstructionCollections) {
-				foreach (IList targetInstructionSet in targetInstructionCollections) {
-					return ExistsRepliedInstructions (currentInstructionSet, targetInstructionSet);
+				foreach (IList currentInstructionSet in currentInstructionCollections) {
+					foreach (IList targetInstructionSet in targetInstructionCollections) {
+						return ExistsRepliedInstructions (currentInstructionSet, targetInstructionSet);
+					}
 				}
 			}
-			
 			return false;
 		}
 	
@@ -167,24 +168,15 @@ namespace Gendarme.Rules.Smells {
 		{
 			checkedMethods = new StringCollection ();
 			MessageCollection messageCollection = new MessageCollection ();
-			Console.WriteLine (typeDefinition.Name);
-			foreach (MethodDefinition methodDefinition in typeDefinition.Methods) {
-				if (methodDefinition.HasBody) {
-					MethodBody currentBody = methodDefinition.Body;
-					foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
-						if (targetMethodDefinition.HasBody) {
-							if ((targetMethodDefinition != methodDefinition) && (!checkedMethods.Contains (targetMethodDefinition.Name))) {
-								Console.WriteLine ("Comparing {0}.{1} and {2}.{3}", typeDefinition.Name, methodDefinition.Name, typeDefinition.Name, targetMethodDefinition.Name);
-								if (ContainsSameCode (currentBody, targetMethodDefinition.Body)) {
-									Location location = new Location (typeDefinition.Name, methodDefinition.Name, 0);
-									Message message = new Message (String.Format ("Exists code duplicated in: {0}.{1} and in {0}.{2}", typeDefinition.Name, methodDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
-									messageCollection.Add (message);
-								}
-							}
-						}
+			foreach (MethodDefinition currentMethodDefinition in typeDefinition.Methods) {
+				foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
+					if (ContainsSameCode (currentMethodDefinition, targetMethodDefinition)) {
+						Location location = new Location (typeDefinition.Name, currentMethodDefinition.Name, 0);
+						Message message = new Message (String.Format ("Exists code duplicated in: {0}.{1} and in {0}.{2}", typeDefinition.Name, currentMethodDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
+						messageCollection.Add (message);
 					}
 				}
-				checkedMethods.Add (methodDefinition.Name);
+				checkedMethods.Add (currentMethodDefinition.Name);
 			}
 			
 			if (messageCollection.Count == 0)
