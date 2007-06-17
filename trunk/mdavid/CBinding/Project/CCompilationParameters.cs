@@ -61,6 +61,9 @@ namespace CBinding
 		[ItemProperty ("ExtraLinkerArguments")]
 		private string extra_linker_args = string.Empty;
 		
+		[ItemProperty ("DefineSymbols")]
+		private string define_symbols = string.Empty;
+		
 		public object Clone ()
 		{
 			return MemberwiseClone ();
@@ -89,6 +92,11 @@ namespace CBinding
 		public string ExtraLinkerArguments {
 			get { return extra_linker_args; }
 			set { extra_linker_args = value; }
+		}
+		
+		public string DefineSymbols {
+			get { return define_symbols; }
+			set { define_symbols = value; }
 		}
 	}
 }

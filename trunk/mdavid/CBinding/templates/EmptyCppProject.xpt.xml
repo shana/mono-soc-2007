@@ -19,7 +19,7 @@
 			<Options
 				Target = "Bin"
 				PauseConsoleOutput = "True"
-				CompilerArgs = "-D_MONODEVELOP_"
+				CompilerArgs = ""
 				LinkerArgs = ""/>
 		</Project>
 	</Combine>
