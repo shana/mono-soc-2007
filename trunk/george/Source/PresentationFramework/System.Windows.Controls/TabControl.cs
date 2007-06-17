@@ -23,7 +23,9 @@ namespace System.Windows.Controls {
 		public static readonly DependencyProperty SelectedContentProperty = DependencyProperty.Register("SelectedContent", typeof(object), typeof(TabControl), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty SelectedContentTemplateProperty = DependencyProperty.Register("SelectedContentTemplate", typeof(DataTemplate), typeof(TabControl), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty SelectedContentTemplateSelectorProperty = DependencyProperty.Register("SelectedContentTemplateSelector", typeof(DataTemplateSelector), typeof(TabControl), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty TabStripPlacementProperty = DependencyProperty.Register("TabStripPlacement", typeof(Dock), typeof(TabControl), new FrameworkPropertyMetadata(Dock.Top));
+		public static readonly DependencyProperty TabStripPlacementProperty = DependencyProperty.Register("TabStripPlacement", typeof(Dock), typeof(TabControl), new FrameworkPropertyMetadata(Dock.Top, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			((TabControl)d).UpdateTabStripPlacement();
+		}));
 		#endregion
 		#endregion
 
@@ -40,6 +42,7 @@ namespace System.Windows.Controls {
 		public TabControl() {
 			ItemContainerGenerator.StatusChanged += delegate(object sender, EventArgs e) {
 				EnsureATabItemIsSelected();
+				UpdateTabStripPlacement();
 			};
 		}
 		#endregion
@@ -144,6 +147,16 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region Internal Methods
+		internal object GetItemForTabItem(TabItem tab_item) {
+			object item_from_container = ItemContainerGenerator.ItemFromContainer(tab_item);
+			if (item_from_container == DependencyProperty.UnsetValue)
+				return tab_item;
+			else
+				return item_from_container;
+		}
+		#endregion
+
 		#region Private Methods
 		void EnsureATabItemIsSelected() {
 			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
@@ -162,6 +175,14 @@ namespace System.Windows.Controls {
 
 		TabItem GetTabItemForItemAtIndex(int index) {
 			return (TabItem)ItemContainerGenerator.ContainerFromIndex(index);
+		}
+
+		void UpdateTabStripPlacement() {
+			for (int item_index = 0; item_index < Items.Count; item_index++) {
+				TabItem tab_item = GetTabItemForItemAtIndex(item_index);
+				if (tab_item != null)
+					tab_item.TabStripPlacement = TabStripPlacement;
+			}
 		}
 		#endregion
 	}
