@@ -115,6 +115,10 @@
 		<CommandItem id = "MonoDevelop.Ide.Commands.EditCommands.Delete"/>
 	</Extension>
 	
+	<Extension path = "/SharpDevelop/Workbench/ProjectServiceExtensions">
+		<Class id = "CleanObjectFiles" class = "CBinding.CProjectServiceExtension"/>
+	</Extension>
+	
 	<Extension path = "/SharpDevelop/Workbench/SerializableClasses">
 		<DataType class = "CBinding.CCompilationParameters"/>
 		<DataType class = "CBinding.CProjectConfiguration"/>
