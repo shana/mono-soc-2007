@@ -10,7 +10,7 @@ using System;
 using System.IO;
 using NUnit.Framework;
 
-namespace Monodoc.EditorUtils {
+namespace Monodoc.Editor.Utils {
 [TestFixture()]
 public class TestMonoDocument {
 	
@@ -24,7 +24,7 @@ public class TestMonoDocument {
 		
 		filePath = Test.PathOfTestFiles ();
 		pathTest = Path.Combine (filePath, "Examples");
-		type = Type.GetType ("Monodoc.EditorUtils.MonoDocument");
+		type = Type.GetType ("Monodoc.Editor.Utils.MonoDocument");
 	}
 	
 	[Test()]

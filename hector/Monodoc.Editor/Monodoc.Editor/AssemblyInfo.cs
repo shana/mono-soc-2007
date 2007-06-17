@@ -10,7 +10,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("MonodocEditor")]
+[assembly: AssemblyTitle("monodoc-editor")]
 [assembly: AssemblyDescription("WYSIWYG Editor for Monodoc Documentation.")]
 [assembly: AssemblyCompany("Mono Project")]
 [assembly: AssemblyProduct("monodoc-editor")]

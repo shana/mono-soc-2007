@@ -10,10 +10,10 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("EditorUtils")]
+[assembly: AssemblyTitle("Monodoc.Editor.Utils")]
 [assembly: AssemblyDescription("Library with classes to create, modify and handle Monodoc Documentation.")]
 [assembly: AssemblyCompany("Mono Project")]
-[assembly: AssemblyProduct("EditorUtils")]
+[assembly: AssemblyProduct("Monodoc.Editor.Utils")]
 [assembly: AssemblyCopyright("2007 Hector E. Gomez M")]
 //[assembly: AssemblyConfiguration("")]
 //[assembly: AssemblyTrademark("")]

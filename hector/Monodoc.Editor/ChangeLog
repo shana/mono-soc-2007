@@ -1,3 +1,12 @@
+2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Utils/AssemblyInfo.cs,
+	  Monodoc.Editor.Utils/Test/TestMonoDocument.cs,
+	  Monodoc.Editor.Utils/Test/TestEcmaReader.cs,
+	  Monodoc.Editor.Utils/Test.cs, Monodoc.Editor.Utils/MonoDocument.cs,
+	  Monodoc.Editor.Utils/EcmaReader.cs, Monodoc.Editor/AssemblyInfo.cs,
+	  Monodoc.Editor/EditorWindow.cs: More name changes.
+
 2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor/Monodoc.Editor.mdp: Change reference.
