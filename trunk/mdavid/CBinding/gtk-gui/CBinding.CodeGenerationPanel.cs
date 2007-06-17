@@ -140,6 +140,7 @@ namespace CBinding {
             this.vpaned2.Position = 195;
             // Container child vpaned2.Gtk.Paned+PanedChild
             this.table1 = new Gtk.Table(((uint)(4)), ((uint)(2)), false);
+            this.table1.Name = "table1";
             this.table1.RowSpacing = ((uint)(10));
             this.table1.ColumnSpacing = ((uint)(10));
             this.table1.BorderWidth = ((uint)(3));

@@ -58,7 +58,7 @@ namespace CBinding
 		{
 			StringBuilder args = new StringBuilder ();
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());
-			bool res = false;
+			bool res = true;
 			
 			string outputName = string.Format ("{0}/{1}",
 			    configuration.OutputDirectory,
@@ -66,6 +66,9 @@ namespace CBinding
 			
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
+			
+			if (configuration.DebugMode)
+				args.Append ("-g ");
 			
 			switch (cp.WarningLevel)
 			{
@@ -139,7 +142,7 @@ namespace CBinding
 		                     CProjectConfiguration configuration,
 		                     CompilerResults cr,
 		                     IProgressMonitor monitor, string outputName)
-		{
+		{			
 			if (!NeedsUpdate (projectFiles, outputName)) return;
 			
 			string objectFiles = StringArrayToSingleString (ObjectFiles (projectFiles));
