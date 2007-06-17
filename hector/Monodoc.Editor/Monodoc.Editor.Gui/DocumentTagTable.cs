@@ -38,6 +38,7 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new TextTag ("Type:Attributes");
 		tag.Editable = false;
+		tag.Invisible = true;
 		Add (tag);
 		
 		tag = new TextTag ("TypeSignature");
@@ -145,7 +146,9 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 		
 		tag = new TextTag ("link");
-		tag.Editable = false;
+		tag.Editable = true;
+		tag.Underline = Pango.Underline.Single;
+		tag.Foreground = "#204a87";
 		Add (tag);
 		
 		tag = new TextTag ("since");
