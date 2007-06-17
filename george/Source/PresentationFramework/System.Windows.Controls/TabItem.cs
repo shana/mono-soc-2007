@@ -24,18 +24,20 @@ namespace System.Windows.Controls {
 								tab_item.IsSelected = false;
 						}
 						tab_control.SelectedItem = tab_control.Items[index_of_current_instance];
-					}
+					} else
+						tab_control.SelectedItem = i;
 				}
 				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
 			} else {
 				if (tab_control != null) {
-					if (tab_control.SelectedItem == tab_control.ItemContainerGenerator.ItemFromContainer(i))
+					if (tab_control.SelectedItem == tab_control.GetItemForTabItem(i))
 						tab_control.SelectedItem = null;
 				}
 				i.OnUnselected(new RoutedEventArgs(UnselectedEvent, i));
 			}
 		}));
-		public static readonly DependencyProperty TabStripPlacementProperty = DependencyProperty.RegisterReadOnly("TabStripPlacement", typeof(Dock), typeof(TabItem), new FrameworkPropertyMetadata(Dock.Top)).DependencyProperty; 
+		static readonly DependencyPropertyKey TabStripPlacementPropertyKey = DependencyProperty.RegisterReadOnly("TabStripPlacement", typeof(Dock), typeof(TabItem), new FrameworkPropertyMetadata(Dock.Top));
+		public static readonly DependencyProperty TabStripPlacementProperty = TabStripPlacementPropertyKey.DependencyProperty; 
 		#endregion
 		#endregion
 
@@ -70,6 +72,7 @@ namespace System.Windows.Controls {
 
 		public Dock TabStripPlacement {
 			get { return (Dock)GetValue(TabStripPlacementProperty); }
+			internal set { SetValue(TabStripPlacementPropertyKey, value); }
 		}
 		#endregion
 		#endregion
