@@ -1,5 +1,13 @@
 2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor.Utils/Test/Examples/WrapMode.xml,
+	  Monodoc.Editor.Utils/Monodoc.Editor.Utils.mdp: Added WrapMode.xml
+	  doc for test purposes.
+	* Monodoc.Editor.Gui/DocumentTagTable.cs: Added basic tags for
+	  DocumentBuffer.
+
+2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Added two new classes to
 	  project.
 	* Monodoc.Editor.Gui/DocumentTagTable.cs: Added DocumentTagTable based
