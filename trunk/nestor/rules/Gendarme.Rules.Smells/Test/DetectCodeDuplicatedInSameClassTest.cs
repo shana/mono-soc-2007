@@ -121,6 +121,13 @@ namespace Test.Rules.Smells {
 			}
 		}
 		
+		private void DumpMessageCollection (MessageCollection messageCollection)
+		{
+			foreach (Message message in messageCollection) {
+				Console.WriteLine ("{0} - {1}", message.Type, message.ToString ());
+			}
+		}
+		
 		[Test]
 		public void TestClassWithoutCodeDuplicated () 
 		{
@@ -134,6 +141,7 @@ namespace Test.Rules.Smells {
 		{
 			type = assembly.MainModule.Types ["Test.Rules.Smells.ClassWithCodeDuplicated"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			DumpMessageCollection (messageCollection);
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (messageCollection.Count, 1);
 			CheckMessageType (messageCollection, MessageType.Error);

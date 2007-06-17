@@ -27,21 +27,169 @@
 //
 
 using System;
+using System.Collections;
+using System.Collections.Specialized;
+using System.Text;
 
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Gendarme.Framework;
 
 namespace Gendarme.Rules.Smells {
+	//TODO: Ask if I can create new files that contains classes for this rule.
+
+	class InstructionSetVisitor : BaseCodeVisitor {
+		private IList instructionSets;
+		private IList instructionSet;
+		private InstructionPair currentPair;
+		
+		public	InstructionSetVisitor () : base () {
+		}
+		
+		public override void VisitMethodBody (MethodBody methodBody) 
+		{
+			instructionSets = new ArrayList ();
+			currentPair = new InstructionPair ();
+		}
+		
+		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
+		{
+			foreach (Instruction instruction in instructionCollection) {
+				if (instruction.OpCode.Name == "ldarg.0") {
+					instructionSet = new ArrayList ();
+					instructionSets.Add (instructionSet);
+				}
+				else {
+					if (currentPair.First != null) {
+						currentPair.Second = instruction;
+						instructionSet.Add (currentPair);
+						currentPair = new InstructionPair ();
+						currentPair.First = instruction;
+					}
+					else {
+						currentPair.First = instruction;
+					}
+				}
+			}
+		}
+		
+		public IList InstructionSets {
+			get {
+				return instructionSets;
+			}
+		}
+	}
+	
+	class InstructionPair {
+		private Instruction firstInstruction;
+		private Instruction secondInstruction;
+		
+		public InstructionPair () {}
+		
+		public InstructionPair (Instruction firstInstruction, Instruction secondInstruction) {
+			this.firstInstruction = firstInstruction;
+			this.secondInstruction = secondInstruction;
+		}
+		
+		public Instruction First {
+			get {
+				return firstInstruction;
+			}
+			set {
+				firstInstruction = value;
+			}
+		}
+		
+		public Instruction Second {
+			get {
+				return secondInstruction;
+			}
+			set {
+				secondInstruction = value;
+			}
+		}
+		
+		public override bool Equals (object obj) {
+			if (obj is InstructionPair) {
+				InstructionPair targetInstructionPair = (InstructionPair) obj;
+				return firstInstruction.OpCode.Name == targetInstructionPair.First.OpCode.Name && secondInstruction.OpCode.Name == targetInstructionPair.Second.OpCode.Name;
+			}
+			return false;
+		}
+		
+		public override int GetHashCode () {
+			return base.GetHashCode ();
+		}
+		
+		public override string ToString () {
+			StringBuilder stringBuilder = new StringBuilder ();
+			stringBuilder.Append ("Instruction Pair:");
+			stringBuilder.Append (String.Format (" First: {0} ", firstInstruction.OpCode.Name));
+			stringBuilder.Append (String.Format (" Second: {0} ", secondInstruction.OpCode.Name));
+			return stringBuilder.ToString ();
+		}
+	}
+	
 	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
+		private StringCollection checkedMethods;
+
+		private IList FillInstructionCollectionsFrom (MethodBody methodBody) {
+			InstructionSetVisitor instructionSetVisitor = new InstructionSetVisitor ();
+			methodBody.Accept (instructionSetVisitor);
+			return instructionSetVisitor.InstructionSets;
+		}
+		
+		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) {
+			bool existsRepliedInstructions = false;
+			
+			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
+				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
+					existsRepliedInstructions = currentInstructionPair.Equals (targetInstructionPair);
+				}
+			}
+			return existsRepliedInstructions;
+		}
 	
+		private bool ContainsSameCode (MethodBody currentMethodBody, MethodBody targetMethodBody) {
+			IList currentInstructionCollections = FillInstructionCollectionsFrom (currentMethodBody);
+			IList targetInstructionCollections = FillInstructionCollectionsFrom (targetMethodBody);
+			
+			foreach (IList currentInstructionSet in currentInstructionCollections) {
+				foreach (IList targetInstructionSet in targetInstructionCollections) {
+					return ExistsRepliedInstructions (currentInstructionSet, targetInstructionSet);
+				}
+			}
+			
+			return false;
+		}
 	
-	    public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner) 
-	    {
-	        MessageCollection messageCollection = new MessageCollection ();
-	        
-	        if (messageCollection.Count == 0)
-	        	return null;
-	        return messageCollection;
-	    }
+		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner) 
+		{
+			checkedMethods = new StringCollection ();
+			MessageCollection messageCollection = new MessageCollection ();
+			Console.WriteLine (typeDefinition.Name);
+			foreach (MethodDefinition methodDefinition in typeDefinition.Methods) {
+				if (methodDefinition.HasBody) {
+					MethodBody currentBody = methodDefinition.Body;
+					foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
+						if (targetMethodDefinition.HasBody) {
+							if ((targetMethodDefinition != methodDefinition) && (!checkedMethods.Contains (targetMethodDefinition.Name))) {
+								Console.WriteLine ("Comparing {0}.{1} and {2}.{3}", typeDefinition.Name, methodDefinition.Name, typeDefinition.Name, targetMethodDefinition.Name);
+								if (ContainsSameCode (currentBody, targetMethodDefinition.Body)) {
+									Location location = new Location (typeDefinition.Name, methodDefinition.Name, 0);
+									Message message = new Message (String.Format ("Exists code duplicated in: {0}.{1} and in {0}.{2}", typeDefinition.Name, methodDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
+									messageCollection.Add (message);
+								}
+							}
+						}
+					}
+				}
+				checkedMethods.Add (methodDefinition.Name);
+			}
+			
+			if (messageCollection.Count == 0)
+				return null;
+			return messageCollection;
+		}
 	}
 }
