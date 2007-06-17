@@ -1,5 +1,11 @@
 2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs,
+	  Monodoc.Editor.Gui/DocumentTagTable.cs: More Deserializer
+	  implementation work.
+
+2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor/EditorWindow.cs: Testing Deserialize method.
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs,
 	  Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Added
