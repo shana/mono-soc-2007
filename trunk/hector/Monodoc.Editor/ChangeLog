@@ -1,3 +1,8 @@
+2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor/Monodoc.Editor.mdp, Monodoc.Editor/app.desktop,
+	  Monodoc.Editor.mds: Continue name changes.
+
 2007-06-16  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
 
 	* Monodoc.Editor.mds:  Changed the MonodocEditor to Monodoc.Editor.
