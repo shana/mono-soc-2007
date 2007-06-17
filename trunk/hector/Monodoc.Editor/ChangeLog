@@ -1,5 +1,9 @@
 2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor/Monodoc.Editor.mdp: Change reference.
+
+2007-06-16  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor/Monodoc.Editor.mdp, Monodoc.Editor/app.desktop,
 	  Monodoc.Editor.mds: Continue name changes.
 
