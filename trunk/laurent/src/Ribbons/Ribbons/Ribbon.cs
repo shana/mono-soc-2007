@@ -7,29 +7,46 @@ namespace Ribbons
 {
 	public class Ribbon : Container
 	{
+		private static double ribbon_borderWidth = 2.0;
+		private static double ribbon_space = 2.0;
+		private static double lineWidth = 1.0;
+		private static double roundSize = 4.0;
+		
+		protected ColorScheme colorScheme = new ColorScheme ();
 		protected Theme theme = new Theme ();
-		private List<RibbonPage> pages;
-		private RibbonPage curPage;
+		
+		protected List<RibbonPage> pages;
+		protected int curPageIndex;
 		private Gdk.Rectangle bodyAllocation, pageAllocation;
 		
-		public int Page
+		public int CurrentPageIndex
 		{
 			set
 			{
-				if(curPage != null)
+				if(curPageIndex != -1)
 				{
-					curPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
+					CurrentPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
 				}
-				curPage = pages[value];
-				if(curPage != null)
+				curPageIndex = value;
+				if(curPageIndex != -1)
 				{
-					curPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (true));
+					CurrentPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (true));
 				}
+				
+				this.QueueDraw ();
 			}
 			get
 			{
-				RibbonPage p = curPage;
-				return p == null ? -1 : PageNum (p.Page);
+				return curPageIndex;
+			}
+		}
+		
+		public RibbonPage CurrentPage
+		{
+			get
+			{
+				int idx = curPageIndex;
+				return idx == -1 ? null : pages[idx];
 			}
 		}
 		
@@ -44,7 +61,8 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
-			this.pages = new List<RibbonPage>();
+			this.pages = new List<RibbonPage> ();
+			this.curPageIndex = -1;
 			
 			this.BorderWidth = 4;
 		}
@@ -64,16 +82,59 @@ namespace Ribbons
 			RibbonPage p = new RibbonPage (this, Child, Label);
 			
 			if(Position == -1)
+			{
 				pages.Add (p);
+			}
 			else
+			{
 				pages.Insert (Position, p);
+				
+				if(curPageIndex != -1)
+				{
+					if(Position <= curPageIndex)
+						++curPageIndex;
+				}
+			}
 			
-			if(pages.Count == 1) Page = 0;
-			else p.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
+			if(pages.Count == 1)
+			{
+				CurrentPageIndex = 0;
+			}
+			else
+			{
+				Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
+			}
+			
+			Label.ButtonPressEvent += delegate (object sender, ButtonPressEventArgs evnt)
+			{
+				this.SelectRibbonPage (p);
+			};
+			
+			Label.EnterNotifyEvent += delegate (object sender, EnterNotifyEventArgs evnt)
+			{
+				
+			};
+			
+			Label.LeaveNotifyEvent += delegate (object sender, LeaveNotifyEventArgs evnt)
+			{
+				
+			};
 		}
 		
 		public void RemovePage (int PageNumber)
 		{
+			if(curPageIndex != -1)
+			{
+				if(PageNumber < curPageIndex)
+				{
+					--curPageIndex;
+				}
+				else if(PageNumber == curPageIndex)
+				{
+					curPageIndex = -1;
+				}
+			}
+			
 			pages.RemoveAt (PageNumber);
 		}
 		
@@ -83,6 +144,16 @@ namespace Ribbons
 			// a dozen pages, it is just fine to do a linear search.
 			for(int i = 0, i_up = pages.Count ; i < i_up ; ++i)
 				if(pages[i].Page == Child)
+					return i;
+			return -1;
+		}
+		
+		public int RibbonPageNum (RibbonPage Page)
+		{
+			// Since it is unlikely that the widget will containe more than
+			// a dozen pages, it is just fine to do a linear search.
+			for(int i = 0, i_up = pages.Count ; i < i_up ; ++i)
+				if(pages[i] == Page)
 					return i;
 			return -1;
 		}
@@ -107,33 +178,34 @@ namespace Ribbons
 			return pages[Position];
 		}
 		
+		public void SelectRibbonPage (RibbonPage page)
+		{
+			int idx = RibbonPageNum (page);
+			if(idx != -1) CurrentPageIndex = idx;
+		}
+		
 		public void PrevPage ()
 		{
-			int i = Page;
-			if(i > 0) Page = i - 1;
+			int i = CurrentPageIndex;
+			if(i > 0) CurrentPageIndex = i - 1;
 		}
 		
 		public void NextPage ()
 		{
-			int i = Page;
-			if(i < NPages - 1) Page = i + 1;
+			int i = CurrentPageIndex;
+			if(i < NPages - 1) CurrentPageIndex = i + 1;
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
 			foreach(RibbonPage p in pages) callback (p.Label);
-			if(curPage != null) callback (curPage.Page);
+			if(CurrentPage != null) callback (CurrentPage.Page);
 		}
-		
-		private double ribbon_borderWidth = 2.0;
-		private double ribbon_space = 2.0;
-		private double lineWidth = 1.0;
-		private double roundSize = 4.0;
-		private ColorScheme colorScheme = new ColorScheme();
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
 		{
 			base.OnSizeRequested (ref requisition);
+			RibbonPage page = null;//CurrentPage;
 			
 			int vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
 			
@@ -147,9 +219,9 @@ namespace Ribbons
 			headerHeight += vertPadding + (int)ribbon_space;
 			
 			int width = 0, height = 0;
-			if(curPage != null)
+			if(page != null)
 			{
-				Gtk.Requisition req = curPage.Page.SizeRequest ();
+				Gtk.Requisition req = page.Page.SizeRequest ();
 				width = req.Width;
 				height = req.Height + (int)(2*BorderWidth + ribbon_space);
 			}
@@ -164,6 +236,7 @@ namespace Ribbons
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
+			RibbonPage page = null;//CurrentPage;
 			
 			int x = allocation.X + (int)(ribbon_space + roundSize), y = allocation.Y + (int)ribbon_space, maxH = 0;
 			
@@ -203,12 +276,12 @@ namespace Ribbons
 			bodyAllocation.Width = allocation.Width - bodyAllocation.X  - (int)ribbon_space;
 			bodyAllocation.Height = allocation.Height - bodyAllocation.Y - (int)ribbon_space;
 			
-			if(curPage != null)
+			if(page != null)
 			{
 				pageAllocation = bodyAllocation;
 				int bw = (int)BorderWidth;
 				pageAllocation.Inflate (-bw, -bw);
-				curPage.Page.SizeAllocate (pageAllocation);
+				page.Page.SizeAllocate (pageAllocation);
 			}
 			else
 			{
@@ -222,7 +295,7 @@ namespace Ribbons
 			
 			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
 			cr.Clip ();
-			Draw(cr);
+			Draw (cr);
 			
 			return base.OnExposeEvent (evnt);
 		}

@@ -81,13 +81,16 @@ namespace Ribbons
 				Container next = null;
 				foreach(Widget child in current.Children)
 				{
-					Gdk.Rectangle alloc = child.Allocation;
-					if(alloc.Contains (x, y))
+					if(child.IsNoWindow)
 					{
-						lastHoveredWidgets.Add (child);
-						match = child;
-						next = child as Container;
-						break;
+						Gdk.Rectangle alloc = child.Allocation;
+						if(alloc.Contains (x, y))
+						{
+							lastHoveredWidgets.Add (child);
+							match = child;
+							next = child as Container;
+							break;
+						}
 					}
 				}
 				current = next;
