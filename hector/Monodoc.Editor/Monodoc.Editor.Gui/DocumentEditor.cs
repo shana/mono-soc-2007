@@ -10,13 +10,13 @@
 using System;
 using Gtk;
 
-namespace Monodoc.Editor {
-public partial class DocumentEditor : Gtk.TextView {
-	public DocumentEditor (Gtk.TextBuffer buffer) : base (buffer)
+namespace Monodoc.Editor.Gui {
+public partial class DocumentEditor : TextView {
+	public DocumentEditor (TextBuffer buffer) : base (buffer)
 	{
 	}
 	
-	public DocumentEditor () : base (new Gtk.TextBuffer (null))
+	public DocumentEditor () : base (new TextBuffer (null))
 	{
 	}
 }

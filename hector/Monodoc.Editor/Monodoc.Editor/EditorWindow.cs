@@ -9,6 +9,7 @@
 
 using System;
 using Gtk;
+using Monodoc.Editor.Gui;
 using Monodoc.Editor.Utils;
 
 namespace Monodoc.Editor {
