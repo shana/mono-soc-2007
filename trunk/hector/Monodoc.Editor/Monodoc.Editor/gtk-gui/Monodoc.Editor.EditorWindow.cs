@@ -25,7 +25,7 @@ namespace Monodoc.Editor {
         
         private Gtk.ScrolledWindow scrolledwindow2;
         
-        private Gtk.TextView docEditView;
+        private Monodoc.Editor.Gui.DocumentEditor docEditView;
         
         private Gtk.Statusbar statusbar1;
         
@@ -69,7 +69,7 @@ namespace Monodoc.Editor {
             this.scrolledwindow2.HscrollbarPolicy = ((Gtk.PolicyType)(1));
             this.scrolledwindow2.ShadowType = ((Gtk.ShadowType)(1));
             // Container child scrolledwindow2.Gtk.Container+ContainerChild
-            this.docEditView = new Gtk.TextView();
+            this.docEditView = new Monodoc.Editor.Gui.DocumentEditor();
             this.docEditView.CanFocus = true;
             this.docEditView.Name = "docEditView";
             this.scrolledwindow2.Add(this.docEditView);

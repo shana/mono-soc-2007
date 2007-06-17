@@ -29,6 +29,7 @@
   <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
     <ExportedWidgets>
       <Widget>Monodoc.Editor.DocumentEditor</Widget>
+      <Widget>Monodoc.Editor.Gui.DocumentEditor</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
 </Project>

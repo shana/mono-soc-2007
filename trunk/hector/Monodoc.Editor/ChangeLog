@@ -1,5 +1,17 @@
 2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor/EditorWindow.cs, Monodoc.Editor/Monodoc.Editor.mdp,
+	  Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/gui.stetic: Using DocumentEditor in
+	  EditorWindow.
+	* Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp,
+	  Monodoc.Editor.Gui/gtk-gui/objects.xml: Export DocumentEditor for
+	  stetic palette.
+	* Monodoc.Editor.Gui/DocumentEditor.cs: Added default construtor for
+	  DocumentEditor.
+
+2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Packages.mdse, Monodoc.Editor.mds, Monodoc.Editor.Gui,
 	  Monodoc.Editor.Gui/AssemblyInfo.cs,
 	  Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp,

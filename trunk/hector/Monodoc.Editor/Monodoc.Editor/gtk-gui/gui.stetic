@@ -3,6 +3,9 @@
   <configuration>
     <images-root-path>../</images-root-path>
   </configuration>
+  <import>
+    <widget-library name="../../Monodoc.Editor.Gui/bin/Debug/Monodoc.Editor.Gui.dll" />
+  </import>
   <widget class="Gtk.Window" id="Monodoc.Editor.EditorWindow" design-size="442 300">
     <action-group name="Default">
       <action id="File">
@@ -58,7 +61,7 @@
             <property name="HscrollbarPolicy">Automatic</property>
             <property name="ShadowType">In</property>
             <child>
-              <widget class="Gtk.TextView" id="docEditView">
+              <widget class="Monodoc.Editor.Gui.DocumentEditor" id="docEditView">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Text" translatable="yes" />
