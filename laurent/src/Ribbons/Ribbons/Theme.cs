@@ -82,56 +82,59 @@ namespace Ribbons
 			double x0, x1, y0, y1;
 			LinearGradient linGrad;
 			
-			Ribbon.RibbonPage p = widget.GetNthRibbonPage (widget.Page);
+			Ribbon.RibbonPage p = widget.CurrentPage;
 			if(p != null)
 			{
 				//Color c = ColorScheme.GetColor(colorScheme.Bright, 0.92);
 				Color c = colorScheme.Normal;
 				
-				/*** PAGE ***/
-				
-				x0 = bodyAllocation.X; x1 = bodyAllocation.X + bodyAllocation.Width;
-				y0 = bodyAllocation.Y; y1 = bodyAllocation.Y + bodyAllocation.Height;
-				
-				cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth05, Math.PI/2, Math.PI);
-				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
-				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth05, 3*Math.PI/2, 0);
-				cr.Arc (x1 - roundSize, y1 - roundSize, roundSize - lineWidth05, 0, Math.PI/2);
-				cr.LineTo (x0 + roundSize, y1 - lineWidth05);
-				
-				/*** BACKGOUND ***/
-				cr.Color = c;
-				cr.FillPreserve ();
+				if(bodyAllocation.Height > 0)
+				{
+					/*** PAGE ***/
+					
+					x0 = bodyAllocation.X; x1 = bodyAllocation.X + bodyAllocation.Width;
+					y0 = bodyAllocation.Y; y1 = bodyAllocation.Y + bodyAllocation.Height;
+					
+					cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth05, Math.PI/2, Math.PI);
+					cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth05, Math.PI, 3*Math.PI/2);
+					cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth05, 3*Math.PI/2, 0);
+					cr.Arc (x1 - roundSize, y1 - roundSize, roundSize - lineWidth05, 0, Math.PI/2);
+					cr.LineTo (x0 + roundSize, y1 - lineWidth05);
+					
+					/*** BACKGOUND ***/
+					cr.Color = c;
+					cr.FillPreserve ();
 
-				/*** DARK BORDER ***/
-				cr.LineWidth = lineWidth;
-				cr.Color = ColorScheme.GetColorAbsolute (colorScheme.Normal, 0.75);
-				cr.Stroke ();
-				
-				/*** GLASS EFFECT ***/
-				double ymid = Math.Round(y0 + (y1 - y0) * 0.25);
-				
-				cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth, Math.PI, 3*Math.PI/2);
-				cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth, 3*Math.PI/2, 0);
-				cr.LineTo (x1 - lineWidth, ymid);
-				cr.LineTo (x0 + lineWidth, ymid);
-				cr.LineTo (x0 + lineWidth, y0 + roundSize);
-				linGrad = new LinearGradient (0, y0, 0, ymid);
-				linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.0));
-				linGrad.AddColorStop (1.0, new Color (0, 0, 0, 0.075));
-				cr.Pattern = linGrad;
-				cr.Fill ();
-				
-				cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth, Math.PI/2, Math.PI);
-				cr.LineTo (x0 + lineWidth, ymid);
-				cr.LineTo (x1 - lineWidth, ymid);
-				cr.Arc (x1 - roundSize, y1 - roundSize, roundSize - lineWidth, 0, Math.PI/2);
-				cr.LineTo (x0 + roundSize, y1 - lineWidth);
-				linGrad = new LinearGradient (0, ymid, 0, y1);
-				linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.1));
-				linGrad.AddColorStop (0.5, new Color (0, 0, 0, 0.0));
-				cr.Pattern = linGrad;
-				cr.Fill ();
+					/*** DARK BORDER ***/
+					cr.LineWidth = lineWidth;
+					cr.Color = ColorScheme.GetColorAbsolute (colorScheme.Normal, 0.75);
+					cr.Stroke ();
+					
+					/*** GLASS EFFECT ***/
+					double ymid = Math.Round(y0 + (y1 - y0) * 0.25);
+					
+					cr.Arc (x0 + roundSize, y0 + roundSize, roundSize - lineWidth, Math.PI, 3*Math.PI/2);
+					cr.Arc (x1 - roundSize, y0 + roundSize, roundSize - lineWidth, 3*Math.PI/2, 0);
+					cr.LineTo (x1 - lineWidth, ymid);
+					cr.LineTo (x0 + lineWidth, ymid);
+					cr.LineTo (x0 + lineWidth, y0 + roundSize);
+					linGrad = new LinearGradient (0, y0, 0, ymid);
+					linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.0));
+					linGrad.AddColorStop (1.0, new Color (0, 0, 0, 0.075));
+					cr.Pattern = linGrad;
+					cr.Fill ();
+					
+					cr.Arc (x0 + roundSize, y1 - roundSize, roundSize - lineWidth, Math.PI/2, Math.PI);
+					cr.LineTo (x0 + lineWidth, ymid);
+					cr.LineTo (x1 - lineWidth, ymid);
+					cr.Arc (x1 - roundSize, y1 - roundSize, roundSize - lineWidth, 0, Math.PI/2);
+					cr.LineTo (x0 + roundSize, y1 - lineWidth);
+					linGrad = new LinearGradient (0, ymid, 0, y1);
+					linGrad.AddColorStop (0.0, new Color (0, 0, 0, 0.1));
+					linGrad.AddColorStop (0.5, new Color (0, 0, 0, 0.0));
+					cr.Pattern = linGrad;
+					cr.Fill ();
+				}
 				
 				/*** TAB ***/
 				
