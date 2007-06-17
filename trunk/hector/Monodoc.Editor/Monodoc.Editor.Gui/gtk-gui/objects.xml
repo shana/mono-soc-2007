@@ -1,0 +1,6 @@
+<objects>
+  <object type="Monodoc.Editor.DocumentEditor" palette-category="widget" allow-children="false" base-type="Gtk.TextView">
+    <itemgroups />
+    <signals />
+  </object>
+</objects>

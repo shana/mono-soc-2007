@@ -1,5 +1,18 @@
 2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Packages.mdse, Monodoc.Editor.mds, Monodoc.Editor.Gui,
+	  Monodoc.Editor.Gui/AssemblyInfo.cs,
+	  Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp,
+	  Monodoc.Editor.Gui/gtk-gui,
+	  Monodoc.Editor.Gui/gtk-gui/generated.cs,
+	  Monodoc.Editor.Gui/gtk-gui/objects.xml,
+	  Monodoc.Editor.Gui/gtk-gui/gui.stetic,
+	  Monodoc.Editor.Gui/DocumentEditor.cs: Added Monodoc.Editor.Gui
+	  widget library that will hold the custom TextView, TextTag and
+	  TextTagTable for Editor.
+
+2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor.Utils/AssemblyInfo.cs,
 	  Monodoc.Editor.Utils/Test/TestMonoDocument.cs,
 	  Monodoc.Editor.Utils/Test/TestEcmaReader.cs,
