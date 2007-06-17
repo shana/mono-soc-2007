@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 #if Implementation
 using System;
@@ -114,6 +116,16 @@ namespace System.Windows.Controls {
 			Assert.AreSame(t.SelectedItem, i2, "16 1");
 		}
 
+		[Test]
+		public void IsSelectedSimplified() {
+			TabControl t = new TabControl();
+			TabItem i1 = new TabItem();
+			t.Items.Add(i1);
+			Assert.AreEqual(t.ItemContainerGenerator.Status, GeneratorStatus.NotStarted, "1");
+			i1.IsSelected = true;
+			Assert.AreEqual(t.SelectedItem, i1, "2");
+		}
+
 		#region OnApplyTemplateSetsIsSelected
 		[Test]
 		public void OnApplyTemplateSetsIsSelected() {
@@ -169,6 +181,11 @@ namespace System.Windows.Controls {
 		[Test]
 		public void Focusable() {
 			Assert.IsTrue(new TabItem().Focusable);
+		}
+
+		[Test]
+		public void TabStripPlacementBinding() {
+			Assert.IsNull(BindingOperations.GetBinding(new TabItem(), TabItem.TabStripPlacementProperty));
 		}
 	}
 }

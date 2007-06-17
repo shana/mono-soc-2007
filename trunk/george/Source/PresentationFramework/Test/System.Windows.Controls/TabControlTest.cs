@@ -252,5 +252,10 @@ namespace System.Windows.Controls {
 			TabItem tab_item = (TabItem)t.ItemContainerGenerator.ContainerFromIndex(0);
 			Assert.IsNull(tab_item);
 		}
+
+		[Test]
+		public void TabStripPlacementPropertyChangedCallback() {
+			Assert.IsNull(TabControl.TabStripPlacementProperty.DefaultMetadata.PropertyChangedCallback);
+		}
 	}
 }
