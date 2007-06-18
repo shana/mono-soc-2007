@@ -1,5 +1,9 @@
 2007-06-19  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabItem.cs: Fixed arrangement when IsSelected changes.
+
+2007-06-19  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Grid.cs: Added.
 
 2007-06-18  George Giolfan  <georgegiolfan@yahoo.com>

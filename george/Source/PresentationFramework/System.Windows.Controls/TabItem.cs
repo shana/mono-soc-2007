@@ -4,8 +4,10 @@ using System.Windows.Input;
 #if Implementation
 using System.Windows;
 using System.Windows.Controls;
+using Mono.System.Windows.Controls.Primitives;
 namespace Mono.System.Windows.Controls {
 #else
+using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	public class TabItem : HeaderedContentControl {
@@ -23,6 +25,9 @@ namespace System.Windows.Controls {
 				}
 				i.OnUnselected(new RoutedEventArgs(UnselectedEvent, i));
 			}
+			TabPanel tab_panel = i.VisualParent as TabPanel;
+			if (tab_panel != null)
+				tab_panel.InvalidateArrange();
 		}));
 		static readonly DependencyPropertyKey TabStripPlacementPropertyKey = DependencyProperty.RegisterReadOnly("TabStripPlacement", typeof(Dock), typeof(TabItem), new FrameworkPropertyMetadata(Dock.Top));
 		public static readonly DependencyProperty TabStripPlacementProperty = TabStripPlacementPropertyKey.DependencyProperty; 
