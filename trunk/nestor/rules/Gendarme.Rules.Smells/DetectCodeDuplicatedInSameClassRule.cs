@@ -123,10 +123,10 @@ namespace Gendarme.Rules.Smells {
 				if (secondInstruction.OpCode.Name.StartsWith ("call") && targetInstructionPair.Second.OpCode.Name.StartsWith("call") &&
 					firstInstruction.OpCode.Name == targetInstructionPair.First.OpCode.Name)
 					return true;
-				
+					
 				//General equality expression
-				return firstInstruction.OpCode.Name == targetInstructionPair.First.OpCode.Name && 	
-						secondInstruction.OpCode.Name == targetInstructionPair.Second.OpCode.Name;
+				return firstInstruction.OpCode == targetInstructionPair.First.OpCode && 	
+						secondInstruction.OpCode == targetInstructionPair.Second.OpCode;
 			}
 			return false;
 		}
