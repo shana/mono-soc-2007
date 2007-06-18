@@ -35,12 +35,6 @@ namespace System.Windows.Controls {
 			Theme.Load();
 #endif
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(TabControl), new FrameworkPropertyMetadata(typeof(TabControl)));
-			//FIXME: I should not do this.
-			//SelectedIndexProperty.AddOwner(typeof(TabControl), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			//    TabItem tab_item = ((TabControl)d).GetTabItemForItemAtIndex((int)e.NewValue);
-			//    if (tab_item != null)
-			//        tab_item.IsSelected = true;
-			//}));
 		}
 		#endregion
 
@@ -49,19 +43,6 @@ namespace System.Windows.Controls {
 			ItemContainerGenerator.StatusChanged += delegate(object sender, EventArgs e) {
 				EnsureATabItemIsSelected();
 				UpdateTabStripPlacement();
-			};
-			
-			KeyDown += delegate(object sender, KeyEventArgs e) {
-				if (Items.Count == 1)
-					return;
-				if (e.Key == Key.Tab && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
-					SelectedIndex++;
-				else if (e.Key == Key.Tab && e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
-					SelectedIndex--;
-				else if (e.Key == Key.Home && e.KeyboardDevice.Modifiers == ModifierKeys.None)
-					SelectedIndex = 0;
-				else if (e.Key == Key.End && e.KeyboardDevice.Modifiers == ModifierKeys.None)
-					SelectedIndex = Items.Count - 1;
 			};
 		}
 		#endregion
@@ -141,13 +122,22 @@ namespace System.Windows.Controls {
 		/// This is not where selecting the tab in response to the keys happens.
 		/// </remarks>
 		protected override void OnKeyDown(KeyEventArgs e) {
-			if (
-				(e.Key == Key.Tab && e.KeyboardDevice.Modifiers == ModifierKeys.Control) ||
-				(e.Key == Key.Tab && e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift)) ||
-				(e.Key == Key.Home && e.KeyboardDevice.Modifiers == ModifierKeys.None) ||
-				(e.Key == Key.End && e.KeyboardDevice.Modifiers == ModifierKeys.None))
-				e.Handled = true;
 			base.OnKeyDown(e);
+			if (Items.Count < 2)
+				return;
+			if (e.Key == Key.Tab && e.KeyboardDevice.Modifiers == ModifierKeys.Control) {
+				SelectedIndex = SelectedIndex == Items.Count - 1 ? 0 : SelectedIndex + 1;
+				e.Handled = true;
+			} else if (e.Key == Key.Tab && e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift)) {
+				SelectedIndex = SelectedIndex == 0 ? Items.Count - 1 : SelectedIndex - 1;
+				e.Handled = true;
+			} else if (e.Key == Key.Home && e.KeyboardDevice.Modifiers == ModifierKeys.None) {
+				SelectedIndex = 0;
+				e.Handled = true;
+			} else if (e.Key == Key.End && e.KeyboardDevice.Modifiers == ModifierKeys.None) {
+				SelectedIndex = Items.Count - 1;
+				e.Handled = true;
+			}
 		}
 
 		/// <summary>
