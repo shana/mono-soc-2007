@@ -1,3 +1,7 @@
+2007-06-18  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControlTest.cs, TabItemTest.cs: Added more tests.
+
 2007-06-17  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControlTest.cs: Added TabStripPlacementPropertyChangedCallback test.
