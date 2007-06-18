@@ -102,9 +102,9 @@ namespace Test.Rules.Smells {
 		}
 		
 		public void Foo () {
+			myList.Add ("MoreFoo");
 			Console.WriteLine ("Banner");
 			Console.WriteLine ("Print");
-			myList.Add ("MoreFoo");
 		}
 	}
 
@@ -155,7 +155,7 @@ namespace Test.Rules.Smells {
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			DumpMessageCollection (messageCollection);
 			Assert.IsNotNull (messageCollection);
-			Assert.AreEqual (messageCollection.Count, 2);
+			Assert.AreEqual (2, messageCollection.Count);
 			CheckMessageType (messageCollection, MessageType.Error);
 		}
 	}

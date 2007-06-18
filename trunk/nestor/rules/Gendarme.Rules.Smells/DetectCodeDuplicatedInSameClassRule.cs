@@ -48,16 +48,19 @@ namespace Gendarme.Rules.Smells {
 		
 		public override void VisitMethodBody (MethodBody methodBody) 
 		{
+			Console.WriteLine ("For the method {0}", methodBody.Method.Name);
 			instructionSetContainer = new ArrayList ();
 			currentPair = new InstructionPair ();
 		}
 		
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
 		{
+			int counter = 0;
 			foreach (Instruction instruction in instructionCollection) {
-				if (instruction.OpCode.Name == "ldarg.0" || instruction.Previous == null) {
+				if (instruction.OpCode.Name == "ldarg.0" || instruction.OpCode.Name == "pop" || instruction.Previous == null) {
 					instructionPairContainer = new ArrayList ();
 					instructionSetContainer.Add (instructionPairContainer);
+					counter++;
 				}
 				else {
 					if (currentPair.First != null) {
@@ -71,6 +74,7 @@ namespace Gendarme.Rules.Smells {
 					}
 				}
 			}
+			Console.WriteLine ("Has Groups: {0}", counter);
 		}
 		
 		public IList InstructionSetContainer {
@@ -112,7 +116,17 @@ namespace Gendarme.Rules.Smells {
 		public override bool Equals (object obj) {
 			if (obj is InstructionPair) {
 				InstructionPair targetInstructionPair = (InstructionPair) obj;
-				return firstInstruction.OpCode.Name == targetInstructionPair.First.OpCode.Name && secondInstruction.OpCode.Name == targetInstructionPair.Second.OpCode.Name;
+				
+				//Special Cases
+				if (firstInstruction.OpCode.Name.StartsWith("call") && targetInstructionPair.First.OpCode.Name.StartsWith("call") && secondInstruction.OpCode.Name == targetInstructionPair.Second.OpCode.Name)
+					return true;
+				if (secondInstruction.OpCode.Name.StartsWith ("call") && targetInstructionPair.Second.OpCode.Name.StartsWith("call") &&
+					firstInstruction.OpCode.Name == targetInstructionPair.First.OpCode.Name)
+					return true;
+				
+				//General equality expression
+				return firstInstruction.OpCode.Name == targetInstructionPair.First.OpCode.Name && 	
+						secondInstruction.OpCode.Name == targetInstructionPair.Second.OpCode.Name;
 			}
 			return false;
 		}
@@ -144,6 +158,7 @@ namespace Gendarme.Rules.Smells {
 			
 			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
+					//Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
 					existsRepliedInstructions = currentInstructionPair.Equals (targetInstructionPair);
 				}
 			}
@@ -152,7 +167,7 @@ namespace Gendarme.Rules.Smells {
 	
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
-				//Console.WriteLine ("Checking: {0}.{1} against {0}.{2}", currentMethod.DeclaringType.Name, currentMethod.Name, targetMethod.Name);
+				Console.WriteLine ("Checking: {0}.{1} against {0}.{2}", currentMethod.DeclaringType.Name, currentMethod.Name, targetMethod.Name);
 				IList currentInstructionSetContainer = FillInstructionCollectionsFrom (currentMethod.Body);
 				IList targetInstructionSetContainer = FillInstructionCollectionsFrom (targetMethod.Body);
 			
