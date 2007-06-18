@@ -94,6 +94,18 @@ namespace Test.Rules.Smells {
 			}
 			myList.Remove ("FooReplied");
 		} 
+				
+		public void Bar () {
+			Console.WriteLine ("Banner");
+			Console.WriteLine ("Print");
+			myList.Add ("MoreBar");
+		}
+		
+		public void Foo () {
+			Console.WriteLine ("Banner");
+			Console.WriteLine ("Print");
+			myList.Add ("MoreFoo");
+		}
 	}
 
 	[TestFixture]
@@ -143,7 +155,7 @@ namespace Test.Rules.Smells {
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			DumpMessageCollection (messageCollection);
 			Assert.IsNotNull (messageCollection);
-			Assert.AreEqual (messageCollection.Count, 1);
+			Assert.AreEqual (messageCollection.Count, 2);
 			CheckMessageType (messageCollection, MessageType.Error);
 		}
 	}

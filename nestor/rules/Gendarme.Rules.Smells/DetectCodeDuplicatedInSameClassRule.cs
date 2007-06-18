@@ -55,7 +55,7 @@ namespace Gendarme.Rules.Smells {
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
 		{
 			foreach (Instruction instruction in instructionCollection) {
-				if (instruction.OpCode.Name == "ldarg.0") {
+				if (instruction.OpCode.Name == "ldarg.0" || instruction.Previous == null) {
 					instructionPairContainer = new ArrayList ();
 					instructionSetContainer.Add (instructionPairContainer);
 				}
@@ -152,6 +152,7 @@ namespace Gendarme.Rules.Smells {
 	
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
+				//Console.WriteLine ("Checking: {0}.{1} against {0}.{2}", currentMethod.DeclaringType.Name, currentMethod.Name, targetMethod.Name);
 				IList currentInstructionSetContainer = FillInstructionCollectionsFrom (currentMethod.Body);
 				IList targetInstructionSetContainer = FillInstructionCollectionsFrom (targetMethod.Body);
 			
@@ -170,6 +171,7 @@ namespace Gendarme.Rules.Smells {
 			MessageCollection messageCollection = new MessageCollection ();
 			foreach (MethodDefinition currentMethodDefinition in typeDefinition.Methods) {
 				foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
+					
 					if (ContainsDuplicatedCode (currentMethodDefinition, targetMethodDefinition)) {
 						Location location = new Location (typeDefinition.Name, currentMethodDefinition.Name, 0);
 						Message message = new Message (String.Format ("Exists code duplicated in: {0}.{1} and in {0}.{2}", typeDefinition.Name, currentMethodDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
