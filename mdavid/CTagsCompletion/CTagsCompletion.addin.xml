@@ -1,0 +1,18 @@
+<AddIn
+	id          = "MonoDevelop.CTagsCompletion"
+	name        = "CTagsCompltion"
+	author      = "Marcos David Marin Amador"
+	copright    = "MIT X11"
+	url         = "http://www.monodevelop.com"
+	description = "Creates and parses exuberant ctags tag files"
+	version     = "0.1">
+	
+	<Runtime>
+		<Import assembly = "CTagsCompletion"/>
+	</Runtime>
+	
+	<Dependencies>
+		<AddIn id = "MonoDevelop.Core" version = "0.14.0"/>
+		<AddIn id = "MonoDevelop.Projects" version = "0.14.0"/>
+	</Dependencies>
+</AddIn>
