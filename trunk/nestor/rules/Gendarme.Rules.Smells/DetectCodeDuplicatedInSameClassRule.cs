@@ -38,17 +38,17 @@ using Gendarme.Framework;
 namespace Gendarme.Rules.Smells {
 	//TODO: Ask if I can create new files that contains classes for this rule.
 
-	class InstructionSetVisitor : BaseCodeVisitor {
-		private IList instructionSets;
-		private IList instructionSet;
+	class InstructionFillerVisitor : BaseCodeVisitor {
+		private IList instructionSetContainer;
+		private IList instructionPairContainer;
 		private InstructionPair currentPair;
 		
-		public	InstructionSetVisitor () : base () {
+		public	InstructionFillerVisitor () : base () {
 		}
 		
 		public override void VisitMethodBody (MethodBody methodBody) 
 		{
-			instructionSets = new ArrayList ();
+			instructionSetContainer = new ArrayList ();
 			currentPair = new InstructionPair ();
 		}
 		
@@ -56,13 +56,13 @@ namespace Gendarme.Rules.Smells {
 		{
 			foreach (Instruction instruction in instructionCollection) {
 				if (instruction.OpCode.Name == "ldarg.0") {
-					instructionSet = new ArrayList ();
-					instructionSets.Add (instructionSet);
+					instructionPairContainer = new ArrayList ();
+					instructionSetContainer.Add (instructionPairContainer);
 				}
 				else {
 					if (currentPair.First != null) {
 						currentPair.Second = instruction;
-						instructionSet.Add (currentPair);
+						instructionPairContainer.Add (currentPair);
 						currentPair = new InstructionPair ();
 						currentPair.First = instruction;
 					}
@@ -73,9 +73,9 @@ namespace Gendarme.Rules.Smells {
 			}
 		}
 		
-		public IList InstructionSets {
+		public IList InstructionSetContainer {
 			get {
-				return instructionSets;
+				return instructionSetContainer;
 			}
 		}
 	}
@@ -134,9 +134,9 @@ namespace Gendarme.Rules.Smells {
 		private StringCollection checkedMethods;
 
 		private IList FillInstructionCollectionsFrom (MethodBody methodBody) {
-			InstructionSetVisitor instructionSetVisitor = new InstructionSetVisitor ();
-			methodBody.Accept (instructionSetVisitor);
-			return instructionSetVisitor.InstructionSets;
+			InstructionFillerVisitor instructionFillerVisitor = new InstructionFillerVisitor ();
+			methodBody.Accept (instructionFillerVisitor);
+			return instructionFillerVisitor.InstructionSetContainer;
 		}
 		
 		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) {
@@ -150,13 +150,13 @@ namespace Gendarme.Rules.Smells {
 			return existsRepliedInstructions;
 		}
 	
-		private bool ContainsSameCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
+		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
-				IList currentInstructionCollections = FillInstructionCollectionsFrom (currentMethod.Body);
-				IList targetInstructionCollections = FillInstructionCollectionsFrom (targetMethod.Body);
+				IList currentInstructionSetContainer = FillInstructionCollectionsFrom (currentMethod.Body);
+				IList targetInstructionSetContainer = FillInstructionCollectionsFrom (targetMethod.Body);
 			
-				foreach (IList currentInstructionSet in currentInstructionCollections) {
-					foreach (IList targetInstructionSet in targetInstructionCollections) {
+				foreach (IList currentInstructionSet in currentInstructionSetContainer) {
+					foreach (IList targetInstructionSet in targetInstructionSetContainer) {
 						return ExistsRepliedInstructions (currentInstructionSet, targetInstructionSet);
 					}
 				}
@@ -170,7 +170,7 @@ namespace Gendarme.Rules.Smells {
 			MessageCollection messageCollection = new MessageCollection ();
 			foreach (MethodDefinition currentMethodDefinition in typeDefinition.Methods) {
 				foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
-					if (ContainsSameCode (currentMethodDefinition, targetMethodDefinition)) {
+					if (ContainsDuplicatedCode (currentMethodDefinition, targetMethodDefinition)) {
 						Location location = new Location (typeDefinition.Name, currentMethodDefinition.Name, 0);
 						Message message = new Message (String.Format ("Exists code duplicated in: {0}.{1} and in {0}.{2}", typeDefinition.Name, currentMethodDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
 						messageCollection.Add (message);
