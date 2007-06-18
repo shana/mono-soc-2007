@@ -1,3 +1,7 @@
+2007-06-18  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs, TabItem.cs: More fixes.
+
 2007-06-17  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControl.cs, TabItem.cs: Improved (the TabControl sample is displayed correctly now).

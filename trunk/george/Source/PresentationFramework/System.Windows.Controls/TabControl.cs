@@ -35,6 +35,12 @@ namespace System.Windows.Controls {
 			Theme.Load();
 #endif
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(TabControl), new FrameworkPropertyMetadata(typeof(TabControl)));
+			//FIXME: I should not do this.
+			//SelectedIndexProperty.AddOwner(typeof(TabControl), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			//    TabItem tab_item = ((TabControl)d).GetTabItemForItemAtIndex((int)e.NewValue);
+			//    if (tab_item != null)
+			//        tab_item.IsSelected = true;
+			//}));
 		}
 		#endregion
 
@@ -43,6 +49,19 @@ namespace System.Windows.Controls {
 			ItemContainerGenerator.StatusChanged += delegate(object sender, EventArgs e) {
 				EnsureATabItemIsSelected();
 				UpdateTabStripPlacement();
+			};
+			
+			KeyDown += delegate(object sender, KeyEventArgs e) {
+				if (Items.Count == 1)
+					return;
+				if (e.Key == Key.Tab && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+					SelectedIndex++;
+				else if (e.Key == Key.Tab && e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift))
+					SelectedIndex--;
+				else if (e.Key == Key.Home && e.KeyboardDevice.Modifiers == ModifierKeys.None)
+					SelectedIndex = 0;
+				else if (e.Key == Key.End && e.KeyboardDevice.Modifiers == ModifierKeys.None)
+					SelectedIndex = Items.Count - 1;
 			};
 		}
 		#endregion
@@ -140,10 +159,13 @@ namespace System.Windows.Controls {
 		/// </remarks>
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
 			base.OnSelectionChanged(e);
-			TabItem selectedTabItem = GetTabItemForItem(SelectedItem);
-			SelectedContent = selectedTabItem == null ? null : selectedTabItem.Content;
-			SelectedContentTemplate = selectedTabItem == null ? ContentTemplate : selectedTabItem.ContentTemplate ?? ContentTemplate;
-			SelectedContentTemplateSelector = selectedTabItem == null ? ContentTemplateSelector : selectedTabItem.ContentTemplateSelector ?? ContentTemplateSelector;
+			TabItem selected_tab_item = GetTabItemForItem(SelectedItem);
+			//FIXME: I should not do this here.
+			if (selected_tab_item != null)
+				selected_tab_item.IsSelected = true;
+			SelectedContent = selected_tab_item == null ? null : selected_tab_item.Content;
+			SelectedContentTemplate = selected_tab_item == null ? ContentTemplate : selected_tab_item.ContentTemplate ?? ContentTemplate;
+			SelectedContentTemplateSelector = selected_tab_item == null ? ContentTemplateSelector : selected_tab_item.ContentTemplateSelector ?? ContentTemplateSelector;
 		}
 		#endregion
 
@@ -170,6 +192,9 @@ namespace System.Windows.Controls {
 		}
 
 		TabItem GetTabItemForItem(object item) {
+			TabItem tab_item = item as TabItem;
+			if (tab_item != null)
+				return tab_item;
 			return (TabItem)ItemContainerGenerator.ContainerFromItem(item);
 		}
 
