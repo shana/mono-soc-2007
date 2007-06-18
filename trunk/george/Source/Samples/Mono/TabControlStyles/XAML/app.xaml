@@ -3,16 +3,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="TabControlGrid.app"
     StartupUri="Pane1.xaml"
+    xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
     >
   <!-- Resources & Styles defined in this section will impact the entire application.  -->
   <Application.Resources>
 
-    <Style x:Key="SimpleTabControl" TargetType="{x:Type TabControl}">
+    <Style x:Key="SimpleTabControl" TargetType="{x:Type mono_sytem_windows_controls:TabControl}">
       <Setter Property = "TabStripPlacement" Value = "Top"/>
       <Setter Property = "Foreground" Value= "Blue"/>
     </Style>
 
-    <Style x:Key="Triggers" TargetType="{x:Type TabItem}">
+    <Style x:Key="Triggers" TargetType="{x:Type mono_sytem_windows_controls:TabItem}">
       <Style.Triggers>
         <Trigger Property="TabItem.IsMouseOver" Value="true">
           <Setter Property = "Foreground" Value="Green"/>
@@ -21,7 +22,7 @@
       </Style.Triggers>
     </Style>
 
-    <Style x:Key="SimpleTabItem" TargetType="{x:Type TabItem}">
+    <Style x:Key="SimpleTabItem" TargetType="{x:Type mono_sytem_windows_controls:TabItem}">
       <Setter Property = "Background" Value = "Pink"/>
       <Setter Property = "FontWeight" Value = "Bold"/>
     </Style>
