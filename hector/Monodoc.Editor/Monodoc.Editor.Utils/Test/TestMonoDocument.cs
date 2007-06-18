@@ -30,6 +30,26 @@ public class TestMonoDocument {
 	[Test()]
 	public void ConstructorInvalid ()
 	{
+		MonoDocument document = null;
+		
+		try {
+			document = new MonoDocument (String.Empty);
+		} catch {
+		}
+		
+		Assert.IsNotInstanceOfType (type, document, "CI01");
+		Assert.IsNull (document, "CI02");
+	}
+	
+	[Test()]
+	public void ConstructorValid ()
+	{
+		string fileName;
+		
+		fileName = Path.Combine (pathTest, "Accel.xml");
+		MonoDocument document = new MonoDocument (fileName);
+		Assert.IsInstanceOfType (type, document, "CV02");
+		Assert.IsNotNull (document, "CV02");
 	}
 }
 }
