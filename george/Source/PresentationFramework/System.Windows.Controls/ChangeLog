@@ -1,3 +1,7 @@
+2007-06-19  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs: Cleaned the code a little.
+
 2007-06-18  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControl.cs, TabItem.cs: More fixes.
