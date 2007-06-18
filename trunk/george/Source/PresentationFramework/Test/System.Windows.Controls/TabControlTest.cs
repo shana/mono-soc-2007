@@ -257,5 +257,72 @@ namespace System.Windows.Controls {
 		public void TabStripPlacementPropertyChangedCallback() {
 			Assert.IsNull(TabControl.TabStripPlacementProperty.DefaultMetadata.PropertyChangedCallback);
 		}
+
+		#region OnSelectionChanged
+		[Test]
+		public void OnSelectionChanged() {
+			new OnSelectionChangedTabControl();
+		}
+
+		class OnSelectionChangedTabControl : TabControl {
+			public OnSelectionChangedTabControl() {
+				TabItem i1 = new TabItem();
+				Items.Add(i1);
+				TabItem i2 = new TabItem();
+				Items.Add(i2);
+				SelectedItem = i2;
+				Assert.IsTrue(i2.IsSelected);
+			}
+
+			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
+			}
+		}
+		#endregion
+
+		[Test]
+		public void IsSynchronizedWithCurrentItem() {
+			Assert.IsNull(new TabControl().IsSynchronizedWithCurrentItem);
+		}
+
+		[Test]
+		public void SelectedIndex() {
+			PropertyMetadata default_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedIndexProperty.DefaultMetadata;
+			PropertyMetadata selector_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedIndexProperty.GetMetadata(typeof(global::System.Windows.Controls.Primitives.Selector));
+			PropertyMetadata tab_control_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedIndexProperty.GetMetadata(typeof(TabControl));
+			Assert.AreNotSame(default_metadata, tab_control_metadata, "1");
+			Assert.AreSame(selector_metadata, tab_control_metadata, "2");
+			Assert.AreEqual(tab_control_metadata.DefaultValue, -1, "3");
+		}
+
+		[Test]
+		public void SelectedItem() {
+			PropertyMetadata default_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedItemProperty.DefaultMetadata;
+			PropertyMetadata selector_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedItemProperty.GetMetadata(typeof(global::System.Windows.Controls.Primitives.Selector));
+			PropertyMetadata tab_control_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedItemProperty.GetMetadata(typeof(TabControl));
+			Assert.AreNotSame(default_metadata, tab_control_metadata, "1");
+			Assert.AreSame(selector_metadata, tab_control_metadata, "2");
+			Assert.AreEqual(tab_control_metadata.DefaultValue, null, "3");
+		}
+
+		[Test]
+		public void SelectedValue() {
+			PropertyMetadata default_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedValueProperty.DefaultMetadata;
+			PropertyMetadata selector_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedValueProperty.GetMetadata(typeof(global::System.Windows.Controls.Primitives.Selector));
+			PropertyMetadata tab_control_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedValueProperty.GetMetadata(typeof(TabControl));
+			Assert.AreNotSame(default_metadata, tab_control_metadata, "1");
+			Assert.AreSame(selector_metadata, tab_control_metadata, "2");
+			Assert.AreEqual(tab_control_metadata.DefaultValue, null, "3");
+		}
+
+		[Test]
+		public void OnSelectionChangedSimplified() {
+			TabControl tab_control = new TabControl();
+			TabItem i1 = new TabItem();
+			tab_control.Items.Add(i1);
+			TabItem i2 = new TabItem();
+			tab_control.Items.Add(i2);
+			tab_control.SelectedItem = i2;
+			Assert.IsTrue(i2.IsSelected);
+		}
 	}
 }

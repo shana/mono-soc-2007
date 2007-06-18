@@ -82,17 +82,21 @@ namespace System.Windows.Controls {
 			i1.IsSelected = true;
 			Assert.IsTrue(i1.IsSelected, "5");
 			Assert.AreEqual(t.SelectedItem, i1, "5 1");
+			Assert.AreEqual(t.SelectedIndex, 0, "5 2");
 			i1.IsSelected = false;
 			Assert.IsFalse(i1.IsSelected, "6");
 			Assert.IsNull(t.SelectedItem, "6 1");
+			Assert.AreEqual(t.SelectedIndex, -1, "6 2");
 			TabItem i2 = new TabItem();
 			t.Items.Add(i2);
 			i2.IsSelected = true;
 			Assert.IsTrue(i2.IsSelected, "7");
 			Assert.AreSame(t.SelectedItem, i2, "7 1");
+			Assert.AreEqual(t.SelectedIndex, 1, "7 2");
 			i1.IsSelected = true;
 			Assert.IsTrue(i1.IsSelected, "8");
 			Assert.AreSame(t.SelectedItem, i1, "8 1");
+			Assert.AreEqual(t.SelectedIndex, 0, "8 2");
 
 			i1.IsSelected = false;
 			i2.IsSelected = false;
@@ -102,18 +106,22 @@ namespace System.Windows.Controls {
 			Assert.IsTrue(i1.IsSelected, "9");
 			Assert.IsFalse(i2.IsSelected, "10");
 			Assert.AreSame(t.SelectedItem, i1, "10 1");
+			Assert.AreEqual(t.SelectedIndex, 0, "10 2");
 			i1.IsSelected = true;
 			Assert.IsTrue(i1.IsSelected, "11");
 			Assert.IsFalse(i2.IsSelected, "12");
 			Assert.AreSame(t.SelectedItem, i1, "12 1");
+			Assert.AreEqual(t.SelectedIndex, 0, "12 2");
 			i2.IsSelected = true;
 			Assert.IsFalse(i1.IsSelected, "13");
 			Assert.IsTrue(i2.IsSelected, "14");
 			Assert.AreSame(t.SelectedItem, i2, "14 1");
+			Assert.AreEqual(t.SelectedIndex, 1, "14 2");
 			i1.IsSelected = false;
 			Assert.IsFalse(i1.IsSelected, "15");
 			Assert.IsTrue(i2.IsSelected, "16");
 			Assert.AreSame(t.SelectedItem, i2, "16 1");
+			Assert.AreEqual(t.SelectedIndex, 1, "16 2");
 		}
 
 		[Test]
@@ -186,6 +194,64 @@ namespace System.Windows.Controls {
 		[Test]
 		public void TabStripPlacementBinding() {
 			Assert.IsNull(BindingOperations.GetBinding(new TabItem(), TabItem.TabStripPlacementProperty));
+		}
+
+		#region OnSelected
+		[Test]
+		public void OnSelected() {
+			TabControl tab_control = new TabControl();
+			OnSelectedTabItem i1 = new OnSelectedTabItem();
+			tab_control.Items.Add(i1);
+			OnSelectedTabItem i2 = new OnSelectedTabItem();
+			tab_control.Items.Add(i2);
+			i1.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "1");
+			i2.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "2");
+			Assert.IsTrue(i1.IsSelected, "3");
+			Assert.IsTrue(i2.IsSelected, "4");
+		}
+
+		class OnSelectedTabItem : TabItem {
+			protected override void OnSelected(RoutedEventArgs e) {
+			}
+		}
+		#endregion
+
+		#region OnUnselected
+		[Test]
+		public void OnUnselected() {
+			TabControl tab_control = new TabControl();
+			OnUnselectedTabItem i1 = new OnUnselectedTabItem();
+			tab_control.Items.Add(i1);
+			OnUnselectedTabItem i2 = new OnUnselectedTabItem();
+			tab_control.Items.Add(i2);
+			i1.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "1");
+			Assert.IsTrue(i1.IsSelected, "1 1");
+			i2.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 1, "2");
+			Assert.IsFalse(i1.IsSelected, "3");
+			Assert.IsTrue(i2.IsSelected, "4");
+		}
+
+		class OnUnselectedTabItem : TabItem {
+			protected override void OnUnselected(RoutedEventArgs e) {
+			}
+		}
+		#endregion
+
+		[Test]
+		public void OnUnselectedSimplified() {
+			TabControl tab_control = new TabControl();
+			TabItem i1 = new TabItem();
+			tab_control.Items.Add(i1);
+			TabItem i2 = new TabItem();
+			tab_control.Items.Add(i2);
+			i1.IsSelected = true;
+			Assert.IsTrue(i1.IsSelected, "1");
+			i2.IsSelected = true;
+			Assert.IsFalse(i1.IsSelected, "2");
 		}
 	}
 }
