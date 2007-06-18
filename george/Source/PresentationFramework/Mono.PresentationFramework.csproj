@@ -65,6 +65,7 @@
     <Compile Include="System.Windows.Controls\ContextMenuEventHandler.cs" />
     <Compile Include="System.Windows.Controls\ContextMenuEventArgs.cs" />
     <Compile Include="System.Windows.Controls\DockPanel.cs" />
+    <Compile Include="System.Windows.Controls\Grid.cs" />
     <Compile Include="System.Windows.Controls\Panel.cs" />
     <Compile Include="System.Windows.Controls\ProgressBar.cs" />
     <Compile Include="System.Windows.Controls\RadioButton.cs" />
