@@ -134,5 +134,37 @@ namespace System.Windows.Controls.Primitives {
 			Assert.AreEqual(t.DesiredSize.Width, 100, "1");
 			Assert.AreEqual(t.DesiredSize.Height, 25, "2");
 		}
+
+		#region DockLeft
+		[Test]
+		public void DockLeft() {
+			DockLeftTabControl t = new DockLeftTabControl();
+
+			TabItem tab_item1 = new TabItem();
+			tab_item1.Header = "H1";
+			t.Items.Add(tab_item1);
+
+			TabItem tab_item2 = new TabItem();
+			tab_item2.Header = "H2...........";
+			t.Items.Add(tab_item2);
+
+			t.TabStripPlacement = Dock.Left;
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			double width = tab_item2.ActualWidth;
+			double header_panel_width = t.GetHeaderPanel().ActualWidth;
+			tab_item2.IsSelected = true;
+			Assert.AreEqual(tab_item2.ActualWidth, width, "1");
+			Assert.AreEqual(t.GetHeaderPanel().ActualWidth, header_panel_width, "2");
+			Assert.AreEqual(header_panel_width, width, "3");
+		}
+
+		class DockLeftTabControl : TabControl {
+			public TabPanel GetHeaderPanel() {
+				return (TabPanel)GetTemplateChild("HeaderPanel");
+			}
+		}
+		#endregion
 	}
 }
