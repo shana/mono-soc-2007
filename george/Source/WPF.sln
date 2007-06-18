@@ -58,6 +58,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canvas_Z-Order", "Samples\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabControlGrid", "Samples\Mono\TabControlStyles\XAML\TabControlGrid.csproj", "{B09EE921-1DD5-479B-BF47-7E9AB163D02C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabControlStyles", "Samples\Mono\TabControlUsingControlTemplates\XAML\TabControlStyles.csproj", "{9244593D-5E7E-4652-B602-0DF1CCA70FA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabControlEx", "Samples\Mono\TabControlwithContextMenu\CSharp\TabControlEx.csproj", "{0FFBE912-D259-40BF-B928-55963E382C07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Implementation|Any CPU = Debug - Implementation|Any CPU
@@ -189,6 +193,18 @@ Global
 		{B09EE921-1DD5-479B-BF47-7E9AB163D02C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B09EE921-1DD5-479B-BF47-7E9AB163D02C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{B09EE921-1DD5-479B-BF47-7E9AB163D02C}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{9244593D-5E7E-4652-B602-0DF1CCA70FA6}.Debug - Implementation|Any CPU.ActiveCfg = Debug|Any CPU
+		{9244593D-5E7E-4652-B602-0DF1CCA70FA6}.Debug - Implementation|Any CPU.Build.0 = Debug|Any CPU
+		{9244593D-5E7E-4652-B602-0DF1CCA70FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9244593D-5E7E-4652-B602-0DF1CCA70FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9244593D-5E7E-4652-B602-0DF1CCA70FA6}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9244593D-5E7E-4652-B602-0DF1CCA70FA6}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{0FFBE912-D259-40BF-B928-55963E382C07}.Debug - Implementation|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FFBE912-D259-40BF-B928-55963E382C07}.Debug - Implementation|Any CPU.Build.0 = Debug|Any CPU
+		{0FFBE912-D259-40BF-B928-55963E382C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FFBE912-D259-40BF-B928-55963E382C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FFBE912-D259-40BF-B928-55963E382C07}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FFBE912-D259-40BF-B928-55963E382C07}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

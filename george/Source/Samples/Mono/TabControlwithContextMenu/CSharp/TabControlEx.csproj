@@ -5,10 +5,10 @@
     <TargetType>winexe</TargetType>
     <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
     <ApplicationIcon>App.ico</ApplicationIcon>
-    <ProductVersion>8.0.40903</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <CLRDefaultNamespace>TabControlEx</CLRDefaultNamespace>
-    <ProjectGuid>{32AAFFC0-6E41-44E8-87FA-D82F6C1601E7}</ProjectGuid>
+    <ProjectGuid>{0FFBE912-D259-40BF-B928-55963E382C07}</ProjectGuid>
     <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -27,8 +27,8 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="UIAutomationProvider"/>
-    <Reference Include="UIAutomationTypes"/>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="app.xaml" />
@@ -49,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PresentationFramework\Mono.PresentationFramework.csproj">
+      <Project>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</Project>
+      <Name>Mono.PresentationFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
