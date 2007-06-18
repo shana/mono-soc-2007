@@ -45,12 +45,6 @@ public class EcmaReader {
 		}
 	}
 	
-	public string Text {
-		get {
-			return document.OuterXml;
-		}
-	}
-	
 	public bool Valid {
 		get {
 			return val_success;

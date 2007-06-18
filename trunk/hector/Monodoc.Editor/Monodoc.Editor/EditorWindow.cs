@@ -36,12 +36,8 @@ public partial class EditorWindow : Gtk.Window {
 		dialog.Run ();
 		
 		try {
-			EcmaReader ecmaReader = new EcmaReader (dialog.Document);
-			DocumentBufferArchiver.Deserialize (docEditView.Buffer, ecmaReader.Text);
-			//docEditView.Buffer.Text = ecmaReader.Text;
-			
-			MonoDocument document = new MonoDocument (dialog.Document);
-			document.Convert ();
+			MonoDocument doc = new MonoDocument (dialog.Document);
+			DocumentBufferArchiver.Deserialize (docEditView.Buffer, doc.Text);
 		} catch (ArgumentException argexp) {
 			Console.WriteLine (argexp.Message);
 		}

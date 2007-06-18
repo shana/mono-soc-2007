@@ -1,5 +1,13 @@
 2007-06-18  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor.Utils/MonoDocument.cs: Deleted Convert methods this
+	  new is done in Deserializer.
+	* Monodoc.Editor.Utils/EcmaReader.cs: Deleted Accesor.
+	* Monodoc.Editor/EditorWindow.cs: Now using MonoDocument and
+	  DocumentBufferArchiver when opening a file.
+
+2007-06-18  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor.Utils/Test/TestMonoDocument.cs: Added to basic
 	  constructor tests for MonoDocument.
 	* Monodoc.Editor.Utils/MonoDocument.cs: Minor change.
