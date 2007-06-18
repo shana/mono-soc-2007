@@ -13,22 +13,10 @@ namespace System.Windows.Controls {
 		#region Dependency Properties
 		public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(TabItem), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			TabItem i = (TabItem)d;
-			TabControl tab_control = i.GetTabControl();
-			if ((bool)e.NewValue) {
-				if (tab_control != null) {
-					int index_of_current_instance = tab_control.ItemContainerGenerator.IndexFromContainer(i);
-					if (index_of_current_instance != -1) {
-						for (int item_index = 0; item_index < tab_control.Items.Count; item_index++) {
-							TabItem tab_item = (TabItem)tab_control.ItemContainerGenerator.ContainerFromIndex(item_index);
-							if (tab_item != null && tab_item != i)
-								tab_item.IsSelected = false;
-						}
-						tab_control.SelectedItem = tab_control.Items[index_of_current_instance];
-					} else
-						tab_control.SelectedItem = i;
-				}
+			if ((bool)e.NewValue)
 				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
-			} else {
+			else {
+				TabControl tab_control = i.GetTabControl();
 				if (tab_control != null) {
 					if (tab_control.SelectedItem == tab_control.GetItemForTabItem(i))
 						tab_control.SelectedItem = null;
@@ -59,6 +47,9 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public TabItem() {
+			//TabControl.AddSelectedHandler(this, delegate(object sender, RoutedEventArgs e) {
+			//    IsSelected = true;
+			//});
 		}
 		#endregion
 
@@ -128,6 +119,25 @@ namespace System.Windows.Controls {
 		}
 
 		protected virtual void OnSelected(RoutedEventArgs e) {
+			TabControl tab_control = GetTabControl();
+			if (tab_control == null)
+				return;
+			int index_of_current_instance = tab_control.ItemContainerGenerator.IndexFromContainer(this);
+			if (index_of_current_instance != -1) {
+				for (int item_index = 0; item_index < tab_control.Items.Count; item_index++) {
+					TabItem tab_item = (TabItem)tab_control.ItemContainerGenerator.ContainerFromIndex(item_index);
+					if (tab_item != null && tab_item != this)
+						tab_item.IsSelected = false;
+				}
+				tab_control.SelectedItem = tab_control.Items[index_of_current_instance];
+			} else {
+				foreach (object item in tab_control.Items) {
+					TabItem tab_item = item as TabItem;
+					if (tab_item != null && tab_item != this)
+						tab_item.IsSelected = false;
+				}
+				tab_control.SelectedItem = this;
+			}
 		}
 
 		protected virtual void OnUnselected(RoutedEventArgs e) {
