@@ -1,3 +1,11 @@
+2007-06-18  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Utils/Test/TestMonoDocument.cs: Added to basic
+	  constructor tests for MonoDocument.
+	* Monodoc.Editor.Utils/MonoDocument.cs: Minor change.
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Deleting unused
+	  variables.
+
 2007-06-17  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs,

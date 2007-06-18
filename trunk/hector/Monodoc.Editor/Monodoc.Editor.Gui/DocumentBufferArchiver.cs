@@ -39,11 +39,8 @@ public class DocumentBufferArchiver {
 		int offset = start.Offset;
 		Stack stack = new Stack ();
 		TagStart tagStart;
-		TextTag tag;
 		TextIter insert_at;
 		
-		DocumentTagTable docTable = buffer.TagTable as DocumentTagTable;
-		int curr_depth = -1;
 		
 		while (xmlReader.Read ()) {
 			switch (xmlReader.NodeType) {

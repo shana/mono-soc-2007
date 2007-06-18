@@ -19,7 +19,7 @@ public class MonoDocument {
 	{
 		EcmaReader reader = new EcmaReader (filePath);
 		document = reader.Document;
-		root_element = reader.Document.DocumentElement;
+		root_element = document.DocumentElement;
 		valid = reader.Valid;
 	}
 	
