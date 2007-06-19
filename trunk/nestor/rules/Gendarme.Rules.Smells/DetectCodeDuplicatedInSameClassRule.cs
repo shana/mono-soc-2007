@@ -150,6 +150,8 @@ namespace Gendarme.Rules.Smells {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
 					//Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
 					existsRepliedInstructions = currentInstructionPair.Equals (targetInstructionPair);
+					if (existsRepliedInstructions)
+						Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
 				}
 			}
 			return existsRepliedInstructions;
