@@ -1,5 +1,18 @@
 2007-06-19 Brian Nickel <brian.nickel@gmail.com>
 
+	* committed/xsp-vhost-fix.patch: MOVED to committed.
+
+	* xsp-baserequestbroker-docs-plus-dont-reassign-buffer.patch: ADDED.
+	Complete documentation for BaseRequestBroker.cs. In addition, it does a
+	small fix that should marginally improve performance.
+	
+	Before the patch, when a request is unregistered, the buffer is not
+	freed but cleared, presumable so it can be used again. However, when a
+	requests is assigned, a new buffer is unconditionally created. This
+	patch checks for a valid buffer before overwriting.
+
+2007-06-19 Brian Nickel <brian.nickel@gmail.com>
+
 	* xsp-baseapplicationhost-dont-assume.patch: ADDED. Alters the behavior
 	of BaseApplicationHost so that it doesn't crash if the request broker
 	doesn't inherit BaseRequestBroker.
