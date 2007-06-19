@@ -1,0 +1,16 @@
+2007-06-19 Brian Nickel <brian.nickel@gmail.com>
+
+	* xsp-baseapplicationhost-dont-assume.patch: ADDED. Alters the behavior
+	of BaseApplicationHost so that it doesn't crash if the request broker
+	doesn't inherit BaseRequestBroker.
+	
+	* xsp-iwebsource-docs.patch: ADDED. Complete documentation for
+	IWebSource.cs.
+	
+	* xsp-iapplicationhost-docs.patch: ADDED. Complete documentation for
+	IApplicationHost.cs.
+	
+	* xsp-monoworkerrequest-docs.patch: ADDED. Complete documentation for
+	MonoWorkerRequest.cs.
+	
+	* xsp-vhost-fix.patch: ADDED. Don't skip path check if vhost is "*".

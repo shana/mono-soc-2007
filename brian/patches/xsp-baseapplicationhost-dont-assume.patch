@@ -1,0 +1,14 @@
+Index: BaseApplicationHost.cs
+===================================================================
+--- BaseApplicationHost.cs	(revision 77663)
++++ BaseApplicationHost.cs	(working copy)
+@@ -118,7 +118,8 @@
+ 				mwr.CloseConnection ();
+ 			} catch {
+ 			} finally {
+-				((BaseRequestBroker) requestBroker).UnregisterRequest (mwr.RequestId);
++				if (requestBroker != null && requestBroker is BaseRequestBroker)
++					((BaseRequestBroker) requestBroker).UnregisterRequest (mwr.RequestId);
+ 			}
+ 		}
+ 	}
