@@ -1,5 +1,6 @@
 SUBDIRS= Gendarme.Rules.Naming \
-Gendarme.Rules.Exceptions
+Gendarme.Rules.Exceptions \
+Gendarme.Rules.Smells
 
 EXTRA_DIST = rules.xml 
 DISTCLEANFILES = Makefile.in
