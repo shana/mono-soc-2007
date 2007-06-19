@@ -45,11 +45,12 @@ namespace CTagsCompletion
 			CTagsProject tagProject = entry as CTagsProject;
 			
 			if (tagProject == null) return;
+			if (!tagProject.ShouldWriteTags) return;
 			
 			try {
 				tagProject.WriteTags ();
 			} catch (Exception ex) {
-				Console.WriteLine (ex.Message);
+				Console.Error.WriteLine (ex.Message);
 			}
 		}
 	}

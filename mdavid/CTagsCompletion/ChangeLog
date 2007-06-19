@@ -1,3 +1,9 @@
+2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* CTagsProjectServiceExtension.cs, CTagsProject.cs: Added a protected
+	  field so that Projects that descend from CTagsProject may choose to
+	  not have it's tags written.
+
 2007-06-18  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Tag.cs: This is the class represents a tag entry in the tags file.
