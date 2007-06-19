@@ -49,6 +49,7 @@ namespace Mono.WebServer
 	{
 		bool verbose;
 		Type host_type;
+		WebSource web_source;
 
 		// This is much faster than hashtable for typical cases.
 		ArrayList vpathToHost = new ArrayList ();
@@ -58,8 +59,9 @@ namespace Mono.WebServer
 			host_type = hostType;
 		}
 		
-		protected ApplicationManager ()
+		protected ApplicationManager (WebSource source)
 		{
+			web_source = source;
 		}
 		
 		public virtual Type GetApplicationHostType ()
@@ -70,6 +72,10 @@ namespace Mono.WebServer
 		public bool Verbose {
 			get { return verbose; }
 			set { verbose = value; }
+		}
+
+		public WebSource WebSource {
+			get { return web_source; }
 		}
 
 		public void AddApplication (string vhost, int vport, string vpath, string fullPath)
@@ -242,7 +248,7 @@ namespace Mono.WebServer
 			if (bestMatch != null) {
 				lock (bestMatch) {
 					if (bestMatch.AppHost == null)
-						bestMatch.CreateHost (this, null);
+						bestMatch.CreateHost (this, web_source);
 				}
 				return bestMatch;
 			}

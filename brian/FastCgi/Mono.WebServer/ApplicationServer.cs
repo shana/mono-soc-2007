@@ -83,24 +83,16 @@ namespace Mono.WebServer
 	
 	public class ApplicationServer : ApplicationManager
 	{
-		WebSource webSource;
 		bool started;
 		bool stop;
 		Socket listen_socket;
 
 		Thread runner;
 		
-		public ApplicationServer (WebSource source)
+		public ApplicationServer (WebSource source) : base (source)
 		{
-			webSource = source;
 		} 
 		
-		public override Type GetApplicationHostType ()
-		{
-			return webSource.GetApplicationHostType ();
-		}
-
- 
 		public bool Start (bool bgThread)
 		{
 			if (started)
@@ -109,7 +101,7 @@ namespace Mono.WebServer
  			if (!ApplicationsSet)
  				throw new InvalidOperationException ("SetApplications must be called first.");
 
-			listen_socket = webSource.CreateSocket ();
+			listen_socket = WebSource.CreateSocket ();
 			listen_socket.Listen (500);
 			listen_socket.Blocking = false;
 			runner = new Thread (new ThreadStart (RunServer));
@@ -128,7 +120,7 @@ namespace Mono.WebServer
 				return; // Just ignore, as we're already stopping
 
 			stop = true;	
-			webSource.Dispose ();
+			WebSource.Dispose ();
 
 			// A foreground thread is required to end cleanly
 			Thread stopThread = new Thread (new ThreadStart (RealStop));
@@ -193,7 +185,7 @@ namespace Mono.WebServer
 			Worker worker = null;
 			try {
 				// The next line can throw (reusing and the client closed)
-				worker = webSource.CreateWorker (accepted, this);
+				worker = WebSource.CreateWorker (accepted, this);
 				worker.SetReuseCount (reuses);
 				if (false == worker.IsAsync)
 					ThreadPool.QueueUserWorkItem (new WaitCallback (worker.Run));
