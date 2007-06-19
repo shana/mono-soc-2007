@@ -1,5 +1,5 @@
 //
-// CProjectServiceExtension.cs: Provide an extension for OnClean to remove *.o files
+// CProjectServiceExtension.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -33,6 +33,8 @@ using System;
 using System.Text;
 
 using Mono.Addins;
+
+using CTagsCompletion;
 
 using MonoDevelop.Core;
 using MonoDevelop.Projects;

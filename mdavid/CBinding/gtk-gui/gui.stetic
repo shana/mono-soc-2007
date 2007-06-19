@@ -405,6 +405,7 @@ Shared Object</property>
           <widget class="Gtk.Table" id="table2">
             <property name="MemberName" />
             <property name="NRows">2</property>
+            <property name="NColumns">3</property>
             <property name="RowSpacing">10</property>
             <property name="ColumnSpacing">10</property>
             <property name="BorderWidth">3</property>
@@ -579,6 +580,7 @@ Shared Object</property>
               <widget class="Gtk.Table" id="table3">
                 <property name="MemberName" />
                 <property name="NRows">2</property>
+                <property name="NColumns">3</property>
                 <property name="RowSpacing">10</property>
                 <property name="ColumnSpacing">10</property>
                 <child>
@@ -736,6 +738,7 @@ Shared Object</property>
               <widget class="Gtk.Table" id="table4">
                 <property name="MemberName" />
                 <property name="NRows">2</property>
+                <property name="NColumns">3</property>
                 <property name="RowSpacing">10</property>
                 <property name="ColumnSpacing">10</property>
                 <child>
@@ -909,6 +912,10 @@ Shared Object</property>
     <child>
       <widget class="Gtk.Table" id="table2">
         <property name="MemberName" />
+        <property name="NRows">3</property>
+        <property name="NColumns">3</property>
+        <property name="RowSpacing">6</property>
+        <property name="ColumnSpacing">6</property>
         <child>
           <placeholder />
         </child>
@@ -1129,6 +1136,8 @@ Shared Object</property>
                 <property name="MemberName" />
                 <property name="NRows">2</property>
                 <property name="NColumns">2</property>
+                <property name="RowSpacing">6</property>
+                <property name="ColumnSpacing">6</property>
                 <child>
                   <placeholder />
                 </child>
@@ -1288,6 +1297,8 @@ Shared Object</property>
             <property name="MemberName" />
             <property name="NRows">4</property>
             <property name="NColumns">2</property>
+            <property name="RowSpacing">6</property>
+            <property name="ColumnSpacing">6</property>
             <property name="BorderWidth">3</property>
             <child>
               <placeholder />
