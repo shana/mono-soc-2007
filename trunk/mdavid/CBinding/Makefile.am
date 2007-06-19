@@ -13,6 +13,7 @@ REFS = \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.Gui.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll \
+	-r:$(top_builddir)/build/AddIns/CTagsCompletion.dll \
 	$(GTK_SHARP_LIBS)
 	
 

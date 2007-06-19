@@ -38,6 +38,8 @@ using System.CodeDom.Compiler;
 
 using Mono.Addins;
 
+using CTagsCompletion;
+
 using MonoDevelop.Core;
 using MonoDevelop.Core.Execution;
 using MonoDevelop.Core.ProgressMonitoring;
@@ -52,7 +54,7 @@ namespace CBinding
 	};
 	
 	[DataInclude(typeof(CProjectConfiguration))]
-	public class CProject : Project
+	public class CProject : CTagsProject
 	{
 		[ItemProperty ("compiler", ValueType = typeof(CCompiler))]
 		private CCompiler compiler_manager;
