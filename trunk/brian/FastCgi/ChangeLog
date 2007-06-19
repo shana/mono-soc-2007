@@ -1,5 +1,17 @@
 2007-06-19 Brian Nickel <brian.nickel@gmail.com>
 
+	* Mono.WebServer/ApplicationServer.cs: Use the WebSource support in
+	ApplicationManager.
+	
+	* Mono.WebServer/ApplicationManager.cs: Add support for WebSource so the
+	request broker gets assigned correctly in XSP implemenations.
+	
+	* Mono.WebServer/IWebSource.cs: Documented.
+	
+	* Mono.WebServer/IApplicationHost.cs: Documented.
+
+2007-06-19 Brian Nickel <brian.nickel@gmail.com>
+
 	* FastCgi/Mono.WebServer.FastCgi/Responder.cs:
 	* FastCgi/Mono.WebServer.FastCgi/WorkerRequest.cs: Fix for new API.
 
