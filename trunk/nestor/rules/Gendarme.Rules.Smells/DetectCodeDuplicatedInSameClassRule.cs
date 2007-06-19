@@ -39,7 +39,6 @@ namespace Gendarme.Rules.Smells {
 	//TODO: Ask if I can create new files that contains classes for this rule.
 
 	class InstructionFillerVisitor : BaseCodeVisitor {
-		private IList instructionSetContainer;
 		private IList instructionPairContainer;
 		private InstructionPair currentPair;
 		
@@ -49,37 +48,28 @@ namespace Gendarme.Rules.Smells {
 		public override void VisitMethodBody (MethodBody methodBody) 
 		{
 			Console.WriteLine ("For the method {0}", methodBody.Method.Name);
-			instructionSetContainer = new ArrayList ();
+			instructionPairContainer = new ArrayList ();
 			currentPair = new InstructionPair ();
 		}
 		
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
 		{
-			int counter = 0;
 			foreach (Instruction instruction in instructionCollection) {
-				if (instruction.OpCode.Name == "ldarg.0" || instruction.OpCode.Name == "pop" || instruction.Previous == null) {
-					instructionPairContainer = new ArrayList ();
-					instructionSetContainer.Add (instructionPairContainer);
-					counter++;
+				if (currentPair.First != null) {
+					currentPair.Second = instruction;
+					instructionPairContainer.Add (currentPair);
+					currentPair = new InstructionPair ();
+					currentPair.First = instruction;
 				}
 				else {
-					if (currentPair.First != null) {
-						currentPair.Second = instruction;
-						instructionPairContainer.Add (currentPair);
-						currentPair = new InstructionPair ();
-						currentPair.First = instruction;
-					}
-					else {
-						currentPair.First = instruction;
-					}
+					currentPair.First = instruction;
 				}
 			}
-			Console.WriteLine ("Has Groups: {0}", counter);
 		}
 		
-		public IList InstructionSetContainer {
+		public IList InstructionPairContainer {
 			get {
-				return instructionSetContainer;
+				return instructionPairContainer;
 			}
 		}
 	}
@@ -147,10 +137,10 @@ namespace Gendarme.Rules.Smells {
 	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
 		private StringCollection checkedMethods;
 
-		private IList FillInstructionCollectionsFrom (MethodBody methodBody) {
+		private IList FillInstructionPairContainerFrom (MethodBody methodBody) {
 			InstructionFillerVisitor instructionFillerVisitor = new InstructionFillerVisitor ();
 			methodBody.Accept (instructionFillerVisitor);
-			return instructionFillerVisitor.InstructionSetContainer;
+			return instructionFillerVisitor.InstructionPairContainer;
 		}
 		
 		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) {
@@ -168,14 +158,10 @@ namespace Gendarme.Rules.Smells {
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
 				Console.WriteLine ("Checking: {0}.{1} against {0}.{2}", currentMethod.DeclaringType.Name, currentMethod.Name, targetMethod.Name);
-				IList currentInstructionSetContainer = FillInstructionCollectionsFrom (currentMethod.Body);
-				IList targetInstructionSetContainer = FillInstructionCollectionsFrom (targetMethod.Body);
+				IList currentInstructionPairContainer = FillInstructionPairContainerFrom (currentMethod.Body);
+				IList targetInstructionPairContainer = FillInstructionPairContainerFrom (targetMethod.Body);
 			
-				foreach (IList currentInstructionSet in currentInstructionSetContainer) {
-					foreach (IList targetInstructionSet in targetInstructionSetContainer) {
-						return ExistsRepliedInstructions (currentInstructionSet, targetInstructionSet);
-					}
-				}
+				return ExistsRepliedInstructions (currentInstructionPairContainer, targetInstructionPairContainer);
 			}
 			return false;
 		}
