@@ -38,6 +38,7 @@ using Gendarme.Framework;
 namespace Gendarme.Rules.Smells {
 	//TODO: Ask if I can create new files that contains classes for this rule.
 
+	//TODO: Probabily we will need other check the instruction sets instead of this approach.
 	class InstructionFillerVisitor : BaseCodeVisitor {
 		private IList instructionPairContainer;
 		private InstructionPair currentPair;
@@ -143,12 +144,14 @@ namespace Gendarme.Rules.Smells {
 			return instructionFillerVisitor.InstructionPairContainer;
 		}
 		
+		//TODO: Fix the error.
 		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) {
 			bool existsRepliedInstructions = false;
 			
 			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
 					//Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
+					//ERROR !! Only check the final state !!
 					existsRepliedInstructions = currentInstructionPair.Equals (targetInstructionPair);
 					if (existsRepliedInstructions)
 						Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
