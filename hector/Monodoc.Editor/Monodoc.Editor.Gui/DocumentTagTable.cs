@@ -9,6 +9,7 @@
 
 using System;
 using Gtk;
+using Pango;
 
 namespace Monodoc.Editor.Gui {
 public class DocumentTagTable : TextTagTable {
@@ -34,18 +35,41 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new TextTag ("Type");
 		tag.Editable = false;
+		tag.Foreground = "blue";
 		Add (tag);
 		
-		tag = new TextTag ("Type:Attributes");
+		tag = new TextTag ("Type:Name");
 		tag.Editable = false;
-		tag.Invisible = true;
+		tag.Invisible = false;
+		Add (tag);
+		
+		tag = new TextTag ("Type:FullName");
+		tag.Scale = Pango.Scale.XXLarge;
+		tag.PixelsBelowLines = 10;
+		tag.Editable = false;
+		Add (tag);
+		
+		tag = new TextTag ("Type:FullNameSP");
+		tag.Editable = false;
+		Add (tag);
+		
+		tag = new TextTag ("Type:Maintainer");
+		tag.Editable = false;
 		Add (tag);
 		
 		tag = new TextTag ("TypeSignature");
 		tag.Editable = false;
 		Add (tag);
 		
-		tag = new TextTag ("TypeSignature:Attributes");
+		tag = new TextTag ("TypeSignature:Language");
+		tag.Editable = false;
+		Add (tag);
+		
+		tag = new TextTag ("TypeSignature:Value");
+		tag.Editable = false;
+		Add (tag);
+		
+		tag = new TextTag ("TypeSignature:Maintainer");
 		tag.Editable = false;
 		Add (tag);
 		
@@ -143,15 +167,36 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new TextTag ("see");
 		tag.Editable = false;
+		tag.Foreground = "red";
+		Add (tag);
+		
+		tag = new TextTag ("see:cref");
+		tag.Editable = false;
+		Add (tag);
+		
+		tag = new TextTag ("see:langword");
+		tag.Editable = false;
+		Add (tag);
+		
+		tag = new TextTag ("see:qualify");
+		tag.Editable = false;
 		Add (tag);
 		
 		tag = new TextTag ("link");
-		tag.Editable = true;
+		tag.Editable = false;
 		tag.Underline = Pango.Underline.Single;
 		tag.Foreground = "#204a87";
 		Add (tag);
 		
+		tag = new TextTag ("link:location");
+		tag.Editable = false;
+		Add (tag);
+		
 		tag = new TextTag ("since");
+		tag.Editable = false;
+		Add (tag);
+		
+		tag = new TextTag ("ignore");
 		tag.Editable = false;
 		Add (tag);
 	}

@@ -1,3 +1,11 @@
+2007-06-19  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Created specific methods to handle the
+	  attributes of differentes elements. Added some temp debug stuff.
+	* Monodoc.Editor.Gui.mdp: Added pango-sharp to the references of the
+	  project.
+	* DocumentTagTable.cs: Added more attribute related tags.
+
 2007-06-18  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* ChangeLog: Added Changelog for widget library.
