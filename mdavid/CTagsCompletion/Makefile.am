@@ -4,10 +4,16 @@ ASSEMBLY = $(ADDIN_BUILD)/CTagsCompletion.dll
 
 REFS = \
 	-r:System \
+	-r:$(top_builddir)/contrib/Mono.Addins.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll
 	
-FILES = CTags.cs
+FILES =  \
+	CTagsCommandHandler.cs \
+	CTagsProject.cs \
+	CTagsProjectServiceExtension.cs \
+	Tag.cs
 
 RES = 
 

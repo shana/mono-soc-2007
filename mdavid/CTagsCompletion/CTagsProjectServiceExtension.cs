@@ -1,5 +1,5 @@
 //
-// CTags.cs
+// CTagsProjectSrviceExtension.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,38 +30,27 @@
 //
 
 using System;
-using System.IO;
-using System.Text;
 
-using MonoDevelop.Projects;
 using MonoDevelop.Core;
-using MonoDevelop.Core.Execution;
+using MonoDevelop.Projects;
 
 namespace CTagsCompletion
 {
-	public class CTags
+	public class CTagsProjectServiceExtension : ProjectServiceExtension
 	{
-		public static void WriteTags (Project project)
+		public override void Save (IProgressMonitor monitor, CombineEntry entry)
 		{
-			string dir = project.BaseDirectory + ".tags";
-			StringBuilder files = new StringBuilder ();
+			base.Save (monitor, entry);
 			
-			if (!Directory.Exists (dir)) {
-				Directory.CreateDirectory (dir);
+			CTagsProject tagProject = entry as CTagsProject;
+			
+			if (tagProject == null) return;
+			
+			try {
+				tagProject.WriteTags ();
+			} catch (Exception ex) {
+				Console.WriteLine (ex.Message);
 			}
-			
-			foreach (ProjectFile f in project.ProjectFiles) {
-				if (f.Subtype == Subtype.Code) {
-					files.Append (f.Name + " ");
-				}
-			}
-			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-			    "ctags", files.ToString (), dir, null);
-			p.WaitForExit ();
-			
-			if (p.ExitCode != 0)
-				throw new Exception ("Could not create tags file");
 		}
 	}
 }
