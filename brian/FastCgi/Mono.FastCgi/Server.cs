@@ -33,40 +33,73 @@ using System.Globalization;
 
 namespace Mono.FastCgi {
 	/// <summary>
-	///    Runs a FastCGI server and registers responder types.
+	///    This class runs a FastCGI server and registers responder types.
 	/// </summary>
 	public class Server
 	{
 		#region Private Fields
 		
-		// A list of the current connections.
+		/// <summary>
+		///    Contains a list of the current connections.
+		/// </summary>
 		private ArrayList connections = new ArrayList ();
 		
-		// The socket to listen on.
+		/// <summary>
+		///    Contains the socket to listen on.
+		/// </summary>
 		private Socket listen_socket;
 		
-		// Whether or not the server is running.
+		/// <summary>
+		///    Indicates whether or not the server is running.
+		/// </summary>
 		private bool started = false;
 		
-		// Whether or not the server is accepting connections.
+		/// <summary>
+		///    Indicates whether or not the server is currently
+		///    accepting a connection.
+		/// </summary>
 		private bool accepting = false;
 		
-		// The thread used to create the server and optionally keep it
-		// alive.
+		/// <summary>
+		///    Contains the thread used to create the server and
+		///    optionally keep it alive.
+		/// </summary>
 		private Thread runner;
 		
-		// Lock used to prevent the socket from accepting.
+		/// <summary>
+		///    Contains the lock used to regulate the accepting of
+		///    sockets.
+		/// </summary>
 		private object accept_lock = new object ();
 		
-		// The async callback to be called when a socket is accepted.
+		/// <summary>
+		///    Contains the async callback to be called when a socket is
+		///    accepted.
+		/// </summary>
 		private AsyncCallback accept_cb;
 		
-		// FastCGI mandated server properties.
-		private int  max_connections       = int.MaxValue;
-		private int  max_requests          = int.MaxValue;
+		/// <summary>
+		///    Contains the maximum number of connections to permit, as
+		///    mandated by the FastCGI specification.
+		/// </summary>
+		private int  max_connections = int.MaxValue;
+		
+		/// <summary>
+		///    Contains the maximum number of requests to permit, as
+		///    mandated by the FastCGI specification.
+		/// </summary>
+		private int  max_requests = int.MaxValue;
+		
+		/// <summary>
+		///    Indicates whether or not to multiplex connections to
+		///    permit, as mandated by the FastCGI specification.
+		/// </summary>
 		private bool multiplex_connections = false;
 		
-		// Types for handling different requests.
+		/// <summary>
+		///    Contains the type of class to use for handling the
+		///    responder role.
+		/// </summary>
 		private System.Type responder_type = null;
 		
 		#endregion
@@ -412,9 +445,13 @@ namespace Mono.FastCgi {
 		
 		#region Private Methods
 		
-		/// Summary: Starts the server by beginning an accept call.
-		///    If the server is running in the foreground, the thread
+		/// <summary>
+		///    Starts the server by beginning an accept call.
+		/// </summary>
+		/// <remarks>
+		///    If the server is running in the foreground, the thread 
 		///    loops, waiting to be aborted.
+		/// </remarks>
 		private void RunServer ()
 		{
 			started = true;
@@ -427,11 +464,21 @@ namespace Mono.FastCgi {
 				Thread.Sleep (1000000);
 		}
 		
-		/// Summary: Accepts a connection. It then attempts to create a
-		///    Connection object, attempts to start the accept process
-		///    again, and then runs the connection. The thread
-		//     containing the OnAccept is used for the duration of the
-		//     connection.
+		/// <summary>
+		///    Accepts a connection.
+		/// </summary>
+		/// <param name="ares">
+		///    A <see cref="IAsyncResult" /> containing the results of
+		///    the accept call.
+		/// </param>
+		/// <remarks>
+		///    <para>Upon accepting the connection, it attempts to
+		///    create a <see cref="Connection" /> object, attempts to
+		///    start the accept process again, and then runs the
+		///    connection.</para>
+		///    <para>The thread that evoked this method is used for the
+		///    duration of the connection.</para>
+		/// </remarks>
 		private void OnAccept (IAsyncResult ares)
 		{
 			Logger.Write (LogLevel.Notice, "Server.OnAccept () [ENTER]");
@@ -460,8 +507,10 @@ namespace Mono.FastCgi {
 			Logger.Write (LogLevel.Notice, "Server.OnAccept () [EXIT]");
 		}
 		
-		/// Summary: Begins accepting a connection, unless one is
-		///    already being accepted.
+		/// <summary>
+		///    Begins accepting a connection, unless one is already
+		///    being accepted.
+		/// </summary>
 		private void BeginAccept ()
 		{
 			lock (accept_lock) {

@@ -31,8 +31,7 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 
-namespace Mono.FastCgi
-{
+namespace Mono.FastCgi {
 	/// <summary>
 	///   Specifies what type of message to log.
 	/// </summary>
@@ -68,27 +67,41 @@ namespace Mono.FastCgi
 	
 	
 	/// <summary>
-	///    Stores log messages in a specified file.
+	///    This class stores log messages in a specified file.
 	/// </summary>
 	public class Logger
 	{
 		#region Private Fields
 		
+		/// <summary>
+		///    Contains the writer to ouput to.
+		/// </summary>
 		private StreamWriter writer;
-		private LogLevel     level;
+		
+		/// <summary>
+		///    Contains the bitwise combined log levels to write.
+		/// </summary>
+		private LogLevel level;
+		
+		/// <summary>
+		///    Contains the lock object to use on the writer.
+		/// </summary>
 		private object write_lock = new object ();
+		
+		/// <summary>
+		///    Contains the singleton instance of the writer.
+		/// </summary>
+		private static Logger logger = new Logger ();
 		
 		#endregion
 		
 		
 		
-		#region Singleton Implementation
+		#region Private Methods
 		
-		/// This class is a singleton class to take advantage of the
-		/// destructor.
-		
-		private static Logger logger = new Logger ();
-		
+		/// <summary>
+		///    Finalizes the singleton instance by closing the stream.
+		/// </summary>
 		~Logger ()
 		{
 			Close ();

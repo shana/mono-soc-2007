@@ -1,3 +1,23 @@
+2007-06-19 Brian Nickel <brian.nickel@gmail.com>
+
+	* Mono.FastCgi/Structures/BeginRequestBody.cs:
+	* Mono.FastCgi/Structures/EndRequestBody.cs:
+	* Mono.FastCgi/Structures/Record.cs:
+	* Mono.FastCgi/Structures/NameValuePair.cs:
+	* Mono.FastCgi/Connection.cs:
+	* Mono.FastCgi/Logger.cs:
+	* Mono.FastCgi/SocketFactory.cs:
+	* Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs:
+	* Mono.FastCgi/SocketAbstractions/TcpSocket.cs:
+	* Mono.FastCgi/SocketAbstractions/StandardSocket.cs:
+	* Mono.FastCgi/Server.cs:
+	* Mono.FastCgi/Requests/Request.cs:
+	* Mono.FastCgi/Requests/ResponderRequest.cs: Finished documenting
+	Mono.FastCgi namespace. Added 1 FIXME (implement UnknownType).
+	
+	* Mono.WebServer/MonoWorkerRequest.cs: Documented.
+	* Mono.WebServer/Mono.WebServer.mdp: Compile documentation.
+
 2007-06-15 Brian Nickel <brian.nickel@gmail.com>
 
 	* Mono.FastCgi/Logger.cs: Made singleton to take advantage of

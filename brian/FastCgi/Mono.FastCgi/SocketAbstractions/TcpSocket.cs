@@ -28,8 +28,7 @@
 
 using System;
 
-namespace Mono.FastCgi
-{
+namespace Mono.FastCgi {
 	internal class TcpSocket : StandardSocket
 	{
 		public TcpSocket (System.Net.IPEndPoint localEndPoint)
