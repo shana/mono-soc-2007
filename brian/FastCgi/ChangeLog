@@ -1,5 +1,10 @@
 2007-06-19 Brian Nickel <brian.nickel@gmail.com>
 
+	* FastCgi/Mono.WebServer.FastCgi/Responder.cs:
+	* FastCgi/Mono.WebServer.FastCgi/WorkerRequest.cs: Fix for new API.
+
+2007-06-19 Brian Nickel <brian.nickel@gmail.com>
+
 	* Mono.FastCgi/Structures/BeginRequestBody.cs:
 	* Mono.FastCgi/Structures/EndRequestBody.cs:
 	* Mono.FastCgi/Structures/Record.cs:

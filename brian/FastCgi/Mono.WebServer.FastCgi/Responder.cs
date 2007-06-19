@@ -72,14 +72,14 @@ namespace Mono.WebServer.FastCgi
 			get {return request;}
 		}
 		
-		public void SendOutputText (string text, System.Text.Encoding encoding)
+		public void SendOutput(string text, System.Text.Encoding encoding)
 		{
-			request.SendOutputText (text, encoding);
+			request.SendOutput (text, encoding);
 		}
 		
-		public void SendOutputData (byte [] data, int length)
+		public void SendOutput (byte [] data, int length)
 		{
-			request.SendOutputData (data, length);
+			request.SendOutput (data, length);
 		}
 		
 		public string GetParameter (string name)

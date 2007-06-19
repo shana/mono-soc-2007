@@ -99,7 +99,7 @@ namespace Mono.WebServer.FastCgi
 				return;
 			
 			if (!response_sent)
-				responder.SendOutputText ("\r\n", HeaderEncoding);
+				responder.SendOutput ("\r\n", HeaderEncoding);
 			
 			responder.CompleteRequest (0);
 			
@@ -179,22 +179,22 @@ namespace Mono.WebServer.FastCgi
 		public override void SendResponseFromMemory (byte [] data, int length)
 		{
 			if (!response_sent)
-				responder.SendOutputText ("\r\n", HeaderEncoding);
+				responder.SendOutput ("\r\n", HeaderEncoding);
 			
-			responder.SendOutputData (data, length);
+			responder.SendOutput (data, length);
 			response_sent = true;
 		}
 
 		public override void SendStatus (int statusCode, string statusDescription)
 		{
 			string line = string.Format ("{0} {1} {2}\r\n", GetHttpVersion (), statusCode, statusDescription);
-			responder.SendOutputText (line, HeaderEncoding);
+			responder.SendOutput (line, HeaderEncoding);
 		}
 
 		public override void SendUnknownResponseHeader (string name, string value)
 		{
 			string line = string.Format ("{0}: {1}\r\n", name, value);
-			responder.SendOutputText (line, HeaderEncoding);
+			responder.SendOutput (line, HeaderEncoding);
 		}
 
 		public override bool IsClientConnected ()
