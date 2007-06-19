@@ -72,6 +72,7 @@ namespace Monodoc.Editor {
             this.docEditView = new Monodoc.Editor.Gui.DocumentEditor();
             this.docEditView.CanFocus = true;
             this.docEditView.Name = "docEditView";
+            this.docEditView.Editable = false;
             this.scrolledwindow2.Add(this.docEditView);
             this.vbox1.Add(this.scrolledwindow2);
             Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox1[this.scrolledwindow2]));

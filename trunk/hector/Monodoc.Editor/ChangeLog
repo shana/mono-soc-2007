@@ -1,5 +1,13 @@
 2007-06-19  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor/Monodoc.Editor.mdp,
+	  Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  Monodoc.Editor.Gui/DocumentTagTable.cs,
+	  Monodoc.Editor/gtk-gui/gui.stetic: Changed to Property Editable to
+	  false in DocumentEditor, maybe add it directly to constructor.
+
+2007-06-19  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Added initial
 	  implementation of the serialize methods and added 3 more helper
 	  methods to deserialize attributes.

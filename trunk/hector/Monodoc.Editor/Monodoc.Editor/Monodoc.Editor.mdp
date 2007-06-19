@@ -36,6 +36,6 @@
     <ProjectReference type="Project" localcopy="True" refto="Monodoc.Editor.Utils" />
     <ProjectReference type="Project" localcopy="True" refto="Monodoc.Editor.Gui" />
   </References>
-  <GtkDesignInfo partialTypes="True" />
   <Deployment.LinuxDeployData scriptName="monodoc-editor" />
+  <GtkDesignInfo partialTypes="True" />
 </Project>

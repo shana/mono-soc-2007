@@ -144,6 +144,7 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 		
 		tag = new TextTag ("see");
+		tag.Editable = true;
 		tag.Foreground = "red";
 		Add (tag);
 		

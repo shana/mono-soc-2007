@@ -64,6 +64,7 @@
               <widget class="Monodoc.Editor.Gui.DocumentEditor" id="docEditView">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
+                <property name="Editable">False</property>
                 <property name="Text" translatable="yes" />
               </widget>
             </child>
