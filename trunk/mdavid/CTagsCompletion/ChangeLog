@@ -1,0 +1,13 @@
+2007-06-18  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Tag.cs: This is the class represents a tag entry in the tags file.
+	* CTagsCommandHandler.cs: This is the default handler for the Complete
+	  command, it should be executed when the user types ctrl+space.
+	* CTagsCompletion.addin.xml: Added the CTagsServiceExtension and the
+	  Complete command
+	* CTagsProjectServiceExtension.cs: Changed to accomodate the new
+	  design.
+	* CTagsProject.cs: CTagsProject is an abstract class tha extends
+	  Project, it should be extended by projects that wish to use
+	  CTagsCompletion
+
