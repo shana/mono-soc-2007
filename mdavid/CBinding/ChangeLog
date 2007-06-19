@@ -1,3 +1,7 @@
+2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProject.cs: CProject does want it's tags written.
+
 2007-06-18  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Project/CProjectServiceExtension.cs, Project/CProject.cs: Changed to
