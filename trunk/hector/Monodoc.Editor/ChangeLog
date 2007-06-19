@@ -1,3 +1,11 @@
+2007-06-19  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Added initial
+	  implementation of the serialize methods and added 3 more helper
+	  methods to deserialize attributes.
+	* Monodoc.Editor.Gui/DocumentTagTable.cs: Deleted extra Editable
+	  properties that are not needed.
+
 2007-06-18  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Utils/MonoDocument.cs: Deleted Convert methods this
