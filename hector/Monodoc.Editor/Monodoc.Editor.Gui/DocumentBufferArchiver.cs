@@ -15,10 +15,30 @@ using System.Collections;
 
 namespace Monodoc.Editor.Gui {
 public class DocumentBufferArchiver {
-	class TagStart 
+	private class TagStart 
 	{
 		public int Start;
 		public TextTag Tag;
+	}
+	
+	public static string Serialize (Gtk.TextBuffer buffer)
+	{
+		return Serialize (buffer, buffer.StartIter, buffer.EndIter);
+	}
+
+	public static string Serialize (Gtk.TextBuffer buffer, Gtk.TextIter   start, Gtk.TextIter   end)
+	{
+		StringWriter stream = new StringWriter ();
+		XmlTextWriter xml = new XmlTextWriter (stream);
+		
+		Serialize (buffer, start, end, xml);
+		
+		xml.Close ();
+		return stream.ToString ();
+	}
+	
+	public static void Serialize (Gtk.TextBuffer buffer, Gtk.TextIter   start, Gtk.TextIter   end, XmlTextWriter  xml)
+	{
 	}
 	
 	public static void Deserialize (TextBuffer buffer, string content)
@@ -31,6 +51,7 @@ public class DocumentBufferArchiver {
 		StringReader stringReader = new StringReader (content);
 		XmlTextReader xmlReader = new XmlTextReader (stringReader);
 		xmlReader.Namespaces = false;
+		xmlReader.WhitespaceHandling = WhitespaceHandling.None;
 		Deserialize (buffer, buffer.StartIter, xmlReader);
 	}
 	
@@ -111,11 +132,20 @@ public class DocumentBufferArchiver {
 			case "TypeSignature":
 				result = DeserializeTypeSignatureAttributes (buffer, offset, xmlReader);
 				break;
+			case "Member":
+				result = DeserializeMemberAttributes (buffer, offset, xmlReader);
+				break;
+			case "MemberSignature":
+				result = DeserializeMemberSignatureAttributes (buffer, offset, xmlReader);
+				break;
 			case "link":
 				result = DeserializeLinkAttributes (buffer, offset, xmlReader);
 				break;
 			case "see":
 				result = DeserializeSeeAttributes (buffer, offset, xmlReader);
+				break;
+			case "since":
+				result = DeserializeSinceAttributes (buffer, offset, xmlReader);
 				break;
 			default:
 				break;
@@ -152,6 +182,34 @@ public class DocumentBufferArchiver {
 		return insertAt.Offset;
 	}
 	
+	private static int DeserializeMemberAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	{
+		string tagPrefix = xmlReader.Name + ":";
+		
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		while (xmlReader.MoveToNextAttribute ()) {
+			string tagName = tagPrefix + xmlReader.Name;
+			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
+			buffer.Insert (ref insertAt, "\n");
+		}
+		
+		return insertAt.Offset;
+	}
+	
+	private static int DeserializeMemberSignatureAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	{
+		string tagPrefix = xmlReader.Name + ":";
+		
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		while (xmlReader.MoveToNextAttribute ()) {
+			string tagName = tagPrefix + xmlReader.Name;
+			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
+			buffer.Insert (ref insertAt, "\n");
+		}
+		
+		return insertAt.Offset;
+	}
+	
 	private static int DeserializeLinkAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
 	{
 		string tagPrefix = xmlReader.Name + ":";
@@ -175,6 +233,20 @@ public class DocumentBufferArchiver {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
 			buffer.Insert (ref insertAt, " ");
+		}
+		
+		return insertAt.Offset;
+	}
+	
+	private static int DeserializeSinceAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	{
+		string tagPrefix = xmlReader.Name + ":";
+		
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		while (xmlReader.MoveToNextAttribute ()) {
+			string tagName = tagPrefix + xmlReader.Name;
+			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
+//			buffer.Insert (ref insertAt, "\n");
 		}
 		
 		return insertAt.Offset;
