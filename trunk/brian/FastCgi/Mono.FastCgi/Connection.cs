@@ -31,49 +31,127 @@ using System.Collections;
 
 namespace Mono.FastCgi {
 	/// <summary>
-	///    Handles a FastCGI connection by processing records and
+	///    This class handles a FastCGI connection by processing records and
 	///    calling responders.
 	/// </summary>
 	public class Connection
 	{
 		#region Private Fields
 		
-		// Collection of requests.
+		/// <summary>
+		///    Contains a list of the current requests.
+		/// </summary>
 		private ArrayList requests = new ArrayList ();
 		
-		// Socket to work with.
+		/// <summary>
+		///    Contains the socket to communicate over.
+		/// </summary>
 		private Socket socket;
 		
-		// Calling server.
+		/// <summary>
+		///    Contains the server that created the current instance.
+		/// </summary>
 		private Server server;
 		
-		// Keep connection alive.
+		/// <summary>
+		///    Indicates whether or not to keep the connection alive
+		///    after a current requests has been completed.
+		/// </summary>
 		private bool keep_alive;
 		
-		// Listen
+		/// <summary>
+		///    Indicates whether or not to stop the current connection.
+		/// </summary>
 		private bool stop;
 		
-		// Lock for modifying requests.
+		/// <summary>
+		///    Contains the lock used to regulate the modifying of the
+		///    request list.
+		/// </summary>
 		private object request_lock = new object ();
+		
 		#endregion
 		
+		
+		
+		#region Constructors
+		
+		/// <summary>
+		///    Constructs and initializes a new instance of <see
+		///    cref="Connection" /> to handle a specified socket created
+		///    by a specified server.
+		/// </summary>
+		/// <param name="socket">
+		///    A <see cref="Socket" /> object to communicate over.
+		/// </param>
+		/// <param name="server">
+		///    A <see cref="Server" /> object containing the server that
+		///    created the new instance.
+		/// </param>
 		public Connection (Socket socket, Server server)
 		{
 			this.socket = socket;
 			this.server = server;
 		}
 		
+		#endregion
+		
+		
+		
+		#region Public Properties
+		
+		/// <summary>
+		///    Gets the number of active requests being managed by the
+		///    current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="int" /> containing the number of active
+		///    requests being managed by the current instance.
+		/// </value>
 		public int RequestCount {
 			get {return requests.Count;}
 		}
 		
+		/// <summary>
+		///    Gets whether or not the current instance is connected.
+		/// </summary>
+		/// <value>
+		///    A <see cref="bool" /> indicating whether or not the
+		///    current instance is connected.
+		/// </value>
 		public bool IsConnected {
 			get {return socket.Connected;}
 		}
 		
+		/// <summary>
+		///    Gets the server used to create the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="Server" /> object containing the server used
+		///    to create the current instance.
+		/// </value>
+		public Server Server {
+			get {return server;}
+		}
+		
+		#endregion
+		
+		
+		
+		#region Public Methods
+		
+		/// <summary>
+		///    Receives and responds to records until all requests have
+		///    been completed.
+		/// </summary>
+		/// <remarks>
+		///    If the last received BeginRequest record is flagged
+		///    with keep-alive, the connection will be kept alive event
+		///    after all open requests have been completed.
+		/// </remarks>
 		public void Run ()
 		{
-			Logger.Write (LogLevel.Notice, "Receving records...");
+			Logger.Write (LogLevel.Notice, "Receiving records...");
 			
 			do {
 				Record record = new Record (socket);
@@ -86,33 +164,52 @@ namespace Mono.FastCgi {
 					request == null ? "NEW" : "EXISTING");
 				
 				switch (record.Type) {
+					
+				// Creates a new request.
 				case RecordType.BeginRequest:
+					
+					// If a request with the given ID
+					// already exists, there's a bug in the
+					// client. Abort.
 					if (request != null) {
-						stop = true;
-						Logger.Write (LogLevel.Error, "Request with given ID already exists. Terminating connection.");
+						StopRun (
+							"Request with given ID already exists.");
 						break;
 					}
 					
-					BeginRequestBody body = new BeginRequestBody
-						(record);
-					
-					if (!server.MultiplexConnections && UnfinishedRequests) {
+					// If there are unfinished requests
+					// and multiplexing is disabled, inform
+					// the client and don't begin the
+					// request.
+					if (!server.MultiplexConnections &&
+						UnfinishedRequests) {
 						EndRequest (record.RequestID, 0,
 							ProtocolStatus.CantMultiplexConnections);
 						break;
 					}
 					
+					// If the maximum number of requests is
+					// reached, inform the client and don't
+					// begin the request.
 					if (!server.CanRequest) {
 						EndRequest (record.RequestID, 0,
 							ProtocolStatus.Overloaded);
 						break;
 					}
 					
+					BeginRequestBody body = new BeginRequestBody
+						(record);
+						
+					// If the role is "Responder", and it is
+					// supported, create a ResponderRequest.
 					if (body.Role == Role.Responder &&
 						server.SupportsResponder)
 						request = new ResponderRequest
 							(record.RequestID, this);
-					
+						
+					// If the request is null, the role is
+					// not supported. Inform the client and
+					// don't begin the request.
 					if (request == null) {
 						Logger.Write (LogLevel.Warning,
 							"Unknown role ({0}).",
@@ -126,28 +223,31 @@ namespace Mono.FastCgi {
 						requests.Add (request);
 					}
 					
-					keep_alive = (body.Flags & BeginRequestFlags.KeepAlive) != 0;
+					keep_alive = (body.Flags &
+						BeginRequestFlags.KeepAlive) != 0;
 					
 				break;
 				
+				// Gets server values.
 				case RecordType.GetValues:
 					byte [] response_data;
 					
+					// Look up the data from the server.
 					try {
 						IDictionary pairs_in  = NameValuePair.FromData (record.Body);
 						IDictionary pairs_out = server.GetValues (pairs_in.Keys);
-						response_data = NameValuePair.ToData (pairs_out);
+						response_data = NameValuePair.GetData (pairs_out);
 					} catch {
 						response_data = new byte [0];
 					}
 					
-					SendResponse (RecordType.GetValuesResult, record.RequestID, response_data);
+					SendRecord (RecordType.GetValuesResult, record.RequestID, response_data);
 				break;
-			
+				
+				// Sends params to the request.
 				case RecordType.Params:
 					if (request == null) {
-						stop = true;
-						Logger.Write (LogLevel.Error, "Request with given ID does not exist. Terminating connection.");
+						StopRun ("Request with given ID does not exist.");
 						break;
 					}
 					
@@ -155,10 +255,10 @@ namespace Mono.FastCgi {
 				
 				break;
 					
+				// Sends standard input to the request.
 				case RecordType.StandardInput:
 					if (request == null) {
-						stop = true;
-						Logger.Write (LogLevel.Error, "Request with given ID does not exist. Terminating connection.");
+						StopRun ("Request with given ID does not exist.");
 						break;
 					}
 					
@@ -166,38 +266,69 @@ namespace Mono.FastCgi {
 				
 				break;
 				
+				// Sends file data to the request.
 				case RecordType.Data:
 					if (request == null) {
-						stop = true;
-						Logger.Write (LogLevel.Error, "Request with given ID does not exist. Terminating connection.");
+						StopRun ("Request with given ID does not exist.");
 						break;
 					}
 					
 					request.AddFileData (record.Body);
 				
 				break;
+				
+				// FIXME: Implement UnknownType for default.
 				}
 			}
 			while (!stop && (UnfinishedRequests || keep_alive));
 		}
 		
-		private bool UnfinishedRequests {
-			get {
-				foreach (Request request in requests)
-					if (request.DataNeeded)
-						return true;
-				
-				return false;
-			}
-		}
-		
-		public void SendResponse (RecordType type, ushort requestID,
+		/// <summary>
+		///    Sends a record to the client.
+		/// </summary>
+		/// <param name="type">
+		///    A <see cref="RecordType" /> specifying the type of record
+		///    to send.
+		/// </param>
+		/// <param name="requestID">
+		///    A <see cref="ushort" /> containing the ID of the request
+		///    the record is associated with.
+		/// </param>
+		/// <param name="bodyData">
+		///    A <see cref="byte[]" /> containing the body data for the
+		///    request.
+		/// </param>
+		/// <remarks>
+		///    If the socket is not connected, the record will not be
+		///    sent.
+		/// </remarks>
+		public void SendRecord (RecordType type, ushort requestID,
 		                          byte [] bodyData)
 		{
 			if (IsConnected)
 				new Record (1, type, requestID, bodyData).Send (socket);
 		}
 		
+		/// <summary>
+		///    Sends an EndRequest record with a specified request ID,
+		///    application status, and protocol status, and releases the
+		///    associated resources.
+		/// </summary>
+		/// <param name="requestID">
+		///    A <see cref="ushort" /> containing the ID of the request
+		///    to end.
+		/// </param>
+		/// <param name="appStatus">
+		///    <para>A <see cref="int" /> containing the application
+		///    status the request ended with.</para>
+		///    <para>This is the same value as would be returned by a
+		///    program on termination. On successful termination, this
+		///    would be zero.</para>
+		/// </param>
+		/// <param name="protocolStatus">
+		///    A <see cref="ProtocolStatus" /> containing the FastCGI
+		///    protocol status with which the request is being ended.
+		/// </param>
 		public void EndRequest (ushort requestID, int appStatus,
 		                        ProtocolStatus protocolStatus)
 		{
@@ -206,7 +337,7 @@ namespace Mono.FastCgi {
 			
 			if (IsConnected)
 				new Record (1, RecordType.EndRequest, requestID,
-					body.Data).Send (socket);
+					body.GetData ()).Send (socket);
 			
 			int index = GetRequestIndex (requestID);
 			
@@ -222,6 +353,10 @@ namespace Mono.FastCgi {
 			}
 		}
 		
+		/// <summary>
+		///    Stops the current instance by ending all the open
+		///    requests and closing the socket.
+		/// </summary>
 		public void Stop ()
 		{
 			stop = true;
@@ -230,10 +365,54 @@ namespace Mono.FastCgi {
 					ProtocolStatus.RequestComplete);
 		}
 		
-		public Server Server {
-			get {return server;}
+		#endregion
+		
+		
+		
+		#region Private Properties
+		
+		/// <summary>
+		///    Gets whether or not more request data is expected by the
+		///    current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="bool" /> indicating whether or not more
+		///    request data is expected by the current instance.
+		/// </value>
+		/// <remarks>
+		///    If <see langword="true" />, more data is expected from a
+		///    open request. For instance, the input data has not been
+		///    completed.
+		/// </remarks>
+		private bool UnfinishedRequests {
+			get {
+				foreach (Request request in requests)
+					if (request.DataNeeded)
+						return true;
+				
+				return false;
+			}
 		}
 		
+		#endregion
+		
+		
+		
+		#region Private Methods
+		
+		/// <summary>
+		///    Gets the request in the current instance with a specified
+		///    request ID.
+		/// </summary>
+		/// <param name="requestID">
+		///    A <see cref="ushort" /> containing the ID of the request
+		///    to get.
+		/// </param>
+		/// <returns>
+		///    A <see cref="Request" /> object containing the request
+		///    with the with the specified request ID, or <see
+		///    langword="null" /> if it was not found.
+		/// </returns>
 		private Request GetRequest (ushort requestID)
 		{
 			foreach (Request request in requests)
@@ -243,6 +422,19 @@ namespace Mono.FastCgi {
 			return null;
 		}
 		
+		/// <summary>
+		///    Gets the index of the request in <see cref="requests" />
+		///    with a specified request ID.
+		/// </summary>
+		/// <param name="requestID">
+		///    A <see cref="ushort" /> containing the ID of the request
+		///    to get.
+		/// </param>
+		/// <returns>
+		///    A <see cref="int" /> containing the index of the request
+		///    in <see cref="requests" /> with the with the specified
+		///    request ID, or -1 if it was not found.
+		/// </returns>
 		private int GetRequestIndex (ushort requestID)
 		{
 			int i = 0;
@@ -252,5 +444,19 @@ namespace Mono.FastCgi {
 			
 			return (i != count) ? i : -1;
 		}
+		
+		/// <summary>
+		///    Flags the process to stop and writes an error message to
+		///    the log.
+		/// </summary>
+		private void StopRun (string message)
+		{
+			stop = true;
+			Logger.Write (LogLevel.Error, message);
+			Logger.Write (LogLevel.Error,
+				"Terminating connection.");
+		}
+		
+		#endregion
 	}
 }

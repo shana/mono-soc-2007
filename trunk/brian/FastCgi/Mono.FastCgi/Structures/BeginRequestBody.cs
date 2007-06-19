@@ -28,51 +28,126 @@
 
 using System;
 
-namespace Mono.FastCgi
-{
+namespace Mono.FastCgi {
+	/// <summary>
+	///    Specifies the role to use for a request.
+	/// </summary>
 	public enum Role : ushort
 	{
+		/// <summary>
+		///    The request is for the role of "Responder".
+		/// </summary>
 		Responder  = 1,
+		
+		/// <summary>
+		///    The request is for the role of "Authorizer".
+		/// </summary>
 		Authorizer = 2,
+		
+		/// <summary>
+		///    The request is for the role of "Filter".
+		/// </summary>
 		Filter     = 3
 	}
 	
+	/// <summary>
+	///    Specifies flags to use for a request.
+	/// </summary>
 	[Flags]
 	public enum BeginRequestFlags : byte
 	{
+		/// <summary>
+		///    The request has no flags.
+		/// </summary>
 		None      = 0,
+		
+		/// <summary>
+		///    The connection is to be kept alive after the request is
+		///    complete.
+		/// </summary>
 		KeepAlive = 1
 	}
 	
+	/// <summary>
+	///    This struct contains the body data for a BeginRequest record.
+	/// </summary>
 	public struct BeginRequestBody
 	{
-		#region Private Properties
-		private Role              role;
+		#region Private Fields
+		
+		/// <summary>
+		///    Contains the role of the request.
+		/// </summary>
+		private Role role;
+		
+		/// <summary>
+		///    Contains the flags for the request.
+		/// </summary>
 		private BeginRequestFlags flags;
+		
 		#endregion
 		
 		
+		
 		#region Constructors
-		public BeginRequestBody(Record record)
+		
+		/// <summary>
+		///    Constructs and initializes a new instance of <see
+		///    cref="BeginRequestBody" /> by reading the body of a
+		///    specified record.
+		/// </summary>
+		/// <param name="record">
+		///    A <see cref="Record" /> object containing the body to
+		///    read.
+		/// </param>
+		/// <exception cref="ArgumentException">
+		///    <paramref name="record" /> is not of type <see
+		///    cref="RecordType.BeginRequest" /> or does not contain
+		///    exactly 8 bytes of body data.
+		/// </exception>
+		public BeginRequestBody (Record record)
 		{
+			if (record.Type != RecordType.BeginRequest)
+				throw new ArgumentException (
+					"The record is not of type BeginRequest.",
+					"record");
+			
 			if (record.Body.Length != 8)
-				throw new ArgumentException
-				("8 bytes expected.", "record");
+				throw new ArgumentException (
+					"8 bytes expected.", "record");
 			
 			role  = (Role) Record.ReadUInt16 (record.Body, 0);
 			flags = (BeginRequestFlags) record.Body [2];
 		}
+		
 		#endregion
 		
 		
+		
 		#region Public Properties
+		
+		/// <summary>
+		///    Gets the role of the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="FastCgi.Role" /> containing the role of the
+		///    current instance.
+		/// </value>
 		public Role Role {
 			get {return role;}
 		}
 		
+		/// <summary>
+		///    Gets the flags contained in the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="BeginRequestFlags" /> containing the flags
+		///    contained in the current instance.
+		/// </value>
 		public BeginRequestFlags Flags {
 			get {return flags;}
 		}
+		
 		#endregion
 	}
 }

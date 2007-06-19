@@ -29,8 +29,7 @@
 
 using System;
 
-namespace Mono.FastCgi
-{
+namespace Mono.FastCgi {
 	internal class StandardSocket : Socket
 	{
 		private System.Net.Sockets.Socket socket;
