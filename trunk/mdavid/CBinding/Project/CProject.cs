@@ -70,12 +70,14 @@ namespace CBinding
 		public CProject ()
 		{
 			packages.SetProject (this);
+			writeTags = true;
 		}
 		
 		public CProject (ProjectCreateInformation info,
 		                 XmlElement projectOptions, string language)
 		{
 			packages.SetProject (this);
+			writeTags = true;
 			string binPath = ".";
 			
 			if (info != null) {
