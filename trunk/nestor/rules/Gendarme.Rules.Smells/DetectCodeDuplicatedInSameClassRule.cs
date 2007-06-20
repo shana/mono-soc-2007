@@ -38,7 +38,6 @@ using Gendarme.Framework;
 namespace Gendarme.Rules.Smells {
 	//TODO: Ask if I can create new files that contains classes for this rule.
 
-	//TODO: Probabily we will need other check the instruction sets instead of this approach.
 	class InstructionFillerVisitor : BaseCodeVisitor {
 		private IList instructionPairContainer;
 		private InstructionPair currentPair;
@@ -55,17 +54,22 @@ namespace Gendarme.Rules.Smells {
 		
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
 		{
+			int counter = 0;
 			foreach (Instruction instruction in instructionCollection) {
-				if (currentPair.First != null) {
-					currentPair.Second = instruction;
-					instructionPairContainer.Add (currentPair);
-					currentPair = new InstructionPair ();
-					currentPair.First = instruction;
-				}
-				else {
-					currentPair.First = instruction;
+				if (instruction.OpCode.FlowControl == FlowControl.Call) {
+					counter++;
+					if (currentPair.First != null) {
+						currentPair.Second = instruction;
+						instructionPairContainer.Add (currentPair);
+						currentPair = new InstructionPair ();
+						currentPair.First = instruction;
+					}
+					else {
+						currentPair.First = instruction;
+					}
 				}
 			}
+			Console.WriteLine ("There are call | callvirt: {0}", counter);
 		}
 		
 		public IList InstructionPairContainer {
@@ -107,17 +111,12 @@ namespace Gendarme.Rules.Smells {
 		public override bool Equals (object obj) {
 			if (obj is InstructionPair) {
 				InstructionPair targetInstructionPair = (InstructionPair) obj;
-				
-				//Special Cases
-				if (firstInstruction.OpCode.Name.StartsWith("call") && targetInstructionPair.First.OpCode.Name.StartsWith("call") && secondInstruction.OpCode.Name == targetInstructionPair.Second.OpCode.Name)
-					return true;
-				if (secondInstruction.OpCode.Name.StartsWith ("call") && targetInstructionPair.Second.OpCode.Name.StartsWith("call") &&
-					firstInstruction.OpCode.Name == targetInstructionPair.First.OpCode.Name)
-					return true;
 					
-				//General equality expression
-				return firstInstruction.OpCode == targetInstructionPair.First.OpCode && 	
-						secondInstruction.OpCode == targetInstructionPair.Second.OpCode;
+				return firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
+						firstInstruction.Operand == targetInstructionPair.First.Operand &&
+						secondInstruction.OpCode == targetInstructionPair.Second.OpCode &&
+						secondInstruction.Operand == targetInstructionPair.Second.Operand
+						;
 			}
 			return false;
 		}
@@ -128,9 +127,9 @@ namespace Gendarme.Rules.Smells {
 		
 		public override string ToString () {
 			StringBuilder stringBuilder = new StringBuilder ();
-			stringBuilder.Append ("Instruction Pair:");
-			stringBuilder.Append (String.Format (" First: {0} ", firstInstruction.OpCode.Name));
-			stringBuilder.Append (String.Format (" Second: {0} ", secondInstruction.OpCode.Name));
+			stringBuilder.Append ("Instruction Pair:\n");
+			stringBuilder.Append (String.Format ("\tFirst: {0} {1}\n", firstInstruction.OpCode.Name, firstInstruction.Operand));
+			stringBuilder.Append (String.Format ("\tSecond: {0} {1}\n", secondInstruction.OpCode.Name, secondInstruction.Operand));
 			return stringBuilder.ToString ();
 		}
 	}
@@ -144,17 +143,15 @@ namespace Gendarme.Rules.Smells {
 			return instructionFillerVisitor.InstructionPairContainer;
 		}
 		
-		//TODO: Fix the error.
 		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) {
 			bool existsRepliedInstructions = false;
 			
 			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
 					//Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
-					//ERROR !! Only check the final state !!
-					existsRepliedInstructions = currentInstructionPair.Equals (targetInstructionPair);
-					if (existsRepliedInstructions)
-						Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
+					existsRepliedInstructions = existsRepliedInstructions || currentInstructionPair.Equals (targetInstructionPair);
+					if (currentInstructionPair.Equals (targetInstructionPair))
+						Console.WriteLine ("Detected duplicate !! {0} against {1}", currentInstructionPair, targetInstructionPair);
 				}
 			}
 			return existsRepliedInstructions;
