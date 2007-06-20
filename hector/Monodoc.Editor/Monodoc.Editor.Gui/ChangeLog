@@ -1,3 +1,13 @@
+2007-06-20  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Modified the main Deserialize method,
+	  added some #if #endif for debugging purposes, relocated some code
+	  to the DeserializeAttributes that applies the attributes tag to the
+	  buffer.
+	* DocumentTagTable.cs: Added some properties to some tags to make
+	  easier to see changes in code.
+	* gtk-gui/gui.stetic: Minor changes.
+
 2007-06-19  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs: Created specific methods to handle the

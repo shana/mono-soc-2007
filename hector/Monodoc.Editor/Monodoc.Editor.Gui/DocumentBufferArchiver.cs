@@ -21,24 +21,61 @@ public class DocumentBufferArchiver {
 		public TextTag Tag;
 	}
 	
-	public static string Serialize (Gtk.TextBuffer buffer)
+	static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)
+	{
+		return (currentIter.HasTag (tag) && !nextIter.HasTag (tag)) || nextIter.IsEnd;
+	}
+	
+	public static string Serialize (TextBuffer buffer)
 	{
 		return Serialize (buffer, buffer.StartIter, buffer.EndIter);
 	}
 
-	public static string Serialize (Gtk.TextBuffer buffer, Gtk.TextIter   start, Gtk.TextIter   end)
+	public static string Serialize (TextBuffer buffer, TextIter start, TextIter end)
 	{
 		StringWriter stream = new StringWriter ();
-		XmlTextWriter xml = new XmlTextWriter (stream);
+		XmlTextWriter xmlWriter = new XmlTextWriter (stream);
+		xmlWriter.Formatting = Formatting.Indented;
 		
-		Serialize (buffer, start, end, xml);
+		Serialize (buffer, start, end, xmlWriter);
 		
-		xml.Close ();
+		xmlWriter.Close ();
 		return stream.ToString ();
 	}
 	
-	public static void Serialize (Gtk.TextBuffer buffer, Gtk.TextIter   start, Gtk.TextIter   end, XmlTextWriter  xml)
+	public static void Serialize (TextBuffer buffer, TextIter start, TextIter end, XmlTextWriter xmlWriter)
 	{
+		TextIter currentIter = start;
+		TextIter nextIter = start;
+		
+		nextIter.ForwardChar ();
+		
+		TextIter temp = start;
+		temp.Offset = 522;
+		if (temp.EndsTag (buffer.TagTable.Lookup ("Members")))
+			Console.WriteLine ("True");
+		
+		while (!currentIter.Equal (end)) {
+			Console.WriteLine ("Offset: {0}", currentIter.Offset);
+			foreach (TextTag tag in currentIter.Tags) {
+				Console.WriteLine ("Tag: {0}, Begins: {1}, Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False"); 
+				if (currentIter.BeginsTag (tag)) {
+					if (tag.Name.EndsWith (":Attributes")) {
+					} else if (tag.Name.IndexOf (":") == -1) {
+						Console.WriteLine ("Start: " + currentIter.Offset);
+						xmlWriter.WriteStartElement (null, tag.Name, null);
+					}
+				} else if (TagEndsHere (tag, currentIter, nextIter)) {
+					if (tag.Name.IndexOf (":") == -1) {
+						Console.WriteLine ("End: " + currentIter.Offset);
+						xmlWriter.WriteEndElement ();
+					}
+				}
+			}
+			
+			currentIter.ForwardChar ();
+			nextIter.ForwardChar ();
+		}
 	}
 	
 	public static void Deserialize (TextBuffer buffer, string content)
@@ -51,40 +88,41 @@ public class DocumentBufferArchiver {
 		StringReader stringReader = new StringReader (content);
 		XmlTextReader xmlReader = new XmlTextReader (stringReader);
 		xmlReader.Namespaces = false;
-		xmlReader.WhitespaceHandling = WhitespaceHandling.None;
 		Deserialize (buffer, buffer.StartIter, xmlReader);
 	}
 	
 	public static void Deserialize (TextBuffer buffer, TextIter start,  XmlTextReader xmlReader)
 	{
 		int offset = start.Offset;
+		bool emptyElement;
 		Stack stack = new Stack ();
 		TagStart tagStart;
-		TextIter insert_at;
+		TextIter insertAt, applyStart, applyEnd;
 		
 		
 		while (xmlReader.Read ()) {
 			switch (xmlReader.NodeType) {
 				case XmlNodeType.Element:
-					bool empty = xmlReader.IsEmptyElement;
+					emptyElement = xmlReader.IsEmptyElement;
 					tagStart = new TagStart ();
 					tagStart.Start = offset;
 					tagStart.Tag = buffer.TagTable.Lookup (xmlReader.Name);
 					
+					#if DEBUG
 					Console.WriteLine ("Element: {0} Start: {1}", tagStart.Tag.Name, tagStart.Start);
+					#endif
 					
-					if (xmlReader.HasAttributes) {
+					if (xmlReader.HasAttributes)
 						offset = DeserializeAttributes (buffer, offset, xmlReader);
-					}
 					
-					if (empty) {
-						TextIter applyStart, applyEnd;
+					if (emptyElement) {
 						applyStart = buffer.GetIterAtOffset (tagStart.Start);
 						applyEnd = buffer.GetIterAtOffset (offset);
-					
-						Console.WriteLine ("TagName: {0}, Start: {1}, End: {2}", xmlReader.Name, tagStart.Start, offset);
-					
 						buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+						
+						#if DEBUG
+						Console.WriteLine ("Empty Element: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
+						#endif
 						break;
 					} else
 						stack.Push (tagStart);
@@ -92,29 +130,38 @@ public class DocumentBufferArchiver {
 				case XmlNodeType.Text:
 				case XmlNodeType.Whitespace:
 				case XmlNodeType.SignificantWhitespace:
-					Console.WriteLine ("Text: " + xmlReader.Value);
+					#if DEBUG
+					Console.WriteLine ("Text: {0} Start: {1}", xmlReader.Value, offset);
+					#endif
 					
-					insert_at = buffer.GetIterAtOffset (offset);
-					buffer.Insert (ref insert_at, xmlReader.Value);
+					insertAt = buffer.GetIterAtOffset (offset);
+					buffer.Insert (ref insertAt, xmlReader.Value);
 					
 					offset += xmlReader.Value.Length;
-					Console.WriteLine ("Offset: " + offset);
 					break;
 				case XmlNodeType.EndElement:
-					tagStart = (TagStart) stack.Pop ();
+					int realOffset = offset;
+					tagStart = stack.Pop () as TagStart;
 					
+					#if DEBUG
 					Console.WriteLine ("Element: {0}, End: {1}", tagStart.Tag.Name, offset);
+					#endif
 					
-					TextIter applyStart, applyEnd;
+					// Padding between tag regions
+					insertAt = buffer.GetIterAtOffset (offset);
+					buffer.Insert (ref insertAt, " ");
+					offset += 1;
+					
 					applyStart = buffer.GetIterAtOffset (tagStart.Start);
-					applyEnd = buffer.GetIterAtOffset (offset);
-					
-					Console.WriteLine ("TagName: {0}, Start: {1}, End: {2}", xmlReader.Name, tagStart.Start, offset);
-					
+					applyEnd = buffer.GetIterAtOffset (realOffset);
 					buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+					
+					#if DEBUG
+					Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, realOffset);
+					#endif
 					break;
 				default:
-					Console.WriteLine ("Unhandled element {0}. Value: '{1}'",
+					Console.WriteLine ("Unhandled Element {0}. Value: '{1}'",
 						    xmlReader.NodeType,
 						    xmlReader.Value);
 					break;
@@ -125,7 +172,10 @@ public class DocumentBufferArchiver {
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
 	{
 		int result = offset;
-		switch (xmlReader.Name) {
+		string tagName = xmlReader.Name;
+		TextIter applyStart, applyEnd;
+		
+		switch (tagName) {
 			case "Type":
 				result = DeserializeTypeAttributes (buffer, offset, xmlReader);
 				break;
@@ -150,6 +200,15 @@ public class DocumentBufferArchiver {
 			default:
 				break;
 		}
+		
+		TextTag tagAttributes = buffer.TagTable.Lookup (tagName + ":Attributes");
+		applyStart = buffer.GetIterAtOffset (offset);
+		applyEnd = buffer.GetIterAtOffset (result);
+		buffer.ApplyTag (tagAttributes, applyStart, applyEnd);
+		
+		#if DEBUG
+		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, result);
+		#endif
 		
 		return result;
 	}
@@ -246,7 +305,6 @@ public class DocumentBufferArchiver {
 		while (xmlReader.MoveToNextAttribute ()) {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-//			buffer.Insert (ref insertAt, "\n");
 		}
 		
 		return insertAt.Offset;
