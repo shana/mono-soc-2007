@@ -1,5 +1,10 @@
 2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* Gui/ProjectPackagesFolderNodeBuilder.cs: Changed the package
+	  added/removed handlers to just call UpdateAll from the builder.
+
+2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Gui/ProjectPackagesFolderNodeBuilder.cs: Changed the node builder so
 	  that it registeres even handlers correctly
 	* Project/ProjectPackageCollection.cs, Project/CProject.cs: Removed the

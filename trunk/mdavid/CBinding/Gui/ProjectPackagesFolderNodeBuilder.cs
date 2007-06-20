@@ -119,16 +119,14 @@ namespace CBinding
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder (e.Project.Packages);
 			if (builder != null)
-				builder.AddChild (e.Package);
+				builder.UpdateAll ();
 		}
 		
 		private void OnRemovePackage (object sender, ProjectPackageEventArgs e)
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder (e.Project.Packages);
-			if (builder != null) {
-				if (builder.FindChild (e.Package))
-					builder.Remove ();
-			}
+			if (builder != null)
+				builder.UpdateAll ();
 		}
 	}
 	
