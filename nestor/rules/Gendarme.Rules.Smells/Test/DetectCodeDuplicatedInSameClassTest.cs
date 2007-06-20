@@ -55,6 +55,13 @@ namespace Test.Rules.Smells {
 			}      
 		}
 
+		private void PrintValuesInListUsingAForLoop () 
+		{
+			for (int index = 0; index < myList.Count; index++) {
+				Console.WriteLine (myList[index]);	
+			}
+		}
+
 		public void PrintAndAddANewValue () 
 		{
 			PrintValuesInList ();
@@ -65,6 +72,18 @@ namespace Test.Rules.Smells {
 		{
 			PrintValuesInList ();
 			myList.Remove ("FooReplied");
+		}
+		
+		public void PrintUsingAForLoopAndAddAValue () 
+		{
+			PrintValuesInListUsingAForLoop ();
+			myList.Add ("OtherFoo");
+		}
+		
+		public void PrintUsingAForLoopAndRemoveAValue () 
+		{
+			PrintValuesInListUsingAForLoop ();
+			myList.Remove ("Bar");
 		}
 	}
 	
@@ -95,16 +114,34 @@ namespace Test.Rules.Smells {
 			myList.Remove ("FooReplied");
 		} 
 				
-		public void ShowBannerAndAdd () {
+		public void ShowBannerAndAdd () 
+		{
 			Console.WriteLine ("Banner");
 			Console.WriteLine ("Print");
 			myList.Add ("MoreBar");
 		}
 		
-		public void AddAndShowBanner () {
+		public void AddAndShowBanner () 
+		{
 			myList.Add ("MoreFoo");
 			Console.WriteLine ("Banner");
 			Console.WriteLine ("Print");
+		}
+		
+		public void PrintUsingAForLoopAndAddAValue () 
+		{
+			for (int index = 0; index < myList.Count; index++) {
+				Console.WriteLine (myList[index]);	
+			}
+			myList.Add ("OtherFoo");
+		}
+		
+		public void PrintUsingAForLoopAndRemoveAValue () 
+		{
+			for (int index = 0; index < myList.Count; index++) {
+				Console.WriteLine (myList[index]);	
+			}
+			myList.Remove ("OtherFoo");
 		}
 	}
 
@@ -155,7 +192,7 @@ namespace Test.Rules.Smells {
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			DumpMessageCollection (messageCollection);
 			Assert.IsNotNull (messageCollection);
-			Assert.AreEqual (2, messageCollection.Count);
+			Assert.AreEqual (3, messageCollection.Count);
 			CheckMessageType (messageCollection, MessageType.Error);
 		}
 	}
