@@ -41,13 +41,13 @@ namespace CBinding
 	{
 		private CProject project;
 		
-		public ProjectPackageCollection ()
-		{
+		internal CProject Project {
+			get { return project; }
+			set { project = value; }
 		}
 		
-		internal void SetProject (CProject project)
+		public ProjectPackageCollection ()
 		{
-			this.project = project;
 		}
 		
 		public ProjectPackage this[int index] {

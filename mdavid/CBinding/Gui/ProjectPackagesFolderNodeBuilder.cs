@@ -50,11 +50,25 @@ namespace CBinding
 	{
 		ProjectPackageEventHandler addedHandler;
 		ProjectPackageEventHandler removedHandler;
-		private bool registered = false;
-		private CProject my_project;
 		
 		public override Type NodeDataType {
 			get { return typeof(ProjectPackageCollection); }
+		}
+		
+		public override void OnNodeAdded (object dataObject)
+		{
+			CProject project = ((ProjectPackageCollection)dataObject).Project;
+			if (project == null) return;
+			project.PackageAddedToProject += addedHandler;
+			project.PackageRemovedFromProject += removedHandler;
+		}
+
+		public override void OnNodeRemoved (object dataObject)
+		{
+			CProject project = ((ProjectPackageCollection)dataObject).Project;
+			if (project == null) return;
+			project.PackageAddedToProject -= addedHandler;
+			project.PackageRemovedFromProject -= removedHandler;
 		}
 		
 		public override Type CommandHandlerType {
@@ -67,31 +81,13 @@ namespace CBinding
 			removedHandler = (ProjectPackageEventHandler)Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnRemovePackage));
 		}
 		
-		public override void Dispose ()
-		{
-			if (registered)
-			{
-				my_project.PackageAddedToProject -= addedHandler;
-				my_project.PackageRemovedFromProject -= removedHandler;
-				registered = false;
-			}
-		}
-		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			return "Packages";
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
-		{
-			if (!registered)
-			{
-				registered = true;
-				my_project = (CProject)treeBuilder.GetParentDataItem (typeof(CProject), false);
-				my_project.PackageAddedToProject += addedHandler;
-				my_project.PackageRemovedFromProject += removedHandler;
-			}
-			
+		{			
 			label = "Packages";
 			icon = Context.GetIcon (Stock.OpenReferenceFolder);
 			closedIcon = Context.GetIcon (Stock.ClosedReferenceFolder);

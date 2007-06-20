@@ -69,15 +69,15 @@ namespace CBinding
 		
 		public CProject ()
 		{
-			packages.SetProject (this);
-			writeTags = true;
+			packages.Project = this;
+			wantTagsCompletion = true;
 		}
 		
 		public CProject (ProjectCreateInformation info,
 		                 XmlElement projectOptions, string language)
 		{
-			packages.SetProject (this);
-			writeTags = true;
+			packages.Project = this;
+			wantTagsCompletion = true;
 			string binPath = ".";
 			
 			if (info != null) {
@@ -258,7 +258,7 @@ namespace CBinding
 			get { return packages; }
 			set {
 				packages = value;
-				packages.SetProject (this);
+				packages.Project = this;
 			}
 		}
 		
