@@ -1,3 +1,8 @@
+2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* GridTest.cs: Added or expanded a few tests.
+	* DefinitionBaseTest.cs: Added.
+
 2007-06-20  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* GridTest.cs: Added.
