@@ -34,6 +34,8 @@ using System;
 using Mono.Addins;
 
 using MonoDevelop.Components.Commands;
+using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 
 namespace CTagsCompletion
 {
@@ -47,6 +49,16 @@ namespace CTagsCompletion
 		protected override void Run ()
 		{
 			Console.WriteLine ("complete command executed");
+		}
+		
+		protected override void Update (CommandInfo info)
+		{
+			CTagsProject project = IdeApp.ProjectOperations.CurrentSelectedProject as CTagsProject;
+			object focus = IdeApp.Workbench.RootWindow.HasToplevelFocus ? IdeApp.Workbench.RootWindow.Focus : null;
+			
+			info.Enabled = ((focus is Gtk.Editable) &&
+			                (project != null) &&
+			                project.WantTagsCompletion);
 		}
 	}
 }

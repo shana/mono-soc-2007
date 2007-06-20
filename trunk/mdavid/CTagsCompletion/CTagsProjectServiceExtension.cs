@@ -45,7 +45,7 @@ namespace CTagsCompletion
 			CTagsProject tagProject = entry as CTagsProject;
 			
 			if (tagProject == null) return;
-			if (!tagProject.ShouldWriteTags) return;
+			if (!tagProject.WantTagsCompletion) return;
 			
 			try {
 				tagProject.WriteTags ();

@@ -46,7 +46,7 @@ namespace CTagsCompletion
 	{
 		private Dictionary<string, Tag> tags;
 		private string tagsFile;
-		protected bool writeTags = false;
+		protected bool wantTagsCompletion = false;
 		
 		public virtual void WriteTags ()
 		{
@@ -97,8 +97,8 @@ namespace CTagsCompletion
 			reader.Close ();
 		}
 		
-		public bool ShouldWriteTags {
-			get { return writeTags; }
+		public bool WantTagsCompletion {
+			get { return wantTagsCompletion; }
 		}
 	}
 }

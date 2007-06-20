@@ -20,10 +20,18 @@
 		<Class id = "CreateTags" class = "CTagsCompletion.CTagsProjectServiceExtension"/>
 	</Extension>
 	
-	<Command
-		id = "CTagsCompletion.TagsCommands.Complete"
-    	defaultHandler = "CTagsCompletion.CTagsCompleteCommandHandler"
-    	shortcut = "Control|Space"
-    	description = "Attempt to complete the current line of code"
-    	_label = "Complete"/>
+	<Extension path = "/SharpDevelop/Commands">
+		<Command
+			id = "CTagsCompletion.TagsCommands.Complete"
+	    	defaultHandler = "CTagsCompletion.CTagsCompleteCommandHandler"
+	    	shortcut = "Control|space"
+	    	description = "Attempt to complete the current line of code"
+	    	icon = "res:complete"
+	    	_label = "Complete"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/MainMenu/Edit">
+		<CommandItem id = "CTagsCompletion.TagsCommands.Complete" insertafter = "Separator2"/>
+		<SeparatorItem id = "CompleteSeparator" />
+	</Extension>
 </AddIn>

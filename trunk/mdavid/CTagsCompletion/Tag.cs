@@ -67,8 +67,6 @@ namespace CTagsCompletion
 			
 			pattern = tagEntry.Substring (i1 + 1, i2 - i1 - 1);
 			
-			Console.WriteLine ("file: '{0}' pattern: '{1}'", file, pattern);
-			
 			return new Tag (file, pattern, null);
 		}
 		
