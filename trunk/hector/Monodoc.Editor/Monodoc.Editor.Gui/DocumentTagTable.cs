@@ -38,6 +38,10 @@ public class DocumentTagTable : TextTagTable {
 		tag.Foreground = "blue";
 		Add (tag);
 		
+		tag = new TextTag ("Type:Attributes");
+		tag.Foreground = "green";
+		Add (tag);
+		
 		tag = new TextTag ("Type:Name");
 		tag.Invisible = false;
 		Add (tag);
@@ -54,6 +58,9 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 		
 		tag = new TextTag ("TypeSignature");
+		Add (tag);
+		
+		tag = new TextTag ("TypeSignature:Attributes");
 		Add (tag);
 		
 		tag = new TextTag ("TypeSignature:Language");
@@ -101,16 +108,19 @@ public class DocumentTagTable : TextTagTable {
 		tag = new TextTag ("Member");
 		Add (tag);
 		
+		tag = new TextTag ("Member:Attributes");
+		Add (tag);
+		
 		tag = new TextTag ("Member:MemberName");
 		Add (tag);
 		
 		tag = new TextTag ("Member:Deprecated");
 		Add (tag);
 		
-		tag = new TextTag ("Member:Attributes");
+		tag = new TextTag ("MemberSignature");
 		Add (tag);
 		
-		tag = new TextTag ("MemberSignature");
+		tag = new TextTag ("MemberSignature:Attributes");
 		Add (tag);
 		
 		tag = new TextTag ("MemberSignature:Language");
@@ -148,6 +158,9 @@ public class DocumentTagTable : TextTagTable {
 		tag.Foreground = "red";
 		Add (tag);
 		
+		tag = new TextTag ("see:Attributes");
+		Add (tag);
+		
 		tag = new TextTag ("see:cref");
 		Add (tag);
 		
@@ -162,10 +175,18 @@ public class DocumentTagTable : TextTagTable {
 		tag.Foreground = "#204a87";
 		Add (tag);
 		
+		tag = new TextTag ("link:Attributes");
+		tag.Foreground = "purple";
+		tag.Underline = Pango.Underline.None;
+		Add (tag);
+		
 		tag = new TextTag ("link:location");
 		Add (tag);
 		
 		tag = new TextTag ("since");
+		Add (tag);
+		
+		tag = new TextTag ("since:Attributes");
 		Add (tag);
 		
 		tag = new TextTag ("since:version");
