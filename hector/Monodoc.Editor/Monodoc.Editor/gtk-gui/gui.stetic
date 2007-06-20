@@ -6,7 +6,7 @@
   <import>
     <widget-library name="../../Monodoc.Editor.Gui/bin/Debug/Monodoc.Editor.Gui.dll" />
   </import>
-  <widget class="Gtk.Window" id="Monodoc.Editor.EditorWindow" design-size="442 300">
+  <widget class="Gtk.Window" id="Monodoc.Editor.EditorWindow" design-size="740 537">
     <action-group name="Default">
       <action id="File">
         <property name="Type">Action</property>
@@ -31,6 +31,7 @@
     <property name="MemberName" />
     <property name="Title" translatable="yes">Monodoc Documentation Editor</property>
     <property name="Icon">resource:monodoc.png</property>
+    <property name="WindowPosition">Center</property>
     <signal name="DeleteEvent" handler="OnDeleteEvent" />
     <child>
       <widget class="Gtk.VBox" id="vbox1">
@@ -58,7 +59,6 @@
             <property name="MemberName" />
             <property name="ShowArrow">False</property>
             <property name="ButtonStyle">Icons</property>
-            <property name="IconSize">SmallToolbar</property>
             <node name="toolbar1" type="Menubar">
               <node type="Toolitem" action="Open" />
             </node>
@@ -83,6 +83,7 @@
                 <property name="CanFocus">True</property>
                 <property name="Editable">False</property>
                 <property name="Text" translatable="yes" />
+                <property name="WrapMode">Word</property>
               </widget>
             </child>
           </widget>
