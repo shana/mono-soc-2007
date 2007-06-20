@@ -1,3 +1,7 @@
+2007-06-20  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* GridTest.cs: Added.
+
 2007-06-18  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControlTest.cs, TabItemTest.cs: Added more tests.
