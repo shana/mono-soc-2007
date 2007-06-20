@@ -77,13 +77,15 @@ namespace Test.Rules.Smells {
 		public void PrintUsingAForLoopAndAddAValue () 
 		{
 			PrintValuesInListUsingAForLoop ();
-			myList.Add ("OtherFoo");
+			if (!myList.Contains ("Bar"))
+				myList.Add ("Bar");
 		}
 		
 		public void PrintUsingAForLoopAndRemoveAValue () 
 		{
 			PrintValuesInListUsingAForLoop ();
-			myList.Remove ("Bar");
+			if (myList.Contains ("Bar"))
+				myList.Remove ("Bar");
 		}
 	}
 	
@@ -133,7 +135,6 @@ namespace Test.Rules.Smells {
 			for (int index = 0; index < myList.Count; index++) {
 				Console.WriteLine (myList[index]);	
 			}
-			myList.Add ("OtherFoo");
 		}
 		
 		public void PrintUsingAForLoopAndRemoveAValue () 
@@ -141,7 +142,6 @@ namespace Test.Rules.Smells {
 			for (int index = 0; index < myList.Count; index++) {
 				Console.WriteLine (myList[index]);	
 			}
-			myList.Remove ("OtherFoo");
 		}
 	}
 
@@ -182,6 +182,7 @@ namespace Test.Rules.Smells {
 		{
 			type = assembly.MainModule.Types ["Test.Rules.Smells.ClassWithoutCodeDuplicated"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			//DumpMessageCollection (messageCollection);
 			Assert.IsNull (messageCollection);
 		}
 		
