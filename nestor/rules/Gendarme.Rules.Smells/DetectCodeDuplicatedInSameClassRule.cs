@@ -51,19 +51,37 @@ namespace Gendarme.Rules.Smells {
 			currentPair = new InstructionPair ();
 		}
 		
+		private bool IsAcceptable (Instruction instruction) 
+		{
+			return instruction.OpCode.FlowControl == FlowControl.Call 
+				|| IsABranchInstruction (instruction);
+		}
+		
+		private bool IsABranchInstruction (Instruction instruction) 
+		{
+			return instruction.OpCode.FlowControl == FlowControl.Branch ||
+				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
+		}
+		
+		private void FillInstructionPair (Instruction instruction) {
+			if (currentPair.First != null) {
+				currentPair.Second = instruction;
+				instructionPairContainer.Add (currentPair);
+				currentPair = new InstructionPair ();
+				currentPair.First = instruction;
+			}
+			else {
+				currentPair.First = instruction;
+			}
+		}
+		
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
 		{
 			foreach (Instruction instruction in instructionCollection) {
-				if (instruction.OpCode.FlowControl == FlowControl.Call) {
-					if (currentPair.First != null) {
-						currentPair.Second = instruction;
-						instructionPairContainer.Add (currentPair);
-						currentPair = new InstructionPair ();
-						currentPair.First = instruction;
-					}
-					else {
-						currentPair.First = instruction;
-					}
+				if (IsAcceptable (instruction)) {
+					if (IsABranchInstruction (instruction.Next)) 
+						FillInstructionPair (instruction.Next);
+					FillInstructionPair (instruction);
 				}
 			}
 		}
@@ -104,11 +122,32 @@ namespace Gendarme.Rules.Smells {
 			}
 		}
 		
+		private bool IsABranchInstruction (Instruction instruction) 
+		{
+			return instruction.OpCode.FlowControl == FlowControl.Branch ||
+				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
+		}
+		
 		public override bool Equals (object obj) {
 			if (obj is InstructionPair) {
 				InstructionPair targetInstructionPair = (InstructionPair) obj;
+				
+				if (IsABranchInstruction (firstInstruction) && 
+					IsABranchInstruction (targetInstructionPair.First)) {
+					return firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
+						secondInstruction.OpCode == targetInstructionPair.Second.OpCode &&
+						secondInstruction.Operand == targetInstructionPair.Second.Operand;
+				}
+				
+				if (IsABranchInstruction (secondInstruction) && 
+					IsABranchInstruction (targetInstructionPair.Second)) {
 					
-				return firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
+					return firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
+						firstInstruction.Operand == targetInstructionPair.First.Operand &&
+						secondInstruction.OpCode == targetInstructionPair.Second.OpCode;
+				}
+				
+				return  firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
 						firstInstruction.Operand == targetInstructionPair.First.Operand &&
 						secondInstruction.OpCode == targetInstructionPair.Second.OpCode &&
 						secondInstruction.Operand == targetInstructionPair.Second.Operand
@@ -124,8 +163,8 @@ namespace Gendarme.Rules.Smells {
 		public override string ToString () {
 			StringBuilder stringBuilder = new StringBuilder ();
 			stringBuilder.Append ("Instruction Pair:" + Environment.NewLine);
-			stringBuilder.Append (String.Format ("\tFirst: {0} {1}{2}", firstInstruction.OpCode.Name, firstInstruction.Operand, Environment.NewLine));
-			stringBuilder.Append (String.Format ("\tSecond: {0} {1}{2}", secondInstruction.OpCode.Name, secondInstruction.Operand, Environment.NewLine));
+			stringBuilder.Append (String.Format ("\tFirst: {0} {1}{2}", firstInstruction != null? firstInstruction.OpCode.Name : "null", firstInstruction != null? firstInstruction.Operand : "null", Environment.NewLine));
+			stringBuilder.Append (String.Format ("\tSecond: {0} {1}{2}", secondInstruction != null? secondInstruction.OpCode.Name : "null", secondInstruction != null ? secondInstruction.Operand : "null", Environment.NewLine));
 			return stringBuilder.ToString ();
 		}
 	}
@@ -141,10 +180,12 @@ namespace Gendarme.Rules.Smells {
 		
 		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) {
 			bool existsRepliedInstructions = false;
-			
+
 			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
 					existsRepliedInstructions = existsRepliedInstructions || currentInstructionPair.Equals (targetInstructionPair);
+					//if (currentInstructionPair.Equals (targetInstructionPair))
+					//Console.WriteLine ("Checking: {0} aganist {1}",currentInstructionPair, targetInstructionPair);
 				}
 			}
 			return existsRepliedInstructions;
@@ -152,9 +193,10 @@ namespace Gendarme.Rules.Smells {
 	
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
+				//Console.WriteLine ("Checking: {0} against {1}", currentMethod.Name, targetMethod.Name);
 				IList currentInstructionPairContainer = FillInstructionPairContainerFrom (currentMethod.Body);
 				IList targetInstructionPairContainer = FillInstructionPairContainerFrom (targetMethod.Body);
-			
+				
 				return ExistsRepliedInstructions (currentInstructionPairContainer, targetInstructionPairContainer);
 			}
 			return false;
