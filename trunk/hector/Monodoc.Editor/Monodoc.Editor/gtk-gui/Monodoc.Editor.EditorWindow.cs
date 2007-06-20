@@ -50,6 +50,7 @@ namespace Monodoc.Editor {
             this.Name = "Monodoc.Editor.EditorWindow";
             this.Title = Mono.Unix.Catalog.GetString("Monodoc Documentation Editor");
             this.Icon = Gdk.Pixbuf.LoadFromResource("monodoc.png");
+            this.WindowPosition = ((Gtk.WindowPosition)(1));
             // Container child Monodoc.Editor.EditorWindow.Gtk.Container+ContainerChild
             this.vbox1 = new Gtk.VBox();
             this.vbox1.Name = "vbox1";
@@ -69,7 +70,6 @@ namespace Monodoc.Editor {
             this.toolbar1.Name = "toolbar1";
             this.toolbar1.ShowArrow = false;
             this.toolbar1.ToolbarStyle = ((Gtk.ToolbarStyle)(0));
-            this.toolbar1.IconSize = ((Gtk.IconSize)(2));
             this.vbox1.Add(this.toolbar1);
             Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.vbox1[this.toolbar1]));
             w4.Position = 1;
@@ -87,6 +87,7 @@ namespace Monodoc.Editor {
             this.docEditView.CanFocus = true;
             this.docEditView.Name = "docEditView";
             this.docEditView.Editable = false;
+            this.docEditView.WrapMode = ((Gtk.WrapMode)(2));
             this.scrolledwindow2.Add(this.docEditView);
             this.vbox1.Add(this.scrolledwindow2);
             Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox1[this.scrolledwindow2]));
@@ -105,8 +106,8 @@ namespace Monodoc.Editor {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 442;
-            this.DefaultHeight = 300;
+            this.DefaultWidth = 740;
+            this.DefaultHeight = 537;
             this.Show();
             this.DeleteEvent += new Gtk.DeleteEventHandler(this.OnDeleteEvent);
             this.Quit.Activated += new System.EventHandler(this.OnQuitActivated);
