@@ -197,11 +197,20 @@ namespace System.Windows.Controls {
 						else
 							remaining_lenght -= row_heights[index];
 					}
-					star_ratio = remaining_lenght / total_star;
+					if (remaining_lenght > 0 && total_star != 0) {
+						star_ratio = remaining_lenght / total_star;
+						for (index = 0; index < row_count; index++) {
+							lenght = row_definitions[index].Height;
+							if (lenght.IsStar)
+								row_heights[index] = lenght.Value * star_ratio;
+						}
+					}
+					remaining_lenght = finalSize.Height;
 					for (index = 0; index < row_count; index++) {
-						lenght = row_definitions[index].Height;
-						if (lenght.IsStar)
-							row_heights[index] = lenght.Value * star_ratio;
+						if (row_heights[index] > remaining_lenght)
+							row_heights[index] = remaining_lenght;
+						remaining_lenght -= row_heights[index];
+						row_definitions[index].ActualHeight = row_heights[index];
 					}
 				}
 				if (has_column_definitions) {
@@ -214,11 +223,21 @@ namespace System.Windows.Controls {
 						else
 							remaining_lenght -= column_widths[index];
 					}
-					star_ratio = remaining_lenght / total_star;
+					if (remaining_lenght > 0 && total_star != 0) {
+						star_ratio = remaining_lenght / total_star;
+						for (index = 0; index < column_count; index++) {
+							lenght = column_definitions[index].Width;
+							if (lenght.IsStar)
+								column_widths[index] = lenght.Value * star_ratio;
+							column_definitions[index].ActualWidth = column_widths[index];
+						}
+					}
+					remaining_lenght = finalSize.Width;
 					for (index = 0; index < column_count; index++) {
-						lenght = column_definitions[index].Width;
-						if (lenght.IsStar)
-							column_widths[index] = lenght.Value * star_ratio;
+						if (column_widths[index] > remaining_lenght)
+							column_widths[index] = remaining_lenght;
+						remaining_lenght -= column_widths[index];
+						column_definitions[index].ActualWidth = column_widths[index];
 					}
 				}
 			}

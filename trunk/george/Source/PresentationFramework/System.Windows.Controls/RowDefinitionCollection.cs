@@ -38,17 +38,22 @@ namespace System.Windows.Controls {
 		#region Public Indexers
 		public RowDefinition this[int index] {
 			get { return (RowDefinition)data[index]; }
-			set { data[index] = value; }
+			set {
+				ResetActualSize();
+				data[index] = value; 
+			}
 		}
 		#endregion
 
 		#region Public Methods
 		public void Add(RowDefinition value) {
+			ResetActualSize();
 			data.Add(value);
 		}
 
 		public void Clear() {
 			data.Clear();
+			ResetActualSize();
 		}
 
 		public bool Contains(RowDefinition value) {
@@ -64,12 +69,14 @@ namespace System.Windows.Controls {
 		}
 
 		public void Insert(int index, RowDefinition value) {
+			ResetActualSize();
 			data.Insert(index, value);
 		}
 
 		public bool Remove(RowDefinition value) {
 			if (!data.Contains(value))
 				return false;
+			ResetActualSize();
 			try {
 				data.Remove(value);
 				return true;
@@ -79,10 +86,12 @@ namespace System.Windows.Controls {
 		}
 
 		public void RemoveAt(int index) {
+			ResetActualSize();
 			data.RemoveAt(index);
 		}
 
 		public void RemoveRange(int index, int count) {
+			ResetActualSize();
 			data.RemoveRange(index, count);
 		}
 		#endregion
@@ -90,10 +99,12 @@ namespace System.Windows.Controls {
 		#region Explicit Interface Implementations
 		#region IList
 		int IList.Add(object value) {
+			ResetActualSize();
 			return data.Add(value);
 		}
 
 		void IList.Clear() {
+			ResetActualSize();
 			data.Clear();
 		}
 
@@ -106,6 +117,7 @@ namespace System.Windows.Controls {
 		}
 
 		void IList.Insert(int index, object value) {
+			ResetActualSize();
 			data.Insert(index, value);
 		}
 
@@ -118,16 +130,21 @@ namespace System.Windows.Controls {
 		}
 
 		void IList.Remove(object value) {
+			ResetActualSize();
 			data.Remove(value);
 		}
 
 		void IList.RemoveAt(int index) {
+			ResetActualSize();
 			data.RemoveAt(index);
 		}
 
 		object IList.this[int index] {
 			get { return data[index]; }
-			set { data[index] = value; }
+			set {
+				ResetActualSize();
+				data[index] = value; 
+			}
 		}
 		#endregion
 
@@ -161,25 +178,32 @@ namespace System.Windows.Controls {
 		}
 
 		void IList<RowDefinition>.Insert(int index, RowDefinition item) {
+			ResetActualSize();
 			data.Insert(index, item);
 		}
 
 		void IList<RowDefinition>.RemoveAt(int index) {
+			ResetActualSize();
 			data.RemoveAt(index);
 		}
 
 		RowDefinition IList<RowDefinition>.this[int index] {
 			get { return (RowDefinition)data[index]; }
-			set { data[index] = value; }
+			set {
+				ResetActualSize();
+				data[index] = value; 
+			}
 		}
 		#endregion
 
 		#region ICollection<RowDefinition>
 		void ICollection<RowDefinition>.Add(RowDefinition item) {
+			ResetActualSize();
 			data.Add(item);
 		}
 
 		void ICollection<RowDefinition>.Clear() {
+			ResetActualSize();
 			data.Clear();
 		}
 
@@ -200,6 +224,7 @@ namespace System.Windows.Controls {
 		}
 
 		bool ICollection<RowDefinition>.Remove(RowDefinition item) {
+			ResetActualSize();
 			return Remove(item);
 		}
 		#endregion
@@ -209,6 +234,13 @@ namespace System.Windows.Controls {
 			return new RowDefinitionEnumerator(data.GetEnumerator());
 		}
 		#endregion
+		#endregion
+
+		#region Private Methods
+		void ResetActualSize() {
+			foreach (RowDefinition item in data)
+				item.ActualHeight = 0;
+		}
 		#endregion
 
 		#region Classes

@@ -62,9 +62,12 @@
     <Compile Include="System.Windows.Controls\CharacterCasing.cs" />
     <Compile Include="System.Windows.Controls\CheckBox.cs" />
     <Compile Include="System.Windows.Controls\ClickMode.cs" />
+    <Compile Include="System.Windows.Controls\ColumnDefinition.cs" />
     <Compile Include="System.Windows.Controls\ContextMenuEventHandler.cs" />
     <Compile Include="System.Windows.Controls\ContextMenuEventArgs.cs" />
     <Compile Include="System.Windows.Controls\ColumnDefinitionCollection.cs" />
+    <Compile Include="System.Windows.Controls\RowDefinition.cs" />
+    <Compile Include="System.Windows.Controls\DefinitionBase.cs" />
     <Compile Include="System.Windows.Controls\DockPanel.cs" />
     <Compile Include="System.Windows.Controls\Grid.cs" />
     <Compile Include="System.Windows.Controls\Panel.cs" />
