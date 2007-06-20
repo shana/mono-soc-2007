@@ -1,3 +1,8 @@
+2007-06-20  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Grid.cs: Initial implementation. It is missing some features and has some bugs but it some trivial cases work.
+	* ColumnDefinitionCollection.cs, RowDefinitionCollection.cs: Added.	
+
 2007-06-19  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabItem.cs: Fixed arrangement when IsSelected changes.
