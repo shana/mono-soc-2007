@@ -6,8 +6,10 @@ REFS = \
 	-r:System \
 	-r:$(top_builddir)/contrib/Mono.Addins.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll \
+	$(GTK_SHARP_LIBS)
 	
 FILES =  \
 	CTagsCommandHandler.cs \
@@ -15,7 +17,8 @@ FILES =  \
 	CTagsProjectServiceExtension.cs \
 	Tag.cs
 
-RES = 
+RES = \
+	icons/complete
 
 ADDIN = CTagsCompletion.addin.xml
 

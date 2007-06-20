@@ -1,5 +1,10 @@
 2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* CTagsCommandHandler.cs, CTagsCompletion.addin.xml: Added the
+	  completion command.
+
+2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* CTagsProjectServiceExtension.cs, CTagsProject.cs: Added a protected
 	  field so that Projects that descend from CTagsProject may choose to
 	  not have it's tags written.
