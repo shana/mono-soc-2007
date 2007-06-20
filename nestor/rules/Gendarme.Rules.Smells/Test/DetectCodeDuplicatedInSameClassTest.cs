@@ -55,13 +55,13 @@ namespace Test.Rules.Smells {
 			}      
 		}
 
-		public void MakeStuff () 
+		public void PrintAndAddANewValue () 
 		{
 			PrintValuesInList ();
 			myList.Add ("FooReplied");
 		}
 
-		public void MakeMoreStuff () 
+		public void PrintAndRemoveANewValue () 
 		{
 			PrintValuesInList ();
 			myList.Remove ("FooReplied");
@@ -79,7 +79,7 @@ namespace Test.Rules.Smells {
 			myList.Add ("Baz");
 		}
 
-		public void MakeStuff () 
+		public void PrintAndAddANewValue () 
 		{
 			foreach (string value in myList) {
 				Console.WriteLine (value);
@@ -87,7 +87,7 @@ namespace Test.Rules.Smells {
 			myList.Add ("FooReplied");
 		}
 
-		public void MakeMoreStuff () 
+		public void PrintAndRemoveANewValue () 
 		{
 			foreach (string value in myList) {
 				Console.WriteLine (value);              
@@ -95,13 +95,13 @@ namespace Test.Rules.Smells {
 			myList.Remove ("FooReplied");
 		} 
 				
-		public void Bar () {
+		public void ShowBannerAndAdd () {
 			Console.WriteLine ("Banner");
 			Console.WriteLine ("Print");
 			myList.Add ("MoreBar");
 		}
 		
-		public void Foo () {
+		public void AddAndShowBanner () {
 			myList.Add ("MoreFoo");
 			Console.WriteLine ("Banner");
 			Console.WriteLine ("Print");
