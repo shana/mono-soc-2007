@@ -1,5 +1,13 @@
 2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* Gui/ProjectPackagesFolderNodeBuilder.cs: Changed the node builder so
+	  that it registeres even handlers correctly
+	* Project/ProjectPackageCollection.cs, Project/CProject.cs: Removed the
+	  SetProject method and replaced it with and internal get/set
+	  property.
+
+2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Project/CProject.cs: CProject does want it's tags written.
 
 2007-06-18  Marcos David Marin Amador <MarcosMarin@gmail.com> 
