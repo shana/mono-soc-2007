@@ -1,3 +1,10 @@
+2007-06-19  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* EditorWindow.cs: Testing Serialize method.
+	* gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Added a
+	  toolbar to the main window.
+	* gtk-gui/Monodoc.Editor.OpenDocDialog.cs: Minor change.
+
 2007-06-16  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
 
 	* Monodoc.Editor.mdp: Change from MonodocEditor.mdp to Monodoc.Editor.mdp
