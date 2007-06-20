@@ -1,5 +1,10 @@
 2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* Project/CProject.cs: Fixed bug where only projects that had a binary
+	  target got correctly cleaned.
+
+2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Gui/ProjectPackagesFolderNodeBuilder.cs: Changed the package
 	  added/removed handlers to just call UpdateAll from the builder.
 
