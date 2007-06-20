@@ -47,17 +47,14 @@ namespace Gendarme.Rules.Smells {
 		
 		public override void VisitMethodBody (MethodBody methodBody) 
 		{
-			Console.WriteLine ("For the method {0}", methodBody.Method.Name);
 			instructionPairContainer = new ArrayList ();
 			currentPair = new InstructionPair ();
 		}
 		
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
 		{
-			int counter = 0;
 			foreach (Instruction instruction in instructionCollection) {
 				if (instruction.OpCode.FlowControl == FlowControl.Call) {
-					counter++;
 					if (currentPair.First != null) {
 						currentPair.Second = instruction;
 						instructionPairContainer.Add (currentPair);
@@ -69,7 +66,6 @@ namespace Gendarme.Rules.Smells {
 					}
 				}
 			}
-			Console.WriteLine ("There are call | callvirt: {0}", counter);
 		}
 		
 		public IList InstructionPairContainer {
@@ -127,9 +123,9 @@ namespace Gendarme.Rules.Smells {
 		
 		public override string ToString () {
 			StringBuilder stringBuilder = new StringBuilder ();
-			stringBuilder.Append ("Instruction Pair:\n");
-			stringBuilder.Append (String.Format ("\tFirst: {0} {1}\n", firstInstruction.OpCode.Name, firstInstruction.Operand));
-			stringBuilder.Append (String.Format ("\tSecond: {0} {1}\n", secondInstruction.OpCode.Name, secondInstruction.Operand));
+			stringBuilder.Append ("Instruction Pair:" + Environment.NewLine);
+			stringBuilder.Append (String.Format ("\tFirst: {0} {1}{2}", firstInstruction.OpCode.Name, firstInstruction.Operand, Environment.NewLine));
+			stringBuilder.Append (String.Format ("\tSecond: {0} {1}{2}", secondInstruction.OpCode.Name, secondInstruction.Operand, Environment.NewLine));
 			return stringBuilder.ToString ();
 		}
 	}
@@ -148,10 +144,7 @@ namespace Gendarme.Rules.Smells {
 			
 			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
-					//Console.WriteLine ("Checking {0} against {1}", currentInstructionPair, targetInstructionPair);
 					existsRepliedInstructions = existsRepliedInstructions || currentInstructionPair.Equals (targetInstructionPair);
-					if (currentInstructionPair.Equals (targetInstructionPair))
-						Console.WriteLine ("Detected duplicate !! {0} against {1}", currentInstructionPair, targetInstructionPair);
 				}
 			}
 			return existsRepliedInstructions;
@@ -159,7 +152,6 @@ namespace Gendarme.Rules.Smells {
 	
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
-				Console.WriteLine ("Checking: {0}.{1} against {0}.{2}", currentMethod.DeclaringType.Name, currentMethod.Name, targetMethod.Name);
 				IList currentInstructionPairContainer = FillInstructionPairContainerFrom (currentMethod.Body);
 				IList targetInstructionPairContainer = FillInstructionPairContainerFrom (targetMethod.Body);
 			
