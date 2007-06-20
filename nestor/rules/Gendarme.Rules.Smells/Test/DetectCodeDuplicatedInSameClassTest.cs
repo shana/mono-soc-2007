@@ -74,14 +74,14 @@ namespace Test.Rules.Smells {
 			myList.Remove ("FooReplied");
 		}
 		
-		public void PrintUsingAForLoopAndAddAValue () 
+		public void PrintUsingAForLoopAndRemoveAValueIfNotExists () 
 		{
 			PrintValuesInListUsingAForLoop ();
 			if (!myList.Contains ("Bar"))
-				myList.Add ("Bar");
+				myList.Remove ("Bar");
 		}
 		
-		public void PrintUsingAForLoopAndRemoveAValue () 
+		public void PrintUsingAForLoopAndRemoveAValueIfExists () 
 		{
 			PrintValuesInListUsingAForLoop ();
 			if (myList.Contains ("Bar"))
@@ -135,6 +135,7 @@ namespace Test.Rules.Smells {
 			for (int index = 0; index < myList.Count; index++) {
 				Console.WriteLine (myList[index]);	
 			}
+			myList.Add ("MoreFoo");
 		}
 		
 		public void PrintUsingAForLoopAndRemoveAValue () 
@@ -142,6 +143,17 @@ namespace Test.Rules.Smells {
 			for (int index = 0; index < myList.Count; index++) {
 				Console.WriteLine (myList[index]);	
 			}
+			myList.Remove ("MoreFoo");
+		}
+		
+		public void IfConditionAndRemove () {
+			if (myList.Contains ("MoreFoo"))
+				myList.Remove ("MoreFoo");
+		}
+		
+		public void IfConditionAndRemoveReplied () {
+			if (myList.Contains ("MoreFoo"))
+				myList.Remove ("MoreFoo");
 		}
 	}
 
@@ -193,7 +205,7 @@ namespace Test.Rules.Smells {
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			DumpMessageCollection (messageCollection);
 			Assert.IsNotNull (messageCollection);
-			Assert.AreEqual (3, messageCollection.Count);
+			Assert.AreEqual (4, messageCollection.Count);
 			CheckMessageType (messageCollection, MessageType.Error);
 		}
 	}
