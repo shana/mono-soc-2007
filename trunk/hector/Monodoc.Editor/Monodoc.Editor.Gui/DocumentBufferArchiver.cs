@@ -23,7 +23,7 @@ public class DocumentBufferArchiver {
 	
 	static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)
 	{
-		return (currentIter.HasTag (tag) && !nextIter.HasTag (tag)) || nextIter.IsEnd;
+		return (currentIter.HasTag (tag) && !nextIter.HasTag (tag));
 	}
 	
 	public static string Serialize (TextBuffer buffer)
@@ -47,34 +47,118 @@ public class DocumentBufferArchiver {
 	{
 		TextIter currentIter = start;
 		TextIter nextIter = start;
-		
+		bool readingValue = false;
+		bool readingText = false;
+		string attributeName = "";
+		string attributeValue = "";
+		string elementText = "";
+		System.Object [] tags;
 		nextIter.ForwardChar ();
-		
-		TextIter temp = start;
-		temp.Offset = 522;
-		if (temp.EndsTag (buffer.TagTable.Lookup ("Members")))
-			Console.WriteLine ("True");
+		Stack stack = new Stack ();
+		TextTag ignore = buffer.TagTable.Lookup ("ignore");
 		
 		while (!currentIter.Equal (end)) {
-			Console.WriteLine ("Offset: {0}", currentIter.Offset);
+			
+			#if DEBUG
+			Console.WriteLine ("Offset: {0} Char: {1}", currentIter.Offset, currentIter.Char);
+			#endif
+			
+			if (readingValue) {
+				attributeValue += currentIter.Char;
+			}
+			
+			if (readingText && !currentIter.HasTag (ignore)) {
+				elementText += currentIter.Char;
+			}
+			
 			foreach (TextTag tag in currentIter.Tags) {
-				Console.WriteLine ("Tag: {0}, Begins: {1}, Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False"); 
+				#if DEBUG
+				Console.WriteLine ("Posible Begin Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
+				#endif
+				
 				if (currentIter.BeginsTag (tag)) {
-					if (tag.Name.EndsWith (":Attributes")) {
+					if (tag.Name.EndsWith (":Attributes") || tag.Name.Equals ("ignore")) {
 					} else if (tag.Name.IndexOf (":") == -1) {
-						Console.WriteLine ("Start: " + currentIter.Offset);
+						bool textNode = HasTextNode (tag.Name);
+						
+						if (readingText) {
+							int length = elementText.Length;
+							xmlWriter.WriteString (elementText.Substring (0, length - 1));
+							readingText = false;
+						}
+						
+						if (textNode) {
+							stack.Push (tag);
+							readingText = true;
+							elementText = currentIter.Char;
+						}
+						
 						xmlWriter.WriteStartElement (null, tag.Name, null);
+						
+						#if DEBUG
+						Console.WriteLine ("Wrote Start Element: " + tag.Name);
+						#endif
+					} else if (tag.Name.IndexOf (":") > 0) {
+						attributeName = tag.Name.Split (':')[1];
+						xmlWriter.WriteStartAttribute (null, attributeName, null);
+						
+						Console.WriteLine ("Wrote Start Attribute: {0}", attributeName);
+						
+						readingValue = true;
+						attributeValue += currentIter.Char;
 					}
-				} else if (TagEndsHere (tag, currentIter, nextIter)) {
-					if (tag.Name.IndexOf (":") == -1) {
-						Console.WriteLine ("End: " + currentIter.Offset);
+				}
+			}
+			
+			tags = Reverse (currentIter.Tags);
+			foreach (TextTag tag in tags) {
+				#if DEBUG
+				Console.WriteLine ("Posible End Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
+				#endif
+				
+				if (TagEndsHere (tag, currentIter, nextIter)) {
+					if (tag.Name.EndsWith (":Attributes") || tag.Name.Equals ("ignore")) {
+					} else if (tag.Name.IndexOf (":") == -1) {
+						string startName = "";
+						TextTag startTag;
+						
+						if (stack.Count != 0) {
+							startTag = stack.Pop () as TextTag;
+							startName = startTag.Name;
+						}
+						
+						if (readingText && startName.Equals (tag.Name)) {
+							xmlWriter.WriteString (elementText);
+							elementText = String.Empty;
+							
+							if (stack.Count != 0)
+								readingText = true;
+							else
+								readingText = false;
+						}
+						
 						xmlWriter.WriteEndElement ();
+						elementText = String.Empty;
+						
+						#if DEBUG
+						Console.WriteLine ("Wrote End Element: " + tag.Name);
+						#endif
+						
+					} else if (tag.Name.IndexOf (":") > 0) {
+						xmlWriter.WriteString (attributeValue);
+						xmlWriter.WriteEndAttribute ();
+						
+						Console.WriteLine ("Wrote End Attribute: {0} Value: {1}", attributeName, attributeValue);
+						
+						readingValue = false;
+						attributeValue = attributeName = elementText =  String.Empty;
 					}
 				}
 			}
 			
 			currentIter.ForwardChar ();
 			nextIter.ForwardChar ();
+			Console.WriteLine ("State: {0} Char: {1} \n", xmlWriter.WriteState.ToString (), currentIter.Char);
 		}
 	}
 	
@@ -149,7 +233,7 @@ public class DocumentBufferArchiver {
 					
 					// Padding between tag regions
 					insertAt = buffer.GetIterAtOffset (offset);
-					buffer.Insert (ref insertAt, " ");
+					buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
 					offset += 1;
 					
 					applyStart = buffer.GetIterAtOffset (tagStart.Start);
@@ -207,7 +291,7 @@ public class DocumentBufferArchiver {
 		buffer.ApplyTag (tagAttributes, applyStart, applyEnd);
 		
 		#if DEBUG
-		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, result);
+		Console.WriteLine ("Attributes: {0} Start: {1} End: {2}", tagName, offset, result);
 		#endif
 		
 		return result;
@@ -216,15 +300,17 @@ public class DocumentBufferArchiver {
 	private static int DeserializeTypeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
 	{
 		string tagPrefix = xmlReader.Name + ":";
+		int resultOffset = offset;
 		
 		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		while (xmlReader.MoveToNextAttribute ()) {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
 			buffer.Insert (ref insertAt, "\n");
+			resultOffset += xmlReader.Value.Length + 1;
 		}
 		
-		return insertAt.Offset;
+		return resultOffset;
 	}
 	
 	private static int DeserializeTypeSignatureAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
@@ -277,7 +363,7 @@ public class DocumentBufferArchiver {
 		while (xmlReader.MoveToNextAttribute ()) {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.Insert (ref insertAt, " ");
+			buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
 		}
 		
 		return insertAt.Offset;
@@ -291,7 +377,7 @@ public class DocumentBufferArchiver {
 		while (xmlReader.MoveToNextAttribute ()) {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.Insert (ref insertAt, " ");
+			buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
 		}
 		
 		return insertAt.Offset;
@@ -307,7 +393,39 @@ public class DocumentBufferArchiver {
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
 		}
 		
+		#if DEBUG
+		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
+		#endif
+		
 		return insertAt.Offset;
+	}
+	
+	private static System.Object [] Reverse (TextTag [] tags)
+	{
+		ArrayList list = new ArrayList ();
+		foreach (TextTag tag in tags) {
+			list.Insert (0, tag);
+		}
+		
+		return list.ToArray ();
+	}
+	
+	private static bool HasTextNode (string name) 
+	{
+		bool result = false;
+		switch (name) {
+			case "AssemblyName":
+				result = true;
+				break;
+			case "ThreadSafetyStatement":
+				result = true;
+				break;
+			case "link":
+				result = true;
+				break;
+		}
+		
+		return result;
 	}
 }
 }
