@@ -39,7 +39,6 @@ namespace CBinding
 {
 	public partial class EditPackagesDialog : Gtk.Dialog
 	{
-		// TODO: add perhaps an icon?
 		private Gtk.ListStore packageListStore = new Gtk.ListStore (typeof(bool), typeof(string), typeof(string));
 		private Gtk.ListStore selectedPackagesListStore = new Gtk.ListStore (typeof(string), typeof(string));
 		private CProject project;
@@ -50,22 +49,37 @@ namespace CBinding
 			
 			this.project = project;
 			
-			Gtk.CellRendererToggle package_toggle = new Gtk.CellRendererToggle ();
-			package_toggle.Activatable = true;
-			package_toggle.Toggled += OnPackageToggled;
-			package_toggle.Xalign = 0;
+			Gtk.CellRendererToggle toggleRenderer = new Gtk.CellRendererToggle ();
+			toggleRenderer.Activatable = true;
+			toggleRenderer.Toggled += OnPackageToggled;
+			toggleRenderer.Xalign = 0;
 			
 			Gtk.CellRendererText textRenderer = new Gtk.CellRendererText ();
 			
+			Gtk.CellRendererPixbuf pixbufRenderer = new Gtk.CellRendererPixbuf ();
+			pixbufRenderer.StockId = "md-package";
+			
+			Gtk.TreeViewColumn packagePackageColumn = new Gtk.TreeViewColumn ();
+			packagePackageColumn.Title = "Package";
+			packagePackageColumn.PackStart (pixbufRenderer, false);
+			packagePackageColumn.PackStart (textRenderer, true);
+			packagePackageColumn.AddAttribute (textRenderer, "text", 1);
+			
 			packageTreeView.Model = packageListStore;
 			packageTreeView.HeadersVisible = true;
-			packageTreeView.AppendColumn ("", package_toggle, "active", 0);
-			packageTreeView.AppendColumn ("ProjectPackage", textRenderer, "text", 1);
+			packageTreeView.AppendColumn ("", toggleRenderer, "active", 0);
+			packageTreeView.AppendColumn (packagePackageColumn);
 			packageTreeView.AppendColumn ("Version", textRenderer, "text", 2);
+			
+			Gtk.TreeViewColumn selectedPackageColumn = new Gtk.TreeViewColumn ();
+			selectedPackageColumn.Title = "Package";
+			selectedPackageColumn.PackStart (pixbufRenderer, false);
+			selectedPackageColumn.PackStart (textRenderer, true);
+			selectedPackageColumn.AddAttribute (textRenderer, "text", 0);
 			
 			selectedPackagesTreeView.Model = selectedPackagesListStore;
 			selectedPackagesTreeView.HeadersVisible = true;
-			selectedPackagesTreeView.AppendColumn ("Package", textRenderer, "text", 0);
+			selectedPackagesTreeView.AppendColumn (selectedPackageColumn);
 			selectedPackagesTreeView.AppendColumn ("Version", textRenderer, "text", 1);
 			
 			foreach (string dir in ScanDirs ()) {
@@ -144,7 +158,27 @@ namespace CBinding
 			
 			if (!selectedPackagesListStore.IterIsValid (iter)) return;
 			
+			string package = (string)selectedPackagesListStore.GetValue (iter, 0);
+			
 			selectedPackagesListStore.Remove (ref iter);
+			
+			Gtk.TreeIter search_iter;
+			bool has_elem = packageListStore.GetIterFirst (out search_iter);
+				
+			if (has_elem)
+			{
+				while (true) {
+					string current = (string)packageListStore.GetValue (search_iter, 1);
+					
+					if (current.Equals (package)) {
+						packageListStore.SetValue (search_iter, 0, false);
+						break;
+					}
+					
+					if (!packageListStore.IterNext (ref search_iter))
+						break;
+				}
+			}
 		}
 		
 		private void OnPackageToggled (object sender, Gtk.ToggledArgs args)
@@ -172,7 +206,6 @@ namespace CBinding
 				{
 					while (true) {
 						string current = (string)selectedPackagesListStore.GetValue (search_iter, 0);
-						Console.WriteLine (current);
 						
 						if (current.Equals (name)) {
 							selectedPackagesListStore.Remove (ref search_iter);

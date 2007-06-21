@@ -1,3 +1,10 @@
+2007-06-21  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Gui/EditPackagesDialog.cs: Added a package icon to both packages
+	  columns.
+	* Project/CProjectBinding.cs, Project/CProject.cs: Implemented
+	  CreateSingleFileProject
+
 2007-06-20  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Gui/OutputOptionsPanel.cs, Project/CProject.cs,

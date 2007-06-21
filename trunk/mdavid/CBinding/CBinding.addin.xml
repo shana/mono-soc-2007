@@ -27,7 +27,7 @@
 			id = "C"
 			insertbefore = "AllFiles"
 			_label = "C/C++ Files"
-			extensions = "*.c,*.cpp,*.h,*.hpp"/>
+			extensions = "*.c,*.cpp,*.h,*.hpp,*.cxx"/>
 	</Extension>
 
 	<Extension path = "/MonoDevelop/FileTemplates">
