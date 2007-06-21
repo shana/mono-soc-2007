@@ -1,5 +1,9 @@
 2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Grid.cs: Added measurement invalidation in response to changes in attached properties.
+
+2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Grid.cs: Fixed row/column span handling.
 
 2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
