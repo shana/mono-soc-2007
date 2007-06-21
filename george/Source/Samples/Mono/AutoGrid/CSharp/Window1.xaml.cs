@@ -58,7 +58,7 @@ namespace SDKSample
             AutoIndexingGrid g = (AutoIndexingGrid)LogicalTreeHelper.FindLogicalNode(myWindow, "TargetGrid");
             while (g.ColumnDefinitions.Count < columnCount)
             {
-                g.ColumnDefinitions.Add(new ColumnDefinition());
+                g.ColumnDefinitions.Add(new Mono.System.Windows.Controls.ColumnDefinition());
             }
             while (g.ColumnDefinitions.Count > columnCount)
             {
@@ -77,8 +77,8 @@ namespace SDKSample
      /// <summary>
     /// AutoIndexingGrid - sample implementation of auto indexing, row primary grid
     /// </summary>
-    
-    public class AutoIndexingGrid : Grid
+
+	public class AutoIndexingGrid : Mono.System.Windows.Controls.Grid
     {
         protected override Size MeasureOverride(Size constraint)
         {
@@ -92,7 +92,7 @@ namespace SDKSample
                 int newRowCount = ((base.Children.Count - 1) / _columnCount + 1);
                 while (base.RowDefinitions.Count < newRowCount)
                 {
-                    base.RowDefinitions.Add(new RowDefinition());
+					base.RowDefinitions.Add(new Mono.System.Windows.Controls.RowDefinition());
                 }
                 if (base.RowDefinitions.Count > newRowCount)
                 {
@@ -103,8 +103,8 @@ namespace SDKSample
                 for (int i = 0, childrenCount = base.Children.Count; i < childrenCount; ++i)
                 {
                     UIElement child = base.Children[i];
-                    Grid.SetColumn(child, i % _columnCount);
-                    Grid.SetRow(child, i / _columnCount);
+					Mono.System.Windows.Controls.Grid.SetColumn(child, i % _columnCount);
+					Mono.System.Windows.Controls.Grid.SetRow(child, i / _columnCount);
                 }
             }
 

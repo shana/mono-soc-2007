@@ -3,10 +3,11 @@
       xmlns:SDKSample="clr-namespace:SDKSample"
       x:Class="SDKSample.Window1"
       Title="Auto Indexing Grid Sample"
-      Name="myWindow" 
-      Loaded="OnStartup">
-  <Grid Background="LightSteelBlue">
-    <Grid.Resources>
+      Name="myWindow"
+      Loaded="OnStartup"
+	xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
+	<mono_sytem_windows_controls:Grid Background="LightSteelBlue">
+		<mono_sytem_windows_controls:Grid.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontFamily" Value="Verdana" />
@@ -41,50 +42,50 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </Grid.Resources>
+    </mono_sytem_windows_controls:Grid.Resources>
 
-    <Border Style="{DynamicResource SampleBorder}" Grid.Row="0">
-      <ScrollViewer>
-        <StackPanel>
-          <Grid>
-            <Grid.Resources>
-              <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Margin" Value="8" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="FontFamily" Value="Verdana" />
-              </Style>
-            </Grid.Resources>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto" />
-              <ColumnDefinition Width="Auto" />
-              <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <RowDefinition />
-              <RowDefinition />
-              <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.ColumnSpan="3" TextWrapping="WrapWithOverflow">
+    <Border Style="{DynamicResource SampleBorder}" mono_sytem_windows_controls:Grid.Row="0">
+		<ScrollViewer>
+			<StackPanel>
+				<mono_sytem_windows_controls:Grid>
+					<mono_sytem_windows_controls:Grid.Resources>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="VerticalAlignment" Value="Center" />
+							<Setter Property="Margin" Value="8" />
+							<Setter Property="FontSize" Value="14" />
+							<Setter Property="FontFamily" Value="Verdana" />
+						</Style>
+					</mono_sytem_windows_controls:Grid.Resources>
+					<mono_sytem_windows_controls:Grid.ColumnDefinitions>
+						<mono_sytem_windows_controls:ColumnDefinition Width="Auto" />
+						<mono_sytem_windows_controls:ColumnDefinition Width="Auto" />
+						<mono_sytem_windows_controls:ColumnDefinition Width="*" />
+					</mono_sytem_windows_controls:Grid.ColumnDefinitions>
+					<mono_sytem_windows_controls:Grid.RowDefinitions>
+						<mono_sytem_windows_controls:RowDefinition />
+						<mono_sytem_windows_controls:RowDefinition />
+						<mono_sytem_windows_controls:RowDefinition />
+					</mono_sytem_windows_controls:Grid.RowDefinitions>
+            <TextBlock mono_sytem_windows_controls:Grid.ColumnSpan="3" TextWrapping="WrapWithOverflow">
               This is an example of a custom Grid element that indexes its children collection based on the number of Columns.
               Use the sliders to manipulate the number of children elements and columns in the Grid. Grid lines are enabled
               to visually illustrate the creation of new columns.
             </TextBlock>
-            <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Style="{DynamicResource SampleBorder}" />
-            <TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Right">Children Count : </TextBlock>
-            <Slider Grid.Column="1" Grid.Row="1" Margin="8" Width="300" Height="20" Name="ChildrenCountSlider" Minimum="0" Maximum="24" Value="3" />
-            <TextBlock Grid.Column="2" Grid.Row="1" TextAlignment="Left" Name="ChildrenCountDisplay">3</TextBlock>
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Style="{DynamicResource SampleBorder}" />
-            <TextBlock Grid.Column="0" Grid.Row="2" TextAlignment="Right">Column Count : </TextBlock>
-            <Slider Grid.Column="1" Grid.Row="2" Margin="8" Width="300" Height="20" Name="ColumnCountSlider" Minimum="1" Maximum="8" Value="3" />
-            <TextBlock Grid.Column="2" Grid.Row="2" TextAlignment="Left" Name="ColumnCountDisplay">3</TextBlock>
-          </Grid>
+            <Border mono_sytem_windows_controls:Grid.Column="0" mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.ColumnSpan="3" Style="{DynamicResource SampleBorder}" />
+            <TextBlock mono_sytem_windows_controls:Grid.Column="0" mono_sytem_windows_controls:Grid.Row="1" TextAlignment="Right">Children Count : </TextBlock>
+			<Slider mono_sytem_windows_controls:Grid.Column="1" mono_sytem_windows_controls:Grid.Row="1" Margin="8" Width="300" Height="20" Name="ChildrenCountSlider" Minimum="0" Maximum="24" Value="3" />
+			<TextBlock mono_sytem_windows_controls:Grid.Column="2" mono_sytem_windows_controls:Grid.Row="1" TextAlignment="Left" Name="ChildrenCountDisplay">3</TextBlock>
+			<Border mono_sytem_windows_controls:Grid.Column="0" mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.ColumnSpan="3" Style="{DynamicResource SampleBorder}" />
+			<TextBlock mono_sytem_windows_controls:Grid.Column="0" mono_sytem_windows_controls:Grid.Row="2" TextAlignment="Right">Column Count : </TextBlock>
+			<Slider mono_sytem_windows_controls:Grid.Column="1" mono_sytem_windows_controls:Grid.Row="2" Margin="8" Width="300" Height="20" Name="ColumnCountSlider" Minimum="1" Maximum="8" Value="3" />
+			<TextBlock mono_sytem_windows_controls:Grid.Column="2" mono_sytem_windows_controls:Grid.Row="2" TextAlignment="Left" Name="ColumnCountDisplay">3</TextBlock>
+          </mono_sytem_windows_controls:Grid>
           <SDKSample:AutoIndexingGrid x:Name="TargetGrid" ShowGridLines="True">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition />
-              <ColumnDefinition />
-              <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+			  <mono_sytem_windows_controls:Grid.ColumnDefinitions>
+				  <mono_sytem_windows_controls:ColumnDefinition />
+				  <mono_sytem_windows_controls:ColumnDefinition />
+				  <mono_sytem_windows_controls:ColumnDefinition />
+			  </mono_sytem_windows_controls:Grid.ColumnDefinitions>
             <Control Style="{DynamicResource ImageWithBorder}" />
             <Control Style="{DynamicResource ImageWithBorder}" />
             <Control Style="{DynamicResource ImageWithBorder}" />
@@ -92,5 +93,5 @@
         </StackPanel>
       </ScrollViewer>
     </Border>
-</Grid>
+</mono_sytem_windows_controls:Grid>
 </Window>
