@@ -10,10 +10,12 @@ namespace System.Windows.Controls {
 	public sealed class ColumnDefinitionCollection : IList<ColumnDefinition>, ICollection<ColumnDefinition>, IEnumerable<ColumnDefinition>, IList, ICollection, IEnumerable {
 		#region Private Fields
 		ArrayList data = new ArrayList();
+		Grid grid;
 		#endregion
 
 		#region Internal Constructors
-		internal ColumnDefinitionCollection() {
+		internal ColumnDefinitionCollection(Grid grid) {
+			this.grid = grid;
 		}
 		#endregion
 
@@ -39,21 +41,21 @@ namespace System.Windows.Controls {
 		public ColumnDefinition this[int index] {
 			get { return (ColumnDefinition)data[index]; }
 			set {
-				ResetActualSize();
-				data[index] = value; 
+				data[index] = value;
+				OnChanged();
 			}
 		}
 		#endregion
 
 		#region Public Methods
 		public void Add(ColumnDefinition value) {
-			ResetActualSize();
 			data.Add(value);
+			OnChanged();
 		}
 
 		public void Clear() {
-			ResetActualSize();
 			data.Clear();
+			OnChanged();
 		}
 
 		public bool Contains(ColumnDefinition value) {
@@ -69,16 +71,16 @@ namespace System.Windows.Controls {
 		}
 
 		public void Insert(int index, ColumnDefinition value) {
-			ResetActualSize();
 			data.Insert(index, value);
+			OnChanged();
 		}
 
 		public bool Remove(ColumnDefinition value) {
 			if (!data.Contains(value))
 				return false;
-			ResetActualSize();
 			try {
 				data.Remove(value);
+				OnChanged();
 				return true;
 			} catch (NotSupportedException) {
 				return false;
@@ -86,26 +88,27 @@ namespace System.Windows.Controls {
 		}
 
 		public void RemoveAt(int index) {
-			ResetActualSize();
 			data.RemoveAt(index);
+			OnChanged();
 		}
 
 		public void RemoveRange(int index, int count) {
-			ResetActualSize();
 			data.RemoveRange(index, count);
+			OnChanged();
 		}
 		#endregion
 
 		#region Explicit Interface Implementations
 		#region IList
 		int IList.Add(object value) {
-			ResetActualSize();
-			return data.Add(value);
+			int result = data.Add(value);
+			OnChanged();
+			return result;
 		}
 
 		void IList.Clear() {
-			ResetActualSize();
 			data.Clear();
+			OnChanged();
 		}
 
 		bool IList.Contains(object value) {
@@ -117,8 +120,8 @@ namespace System.Windows.Controls {
 		}
 
 		void IList.Insert(int index, object value) {
-			ResetActualSize();
 			data.Insert(index, value);
+			OnChanged();
 		}
 
 		bool IList.IsFixedSize {
@@ -130,20 +133,20 @@ namespace System.Windows.Controls {
 		}
 
 		void IList.Remove(object value) {
-			ResetActualSize();
 			data.Remove(value);
+			OnChanged();
 		}
 
 		void IList.RemoveAt(int index) {
-			ResetActualSize();
 			data.RemoveAt(index);
+			OnChanged();
 		}
 
 		object IList.this[int index] {
 			get { return data[index]; }
 			set {
-				ResetActualSize();
-				data[index] = value; 
+				data[index] = value;
+				OnChanged();
 			}
 		}
 		#endregion
@@ -178,33 +181,33 @@ namespace System.Windows.Controls {
 		}
 
 		void IList<ColumnDefinition>.Insert(int index, ColumnDefinition item) {
-			ResetActualSize();
 			data.Insert(index, item);
+			OnChanged();
 		}
 
 		void IList<ColumnDefinition>.RemoveAt(int index) {
-			ResetActualSize();
 			data.RemoveAt(index);
+			OnChanged();
 		}
 
 		ColumnDefinition IList<ColumnDefinition>.this[int index] {
 			get { return (ColumnDefinition)data[index]; }
 			set {
-				ResetActualSize();
-				data[index] = value; 
+				data[index] = value;
+				OnChanged();
 			}
 		}
 		#endregion
 
 		#region ICollection<ColumnDefinition>
 		void ICollection<ColumnDefinition>.Add(ColumnDefinition item) {
-			ResetActualSize();
 			data.Add(item);
+			OnChanged();
 		}
 
 		void ICollection<ColumnDefinition>.Clear() {
-			ResetActualSize();
 			data.Clear();
+			OnChanged();
 		}
 
 		bool ICollection<ColumnDefinition>.Contains(ColumnDefinition item) {
@@ -224,8 +227,9 @@ namespace System.Windows.Controls {
 		}
 
 		bool ICollection<ColumnDefinition>.Remove(ColumnDefinition item) {
-			ResetActualSize();
-			return Remove(item);
+			bool result = Remove(item);
+			OnChanged();
+			return result;
 		}
 		#endregion
 
@@ -237,9 +241,10 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Methods
-		void ResetActualSize() {
+		void OnChanged() {
 			foreach (ColumnDefinition item in data)
 				item.ActualWidth = 0;
+			grid.InvalidateMeasure();
 		}
 		#endregion
 

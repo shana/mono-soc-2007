@@ -10,10 +10,12 @@ namespace System.Windows.Controls {
 	public sealed class RowDefinitionCollection : IList<RowDefinition>, ICollection<RowDefinition>, IEnumerable<RowDefinition>, IList, ICollection, IEnumerable {
 		#region Private Fields
 		ArrayList data = new ArrayList();
+		Grid grid;
 		#endregion
 
 		#region Internal Constructors
-		internal RowDefinitionCollection() {
+		internal RowDefinitionCollection(Grid grid) {
+			this.grid = grid;
 		}
 		#endregion
 
@@ -39,21 +41,21 @@ namespace System.Windows.Controls {
 		public RowDefinition this[int index] {
 			get { return (RowDefinition)data[index]; }
 			set {
-				ResetActualSize();
-				data[index] = value; 
+				data[index] = value;
+				OnChanged();
 			}
 		}
 		#endregion
 
 		#region Public Methods
 		public void Add(RowDefinition value) {
-			ResetActualSize();
 			data.Add(value);
+			OnChanged();
 		}
 
 		public void Clear() {
 			data.Clear();
-			ResetActualSize();
+			OnChanged();
 		}
 
 		public bool Contains(RowDefinition value) {
@@ -69,16 +71,16 @@ namespace System.Windows.Controls {
 		}
 
 		public void Insert(int index, RowDefinition value) {
-			ResetActualSize();
 			data.Insert(index, value);
+			OnChanged();
 		}
 
 		public bool Remove(RowDefinition value) {
 			if (!data.Contains(value))
 				return false;
-			ResetActualSize();
 			try {
 				data.Remove(value);
+				OnChanged();
 				return true;
 			} catch (NotSupportedException) {
 				return false;
@@ -86,26 +88,27 @@ namespace System.Windows.Controls {
 		}
 
 		public void RemoveAt(int index) {
-			ResetActualSize();
 			data.RemoveAt(index);
+			OnChanged();
 		}
 
 		public void RemoveRange(int index, int count) {
-			ResetActualSize();
 			data.RemoveRange(index, count);
+			OnChanged();
 		}
 		#endregion
 
 		#region Explicit Interface Implementations
 		#region IList
 		int IList.Add(object value) {
-			ResetActualSize();
-			return data.Add(value);
+			int result = data.Add(value);
+			OnChanged();
+			return result;
 		}
 
 		void IList.Clear() {
-			ResetActualSize();
 			data.Clear();
+			OnChanged();
 		}
 
 		bool IList.Contains(object value) {
@@ -117,8 +120,8 @@ namespace System.Windows.Controls {
 		}
 
 		void IList.Insert(int index, object value) {
-			ResetActualSize();
 			data.Insert(index, value);
+			OnChanged();
 		}
 
 		bool IList.IsFixedSize {
@@ -130,20 +133,20 @@ namespace System.Windows.Controls {
 		}
 
 		void IList.Remove(object value) {
-			ResetActualSize();
 			data.Remove(value);
+			OnChanged();
 		}
 
 		void IList.RemoveAt(int index) {
-			ResetActualSize();
 			data.RemoveAt(index);
+			OnChanged();
 		}
 
 		object IList.this[int index] {
 			get { return data[index]; }
 			set {
-				ResetActualSize();
-				data[index] = value; 
+				data[index] = value;
+				OnChanged();
 			}
 		}
 		#endregion
@@ -178,33 +181,33 @@ namespace System.Windows.Controls {
 		}
 
 		void IList<RowDefinition>.Insert(int index, RowDefinition item) {
-			ResetActualSize();
 			data.Insert(index, item);
+			OnChanged();
 		}
 
 		void IList<RowDefinition>.RemoveAt(int index) {
-			ResetActualSize();
 			data.RemoveAt(index);
+			OnChanged();
 		}
 
 		RowDefinition IList<RowDefinition>.this[int index] {
 			get { return (RowDefinition)data[index]; }
 			set {
-				ResetActualSize();
-				data[index] = value; 
+				data[index] = value;
+				OnChanged();
 			}
 		}
 		#endregion
 
 		#region ICollection<RowDefinition>
 		void ICollection<RowDefinition>.Add(RowDefinition item) {
-			ResetActualSize();
 			data.Add(item);
+			OnChanged();
 		}
 
 		void ICollection<RowDefinition>.Clear() {
-			ResetActualSize();
 			data.Clear();
+			OnChanged();
 		}
 
 		bool ICollection<RowDefinition>.Contains(RowDefinition item) {
@@ -224,8 +227,9 @@ namespace System.Windows.Controls {
 		}
 
 		bool ICollection<RowDefinition>.Remove(RowDefinition item) {
-			ResetActualSize();
-			return Remove(item);
+			bool result = Remove(item);
+			OnChanged();
+			return result;
 		}
 		#endregion
 
@@ -237,9 +241,10 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Methods
-		void ResetActualSize() {
+		void OnChanged() {
 			foreach (RowDefinition item in data)
 				item.ActualHeight = 0;
+			grid.InvalidateMeasure();
 		}
 		#endregion
 

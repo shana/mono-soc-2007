@@ -24,14 +24,16 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Fields
-		ColumnDefinitionCollection column_definitions = new ColumnDefinitionCollection();
-		RowDefinitionCollection row_definitions = new RowDefinitionCollection();
+		ColumnDefinitionCollection column_definitions;
+		RowDefinitionCollection row_definitions;
 		bool measure_called;
 		GridLinesRenderer grid_lines_renderer;
 		#endregion
 
 		#region Public Constructors
 		public Grid() {
+			column_definitions = new ColumnDefinitionCollection(this);
+			row_definitions = new RowDefinitionCollection(this);
 		}
 		#endregion
 
