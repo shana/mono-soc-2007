@@ -1,5 +1,12 @@
 2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs: Minor changes.
+	* Monodoc.Editor.Gui.mdp, DocumentTag.cs: Added DocumentTag class that
+	  inherits from TextTag. It implements some properties that tells if
+	  the tag represents an element, an attribute or is a text element.
+
+2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBufferArchiver.cs: Continue with the implementation of the
 	  Serialize method. Changed some part of the Deserialize so that
 	  extra characters are enclosed in a "ignore" Tag.

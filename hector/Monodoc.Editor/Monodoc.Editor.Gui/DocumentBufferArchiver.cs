@@ -222,8 +222,6 @@ public class DocumentBufferArchiver {
 						stack.Push (tagStart);
 					break;
 				case XmlNodeType.Text:
-				case XmlNodeType.Whitespace:
-				case XmlNodeType.SignificantWhitespace:
 					#if DEBUG
 					Console.WriteLine ("Text: {0} Start: {1}", xmlReader.Value, offset);
 					#endif
