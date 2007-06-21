@@ -399,5 +399,62 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region ChangingDefinitionsCauseMeasure
+		[Test]
+		public void ChangingDefinitionsCauseMeasure() {
+			new ChangingDefinitionsCauseMeasureGrid();
+		}
+
+		class ChangingDefinitionsCauseMeasureGrid : Grid {
+			bool set_called;
+			bool called;
+
+			public ChangingDefinitionsCauseMeasureGrid() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				set_called = true;
+				RowDefinitions.Add(new RowDefinition());
+				RowDefinitions.Add(new RowDefinition());
+				Assert.IsFalse(called);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				if (set_called)
+					called = true;
+				return base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
+
+		#region ChangingDefinitionsCauseMeasureChildren
+		[Test]
+		public void ChangingDefinitionsCauseMeasureChildren() {
+			new ChangingDefinitionsCauseMeasureChildrenGrid();
+		}
+
+		class ChangingDefinitionsCauseMeasureChildrenGrid : Grid {
+			bool set_called;
+			bool called;
+
+			public ChangingDefinitionsCauseMeasureChildrenGrid() {
+				Children.Add(new global::System.Windows.Controls.Button());
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				set_called = true;
+				RowDefinitions.Add(new RowDefinition());
+				RowDefinitions.Add(new RowDefinition());
+				Assert.IsFalse(called);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				if (set_called)
+					called = true;
+				return base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
 	}
 }
