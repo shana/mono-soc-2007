@@ -1,6 +1,14 @@
 2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs: Minor changes.
+	* DocumentTagTable.cs: Using DocumentTag to define the tags used in the
+	  editor, and toggle if they are elements, attributes or has text
+	  child nodes.
+	* DocumentTag.cs: By default DocumentTags are non Editable.
+
+2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Minor changes.
 	* Monodoc.Editor.Gui.mdp, DocumentTag.cs: Added DocumentTag class that
 	  inherits from TextTag. It implements some properties that tells if
 	  the tag represents an element, an attribute or is a text element.

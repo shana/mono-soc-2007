@@ -31,169 +31,220 @@ public class DocumentTagTable : TextTagTable {
 	
 	private void InitCommonTags ()
 	{
-		TextTag tag;
+		DocumentTag tag;
 		
-		tag = new TextTag ("Type");
-		tag.Editable = false;
+		tag = new DocumentTag ("Type");
+		tag.IsElement = true;
 		tag.Foreground = "blue";
 		Add (tag);
 		
-		tag = new TextTag ("Type:Attributes");
+		tag = new DocumentTag ("Type:Attributes");
 		tag.Foreground = "green";
 		Add (tag);
 		
-		tag = new TextTag ("Type:Name");
-		tag.Invisible = false;
+		tag = new DocumentTag ("Type:Name");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("Type:FullName");
+		tag = new DocumentTag ("Type:FullName");
+		tag.IsAttribute = true;
 		tag.Scale = Pango.Scale.XXLarge;
 		tag.PixelsBelowLines = 10;
 		Add (tag);
 		
-		tag = new TextTag ("Type:FullNameSP");
+		tag = new DocumentTag ("Type:FullNameSP");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("Type:Maintainer");
+		tag = new DocumentTag ("Type:Maintainer");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("TypeSignature");
+		tag = new DocumentTag ("TypeSignature");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("TypeSignature:Attributes");
+		tag = new DocumentTag ("TypeSignature:Attributes");
 		Add (tag);
 		
-		tag = new TextTag ("TypeSignature:Language");
+		tag = new DocumentTag ("TypeSignature:Language");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("TypeSignature:Value");
+		tag = new DocumentTag ("TypeSignature:Value");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("TypeSignature:Maintainer");
+		tag = new DocumentTag ("TypeSignature:Maintainer");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("AssemblyInfo");
+		tag = new DocumentTag ("AssemblyInfo");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("AssemblyName");
+		tag = new DocumentTag ("AssemblyName");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("AssemblyPublicKey");
+		tag = new DocumentTag ("AssemblyPublicKey");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("AssemblyVersion");
+		tag = new DocumentTag ("AssemblyVersion");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("ThreadSafetyStatement");
+		tag = new DocumentTag ("ThreadSafetyStatement");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("Base");
+		tag = new DocumentTag ("Base");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("BaseTypeName");
+		tag = new DocumentTag ("BaseTypeName");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("Attributes");
+		tag = new DocumentTag ("Attributes");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("Attribute");
+		tag = new DocumentTag ("Attribute");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("AttributeName");
+		tag = new DocumentTag ("AttributeName");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("Members");
+		tag = new DocumentTag ("Members");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("Member");
+		tag = new DocumentTag ("Member");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("Member:Attributes");
+		tag = new DocumentTag ("Member:Attributes");
 		Add (tag);
 		
-		tag = new TextTag ("Member:MemberName");
+		tag = new DocumentTag ("Member:MemberName");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("Member:Deprecated");
+		tag = new DocumentTag ("Member:Deprecated");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("MemberSignature");
+		tag = new DocumentTag ("MemberSignature");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("MemberSignature:Attributes");
+		tag = new DocumentTag ("MemberSignature:Attributes");
 		Add (tag);
 		
-		tag = new TextTag ("MemberSignature:Language");
+		tag = new DocumentTag ("MemberSignature:Language");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("MemberSignature:Value");
+		tag = new DocumentTag ("MemberSignature:Value");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("MemberType");
+		tag = new DocumentTag ("MemberType");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("ReturnValue");
+		tag = new DocumentTag ("ReturnValue");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("ReturnType");
+		tag = new DocumentTag ("ReturnType");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("Parameters");
+		tag = new DocumentTag ("Parameters");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("Docs");
+		tag = new DocumentTag ("Docs");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("summary");
+		tag = new DocumentTag ("summary");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("remarks");
+		tag = new DocumentTag ("remarks");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("para");
+		tag = new DocumentTag ("para");
+		tag.IsElement = true;
+		tag.HasText = true;
 		Add (tag);
 		
-		tag = new TextTag ("see");
-		tag.Editable = true;
+		tag = new DocumentTag ("see");
+		tag.IsElement = true;
 		tag.Foreground = "red";
 		Add (tag);
 		
-		tag = new TextTag ("see:Attributes");
+		tag = new DocumentTag ("see:Attributes");
 		Add (tag);
 		
-		tag = new TextTag ("see:cref");
+		tag = new DocumentTag ("see:cref");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("see:langword");
+		tag = new DocumentTag ("see:langword");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("see:qualify");
+		tag = new DocumentTag ("see:qualify");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("link");
+		tag = new DocumentTag ("link");
+		tag.IsElement = true;
+		tag.HasText = true;
 		tag.Underline = Pango.Underline.Single;
 		tag.Foreground = "#204a87";
 		Add (tag);
 		
-		tag = new TextTag ("link:Attributes");
+		tag = new DocumentTag ("link:Attributes");
 		tag.Foreground = "purple";
 		tag.Underline = Pango.Underline.None;
 		Add (tag);
 		
-		tag = new TextTag ("link:location");
+		tag = new DocumentTag ("link:location");
+		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new TextTag ("since");
+		tag = new DocumentTag ("since");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new TextTag ("since:Attributes");
+		tag = new DocumentTag ("since:Attributes");
 		Add (tag);
 		
-		tag = new TextTag ("since:version");
+		tag = new DocumentTag ("since:version");
+		tag.IsAttribute = true;
 		tag.Foreground = "orange";
 		Add (tag);
 		
-		tag = new TextTag ("ignore");
+		tag = new DocumentTag ("ignore");
 		Add (tag);
 	}
 }
