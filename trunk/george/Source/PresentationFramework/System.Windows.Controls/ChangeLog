@@ -1,6 +1,10 @@
 2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Grid.cs: More work.
+
+2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Grid.cs: More work.
 	* ColumnDefinition.cs, DefinitionBase.cs, RowDefinition.cs: Added.
 	* ColumnDefinitionCollection.cs, RowDefinitionCollection.cs: Reset ActualWidth/ActualHeight when the contents change.
 

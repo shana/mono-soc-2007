@@ -266,26 +266,28 @@ namespace System.Windows.Controls {
 
 		protected override Size MeasureOverride(Size availableSize) {
 			measure_called = true;
+			bool has_row_definitions = row_definitions.Count != 0;
+			bool has_column_definitions = column_definitions.Count != 0;
 			int row_count = GetRowColumnCount(row_definitions.Count);
 			int column_count = GetRowColumnCount(column_definitions.Count);
 			double[] row_heights = new double[row_count];
 			double[] column_widths = new double[column_count];
 			int index;
 			#region Compute initial row and column size
-			if (row_definitions.Count != 0)
+			if (has_row_definitions)
 				for (index = 0; index < row_definitions.Count; index++) {
 					GridLength row_definition_height = row_definitions[index].Height;
 					row_heights[index] = row_definition_height.IsAbsolute ? row_definition_height.Value : double.PositiveInfinity;
 				} 
 			else
-				row_heights[0] = availableSize.Height;
-			if (column_definitions.Count != 0)
+				row_heights[0] = double.PositiveInfinity;
+			if (has_column_definitions)
 				for (index = 0; index < column_definitions.Count; index++) {
 					GridLength column_definition_width = column_definitions[index].Width;
 					column_widths[index] = column_definition_width.IsAbsolute ? column_definition_width.Value : double.PositiveInfinity;
 				} 
 			else
-				column_widths[0] = availableSize.Width;
+				column_widths[0] = double.PositiveInfinity;
 			#endregion
 			double[] desired_row_heights = new double[row_count];
 			double[] desired_column_widths = new double[column_count];
@@ -295,10 +297,16 @@ namespace System.Windows.Controls {
 				int child_row_span = GetRowSpan(child);
 				int child_column_span = GetColumnSpan(child);
 				Size child_constraint = new Size();
-				for (index = child_row; index < child_row + child_row_span; index++)
-					child_constraint.Height += row_heights[index];
-				for (index = child_column; index < child_column + child_column_span; index++)
-					child_constraint.Width += column_widths[index];
+				if (has_row_definitions)
+					for (index = child_row; index < child_row + child_row_span; index++)
+						child_constraint.Height += row_heights[index];
+				else
+					child_constraint.Height = availableSize.Height;
+				if (has_column_definitions)
+					for (index = child_column; index < child_column + child_column_span; index++)
+						child_constraint.Width += column_widths[index];
+				else
+					child_constraint.Width = availableSize.Width;
 				child.Measure(child_constraint);
 				if (child_row_span == 1)
 					desired_row_heights[child_row] = Math.Max(desired_row_heights[child_row], child.DesiredSize.Height);
@@ -312,12 +320,12 @@ namespace System.Windows.Controls {
 				if (double.IsPositiveInfinity(column_widths[index]))
 					column_widths[index] = desired_column_widths[index];
 			#region Apply definition minimum and maximum
-			if (row_definitions.Count != 0)
+			if (has_row_definitions)
 				for (index = 0; index < row_count; index++) {
 					RowDefinition row_definition = row_definitions[index];
 					row_heights[index] = AdjustToBeInRange(row_heights[index], row_definition.MinHeight, row_definition.MaxHeight);
 				}
-			if (column_definitions.Count != 0)
+			if (has_column_definitions)
 				for (index = 0; index < column_count; index++) {
 					ColumnDefinition column_definition = column_definitions[index];
 					column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
