@@ -425,6 +425,9 @@ public class DocumentBufferArchiver {
 			case "AssemblyName":
 				result = true;
 				break;
+			case "AssemblyPublicKey":
+				result = true;
+				break;
 			case "AssemblyVersion":
 				result = true;
 				break;
@@ -444,6 +447,9 @@ public class DocumentBufferArchiver {
 				result = true;
 				break;
 			case "summary":
+				result = true;
+				break;
+			case "remarks":
 				result = true;
 				break;
 			case "para":

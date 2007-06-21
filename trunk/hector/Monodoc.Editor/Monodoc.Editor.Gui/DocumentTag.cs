@@ -1,5 +1,5 @@
 //
-// DocumentEditor.cs: TextView based class that represent the editor for Monodoc documentation..
+// DocumentTag.cs: TextTag based class that represent the tags applied to a buffer of Monodoc documentation..
 //
 // Author:
 //   Hector E. Gomez M (hectorgm@ciencias.unam.mx)
@@ -23,6 +23,7 @@ public class DocumentTag : TextTag {
 	
 	public void Initialize () 
 	{
+		this.Editable = false;
 		is_attribute = is_element = has_text = false;
 	}
 	
