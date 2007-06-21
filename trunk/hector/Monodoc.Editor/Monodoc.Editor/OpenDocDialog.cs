@@ -51,7 +51,11 @@ public partial class OpenDocDialog : Gtk.Dialog {
 	private void OnOpenFileDialogFileActivated (object sender, System.EventArgs e)
 	{
 		filename = openFileDialog.Filename;
+		
+		#if DEBUG
 		Console.WriteLine ("Filename: "  + filename);
+		#endif
+		
 		Destroy ();
 	}
 	

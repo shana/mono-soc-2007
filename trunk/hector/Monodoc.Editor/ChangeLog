@@ -1,3 +1,9 @@
+2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor/OpenDocDialog.cs: Minor change.
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: More changes to
+	  Serialize method.
+
 2007-06-19  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor/Monodoc.Editor.mdp,
