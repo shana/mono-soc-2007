@@ -246,13 +246,13 @@ namespace System.Windows.Controls {
 				int row_column = GetRow(child);
 				for (index = 0; index < row_column; index++)
 					rect.Y += row_heights[index];
-				int maximum = row_column + GetRowSpan(child);
+				int maximum = Math.Min(row_column + GetRowSpan(child), row_count);
 				for (index = row_column; index < maximum; index++)
 					rect.Height += row_heights[index];
 				row_column = GetColumn(child);
 				for (index = 0; index < row_column; index++)
 					rect.X += column_widths[index];
-				maximum = row_column + GetColumnSpan(child);
+				maximum = Math.Min(row_column + GetColumnSpan(child), column_count);
 				for (index = row_column; index < maximum; index++)
 					rect.Width += column_widths[index];
 				child.Arrange(rect);
