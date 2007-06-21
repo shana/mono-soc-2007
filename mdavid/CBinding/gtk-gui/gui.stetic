@@ -29,6 +29,7 @@
                 <child>
                   <widget class="Gtk.Entry" id="defineSymbolsTextEntry">
                     <property name="MemberName" />
+                    <property name="Tooltip" translatable="yes">A space seperated list of symbols to define.</property>
                     <property name="CanFocus">True</property>
                     <property name="IsEditable">True</property>
                     <property name="InvisibleChar">●</property>
@@ -324,6 +325,12 @@ Shared Object</property>
                             <child>
                               <widget class="Gtk.TextView" id="extraCompilerTextView">
                                 <property name="MemberName" />
+                                <property name="Tooltip" translatable="yes">A newline seperated list of extra options to send to the compiler.
+One option can be in more than one line.
+Example:
+	`pkg-config
+	--cflags
+	cairo`</property>
                                 <property name="CanFocus">True</property>
                                 <property name="Text" translatable="yes" />
                               </widget>
@@ -351,6 +358,12 @@ Shared Object</property>
                             <child>
                               <widget class="Gtk.TextView" id="extraLinkerTextView">
                                 <property name="MemberName" />
+                                <property name="Tooltip" translatable="yes">A newline seperated list of extra options to send to the linker.
+One option can be in more than one line.
+Example:
+	`pkg-config
+	--libs
+	cairo`</property>
                                 <property name="CanFocus">True</property>
                                 <property name="Text" translatable="yes" />
                               </widget>

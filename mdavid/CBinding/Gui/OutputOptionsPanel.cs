@@ -73,13 +73,13 @@ namespace CBinding
 				return false;
 			
 			if (outputNameTextEntry != null && outputNameTextEntry.Text.Length > 0)
-				configuration.Output = outputNameTextEntry.Text;
+				configuration.Output = outputNameTextEntry.Text.Trim ();
 			
 			if (outputPathTextEntry.Text != null && outputPathTextEntry.Text.Length > 0)
-				configuration.OutputDirectory = outputPathTextEntry.Text;
+				configuration.OutputDirectory = outputPathTextEntry.Text.Trim ();
 			
 			if (parametersTextEntry.Text != null && parametersTextEntry.Text.Length > 0)
-				configuration.CommandLineParameters = parametersTextEntry.Text;
+				configuration.CommandLineParameters = parametersTextEntry.Text.Trim ();
 			
 			configuration.ExternalConsole = externalConsoleCheckbox.Active;
 			configuration.PauseConsoleOutput = pauseCheckbox.Active;
