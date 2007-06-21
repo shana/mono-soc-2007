@@ -38,10 +38,58 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(DesiredSize.Height, Utility.GetEmptyButtonSize(), "10");
 			}
 
-			class TestButton : Button {
+			protected override Size MeasureOverride(Size availableSize) {
+				return measure_result = base.MeasureOverride(availableSize);
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
 				protected override Size MeasureOverride(Size constraint) {
 					measure_constraint = constraint;
-					return measure_result = base.MeasureOverride(constraint);
+					return base.MeasureOverride(constraint);
+				}
+			}
+		}
+		#endregion
+
+		#region MeasureDefinitions
+		[Test]
+		public void MeasureDefinitions() {
+			new MeasureDefinitionsGrid();
+		}
+
+		class MeasureDefinitionsGrid : Grid {
+			static Size measure_constraint;
+			static Size measure_result;
+
+			public MeasureDefinitionsGrid() {
+				RowDefinitions.Add(new RowDefinition());
+				ColumnDefinitions.Add(new ColumnDefinition());
+				Children.Add(new TestButton());
+				Measure(new Size(100, 100));
+				Assert.AreEqual(measure_constraint.Width, 100, "1");
+				Assert.AreEqual(measure_result.Width, Utility.GetEmptyButtonSize(), "2");
+				Assert.AreEqual(measure_result.Height, Utility.GetEmptyButtonSize(), "3");
+				Assert.AreEqual(DesiredSize.Width, Utility.GetEmptyButtonSize(), "4");
+				Assert.AreEqual(DesiredSize.Height, Utility.GetEmptyButtonSize(), "5");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Measure(new Size(100, 100));
+				Assert.AreEqual(measure_constraint.Width, 100, "6");
+				Assert.AreEqual(measure_result.Width, Utility.GetEmptyButtonSize(), "7");
+				Assert.AreEqual(measure_result.Height, Utility.GetEmptyButtonSize(), "8");
+				Assert.AreEqual(DesiredSize.Width, Utility.GetEmptyButtonSize(), "9");
+				Assert.AreEqual(DesiredSize.Height, Utility.GetEmptyButtonSize(), "10");
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				return measure_result = base.MeasureOverride(availableSize);
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
+				protected override Size MeasureOverride(Size constraint) {
+					measure_constraint = constraint;
+					return base.MeasureOverride(constraint);
 				}
 			}
 		}
@@ -66,7 +114,7 @@ namespace System.Windows.Controls {
 				Assert.IsTrue(double.IsPositiveInfinity(measure_constraint.Width));
 			}
 
-			class TestButton : Button {
+			class TestButton : global::System.Windows.Controls.Button {
 				protected override Size MeasureOverride(Size constraint) {
 					measure_constraint = constraint;
 					return base.MeasureOverride(constraint);
@@ -92,7 +140,7 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(DesiredSize.Width, 50);
 			}
 
-			class TestButton : Button {
+			class TestButton : global::System.Windows.Controls.Button {
 				protected override Size MeasureOverride(Size constraint) {
 					return new Size(100, 100);
 				}
@@ -117,7 +165,7 @@ namespace System.Windows.Controls {
 		class NullReferenceExceptionOverridingMeasureOverrideAndNotCallingBaseGrid : Grid {
 			public NullReferenceExceptionOverridingMeasureOverrideAndNotCallingBaseGrid() {
 				RowDefinitions.Add(new RowDefinition());
-				Children.Add(new Button());
+				Children.Add(new global::System.Windows.Controls.Button());
 				Window w = new Window();
 				w.Content = this;
 				w.Show();
@@ -135,7 +183,7 @@ namespace System.Windows.Controls {
 			c.Width = GridLength.Auto;
 			g.ColumnDefinitions.Add(c);
 			g.ColumnDefinitions.Add(new ColumnDefinition());
-			g.Children.Add(new Button());
+			g.Children.Add(new global::System.Windows.Controls.Button());
 			g.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 			//LAMESPEC
 			Assert.AreEqual(c.ActualWidth, 0, "1");
@@ -156,8 +204,10 @@ namespace System.Windows.Controls {
 			g.Children.Add(b);
 			g.Measure(new Size(Utility.GetEmptyButtonSize() / 2, Utility.GetEmptyButtonSize() / 2));
 			g.Arrange(new Rect(0, 0, Utility.GetEmptyButtonSize() / 2, Utility.GetEmptyButtonSize() / 2));
-			Assert.AreEqual(b.ActualWidth, Utility.GetEmptyButtonSize() / 2, "1");
-			Assert.AreEqual(b.ActualHeight, Utility.GetEmptyButtonSize() / 2, "2");
+			Assert.AreEqual(b.DesiredSize.Width, 0, "1");
+			Assert.AreEqual(b.DesiredSize.Height, 0, "2");
+			Assert.AreEqual(b.ActualWidth, Utility.GetEmptyButtonSize() / 2, "3");
+			Assert.AreEqual(b.ActualHeight, Utility.GetEmptyButtonSize() / 2, "4");
 		}
 
 		#region Arrange
