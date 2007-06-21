@@ -1,5 +1,9 @@
 2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* GridTest.cs: Added GridPropertiesCauseLayoutChanges test.
+
+2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* GridTest.cs: Switched to Microsoft buttons in some tests.
 
 2007-06-21  George Giolfan  <georgegiolfan@yahoo.com>

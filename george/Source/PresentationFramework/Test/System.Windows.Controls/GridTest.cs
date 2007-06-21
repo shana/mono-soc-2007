@@ -236,5 +236,29 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void GridPropertiesCauseLayoutChanges() {
+			Window w = new Window();
+			Grid g = new Grid();
+			w.Width = 500;
+			w.Content = g;
+			ColumnDefinition c1 = new ColumnDefinition();
+			c1.Width = new GridLength(100);
+			g.ColumnDefinitions.Add(c1);
+			ColumnDefinition c2 = new ColumnDefinition();
+			c2.Width = new GridLength(200);
+			g.ColumnDefinitions.Add(c2);
+			Button b = new Button();
+			g.Children.Add(b);
+			w.Show();
+			Assert.AreEqual(b.ActualWidth, 100, "1");
+			Grid.SetColumn(b, 1);
+			Assert.AreEqual(b.ActualWidth, 100, "2");
+			g.RowDefinitions.Add(new RowDefinition());
+			Grid.SetColumn(b, 0);
+			Grid.SetColumn(b, 1);
+			Assert.AreEqual(b.ActualWidth, 100, "3");
+		}
 	}
 }
