@@ -17,19 +17,31 @@ namespace System.Windows.Controls {
 
 		class MeasureGrid : Grid {
 			static Size measure_constraint;
+			static Size measure_result;
 
 			public MeasureGrid() {
 				Children.Add(new TestButton());
 				Measure(new Size(100, 100));
 				Assert.AreEqual(measure_constraint.Width, 100, "1");
-				Assert.AreEqual(DesiredSize.Width, Utility.GetEmptyButtonSize(), "2");
-				Assert.AreEqual(DesiredSize.Height, Utility.GetEmptyButtonSize(), "2");
+				Assert.AreEqual(measure_result.Width, Utility.GetEmptyButtonSize(), "2");
+				Assert.AreEqual(measure_result.Height, Utility.GetEmptyButtonSize(), "3");
+				Assert.AreEqual(DesiredSize.Width, Utility.GetEmptyButtonSize(), "4");
+				Assert.AreEqual(DesiredSize.Height, Utility.GetEmptyButtonSize(), "5");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Measure(new Size(100, 100));
+				Assert.AreEqual(measure_constraint.Width, 100, "6");
+				Assert.AreEqual(measure_result.Width, Utility.GetEmptyButtonSize(), "7");
+				Assert.AreEqual(measure_result.Height, Utility.GetEmptyButtonSize(), "8");
+				Assert.AreEqual(DesiredSize.Width, Utility.GetEmptyButtonSize(), "9");
+				Assert.AreEqual(DesiredSize.Height, Utility.GetEmptyButtonSize(), "10");
 			}
 
 			class TestButton : Button {
 				protected override Size MeasureOverride(Size constraint) {
 					measure_constraint = constraint;
-					return base.MeasureOverride(constraint);
+					return measure_result = base.MeasureOverride(constraint);
 				}
 			}
 		}
