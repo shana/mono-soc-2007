@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Windows.Media;
 #if Implementation
 using System;
 using System.Windows;
@@ -325,5 +326,34 @@ namespace System.Windows.Controls {
 			g.Arrange(new Rect(0, 0, 100, 100));
 			Assert.AreEqual(c2.Offset, 100, "3");
 		}
+
+		#region ShowGridLines
+		[Test]
+		public void ShowGridLines() {
+			new ShowGridLinesGrid();
+		}
+
+		class ShowGridLinesGrid : Grid {
+			public ShowGridLinesGrid() {
+				Assert.AreEqual(VisualChildrenCount, 0, "1");
+				ShowGridLines = true;
+				Assert.AreEqual(VisualChildrenCount, 0, "2");
+				RowDefinitions.Add(new RowDefinition());
+				Assert.AreEqual(VisualChildrenCount, 0, "3");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(VisualChildrenCount, 1, "4");
+				ShowGridLines = false;
+				Assert.AreEqual(VisualChildrenCount, 1, "5");
+				RowDefinitions.Add(new RowDefinition());
+				Assert.AreEqual(VisualChildrenCount, 1, "6");
+				w.Content = null;
+				Assert.AreEqual(VisualChildrenCount, 1, "7");
+				Visual visual = GetVisualChild(0);
+				Assert.IsTrue(visual is DrawingVisual, "8");
+			}
+		}
+		#endregion
 	}
 }
