@@ -30,6 +30,7 @@
 //
 
 using System.Xml;
+using System.IO;
 
 using Mono.Addins;
 
@@ -52,14 +53,38 @@ namespace CBinding
 		
 		public Project CreateSingleFileProject (string sourceFile)
 		{
-			// TODO: implement
+			ProjectCreateInformation info = new ProjectCreateInformation ();
+			info.ProjectName = Path.GetFileNameWithoutExtension (sourceFile);
+			info.CombinePath = Path.GetDirectoryName (sourceFile);
+			info.ProjectBasePath = Path.GetDirectoryName (sourceFile);
+			
+			string language = string.Empty;
+			
+			switch (Path.GetExtension (sourceFile))
+			{
+			case ".c":
+				language = "C";
+				break;
+			case ".cpp":
+				language = "CPP";
+				break;
+			case ".cxx":
+				language = "CPP";
+				break;
+			}
+			
+			if (language.Length > 0) {
+				Project project =  new CProject (info, null, language);
+				project.ProjectFiles.Add (new ProjectFile (sourceFile));
+				return project;
+			}
+			
 			return null;
 		}
 		
 		public bool CanCreateSingleFileProject (string sourceFile)
 		{
-			// Not at the moment
-			return false;
+			return true;
 		}
 	}
 }

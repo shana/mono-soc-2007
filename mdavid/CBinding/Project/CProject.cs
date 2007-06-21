@@ -157,6 +157,7 @@ namespace CBinding
 				return (Path.GetExtension (fileName.ToUpper ()) == ".C");
 			} else {
 				return (Path.GetExtension (fileName.ToUpper ()) == ".CPP" ||
+				        Path.GetExtension (fileName.ToUpper ()) == ".CXX" ||
 				        Path.GetExtension (fileName.ToUpper ()) == ".C");
 			}
 		}
