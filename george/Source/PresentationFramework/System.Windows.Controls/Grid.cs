@@ -297,15 +297,18 @@ namespace System.Windows.Controls {
 				int child_row_span = GetRowSpan(child);
 				int child_column_span = GetColumnSpan(child);
 				Size child_constraint = new Size();
+				int maximum;
 				if (has_row_definitions) {
-					for (index = child_row; index < child_row + child_row_span; index++)
+					maximum = Math.Min(child_row + child_row_span, row_count);
+					for (index = child_row; index < maximum; index++)
 						child_constraint.Height += row_heights[index];
 					if (double.IsPositiveInfinity(child_constraint.Height) && child_row_span == 1 && row_definitions[child_row].Height.IsStar)
 						child_constraint.Height = availableSize.Height;
 				} else
 					child_constraint.Height = availableSize.Height;
 				if (has_column_definitions) {
-					for (index = child_column; index < child_column + child_column_span; index++)
+					maximum = Math.Min(child_column + child_column_span, column_count);
+					for (index = child_column; index < maximum; index++)
 						child_constraint.Width += column_widths[index];
 					if (double.IsPositiveInfinity(child_constraint.Width) && child_column_span == 1 && column_definitions[child_column].Width.IsStar)
 						child_constraint.Width = availableSize.Width;
