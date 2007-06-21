@@ -240,6 +240,13 @@ namespace System.Windows.Controls {
 		#region GridPropertiesCauseLayoutChanges
 		[Test]
 		public void GridPropertiesCauseLayoutChanges() {
+			FrameworkPropertyMetadata column_metadata = (FrameworkPropertyMetadata) Grid.ColumnProperty.DefaultMetadata;
+			Assert.IsFalse(column_metadata.AffectsArrange, "Metadata 1");
+			Assert.IsFalse(column_metadata.AffectsMeasure, "Metadata 2");
+			Assert.IsFalse(column_metadata.AffectsParentArrange, "Metadata 3");
+			Assert.IsFalse(column_metadata.AffectsParentMeasure, "Metadata 4");
+			Assert.IsFalse(column_metadata.AffectsRender, "Metadata 5");
+			Assert.IsNotNull(column_metadata.PropertyChangedCallback, "Metadata 6");
 			Window w = new Window();
 			GridPropertiesCauseLayoutChangesGrid g = new GridPropertiesCauseLayoutChangesGrid();
 			w.Width = 500;
