@@ -352,6 +352,9 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(VisualChildrenCount, 1, "7");
 				Visual visual = GetVisualChild(0);
 				Assert.IsTrue(visual is DrawingVisual, "8");
+				Assert.IsNull(Grid.ShowGridLinesProperty.DefaultMetadata.PropertyChangedCallback, "9");
+				Assert.IsNull(Grid.ShowGridLinesProperty.ValidateValueCallback, "10");
+				Assert.IsFalse(Grid.ShowGridLinesProperty is FrameworkPropertyMetadata, "11");
 			}
 		}
 		#endregion
