@@ -54,6 +54,7 @@ namespace System.Windows.Controls {
 
 		public double Offset {
 			get { return offset; }
+			internal set { offset = value; }
 		}
 		#endregion
 	}

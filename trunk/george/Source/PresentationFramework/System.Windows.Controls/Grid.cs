@@ -187,6 +187,7 @@ namespace System.Windows.Controls {
 				double remaining_lenght;
 				GridLength lenght;
 				double star_ratio;
+				double offset;
 				if (has_row_definitions) {
 					total_star = 0;
 					remaining_lenght = finalSize.Height;
@@ -206,11 +207,14 @@ namespace System.Windows.Controls {
 						}
 					}
 					remaining_lenght = finalSize.Height;
+					offset = 0;
 					for (index = 0; index < row_count; index++) {
 						if (row_heights[index] > remaining_lenght)
 							row_heights[index] = remaining_lenght;
 						remaining_lenght -= row_heights[index];
-						row_definitions[index].ActualHeight = row_heights[index];
+						RowDefinition definition = row_definitions[index];
+						definition.Offset = offset;
+						offset += definition.ActualHeight = row_heights[index];
 					}
 				}
 				if (has_column_definitions) {
@@ -233,11 +237,14 @@ namespace System.Windows.Controls {
 						}
 					}
 					remaining_lenght = finalSize.Width;
+					offset = 0;
 					for (index = 0; index < column_count; index++) {
 						if (column_widths[index] > remaining_lenght)
 							column_widths[index] = remaining_lenght;
 						remaining_lenght -= column_widths[index];
-						column_definitions[index].ActualWidth = column_widths[index];
+						ColumnDefinition definition = column_definitions[index];
+						definition.Offset = offset;
+						offset += definition.ActualWidth = column_widths[index];
 					}
 				}
 			}
