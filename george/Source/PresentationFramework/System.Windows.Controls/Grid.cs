@@ -154,12 +154,12 @@ namespace System.Windows.Controls {
 				foreach (UIElement child in InternalChildren) {
 					if (has_row_definitions) {
 						int child_row = GetRow(child);
-						if (row_definitions[child_row].Height.IsAuto && GetRowSpan(child) == 1)
+						if (!row_definitions[child_row].Height.IsAbsolute && GetRowSpan(child) == 1)
 							desired_row_heights[child_row] = Math.Max(desired_row_heights[child_row], child.DesiredSize.Height);
 					}
 					if (has_column_definitions) {
 						int child_column = GetColumn(child);
-						if (column_definitions[child_column].Width.IsAuto && GetColumnSpan(child) == 1)
+						if (!column_definitions[child_column].Width.IsAbsolute && GetColumnSpan(child) == 1)
 							desired_column_widths[child_column] = Math.Max(desired_column_widths[child_column], child.DesiredSize.Width);
 					}
 				}
@@ -202,7 +202,7 @@ namespace System.Windows.Controls {
 						for (index = 0; index < row_count; index++) {
 							lenght = row_definitions[index].Height;
 							if (lenght.IsStar)
-								row_heights[index] = lenght.Value * star_ratio;
+								row_heights[index] = Math.Max(lenght.Value * star_ratio, desired_row_heights[index]);
 						}
 					}
 					remaining_lenght = finalSize.Height;
@@ -228,7 +228,7 @@ namespace System.Windows.Controls {
 						for (index = 0; index < column_count; index++) {
 							lenght = column_definitions[index].Width;
 							if (lenght.IsStar)
-								column_widths[index] = lenght.Value * star_ratio;
+								column_widths[index] = Math.Max(lenght.Value * star_ratio, desired_column_widths[index]);
 							column_definitions[index].ActualWidth = column_widths[index];
 						}
 					}
