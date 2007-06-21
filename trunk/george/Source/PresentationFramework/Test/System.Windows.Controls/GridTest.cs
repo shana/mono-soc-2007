@@ -354,7 +354,48 @@ namespace System.Windows.Controls {
 				Assert.IsTrue(visual is DrawingVisual, "8");
 				Assert.IsNull(Grid.ShowGridLinesProperty.DefaultMetadata.PropertyChangedCallback, "9");
 				Assert.IsNull(Grid.ShowGridLinesProperty.ValidateValueCallback, "10");
-				Assert.IsFalse(Grid.ShowGridLinesProperty is FrameworkPropertyMetadata, "11");
+				Assert.IsFalse(Grid.ShowGridLinesProperty.DefaultMetadata is FrameworkPropertyMetadata, "11");
+			}
+		}
+		#endregion
+
+		#region WhereIsGridLinesRendererCreated
+		[Test]
+		public void WhereIsGridLinesRendererCreated() {
+			new WhereIsGridLinesRendererCreatedGrid();
+		}
+
+		class WhereIsGridLinesRendererCreatedGrid : Grid {
+			public WhereIsGridLinesRendererCreatedGrid() {
+				ShowGridLines = true;
+				Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(VisualChildrenCount, 0, "1");
+				Arrange(new Rect(0, 0, 100, 100));
+				Assert.AreEqual(VisualChildrenCount, 0, "2");
+				Window w = new Window();
+				w.Content = this;
+				Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(VisualChildrenCount, 0, "3");
+				Arrange(new Rect(0, 0, 100, 100));
+				Assert.AreEqual(VisualChildrenCount, 0, "4");
+			}
+		}
+		#endregion
+
+		#region WhereIsGridLinesRendererCreatedDefinition
+		[Test]
+		public void WhereIsGridLinesRendererCreatedDefinition() {
+			new WhereIsGridLinesRendererCreatedDefinitionGrid();
+		}
+
+		class WhereIsGridLinesRendererCreatedDefinitionGrid : Grid {
+			public WhereIsGridLinesRendererCreatedDefinitionGrid() {
+				ShowGridLines = true;
+				RowDefinitions.Add(new RowDefinition());
+				Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Assert.AreEqual(VisualChildrenCount, 0, "1");
+				Arrange(new Rect(0, 0, 100, 100));
+				Assert.AreEqual(VisualChildrenCount, 1, "2");
 			}
 		}
 		#endregion
