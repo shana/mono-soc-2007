@@ -27,6 +27,7 @@ namespace System.Windows.Controls {
 		ColumnDefinitionCollection column_definitions = new ColumnDefinitionCollection();
 		RowDefinitionCollection row_definitions = new RowDefinitionCollection();
 		bool measure_called;
+		GridLinesRenderer grid_lines_renderer;
 		#endregion
 
 		#region Public Constructors
@@ -60,7 +61,7 @@ namespace System.Windows.Controls {
 
 		protected override int VisualChildrenCount {
 			get {
-				return base.VisualChildrenCount;
+				return base.VisualChildrenCount + (grid_lines_renderer == null ? 0 : 1);
 			}
 		}
 		#endregion
@@ -264,10 +265,16 @@ namespace System.Windows.Controls {
 					rect.Width += column_widths[index];
 				child.Arrange(rect);
 			}
+			if (grid_lines_renderer == null && ShowGridLines && (has_row_definitions || has_column_definitions))
+				grid_lines_renderer = new GridLinesRenderer(this);
+			if (grid_lines_renderer != null)
+				grid_lines_renderer.Rebuild();
 			return finalSize;
 		}
 
 		protected override Visual GetVisualChild(int index) {
+			if (grid_lines_renderer != null && index == InternalChildren.Count)
+				return grid_lines_renderer;
 			return base.GetVisualChild(index);
 		}
 
@@ -393,6 +400,32 @@ namespace System.Windows.Controls {
 			if (grid == null)
 				return;
 			grid.InvalidateMeasure();
+		}
+		#endregion
+
+		#region Classes
+		class GridLinesRenderer : DrawingVisual {
+			Grid grid;
+
+			public GridLinesRenderer(Grid grid) {
+				this.grid = grid;
+			}
+
+			public void Rebuild() {
+				DrawingContext drawing_context = RenderOpen();
+				int definition_index;
+				for (definition_index = 1; definition_index < grid.row_definitions.Count; definition_index++)
+					DrawLine(drawing_context, grid.row_definitions[definition_index].Offset, true);
+				for (definition_index = 1; definition_index < grid.column_definitions.Count; definition_index++)
+					DrawLine(drawing_context, grid.column_definitions[definition_index].Offset, false);
+				drawing_context.Close();
+				grid.InvalidateVisual();
+			}
+
+			void DrawLine(DrawingContext drawingContext, double position, bool horizontal) {
+				//FIXME
+				drawingContext.DrawLine(new Pen(Brushes.Black, 1), new Point(horizontal ? 0 : position, horizontal ? position : 0), new Point(horizontal ? grid.ActualWidth : position, horizontal ? position : grid.ActualHeight));
+			}
 		}
 		#endregion
 	}
