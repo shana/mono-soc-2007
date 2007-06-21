@@ -1,3 +1,15 @@
+2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor/EditorWindow.cs: Added handlers for Save and SaveAs
+	  actions.
+	* Monodoc.Editor/Monodoc.Editor.mdp,
+	  Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/Monodoc.Editor.SaveDocDialog.cs,
+	  Monodoc.Editor/gtk-gui/gui.stetic, Monodoc.Editor/SaveDocDialog.cs:
+	  Added two new actions: Save and Save As. Added a new dialog for
+	  Save As action.
+	* Monodoc.Editor/OpenDocDialog.cs: Whitespace changes.
+	
 2007-06-20  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Made the
