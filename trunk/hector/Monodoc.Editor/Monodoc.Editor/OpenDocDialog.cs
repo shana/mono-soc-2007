@@ -31,12 +31,12 @@ public partial class OpenDocDialog : Gtk.Dialog {
 		openFileDialog.AddFilter (allFiles);
 		openFileDialog.SetCurrentFolder ("/usr/src/");
 	}
-
+	
 	private void OnButtonCancelClicked (object sender, System.EventArgs e)
 	{
 		Destroy ();
 	}
-
+	
 	private void OnButtonOkClicked (object sender, System.EventArgs e)
 	{
 		filename = openFileDialog.Filename;
@@ -47,7 +47,7 @@ public partial class OpenDocDialog : Gtk.Dialog {
 		else
 			Destroy ();
 	}
-
+	
 	private void OnOpenFileDialogFileActivated (object sender, System.EventArgs e)
 	{
 		filename = openFileDialog.Filename;
