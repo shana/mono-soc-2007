@@ -237,10 +237,11 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region GridPropertiesCauseLayoutChanges
 		[Test]
 		public void GridPropertiesCauseLayoutChanges() {
 			Window w = new Window();
-			Grid g = new Grid();
+			GridPropertiesCauseLayoutChangesGrid g = new GridPropertiesCauseLayoutChangesGrid();
 			w.Width = 500;
 			w.Content = g;
 			ColumnDefinition c1 = new ColumnDefinition();
@@ -252,13 +253,55 @@ namespace System.Windows.Controls {
 			Button b = new Button();
 			g.Children.Add(b);
 			w.Show();
+			Assert.IsTrue(g.ArrangeOverrideCalled, "Arrange 1");
+			g.ArrangeOverrideCalled = false;
+			Assert.IsTrue(g.MeasureOverrideCalled, "Measure 1");
+			g.MeasureOverrideCalled = false;
 			Assert.AreEqual(b.ActualWidth, 100, "1");
 			Grid.SetColumn(b, 1);
+			Assert.IsFalse(g.ArrangeOverrideCalled, "Arrange 2");
+			Assert.IsFalse(g.MeasureOverrideCalled, "Measure 2");
 			Assert.AreEqual(b.ActualWidth, 100, "2");
 			g.RowDefinitions.Add(new RowDefinition());
 			Grid.SetColumn(b, 0);
 			Grid.SetColumn(b, 1);
+			Assert.IsFalse(g.ArrangeOverrideCalled, "Arrange 3");
+			Assert.IsFalse(g.MeasureOverrideCalled, "Measure 3");
 			Assert.AreEqual(b.ActualWidth, 100, "3");
+		}
+
+		class GridPropertiesCauseLayoutChangesGrid : Grid {
+			public bool ArrangeOverrideCalled;
+			public bool MeasureOverrideCalled;
+
+			protected override Size ArrangeOverride(Size finalSize) {
+				ArrangeOverrideCalled = true;
+				return base.ArrangeOverride(finalSize);
+			}
+			
+			protected override Size MeasureOverride(Size availableSize) {
+				MeasureOverrideCalled = true;
+				return base.MeasureOverride(availableSize);
+			}
+		}
+		#endregion
+
+		[Test]
+		public void StarSizing() {
+			Grid g = new Grid();
+			ColumnDefinition c1 = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c1);
+			ColumnDefinition c2 = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c2);
+			global::System.Windows.Controls.Button b = new global::System.Windows.Controls.Button();
+			g.Children.Add(b);
+			Canvas c = new Canvas();
+			c.Children.Add(g);
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			Assert.AreEqual(c1.ActualWidth, Utility.GetEmptyButtonSize(), "1");
+			Assert.AreEqual(c2.ActualWidth, 0, "2");
 		}
 	}
 }
