@@ -79,6 +79,11 @@ namespace Gendarme.Rules.Smells {
 		{
 			foreach (Instruction instruction in instructionCollection) {
 				if (IsAcceptable (instruction)) {
+					// I will anticipate to branches and put the instructions 
+					// before and after the call.  In IL are placed after the call.
+					// This is useful for detect FlowControl
+					// IL_000b:  callvirt instance bool class [mscorlib]System.Collections.IList::Contains(object)
+        			// IL_0010:  brfalse IL_0025
 					if (IsABranchInstruction (instruction.Next)) 
 						FillInstructionPair (instruction.Next);
 					FillInstructionPair (instruction);
@@ -132,6 +137,7 @@ namespace Gendarme.Rules.Smells {
 			if (obj is InstructionPair) {
 				InstructionPair targetInstructionPair = (InstructionPair) obj;
 				
+				// When detect a branch, only check the OpCode.
 				if (IsABranchInstruction (firstInstruction) && 
 					IsABranchInstruction (targetInstructionPair.First)) {
 					return firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
@@ -146,7 +152,7 @@ namespace Gendarme.Rules.Smells {
 						firstInstruction.Operand == targetInstructionPair.First.Operand &&
 						secondInstruction.OpCode == targetInstructionPair.Second.OpCode;
 				}
-				
+				// This is the normal case.
 				return  firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
 						firstInstruction.Operand == targetInstructionPair.First.Operand &&
 						secondInstruction.OpCode == targetInstructionPair.Second.OpCode &&
@@ -183,17 +189,17 @@ namespace Gendarme.Rules.Smells {
 
 			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
+					//If exists replied instructions I don't need check the following.
 					existsRepliedInstructions = existsRepliedInstructions || currentInstructionPair.Equals (targetInstructionPair);
-					//if (currentInstructionPair.Equals (targetInstructionPair))
-					//Console.WriteLine ("Checking: {0} aganist {1}",currentInstructionPair, targetInstructionPair);
 				}
 			}
 			return existsRepliedInstructions;
 		}
 	
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
+			// When check a method, it should have body.  Also I don't check 
+			// a method with itself.
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
-				//Console.WriteLine ("Checking: {0} against {1}", currentMethod.Name, targetMethod.Name);
 				IList currentInstructionPairContainer = FillInstructionPairContainerFrom (currentMethod.Body);
 				IList targetInstructionPairContainer = FillInstructionPairContainerFrom (targetMethod.Body);
 				
@@ -208,7 +214,6 @@ namespace Gendarme.Rules.Smells {
 			MessageCollection messageCollection = new MessageCollection ();
 			foreach (MethodDefinition currentMethodDefinition in typeDefinition.Methods) {
 				foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
-					
 					if (ContainsDuplicatedCode (currentMethodDefinition, targetMethodDefinition)) {
 						Location location = new Location (typeDefinition.Name, currentMethodDefinition.Name, 0);
 						Message message = new Message (String.Format ("Exists code duplicated in: {0}.{1} and in {0}.{2}", typeDefinition.Name, currentMethodDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
