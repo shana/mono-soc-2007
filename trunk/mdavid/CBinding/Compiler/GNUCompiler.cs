@@ -199,6 +199,7 @@ namespace CBinding
 			string objectFiles = StringArrayToSingleString (ObjectFiles (projectFiles));
 			
 			monitor.Log.WriteLine ("Generating static library...");
+			monitor.Log.WriteLine ("using: ar rcs " + outputName + " " + objectFiles);
 			
 			Process p = Runtime.ProcessService.StartProcess (
 				"ar", "rcs " + outputName + " " + objectFiles,
@@ -280,7 +281,7 @@ namespace CBinding
 		}
 		
 		/// <summary>
-		/// Compiles a source file into object code
+		/// Compiles a single source file into object code
 		/// </summary>
 		private bool DoCompilation (ProjectFile file, string args,
 		                            ProjectPackageCollection packages,

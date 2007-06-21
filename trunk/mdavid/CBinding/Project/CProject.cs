@@ -45,6 +45,7 @@ using MonoDevelop.Core.Execution;
 using MonoDevelop.Core.ProgressMonitoring;
 using MonoDevelop.Projects;
 using MonoDevelop.Projects.Serialization;
+using MonoDevelop.Ide.Gui;
 
 namespace CBinding
 {
@@ -186,6 +187,11 @@ namespace CBinding
 			string platform = "Native";
 			bool pause = conf.PauseConsoleOutput;
 			IConsole console;
+			
+			if (conf.CompileTarget != CBinding.CompileTarget.Bin) {
+				IdeApp.Services.MessageService.ShowMessage ("Compile target is not an executable!");
+				return;
+			}
 			
 			monitor.Log.WriteLine ("Running project...");
 			
