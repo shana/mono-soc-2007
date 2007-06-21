@@ -38,10 +38,23 @@ public partial class EditorWindow : Gtk.Window {
 		try {
 			MonoDocument doc = new MonoDocument (dialog.Document);
 			DocumentBufferArchiver.Deserialize (docEditView.Buffer, doc.Text);
-			Console.WriteLine ("Serialize: \n" + DocumentBufferArchiver.Serialize (docEditView.Buffer));
 		} catch (ArgumentException argexp) {
 			Console.WriteLine (argexp.Message);
 		}
+	}
+
+	private void OnSaveAsActivated (object sender, System.EventArgs e)
+	{
+		SaveDocDialog dialog = new SaveDocDialog ();
+		string xml = DocumentBufferArchiver.Serialize (docEditView.Buffer);
+		Console.WriteLine ("Serialize: \n" + xml);
+	}
+
+	private void OnSaveActivated (object sender, System.EventArgs e)
+	{
+		SaveDocDialog dialog = new SaveDocDialog ();
+		string xml = DocumentBufferArchiver.Serialize (docEditView.Buffer);
+		Console.WriteLine ("Serialize: \n" + xml);
 	}
 }
 }
