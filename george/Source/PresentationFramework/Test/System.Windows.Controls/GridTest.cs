@@ -310,5 +310,20 @@ namespace System.Windows.Controls {
 			Assert.AreEqual(c1.ActualWidth, Utility.GetEmptyButtonSize(), "1");
 			Assert.AreEqual(c2.ActualWidth, 0, "2");
 		}
+
+		[Test]
+		public void DefinitionOffset() {
+			Grid g = new Grid();
+			ColumnDefinition c1 = new ColumnDefinition();
+			c1.Width = new GridLength(100);
+			g.ColumnDefinitions.Add(c1);
+			ColumnDefinition c2 = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c2);
+			Assert.AreEqual(c2.Offset, 0, "1");
+			g.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+			Assert.AreEqual(c2.Offset, 0, "2");
+			g.Arrange(new Rect(0, 0, 100, 100));
+			Assert.AreEqual(c2.Offset, 100, "3");
+		}
 	}
 }
