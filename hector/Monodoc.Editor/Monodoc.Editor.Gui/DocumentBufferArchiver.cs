@@ -102,7 +102,9 @@ public class DocumentBufferArchiver {
 						attributeName = tag.Name.Split (':')[1];
 						xmlWriter.WriteStartAttribute (null, attributeName, null);
 						
+						#if DEBUG
 						Console.WriteLine ("Wrote Start Attribute: {0}", attributeName);
+						#endif
 						
 						readingValue = true;
 						attributeValue += currentIter.Char;
@@ -122,7 +124,7 @@ public class DocumentBufferArchiver {
 						string startName = "";
 						TextTag startTag;
 						
-						if (stack.Count != 0) {
+						if (stack.Count != 0 && ((TextTag) stack.Peek ()).Name.Equals (tag.Name)) {
 							startTag = stack.Pop () as TextTag;
 							startName = startTag.Name;
 						}
@@ -135,6 +137,9 @@ public class DocumentBufferArchiver {
 								readingText = true;
 							else
 								readingText = false;
+						} else if (!readingText && !startName.Equals (tag.Name) && stack.Count != 0) {
+							elementText = String.Empty;
+							readingText = true;
 						}
 						
 						xmlWriter.WriteEndElement ();
@@ -148,7 +153,9 @@ public class DocumentBufferArchiver {
 						xmlWriter.WriteString (attributeValue);
 						xmlWriter.WriteEndAttribute ();
 						
+						#if DEBUG
 						Console.WriteLine ("Wrote End Attribute: {0} Value: {1}", attributeName, attributeValue);
+						#endif
 						
 						readingValue = false;
 						attributeValue = attributeName = elementText =  String.Empty;
@@ -158,7 +165,10 @@ public class DocumentBufferArchiver {
 			
 			currentIter.ForwardChar ();
 			nextIter.ForwardChar ();
+			
+			#if DEBUG
 			Console.WriteLine ("State: {0} Char: {1} \n", xmlWriter.WriteState.ToString (), currentIter.Char);
+			#endif
 		}
 	}
 	
@@ -417,7 +427,28 @@ public class DocumentBufferArchiver {
 			case "AssemblyName":
 				result = true;
 				break;
+			case "AssemblyVersion":
+				result = true;
+				break;
 			case "ThreadSafetyStatement":
+				result = true;
+				break;
+			case "BaseTypeName":
+				result = true;
+				break;
+			case "AttributeName":
+				result = true;
+				break;
+			case "MemberType":
+				result = true;
+				break;
+			case "ReturnType":
+				result = true;
+				break;
+			case "summary":
+				result = true;
+				break;
+			case "para":
 				result = true;
 				break;
 			case "link":
