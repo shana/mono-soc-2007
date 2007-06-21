@@ -297,15 +297,19 @@ namespace System.Windows.Controls {
 				int child_row_span = GetRowSpan(child);
 				int child_column_span = GetColumnSpan(child);
 				Size child_constraint = new Size();
-				if (has_row_definitions)
+				if (has_row_definitions) {
 					for (index = child_row; index < child_row + child_row_span; index++)
 						child_constraint.Height += row_heights[index];
-				else
+					if (double.IsPositiveInfinity(child_constraint.Height) && child_row_span == 1 && row_definitions[child_row].Height.IsStar)
+						child_constraint.Height = availableSize.Height;
+				} else
 					child_constraint.Height = availableSize.Height;
-				if (has_column_definitions)
+				if (has_column_definitions) {
 					for (index = child_column; index < child_column + child_column_span; index++)
 						child_constraint.Width += column_widths[index];
-				else
+					if (double.IsPositiveInfinity(child_constraint.Width) && child_column_span == 1 && column_definitions[child_column].Width.IsStar)
+						child_constraint.Width = availableSize.Width;
+				} else
 					child_constraint.Width = availableSize.Width;
 				child.Measure(child_constraint);
 				if (child_row_span == 1)
@@ -331,6 +335,23 @@ namespace System.Windows.Controls {
 					column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
 				}
 			#endregion
+			double remaining_lenght;
+			if (has_row_definitions) {
+				remaining_lenght = availableSize.Height;
+				for (index = 0; index < row_count; index++) {
+					if (row_heights[index] > remaining_lenght)
+						row_heights[index] = remaining_lenght;
+					remaining_lenght -= row_heights[index];
+				}
+			}
+			if (has_column_definitions) {
+				remaining_lenght = availableSize.Width;
+				for (index = 0; index < column_count; index++) {
+					if (column_widths[index] > remaining_lenght)
+						column_widths[index] = remaining_lenght;
+					remaining_lenght -= column_widths[index];
+				}
+			}
 			Size result = new Size();
 			for (index = 0; index < row_count; index++)
 				result.Height += row_heights[index];
