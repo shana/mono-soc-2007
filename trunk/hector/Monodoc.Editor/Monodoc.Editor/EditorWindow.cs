@@ -52,7 +52,6 @@ public partial class EditorWindow : Gtk.Window {
 
 	private void OnSaveActivated (object sender, System.EventArgs e)
 	{
-		SaveDocDialog dialog = new SaveDocDialog ();
 		string xml = DocumentBufferArchiver.Serialize (docEditView.Buffer);
 		Console.WriteLine ("Serialize: \n" + xml);
 	}
