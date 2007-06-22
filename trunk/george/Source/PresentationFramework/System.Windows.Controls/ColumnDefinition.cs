@@ -13,7 +13,9 @@ namespace System.Windows.Controls {
 		public static readonly DependencyProperty MaxWidthProperty = DependencyProperty.Register("MaxWidth", typeof(double), typeof(ColumnDefinition), new FrameworkPropertyMetadata(double.PositiveInfinity));
 		[TypeConverter("System.Windows.LengthConverter, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, Custom=null")]
 		public static readonly DependencyProperty MinWidthProperty = DependencyProperty.Register("MinWidth", typeof(double), typeof(ColumnDefinition), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(GridLength), typeof(ColumnDefinition), new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star)));
+		public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(GridLength), typeof(ColumnDefinition), new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star), delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			((ColumnDefinition)d).InvalidateGridMeasure();
+		}));
 		#endregion
 		#endregion
 
@@ -63,6 +65,13 @@ namespace System.Windows.Controls {
 		internal Grid Grid {
 			get { return grid; }
 			set { grid = value; }
+		}
+		#endregion
+
+		#region Private Methods
+		void InvalidateGridMeasure() {
+			if (grid != null)
+				grid.InvalidateMeasure();
 		}
 		#endregion
 	}
