@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="SDKSample.Window1"
     Title="GridUnitType.Star Sample"
-    Loaded="initVal">
+    Loaded="initVal"
+	xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
   <ScrollViewer>
       <StackPanel>
         <TextBlock FontSize="20" Margin="15">Understanding Star Sizing</TextBlock>
@@ -38,34 +39,34 @@
           <TextBlock Name="txt3"/>
           <TextBlock Name="txt4"/>
         </StackPanel>
-        <Grid Height="400" Width="800" Name="myGrid" ShowGridLines="True" Margin="10">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto" Name="colDef1"/>
-            <ColumnDefinition Width="Auto" Name="colDef2"/>
-            <ColumnDefinition Width="Auto" Name="colDef3"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="Auto" Name="rowDef1"/>
-            <RowDefinition Height="Auto" Name="rowDef2"/>
-          </Grid.RowDefinitions>
+		  <mono_sytem_windows_controls:Grid Height="400" Width="800" Name="myGrid" ShowGridLines="True" Margin="10">
+			  <mono_sytem_windows_controls:Grid.ColumnDefinitions>
+				  <mono_sytem_windows_controls:ColumnDefinition Width="Auto"/>
+				  <mono_sytem_windows_controls:ColumnDefinition Width="Auto" Name="colDef1"/>
+				  <mono_sytem_windows_controls:ColumnDefinition Width="Auto" Name="colDef2"/>
+				  <mono_sytem_windows_controls:ColumnDefinition Width="Auto" Name="colDef3"/>
+          </mono_sytem_windows_controls:Grid.ColumnDefinitions>
+			  <mono_sytem_windows_controls:Grid.RowDefinitions>
+				  <mono_sytem_windows_controls:RowDefinition Height="25"/>
+				  <mono_sytem_windows_controls:RowDefinition Height="Auto" Name="rowDef1"/>
+				  <mono_sytem_windows_controls:RowDefinition Height="Auto" Name="rowDef2"/>
+          </mono_sytem_windows_controls:Grid.RowDefinitions>
           
-          <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center">colDef1</TextBlock>
-          <TextBlock Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center">colDef2</TextBlock>
-          <TextBlock Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center">colDef3</TextBlock>
+          <TextBlock mono_sytem_windows_controls:Grid.Row="0" mono_sytem_windows_controls:Grid.Column="1" HorizontalAlignment="Center">colDef1</TextBlock>
+		  <TextBlock mono_sytem_windows_controls:Grid.Row="0" mono_sytem_windows_controls:Grid.Column="2" HorizontalAlignment="Center">colDef2</TextBlock>
+		  <TextBlock mono_sytem_windows_controls:Grid.Row="0" mono_sytem_windows_controls:Grid.Column="3" HorizontalAlignment="Center">colDef3</TextBlock>
 
-          <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">rowDef1</TextBlock>
-          <Rectangle Name="rect1" Fill="LightSteelBlue" Width="100" Height="100" Grid.Row="1" Grid.Column="1"/>
-          <Rectangle Name="rect2" Fill="SteelBlue" Width="100" Height="100" Grid.Row="1" Grid.Column="2"/>
-          <Rectangle Name="rect3" Fill="DarkSlateGray" Width="100" Height="100" Grid.Row="1" Grid.Column="3"/>
+		  <TextBlock mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.Column="0" VerticalAlignment="Center">rowDef1</TextBlock>
+		  <Rectangle Name="rect1" Fill="LightSteelBlue" Width="100" Height="100" mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.Column="1"/>
+		  <Rectangle Name="rect2" Fill="SteelBlue" Width="100" Height="100" mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.Column="2"/>
+		  <Rectangle Name="rect3" Fill="DarkSlateGray" Width="100" Height="100" mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.Column="3"/>
 
-          <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">rowDef2</TextBlock>
-          <Ellipse Name="ellipse1" Fill="LightSteelBlue" Width="100" Height="100" Grid.Row="2" Grid.Column="1"/>
-          <Ellipse Name="ellipse2" Fill="SteelBlue" Width="100" Height="100" Grid.Row="2" Grid.Column="2"/>
-          <Ellipse Name="ellipse3" Fill="DarkSlateGray" Width="100" Height="100" Grid.Row="2" Grid.Column="3"/>
+		  <TextBlock mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.Column="0" VerticalAlignment="Center">rowDef2</TextBlock>
+		  <Ellipse Name="ellipse1" Fill="LightSteelBlue" Width="100" Height="100" mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.Column="1"/>
+		  <Ellipse Name="ellipse2" Fill="SteelBlue" Width="100" Height="100" mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.Column="2"/>
+		  <Ellipse Name="ellipse3" Fill="DarkSlateGray" Width="100" Height="100" mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.Column="3"/>
 
-        </Grid>
+	  </mono_sytem_windows_controls:Grid>
         <StackPanel HorizontalAlignment="Center" Margin="10">
           <Button Click="resetSample">Reset Sample</Button>
         </StackPanel>
