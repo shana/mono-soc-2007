@@ -1,3 +1,10 @@
+2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonoDocument.cs: EcmaReader will only validate for the time being,
+	  then we open a stream and read directly the file as alas
+	  XmlDocument Save method adds an XML Declaration.
+	* EcmaReader.cs: Close XmlTextReader after loading the XML file.
+
 2007-06-18  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* ChangeLog: Added a Changelog for the utils library.
