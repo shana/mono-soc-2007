@@ -26,11 +26,13 @@ namespace Ribbons
 				if(curPageIndex != -1)
 				{
 					CurrentPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (false));
+					CurrentPage.Page.Unparent ();
 				}
 				curPageIndex = value;
 				if(curPageIndex != -1)
 				{
 					CurrentPage.Label.ModifyFg (StateType.Normal, theme.GetForecolorForRibbonTabs (true));
+					CurrentPage.Page.Parent = this;
 				}
 				
 				this.QueueDraw ();
@@ -205,7 +207,7 @@ namespace Ribbons
 		protected override void OnSizeRequested (ref Requisition requisition)
 		{
 			base.OnSizeRequested (ref requisition);
-			RibbonPage page = null;//CurrentPage;
+			RibbonPage page = CurrentPage;
 			
 			int vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
 			
@@ -236,7 +238,7 @@ namespace Ribbons
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
-			RibbonPage page = null;//CurrentPage;
+			RibbonPage page = CurrentPage;
 			
 			int x = allocation.X + (int)(ribbon_space + roundSize), y = allocation.Y + (int)ribbon_space, maxH = 0;
 			
@@ -324,12 +326,7 @@ namespace Ribbons
 			
 			public Widget Page
 			{
-				set
-				{
-					if(page != null) page.Unparent ();
-					page = value;
-					if(page != null) page.Parent = parent;
-				}
+				set { page = value; }
 				get { return page; }
 			}
 			
