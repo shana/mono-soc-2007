@@ -344,13 +344,17 @@ namespace System.Windows.Controls {
 				w.Content = this;
 				w.Show();
 				Assert.AreEqual(VisualChildrenCount, 1, "4");
+				Visual visual = GetVisualChild(0);
+				Assert.IsTrue(visual is DrawingVisual, "4 1");
+				DrawingVisual drawing_visual = (DrawingVisual)visual;
+				Assert.IsNull(drawing_visual.Drawing, "4 2");
 				ShowGridLines = false;
 				Assert.AreEqual(VisualChildrenCount, 1, "5");
 				RowDefinitions.Add(new RowDefinition());
 				Assert.AreEqual(VisualChildrenCount, 1, "6");
 				w.Content = null;
 				Assert.AreEqual(VisualChildrenCount, 1, "7");
-				Visual visual = GetVisualChild(0);
+				visual = GetVisualChild(0);
 				Assert.IsTrue(visual is DrawingVisual, "8");
 				Assert.IsNull(Grid.ShowGridLinesProperty.DefaultMetadata.PropertyChangedCallback, "9");
 				Assert.IsNull(Grid.ShowGridLinesProperty.ValidateValueCallback, "10");
@@ -396,6 +400,39 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(VisualChildrenCount, 0, "1");
 				Arrange(new Rect(0, 0, 100, 100));
 				Assert.AreEqual(VisualChildrenCount, 1, "2");
+			}
+		}
+		#endregion
+
+		#region WhereIsGridLinesRendererCreatedDefinitionChildren
+		[Test]
+		public void WhereIsGridLinesRendererCreatedDefinitionChildren() {
+			new WhereIsGridLinesRendererCreatedDefinitionChildrenGrid();
+		}
+
+		class WhereIsGridLinesRendererCreatedDefinitionChildrenGrid : Grid {
+			public WhereIsGridLinesRendererCreatedDefinitionChildrenGrid() {
+				Children.Add(new TestButton(this));
+				ShowGridLines = true;
+				RowDefinitions.Add(new RowDefinition());
+				Arrange(new Rect(0, 0, 100, 100));
+			}
+
+			public int GetVisualChildrenCount() {
+				return VisualChildrenCount;
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
+				WhereIsGridLinesRendererCreatedDefinitionChildrenGrid grid;
+
+				public TestButton(WhereIsGridLinesRendererCreatedDefinitionChildrenGrid grid) {
+					this.grid = grid;
+				}
+
+				protected override Size ArrangeOverride(Size arrangeBounds) {
+					Assert.AreEqual(grid.GetVisualChildrenCount(), 1);
+					return base.ArrangeOverride(arrangeBounds);
+				}
 			}
 		}
 		#endregion
@@ -456,5 +493,80 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region ChangingDefinitionsCauseMeasureChildren2
+		[Test]
+		public void ChangingDefinitionsCauseMeasureChildren2() {
+			new ChangingDefinitionsCauseMeasureChildren2Grid();
+		}
+
+		class ChangingDefinitionsCauseMeasureChildren2Grid : Grid {
+			bool set_called;
+			bool called;
+
+			public ChangingDefinitionsCauseMeasureChildren2Grid() {
+				Children.Add(new global::System.Windows.Controls.Button());
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				set_called = true;
+				RowDefinitions.Add(new RowDefinition());
+				RowDefinitions.Add(new RowDefinition());
+				ColumnDefinitions.Add(new ColumnDefinition());
+				Assert.IsFalse(called);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				if (set_called)
+					called = true;
+				return base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
+
+		#region ChangingDefinitionsCauseMeasureChildren3
+		[Test]
+		public void ChangingDefinitionsCauseMeasureChildren3() {
+			new ChangingDefinitionsCauseMeasureChildren3Grid();
+		}
+
+		class ChangingDefinitionsCauseMeasureChildren3Grid : Grid {
+			bool set_called;
+			bool called;
+
+			public ChangingDefinitionsCauseMeasureChildren3Grid() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				global::System.Windows.Controls.Button b1 = new global::System.Windows.Controls.Button();
+				Children.Add(b1);
+				global::System.Windows.Controls.Button b2 = new global::System.Windows.Controls.Button();
+				Grid.SetColumn(b2, 1);
+				Children.Add(b2);
+				set_called = true;
+				RowDefinitions.Add(new RowDefinition());
+				RowDefinitions.Add(new RowDefinition());
+				ColumnDefinitions.Add(new ColumnDefinition());
+				Assert.IsFalse(called);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				if (set_called)
+					called = true;
+				return base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
+
+		[Test]
+		public void GridAttachedPropertiesOutOfRange() {
+			Grid g = new Grid();
+			g.RowDefinitions.Add(new RowDefinition());
+			global::System.Windows.Controls.Button b = new global::System.Windows.Controls.Button();
+			Grid.SetRow(b, 5);
+			g.Children.Add(b);
+			g.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+			g.Arrange(new Rect(0, 0, 100, 100));
+		}
 	}
 }
