@@ -1,5 +1,9 @@
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Grid.cs: Added a PropertyChangedCallback to ShowGridLines.
+
+2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Grid.cs: Added handling for out of range Row/Column values.
 
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
