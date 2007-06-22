@@ -1,5 +1,11 @@
 2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Test/Examples/WrapMode.xml: Added markup for empty elements
+	* DocumentBufferArchiver.cs: Added case in Deserialize for empty
+	  elements.
+
+2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Test/TestDocumentBufferArchiver.cs, Monodoc.Editor.Gui.mdp: Added
 	  Test for DocumentBufferArchiver, added a test for Serialize method.
 	* Test/Examples/WrapMode.xml: Removed all empty elements that we are

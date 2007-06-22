@@ -86,7 +86,9 @@ public class DocumentBufferArchiver {
 						if (docTag.HasText) {
 							stack.Push (docTag);
 							readingText = true;
-							elementText = currentIter.Char;
+							
+							if (!currentIter.HasTag (ignore))
+								elementText = currentIter.Char;
 						}
 						
 						xmlWriter.WriteStartElement (null, docTag.Name, null);
@@ -201,8 +203,18 @@ public class DocumentBufferArchiver {
 						offset = DeserializeAttributes (buffer, offset, xmlReader);
 					
 					if (emptyElement) {
-						applyStart = buffer.GetIterAtOffset (tagStart.Start);
-						applyEnd = buffer.GetIterAtOffset (offset);
+						if (tagStart.Start != offset) {
+							applyStart = buffer.GetIterAtOffset (tagStart.Start);
+							applyEnd = buffer.GetIterAtOffset (offset);
+						} else {
+							insertAt = buffer.GetIterAtOffset (offset);
+							buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+							offset += 1;
+							
+							applyStart = buffer.GetIterAtOffset (tagStart.Start);
+							applyEnd = buffer.GetIterAtOffset (offset);
+						}
+						
 						buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
 						
 						#if DEBUG
@@ -223,25 +235,36 @@ public class DocumentBufferArchiver {
 					offset += xmlReader.Value.Length;
 					break;
 				case XmlNodeType.EndElement:
-					int realOffset = offset;
 					tagStart = stack.Pop () as TagStart;
 					
 					#if DEBUG
 					Console.WriteLine ("Element: {0}, End: {1}", tagStart.Tag.Name, offset);
 					#endif
 					
+					if (tagStart.Start != offset) {
+						applyStart = buffer.GetIterAtOffset (tagStart.Start);
+						applyEnd = buffer.GetIterAtOffset (offset);
+					} else {
+						insertAt = buffer.GetIterAtOffset (offset);
+						buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+						offset += 1;
+						
+						applyStart = buffer.GetIterAtOffset (tagStart.Start);
+						applyEnd = buffer.GetIterAtOffset (offset); 
+					}
+					
+					buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+					
+					#if DEBUG
+					Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
+					#endif
+					
 					// Padding between tag regions
 					insertAt = buffer.GetIterAtOffset (offset);
 					buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
 					offset += 1;
-					
-					applyStart = buffer.GetIterAtOffset (tagStart.Start);
-					applyEnd = buffer.GetIterAtOffset (realOffset);
-					buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
-					
-					#if DEBUG
-					Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, realOffset);
-					#endif
+					break;
+				case XmlNodeType.Whitespace:
 					break;
 				default:
 					Console.WriteLine ("Unhandled Element {0}. Value: '{1}'",
