@@ -20,6 +20,7 @@ namespace System.Windows.Controls {
 		#region Private Fields
 		double actual_width;
 		double offset;
+		Grid grid;
 		#endregion
 
 		#region Public Constructors
@@ -55,6 +56,13 @@ namespace System.Windows.Controls {
 		public double Offset {
 			get { return offset; }
 			internal set { offset = value; }
+		}
+		#endregion
+
+		#region Internal Properties
+		internal Grid Grid {
+			get { return grid; }
+			set { grid = value; }
 		}
 		#endregion
 	}
