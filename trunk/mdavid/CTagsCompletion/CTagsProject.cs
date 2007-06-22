@@ -44,7 +44,7 @@ namespace CTagsCompletion
 {
 	public abstract class CTagsProject : Project
 	{
-		private Dictionary<string, Tag> tags;
+		private List<Tag> tags = new List<Tag> ();
 		private string tagsFile;
 		protected bool wantTagsCompletion = false;
 		
@@ -75,11 +75,9 @@ namespace CTagsCompletion
 			LoadTags ();
 		}
 		
-		protected virtual void LoadTags ()
+		internal virtual void LoadTags ()
 		{
 			if (tagsFile == null || tagsFile.Length == 0) return;
-			
-			tags = new Dictionary<string,CTagsCompletion.Tag> ();
 			
 			StreamReader reader = new StreamReader (tagsFile);
 			
@@ -88,10 +86,7 @@ namespace CTagsCompletion
 			while ((entry = reader.ReadLine()) != null) {
 				if (entry.StartsWith ("!_")) continue;
 				
-				string tagName = entry.Substring (0, entry.IndexOf ('\t'));
-				
-				if (!tags.ContainsKey (tagName))
-					tags.Add (tagName, Tag.CreateTag (entry));
+				tags.Add (Tag.CreateTag (entry));
 			}
 			
 			reader.Close ();
@@ -99,6 +94,10 @@ namespace CTagsCompletion
 		
 		public bool WantTagsCompletion {
 			get { return wantTagsCompletion; }
+		}
+		
+		public List<Tag> Tags {
+			get { return tags; }
 		}
 	}
 }

@@ -1,3 +1,9 @@
+2007-06-21  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Tag.cs, CTagsCompletion.addin.xml, CTagsProject.cs,
+	  CTagsTextEditorExtension.cs: Managed to get a completion window
+	  with all the tags.
+
 2007-06-19  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* CTagsCommandHandler.cs, CTagsCompletion.addin.xml: Added the
