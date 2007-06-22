@@ -359,6 +359,52 @@ namespace System.Windows.Controls {
 				Assert.IsNull(Grid.ShowGridLinesProperty.DefaultMetadata.PropertyChangedCallback, "9");
 				Assert.IsNull(Grid.ShowGridLinesProperty.ValidateValueCallback, "10");
 				Assert.IsFalse(Grid.ShowGridLinesProperty.DefaultMetadata is FrameworkPropertyMetadata, "11");
+				Assert.AreNotSame(Grid.ShowGridLinesProperty.DefaultMetadata, Grid.ShowGridLinesProperty.GetMetadata(typeof(Grid)), "12");
+				FrameworkPropertyMetadata grid_metadata = (FrameworkPropertyMetadata)Grid.ShowGridLinesProperty.GetMetadata(typeof(Grid));
+				Assert.IsNotNull(grid_metadata.PropertyChangedCallback, "13");
+				Assert.IsFalse(grid_metadata.AffectsArrange, "14");
+				Assert.IsFalse(grid_metadata.AffectsMeasure, "15");
+				Assert.IsFalse(grid_metadata.AffectsParentArrange, "16");
+				Assert.IsFalse(grid_metadata.AffectsParentMeasure, "17");
+				Assert.IsFalse(grid_metadata.AffectsRender, "18");
+			}
+		}
+		#endregion
+
+		#region ShowGridLines2
+		[Test]
+		public void ShowGridLines2() {
+			new ShowGridLines2Grid();
+		}
+
+		class ShowGridLines2Grid : Grid {
+			public ShowGridLines2Grid() {
+				RowDefinitions.Add(new RowDefinition());
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(VisualChildrenCount, 0, "1");
+				ShowGridLines = true;
+				Assert.AreEqual(VisualChildrenCount, 0, "2");
+			}
+		}
+		#endregion
+
+		#region GridLinesRendererPlace
+		[Test]
+		public void GridLinesRendererPlace() {
+			new GridLinesRendererPlaceGrid();
+		}
+
+		class GridLinesRendererPlaceGrid : Grid {
+			public GridLinesRendererPlaceGrid() {
+				Children.Add(new Button());
+				ShowGridLines = true;
+				RowDefinitions.Add(new RowDefinition());
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.IsTrue(GetVisualChild(1) is DrawingVisual);
 			}
 		}
 		#endregion
@@ -580,5 +626,47 @@ namespace System.Windows.Controls {
 		public void GridRowSpanZero() {
 			Grid.SetRowSpan(new UIElement(), 0);
 		}
+
+		#region SettingDefinitionSize
+		[Test]
+		public void SettingDefinitionSize() {
+			new SettingDefinitionSizeGrid();
+		}
+
+		class SettingDefinitionSizeGrid : Grid {
+			bool set_called;
+			bool called;
+			bool called_arrange;
+
+			public SettingDefinitionSizeGrid() {
+				ColumnDefinition c = new ColumnDefinition();
+				ColumnDefinitions.Add(c);
+				set_called = true;
+				c.Width = new GridLength(100);
+				Assert.IsFalse(called, "1");
+				Assert.IsFalse(called_arrange, "2");
+				set_called = false;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				set_called = true;
+				c.Width = new GridLength(101);
+				Assert.IsFalse(called, "3");
+				Assert.IsFalse(called_arrange, "4");
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				if (set_called)
+					called = true;
+				return base.MeasureOverride(availableSize);
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				if (set_called)
+					called_arrange = true;
+				return base.ArrangeOverride(arrangeSize);
+			}
+		}
+		#endregion
 	}
 }
