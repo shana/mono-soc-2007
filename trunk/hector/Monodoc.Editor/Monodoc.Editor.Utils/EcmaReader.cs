@@ -27,6 +27,7 @@ public class EcmaReader {
 		try {
 			XmlTextReader textReader = new XmlTextReader (filePath);
 			document.Load (GetValidatingReader (textReader));
+			textReader.Close ();
 			
 			#if DEBUG
 			Console.WriteLine ("DEBUG: Validando estilo. La validacion fue {0}", 
