@@ -2,6 +2,7 @@
   <TypeSignature Language="C#" Maintainer="Hector Gomez M" Value="public enum WrapMode" />
   <AssemblyInfo>
     <AssemblyName>gtk-sharp</AssemblyName>
+    <AssemblyPublicKey />
     <AssemblyVersion>2.10.0.0</AssemblyVersion>
   </AssemblyInfo>
   <ThreadSafetyStatement>Gtk# is thread aware, but not thread safe; See the <link location="node:gtk-sharp/programming/threads">Gtk# Thread Programming</link> for details.</ThreadSafetyStatement>
@@ -28,6 +29,7 @@
       <ReturnValue>
         <ReturnType>Gtk.WrapMode</ReturnType>
       </ReturnValue>
+      <Parameters />
       <Docs>
         <summary>Do not wrap lines, just make the text area wider.</summary>
         <remarks>
@@ -43,6 +45,7 @@
       <ReturnValue>
         <ReturnType>Gtk.WrapMode</ReturnType>
       </ReturnValue>
+      <Parameters />
       <Docs>
         <summary>Wrap text, breaking lines anywhere the cursor can appear.</summary>
         <remarks>
@@ -58,6 +61,7 @@
       <ReturnValue>
         <ReturnType>Gtk.WrapMode</ReturnType>
       </ReturnValue>
+      <Parameters />
       <Docs>
         <summary>Wrap text, breaking lines in between words.</summary>
         <remarks>
@@ -73,8 +77,10 @@
       <ReturnValue>
         <ReturnType>Gtk.WrapMode</ReturnType>
       </ReturnValue>
+      <Parameters />
       <Docs>
         <summary>wrap text, breaking lines in between words, or if that is not enough, also between graphemes.</summary>
+        <remarks />
         <since version="Gtk# 2.4" />
       </Docs>
     </Member>
