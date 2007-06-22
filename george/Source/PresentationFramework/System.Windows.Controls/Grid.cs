@@ -405,11 +405,11 @@ namespace System.Windows.Controls {
 		}
 
 		static bool ValidateRowColumn(object value) {
-			return (double)value >= 0;
+			return (int)value >= 0;
 		}
 
 		static bool ValidateSpan(object value) {
-			return (double)value > 0;
+			return (int)value > 0;
 		}
 		#endregion
 
