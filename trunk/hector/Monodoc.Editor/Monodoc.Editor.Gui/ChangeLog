@@ -1,5 +1,11 @@
 2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Test, Test/Examples, Test/Examples/WrapMode.xml,
+	  Monodoc.Editor.Gui.mdp: Adding testing framework to
+	  Monodoc.Editor.Gui.
+
+2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBufferArchiver.cs: Using DocumentTag properties to guide the
 	  serialization of the buffer.
 
