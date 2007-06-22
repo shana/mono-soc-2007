@@ -46,12 +46,8 @@ public class TestDocumentBufferArchiver {
 		MonoDocument document = new MonoDocument (fileName);
 		originalText = document.Text;
 		
-		Console.WriteLine (originalText);
-		
 		DocumentBufferArchiver.Deserialize (buffer, originalText);
 		newText = DocumentBufferArchiver.Serialize (buffer);
-		
-		Console.WriteLine (newText);
 		
 		Assert.AreEqual (originalText, newText, "SR01");
 	}
