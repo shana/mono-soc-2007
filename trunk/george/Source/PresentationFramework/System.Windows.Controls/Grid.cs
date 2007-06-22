@@ -156,12 +156,12 @@ namespace System.Windows.Controls {
 				double[] desired_column_widths = new double[column_count];
 				foreach (UIElement child in InternalChildren) {
 					if (has_row_definitions) {
-						int child_row = GetRow(child);
+						int child_row = Math.Min(GetRow(child), row_count - 1);
 						if (!row_definitions[child_row].Height.IsAbsolute && GetRowSpan(child) == 1)
 							desired_row_heights[child_row] = Math.Max(desired_row_heights[child_row], child.DesiredSize.Height);
 					}
 					if (has_column_definitions) {
-						int child_column = GetColumn(child);
+						int child_column = Math.Min(GetColumn(child), column_count - 1);
 						if (!column_definitions[child_column].Width.IsAbsolute && GetColumnSpan(child) == 1)
 							desired_column_widths[child_column] = Math.Max(desired_column_widths[child_column], child.DesiredSize.Width);
 					}
@@ -253,13 +253,13 @@ namespace System.Windows.Controls {
 			}
 			foreach (UIElement child in InternalChildren) {
 				Rect rect = new Rect();
-				int row_column = GetRow(child);
+				int row_column = Math.Min(GetRow(child), row_count - 1);
 				for (index = 0; index < row_column; index++)
 					rect.Y += row_heights[index];
 				int maximum = Math.Min(row_column + GetRowSpan(child), row_count);
 				for (index = row_column; index < maximum; index++)
 					rect.Height += row_heights[index];
-				row_column = GetColumn(child);
+				row_column = Math.Min(GetColumn(child), column_count - 1);
 				for (index = 0; index < row_column; index++)
 					rect.X += column_widths[index];
 				maximum = Math.Min(row_column + GetColumnSpan(child), column_count);
@@ -308,8 +308,8 @@ namespace System.Windows.Controls {
 			double[] desired_row_heights = new double[row_count];
 			double[] desired_column_widths = new double[column_count];
 			foreach (UIElement child in InternalChildren) {
-				int child_row = GetRow(child);
-				int child_column = GetColumn(child);
+				int child_row = Math.Min(GetRow(child), row_count - 1);
+				int child_column = Math.Min(GetColumn(child), column_count - 1);
 				int child_row_span = GetRowSpan(child);
 				int child_column_span = GetColumnSpan(child);
 				Size child_constraint = new Size();
