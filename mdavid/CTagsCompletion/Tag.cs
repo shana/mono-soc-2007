@@ -36,12 +36,14 @@ namespace CTagsCompletion
 {
 	public class Tag
 	{
+		private string name;
 		private string file;
 		private string pattern;
 		private Dictionary<string, string> tagField;
 		
-		public Tag (string file, string pattern, Dictionary<string, string> tagField)
+		public Tag (string name, string file, string pattern, Dictionary<string, string> tagField)
 		{
+			this.name = name;
 			this.file = file;
 			this.pattern = pattern;
 			this.tagField = tagField;
@@ -53,7 +55,10 @@ namespace CTagsCompletion
 			int i1, i2;
 			string file;
 			string pattern;
+			string name;
 			char delimiter;
+			
+			name = tagEntry.Substring (0, tagEntry.IndexOf ('\t'));
 			
 			i1 = tagEntry.IndexOf ('\t') + 1;
 			i2 = tagEntry.IndexOf ('\t', i1) - 1;
@@ -67,7 +72,7 @@ namespace CTagsCompletion
 			
 			pattern = tagEntry.Substring (i1 + 1, i2 - i1 - 1);
 			
-			return new Tag (file, pattern, null);
+			return new Tag (name, file, pattern, null);
 		}
 		
 		public string File {
@@ -80,6 +85,10 @@ namespace CTagsCompletion
 		
 		public virtual Dictionary<string, string> TagField {
 			get { return tagField; }
+		}
+
+		public virtual string Name {
+			get { return name; }
 		}
 	}
 }
