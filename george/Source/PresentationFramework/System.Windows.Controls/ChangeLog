@@ -1,5 +1,9 @@
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* ColumnDefinition.cs, RowDefinition.cs: Call InvalidateMeasure on the owner grid when size changes.
+
+2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ColumnDefinitionCollection.cs, RowDefinitionCollection.cs: Added exception cases.
 
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
