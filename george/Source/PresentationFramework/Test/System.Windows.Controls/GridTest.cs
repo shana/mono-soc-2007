@@ -568,5 +568,17 @@ namespace System.Windows.Controls {
 			g.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 			g.Arrange(new Rect(0, 0, 100, 100));
 		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentException))]
+		public void GridRowNegative() {
+			Grid.SetRow(new UIElement(), -1);
+		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentException))]
+		public void GridRowSpanZero() {
+			Grid.SetRowSpan(new UIElement(), 0);
+		}
 	}
 }
