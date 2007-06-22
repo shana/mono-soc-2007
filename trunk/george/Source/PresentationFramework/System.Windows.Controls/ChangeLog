@@ -1,5 +1,9 @@
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* RowDefinition.cs, ColumnDefinition.cs: Added Grid property.
+
+2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Grid.cs: Added a PropertyChangedCallback to ShowGridLines.
 
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
