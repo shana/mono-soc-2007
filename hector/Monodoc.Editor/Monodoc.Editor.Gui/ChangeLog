@@ -7,6 +7,13 @@
 
 2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Test/TestDocumentBufferArchiver.cs, Monodoc.Editor.Gui.mdp: Added
+	  Test for DocumentBufferArchiver, added a test for Serialize method.
+	* Test/Examples/WrapMode.xml: Removed all empty elements that we are
+	  not creating for the time being.
+
+2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Test, Test/Examples, Test/Examples/WrapMode.xml,
 	  Monodoc.Editor.Gui.mdp: Adding testing framework to
 	  Monodoc.Editor.Gui.
