@@ -14,11 +14,11 @@ namespace System.Windows.Controls {
 		#region Dependency Properties
 		public static readonly DependencyProperty ShowGridLinesProperty = DependencyProperty.Register("ShowGridLines", typeof(bool), typeof(Grid), new FrameworkPropertyMetadata());
 		#region Attached Properties
-		public static readonly DependencyProperty ColumnProperty = DependencyProperty.RegisterAttached("Column", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(InvalidateGridMeasure));
-		public static readonly DependencyProperty ColumnSpanProperty = DependencyProperty.RegisterAttached("ColumnSpan", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(1, InvalidateGridMeasure));
+		public static readonly DependencyProperty ColumnProperty = DependencyProperty.RegisterAttached("Column", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(InvalidateGridMeasure), ValidateRowColumn);
+		public static readonly DependencyProperty ColumnSpanProperty = DependencyProperty.RegisterAttached("ColumnSpan", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(1, InvalidateGridMeasure), ValidateSpan);
 		public static readonly DependencyProperty IsSharedSizeScopeProperty = DependencyProperty.RegisterAttached("IsSharedSizeScope", typeof(bool), typeof(Grid), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty RowProperty = DependencyProperty.RegisterAttached("Row", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(InvalidateGridMeasure));
-		public static readonly DependencyProperty RowSpanProperty = DependencyProperty.RegisterAttached("RowSpan", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(1, InvalidateGridMeasure));
+		public static readonly DependencyProperty RowProperty = DependencyProperty.RegisterAttached("Row", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(InvalidateGridMeasure), ValidateRowColumn);
+		public static readonly DependencyProperty RowSpanProperty = DependencyProperty.RegisterAttached("RowSpan", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(1, InvalidateGridMeasure), ValidateSpan);
 		#endregion
 		#endregion
 		#endregion
@@ -402,6 +402,14 @@ namespace System.Windows.Controls {
 			if (grid == null)
 				return;
 			grid.InvalidateMeasure();
+		}
+
+		static bool ValidateRowColumn(object value) {
+			return (double)value >= 0;
+		}
+
+		static bool ValidateSpan(object value) {
+			return (double)value > 0;
 		}
 		#endregion
 
