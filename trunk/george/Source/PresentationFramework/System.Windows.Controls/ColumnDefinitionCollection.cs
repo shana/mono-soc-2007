@@ -14,8 +14,8 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Internal Constructors
-		internal ColumnDefinitionCollection(Grid grid) {
-			this.grid = grid;
+		internal ColumnDefinitionCollection(Grid owner) {
+			grid = owner;
 		}
 		#endregion
 
@@ -28,7 +28,7 @@ namespace System.Windows.Controls {
 			get { return data.IsReadOnly; }
 		}
 
-		public bool IsSyncronized {
+		public bool IsSynchronized {
 			get { return data.IsSynchronized; }
 		}
 
@@ -39,8 +39,14 @@ namespace System.Windows.Controls {
 
 		#region Public Indexers
 		public ColumnDefinition this[int index] {
-			get { return (ColumnDefinition)data[index]; }
+			get {
+				CheckIndex(index);
+				return (ColumnDefinition)data[index]; 
+			}
 			set {
+				CheckNull(value);
+				CheckIfItIsInAnotherGrid(value);
+				CheckIndex(index);
 				data[index] = value;
 				OnChanged();
 			}
@@ -49,8 +55,7 @@ namespace System.Windows.Controls {
 
 		#region Public Methods
 		public void Add(ColumnDefinition value) {
-			data.Add(value);
-			OnChanged();
+			AddAndReturnInt(value);
 		}
 
 		public void Clear() {
@@ -71,6 +76,9 @@ namespace System.Windows.Controls {
 		}
 
 		public void Insert(int index, ColumnDefinition value) {
+			CheckNull(value);
+			CheckIfItIsInAnotherGrid(value);
+			value.Grid = grid;
 			data.Insert(index, value);
 			OnChanged();
 		}
@@ -79,6 +87,7 @@ namespace System.Windows.Controls {
 			if (!data.Contains(value))
 				return false;
 			try {
+				value.Grid = null;
 				data.Remove(value);
 				OnChanged();
 				return true;
@@ -98,30 +107,60 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-		#region Explicit Interface Implementations
-		#region IList
-		int IList.Add(object value) {
+		#region Private Methods
+		int AddAndReturnInt(ColumnDefinition value) {
+			CheckIfItIsInAnotherGrid(value);
+			value.Grid = grid;
 			int result = data.Add(value);
 			OnChanged();
 			return result;
 		}
 
+		void CheckIndex(int index) {
+			if (index < 0 || index >= data.Count)
+				throw new ArgumentOutOfRangeException("Index is out of collection's boundary.");
+		}
+
+		void CheckIfItIsInAnotherGrid(ColumnDefinition value) {
+			if (value.Grid != null)
+				throw new ArgumentException("'value' already belongs to another 'ColumnDefinitionCollection'.");
+		}
+
+		ColumnDefinition CheckType(object value) {
+			ColumnDefinition typed_value = value as ColumnDefinition;
+			if (typed_value == null)
+				throw new ArgumentException("'ColumnDefinitionCollection' must be type 'ColumnDefinition'.");
+			return typed_value;
+		}
+
+		void CheckNull(object value) {
+			if (value == null)
+				throw new ArgumentNullException();
+		}
+		#endregion
+
+		#region Explicit Interface Implementations
+		#region IList
+		int IList.Add(object value) {
+			CheckNull(value);
+			return AddAndReturnInt(CheckType(value));
+		}
+
 		void IList.Clear() {
-			data.Clear();
-			OnChanged();
+			Clear();
 		}
 
 		bool IList.Contains(object value) {
-			return data.Contains(value);
+			return Contains(CheckType(value));
 		}
 
 		int IList.IndexOf(object value) {
-			return data.IndexOf(value);
+			return IndexOf(CheckType(value));
 		}
 
 		void IList.Insert(int index, object value) {
-			data.Insert(index, value);
-			OnChanged();
+			CheckNull(value);
+			Insert(index, CheckType(value));
 		}
 
 		bool IList.IsFixedSize {
@@ -129,24 +168,23 @@ namespace System.Windows.Controls {
 		}
 
 		bool IList.IsReadOnly {
-			get { return data.IsReadOnly; }
+			get { return IsReadOnly; }
 		}
 
 		void IList.Remove(object value) {
-			data.Remove(value);
-			OnChanged();
+			CheckNull(value);
+			Remove(CheckType(value));
 		}
 
 		void IList.RemoveAt(int index) {
-			data.RemoveAt(index);
-			OnChanged();
+			RemoveAt(index);
 		}
 
 		object IList.this[int index] {
-			get { return data[index]; }
+			get { return this[index]; }
 			set {
-				data[index] = value;
-				OnChanged();
+				CheckNull(value);
+				this[index] = CheckType(value); 
 			}
 		}
 		#endregion
@@ -157,15 +195,15 @@ namespace System.Windows.Controls {
 		}
 
 		int ICollection.Count {
-			get { return data.Count; }
+			get { return Count; }
 		}
 
 		bool ICollection.IsSynchronized {
-			get { return data.IsSynchronized; }
+			get { return IsSynchronized; }
 		}
 
 		object ICollection.SyncRoot {
-			get { return data.SyncRoot; }
+			get { return SyncRoot; }
 		}
 		#endregion
 
@@ -177,59 +215,50 @@ namespace System.Windows.Controls {
 
 		#region IList<ColumnDefinition>
 		int IList<ColumnDefinition>.IndexOf(ColumnDefinition item) {
-			return data.IndexOf(item);
+			return IndexOf(item);
 		}
 
 		void IList<ColumnDefinition>.Insert(int index, ColumnDefinition item) {
-			data.Insert(index, item);
-			OnChanged();
+			Insert(index, item);
 		}
 
 		void IList<ColumnDefinition>.RemoveAt(int index) {
-			data.RemoveAt(index);
-			OnChanged();
+			RemoveAt(index);
 		}
 
 		ColumnDefinition IList<ColumnDefinition>.this[int index] {
-			get { return (ColumnDefinition)data[index]; }
-			set {
-				data[index] = value;
-				OnChanged();
-			}
+			get { return this[index]; }
+			set { this[index] = value; }
 		}
 		#endregion
 
 		#region ICollection<ColumnDefinition>
 		void ICollection<ColumnDefinition>.Add(ColumnDefinition item) {
-			data.Add(item);
-			OnChanged();
+			Add(item);
 		}
 
 		void ICollection<ColumnDefinition>.Clear() {
-			data.Clear();
-			OnChanged();
+			Clear();
 		}
 
 		bool ICollection<ColumnDefinition>.Contains(ColumnDefinition item) {
-			return data.Contains(item);
+			return Contains(item);
 		}
 
 		void ICollection<ColumnDefinition>.CopyTo(ColumnDefinition[] array, int arrayIndex) {
-			data.CopyTo(array, arrayIndex);
+			CopyTo(array, arrayIndex);
 		}
 
 		int ICollection<ColumnDefinition>.Count {
-			get { return data.Count; }
+			get { return Count; }
 		}
 
 		bool ICollection<ColumnDefinition>.IsReadOnly {
-			get { return data.IsReadOnly; }
+			get { return IsReadOnly; }
 		}
 
 		bool ICollection<ColumnDefinition>.Remove(ColumnDefinition item) {
-			bool result = Remove(item);
-			OnChanged();
-			return result;
+			return Remove(item);
 		}
 		#endregion
 
