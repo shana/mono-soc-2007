@@ -1,3 +1,8 @@
+2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Using DocumentTag properties to guide the
+	  serialization of the buffer.
+
 2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs: Minor changes.

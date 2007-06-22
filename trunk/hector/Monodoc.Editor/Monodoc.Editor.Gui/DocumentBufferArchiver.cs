@@ -21,11 +21,6 @@ public class DocumentBufferArchiver {
 		public TextTag Tag;
 	}
 	
-	static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)
-	{
-		return (currentIter.HasTag (tag) && !nextIter.HasTag (tag));
-	}
-	
 	public static string Serialize (TextBuffer buffer)
 	{
 		return Serialize (buffer, buffer.StartIter, buffer.EndIter);
@@ -53,9 +48,10 @@ public class DocumentBufferArchiver {
 		string attributeValue = "";
 		string elementText = "";
 		System.Object [] tags;
-		nextIter.ForwardChar ();
 		Stack stack = new Stack ();
+		DocumentTag docTag;
 		TextTag ignore = buffer.TagTable.Lookup ("ignore");
+		nextIter.ForwardChar ();
 		
 		while (!currentIter.Equal (end)) {
 			
@@ -77,9 +73,9 @@ public class DocumentBufferArchiver {
 				#endif
 				
 				if (currentIter.BeginsTag (tag)) {
-					if (tag.Name.EndsWith (":Attributes") || tag.Name.Equals ("ignore")) {
-					} else if (tag.Name.IndexOf (":") == -1) {
-						bool textNode = HasTextNode (tag.Name);
+					docTag = tag as DocumentTag;
+					
+					if (docTag.IsElement) {
 						
 						if (readingText) {
 							int length = elementText.Length;
@@ -87,19 +83,19 @@ public class DocumentBufferArchiver {
 							readingText = false;
 						}
 						
-						if (textNode) {
-							stack.Push (tag);
+						if (docTag.HasText) {
+							stack.Push (docTag);
 							readingText = true;
 							elementText = currentIter.Char;
 						}
 						
-						xmlWriter.WriteStartElement (null, tag.Name, null);
+						xmlWriter.WriteStartElement (null, docTag.Name, null);
 						
 						#if DEBUG
-						Console.WriteLine ("Wrote Start Element: " + tag.Name);
+						Console.WriteLine ("Wrote Start Element: " + docTag.Name);
 						#endif
-					} else if (tag.Name.IndexOf (":") > 0) {
-						attributeName = tag.Name.Split (':')[1];
+					} else if (docTag.IsAttribute) {
+						attributeName = docTag.Name.Split (':')[1];
 						xmlWriter.WriteStartAttribute (null, attributeName, null);
 						
 						#if DEBUG
@@ -119,26 +115,21 @@ public class DocumentBufferArchiver {
 				#endif
 				
 				if (TagEndsHere (tag, currentIter, nextIter)) {
-					if (tag.Name.EndsWith (":Attributes") || tag.Name.Equals ("ignore")) {
-					} else if (tag.Name.IndexOf (":") == -1) {
-						string startName = "";
-						TextTag startTag;
+					docTag = tag as DocumentTag;
+					if (docTag.IsElement) {
+						DocumentTag startTag = null;
 						
-						if (stack.Count != 0 && ((TextTag) stack.Peek ()).Name.Equals (tag.Name)) {
-							startTag = stack.Pop () as TextTag;
-							startName = startTag.Name;
-						}
+						if (stack.Count != 0 && ((DocumentTag) stack.Peek ()).Name.Equals (docTag.Name))
+							startTag = stack.Pop () as DocumentTag;
 						
-						if (readingText && startName.Equals (tag.Name)) {
+						if (readingText && startTag != null) {
 							xmlWriter.WriteString (elementText);
-							elementText = String.Empty;
 							
 							if (stack.Count != 0)
 								readingText = true;
 							else
 								readingText = false;
-						} else if (!readingText && !startName.Equals (tag.Name) && stack.Count != 0) {
-							elementText = String.Empty;
+						} else if (!readingText && startTag == null && stack.Count != 0) {
 							readingText = true;
 						}
 						
@@ -146,10 +137,10 @@ public class DocumentBufferArchiver {
 						elementText = String.Empty;
 						
 						#if DEBUG
-						Console.WriteLine ("Wrote End Element: " + tag.Name);
+						Console.WriteLine ("Wrote End Element: " + docTag.Name);
 						#endif
 						
-					} else if (tag.Name.IndexOf (":") > 0) {
+					} else if (docTag.IsAttribute) {
 						xmlWriter.WriteString (attributeValue);
 						xmlWriter.WriteEndAttribute ();
 						
@@ -418,49 +409,9 @@ public class DocumentBufferArchiver {
 		return list.ToArray ();
 	}
 	
-	private static bool HasTextNode (string name) 
+	private static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)
 	{
-		bool result = false;
-		switch (name) {
-			case "AssemblyName":
-				result = true;
-				break;
-			case "AssemblyPublicKey":
-				result = true;
-				break;
-			case "AssemblyVersion":
-				result = true;
-				break;
-			case "ThreadSafetyStatement":
-				result = true;
-				break;
-			case "BaseTypeName":
-				result = true;
-				break;
-			case "AttributeName":
-				result = true;
-				break;
-			case "MemberType":
-				result = true;
-				break;
-			case "ReturnType":
-				result = true;
-				break;
-			case "summary":
-				result = true;
-				break;
-			case "remarks":
-				result = true;
-				break;
-			case "para":
-				result = true;
-				break;
-			case "link":
-				result = true;
-				break;
-		}
-		
-		return result;
+		return (currentIter.HasTag (tag) && !nextIter.HasTag (tag));
 	}
 }
 }
