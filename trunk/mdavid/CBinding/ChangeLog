@@ -1,3 +1,9 @@
+2007-06-22  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProject.cs: Made a very simple implementation of
+	  AddTagsToProvider which is the method where the logic about which
+	  tags shoud be added to the completion list window takes place.
+
 2007-06-21  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Gui/EditPackagesDialog.cs: Added a package icon to both packages

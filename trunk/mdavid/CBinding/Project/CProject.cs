@@ -269,6 +269,26 @@ namespace CBinding
 			}
 		}
 		
+		
+		// For now just show member of any class/struct
+		public override void AddTagsToProvider (CTagsCompletionDataProvider provider,
+		                                        string line)
+		{
+			foreach (Tag tag in Tags) {
+				string kind = string.Empty;
+				
+				for (int i = 0; i < tag.TagField.Count; i++) {
+					if (tag.TagField[i][0].Equals ("kind")) {
+						kind = tag.TagField[i][1];
+						break;
+					}
+				}
+				
+				if (kind.Equals ("member"))
+					provider.AddCompletionData (new CTagsCompletionData (tag, "md-class"));
+			}
+		}
+		
 		protected override void OnFileAddedToProject (ProjectFileEventArgs e)
 		{
 			base.OnFileAddedToProject (e);
