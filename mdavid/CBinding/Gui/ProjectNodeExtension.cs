@@ -50,7 +50,8 @@ namespace CBinding
 		{
 			CProject p = dataObject as CProject;
 			
-			// FIXME: Add child on top of other nodes
+			if (p == null) return;
+			
 			builder.AddChild (p.Packages);
 		}
 	}
