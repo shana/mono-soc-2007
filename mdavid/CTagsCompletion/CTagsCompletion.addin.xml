@@ -12,8 +12,10 @@
 	</Runtime>
 	
 	<Dependencies>
+		<AddIn id = "MonoDevelop.Ide" version = "0.14.0"/>
 		<AddIn id = "MonoDevelop.Core" version = "0.14.0"/>
 		<AddIn id = "MonoDevelop.Projects" version = "0.14.0"/>
+		<AddIn id = "MonoDevelop.Projects.Gui" version = "0.14.0"/>
 	</Dependencies>
 	
 	<Extension path = "/SharpDevelop/Workbench/ProjectServiceExtensions">

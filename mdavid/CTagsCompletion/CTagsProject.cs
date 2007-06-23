@@ -45,15 +45,12 @@ namespace CTagsCompletion
 	public abstract class CTagsProject : Project
 	{
 		private List<Tag> tags = new List<Tag> ();
-		private string tagsFile;
 		protected bool wantTagsCompletion = false;
 		
 		public virtual void WriteTags ()
 		{
 			string dir = Path.Combine (BaseDirectory, ".tags");
 			StringBuilder files = new StringBuilder ();
-			
-			tagsFile = Path.Combine (dir, "tags");
 			
 			if (!Directory.Exists (dir)) {
 				Directory.CreateDirectory (dir);
@@ -65,18 +62,23 @@ namespace CTagsCompletion
 				}
 			}
 			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-			    "ctags", files.ToString (), dir, null);
-			p.WaitForExit ();
+			ProcessWrapper p = new ProcessWrapper ();
 			
-			if (p.ExitCode != 0)
-				throw new Exception ("Could not create tags file");
-			
-			LoadTags ();
+			try {
+				p = Runtime.ProcessService.StartProcess (
+				    "ctags", "--language-force=C++ --C++-kinds=+lpx --fields=fksaiKSz " + files.ToString (), dir, null);
+				p.WaitForExit ();
+			} catch (Exception ex) {
+				throw new Exception ("Could not create tags file", ex);
+			} finally {
+				p.Close ();
+			}
 		}
 		
-		internal virtual void LoadTags ()
+		public virtual void LoadTags ()
 		{
+			string tagsFile = TagsFile ();
+			
 			if (tagsFile == null || tagsFile.Length == 0) return;
 			
 			StreamReader reader = new StreamReader (tagsFile);
@@ -90,6 +92,19 @@ namespace CTagsCompletion
 			}
 			
 			reader.Close ();
+		}
+		
+		public virtual void AddTagsToProvider (CTagsCompletionDataProvider provider,
+		                                       string line)
+		{
+		}
+		
+		private string TagsFile ()
+		{
+			string dir = Path.Combine (BaseDirectory, ".tags");
+			string tagsFile = Path.Combine (dir, "tags");
+			
+			return tagsFile;
 		}
 		
 		public bool WantTagsCompletion {

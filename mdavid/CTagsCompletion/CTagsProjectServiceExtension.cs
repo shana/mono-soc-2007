@@ -38,20 +38,23 @@ namespace CTagsCompletion
 {
 	public class CTagsProjectServiceExtension : ProjectServiceExtension
 	{
-		public override void Save (IProgressMonitor monitor, CombineEntry entry)
+		public override ICompilerResult Build (IProgressMonitor monitor, CombineEntry entry)
 		{
-			base.Save (monitor, entry);
+			ICompilerResult result = base.Build (monitor, entry);
 			
 			CTagsProject tagProject = entry as CTagsProject;
 			
-			if (tagProject == null) return;
-			if (!tagProject.WantTagsCompletion) return;
+			if (tagProject == null || !tagProject.WantTagsCompletion)
+				return result;
 			
 			try {
 				tagProject.WriteTags ();
 			} catch (Exception ex) {
 				Console.Error.WriteLine (ex.Message);
+				return result;
 			}
+			
+			return result;
 		}
 	}
 }

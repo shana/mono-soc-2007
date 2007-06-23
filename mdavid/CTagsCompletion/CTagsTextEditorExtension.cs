@@ -49,22 +49,38 @@ namespace CTagsCompletion
 			
 			if (project == null) return null;
 			
-			// This will be changed to check the entire current line
-			if (completionChar != '.' &&
-			    completionChar != '>' &&
-			    completionChar != ':')
-				return null;
+			TextEditor editor = IdeApp.Workbench.ActiveDocument.TextEditor;
+			
+			int line, column;
+			editor.GetLineColumnFromPosition (editor.CursorPosition, out line, out column);
+			string currentLine = editor.GetLineText (line);
+			
+			if (!ShouldComplete (currentLine)) return null;
 			
 			if (project.Tags.Count == 0)
 				project.LoadTags ();
 			
 			CTagsCompletionDataProvider provider = new CTagsCompletionDataProvider ();
 			
-			foreach (Tag tag in project.Tags) {
-				provider.AddCompletionData (new CTagsCompletionData (tag.Name, "md-literal"));
-			}
+			project.AddTagsToProvider (provider, currentLine);
 			
 			return provider;
+		}
+		
+		private bool ShouldComplete (string line)
+		{
+			if (line == null || line.Length < 2) return false;
+			
+			int len = line.Length;
+			
+			if (line[len - 1] == '.' && !line.Trim ().StartsWith ("#"))
+				return true;
+			if (line[len - 1] == '>' && line[len - 2] == '-')
+				return true;
+			if (line[len - 1] == ':' && line[len - 2] == ':')
+				return true;
+			
+			return false;
 		}
 	}
 	
@@ -99,11 +115,11 @@ namespace CTagsCompletion
 		private string completion_string;
 		private string description_pango;
 		
-		public CTagsCompletionData (string text, string image)
+		public CTagsCompletionData (Tag tag, string image)
 		{
 			this.image = image;
-			this.text = text;
-			this.completion_string = text;
+			this.text = tag.Name;
+			this.completion_string = tag.Name;
 			this.description = string.Empty;
 			this.description_pango = string.Empty;
 		}
