@@ -1,3 +1,10 @@
+2007-06-22  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Tag.cs, CTagsProjectServiceExtension.cs, CTagsProject.cs,
+	  CTagsTextEditorExtension.cs: The project that subclasses
+	  CTagsProject is now responsible for adding the logic about which
+	  tags should be added to the completion list window.
+
 2007-06-21  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Tag.cs, CTagsCompletion.addin.xml, CTagsProject.cs,
