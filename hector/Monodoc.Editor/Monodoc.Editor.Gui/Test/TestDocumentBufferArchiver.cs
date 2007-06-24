@@ -23,9 +23,7 @@ public class TestDocumentBufferArchiver {
 	[SetUp()]
 	public void Initialize ()
 	{
-		string filePath;
-		
-		filePath = Test.PathOfTestFiles ();
+		string filePath = Test.PathOfTestFiles ();
 		pathTest = Path.Combine (filePath, "Examples");
 		files = Directory.GetFiles (pathTest, "*.xml");
 		
@@ -74,7 +72,7 @@ public class TestDocumentBufferArchiver {
 			DateTime stopTime = DateTime.Now;
 			TimeSpan duration = stopTime - startTime;
 			
-			Assert.Less (duration.Milliseconds, 500, "SP01");
+			Assert.Less (duration.TotalMilliseconds, 500, "SP01");
 			buffer.Clear ();
 		}
 	}
@@ -82,7 +80,7 @@ public class TestDocumentBufferArchiver {
 	[Test()]
 	public void DeserializePerformance ()
 	{
-		string originalText, fileName;
+		string originalText;
 		
 		foreach (string file in files) {
 			MonoDocument document = new MonoDocument (file);
@@ -93,7 +91,7 @@ public class TestDocumentBufferArchiver {
 			DateTime stopTime = DateTime.Now;
 			TimeSpan duration = stopTime - startTime;
 			
-			Assert.Less (duration.Milliseconds, 100, "SP01");
+			Assert.Less (duration.TotalMilliseconds, 100, "SP01");
 			buffer.Clear ();
 		}
 	}
