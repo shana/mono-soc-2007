@@ -1,5 +1,10 @@
 2007-06-24  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs: Abstracting the several
+	  Deserialize*Attributes moethods.
+
+2007-06-24  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Test/TestDocumentBufferArchiver.cs: Minor changes in the tests.
 
 2007-06-23  Hector E. Gomez Morales <hectoregm@gmail.com> 
