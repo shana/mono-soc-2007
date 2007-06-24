@@ -1,5 +1,9 @@
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* GridTest.cs: Added MinWidthMeasureConstraint test.
+
+2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* GridTest.cs: Added MinWidth, MaxWidth tests.
 
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
