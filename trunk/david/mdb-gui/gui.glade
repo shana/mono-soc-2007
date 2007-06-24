@@ -9,6 +9,8 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
+  <property name="default_width">600</property>
+  <property name="default_height">400</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -138,6 +140,7 @@
 	<widget class="GtkVPaned" id="vpaned_main">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
+	  <property name="position">180</property>
 
 	  <child>
 	    <widget class="GtkScrolledWindow" id="scrolledwindow">
@@ -208,7 +211,7 @@
 			    <widget class="GtkTextView" id="consoleOut">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="editable">True</property>
+			      <property name="editable">False</property>
 			      <property name="overwrite">False</property>
 			      <property name="accepts_tab">True</property>
 			      <property name="justification">GTK_JUSTIFY_LEFT</property>
@@ -242,6 +245,7 @@
 			  <property name="has_frame">True</property>
 			  <property name="invisible_char">•</property>
 			  <property name="activates_default">False</property>
+			  <signal name="activate" handler="OnConsoleIn_activate" last_modification_time="Sun, 24 Jun 2007 13:27:42 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>

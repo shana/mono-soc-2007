@@ -8,7 +8,8 @@ namespace Mono.Debugger.Frontend
 {
 	public class MdbGui
 	{
-		[Glade.Widget] TextView sourceView;
+		[Widget] protected TextView sourceView;
+		[Widget] protected Entry consoleIn;
 		
 		public static void Main(string[] args)
 		{
@@ -26,35 +27,42 @@ namespace Mono.Debugger.Frontend
 			Application.Run();
 		}
 		
-		public void OnMainWindow_delete_event(object o, DeleteEventArgs e) 
+		protected void OnMainWindow_delete_event(object o, DeleteEventArgs e) 
 		{
 			Application.Quit();
 			e.RetVal = true;
 		}
 		
-		public void OnToolbuttonRun_clicked(object o, EventArgs e) 
+		protected void OnToolbuttonRun_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("Button Run clicked");
+			Console.WriteLine("OnToolbuttonRun_clicked");
 		}
 		
-		public void OnToolbuttonStop_clicked(object o, EventArgs e) 
+		protected void OnToolbuttonStop_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("Button Stop clicked");
+			Console.WriteLine("OnToolbuttonStop_clicked");
 		}
 		
-		public void OnToolbuttonStepIn_clicked(object o, EventArgs e) 
+		protected void OnToolbuttonStepIn_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("Button StepIn clicked");
+			Console.WriteLine("OnToolbuttonStepIn_clicked");
 		}
 		
 		public void OnToolbuttonStepOver_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("Button StepOver clicked");
+			Console.WriteLine("OnToolbuttonStepOver_clicked");
 		}
 		
-		public void OnToolbuttonStepOut_clicked(object o, EventArgs e) 
+		protected void OnToolbuttonStepOut_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("Button StepOut clicked");
+			Console.WriteLine("OnToolbuttonStepOut_clicked");
+		}
+		
+		protected void OnConsoleIn_activate(object o, EventArgs e) 
+		{
+			Console.WriteLine("OnConsoleIn_activate");
+			Console.WriteLine("Text: " + consoleIn.Text);
+			consoleIn.Text = String.Empty;
 		}
 	}
 }
