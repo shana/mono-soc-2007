@@ -70,6 +70,9 @@ namespace Mono.FastCgi {
 		/// </summary>
 		private object request_lock = new object ();
 		
+		private object send_lock = new object ();
+		private byte[] receive_buffer;
+		private byte[] send_buffer;
 		#endregion
 		
 		
@@ -92,6 +95,8 @@ namespace Mono.FastCgi {
 		{
 			this.socket = socket;
 			this.server = server;
+			server.AllocateBuffers (out receive_buffer,
+				out send_buffer);
 		}
 		
 		#endregion
@@ -154,13 +159,27 @@ namespace Mono.FastCgi {
 			Logger.Write (LogLevel.Notice, "Receiving records...");
 			
 			do {
-				Record record = new Record (socket);
+				Record record;
+				
+				try {
+					record = new Record (socket, receive_buffer);
+				} catch (ArgumentException) {
+					// An argument exception in the
+					// constructor indicated that the socket
+					// did not contain a complete and valid
+					// record. We take this to mean that the
+					// socket is dead and abort.
+					StopRun ("Incomplete record.");
+					Stop ();
+					return;
+				}
+				
 				Request request = GetRequest (record.RequestID);
 				
 				Logger.Write (LogLevel.Notice,
 					" Record received ({0}, {1}, {2}) [{3}]",
 					record.Type, record.RequestID,
-					record.Body.Length,
+					record.BodyLength,
 					request == null ? "NEW" : "EXISTING");
 				
 				switch (record.Type) {
@@ -234,7 +253,7 @@ namespace Mono.FastCgi {
 					
 					// Look up the data from the server.
 					try {
-						IDictionary pairs_in  = NameValuePair.FromData (record.Body);
+						IDictionary pairs_in  = NameValuePair.FromData (record.GetBody ());
 						IDictionary pairs_out = server.GetValues (pairs_in.Keys);
 						response_data = NameValuePair.GetData (pairs_out);
 					} catch {
@@ -251,7 +270,7 @@ namespace Mono.FastCgi {
 						break;
 					}
 					
-					request.AddParameterData (record.Body);
+					request.AddParameterData (record.GetBody ());
 				
 				break;
 					
@@ -262,7 +281,7 @@ namespace Mono.FastCgi {
 						break;
 					}
 					
-					request.AddInputData (record.Body);
+					request.AddInputData (record);
 				
 				break;
 				
@@ -273,11 +292,30 @@ namespace Mono.FastCgi {
 						break;
 					}
 					
-					request.AddFileData (record.Body);
+					request.AddFileData (record);
 				
 				break;
 				
-				// FIXME: Implement UnknownType for default.
+				// Aborts a request when the server aborts.
+				case RecordType.AbortRequest:
+					if (request == null)
+						request.AbortRequest (
+							"FastCGI Abort Request");
+				
+				break;
+				
+				// Informs the client that the record type is
+				// unknown.
+				default:
+					Logger.Write (LogLevel.Warning,
+						"Unknown type encountered: {0}",
+						record.Type);
+					SendRecord (RecordType.UnknownType,
+						record.RequestID,
+						new UnknownTypeBody (
+							record.Type).GetData ());
+				
+				break;
 				}
 			}
 			while (!stop && (UnfinishedRequests || keep_alive));
@@ -302,11 +340,66 @@ namespace Mono.FastCgi {
 		///    If the socket is not connected, the record will not be
 		///    sent.
 		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		///    <paramref name="bodyData" /> is <see langword="null" />.
+		/// </exception>
 		public void SendRecord (RecordType type, ushort requestID,
-		                          byte [] bodyData)
+		                        byte [] bodyData)
+		{
+			SendRecord (type, requestID, bodyData, 0, -1);
+		}
+		
+		/// <summary>
+		///    Sends a record to the client.
+		/// </summary>
+		/// <param name="type">
+		///    A <see cref="RecordType" /> specifying the type of record
+		///    to send.
+		/// </param>
+		/// <param name="requestID">
+		///    A <see cref="ushort" /> containing the ID of the request
+		///    the record is associated with.
+		/// </param>
+		/// <param name="bodyData">
+		///    A <see cref="byte[]" /> containing the body data for the
+		///    request.
+		/// </param>
+		/// <param name="bodyIndex">
+		///    A <see cref="int" /> specifying the index in <paramref
+		///    name="bodyData" /> at which the body begins.
+		/// </param>
+		/// <param name="bodyLength">
+		///    A <see cref="int" /> specifying the length of the body in
+		///    <paramref name="bodyData" /> or -1 if all remaining data
+		///    (<c><paramref name="bodyData" />.Length - <paramref
+		///    name="bodyIndex" /></c>) is used.
+		/// </param>
+		/// <remarks>
+		///    If the socket is not connected, the record will not be
+		///    sent.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		///    <paramref name="bodyData" /> is <see langword="null" />.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		///    <paramref name="bodyIndex" /> is outside of the range
+		///    of <paramref name="bodyData" />.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		///    <paramref name="bodyLength" /> contains more than 65535
+		///    bytes or is set to -1 and calculated to be greater than
+		///    65535 bytes.
+		/// </exception>
+		public void SendRecord (RecordType type, ushort requestID,
+		                        byte [] bodyData, int bodyIndex,
+		                        int bodyLength)
 		{
 			if (IsConnected)
-				new Record (1, type, requestID, bodyData).Send (socket);
+				lock (send_lock) {
+					new Record (1, type, requestID, bodyData,
+						bodyIndex, bodyLength).Send (
+							socket, send_buffer);
+				}
 		}
 		
 		/// <summary>
@@ -350,6 +443,8 @@ namespace Mono.FastCgi {
 			if (requests.Count == 0 && (!keep_alive || stop)) {
 				socket.Close ();
 				server.EndConnection (this);
+				server.ReleaseBuffers (receive_buffer,
+					send_buffer);
 			}
 		}
 		

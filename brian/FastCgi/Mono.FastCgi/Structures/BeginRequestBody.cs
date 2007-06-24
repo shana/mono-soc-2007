@@ -112,12 +112,13 @@ namespace Mono.FastCgi {
 					"The record is not of type BeginRequest.",
 					"record");
 			
-			if (record.Body.Length != 8)
+			if (record.BodyLength != 8)
 				throw new ArgumentException (
 					"8 bytes expected.", "record");
 			
-			role  = (Role) Record.ReadUInt16 (record.Body, 0);
-			flags = (BeginRequestFlags) record.Body [2];
+			byte[] body = record.GetBody ();
+			role  = (Role) Record.ReadUInt16 (body, 0);
+			flags = (BeginRequestFlags) body [2];
 		}
 		
 		#endregion

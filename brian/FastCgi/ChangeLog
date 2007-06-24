@@ -1,3 +1,53 @@
+2007-06-24 Brian Nickel <brian.nickel@gmail.com>
+
+	* Mono.FastCgi/Structures/Record.cs: Added support for sending and 
+	receiving on buffers to reduce the amount of memory allocation work.
+	
+	* Mono.FastCgi/Structures/BeginRequestBody.cs: Use new buffering API.
+	
+	* Mono.FastCgi/Structures/EndRequestBody.cs: Tidy up source a bit.
+	
+	* Mono.FastCgi/Structures/UnknownTypeBody.cs: ADDED. Implemented for
+	FastCGI unknown type record.
+	
+	* Mono.FastCgi/Connection.cs: Use buffers to process data.
+	
+	* Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs: Use full
+	arguments on Send and Receive.
+	
+	* Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: ADDED. Initial
+	work on standard FastCGI socket.
+	
+	* Mono.FastCgi/SocketAbstractions/StandardSocket.cs: Extend new methods.
+	
+	* Mono.FastCgi/Mono.FastCgi.mdp: Automatic changes.
+	
+	* Mono.FastCgi/Server.cs: Added buffer management similar to
+	Mono.WebServer.BaseRequestBroker.
+	
+	* Mono.FastCgi/Requests/Request.cs: Use buffers.
+	
+	* Mono.FastCgi/Requests/ResponderRequest.cs: Replace "language"
+	attribute with "lang" in "code" element.
+	
+	* Mono.WebServer.FastCgi/ConfigurationManager.xml: Initial work on
+	configuration management.
+	
+	* Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp: Automatic changes.
+	
+	* Mono.WebServer.FastCgi/fastcgi-mono-server.exe.config: Initial work on
+	config file.
+	
+	* Mono.WebServer/MonoWorkerRequest.cs: Documentation.
+	
+	* Mono.WebServer/Tracing.cs: Documentation.
+	
+	* Mono.WebServer/BaseRequestBroker.cs: Documentation.
+	
+	* Mono.WebServer/BaseApplicationHost.cs: Documentation.
+	
+	* Mono.WebServer/LingeringNetworkStream.cs: Documentation.
+
 2007-06-19 Brian Nickel <brian.nickel@gmail.com>
 
 	* Mono.WebServer/ApplicationServer.cs: Use the WebSource support in

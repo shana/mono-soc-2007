@@ -1,5 +1,5 @@
 //
-// SocketAbstractions/Socket.cs: Abstracts socket operations.
+// Record.cs: Represents the FastCGI BeginRequestBody structure.
 //
 // Author:
 //   Brian Nickel (brian.nickel@gmail.com)
@@ -30,33 +30,59 @@ using System;
 
 namespace Mono.FastCgi {
 	/// <summary>
-	///    This abstract class provides a wrapper around socket methods and
-	///    is to be removed once a FILDES solution has been reached.
+	///    This struct contains the body data for an UnknownType record.
 	/// </summary>
-	public abstract class Socket
+	/// <remarks>
+	///    An UnknownType record is sent by the server when the client sends
+	///    it a type that it does not know how to handle.
+	/// </remarks>
+	public struct UnknownTypeBody
 	{
-		/// <seealso cref="System.Net.Sockets.Socket.Close" />.
-		public abstract void Close ();
+		#region Private Fields
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Receive(byte[])" />.
-		public abstract int Receive (byte [] buffer, int size, System.Net.Sockets.SocketFlags flags);
+		/// <summary>
+		///    Contains the unknown type.
+		/// </summary>
+		private RecordType type;
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Send(byte[])" />.
-		public abstract int Send (byte [] data, int size, System.Net.Sockets.SocketFlags flags);
+		#endregion
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Blocking" />.
-		public abstract bool Blocking {get; set;}
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Listen" />.
-		public abstract void Listen (int backlog);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.BeginAccept" />.
-		public abstract IAsyncResult BeginAccept (AsyncCallback callback, object state);
+		#region Constructors
 		
-		/// <seealso cref="System.Net.Sockets.Socket.EndAccept(IAsyncResult)" />.
-		public abstract Socket EndAccept (IAsyncResult asyncResult);
+		/// <summary>
+		///    Constructs and initializes a new instance of <see
+		///    cref="UnknownTypeBody" /> for a specified type.
+		/// </summary>
+		/// <param name="unknownType">
+		///    A <see cref="RecordType" /> containing the unknown type.
+		/// </param>
+		public UnknownTypeBody (RecordType unknownType)
+		{
+			type = unknownType;
+		}
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Connected" />.
-		public abstract bool Connected {get;}
+		#endregion
+		
+		
+		
+		#region Public Methods
+		
+		/// <summary>
+		///    Gets the data contained in the current instance.
+		/// </summary>
+		/// <returns>
+		///    A <see cref="byte[]" /> containing the data contained in
+		///    the current instance.
+		/// </returns>
+		public byte [] GetData ()
+		{
+			byte [] data = new byte [8];
+			data [0] = (byte) type;
+			return data;
+		}
+		
+		#endregion
 	}
 }

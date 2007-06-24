@@ -364,8 +364,8 @@ namespace Mono.FastCgi {
 		///    Adds a block of standard input data to the current
 		///    instance.
 		/// </summary>
-		/// <param name="data">
-		///    A <see cref="byte[]" /> containing a chunk of input
+		/// <param name="record">
+		///    A <see cref="Record" /> containing a block of input
 		///    data.
 		/// </param>
 		/// <remarks>
@@ -375,29 +375,32 @@ namespace Mono.FastCgi {
 		///    <para>When data is received, <see
 		///    cref="InputDataReceived" /> is called.</para>
 		/// </remarks>
-		/// <exception cref="ArgumentNullException">
-		///    <paramref name="data" /> is <see langref="null" />.
+		/// <exception cref="ArgumentException">
+		///    <paramref name="record" /> does not have the type <see
+		///    cref="RecordType.StandardInput" />.
 		/// </exception>
 		/// <exception cref="InvalidOperationException">
 		///    The input data has already been completed.
 		/// </exception>
-		public void AddInputData (byte [] data)
+		public void AddInputData (Record record)
 		{
 			// Validate arguments in public methods.
-			if (data == null)
-				throw new ArgumentNullException ("data");
+			if (record.Type != RecordType.StandardInput)
+				throw new ArgumentException (
+					"Record is not of type 'StandardInput'.",
+					"record");
 			
 			// There should be no data following a zero byte record.
 			if (input_data_completed)
 				throw new InvalidOperationException (
 					"Data already completed.");
 			
-			if (data.Length == 0)
+			if (record.BodyLength == 0)
 				input_data_completed = true;
 			
 			// Inform listeners of the data.
 			if (InputDataReceived != null)
-				InputDataReceived (this, new DataReceivedArgs (data));
+				InputDataReceived (this, new DataReceivedArgs (record));
 		}
 		#endregion
 		
@@ -424,8 +427,9 @@ namespace Mono.FastCgi {
 		/// <summary>
 		///    Adds a block of file data to the current instance.
 		/// </summary>
-		/// <param name="data">
-		///    A <see cref="byte[]" /> containing a chunk of file data.
+		/// <param name="record">
+		///    A <see cref="Record" /> containing a block of file
+		///    data.
 		/// </param>
 		/// <remarks>
 		///    <para>File data send for the FastCGI filter role and
@@ -434,28 +438,32 @@ namespace Mono.FastCgi {
 		///    <para>When data is received, <see
 		///    cref="FileDataReceived" /> is called.</para>
 		/// </remarks>
-		/// <exception cref="ArgumentNullException">
-		///    <paramref name="data" /> is <see langref="null" />.
+		/// <exception cref="ArgumentException">
+		///    <paramref name="record" /> does not have the type <see
+		///    cref="RecordType.Data" />.
 		/// </exception>
 		/// <exception cref="InvalidOperationException">
 		///    The file data has already been completed.
 		/// </exception>
-		public void AddFileData (byte [] data)
+		public void AddFileData (Record record)
 		{
 			// Validate arguments in public methods.
-			if (data == null)
-				throw new ArgumentNullException ("data");
+			if (record.Type != RecordType.Data)
+				throw new ArgumentException (
+					"Record is not of type 'Data'.",
+					"record");
 			
 			// There should be no data following a zero byte record.
 			if (file_data_completed)
-				throw new Exception ("Data already completed.");
+				throw new InvalidOperationException (
+					"Data already completed.");
 			
-			if (data.Length == 0)
+			if (record.BodyLength == 0)
 				file_data_completed = true;
 			
 			// Inform listeners of the data.
 			if (FileDataReceived != null)
-				FileDataReceived (this, new DataReceivedArgs (data));
+				FileDataReceived (this, new DataReceivedArgs (record));
 		}
 		#endregion
 		
@@ -678,24 +686,21 @@ namespace Mono.FastCgi {
 			if (length > data.Length)
 				length = data.Length;
 			
-			if (length == data.Length && length < 0xFFFF)
-				connection.SendRecord (type, requestID, data);
+			if (length < 0xFFFF)
+				connection.SendRecord (type, requestID, data, 0,
+					length);
 			else
 			{
 				int index = 0;
-				byte [] data_part = new byte [System.Math.Min (
-					0xFFFF, length)];
 				while (index < length)
 				{
 					int chunk_length = (index + 0xFFFF <
 						length) ? 0xFFFF : (length - index);
-					if (chunk_length != data_part.Length)
-						data_part = new byte [chunk_length];
 					
-					Array.Copy (data, index, data_part, 0,
-						chunk_length);
 					connection.SendRecord (type, requestID,
-						data_part);
+						data, index, chunk_length);
+					
+					index += chunk_length;
 				}
 			}
 		}
@@ -713,8 +718,8 @@ namespace Mono.FastCgi {
 	///    A <see cref="DataReceivedArgs" /> object containing the arguments
 	///    for the event.
 	/// </param>
-	public delegate void DataReceivedHandler  (Request sender,
-	                                           DataReceivedArgs args);
+	public delegate void DataReceivedHandler (Request sender,
+	                                          DataReceivedArgs args);
 	
 	/// <summary>
 	///    This class extends <see cref="EventArgs" /> and provides
@@ -725,25 +730,19 @@ namespace Mono.FastCgi {
 		/// <summary>
 		///    Contains the data that was received.
 		/// </summary>
-		private byte [] data;
+		private Record record;
 		
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="DataReceivedArgs" /> with the specified data.
 		/// </summary>
-		/// <param name="data">
-		///    A <see cref="byte[]" /> containing the data that was
+		/// <param name="record">
+		///    A <see cref="Record" /> containing the data that was
 		///    received.
 		/// </param>
-		/// <exception name="ArgumentNullException">
-		///    <paramref name="data" /> is <see langref="null" />.
-		/// </exception>
-		public DataReceivedArgs (byte [] data)
+		public DataReceivedArgs (Record record)
 		{
-			if (data == null)
-				throw new ArgumentNullException ("data");
-			
-			this.data = data;
+			this.record = record;
 		}
 		
 		/// <summary>
@@ -760,7 +759,7 @@ namespace Mono.FastCgi {
 		///    0</c>.
 		/// </remarks>
 		public bool DataCompleted {
-			get {return data.Length == 0;}
+			get {return record.BodyLength == 0;}
 		}
 		
 		/// <summary>
@@ -770,9 +769,49 @@ namespace Mono.FastCgi {
 		///    A <see cref="byte[]" /> containing the data that was
 		///    received.
 		/// </value>
-		public byte [] Data {
-			get {return data;}
+		public byte[] GetData ()
+		{
+			return record.GetBody ();
 		}
 		
+		/// <summary>
+		///    Gets the length of the data in the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="ushort" /> containing the length of the data
+		///    in the current instance.
+		/// </value>
+		public int DataLength {
+			get {return record.BodyLength;}
+		}
+		
+		/// <summary>
+		///    Copies the data to another array.
+		/// </summary>
+		/// <param name="dest">
+		///    A <see cref="byte[]" /> to copy the body to.
+		/// </param>
+		/// <param name="destIndex">
+		///    A <see cref="int" /> specifying at what index to start
+		///    copying.
+		/// </param>
+		/// <exception cref="ArgumentNullException">
+		///    <paramref name="dest" /> is <see langref="null" />.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		///    <paramref name="destIndex" /> is less than zero or does
+		///    not provide enough space to copy the body.
+		/// </exception>
+		public void CopyTo (byte[] dest, int destIndex)
+		{
+			if (dest == null)
+				throw new ArgumentNullException ("dest");
+			
+			if (DataLength > dest.Length - destIndex)
+				throw new ArgumentOutOfRangeException (
+					"destIndex");
+			
+			record.CopyTo (dest, destIndex);
+		}
 	}
 }

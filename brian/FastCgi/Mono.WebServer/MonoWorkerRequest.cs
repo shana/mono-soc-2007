@@ -148,7 +148,7 @@ namespace Mono.WebServer
 	/// </remarks>
 	/// <example>
 	///    An example <see cref="MapPathEventHandler" />
-	///    <code language="C#">
+	///    <code lang="C#">
 	///        void OnMapPathEvent (object sender, MapPathEventArgs args)
 	///        {
 	///            if (args.Path.StartsWith ("/blog"))
@@ -186,11 +186,13 @@ namespace Mono.WebServer
 		/// </summary>
 		Encoding encoding;
 		
+#if NET_2_0
 		/// <summary>
 		///    Contains the encoding used for headers in the current
 		///    instance.
 		/// </summary>
 		Encoding headerEncoding;
+#endif
 		
 		/// <summary>
 		///    Contains a <see cref="byte[]" /> representation of the
