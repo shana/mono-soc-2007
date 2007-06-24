@@ -129,9 +129,30 @@ namespace Mono.FastCgi {
 		private ushort request_id;
 		
 		/// <summary>
-		///    Contains the body data.
+		///    Contains the record data plus padding.
 		/// </summary>
-		private byte [] body_data;
+		/// <remarks>
+		///    The actual body is stored starting at <see
+		///    cref="body_index" /> with a length of <see
+		///    cref="body_length" /> bytes of this property.
+		/// </remarks>
+		private byte [] data;
+		
+		/// <summary>
+		///    Contains the index at which the body begins.
+		/// </summary>
+		private int body_index;
+		
+		/// <summary>
+		///    Contains the length of the body.
+		/// </summary>
+		private ushort body_length;
+		
+		/// <summary>
+		///    Contains the suggested buffer size, equal to the maximum
+		///    possible size of a record.
+		/// </summary>
+		public const int SuggestedBufferSize = 0x08 + 0xFFFF + 0xFF;
 		
 		#endregion
 		
@@ -159,6 +180,10 @@ namespace Mono.FastCgi {
 		///    A <see cref="Socket" /> object to receive the record data
 		///    from.
 		/// </param>
+		/// <remarks>
+		///    To improve performance, consider using a buffer and
+		///    <see cref="Record(Socket,byte[])" /> instead.
+		/// </remarks>
 		/// <exception cref="ArgumentNullException">
 		///    <paramref name="socket" /> is <see langword="null" />.
 		/// </exception>
@@ -166,46 +191,80 @@ namespace Mono.FastCgi {
 		///    <paramref name="socket" /> does not contain a complete
 		///    record.
 		/// </exception>
-		public Record (Socket socket)
+		public Record (Socket socket) : this (socket, null)
+		{
+		}
+		
+		/// <summary>
+		///    Constructs and initializes a new instance of <see
+		///    cref="Record" /> by reading the contents from a specified
+		///    socket.
+		/// </summary>
+		/// <param name="socket">
+		///    A <see cref="Socket" /> object to receive the record data
+		///    from.
+		/// </param>
+		/// <param name="buffer">
+		///    A <see cref="byte[]" /> containing the buffer to use when
+		///    receiving from the socket or <see langword="null" /> to
+		///    create the buffers on the fly.
+		/// </param>
+		/// <remarks>
+		///    <para>If <paramref name="buffer" /> is not <see
+		///    langword="null" />, the suggested size is <see
+		///    cref="SuggestedBufferSize" />. If the size of the buffer
+		///    is insufficient to read the data, a sufficiently sized
+		///    array will be created on a per-instance basis.</para>
+		///    <note type="caution">
+		///       <para>If a buffer is used, the new instance
+		///       is only valid until the same buffer is used again.
+		///       Therefore, use an extra degree of caution when using
+		///       this constructor.</para>
+		///    </note>
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		///    <paramref name="socket" /> is <see langword="null" />.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		///    <paramref name="socket" /> does not contain a complete
+		///    record.
+		/// </exception>
+		public Record (Socket socket, byte [] buffer)
 		{
 			if (socket == null)
 				throw new ArgumentNullException ("socket");
 			
-			byte[] buffer = new byte [HeaderSize];
-			ushort body_length;
+			byte[] header_buffer = (buffer != null && buffer.Length
+				> 8) ? buffer : new byte [HeaderSize];
 			byte   padding_length;
-			byte[] padding_buffer;
 			
 			// Read the 8 byte record header. If 8 bytes aren't
 			// read, the stream is corrupted and an exception is
 			// thrown.
-			if (socket.Receive (buffer) < HeaderSize)
+			if (socket.Receive (header_buffer, 8,
+				System.Net.Sockets.SocketFlags.None) < HeaderSize)
 				throw new ArgumentException (
 					"Socket does not contain sufficient data.",
 					"socket");
 			
 			// Read the values from the data.
-			version        = buffer [0];
-			type           = (RecordType) buffer [1];
-			request_id     = ReadUInt16 (buffer, 2);
-			body_length    = ReadUInt16 (buffer, 4);
-			padding_length = buffer [6];
+			version        = header_buffer [0];
+			type           = (RecordType) header_buffer [1];
+			request_id     = ReadUInt16 (header_buffer, 2);
+			body_length    = ReadUInt16 (header_buffer, 4);
+			padding_length = header_buffer [6];
 			
-			body_data  = new byte [body_length];
-			padding_buffer = new byte [padding_length];
+			int total_length = body_length + padding_length;
+			
+			data  = (buffer != null && buffer.Length >= total_length)
+				? buffer : new byte [total_length];
+			body_index = 0;
 			
 			// Read the record data, and throw an exception if the
 			// complete data cannot be read.
-			if (body_length > 0 && socket.Receive (body_data) < 
-				body_length)
-				throw new ArgumentException (
-					"Socket does not contain sufficient data.",
-					"socket");
-			
-			// Read the padding data, and throw an exception if the
-			// complete padding cannot be read.
-			if (padding_length > 0 && socket.Receive (
-				padding_buffer) < padding_length)
+			if (total_length > 0 && socket.Receive (data,
+				total_length,
+				System.Net.Sockets.SocketFlags.None) < total_length)
 				throw new ArgumentException (
 					"Socket does not contain sufficient data.",
 					"socket");
@@ -232,6 +291,13 @@ namespace Mono.FastCgi {
 		///    A <see cref="byte[]" /> containing the contents to use
 		///    in the new record.
 		/// </param>
+		/// <remarks>
+		///    <note type="caution">
+		///       The new instance will store a reference to <paramref
+		///       name="bodyData" /> and as such be invalid when the
+		///       value changes externally.
+		///    </note>
+		/// </remarks>
 		/// <exception cref="ArgumentNullException">
 		///    <paramref name="bodyData" /> is <see langword="null" />.
 		/// </exception>
@@ -240,18 +306,86 @@ namespace Mono.FastCgi {
 		///    bytes and cannot be sent.
 		/// </exception>
 		public Record (byte version, RecordType type, ushort requestID,
-		               byte [] bodyData)
+		               byte [] bodyData) : this (version, type,
+		                                         requestID, bodyData,
+		                                         0, -1)
+		{
+		}
+		
+		/// <summary>
+		///    Constructs and initializes a new instance of <see
+		///    cref="Record" /> populating it with a specified version,
+		///    type, ID, and body.
+		/// </summary>
+		/// <param name="version">
+		///    A <see cref="byte" /> containing the FastCGI version the
+		///    record is structured for.
+		/// </param>
+		/// <param name="type">
+		///    A <see cref="RecordType" /> containing the type of
+		///    record to create.
+		/// </param>
+		/// <param name="requestID">
+		///    A <see cref="ushort" /> containing the ID of the request
+		///    associated with the new record.
+		/// </param>
+		/// <param name="bodyData">
+		///    A <see cref="byte[]" /> containing the contents to use
+		///    in the new record.
+		/// </param>
+		/// <param name="bodyIndex">
+		///    A <see cref="int" /> specifying the index in <paramref
+		///    name="bodyData" /> at which the body begins.
+		/// </param>
+		/// <param name="bodyLength">
+		///    A <see cref="int" /> specifying the length of the body in
+		///    <paramref name="bodyData" /> or -1 if all remaining data
+		///    (<c><paramref name="bodyData" />.Length - <paramref
+		///    name="bodyIndex" /></c>) is used.
+		/// </param>
+		/// <remarks>
+		///    <note type="caution">
+		///       The new instance will store a reference to <paramref
+		///       name="bodyData" /> and as such be invalid when the
+		///       value changes externally.
+		///    </note>
+		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		///    <paramref name="bodyData" /> is <see langword="null" />.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		///    <paramref name="bodyIndex" /> is outside of the range
+		///    of <paramref name="bodyData" />.
+		/// </exception>
+		/// <exception cref="ArgumentException">
+		///    <paramref name="bodyLength" /> contains more than 65535
+		///    bytes or is set to -1 and calculated to be greater than
+		///    65535 bytes.
+		/// </exception>
+		public Record (byte version, RecordType type, ushort requestID,
+		               byte [] bodyData, int bodyIndex, int bodyLength)
 		{
 			if (bodyData == null)
-				throw new ArgumentNullException ("data");
-			if (bodyData.Length > 0xFFFF)
+				throw new ArgumentNullException ("bodyData");
+			
+			if (bodyIndex < 0 || bodyIndex > bodyData.Length)
+				throw new ArgumentOutOfRangeException (
+					"bodyIndex");
+			
+			if (bodyLength < 0)
+				bodyLength = bodyData.Length - bodyIndex;
+			
+			if (bodyLength > 0xFFFF)
 				throw new ArgumentException
 				("Data is too large.", "data");
 			
-			this.version    = version;
-			this.type       = type;
-			this.request_id = requestID;
-			this.body_data  = bodyData;
+			
+			this.version     = version;
+			this.type        = type;
+			this.request_id  = requestID;
+			this.data        = bodyData;
+			this.body_index  = bodyIndex;
+			this.body_length = (ushort) bodyLength;
 		}
 		
 		#endregion
@@ -295,21 +429,65 @@ namespace Mono.FastCgi {
 		}
 		
 		/// <summary>
-		///    Gets the body data of with the current instance.
+		///    Gets the length of the body of the current instance.
 		/// </summary>
 		/// <value>
-		///    A <see cref="byte" /> containing the body data of the
+		///    A <see cref="ushort" /> containing the body length of the
 		///    current instance.
 		/// </value>
-		public byte[] Body {
-			get {return body_data;}
+		public ushort BodyLength {
+			get {return body_length;}
 		}
-		
 		#endregion
 		
 		
 		
 		#region Public Methods
+		
+		/// <summary>
+		///    Copies the body to another array.
+		/// </summary>
+		/// <param name="dest">
+		///    A <see cref="byte[]" /> to copy the body to.
+		/// </param>
+		/// <param name="destIndex">
+		///    A <see cref="int" /> specifying at what index to start
+		///    copying.
+		/// </param>
+		/// <exception cref="ArgumentNullException">
+		///    <paramref name="dest" /> is <see langref="null" />.
+		/// </exception>
+		/// <exception cref="ArgumentOutOfRangeException">
+		///    <paramref name="destIndex" /> is less than zero or does
+		///    not provide enough space to copy the body.
+		/// </exception>
+		public void CopyTo (byte[] dest, int destIndex)
+		{
+			if (dest == null)
+				throw new ArgumentNullException ("dest");
+			
+			if (body_length > dest.Length - destIndex)
+				throw new ArgumentOutOfRangeException (
+					"destIndex");
+			
+			Array.Copy (data, body_index, dest, destIndex,
+				body_length);
+		}
+		
+		/// <summary>
+		///    Gets the body data of with the current instance.
+		/// </summary>
+		/// <returns>
+		///    A new <see cref="byte[]" /> containing the body data of
+		///    the current instance.
+		/// </returns>
+		public byte[] GetBody ()
+		{
+			byte[] body_data = new byte [body_length];
+			Array.Copy (data, body_index, body_data, 0,
+				body_length);
+			return body_data;
+		}
 		
 		/// <summary>
 		///    Creates and returns a <see cref="string" />
@@ -325,7 +503,7 @@ namespace Mono.FastCgi {
 			       "\n   Version:        " + Version +
 			       "\n   Type:           " + Type +
 			       "\n   Request ID:     " + RequestID +
-			       "\n   Content Length: " + Body.Length;
+			       "\n   Content Length: " + BodyLength;
 		}
 		
 		/// <summary>
@@ -337,10 +515,34 @@ namespace Mono.FastCgi {
 		/// </param>
 		public void Send (Socket socket)
 		{
-			ushort body_length  = (ushort) body_data.Length;
-			byte   padding_size = (byte) ((8 - (body_length % 8)) % 8);
+			Send (socket, null);
+		}
+		
+		/// <summary>
+		///    Sends a FastCGI record with the data from the current
+		///    instance over a given socket.
+		/// </summary>
+		/// <param name="socket">
+		///    A <see cref="Socket" /> object to send the data over.
+		/// </param>
+		/// <param name="buffer">
+		///    A <see cref="byte[]" /> to write the record to or <see
+		///    langword="null" /> to create a temporary buffer during
+		///    the send.
+		/// </param>
+		/// <remarks>
+		///    If <paramref name="buffer" /> is of insufficient size to
+		///    write to the buffer, a temporary buffer will be created.
+		/// </remarks>
+		public void Send (Socket socket, byte [] buffer)
+		{
+			byte padding_size = (byte) ((8 - (body_length % 8)) % 8);
 			
-			byte [] data = new byte [8 + body_length + padding_size];
+			int total_size = 8 + body_length + padding_size;
+			
+			byte[] data = (buffer != null && buffer.Length >
+				total_size) ? buffer : new byte [total_size];
+			
 			data [0] = version;
 			data [1] = (byte) type;
 			data [2] = (byte) (request_id >> 8);
@@ -349,8 +551,13 @@ namespace Mono.FastCgi {
 			data [5] = (byte) (body_length & 0xFF);
 			data [6] = padding_size;
 			
-			body_data.CopyTo (data, 8);
-			socket.Send (data);
+			Array.Copy (this.data, body_index, data, 8,
+				body_length);
+			
+			for (int i = 0; i < padding_size; i ++)
+				data [8 + body_length + i] = 0;
+			
+			socket.Send (data, total_size, System.Net.Sockets.SocketFlags.None);
 		}
 		
 		#endregion

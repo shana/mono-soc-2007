@@ -184,15 +184,15 @@ namespace Mono.FastCgi {
 				input_data = new byte [length];
 			}
 			
-			if (write_index + args.Data.Length > input_data.Length)
+			if (write_index + args.DataLength > input_data.Length)
 			{
 				AbortRequest (
 					"Input data exceeds content length.");
 				return;
 			}
 			
-			args.Data.CopyTo (input_data, write_index);
-			write_index += args.Data.Length;
+			args.CopyTo (input_data, write_index);
+			write_index += args.DataLength;
 		}
 		
 		/// <summary>
@@ -230,7 +230,7 @@ namespace Mono.FastCgi {
 	/// </remarks>
 	/// <example>
 	///    A very basic responder:
-	///    <code language="C#">
+	///    <code lang="C#">
 	///    class MyResponder : IResponder
 	///    {
 	///        ResponderRequest req;

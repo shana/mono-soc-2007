@@ -19,6 +19,8 @@
     <File name="./server.cs" subtype="Code" buildaction="Compile" />
     <File name="./Responder.cs" subtype="Code" buildaction="Compile" />
     <File name="./AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
+    <File name="./fastcgi-mono-server.exe.config" subtype="Code" buildaction="Compile" />
+    <File name="./ConfigurationManager.xml" subtype="Code" buildaction="EmbedAsResource" />
   </Contents>
   <References>
     <ProjectReference type="Project" localcopy="True" refto="Mono.FastCgi" />

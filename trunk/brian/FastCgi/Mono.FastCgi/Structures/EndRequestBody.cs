@@ -37,7 +37,7 @@ namespace Mono.FastCgi {
 		/// <summary>
 		///    The request was completed successfully.
 		/// </summary>
-		RequestComplete          = 0,
+		RequestComplete = 0,
 		
 		/// <summary>
 		///    The request cannot be complete because it would require
@@ -49,13 +49,13 @@ namespace Mono.FastCgi {
 		///    The request cannot be completed becuase a resource is
 		///    overloaded.
 		/// </summary>
-		Overloaded               = 2,
+		Overloaded = 2,
 		
 		/// <summary>
 		///    The request cannot be completed becuase the role is
 		///    unknown.
 		/// </summary>
-		UnknownRole              = 3
+		UnknownRole = 3
 	}
 	
 	/// <summary>
@@ -108,7 +108,7 @@ namespace Mono.FastCgi {
 		
 		
 		
-		#region Public Properties
+		#region Public Methods
 		
 		/// <summary>
 		///    Gets the data contained in the current instance.
