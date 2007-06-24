@@ -283,25 +283,25 @@ public class DocumentBufferArchiver {
 		
 		switch (tagName) {
 			case "Type":
-				result = DeserializeTypeAttributes (buffer, offset, xmlReader);
+				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
 				break;
 			case "TypeSignature":
-				result = DeserializeTypeSignatureAttributes (buffer, offset, xmlReader);
+				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
 				break;
 			case "Member":
-				result = DeserializeMemberAttributes (buffer, offset, xmlReader);
+				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
 				break;
 			case "MemberSignature":
-				result = DeserializeMemberSignatureAttributes (buffer, offset, xmlReader);
+				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
 				break;
 			case "link":
-				result = DeserializeLinkAttributes (buffer, offset, xmlReader);
+				result = DeserializeAttributesSpace (buffer, offset, xmlReader);
 				break;
 			case "see":
-				result = DeserializeSeeAttributes (buffer, offset, xmlReader);
+				result = DeserializeAttributesSpace (buffer, offset, xmlReader);
 				break;
 			case "since":
-				result = DeserializeSinceAttributes (buffer, offset, xmlReader);
+				result = DeserializeAttributesNone (buffer, offset, xmlReader);
 				break;
 			default:
 				break;
@@ -319,23 +319,7 @@ public class DocumentBufferArchiver {
 		return result;
 	}
 	
-	private static int DeserializeTypeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
-	{
-		string tagPrefix = xmlReader.Name + ":";
-		int resultOffset = offset;
-		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		while (xmlReader.MoveToNextAttribute ()) {
-			string tagName = tagPrefix + xmlReader.Name;
-			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.Insert (ref insertAt, "\n");
-			resultOffset += xmlReader.Value.Length + 1;
-		}
-		
-		return resultOffset;
-	}
-	
-	private static int DeserializeTypeSignatureAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	private static int DeserializeAttributesNewline (TextBuffer buffer, int offset, XmlTextReader xmlReader)
 	{
 		string tagPrefix = xmlReader.Name + ":";
 		
@@ -343,41 +327,17 @@ public class DocumentBufferArchiver {
 		while (xmlReader.MoveToNextAttribute ()) {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.Insert (ref insertAt, "\n");
+			buffer.InsertWithTagsByName (ref insertAt, "\n", "ignore");
 		}
+		
+		#if DEBUG
+		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
+		#endif
 		
 		return insertAt.Offset;
 	}
 	
-	private static int DeserializeMemberAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
-	{
-		string tagPrefix = xmlReader.Name + ":";
-		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		while (xmlReader.MoveToNextAttribute ()) {
-			string tagName = tagPrefix + xmlReader.Name;
-			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.Insert (ref insertAt, "\n");
-		}
-		
-		return insertAt.Offset;
-	}
-	
-	private static int DeserializeMemberSignatureAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
-	{
-		string tagPrefix = xmlReader.Name + ":";
-		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		while (xmlReader.MoveToNextAttribute ()) {
-			string tagName = tagPrefix + xmlReader.Name;
-			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.Insert (ref insertAt, "\n");
-		}
-		
-		return insertAt.Offset;
-	}
-	
-	private static int DeserializeLinkAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	private static int DeserializeAttributesSpace (TextBuffer buffer, int offset, XmlTextReader xmlReader)
 	{
 		string tagPrefix = xmlReader.Name + ":";
 		
@@ -388,24 +348,14 @@ public class DocumentBufferArchiver {
 			buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
 		}
 		
-		return insertAt.Offset;
-	}
-	
-	private static int DeserializeSeeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
-	{
-		string tagPrefix = xmlReader.Name + ":";
-		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		while (xmlReader.MoveToNextAttribute ()) {
-			string tagName = tagPrefix + xmlReader.Name;
-			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
-		}
+		#if DEBUG
+		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
+		#endif
 		
 		return insertAt.Offset;
 	}
 	
-	private static int DeserializeSinceAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	private static int DeserializeAttributesNone (TextBuffer buffer, int offset, XmlTextReader xmlReader)
 	{
 		string tagPrefix = xmlReader.Name + ":";
 		
