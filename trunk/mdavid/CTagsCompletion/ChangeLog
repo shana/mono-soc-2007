@@ -1,3 +1,10 @@
+2007-06-24  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* CTagsCompletionDataProvider.cs, CTagsProjectServiceExtension.cs,
+	  ITagsSpecialization.cs, CTagsTextEditorExtension.cs: Changed the
+	  CTagsCompletion design, now the completion is based per file
+	  instead as per project.
+
 2007-06-22  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Tag.cs, CTagsProjectServiceExtension.cs, CTagsProject.cs,

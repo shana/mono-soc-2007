@@ -30,118 +30,89 @@
 //
 
 using System;
-using System.Collections;
+using System.IO;
+using System.Collections.Generic;
 
 using Mono.Addins;
 
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Content;
+using MonoDevelop.Projects;
 using MonoDevelop.Projects.Gui.Completion;
 
 namespace CTagsCompletion
 {
 	public class CTagsTextEditorExtension : TextEditorExtension
 	{
+		private List<Tag> tags = new List<Tag> ();
+		string CurrentLanguagesTagsLoaded = string.Empty;
+		
 		public override ICompletionDataProvider HandleCodeCompletion (
 		    ICodeCompletionContext completionContext, char completionChar)
 		{
-			CTagsProject project = IdeApp.ProjectOperations.CurrentSelectedProject as CTagsProject;
-			
-			if (project == null) return null;
-			
 			TextEditor editor = IdeApp.Workbench.ActiveDocument.TextEditor;
 			
 			int line, column;
 			editor.GetLineColumnFromPosition (editor.CursorPosition, out line, out column);
 			string currentLine = editor.GetLineText (line);
 			
-			if (!ShouldComplete (currentLine)) return null;
+			string currentDocsExtension = Path.GetExtension (IdeApp.Workbench.ActiveDocument.FileName);
+			string currentLanguage = GetLanguageFromExtension (currentDocsExtension);
 			
-			if (project.Tags.Count == 0)
-				project.LoadTags ();
+			if (tags.Count == 0 || !CurrentLanguagesTagsLoaded.Equals (currentLanguage)) {
+				LoadTags ();
+				CurrentLanguagesTagsLoaded = currentLanguage;
+			}
 			
 			CTagsCompletionDataProvider provider = new CTagsCompletionDataProvider ();
 			
-			project.AddTagsToProvider (provider, currentLine);
+			// TODO: check specializations
+			
+			foreach (Tag tag in tags) {
+				provider.AddCompletionData (new CTagsCompletionData (tag, "md-class"));
+			}
 			
 			return provider;
 		}
 		
-		private bool ShouldComplete (string line)
+		public virtual void LoadTags ()
 		{
-			if (line == null || line.Length < 2) return false;
+			string extension = Path.GetExtension (IdeApp.Workbench.ActiveDocument.FileName);
+			string language = GetLanguageFromExtension (extension);
 			
-			int len = line.Length;
+			if (language == null) return;
 			
-			if (line[len - 1] == '.' && !line.Trim ().StartsWith ("#"))
-				return true;
-			if (line[len - 1] == '>' && line[len - 2] == '-')
-				return true;
-			if (line[len - 1] == ':' && line[len - 2] == ':')
-				return true;
+			Project project = IdeApp.ProjectOperations.CurrentSelectedProject;
 			
-			return false;
-		}
-	}
-	
-	public class CTagsCompletionDataProvider : ICompletionDataProvider
-	{
-		private string defaultCompletionString;
-		private ArrayList completionData = new ArrayList ();
-		
-		public ICompletionData[] GenerateCompletionData (ICompletionWidget widget, char charTyped)
-		{
-			return (ICompletionData[])completionData.ToArray (typeof(ICompletionData));
-		}
-		
-		public void AddCompletionData (ICompletionData data)
-		{
-			completionData.Add (data);
-		}
-		
-		public string DefaultCompletionString {
-			get { return defaultCompletionString; }
-		}
-		public virtual void Dispose ()
-		{
-		}
-	}
-	
-	public class CTagsCompletionData : ICompletionDataWithMarkup
-	{
-		private string image;
-		private string text;
-		private string description;
-		private string completion_string;
-		private string description_pango;
-		
-		public CTagsCompletionData (Tag tag, string image)
-		{
-			this.image = image;
-			this.text = tag.Name;
-			this.completion_string = tag.Name;
-			this.description = string.Empty;
-			this.description_pango = string.Empty;
+			if (project == null) return;
+			
+			string tagsFile = Path.Combine (Path.Combine (
+			    project.BaseDirectory, ".tags"), string.Format ("{0}TAGS", language));
+			
+			if (tagsFile == null || tagsFile.Length == 0) return;
+			
+			StreamReader reader = new StreamReader (tagsFile);
+			
+			string entry;
+			
+			while ((entry = reader.ReadLine()) != null) {
+				if (entry.StartsWith ("!_")) continue;
+				
+				tags.Add (Tag.CreateTag (entry));
+			}
+			
+			reader.Close ();
 		}
 		
-		public string Image {
-			get { return image; }
+		private string GetLanguageFromExtension (string extension)
+		{			
+			for (int i = 0; i < CTagsProjectServiceExtension.SupportedExtensions.GetLength (0); i++) {
+				if (extension.ToUpper ().Equals (CTagsProjectServiceExtension.SupportedExtensions[i,1])) {
+					return CTagsProjectServiceExtension.SupportedExtensions[i,0];
+				}
+			}
+			
+			return null;
 		}
-		
-		public string[] Text {
-			get { return new string[] { text }; }
-		}
-		
-		public string Description {
-			get { return description; }
-		}
-
-		public string CompletionString {
-			get { return completion_string; }
-		}
-		
-		public string DescriptionPango {
-			get { return description_pango; }
-		}		
 	}
 }
