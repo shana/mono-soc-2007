@@ -39,6 +39,11 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
+    <Reference Include="gdk-sharp">
+      <HintPath>..\..\mono-1.2.4\lib\mono\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="glade-sharp">
       <HintPath>..\..\mono-1.2.4\lib\mono\gtk-sharp-2.0\glade-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
