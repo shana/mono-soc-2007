@@ -1,5 +1,9 @@
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* ColumnDefinition.cs, RowDefinition.cs: Call InvalidateMeasure on the owner grid when size maximum or minimum changes.
+
+2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Grid.cs: GridLinesRenderer-related partial fix.
 
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>

@@ -10,12 +10,10 @@ namespace System.Windows.Controls {
 		#region Public Fields
 		#region Dependency Properties
 		[TypeConverter("System.Windows.LengthConverter, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, Custom=null")]
-		public static readonly DependencyProperty MaxHeightProperty = DependencyProperty.Register("MaxHeight", typeof(double), typeof(RowDefinition), new FrameworkPropertyMetadata(double.PositiveInfinity));
+		public static readonly DependencyProperty MaxHeightProperty = DependencyProperty.Register("MaxHeight", typeof(double), typeof(RowDefinition), new FrameworkPropertyMetadata(double.PositiveInfinity, InvalidateGridMeasure));
 		[TypeConverter("System.Windows.LengthConverter, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, Custom=null")]
-		public static readonly DependencyProperty MinHeightProperty = DependencyProperty.Register("MinHeight", typeof(double), typeof(RowDefinition), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty HeightProperty = DependencyProperty.Register("Height", typeof(GridLength), typeof(RowDefinition), new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star), delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			((RowDefinition)d).InvalidateGridMeasure();
-		}));
+		public static readonly DependencyProperty MinHeightProperty = DependencyProperty.Register("MinHeight", typeof(double), typeof(RowDefinition), new FrameworkPropertyMetadata(InvalidateGridMeasure));
+		public static readonly DependencyProperty HeightProperty = DependencyProperty.Register("Height", typeof(GridLength), typeof(RowDefinition), new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star), InvalidateGridMeasure));
 		#endregion
 		#endregion
 
@@ -69,7 +67,8 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Methods
-		void InvalidateGridMeasure() {
+		static void InvalidateGridMeasure(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			Grid grid = ((RowDefinition)d).grid;
 			if (grid != null)
 				grid.InvalidateMeasure();
 		}

@@ -10,12 +10,10 @@ namespace System.Windows.Controls {
 		#region Public Fields
 		#region Dependency Properties
 		[TypeConverter("System.Windows.LengthConverter, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, Custom=null")]
-		public static readonly DependencyProperty MaxWidthProperty = DependencyProperty.Register("MaxWidth", typeof(double), typeof(ColumnDefinition), new FrameworkPropertyMetadata(double.PositiveInfinity));
+		public static readonly DependencyProperty MaxWidthProperty = DependencyProperty.Register("MaxWidth", typeof(double), typeof(ColumnDefinition), new FrameworkPropertyMetadata(double.PositiveInfinity, InvalidateGridMeasure));
 		[TypeConverter("System.Windows.LengthConverter, PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, Custom=null")]
-		public static readonly DependencyProperty MinWidthProperty = DependencyProperty.Register("MinWidth", typeof(double), typeof(ColumnDefinition), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(GridLength), typeof(ColumnDefinition), new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star), delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-			((ColumnDefinition)d).InvalidateGridMeasure();
-		}));
+		public static readonly DependencyProperty MinWidthProperty = DependencyProperty.Register("MinWidth", typeof(double), typeof(ColumnDefinition), new FrameworkPropertyMetadata(InvalidateGridMeasure));
+		public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(GridLength), typeof(ColumnDefinition), new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star), InvalidateGridMeasure));
 		#endregion
 		#endregion
 
@@ -69,7 +67,8 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Methods
-		void InvalidateGridMeasure() {
+		static void InvalidateGridMeasure(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			Grid grid = ((ColumnDefinition)d).grid;
 			if (grid != null)
 				grid.InvalidateMeasure();
 		}
