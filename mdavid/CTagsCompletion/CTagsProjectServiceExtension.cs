@@ -30,31 +30,113 @@
 //
 
 using System;
+using System.Text;
+using System.IO;
+using System.Collections.Generic;
+
+using Mono.Addins;
 
 using MonoDevelop.Core;
+using MonoDevelop.Core.Execution;
 using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 
 namespace CTagsCompletion
 {
 	public class CTagsProjectServiceExtension : ProjectServiceExtension
 	{
-		public override ICompilerResult Build (IProgressMonitor monitor, CombineEntry entry)
+		// Add here new supported languages and their associated extensions (in all caps)
+		public static string[,] SupportedExtensions = 
 		{
-			ICompilerResult result = base.Build (monitor, entry);
+			// lang - ext
+			{ "CPP", ".C" },
+			{ "CPP", ".H" },
+			{ "CPP", ".CPP" },
+			{ "CPP", ".CXX" },
+			{ "CPP", ".HPP" }
+		};
+		
+		private Dictionary<string, List<string>> filesPerLanguage = new Dictionary<string, List<string>> ();
+		
+		// This seems to be the best place to place this code
+		public override void SetNeedsBuilding (CombineEntry entry, bool val)
+		{
+			base.SetNeedsBuilding (entry, val);
 			
-			CTagsProject tagProject = entry as CTagsProject;
+			filesPerLanguage.Clear ();
 			
-			if (tagProject == null || !tagProject.WantTagsCompletion)
-				return result;
+			Project project = entry as Project;
 			
-			try {
-				tagProject.WriteTags ();
-			} catch (Exception ex) {
-				Console.Error.WriteLine (ex.Message);
-				return result;
+			if (project == null) return;
+			
+			foreach (ProjectFile file in project.ProjectFiles) {
+				if (file.Subtype != Subtype.Code) continue;
+				
+				for (int i = 0; i < SupportedExtensions.GetLength (0); i++) {
+					if (Path.GetExtension (file.Name).ToUpper ().Equals (SupportedExtensions[i,1])) {
+						string language = SupportedExtensions[i,0];
+						
+						if (!filesPerLanguage.ContainsKey (language))
+							filesPerLanguage.Add (language, new List<string> ());
+						
+						filesPerLanguage[language].Add (file.Name);
+						break;
+					}
+				}
 			}
 			
-			return result;
+			StringBuilder builder = new StringBuilder ();
+			string tagsDirectory = Path.Combine (entry.BaseDirectory, ".tags");
+			string arguments = string.Empty;
+			
+			object[] nodes = AddinManager.GetExtensionObjects ("/CTagsCompletion/Specialization");
+			
+			if (!Directory.Exists (tagsDirectory))
+				Directory.CreateDirectory (tagsDirectory);
+			
+			foreach (KeyValuePair<string, List<string>> kvp in filesPerLanguage) {
+				foreach (ITagsSpecialization node in nodes) {
+					if (node.Language.Equals (kvp.Key))
+						arguments = node.CTagsArguments;
+				}
+				
+				builder.AppendFormat ("-f {0}TAGS {1}", kvp.Key, arguments);
+				
+				foreach (string file in kvp.Value) {
+					builder.Append (" " + file);
+				}
+				
+				try {
+					ProcessWrapper p = Runtime.ProcessService.StartProcess (
+					    "ctags", builder.ToString (), tagsDirectory, null);
+					p.WaitForExit ();
+				} catch (Exception ex) {
+					throw new Exception ("Could not create tags file", ex);
+				}
+				
+				builder.Remove (0, builder.Length);
+			}
 		}
+		
+		/// <summary>
+		/// recursevly looks for all the files in the specified diretory
+		/// NOT USED
+		/// </summary>
+//		private List<string> ScanDirectory (string directory)
+//		{			    
+//			List<string> files = new List<string> ();
+//			
+//			try {
+//				foreach (string dir in Directory.GetDirectories (directory)) {
+//					files.AddRange (ScanDirectory (dir));
+//				}
+//				
+//				files.AddRange (Directory.GetFiles (directory));
+//			} catch (UnauthorizedAccessException ex) {
+//				Console.Error.WriteLine (ex.Message);
+//			}
+//			
+//			return files;
+//		}
 	}
 }

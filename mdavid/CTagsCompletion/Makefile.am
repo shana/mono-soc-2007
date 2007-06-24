@@ -13,9 +13,10 @@ REFS = \
 	$(GTK_SHARP_LIBS)
 	
 FILES =  \
-	CTagsProject.cs \
+	CTagsCompletionDataProvider.cs \
 	CTagsProjectServiceExtension.cs \
 	CTagsTextEditorExtension.cs \
+	ITagsSpecialization.cs \
 	Tag.cs
 
 RES =
