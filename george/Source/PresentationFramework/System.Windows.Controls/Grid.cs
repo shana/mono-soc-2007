@@ -188,6 +188,7 @@ namespace System.Windows.Controls {
 						column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
 					}
 				#endregion
+				#region Distribute remaining space to rows/columns with star size; set row/column definitions ActualWidth/Height and Offset values
 				double total_star;
 				double remaining_lenght;
 				GridLength lenght;
@@ -196,9 +197,11 @@ namespace System.Windows.Controls {
 				if (has_row_definitions) {
 					total_star = 0;
 					remaining_lenght = finalSize.Height;
+					RowDefinition row_definition;
 					for (index = 0; index < row_count; index++) {
-						lenght = row_definitions[index].Height;
-						if (lenght.IsStar)
+						row_definition = row_definitions[index];
+						lenght = row_definition.Height;
+						if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
 							total_star += lenght.Value;
 						else
 							remaining_lenght -= row_heights[index];
@@ -206,8 +209,9 @@ namespace System.Windows.Controls {
 					if (remaining_lenght > 0 && total_star != 0) {
 						star_ratio = remaining_lenght / total_star;
 						for (index = 0; index < row_count; index++) {
-							lenght = row_definitions[index].Height;
-							if (lenght.IsStar)
+							row_definition = row_definitions[index];
+							lenght = row_definition.Height;
+							if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
 								row_heights[index] = Math.Max(lenght.Value * star_ratio, desired_row_heights[index]);
 						}
 					}
@@ -225,9 +229,11 @@ namespace System.Windows.Controls {
 				if (has_column_definitions) {
 					total_star = 0;
 					remaining_lenght = finalSize.Width;
+					ColumnDefinition column_definition;
 					for (index = 0; index < column_count; index++) {
-						lenght = column_definitions[index].Width;
-						if (lenght.IsStar)
+						column_definition = column_definitions[index];
+						lenght = column_definition.Width;
+						if (lenght.IsStar && column_definition.MinWidth == 0 && double.IsPositiveInfinity(column_definition.MaxWidth))
 							total_star += lenght.Value;
 						else
 							remaining_lenght -= column_widths[index];
@@ -235,8 +241,9 @@ namespace System.Windows.Controls {
 					if (remaining_lenght > 0 && total_star != 0) {
 						star_ratio = remaining_lenght / total_star;
 						for (index = 0; index < column_count; index++) {
-							lenght = column_definitions[index].Width;
-							if (lenght.IsStar)
+							column_definition = column_definitions[index];
+							lenght = column_definition.Width;
+							if (lenght.IsStar && column_definition.MinWidth == 0 && double.IsPositiveInfinity(column_definition.MaxWidth))
 								column_widths[index] = Math.Max(lenght.Value * star_ratio, desired_column_widths[index]);
 							column_definitions[index].ActualWidth = column_widths[index];
 						}
@@ -252,7 +259,9 @@ namespace System.Windows.Controls {
 						offset += definition.ActualWidth = column_widths[index];
 					}
 				}
+				#endregion
 			}
+			#region Arrange children
 			foreach (UIElement child in InternalChildren) {
 				Rect rect = new Rect();
 				int row_column = Math.Min(GetRow(child), row_count - 1);
@@ -269,6 +278,8 @@ namespace System.Windows.Controls {
 					rect.Width += column_widths[index];
 				child.Arrange(rect);
 			}
+			#endregion
+			#region Create or update GridLinesRenderer
 			if (grid_lines_renderer == null) {
 				if (ShowGridLines && (has_row_definitions || has_column_definitions)) {
 					grid_lines_renderer = new GridLinesRenderer(this);
@@ -276,6 +287,7 @@ namespace System.Windows.Controls {
 				}
 			} else
 				grid_lines_renderer.Rebuild();
+			#endregion
 			return finalSize;
 		}
 
