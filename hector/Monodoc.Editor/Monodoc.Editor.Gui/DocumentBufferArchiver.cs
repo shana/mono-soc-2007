@@ -47,13 +47,13 @@ public class DocumentBufferArchiver {
 		string attributeName = "";
 		string attributeValue = "";
 		string elementText = "";
-		System.Object [] tags;
-		Stack stack = new Stack ();
+		TextTag [] tags;
 		DocumentTag docTag;
 		TextTag ignore = buffer.TagTable.Lookup ("ignore");
 		nextIter.ForwardChar ();
 		
 		while (!currentIter.Equal (end)) {
+			tags = currentIter.Tags;
 			
 			#if DEBUG
 			Console.WriteLine ("Offset: {0} Char: {1}", currentIter.Offset, currentIter.Char);
@@ -67,7 +67,7 @@ public class DocumentBufferArchiver {
 				elementText += currentIter.Char;
 			}
 			
-			foreach (TextTag tag in currentIter.Tags) {
+			foreach (TextTag tag in tags) {
 				#if DEBUG
 				Console.WriteLine ("Posible Begin Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
 				#endif
@@ -76,21 +76,6 @@ public class DocumentBufferArchiver {
 					docTag = tag as DocumentTag;
 					
 					if (docTag.IsElement) {
-						
-						if (readingText) {
-							int length = elementText.Length;
-							xmlWriter.WriteString (elementText.Substring (0, length - 1));
-							readingText = false;
-						}
-						
-						if (docTag.HasText) {
-							stack.Push (docTag);
-							readingText = true;
-							
-							if (!currentIter.HasTag (ignore))
-								elementText = currentIter.Char;
-						}
-						
 						xmlWriter.WriteStartElement (null, docTag.Name, null);
 						
 						#if DEBUG
@@ -106,11 +91,14 @@ public class DocumentBufferArchiver {
 						
 						readingValue = true;
 						attributeValue = currentIter.Char;
+					} else if (docTag.IsText && docTag.IsSerializable) {
+						readingText = true;
+						elementText = currentIter.Char;
 					}
 				}
 			}
 			
-			tags = Reverse (currentIter.Tags);
+			Array.Reverse (tags);
 			foreach (TextTag tag in tags) {
 				#if DEBUG
 				Console.WriteLine ("Posible End Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
@@ -119,29 +107,11 @@ public class DocumentBufferArchiver {
 				if (TagEndsHere (tag, currentIter, nextIter)) {
 					docTag = tag as DocumentTag;
 					if (docTag.IsElement) {
-						DocumentTag startTag = null;
-						
-						if (stack.Count != 0 && ((DocumentTag) stack.Peek ()).Name.Equals (docTag.Name))
-							startTag = stack.Pop () as DocumentTag;
-						
-						if (readingText && startTag != null) {
-							xmlWriter.WriteString (elementText);
-							
-							if (stack.Count != 0)
-								readingText = true;
-							else
-								readingText = false;
-						} else if (!readingText && startTag == null && stack.Count != 0) {
-							readingText = true;
-						}
-						
 						xmlWriter.WriteEndElement ();
-						elementText = String.Empty;
 						
 						#if DEBUG
 						Console.WriteLine ("Wrote End Element: " + docTag.Name);
 						#endif
-						
 					} else if (docTag.IsAttribute) {
 						xmlWriter.WriteString (attributeValue);
 						xmlWriter.WriteEndAttribute ();
@@ -151,7 +121,11 @@ public class DocumentBufferArchiver {
 						#endif
 						
 						readingValue = false;
-						attributeValue = attributeName = elementText =  String.Empty;
+						attributeValue = attributeName = String.Empty;
+					} else if (docTag.IsText && docTag.IsSerializable) {
+						xmlWriter.WriteString (elementText);
+						elementText = String.Empty;
+						readingText = false;
 					}
 				}
 			}
@@ -225,12 +199,15 @@ public class DocumentBufferArchiver {
 						stack.Push (tagStart);
 					break;
 				case XmlNodeType.Text:
+					tagStart = stack.Peek () as TagStart;
+					string tagName = tagStart.Tag.Name + ":Text";
+					
 					#if DEBUG
-					Console.WriteLine ("Text: {0} Start: {1}", xmlReader.Value, offset);
+					Console.WriteLine ("Text: {0} Value: {1} Start: {2}", tagName, xmlReader.Value, offset);
 					#endif
 					
 					insertAt = buffer.GetIterAtOffset (offset);
-					buffer.Insert (ref insertAt, xmlReader.Value);
+					buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
 					
 					offset += xmlReader.Value.Length;
 					break;
@@ -370,16 +347,6 @@ public class DocumentBufferArchiver {
 		#endif
 		
 		return insertAt.Offset;
-	}
-	
-	private static System.Object [] Reverse (TextTag [] tags)
-	{
-		ArrayList list = new ArrayList ();
-		foreach (TextTag tag in tags) {
-			list.Insert (0, tag);
-		}
-		
-		return list.ToArray ();
 	}
 	
 	private static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)

@@ -12,9 +12,17 @@ using Gtk;
 
 namespace Monodoc.Editor.Gui {
 public class DocumentTag : TextTag {
-	private bool is_attribute;
-	private bool is_element;
 	private bool has_text;
+	
+	[Flags]
+	enum TagFlags {
+		IsSerializable = 0x0001,
+		IsElement = 0x0002,
+		IsAttribute = 0x0004,
+		IsText = 0x0008
+	};
+	
+	TagFlags flags;
 	
 	public DocumentTag (string tagName) : base (tagName)
 	{
@@ -24,26 +32,59 @@ public class DocumentTag : TextTag {
 	public void Initialize () 
 	{
 		this.Editable = false;
-		is_attribute = is_element = has_text = false;
+		flags = TagFlags.IsSerializable;
+		has_text = false;
+	}
+	
+	public bool IsSerializable {
+		get {
+			return (flags & TagFlags.IsSerializable) == TagFlags.IsSerializable;
+		}
+		
+		set {
+			if (value)
+				flags |= TagFlags.IsSerializable;
+			else
+				flags &= ~TagFlags.IsSerializable;
+		}
 	}
 	
 	public bool IsAttribute {
 		get {
-			return is_attribute;
+			return (flags & TagFlags.IsAttribute) == TagFlags.IsAttribute;
 		}
 		
 		set {
-			is_attribute = value;
+			if (value)
+				flags |= TagFlags.IsAttribute;
+			else
+				flags &= ~TagFlags.IsAttribute;
 		}
 	}
 	
 	public bool IsElement {
 		get {
-			return is_element;
+			return (flags & TagFlags.IsElement) == TagFlags.IsElement;
 		}
 		
 		set {
-			is_element = value;
+			if (value)
+				flags |= TagFlags.IsElement;
+			else
+				flags &= ~TagFlags.IsElement;
+		}
+	}
+	
+	public bool IsText {
+		get {
+			return (flags & TagFlags.IsText) == TagFlags.IsText;
+		}
+		
+		set {
+			if (value)
+				flags |= TagFlags.IsText;
+			else
+				flags &= ~TagFlags.IsText;
 		}
 	}
 	
