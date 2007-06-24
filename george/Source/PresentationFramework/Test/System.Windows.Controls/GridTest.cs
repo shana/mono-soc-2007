@@ -837,5 +837,31 @@ namespace System.Windows.Controls {
 			w.Show();
 			Assert.AreEqual(c.ActualWidth, 100);
 		}
+
+		#region MinWidthMeasureConstraint
+		[Test]
+		public void MinWidthMeasureConstraint() {
+			Grid g = new Grid();
+			ColumnDefinition c = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c);
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			c.MinWidth = 100;
+			c.Width = new GridLength(50);
+			g.Children.Add(new MinWidthMeasureConstraintButton());
+			Window w = new Window();
+			w.Content = g;
+			w.Show();
+			Assert.AreEqual(MinWidthMeasureConstraintButton.MeasureConstraint.Width, 100);
+		}
+
+		class MinWidthMeasureConstraintButton : global::System.Windows.Controls.Button {
+			static public Size MeasureConstraint;
+
+			protected override Size MeasureOverride(Size constraint) {
+				MeasureConstraint = constraint;
+				return base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
 	}
 }
