@@ -1,5 +1,10 @@
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* RowDefinitionTest.cs: Added.
+	* ColumnDefinitionTest.cs, GridTest.cs: Added tests.
+
+2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* StackPanelTest.cs: Disabled a buggy test.
 	
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>

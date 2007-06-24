@@ -18,5 +18,12 @@ namespace System.Windows.Controls {
 			Assert.IsFalse(width_metadata.AffectsParentMeasure, "5");
 			Assert.IsFalse(width_metadata.AffectsRender, "6");
 		}
+
+		[Test]
+		public void Lenght() {
+			GridLength l = new ColumnDefinition().Width;
+			Assert.AreEqual(l.Value, 1, "1");
+			Assert.AreEqual(l.GridUnitType, GridUnitType.Star, "2");
+		}
 	}
 }
