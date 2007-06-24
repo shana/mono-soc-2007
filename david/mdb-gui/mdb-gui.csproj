@@ -35,27 +35,27 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
     <Reference Include="atk-sharp">
-      <HintPath>..\..\mono-1.2.4\lib\mono\gtk-sharp-2.0\atk-sharp.dll</HintPath>
+      <HintPath>..\..\mono\lib\mono\gtk-sharp-2.0\atk-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
     <Reference Include="gdk-sharp">
-      <HintPath>..\..\mono-1.2.4\lib\mono\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
+      <HintPath>..\..\mono\lib\mono\gtk-sharp-2.0\gdk-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
     <Reference Include="glade-sharp">
-      <HintPath>..\..\mono-1.2.4\lib\mono\gtk-sharp-2.0\glade-sharp.dll</HintPath>
+      <HintPath>..\..\mono\lib\mono\gtk-sharp-2.0\glade-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
     <Reference Include="glib-sharp">
-      <HintPath>..\..\mono-1.2.4\lib\mono\gtk-sharp-2.0\glib-sharp.dll</HintPath>
+      <HintPath>..\..\mono\lib\mono\gtk-sharp-2.0\glib-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
     <Reference Include="gtk-sharp">
-      <HintPath>..\..\mono-1.2.4\lib\mono\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
+      <HintPath>..\..\mono\lib\mono\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
