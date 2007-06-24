@@ -71,6 +71,7 @@
     <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ColumnDefinitionCollectionTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ColumnDefinitionTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\RowDefinitionTest.cs" />
     <Compile Include="Test\System.Windows.Controls\DefinitionBaseTest.cs" />
     <Compile Include="Test\System.Windows.Controls\GridTest.cs" />
     <Compile Include="Test\System.Windows.Controls\TabItemTest.cs" />

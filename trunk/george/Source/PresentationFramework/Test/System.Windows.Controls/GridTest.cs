@@ -450,6 +450,65 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region WhereIsGridLinesRendererCreatedDefinition2
+		[Test]
+		public void WhereIsGridLinesRendererCreatedDefinition2() {
+			new WhereIsGridLinesRendererCreatedDefinition2Grid();
+		}
+
+		class WhereIsGridLinesRendererCreatedDefinition2Grid : Grid {
+			public WhereIsGridLinesRendererCreatedDefinition2Grid() {
+				ShowGridLines = true;
+				RowDefinitions.Add(new RowDefinition());
+				Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				Arrange(new Rect(0, 0, 100, 100));
+			}
+			
+			protected override Size MeasureOverride(Size availableSize) {
+				Assert.AreEqual(VisualChildrenCount, 0, "1");
+				Size result = base.MeasureOverride(availableSize);
+				Assert.AreEqual(VisualChildrenCount, 0, "2");
+				return result;
+			}
+			
+			protected override Size ArrangeOverride(Size finalSize) {
+				Assert.AreEqual(VisualChildrenCount, 0, "3");
+				Size result = base.ArrangeOverride(finalSize);
+				Assert.AreEqual(VisualChildrenCount, 1, "4");
+				return result;
+			}
+		}
+		#endregion
+
+		#region WhereIsGridLinesRendererCreatedDefinition3
+		[Test]
+		public void WhereIsGridLinesRendererCreatedDefinition3() {
+			new WhereIsGridLinesRendererCreatedDefinition3Grid();
+		}
+
+		class WhereIsGridLinesRendererCreatedDefinition3Grid : Grid {
+			public WhereIsGridLinesRendererCreatedDefinition3Grid() {
+				ShowGridLines = true;
+				RowDefinitions.Add(new RowDefinition());
+				Arrange(new Rect(0, 0, 100, 100));
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				Assert.AreEqual(VisualChildrenCount, 0, "1");
+				Size result = base.MeasureOverride(availableSize);
+				Assert.AreEqual(VisualChildrenCount, 0, "2");
+				return result;
+			}
+
+			protected override Size ArrangeOverride(Size finalSize) {
+				Assert.AreEqual(VisualChildrenCount, 0, "3");
+				Size result = base.ArrangeOverride(finalSize);
+				Assert.AreEqual(VisualChildrenCount, 1, "4");
+				return result;
+			}
+		}
+		#endregion
+
 		#region WhereIsGridLinesRendererCreatedDefinitionChildren
 		[Test]
 		public void WhereIsGridLinesRendererCreatedDefinitionChildren() {
@@ -667,6 +726,88 @@ namespace System.Windows.Controls {
 				return base.ArrangeOverride(arrangeSize);
 			}
 		}
+		#endregion
+
+		#region OnVisualChildrenChanged
+		[Test]
+		public void OnVisualChildrenChanged() {
+			new OnVisualChildrenChangedGrid();
+		}
+
+		class OnVisualChildrenChangedGrid : Grid {
+			bool set_called;
+			int calls;
+
+			public OnVisualChildrenChangedGrid() {
+				ShowGridLines = true;
+				RowDefinitions.Add(new RowDefinition());
+				set_called = true;
+				Arrange(new Rect(0, 0, 100, 100));
+				Assert.AreEqual(calls, 1);
+
+			}
+
+			protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved) {
+				if (set_called)
+					calls++;
+				base.OnVisualChildrenChanged(visualAdded, visualRemoved);
+			}
+		}
+		#endregion
+
+		#region SettingShowGridLinesCausesMeasure
+		[Test]
+		public void SettingShowGridLinesCausesMeasure() {
+			new SettingShowGridLinesCausesMeasureGrid();
+		}
+
+		class SettingShowGridLinesCausesMeasureGrid : Grid {
+			bool set_calls;
+			int calls;
+
+			public SettingShowGridLinesCausesMeasureGrid() {
+				RowDefinitions.Add(new RowDefinition());
+				set_calls = true;
+				ShowGridLines = true;
+				Assert.AreEqual(calls, 0);
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				if (set_calls)
+					calls++;
+				return base.MeasureOverride(availableSize);
+			}
+		}
+
+		#endregion
+
+		#region SettingShowGridLinesCausesMeasureInWindow
+		[Test]
+		public void SettingShowGridLinesCausesMeasureInWindow() {
+			new SettingShowGridLinesCausesMeasureInWindowGrid();
+		}
+
+		class SettingShowGridLinesCausesMeasureInWindowGrid : Grid {
+			bool set_calls;
+			int calls;
+
+			public SettingShowGridLinesCausesMeasureInWindowGrid() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				RowDefinitions.Add(new RowDefinition());
+				set_calls = true;
+				ShowGridLines = true;
+				Assert.AreEqual(calls, 0);
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				if (set_calls)
+					calls++;
+				return base.MeasureOverride(availableSize);
+			}
+		}
+
 		#endregion
 	}
 }
