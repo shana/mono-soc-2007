@@ -105,7 +105,7 @@ public class DocumentBufferArchiver {
 						#endif
 						
 						readingValue = true;
-						attributeValue += currentIter.Char;
+						attributeValue = currentIter.Char;
 					}
 				}
 			}
