@@ -12,8 +12,6 @@ using Gtk;
 
 namespace Monodoc.Editor.Gui {
 public class DocumentTag : TextTag {
-	private bool has_text;
-	
 	[Flags]
 	enum TagFlags {
 		IsSerializable = 0x0001,
@@ -33,7 +31,6 @@ public class DocumentTag : TextTag {
 	{
 		this.Editable = false;
 		flags = TagFlags.IsSerializable;
-		has_text = false;
 	}
 	
 	public bool IsSerializable {
@@ -85,16 +82,6 @@ public class DocumentTag : TextTag {
 				flags |= TagFlags.IsText;
 			else
 				flags &= ~TagFlags.IsText;
-		}
-	}
-	
-	public bool HasText {
-		get {
-			return has_text;
-		}
-		
-		set {
-			has_text = value;
 		}
 	}
 }

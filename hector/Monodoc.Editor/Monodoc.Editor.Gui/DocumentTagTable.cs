@@ -85,7 +85,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("AssemblyName");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("AssemblyName:Text");
@@ -94,7 +93,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("AssemblyPublicKey");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("AssemblyPublicKey:Text");
@@ -103,7 +101,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("AssemblyVersion");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("AssemblyVersion:Text");
@@ -112,7 +109,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("ThreadSafetyStatement");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("ThreadSafetyStatement:Text");
@@ -125,7 +121,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("BaseTypeName");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("BaseTypeName:Text");
@@ -142,7 +137,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("AttributeName");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("AttributeName:Text");
@@ -185,7 +179,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("MemberType");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("MemberType:Text");
@@ -198,7 +191,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("ReturnType");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("ReturnType:Text");
@@ -215,7 +207,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("summary");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("summary:Text");
@@ -224,7 +215,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("remarks");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("remarks:Text");
@@ -233,7 +223,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("para");
 		tag.IsElement = true;
-		tag.HasText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("para:Text");
@@ -262,7 +251,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("link");
 		tag.IsElement = true;
-		tag.HasText = true;
 		tag.Underline = Pango.Underline.Single;
 		tag.Foreground = "#204a87";
 		Add (tag);
