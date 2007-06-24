@@ -322,6 +322,18 @@ namespace System.Windows.Controls {
 			else
 				column_widths[0] = double.PositiveInfinity;
 			#endregion
+			#region Apply definition minimum and maximum
+			if (has_row_definitions)
+				for (index = 0; index < row_count; index++) {
+					RowDefinition row_definition = row_definitions[index];
+					row_heights[index] = AdjustToBeInRange(row_heights[index], row_definition.MinHeight, row_definition.MaxHeight);
+				}
+			if (has_column_definitions)
+				for (index = 0; index < column_count; index++) {
+					ColumnDefinition column_definition = column_definitions[index];
+					column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
+				}
+			#endregion
 			double[] desired_row_heights = new double[row_count];
 			double[] desired_column_widths = new double[column_count];
 			foreach (UIElement child in InternalChildren) {
@@ -398,6 +410,7 @@ namespace System.Windows.Controls {
 		
 		protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved) {
 			base.OnVisualChildrenChanged(visualAdded, visualRemoved);
+			//WDTDH
 		}
 		#endregion
 
