@@ -17,6 +17,7 @@ namespace Monodoc.Editor.Gui {
 public class TestDocumentBufferArchiver {
 	
 	private string pathTest;
+	private string [] files;
 	private TextBuffer buffer;
 	
 	[SetUp()]
@@ -26,7 +27,10 @@ public class TestDocumentBufferArchiver {
 		
 		filePath = Test.PathOfTestFiles ();
 		pathTest = Path.Combine (filePath, "Examples");
+		files = Directory.GetFiles (pathTest, "*.xml");
+		
 		Application.Init ();
+		
 		DocumentEditor editor = new DocumentEditor ();
 		buffer = editor.Buffer;
 	}
@@ -40,17 +44,58 @@ public class TestDocumentBufferArchiver {
 	[Test()]
 	public void Serialize()
 	{
-		string originalText, newText, fileName;
+		string originalText, newText;
+		int count = 0;
 		
-		fileName = Path.Combine (pathTest, "WrapMode.xml");
-		MonoDocument document = new MonoDocument (fileName);
-		originalText = document.Text;
-		
-		DocumentBufferArchiver.Deserialize (buffer, originalText);
-		newText = DocumentBufferArchiver.Serialize (buffer);
-		
-		Assert.AreEqual (originalText, newText, "SR01");
+		foreach (string file in files) {
+			MonoDocument document = new MonoDocument (file);
+			originalText = document.Text;
+			
+			DocumentBufferArchiver.Deserialize (buffer, originalText);
+			newText = DocumentBufferArchiver.Serialize (buffer);
+			
+			Assert.AreEqual (originalText, newText, "SR" + count);
+			buffer.Clear ();
+		}
 	}
 	
+	[Test()]
+	public void SerializePerformance ()
+	{
+		string originalText;
+		
+		foreach (string file in files) {
+			MonoDocument document = new MonoDocument (file);
+			originalText = document.Text;
+			
+			DocumentBufferArchiver.Deserialize (buffer, originalText);
+			DateTime startTime = DateTime.Now;
+			DocumentBufferArchiver.Serialize (buffer);
+			DateTime stopTime = DateTime.Now;
+			TimeSpan duration = stopTime - startTime;
+			
+			Assert.Less (duration.Milliseconds, 500, "SP01");
+			buffer.Clear ();
+		}
+	}
+	
+	[Test()]
+	public void DeserializePerformance ()
+	{
+		string originalText, fileName;
+		
+		foreach (string file in files) {
+			MonoDocument document = new MonoDocument (file);
+			originalText = document.Text;
+			
+			DateTime startTime = DateTime.Now;
+			DocumentBufferArchiver.Deserialize (buffer, originalText);
+			DateTime stopTime = DateTime.Now;
+			TimeSpan duration = stopTime - startTime;
+			
+			Assert.Less (duration.Milliseconds, 100, "SP01");
+			buffer.Clear ();
+		}
+	}
 }
 }

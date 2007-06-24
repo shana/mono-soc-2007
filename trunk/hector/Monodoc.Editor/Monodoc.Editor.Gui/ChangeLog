@@ -1,3 +1,12 @@
+2007-06-23  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/TestDocumentBufferArchiver.cs: Iterate over all XML files inside
+	  Examples directory. Added perfomance test for Deserialize and
+	  Serialize methods.
+	* DocumentBufferArchiver.cs: Minor Change.
+	* Monodoc.Editor.Gui.mdp, Test/Examples/WindowType.xml: Added
+	  WindowType document XML for tests.
+
 2007-06-22  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Test/Examples/WrapMode.xml: Added markup for empty elements
