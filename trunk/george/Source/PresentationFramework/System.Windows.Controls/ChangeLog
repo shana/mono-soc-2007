@@ -1,5 +1,9 @@
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Grid.cs: Fixed GridLineRenderer line drawing style.
+
+2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Grid.cs: Children are now measured with constrains adjusted for minimum and maximum row/column size.
 
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>

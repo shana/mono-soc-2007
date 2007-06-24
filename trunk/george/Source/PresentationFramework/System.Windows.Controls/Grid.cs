@@ -463,8 +463,15 @@ namespace System.Windows.Controls {
 			}
 
 			void DrawLine(DrawingContext drawingContext, double position, bool horizontal) {
-				//FIXME
-				drawingContext.DrawLine(new Pen(Brushes.Black, 1), new Point(horizontal ? 0 : position, horizontal ? position : 0), new Point(horizontal ? grid.ActualWidth : position, horizontal ? position : grid.ActualHeight));
+				Point point1 = new Point(horizontal ? 0 : position, horizontal ? position : 0);
+				Point point2 = new Point(horizontal ? grid.ActualWidth : position, horizontal ? position : grid.ActualHeight);
+				const int DashSize = 4;
+				Pen pen = new Pen(Brushes.Blue, 1);
+				pen.DashStyle = new DashStyle(new double[] { DashSize, DashSize }, 0);
+				drawingContext.DrawLine(pen, point1, point2);
+				pen = new Pen(Brushes.Yellow, 1);
+				pen.DashStyle = new DashStyle(new double[] { DashSize, DashSize }, DashSize);
+				drawingContext.DrawLine(pen, point1, point2);
 			}
 		}
 		#endregion
