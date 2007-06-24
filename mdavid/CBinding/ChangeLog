@@ -1,3 +1,10 @@
+2007-06-24  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProject.cs: Changed to accomodate the new CTagsCompletion
+	  design
+	* Completion.cs: This is where CBinding will specify more specialized
+	  behavior for the CTagsCompletion AddIn
+
 2007-06-22  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Project/CProject.cs: Made a very simple implementation of
