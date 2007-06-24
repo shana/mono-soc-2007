@@ -19,6 +19,7 @@ REFS = \
 
 FILES =  \
 	CLanguageBinding.cs \
+	Completion.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GccCompiler.cs \
 	Compiler/GNUCompiler.cs \

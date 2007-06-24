@@ -55,7 +55,7 @@ namespace CBinding
 	};
 	
 	[DataInclude(typeof(CProjectConfiguration))]
-	public class CProject : CTagsProject
+	public class CProject : Project
 	{
 		[ItemProperty ("compiler", ValueType = typeof(CCompiler))]
 		private CCompiler compiler_manager;
@@ -71,14 +71,12 @@ namespace CBinding
 		public CProject ()
 		{
 			packages.Project = this;
-			wantTagsCompletion = true;
 		}
 		
 		public CProject (ProjectCreateInformation info,
 		                 XmlElement projectOptions, string language)
 		{
 			packages.Project = this;
-			wantTagsCompletion = true;
 			string binPath = ".";
 			
 			if (info != null) {
@@ -266,26 +264,6 @@ namespace CBinding
 			set {
 				packages = value;
 				packages.Project = this;
-			}
-		}
-		
-		
-		// For now just show member of any class/struct
-		public override void AddTagsToProvider (CTagsCompletionDataProvider provider,
-		                                        string line)
-		{
-			foreach (Tag tag in Tags) {
-				string kind = string.Empty;
-				
-				for (int i = 0; i < tag.TagField.Count; i++) {
-					if (tag.TagField[i][0].Equals ("kind")) {
-						kind = tag.TagField[i][1];
-						break;
-					}
-				}
-				
-				if (kind.Equals ("member"))
-					provider.AddCompletionData (new CTagsCompletionData (tag, "md-class"));
 			}
 		}
 		
