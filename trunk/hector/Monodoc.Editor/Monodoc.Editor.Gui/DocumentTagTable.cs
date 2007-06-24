@@ -88,9 +88,17 @@ public class DocumentTagTable : TextTagTable {
 		tag.HasText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("AssemblyName:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("AssemblyPublicKey");
 		tag.IsElement = true;
 		tag.HasText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("AssemblyPublicKey:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("AssemblyVersion");
@@ -98,9 +106,17 @@ public class DocumentTagTable : TextTagTable {
 		tag.HasText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("AssemblyVersion:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("ThreadSafetyStatement");
 		tag.IsElement = true;
 		tag.HasText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ThreadSafetyStatement:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Base");
@@ -110,6 +126,10 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("BaseTypeName");
 		tag.IsElement = true;
 		tag.HasText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("BaseTypeName:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Attributes");
@@ -123,6 +143,10 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("AttributeName");
 		tag.IsElement = true;
 		tag.HasText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("AttributeName:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Members");
@@ -164,6 +188,10 @@ public class DocumentTagTable : TextTagTable {
 		tag.HasText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("MemberType:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("ReturnValue");
 		tag.IsElement = true;
 		Add (tag);
@@ -171,6 +199,10 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("ReturnType");
 		tag.IsElement = true;
 		tag.HasText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ReturnType:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Parameters");
@@ -186,14 +218,26 @@ public class DocumentTagTable : TextTagTable {
 		tag.HasText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("summary:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("remarks");
 		tag.IsElement = true;
 		tag.HasText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("remarks:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("para");
 		tag.IsElement = true;
 		tag.HasText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("para:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("see");
@@ -232,6 +276,10 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsAttribute = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("link:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("since");
 		tag.IsElement = true;
 		Add (tag);
@@ -245,6 +293,8 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 		
 		tag = new DocumentTag ("ignore");
+		tag.IsSerializable = false;
+		tag.IsText = true;
 		Add (tag);
 	}
 }

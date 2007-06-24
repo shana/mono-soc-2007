@@ -1,5 +1,14 @@
 2007-06-24  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs: Changed Serialize to use the new attribute
+	  IsText and the new associated tags to serialize the buffer.
+	* DocumentTagTable.cs: Adding *:Text tags that represents patches of
+	  text inside a element.
+	* DocumentTag.cs: Added a enum that functions as a bit mask, new
+	  properties are: IsSerializable, IsElement, IsAttribute and IsText.
+
+2007-06-24  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBufferArchiver.cs: Abstracting the several
 	  Deserialize*Attributes moethods.
 
