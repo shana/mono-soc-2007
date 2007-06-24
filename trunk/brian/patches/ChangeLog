@@ -1,3 +1,15 @@
+2007-06-24 Brian Nickel <brian.nickel@gmail.com>
+
+	* committed-with-changes/xsp-baseapplicationhost-dont-assume.patch:
+	MOVED to committed-with-changes. Faster checking was applied.
+	
+	* committed-with-changes/xsp-baserequestbroker-docs-plus-dont-reassign-buffer.patch:
+	MOVED to committed-with-changes. Logic was backwards. Had to be negated.
+	
+	* committed/xsp-iwebsource-docs.patch:
+	* committed/xsp-iapplicationhost-docs.patch:
+	* committed/xsp-monoworkerrequest-docs.patch: MOVED to committed.
+
 2007-06-19 Brian Nickel <brian.nickel@gmail.com>
 
 	* committed/xsp-vhost-fix.patch: MOVED to committed.
