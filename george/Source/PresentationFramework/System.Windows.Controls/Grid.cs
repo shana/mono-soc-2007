@@ -13,6 +13,7 @@ namespace System.Windows.Controls {
 		#region Public Fields
 		#region Dependency Properties
 		public static readonly DependencyProperty ShowGridLinesProperty = DependencyProperty.Register("ShowGridLines", typeof(bool), typeof(Grid), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			((Grid)d).InvalidateArrange();
 		}));
 		#region Attached Properties
 		public static readonly DependencyProperty ColumnProperty = DependencyProperty.RegisterAttached("Column", typeof(int), typeof(Grid), new FrameworkPropertyMetadata(InvalidateGridMeasure), ValidateRowColumn);
@@ -268,9 +269,12 @@ namespace System.Windows.Controls {
 					rect.Width += column_widths[index];
 				child.Arrange(rect);
 			}
-			if (grid_lines_renderer == null && ShowGridLines && (has_row_definitions || has_column_definitions))
-				grid_lines_renderer = new GridLinesRenderer(this);
-			if (grid_lines_renderer != null)
+			if (grid_lines_renderer == null) {
+				if (ShowGridLines && (has_row_definitions || has_column_definitions)) {
+					grid_lines_renderer = new GridLinesRenderer(this);
+					AddVisualChild(grid_lines_renderer);
+				}
+			} else
 				grid_lines_renderer.Rebuild();
 			return finalSize;
 		}
@@ -420,6 +424,7 @@ namespace System.Windows.Controls {
 
 			public GridLinesRenderer(Grid grid) {
 				this.grid = grid;
+				Rebuild();
 			}
 
 			public void Rebuild() {
@@ -430,7 +435,6 @@ namespace System.Windows.Controls {
 				for (definition_index = 1; definition_index < grid.column_definitions.Count; definition_index++)
 					DrawLine(drawing_context, grid.column_definitions[definition_index].Offset, false);
 				drawing_context.Close();
-				grid.InvalidateVisual();
 			}
 
 			void DrawLine(DrawingContext drawingContext, double position, bool horizontal) {
