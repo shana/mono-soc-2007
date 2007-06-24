@@ -1,3 +1,7 @@
+2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ButtonTest.cs: Disabled a buggy test.
+
 2007-06-22  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ColumnDefinitionTest.cs: Added.
