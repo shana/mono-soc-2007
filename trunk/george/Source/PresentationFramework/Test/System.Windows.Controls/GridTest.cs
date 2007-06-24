@@ -809,5 +809,33 @@ namespace System.Windows.Controls {
 		}
 
 		#endregion
+
+		[Test]
+		public void MinWidth() {
+			Window w = new Window();
+			Grid g = new Grid();
+			w.Content = g;
+			w.Show();
+			ColumnDefinition c = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c);
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			c.MinWidth = 100;
+			c.Width = new GridLength(50);
+			g.Arrange(new Rect(0, 0, 200, 200));
+			Assert.AreEqual(c.ActualWidth, 100);
+		}
+
+		[Test]
+		public void MaxWidth() {
+			Grid g = new Grid();
+			ColumnDefinition c = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c);
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			c.MaxWidth = 100;
+			Window w = new Window();
+			w.Content = g;
+			w.Show();
+			Assert.AreEqual(c.ActualWidth, 100);
+		}
 	}
 }
