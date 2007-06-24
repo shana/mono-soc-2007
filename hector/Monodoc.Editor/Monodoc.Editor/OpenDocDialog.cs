@@ -34,21 +34,9 @@ public partial class OpenDocDialog : Gtk.Dialog {
 	
 	private void OnButtonCancelClicked (object sender, System.EventArgs e)
 	{
-		Destroy ();
 	}
 	
 	private void OnButtonOkClicked (object sender, System.EventArgs e)
-	{
-		filename = openFileDialog.Filename;
-		Console.WriteLine ("Filename: "  + filename);
-		
-		if (Directory.Exists (filename))
-			openFileDialog.SetCurrentFolder (filename);
-		else
-			Destroy ();
-	}
-	
-	private void OnOpenFileDialogFileActivated (object sender, System.EventArgs e)
 	{
 		filename = openFileDialog.Filename;
 		
@@ -56,7 +44,20 @@ public partial class OpenDocDialog : Gtk.Dialog {
 		Console.WriteLine ("Filename: "  + filename);
 		#endif
 		
-		Destroy ();
+		if (Directory.Exists (filename))
+			openFileDialog.SetCurrentFolder (filename);
+		else
+			Respond (ResponseType.Ok);
+	}
+	
+	private void OnOpenFileDialogFileActivated (object sender, System.EventArgs e)
+	{
+		filename = openFileDialog.Filename;
+		Respond (ResponseType.Ok);
+		
+		#if DEBUG
+		Console.WriteLine ("Filename: "  + filename);
+		#endif
 	}
 	
 	public string Document {

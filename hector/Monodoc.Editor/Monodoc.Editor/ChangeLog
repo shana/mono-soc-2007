@@ -1,3 +1,11 @@
+2007-06-24  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* EditorWindow.cs: Changed the handling of the OnSaveAs and OnOpen
+	  events for the EditorWindow.
+	* gtk-gui/Monodoc.Editor.SaveDocDialog.cs, gtk-gui/gui.stetic,
+	  SaveDocDialog.cs: Added basic handlers for events in SaveDocDialog.
+	* OpenDocDialog.cs: Using Respond method to send result of the dialog.
+
 2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor/EditorWindow.cs: Added handlers for Save and SaveAs

@@ -13,7 +13,7 @@ namespace Monodoc.Editor {
     
     public partial class SaveDocDialog {
         
-        private Gtk.FileChooserWidget filechooserwidget1;
+        private Gtk.FileChooserWidget saveFileDialog;
         
         private Gtk.Button buttonCancel;
         
@@ -30,10 +30,10 @@ namespace Monodoc.Editor {
             w1.Name = "dialog1_VBox";
             w1.BorderWidth = ((uint)(2));
             // Container child dialog1_VBox.Gtk.Box+BoxChild
-            this.filechooserwidget1 = new Gtk.FileChooserWidget(((Gtk.FileChooserAction)(1)));
-            this.filechooserwidget1.Name = "filechooserwidget1";
-            w1.Add(this.filechooserwidget1);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.filechooserwidget1]));
+            this.saveFileDialog = new Gtk.FileChooserWidget(((Gtk.FileChooserAction)(1)));
+            this.saveFileDialog.Name = "saveFileDialog";
+            w1.Add(this.saveFileDialog);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.saveFileDialog]));
             w2.Position = 0;
             // Internal child Monodoc.Editor.SaveDocDialog.ActionArea
             Gtk.HButtonBox w3 = this.ActionArea;
@@ -60,8 +60,8 @@ namespace Monodoc.Editor {
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.UseStock = true;
             this.buttonOk.UseUnderline = true;
-            this.buttonOk.Label = "gtk-ok";
-            this.AddActionWidget(this.buttonOk, -5);
+            this.buttonOk.Label = "gtk-save";
+            w3.Add(this.buttonOk);
             Gtk.ButtonBox.ButtonBoxChild w5 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonOk]));
             w5.Position = 1;
             w5.Expand = false;
@@ -69,9 +69,12 @@ namespace Monodoc.Editor {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 599;
-            this.DefaultHeight = 176;
+            this.DefaultWidth = 779;
+            this.DefaultHeight = 599;
             this.Show();
+            this.saveFileDialog.FileActivated += new System.EventHandler(this.OnSaveFileDialogFileActivated);
+            this.buttonCancel.Clicked += new System.EventHandler(this.OnButtonCancelClicked);
+            this.buttonOk.Clicked += new System.EventHandler(this.OnButtonOkClicked);
         }
     }
 }
