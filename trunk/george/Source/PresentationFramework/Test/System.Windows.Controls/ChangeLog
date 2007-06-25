@@ -1,5 +1,9 @@
 2007-06-25  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* PanelTest.cs: Added GetVisualChildOutOfRange test.
+
+2007-06-25  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* GridTest.cs: Added MultipleColumnSpan* tests.
 
 2007-06-24  George Giolfan  <georgegiolfan@yahoo.com>
