@@ -16,7 +16,7 @@ public class DocumentBuffer : TextBuffer {
 	{
 	}
 	
-	public DocumentBuffer () : base (new DocumentTagTable ())
+	public DocumentBuffer () : base (DocumentTagTable.Instance)
 	{
 	}
 }
