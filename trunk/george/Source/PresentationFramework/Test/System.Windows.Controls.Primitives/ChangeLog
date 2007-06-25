@@ -1,3 +1,7 @@
+2007-06-25  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabPanelTest.cs: Moved some theme-specific tests.
+
 2007-06-19  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabPanelTest.cs: Added DockLeft test.
