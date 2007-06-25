@@ -34,8 +34,6 @@ using System.Text;
 
 using Mono.Addins;
 
-using CTagsCompletion;
-
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
 using MonoDevelop.Core.Execution;

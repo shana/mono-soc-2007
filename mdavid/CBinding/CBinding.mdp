@@ -57,7 +57,6 @@
     <File name="./icons/C.Source.File.Empty" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./Project/CProjectServiceExtension.cs" subtype="Code" buildaction="Compile" />
     <File name="./ChangeLog" subtype="Code" buildaction="Nothing" />
-    <File name="./Completion.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -71,7 +70,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Components, Version=0.13.0.0, Culture=neutral" />
-    <ProjectReference type="Project" localcopy="True" refto="CTagsCompletion" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </References>
   <Deployment.LinuxDeployData scriptName="cbinding" />

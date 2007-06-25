@@ -38,8 +38,6 @@ using System.CodeDom.Compiler;
 
 using Mono.Addins;
 
-using CTagsCompletion;
-
 using MonoDevelop.Core;
 using MonoDevelop.Core.Execution;
 using MonoDevelop.Core.ProgressMonitoring;

@@ -1,3 +1,9 @@
+2007-06-25  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProjectServiceExtension.cs, Project/CProject.cs,
+	  Makefile.am, CBinding.addin.xml, CBinding.mdp, Completion.cs: Got
+	  rid of anything related to CTagsCompletion.
+
 2007-06-24  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Project/CProject.cs: Changed to accomodate the new CTagsCompletion
