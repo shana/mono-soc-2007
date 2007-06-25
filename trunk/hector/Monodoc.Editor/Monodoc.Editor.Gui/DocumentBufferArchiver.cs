@@ -91,7 +91,7 @@ public class DocumentBufferArchiver {
 						
 						readingValue = true;
 						attributeValue = currentIter.Char;
-					} else if (docTag.IsText && docTag.IsSerializable) {
+					} else if (docTag.IsSerializableText) {
 						readingText = true;
 						elementText = currentIter.Char;
 					}
@@ -122,7 +122,7 @@ public class DocumentBufferArchiver {
 						
 						readingValue = false;
 						attributeValue = attributeName = String.Empty;
-					} else if (docTag.IsText && docTag.IsSerializable) {
+					} else if (docTag.IsSerializableText) {
 						xmlWriter.WriteString (elementText);
 						elementText = String.Empty;
 						readingText = false;
@@ -260,20 +260,12 @@ public class DocumentBufferArchiver {
 		
 		switch (tagName) {
 			case "Type":
-				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
-				break;
 			case "TypeSignature":
-				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
-				break;
 			case "Member":
-				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
-				break;
 			case "MemberSignature":
 				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
 				break;
 			case "link":
-				result = DeserializeAttributesSpace (buffer, offset, xmlReader);
-				break;
 			case "see":
 				result = DeserializeAttributesSpace (buffer, offset, xmlReader);
 				break;

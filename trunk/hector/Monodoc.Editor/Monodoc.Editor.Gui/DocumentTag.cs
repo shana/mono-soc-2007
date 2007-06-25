@@ -17,7 +17,8 @@ public class DocumentTag : TextTag {
 		IsSerializable = 0x0001,
 		IsElement = 0x0002,
 		IsAttribute = 0x0004,
-		IsText = 0x0008
+		IsText = 0x0008,
+		IsSerializableText = (IsSerializable | IsText)
 	};
 	
 	TagFlags flags;
@@ -82,6 +83,19 @@ public class DocumentTag : TextTag {
 				flags |= TagFlags.IsText;
 			else
 				flags &= ~TagFlags.IsText;
+		}
+	}
+	
+	public bool IsSerializableText {
+		get {
+			return (flags & (TagFlags.IsSerializableText)) == TagFlags.IsSerializableText;
+		}
+		
+		set {
+			if (value)
+				flags |= TagFlags.IsSerializableText;
+			else
+				flags &= ~TagFlags.IsSerializableText;
 		}
 	}
 }

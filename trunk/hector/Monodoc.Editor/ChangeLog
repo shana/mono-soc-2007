@@ -1,3 +1,10 @@
+2007-06-24  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Using
+	  IsSerializableText property for conditional.
+	* Monodoc.Editor.Gui/DocumentTag.cs: Added a property named
+	  IsSerializableText.
+
 2007-06-21  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor/EditorWindow.cs: Added handlers for Save and SaveAs
