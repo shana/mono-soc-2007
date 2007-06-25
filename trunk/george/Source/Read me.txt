@@ -45,3 +45,6 @@ http://pavanpodila.spaces.live.com/blog/cns!9c9e888164859398!135.entry
 
 Panel.IsItemsHost
 http://www.beacosta.com/Archive/2005_10_01_bcosta_archive.html
+
+Visual tree repainting
+http://devpinoy.org/blogs/smash/archive/2006/10/28/Forcing-a-visual-tree-repaint-in-WPF.aspx
