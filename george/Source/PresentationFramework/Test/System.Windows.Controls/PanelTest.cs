@@ -72,6 +72,20 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region GetVisualChildOutOfRange
+		[Test]
+		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void GetVisualChildOutOfRange() {
+			new GetVisualChildOutOfRangePanel();
+		}
+
+		class GetVisualChildOutOfRangePanel : Panel {
+			public GetVisualChildOutOfRangePanel() {
+				GetVisualChild(0);
+			}
+		}
+		#endregion
+
 		#region HasLogicalOrientation
 		[Test]
 		public void HasLogicalOrientation() {
