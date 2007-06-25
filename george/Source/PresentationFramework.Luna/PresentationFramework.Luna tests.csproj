@@ -80,6 +80,7 @@
     <Compile Include="Test\System.Windows.Controls.Primitives\ScrollBarTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\RepeatButtonTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\SetUpFixture.cs" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\TabPanelTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\TrackTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ButtonTest.cs" />
     <Compile Include="Test\System.Windows.Controls\CheckBoxTest.cs" />
@@ -90,6 +91,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Test\Microsoft.Windows.Themes\ChangeLog" />
+    <None Include="Test\System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="Test\System.Windows.Controls\ChangeLog" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.WinFX.targets" />
