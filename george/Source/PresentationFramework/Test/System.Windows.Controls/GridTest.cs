@@ -907,5 +907,70 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region MeasureConstraint
+		[Test]
+		public void MeasureConstraint() {
+			new MeasureConstraintGrid();
+		}
+
+		class MeasureConstraintGrid : Grid {
+			static Size measure_constraint;
+
+			public MeasureConstraintGrid() {
+				RowDefinitions.Add(new RowDefinition());
+				RowDefinition row_definition = new RowDefinition();
+				row_definition.Height = new GridLength(1, GridUnitType.Star);
+				RowDefinitions.Add(row_definition);
+				TestButton button = new TestButton();
+				Children.Add(button);
+				Window window = new Window();
+				window.Content = this;
+				window.Show();
+				Assert.AreEqual(measure_constraint.Width, ActualWidth);
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
+				protected override Size MeasureOverride(Size constraint) {
+					measure_constraint = constraint;
+					return base.MeasureOverride(constraint);
+				}
+			}
+		}
+		#endregion
+
+		#region MeasureConstraintAuto
+		[Test]
+		public void MeasureConstraintAuto() {
+			new MeasureConstraintAutoGrid();
+		}
+
+		class MeasureConstraintAutoGrid : Grid {
+			static Size measure_constraint;
+
+			public MeasureConstraintAutoGrid() {
+				RowDefinitions.Add(new RowDefinition());
+				RowDefinition row_definition = new RowDefinition();
+				row_definition.Height = new GridLength(1, GridUnitType.Star);
+				RowDefinitions.Add(row_definition);
+				global::System.Windows.Controls.Button button1 = new global::System.Windows.Controls.Button();
+				Children.Add(button1);
+				TestButton button2 = new TestButton();
+				Grid.SetRow(button2, 1);
+				Children.Add(button2);
+				Window window = new Window();
+				window.Content = this;
+				window.Show();
+				Assert.AreEqual(measure_constraint.Height, ActualHeight / 2);
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
+				protected override Size MeasureOverride(Size constraint) {
+					measure_constraint = constraint;
+					return base.MeasureOverride(constraint);
+				}
+			}
+		}
+		#endregion
 	}
 }
