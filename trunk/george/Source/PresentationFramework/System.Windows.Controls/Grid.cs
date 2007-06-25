@@ -334,8 +334,79 @@ namespace System.Windows.Controls {
 					column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
 				}
 			#endregion
+			#region Distribute remaining space to rows/columns with star size
+			double[] row_star_heights = new double[row_count];
+			Array.Copy(row_heights, row_star_heights, row_count);
+			double[] column_star_widths = new double[column_count];
+			Array.Copy(column_widths, column_star_widths, column_count);
+			double total_star;
+			double remaining_lenght;
+			GridLength lenght;
+			double star_ratio;
+			if (has_row_definitions && !double.IsPositiveInfinity(availableSize.Height)) {
+				total_star = 0;
+				remaining_lenght = availableSize.Height;
+				RowDefinition row_definition;
+				for (index = 0; index < row_count; index++) {
+					row_definition = row_definitions[index];
+					lenght = row_definition.Height;
+					if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
+						total_star += lenght.Value;
+					else
+						remaining_lenght -= row_heights[index];
+				}
+				if (remaining_lenght > 0 && total_star != 0) {
+					star_ratio = remaining_lenght / total_star;
+					for (index = 0; index < row_count; index++) {
+						row_definition = row_definitions[index];
+						lenght = row_definition.Height;
+						if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
+							row_star_heights[index] = lenght.Value * star_ratio;
+					}
+				}
+				remaining_lenght = availableSize.Height;
+				for (index = 0; index < row_count; index++) {
+					if (row_definitions[index].Height.IsAuto)
+						continue;
+					if (row_star_heights[index] > remaining_lenght)
+						row_star_heights[index] = remaining_lenght;
+					remaining_lenght -= row_star_heights[index];
+				}
+			}
+			if (has_column_definitions && !double.IsPositiveInfinity(availableSize.Width)) {
+				total_star = 0;
+				remaining_lenght = availableSize.Width;
+				ColumnDefinition column_definition;
+				for (index = 0; index < column_count; index++) {
+					column_definition = column_definitions[index];
+					lenght = column_definition.Width;
+					if (lenght.IsStar && column_definition.MinWidth == 0 && double.IsPositiveInfinity(column_definition.MaxWidth))
+						total_star += lenght.Value;
+					else
+						remaining_lenght -= column_widths[index];
+				}
+				if (remaining_lenght > 0 && total_star != 0) {
+					star_ratio = remaining_lenght / total_star;
+					for (index = 0; index < column_count; index++) {
+						column_definition = column_definitions[index];
+						lenght = column_definition.Width;
+						if (lenght.IsStar && column_definition.MinWidth == 0 && double.IsPositiveInfinity(column_definition.MaxWidth))
+							column_star_widths[index] = lenght.Value * star_ratio;
+					}
+				}
+				remaining_lenght = availableSize.Width;
+				for (index = 0; index < column_count; index++) {
+					if (column_definitions[index].Width.IsAuto)
+						continue;
+					if (column_star_widths[index] > remaining_lenght)
+						column_star_widths[index] = remaining_lenght;
+					remaining_lenght -= column_star_widths[index];
+				}
+			}
+			#endregion
 			double[] desired_row_heights = new double[row_count];
 			double[] desired_column_widths = new double[column_count];
+			#region Measure children
 			foreach (UIElement child in InternalChildren) {
 				int child_row = Math.Min(GetRow(child), row_count - 1);
 				int child_column = Math.Min(GetColumn(child), column_count - 1);
@@ -346,7 +417,7 @@ namespace System.Windows.Controls {
 				if (has_row_definitions) {
 					maximum = Math.Min(child_row + child_row_span, row_count);
 					for (index = child_row; index < maximum; index++)
-						child_constraint.Height += row_heights[index];
+						child_constraint.Height += row_definitions[index].Height.IsStar ? row_star_heights[index] : row_heights[index];
 					if (double.IsPositiveInfinity(child_constraint.Height) && child_row_span == 1 && row_definitions[child_row].Height.IsStar)
 						child_constraint.Height = availableSize.Height;
 				} else
@@ -354,7 +425,7 @@ namespace System.Windows.Controls {
 				if (has_column_definitions) {
 					maximum = Math.Min(child_column + child_column_span, column_count);
 					for (index = child_column; index < maximum; index++)
-						child_constraint.Width += column_widths[index];
+						child_constraint.Width += column_definitions[index].Width.IsStar ? column_star_widths[index] : column_widths[index];
 					if (double.IsPositiveInfinity(child_constraint.Width) && child_column_span == 1 && column_definitions[child_column].Width.IsStar)
 						child_constraint.Width = availableSize.Width;
 				} else
@@ -365,6 +436,7 @@ namespace System.Windows.Controls {
 				if (child_column_span == 1)
 					desired_column_widths[child_column] = Math.Max(desired_column_widths[child_column], child.DesiredSize.Width);
 			}
+			#endregion
 			for (index = 0; index < row_count; index++)
 				if (double.IsPositiveInfinity(row_heights[index]))
 					row_heights[index] = desired_row_heights[index];
@@ -383,7 +455,6 @@ namespace System.Windows.Controls {
 					column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
 				}
 			#endregion
-			double remaining_lenght;
 			if (has_row_definitions) {
 				remaining_lenght = availableSize.Height;
 				for (index = 0; index < row_count; index++) {
