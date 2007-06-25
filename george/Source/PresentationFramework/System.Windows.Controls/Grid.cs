@@ -353,7 +353,8 @@ namespace System.Windows.Controls {
 					if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
 						total_star += lenght.Value;
 					else
-						remaining_lenght -= row_heights[index];
+						if (!double.IsPositiveInfinity(row_heights[index]))
+							remaining_lenght -= row_heights[index];
 				}
 				if (remaining_lenght > 0 && total_star != 0) {
 					star_ratio = remaining_lenght / total_star;
@@ -383,7 +384,8 @@ namespace System.Windows.Controls {
 					if (lenght.IsStar && column_definition.MinWidth == 0 && double.IsPositiveInfinity(column_definition.MaxWidth))
 						total_star += lenght.Value;
 					else
-						remaining_lenght -= column_widths[index];
+						if (!double.IsPositiveInfinity(column_widths[index]))
+							remaining_lenght -= column_widths[index];
 				}
 				if (remaining_lenght > 0 && total_star != 0) {
 					star_ratio = remaining_lenght / total_star;
