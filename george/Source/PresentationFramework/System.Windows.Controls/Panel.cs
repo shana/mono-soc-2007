@@ -121,6 +121,8 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Visual GetVisualChild(int index) {
+			if (index < 0 || index >= VisualChildrenCount)
+				throw new ArgumentOutOfRangeException("index");
 			SortedDictionary<int, List<UIElement>> groups = new SortedDictionary<int, List<UIElement>>();
 			foreach (UIElement child in Children) {
 				int z_index = GetZIndex(child);
