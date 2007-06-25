@@ -863,5 +863,49 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region MultipleColumnSpan
+		[Test]
+		public void MultipleColumnSpan() {
+			Grid g = new Grid();
+			ColumnDefinition c = new ColumnDefinition();
+			c.Width = new GridLength(100);
+			g.ColumnDefinitions.Add(c);
+			c = new ColumnDefinition();
+			c.Width = new GridLength(100);
+			g.ColumnDefinitions.Add(c);
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			MultipleColumnSpanButton b = new MultipleColumnSpanButton();
+			Grid.SetColumnSpan(b, 2);
+			g.Children.Add(b);
+			Window w = new Window();
+			w.Content = g;
+			w.Show();
+			Assert.AreEqual(b.MeasureConstraint.Width, 200);
+		}
+
+		[Test]
+		public void MultipleColumnSpanStar() {
+			Grid g = new Grid();
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			MultipleColumnSpanButton b = new MultipleColumnSpanButton();
+			Grid.SetColumnSpan(b, 2);
+			g.Children.Add(b);
+			Window w = new Window();
+			w.Content = g;
+			w.Show();
+			Assert.AreEqual(b.MeasureConstraint.Width, g.ColumnDefinitions[0].ActualWidth + g.ColumnDefinitions[1].ActualWidth);
+		}
+
+		class MultipleColumnSpanButton : global::System.Windows.Controls.Button {
+			public Size MeasureConstraint;
+			protected override Size MeasureOverride(Size constraint) {
+				MeasureConstraint = constraint;
+				return base.MeasureOverride(constraint);
+			}
+		}
+		#endregion
 	}
 }
