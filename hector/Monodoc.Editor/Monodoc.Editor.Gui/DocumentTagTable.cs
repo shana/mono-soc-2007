@@ -79,6 +79,14 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsAttribute = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("MemberOfLibrary");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("MemberOfLibrary:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("AssemblyInfo");
 		tag.IsElement = true;
 		Add (tag);
@@ -107,6 +115,34 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("AssemblyCulture");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("AssemblyCulture:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("TypeParameters");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("TypeParameter");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("TypeParameter:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ThreadingSafetyStatement");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ThreadingSafetyStatement:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("ThreadSafetyStatement");
 		tag.IsElement = true;
 		Add (tag);
@@ -127,20 +163,43 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("Attributes");
+		tag = new DocumentTag ("BaseTypeArguments");
 		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("Attribute");
+		tag = new DocumentTag ("BaseTypeArgument");
 		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("AttributeName");
-		tag.IsElement = true;
+		tag = new DocumentTag ("BaseTypeArgument:Attributes");
 		Add (tag);
 		
-		tag = new DocumentTag ("AttributeName:Text");
+		tag = new DocumentTag ("BaseTypeArgument:TypeParamName");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("BaseTypeArgument:Text");
 		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedBaseTypeName");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedBaseTypeName:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Interfaces");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Interface");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("InterfaceName");
+		tag.IsElement = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Members");
@@ -197,8 +256,91 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("MemberValue");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("MemberValue:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedLibrary");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedLibrary:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("Parameters");
 		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Parameter");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Parameter:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("Parameter:Name");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Parameter:Type");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Parameter:RefType");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("TypeExcluded");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("TypeExcluded:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Attributes");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Attribute");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("AttributeName");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("AttributeName:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Excluded");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("Excluded:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedTypeName");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedTypeName:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedLibraryName");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ExcludedLibraryName:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Docs");
@@ -227,6 +369,79 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("para:Text");
 		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("param");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("param:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("param:name");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("param:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("paramref");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("paramref:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("paramref:name");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("returns");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("returns:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("example");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("example:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("code");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("code:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("code:lang");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("code:language");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("code:source");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("c");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("c:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("value");
+		tag.IsElement = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("see");

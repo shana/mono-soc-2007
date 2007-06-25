@@ -1,3 +1,10 @@
+2007-06-25  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentTagTable.cs: Adding more tag for missing elements and
+	  attributes.
+	* DocumentBuffer.cs: Use Instance call so only one DocumentTagTable is
+	  created at any time.
+
 2007-06-24  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentTagTable.cs, DocumentTag.cs: Deleted HasText property.
