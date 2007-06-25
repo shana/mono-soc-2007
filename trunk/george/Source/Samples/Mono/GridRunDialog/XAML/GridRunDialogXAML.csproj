@@ -5,9 +5,9 @@
     <AssemblyName>SDKSample</AssemblyName>
     <TargetType>winexe</TargetType>
     <Configuration>Release</Configuration>
-    
     <SchemaVersion>2.0</SchemaVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <ProjectGuid>{95F88176-F895-4C7D-AA46-6FCF56C04DF0}</ProjectGuid>
   </PropertyGroup>
   <!--Import the target file that contains all the common targets -->
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -33,5 +33,11 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="UIAutomationTypes" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PresentationFramework\Mono.PresentationFramework.csproj">
+      <Project>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</Project>
+      <Name>Mono.PresentationFramework</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
