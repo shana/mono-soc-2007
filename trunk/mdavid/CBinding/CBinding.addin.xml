@@ -10,7 +10,6 @@
 
 	<Runtime>
 		<Import assembly = "CBinding.dll"/>
-		<Import assembly = "../CTagsCompletion.dll"/>
 	</Runtime>
 	
 	<Dependencies>
@@ -19,7 +18,6 @@
 		<AddIn id = "MonoDevelop.Ide" version = "0.14.0"/>
 		<AddIn id = "MonoDevelop.Projects" version = "0.14.0"/>
 		<AddIn id = "MonoDevelop.Projects.Gui" version = "0.14.0"/>
-		<AddIn id = "MonoDevelop.CTagsCompletion" version = "0.1"/>
 	</Dependencies>
 
 	<Extension path = "/SharpDevelop/Workbench/FileFilter">
