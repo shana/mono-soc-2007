@@ -972,5 +972,18 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void MinWidth2() {
+			Grid g = new Grid();
+			ColumnDefinition c = new ColumnDefinition();
+			c.MinWidth = 100;
+			g.ColumnDefinitions.Add(c);
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			Window w = new Window();
+			w.Content = g;
+			w.Show();
+			Assert.AreEqual(c.ActualWidth, g.ActualWidth / 2);
+		}
 	}
 }
