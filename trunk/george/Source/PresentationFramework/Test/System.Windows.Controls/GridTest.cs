@@ -985,5 +985,24 @@ namespace System.Windows.Controls {
 			w.Show();
 			Assert.AreEqual(c.ActualWidth, g.ActualWidth / 2);
 		}
+
+		[Test]
+		public void MinWidth3() {
+			Grid g = new Grid();
+			ColumnDefinition c1 = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c1);
+			ColumnDefinition c2 = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c2);
+			ColumnDefinition c3 = new ColumnDefinition();
+			g.ColumnDefinitions.Add(c3);
+			Window w = new Window();
+			w.Content = g;
+			w.Show();
+			c1.MinWidth = g.ActualWidth / 2;
+			g.UpdateLayout();
+			Assert.AreEqual(c1.ActualWidth, g.ActualWidth / 2, "1");
+			Assert.AreEqual(c2.ActualWidth, g.ActualWidth / 4, "2");
+			Assert.AreEqual(c3.ActualWidth, g.ActualWidth / 4, "3");
+		}
 	}
 }
