@@ -27,6 +27,7 @@ namespace System.Windows.Controls {
 		#region Public Constructors
 		public Label() {
 			IsTabStop = false;
+
             AccessKeyManager.AddAccessKeyPressedHandler(this, delegate(object sender, AccessKeyPressedEventArgs e) {
                 UIElement target = Target;
                 if (target != null)
@@ -36,10 +37,12 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Public Properties
+		#region Dependency Properties
 		public UIElement Target {
 			get { return (UIElement)GetValue(TargetProperty); }
 			set { SetValue(TargetProperty, value); }
 		}
+		#endregion
 		#endregion
 
 		#region Protected Methods
