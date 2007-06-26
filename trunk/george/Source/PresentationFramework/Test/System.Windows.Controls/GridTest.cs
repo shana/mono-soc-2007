@@ -896,7 +896,9 @@ namespace System.Windows.Controls {
 			Window w = new Window();
 			w.Content = g;
 			w.Show();
-			Assert.AreEqual(b.MeasureConstraint.Width, g.ColumnDefinitions[0].ActualWidth + g.ColumnDefinitions[1].ActualWidth);
+			Assert.IsTrue(Utility.AreCloseEnough(g.ColumnDefinitions[0].ActualWidth, g.ColumnDefinitions[1].ActualWidth), "1");
+			Assert.IsTrue(Utility.AreCloseEnough(g.ColumnDefinitions[0].ActualWidth, g.ColumnDefinitions[2].ActualWidth), "2");
+			Assert.AreEqual(b.MeasureConstraint.Width, g.ColumnDefinitions[0].ActualWidth + g.ColumnDefinitions[1].ActualWidth, "3");
 		}
 
 		class MultipleColumnSpanButton : global::System.Windows.Controls.Button {
