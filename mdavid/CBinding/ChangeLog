@@ -1,5 +1,11 @@
 2007-06-25  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* Navigation/Tag.cs, Navigation/Namespace.cs,
+	  Navigation/ProjectNodeBuilderExtension.cs, CBinding.addin.xml:
+	  Started work on code navigation.
+
+2007-06-25  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Project/CProjectServiceExtension.cs, Project/CProject.cs,
 	  Makefile.am, CBinding.addin.xml, CBinding.mdp, Completion.cs: Got
 	  rid of anything related to CTagsCompletion.
