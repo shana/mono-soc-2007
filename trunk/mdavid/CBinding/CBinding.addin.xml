@@ -97,10 +97,14 @@
 	</ExtensionPoint>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
-		<NodeBuilder id = "ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
-		<NodeBuilder id = "ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
-		<NodeBuilder id = "ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
-		<NodeBuilder id = "ProjectPackageNodeBuilder" class = "CBinding.ProjectPackageNodeBuilder"/>
+		<NodeBuilder id = "CBinding.ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
+		<NodeBuilder id = "CBinding.ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
+		<NodeBuilder id = "CBinding.ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
+		<NodeBuilder id = "CBinding.ProjectPackageNodeBuilder" class = "CBinding.ProjectPackageNodeBuilder"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ClassPad">
+		<NodeBuilder id = "CBinding.Navigation.ProjectNodeBuilderExtension" class = "CBinding.Navigation.ProjectNodeBuilderExtension"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">

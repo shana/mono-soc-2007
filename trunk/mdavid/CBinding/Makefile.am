@@ -40,6 +40,9 @@ FILES =  \
 	Gui/ProjectPackageNodeBuilder.cs \
 	Gui/ProjectPackagesFolderNodeBuilder.cs \
 	Gui/ProjectReferencesExtension.cs \
+	Navigation/Namespace.cs \
+	Navigation/ProjectNodeBuilderExtension.cs \
+	Navigation/Tag.cs \
 	Project/CCompilationParameters.cs \
 	Project/CProject.cs \
 	Project/CProjectBinding.cs \
