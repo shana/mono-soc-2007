@@ -188,12 +188,11 @@ namespace System.Windows.Controls {
 						column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
 					}
 				#endregion
-				#region Distribute remaining space to rows/columns with star size; set row/column definitions ActualWidth/Height and Offset values
+				#region Distribute remaining space to rows/columns with star size
 				double total_star;
 				double remaining_lenght;
 				GridLength lenght;
 				double star_ratio;
-				double offset;
 				if (has_row_definitions) {
 					total_star = 0;
 					remaining_lenght = finalSize.Height;
@@ -214,16 +213,6 @@ namespace System.Windows.Controls {
 							if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
 								row_heights[index] = Math.Max(lenght.Value * star_ratio, desired_row_heights[index]);
 						}
-					}
-					remaining_lenght = finalSize.Height;
-					offset = 0;
-					for (index = 0; index < row_count; index++) {
-						if (row_heights[index] > remaining_lenght)
-							row_heights[index] = remaining_lenght;
-						remaining_lenght -= row_heights[index];
-						RowDefinition definition = row_definitions[index];
-						definition.Offset = offset;
-						offset += definition.ActualHeight = row_heights[index];
 					}
 				}
 				if (has_column_definitions) {
@@ -248,6 +237,23 @@ namespace System.Windows.Controls {
 							column_definitions[index].ActualWidth = column_widths[index];
 						}
 					}
+				}
+				#endregion
+				#region Set row/column definitions ActualWidth/Height and Offset values
+				double offset;
+				if (has_row_definitions) {
+					remaining_lenght = finalSize.Height;
+					offset = 0;
+					for (index = 0; index < row_count; index++) {
+						if (row_heights[index] > remaining_lenght)
+							row_heights[index] = remaining_lenght;
+						remaining_lenght -= row_heights[index];
+						RowDefinition definition = row_definitions[index];
+						definition.Offset = offset;
+						offset += definition.ActualHeight = row_heights[index];
+					}
+				}
+				if (has_column_definitions) {
 					remaining_lenght = finalSize.Width;
 					offset = 0;
 					for (index = 0; index < column_count; index++) {
