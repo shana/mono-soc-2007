@@ -1036,5 +1036,35 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+		#region StarSizingMeasure
+		[Test]
+		public void StarSizingMeasure() {
+			new StarSizingMeasureGrid();
+		}
+
+		class StarSizingMeasureGrid : Grid {
+			static Size measure_constraint;
+
+			public StarSizingMeasureGrid() {
+				ColumnDefinition c = new ColumnDefinition();
+				c.Width = GridLength.Auto;
+				ColumnDefinitions.Add(c);
+				ColumnDefinitions.Add(new ColumnDefinition());
+				TestButton b = new TestButton();
+				Children.Add(b);
+				Children.Add(new global::System.Windows.Controls.Button());
+				Grid.SetColumn(b, 1);
+				Measure(new Size(100, 100));
+				Assert.AreEqual(measure_constraint.Width, 100 - Utility.GetEmptyButtonSize());
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
+				protected override Size MeasureOverride(Size constraint) {
+					measure_constraint = constraint;
+					return base.MeasureOverride(constraint);
+				}
+			}
+		}
+		#endregion
 	}
 }
