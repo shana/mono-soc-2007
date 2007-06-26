@@ -1004,5 +1004,35 @@ namespace System.Windows.Controls {
 			Assert.AreEqual(c2.ActualWidth, g.ActualWidth / 4, "2");
 			Assert.AreEqual(c3.ActualWidth, g.ActualWidth / 4, "3");
 		}
+
+		#region StarSizingWithMinimumMaximumMeasure
+		[Test]
+		public void StarSizingWithMinimumMaximumMeasure() {
+			new StarSizingWithMinimumMaximumMeasureGrid();
+		}
+
+		class StarSizingWithMinimumMaximumMeasureGrid : Grid {
+			static Size measure_constraint;
+
+			public StarSizingWithMinimumMaximumMeasureGrid() {
+				ColumnDefinition c = new ColumnDefinition();
+				c.MinWidth = 100;
+				ColumnDefinitions.Add(c);
+				ColumnDefinitions.Add(new ColumnDefinition());
+				TestButton b = new TestButton();
+				Children.Add(b);
+				Grid.SetColumn(b, 1);
+				Measure(new Size(150, 100));
+				Assert.AreEqual(measure_constraint.Width, 50);
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
+				protected override Size MeasureOverride(Size constraint) {
+					measure_constraint = constraint;
+					return base.MeasureOverride(constraint);
+				}
+			}
+		}
+		#endregion
 	}
 }
