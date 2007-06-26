@@ -1036,6 +1036,7 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
 		#region StarSizingMeasure
 		[Test]
 		public void StarSizingMeasure() {
@@ -1044,7 +1045,7 @@ namespace System.Windows.Controls {
 
 		class StarSizingMeasureGrid : Grid {
 			static Size measure_constraint;
-
+			static int calls;
 			public StarSizingMeasureGrid() {
 				ColumnDefinition c = new ColumnDefinition();
 				c.Width = GridLength.Auto;
@@ -1055,12 +1056,14 @@ namespace System.Windows.Controls {
 				Children.Add(new global::System.Windows.Controls.Button());
 				Grid.SetColumn(b, 1);
 				Measure(new Size(100, 100));
-				Assert.AreEqual(measure_constraint.Width, 100 - Utility.GetEmptyButtonSize());
+				Assert.AreEqual(measure_constraint.Width, 100 - Utility.GetEmptyButtonSize(), "1");
+				Assert.AreEqual(calls, 1, "2");
 			}
 
 			class TestButton : global::System.Windows.Controls.Button {
 				protected override Size MeasureOverride(Size constraint) {
 					measure_constraint = constraint;
+					calls++;
 					return base.MeasureOverride(constraint);
 				}
 			}
