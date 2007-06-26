@@ -167,8 +167,10 @@ namespace Mono.WindowsPresentationFoundation {
 
 		public static void LoadLunaTheme() {
 			const int WindowsVistaMajorVersion = 6;
-			if (Environment.OSVersion.Version.Major == WindowsVistaMajorVersion)
+			if (Environment.OSVersion.Version.Major == WindowsVistaMajorVersion) {
 				Application.Current.Resources.MergedDictionaries.Add(Application.LoadComponent(new Uri("PresentationFramework.Luna;V3.0.0.0;31bf3856ad364e35;component\\themes/luna.normalcolor.xaml", UriKind.Relative)) as ResourceDictionary);
+				Application.Current.Resources.MergedDictionaries.Add(Application.LoadComponent(new Uri("Mono.PresentationFramework.Luna;V3.0.0.0;;component\\themes/luna.normalcolor.xaml", UriKind.Relative)) as ResourceDictionary);
+			}
 		}
 	}
 }
