@@ -284,6 +284,7 @@ namespace System.Windows.Controls {
 				if (ShowGridLines && (has_row_definitions || has_column_definitions)) {
 					grid_lines_renderer = new GridLinesRenderer(this);
 					AddVisualChild(grid_lines_renderer);
+					grid_lines_renderer.Rebuild();
 				}
 			} else
 				grid_lines_renderer.Rebuild();
@@ -519,20 +520,55 @@ namespace System.Windows.Controls {
 		#region Classes
 		class GridLinesRenderer : DrawingVisual {
 			Grid grid;
+			int row_count;
+			int column_count;
+			double[] row_offsets;
+			double[] column_offsets;
 
 			public GridLinesRenderer(Grid grid) {
 				this.grid = grid;
-				Rebuild();
 			}
 
 			public void Rebuild() {
-				DrawingContext drawing_context = RenderOpen();
+				bool changed = false;
 				int definition_index;
-				for (definition_index = 1; definition_index < grid.row_definitions.Count; definition_index++)
+				if (grid.row_definitions.Count != row_count) {
+					changed = true;
+					row_count = grid.row_definitions.Count;
+					row_offsets = new double[row_count];
+					for (definition_index = 1; definition_index < row_count; definition_index++)
+						row_offsets[definition_index] = grid.row_definitions[definition_index].Offset;
+				} else
+					for (definition_index = 1; definition_index < row_count; definition_index++) {
+						if (row_offsets[definition_index] != grid.row_definitions[definition_index].Offset)
+							changed = true;
+						row_offsets[definition_index] = grid.row_definitions[definition_index].Offset;
+					}
+				if (grid.column_definitions.Count != column_count) {
+					changed = true;
+					column_count = grid.column_definitions.Count;
+					column_offsets = new double[column_count];
+					for (definition_index = 1; definition_index < column_count; definition_index++)
+						column_offsets[definition_index] = grid.column_definitions[definition_index].Offset;
+				} else
+					for (definition_index = 1; definition_index < column_count; definition_index++) {
+						if (column_offsets[definition_index] != grid.column_definitions[definition_index].Offset)
+							changed = true;
+						column_offsets[definition_index] = grid.column_definitions[definition_index].Offset;
+					}
+
+				//FIXME: I don't know why I can't do this only when "changed".
+				//if (changed) {
+				DrawingContext drawing_context = RenderOpen();
+				for (definition_index = 1; definition_index < row_count; definition_index++)
 					DrawLine(drawing_context, grid.row_definitions[definition_index].Offset, true);
-				for (definition_index = 1; definition_index < grid.column_definitions.Count; definition_index++)
+				for (definition_index = 1; definition_index < column_count; definition_index++)
 					DrawLine(drawing_context, grid.column_definitions[definition_index].Offset, false);
 				drawing_context.Close();
+				//}
+
+				if (changed)
+					grid.InvalidateMeasure();
 			}
 
 			void DrawLine(DrawingContext drawingContext, double position, bool horizontal) {

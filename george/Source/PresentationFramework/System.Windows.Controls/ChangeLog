@@ -1,3 +1,7 @@
+2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Grid.cs: Fixed grid lines rendering.
+
 2007-06-25  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Panel.cs: GetVisualChild now throws ArgumentOutOfRangeException when the passed index is out of range.
