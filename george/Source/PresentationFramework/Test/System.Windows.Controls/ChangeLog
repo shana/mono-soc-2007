@@ -1,5 +1,9 @@
 2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* PanelTest.cs: Added InItemsControlSimple.
+
+2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ListBoxTest.cs, ListBoxItemTest.cs: Added.
 
 2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>

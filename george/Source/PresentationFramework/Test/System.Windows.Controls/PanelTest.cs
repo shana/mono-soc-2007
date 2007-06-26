@@ -233,6 +233,21 @@ namespace System.Windows.Controls {
 			Assert.AreEqual(children.GetType(), typeof(UIElementCollection), "15");
 		}
 
+		[Test]
+		public void InItemsControlSimple() {
+			TestItemsControl items_control = new TestItemsControl();
+			ControlTemplate items_control_template = new ControlTemplate(typeof(TestItemsControl));
+			FrameworkElementFactory panel_factory = new FrameworkElementFactory(typeof(IsItemsHostPanel));
+			panel_factory.Name = "Panel";
+			items_control_template.VisualTree = panel_factory;
+			items_control.Template = items_control_template;
+			items_control.ApplyTemplate();
+			UIElementCollection children = items_control.GetPanel().Children;
+			Assert.AreEqual(children.Count, 0, "1");
+			items_control.Items.Add(new Button());
+			Assert.AreEqual(children.Count, 1, "2");
+		}
+
 		class IsItemsHostPanel : Panel {
 			public bool CallOnIsItemsHostChanged = true;
 
