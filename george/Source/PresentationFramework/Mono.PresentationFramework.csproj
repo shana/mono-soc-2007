@@ -66,6 +66,8 @@
     <Compile Include="System.Windows.Controls\ContextMenuEventHandler.cs" />
     <Compile Include="System.Windows.Controls\ContextMenuEventArgs.cs" />
     <Compile Include="System.Windows.Controls\ColumnDefinitionCollection.cs" />
+    <Compile Include="System.Windows.Controls\ListBox.cs" />
+    <Compile Include="System.Windows.Controls\ListBoxItem.cs" />
     <Compile Include="System.Windows.Controls\RowDefinition.cs" />
     <Compile Include="System.Windows.Controls\DefinitionBase.cs" />
     <Compile Include="System.Windows.Controls\DockPanel.cs" />
