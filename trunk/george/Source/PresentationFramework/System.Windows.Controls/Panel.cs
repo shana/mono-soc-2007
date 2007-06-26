@@ -68,9 +68,8 @@ namespace System.Windows.Controls {
 					ItemsControl items_control = TemplatedParent as ItemsControl;
 					if (items_control == null)
 						throw new InvalidOperationException("A panel with IsItemsHost=\"true\" is not nested in an ItemsControl. Panel must be nested in ItemsControl to get and show items.");
-					return children;
-				} else
-					return children; 
+				}
+				return children; 
 			}
 		}
 		#endregion
