@@ -1,3 +1,7 @@
+2007-06-27  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* GridTest.cs: Expanded StarSizingMeasure test.
+
 2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* GridTest.cs: Added StarSizingMeasure test.
