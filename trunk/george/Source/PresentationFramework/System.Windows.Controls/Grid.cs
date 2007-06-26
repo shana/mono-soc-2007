@@ -388,7 +388,6 @@ namespace System.Windows.Controls {
 					current_star_sizing_valid = true;
 					total_star = 0;
 					remaining_lenght = availableSize.Height;
-					RowDefinition row_definition;
 					for (index = 0; index < row_count; index++) {
 						if (uses_star_sizing[index])
 							total_star += row_definitions[index].Height.Value;
@@ -434,7 +433,6 @@ namespace System.Windows.Controls {
 					current_star_sizing_valid = true;
 					total_star = 0;
 					remaining_lenght = availableSize.Width;
-					ColumnDefinition column_definition;
 					for (index = 0; index < column_count; index++) {
 						if (uses_star_sizing[index])
 							total_star += column_definitions[index].Width.Value;
