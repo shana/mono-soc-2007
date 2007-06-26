@@ -196,12 +196,12 @@ namespace System.Windows.Controls {
 				bool[] uses_star_sizing;
 				bool current_star_sizing_valid = true;
 				if (has_row_definitions) {
-					total_star = 0;
-					remaining_lenght = finalSize.Height;
 					uses_star_sizing = new bool[row_count];
 					for (index = 0; index < row_count; index++)
 						uses_star_sizing[index] = row_definitions[index].Height.IsStar;
 					do {
+						total_star = 0;
+						remaining_lenght = finalSize.Height;
 						for (index = 0; index < row_count; index++) {
 							if (uses_star_sizing[index])
 								total_star += row_definitions[index].Height.Value;
@@ -232,12 +232,12 @@ namespace System.Windows.Controls {
 					} while (!current_star_sizing_valid);
 				}
 				if (has_column_definitions) {
-					total_star = 0;
-					remaining_lenght = finalSize.Width;
 					uses_star_sizing = new bool[column_count];
 					for (index = 0; index < column_count; index++)
 						uses_star_sizing[index] = column_definitions[index].Width.IsStar;
 					do {
+						total_star = 0;
+						remaining_lenght = finalSize.Width;
 						for (index = 0; index < column_count; index++) {
 							if (uses_star_sizing[index])
 								total_star += column_definitions[index].Width.Value;
