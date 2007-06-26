@@ -1,5 +1,9 @@
 2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Grid.cs: Fixed previous fix.
+
+2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Grid.cs: Fixed star sizing when the row/column size would not be between its minimum and maximum.
 
 2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
