@@ -191,7 +191,6 @@ namespace System.Windows.Controls {
 				#region Distribute remaining space to rows/columns with star size
 				double total_star;
 				double remaining_lenght;
-				GridLength lenght;
 				double star_ratio;
 				bool[] uses_star_sizing;
 				bool current_star_sizing_valid = true;
