@@ -378,28 +378,45 @@ namespace System.Windows.Controls {
 			double remaining_lenght;
 			GridLength lenght;
 			double star_ratio;
+			bool[] uses_star_sizing;
+			bool current_star_sizing_valid;
 			if (has_row_definitions && !double.IsPositiveInfinity(availableSize.Height)) {
-				total_star = 0;
-				remaining_lenght = availableSize.Height;
-				RowDefinition row_definition;
-				for (index = 0; index < row_count; index++) {
-					row_definition = row_definitions[index];
-					lenght = row_definition.Height;
-					if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
-						total_star += lenght.Value;
-					else
-						if (!double.IsPositiveInfinity(row_heights[index]))
-							remaining_lenght -= row_heights[index];
-				}
-				if (remaining_lenght > 0 && total_star != 0) {
-					star_ratio = remaining_lenght / total_star;
+				uses_star_sizing = new bool[row_count];
+				for (index = 0; index < row_count; index++)
+					uses_star_sizing[index] = row_definitions[index].Height.IsStar;
+				do {
+					current_star_sizing_valid = true;
+					total_star = 0;
+					remaining_lenght = availableSize.Height;
+					RowDefinition row_definition;
 					for (index = 0; index < row_count; index++) {
-						row_definition = row_definitions[index];
-						lenght = row_definition.Height;
-						if (lenght.IsStar && row_definition.MinHeight == 0 && double.IsPositiveInfinity(row_definition.MaxHeight))
-							row_star_heights[index] = lenght.Value * star_ratio;
+						if (uses_star_sizing[index])
+							total_star += row_definitions[index].Height.Value;
+						else
+							if (!double.IsPositiveInfinity(row_heights[index]))
+								remaining_lenght -= row_heights[index];
 					}
-				}
+					if (remaining_lenght > 0 && total_star != 0) {
+						star_ratio = remaining_lenght / total_star;
+						for (index = 0; index < row_count; index++)
+							if (uses_star_sizing[index]) {
+								RowDefinition definition = row_definitions[index];
+								double proposed_lenght = definition.Height.Value * star_ratio;
+								if (proposed_lenght < definition.MinHeight) {
+									row_star_heights[index] = definition.MinHeight;
+									uses_star_sizing[index] = false;
+									current_star_sizing_valid = false;
+									break;
+								} else if (proposed_lenght > definition.MaxHeight) {
+									row_star_heights[index] = definition.MaxHeight;
+									uses_star_sizing[index] = false;
+									current_star_sizing_valid = false;
+									break;
+								} else
+									row_star_heights[index] = proposed_lenght;
+							}
+					}
+				} while (!current_star_sizing_valid);
 				remaining_lenght = availableSize.Height;
 				for (index = 0; index < row_count; index++) {
 					if (row_definitions[index].Height.IsAuto)
@@ -410,27 +427,42 @@ namespace System.Windows.Controls {
 				}
 			}
 			if (has_column_definitions && !double.IsPositiveInfinity(availableSize.Width)) {
-				total_star = 0;
-				remaining_lenght = availableSize.Width;
-				ColumnDefinition column_definition;
-				for (index = 0; index < column_count; index++) {
-					column_definition = column_definitions[index];
-					lenght = column_definition.Width;
-					if (lenght.IsStar && column_definition.MinWidth == 0 && double.IsPositiveInfinity(column_definition.MaxWidth))
-						total_star += lenght.Value;
-					else
-						if (!double.IsPositiveInfinity(column_widths[index]))
-							remaining_lenght -= column_widths[index];
-				}
-				if (remaining_lenght > 0 && total_star != 0) {
-					star_ratio = remaining_lenght / total_star;
+				uses_star_sizing = new bool[column_count];
+				for (index = 0; index < column_count; index++)
+					uses_star_sizing[index] = column_definitions[index].Width.IsStar;
+				do {
+					current_star_sizing_valid = true;
+					total_star = 0;
+					remaining_lenght = availableSize.Width;
+					ColumnDefinition column_definition;
 					for (index = 0; index < column_count; index++) {
-						column_definition = column_definitions[index];
-						lenght = column_definition.Width;
-						if (lenght.IsStar && column_definition.MinWidth == 0 && double.IsPositiveInfinity(column_definition.MaxWidth))
-							column_star_widths[index] = lenght.Value * star_ratio;
+						if (uses_star_sizing[index])
+							total_star += column_definitions[index].Width.Value;
+						else
+							if (!double.IsPositiveInfinity(column_widths[index]))
+								remaining_lenght -= column_widths[index];
 					}
-				}
+					if (remaining_lenght > 0 && total_star != 0) {
+						star_ratio = remaining_lenght / total_star;
+						for (index = 0; index < column_count; index++)
+							if (uses_star_sizing[index]) {
+								ColumnDefinition definition = column_definitions[index];
+								double proposed_lenght = definition.Width.Value * star_ratio;
+								if (proposed_lenght < definition.MinWidth) {
+									column_star_widths[index] = definition.MinWidth;
+									uses_star_sizing[index] = false;
+									current_star_sizing_valid = false;
+									break;
+								} else if (proposed_lenght > definition.MaxWidth) {
+									column_star_widths[index] = definition.MaxWidth;
+									uses_star_sizing[index] = false;
+									current_star_sizing_valid = false;
+									break;
+								} else
+									column_star_widths[index] = proposed_lenght;
+							}
+					}
+				} while (!current_star_sizing_valid);
 				remaining_lenght = availableSize.Width;
 				for (index = 0; index < column_count; index++) {
 					if (column_definitions[index].Width.IsAuto)
