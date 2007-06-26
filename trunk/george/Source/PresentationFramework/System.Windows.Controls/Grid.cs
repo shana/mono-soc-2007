@@ -193,12 +193,13 @@ namespace System.Windows.Controls {
 				double remaining_lenght;
 				double star_ratio;
 				bool[] uses_star_sizing;
-				bool current_star_sizing_valid = true;
+				bool current_star_sizing_valid;
 				if (has_row_definitions) {
 					uses_star_sizing = new bool[row_count];
 					for (index = 0; index < row_count; index++)
 						uses_star_sizing[index] = row_definitions[index].Height.IsStar;
 					do {
+						current_star_sizing_valid = true;
 						total_star = 0;
 						remaining_lenght = finalSize.Height;
 						for (index = 0; index < row_count; index++) {
@@ -226,8 +227,7 @@ namespace System.Windows.Controls {
 									} else
 										row_heights[index] = proposed_lenght;
 								}
-						} else
-							current_star_sizing_valid = true;
+						}
 					} while (!current_star_sizing_valid);
 				}
 				if (has_column_definitions) {
@@ -235,6 +235,7 @@ namespace System.Windows.Controls {
 					for (index = 0; index < column_count; index++)
 						uses_star_sizing[index] = column_definitions[index].Width.IsStar;
 					do {
+						current_star_sizing_valid = true;
 						total_star = 0;
 						remaining_lenght = finalSize.Width;
 						for (index = 0; index < column_count; index++) {
@@ -262,8 +263,7 @@ namespace System.Windows.Controls {
 									} else
 										column_widths[index] = proposed_lenght;
 								}
-						} else
-							current_star_sizing_valid = true;
+						}
 					} while (!current_star_sizing_valid);
 				}
 				#endregion
