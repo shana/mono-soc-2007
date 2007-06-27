@@ -191,7 +191,6 @@ Shared Object</property>
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="Label" translatable="yes">no warnings</property>
-                        <property name="Active">True</property>
                         <property name="DrawIndicator">True</property>
                         <property name="HasLabel">True</property>
                         <property name="UseUnderline">True</property>
@@ -274,9 +273,9 @@ Shared Object</property>
                         <property name="MemberName" />
                         <property name="NRows">2</property>
                         <property name="NColumns">2</property>
-                        <property name="RowSpacing">8</property>
-                        <property name="ColumnSpacing">12</property>
-                        <property name="BorderWidth">3</property>
+                        <property name="RowSpacing">6</property>
+                        <property name="ColumnSpacing">9</property>
+                        <property name="BorderWidth">6</property>
                         <child>
                           <widget class="Gtk.Label" id="label11">
                             <property name="MemberName" />

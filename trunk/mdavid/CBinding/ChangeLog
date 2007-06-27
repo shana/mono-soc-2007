@@ -1,5 +1,11 @@
 2007-06-26  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* gtk-gui/CBinding.EditPackagesDialog.cs,
+	  gtk-gui/CBinding.CodeGenerationPanel.cs, gtk-gui/gui.stetic:
+	  Improved spacing a bit.
+
+2007-06-26  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Navigation/Tag.cs: Fixed up a bit.
 	* Navigation/TagDatabaseManager.cs: The entire tag database for each
 	  project is managed here.
