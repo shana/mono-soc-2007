@@ -1046,6 +1046,7 @@ namespace System.Windows.Controls {
 		class StarSizingMeasureGrid : Grid {
 			static Size measure_constraint;
 			static int calls;
+			static int calls2;
 			public StarSizingMeasureGrid() {
 				ColumnDefinition c = new ColumnDefinition();
 				c.Width = GridLength.Auto;
@@ -1053,7 +1054,7 @@ namespace System.Windows.Controls {
 				ColumnDefinitions.Add(new ColumnDefinition());
 				TestButton b = new TestButton();
 				Children.Add(b);
-				Children.Add(new global::System.Windows.Controls.Button());
+				Children.Add(new TestButton2());
 				Grid.SetColumn(b, 1);
 				Measure(new Size(100, 100));
 				Assert.AreEqual(measure_constraint.Width, 100 - Utility.GetEmptyButtonSize(), "1");
@@ -1062,8 +1063,54 @@ namespace System.Windows.Controls {
 
 			class TestButton : global::System.Windows.Controls.Button {
 				protected override Size MeasureOverride(Size constraint) {
+					Assert.AreEqual(calls2, 1, "3");
 					measure_constraint = constraint;
 					calls++;
+					return base.MeasureOverride(constraint);
+				}
+			}
+			
+			class TestButton2 : global::System.Windows.Controls.Button {
+				protected override Size MeasureOverride(Size constraint) {
+					calls2++;
+					return base.MeasureOverride(constraint);
+				}
+			}
+		}
+		#endregion
+
+		#region MeasureOrder
+		[Test]
+		public void MeasureOrder() {
+			new MeasureOrderGrid();
+		}
+
+		class MeasureOrderGrid : Grid {
+			static int counter;
+
+			public MeasureOrderGrid() {
+				Children.Add(new TestButton(0));
+				TestButton b2 = new TestButton(1);
+				SetRow(b2, 1);
+				Children.Add(b2);
+				TestButton b3 = new TestButton(2);
+				SetColumn(b3, 1);
+				Children.Add(b3);
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+			}
+
+			class TestButton : global::System.Windows.Controls.Button {
+				int order;
+
+				public TestButton(int order) {
+					this.order = order;
+				}
+
+				protected override Size MeasureOverride(Size constraint) {
+					Assert.AreEqual(order, counter, order.ToString());
+					counter++;
 					return base.MeasureOverride(constraint);
 				}
 			}
