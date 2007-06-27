@@ -1,3 +1,7 @@
+2007-06-27  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Grid.cs: Children in autosized rows/columns are now measured first. Star sizing in the measure pass is now computed after each measurement.
+
 2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ListBox.cs, ListBoxItem.cs: Added.

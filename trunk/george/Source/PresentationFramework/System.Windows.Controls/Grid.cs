@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Markup;
 using System.Windows.Media;
 #if Implementation
@@ -369,112 +370,136 @@ namespace System.Windows.Controls {
 					column_widths[index] = AdjustToBeInRange(column_widths[index], column_definition.MinWidth, column_definition.MaxWidth);
 				}
 			#endregion
-			#region Distribute remaining space to rows/columns with star size
-			double[] row_star_heights = new double[row_count];
-			Array.Copy(row_heights, row_star_heights, row_count);
-			double[] column_star_widths = new double[column_count];
-			Array.Copy(column_widths, column_star_widths, column_count);
-			double total_star;
-			double remaining_lenght;
-			GridLength lenght;
-			double star_ratio;
-			bool[] uses_star_sizing;
-			bool current_star_sizing_valid;
-			if (has_row_definitions && !double.IsPositiveInfinity(availableSize.Height)) {
-				uses_star_sizing = new bool[row_count];
-				for (index = 0; index < row_count; index++)
-					uses_star_sizing[index] = row_definitions[index].Height.IsStar;
-				do {
-					current_star_sizing_valid = true;
-					total_star = 0;
-					remaining_lenght = availableSize.Height;
-					for (index = 0; index < row_count; index++) {
-						if (uses_star_sizing[index])
-							total_star += row_definitions[index].Height.Value;
-						else
-							if (!double.IsPositiveInfinity(row_heights[index]))
-								remaining_lenght -= row_heights[index];
-					}
-					if (remaining_lenght > 0 && total_star != 0) {
-						star_ratio = remaining_lenght / total_star;
-						for (index = 0; index < row_count; index++)
-							if (uses_star_sizing[index]) {
-								RowDefinition definition = row_definitions[index];
-								double proposed_lenght = definition.Height.Value * star_ratio;
-								if (proposed_lenght < definition.MinHeight) {
-									row_star_heights[index] = definition.MinHeight;
-									uses_star_sizing[index] = false;
-									current_star_sizing_valid = false;
-									break;
-								} else if (proposed_lenght > definition.MaxHeight) {
-									row_star_heights[index] = definition.MaxHeight;
-									uses_star_sizing[index] = false;
-									current_star_sizing_valid = false;
-									break;
-								} else
-									row_star_heights[index] = proposed_lenght;
-							}
-					}
-				} while (!current_star_sizing_valid);
-				remaining_lenght = availableSize.Height;
-				for (index = 0; index < row_count; index++) {
-					if (row_definitions[index].Height.IsAuto)
-						continue;
-					if (row_star_heights[index] > remaining_lenght)
-						row_star_heights[index] = remaining_lenght;
-					remaining_lenght -= row_star_heights[index];
-				}
-			}
-			if (has_column_definitions && !double.IsPositiveInfinity(availableSize.Width)) {
-				uses_star_sizing = new bool[column_count];
-				for (index = 0; index < column_count; index++)
-					uses_star_sizing[index] = column_definitions[index].Width.IsStar;
-				do {
-					current_star_sizing_valid = true;
-					total_star = 0;
-					remaining_lenght = availableSize.Width;
-					for (index = 0; index < column_count; index++) {
-						if (uses_star_sizing[index])
-							total_star += column_definitions[index].Width.Value;
-						else
-							if (!double.IsPositiveInfinity(column_widths[index]))
-								remaining_lenght -= column_widths[index];
-					}
-					if (remaining_lenght > 0 && total_star != 0) {
-						star_ratio = remaining_lenght / total_star;
-						for (index = 0; index < column_count; index++)
-							if (uses_star_sizing[index]) {
-								ColumnDefinition definition = column_definitions[index];
-								double proposed_lenght = definition.Width.Value * star_ratio;
-								if (proposed_lenght < definition.MinWidth) {
-									column_star_widths[index] = definition.MinWidth;
-									uses_star_sizing[index] = false;
-									current_star_sizing_valid = false;
-									break;
-								} else if (proposed_lenght > definition.MaxWidth) {
-									column_star_widths[index] = definition.MaxWidth;
-									uses_star_sizing[index] = false;
-									current_star_sizing_valid = false;
-									break;
-								} else
-									column_star_widths[index] = proposed_lenght;
-							}
-					}
-				} while (!current_star_sizing_valid);
-				remaining_lenght = availableSize.Width;
-				for (index = 0; index < column_count; index++) {
-					if (column_definitions[index].Width.IsAuto)
-						continue;
-					if (column_star_widths[index] > remaining_lenght)
-						column_star_widths[index] = remaining_lenght;
-					remaining_lenght -= column_star_widths[index];
-				}
-			}
-			#endregion
 			double[] desired_row_heights = new double[row_count];
 			double[] desired_column_widths = new double[column_count];
+			double remaining_lenght;
 			#region Measure children
+			List<UIElement> children_in_auto_size_definitions = new List<UIElement>();
+			List<UIElement> other_children = new List<UIElement>();
 			foreach (UIElement child in InternalChildren) {
+				if (has_row_definitions) {
+					if (row_definitions[Math.Min(GetRow(child), row_count - 1)].Height.IsAuto) {
+						children_in_auto_size_definitions.Add(child);
+						continue;
+					}
+				}
+				if (has_column_definitions) {
+					if (column_definitions[Math.Min(GetColumn(child), column_count - 1)].Width.IsAuto) {
+						children_in_auto_size_definitions.Add(child);
+						continue;
+					}
+				}
+				other_children.Add(child);
+			}
+			children_in_auto_size_definitions.AddRange(other_children);
+			foreach (UIElement child in children_in_auto_size_definitions) {
+				#region Distribute remaining space to rows/columns with star size
+				double[] row_star_heights = new double[row_count];
+				Array.Copy(row_heights, row_star_heights, row_count);
+				double[] column_star_widths = new double[column_count];
+				Array.Copy(column_widths, column_star_widths, column_count);
+				double total_star;
+				double star_ratio;
+				bool[] uses_star_sizing;
+				bool current_star_sizing_valid;
+				GridLength lenght;
+				if (has_row_definitions && !double.IsPositiveInfinity(availableSize.Height)) {
+					uses_star_sizing = new bool[row_count];
+					for (index = 0; index < row_count; index++)
+						uses_star_sizing[index] = row_definitions[index].Height.IsStar;
+					do {
+						current_star_sizing_valid = true;
+						total_star = 0;
+						remaining_lenght = availableSize.Height;
+						for (index = 0; index < row_count; index++) {
+							lenght = row_definitions[index].Height;
+							if (uses_star_sizing[index])
+								total_star += lenght.Value;
+							else
+								if (lenght.IsAuto)
+									remaining_lenght -= desired_row_heights[index];
+								else if (!double.IsPositiveInfinity(row_heights[index]))
+									remaining_lenght -= row_heights[index];
+						}
+						if (remaining_lenght > 0 && total_star != 0) {
+							star_ratio = remaining_lenght / total_star;
+							for (index = 0; index < row_count; index++)
+								if (uses_star_sizing[index]) {
+									RowDefinition definition = row_definitions[index];
+									double proposed_lenght = definition.Height.Value * star_ratio;
+									if (proposed_lenght < definition.MinHeight) {
+										row_star_heights[index] = definition.MinHeight;
+										uses_star_sizing[index] = false;
+										current_star_sizing_valid = false;
+										break;
+									} else if (proposed_lenght > definition.MaxHeight) {
+										row_star_heights[index] = definition.MaxHeight;
+										uses_star_sizing[index] = false;
+										current_star_sizing_valid = false;
+										break;
+									} else
+										row_star_heights[index] = proposed_lenght;
+								}
+						}
+					} while (!current_star_sizing_valid);
+					remaining_lenght = availableSize.Height;
+					for (index = 0; index < row_count; index++) {
+						if (row_definitions[index].Height.IsAuto)
+							continue;
+						if (row_star_heights[index] > remaining_lenght)
+							row_star_heights[index] = remaining_lenght;
+						remaining_lenght -= row_star_heights[index];
+					}
+				}
+				if (has_column_definitions && !double.IsPositiveInfinity(availableSize.Width)) {
+					uses_star_sizing = new bool[column_count];
+					for (index = 0; index < column_count; index++)
+						uses_star_sizing[index] = column_definitions[index].Width.IsStar;
+					do {
+						current_star_sizing_valid = true;
+						total_star = 0;
+						remaining_lenght = availableSize.Width;
+						for (index = 0; index < column_count; index++) {
+							lenght = column_definitions[index].Width;
+							if (uses_star_sizing[index])
+								total_star += lenght.Value;
+							else
+								if (lenght.IsAuto)
+									remaining_lenght -= desired_column_widths[index];
+								else if (!double.IsPositiveInfinity(column_widths[index]))
+									remaining_lenght -= column_widths[index];
+						}
+						if (remaining_lenght > 0 && total_star != 0) {
+							star_ratio = remaining_lenght / total_star;
+							for (index = 0; index < column_count; index++)
+								if (uses_star_sizing[index]) {
+									ColumnDefinition definition = column_definitions[index];
+									double proposed_lenght = definition.Width.Value * star_ratio;
+									if (proposed_lenght < definition.MinWidth) {
+										column_star_widths[index] = definition.MinWidth;
+										uses_star_sizing[index] = false;
+										current_star_sizing_valid = false;
+										break;
+									} else if (proposed_lenght > definition.MaxWidth) {
+										column_star_widths[index] = definition.MaxWidth;
+										uses_star_sizing[index] = false;
+										current_star_sizing_valid = false;
+										break;
+									} else
+										column_star_widths[index] = proposed_lenght;
+								}
+						}
+					} while (!current_star_sizing_valid);
+					remaining_lenght = availableSize.Width;
+					for (index = 0; index < column_count; index++) {
+						if (column_definitions[index].Width.IsAuto)
+							continue;
+						if (column_star_widths[index] > remaining_lenght)
+							column_star_widths[index] = remaining_lenght;
+						remaining_lenght -= column_star_widths[index];
+					}
+				}
+				#endregion
 				int child_row = Math.Min(GetRow(child), row_count - 1);
 				int child_column = Math.Min(GetColumn(child), column_count - 1);
 				int child_row_span = GetRowSpan(child);
