@@ -1,0 +1,22 @@
+<Addin	id		= "MonoDevelop.Database.Designer"
+	namespace	= "MonoDevelop"
+	name		= "MonoDevelop Database Designer"
+	author		= "Ben Motmans"
+	copyright	= "MIT X11"
+	url		= "http://www.monodevelop.com"
+	description	= "Provides some IDE extensions useful for creating and managing databases."
+	version		= "0.14.0">
+    
+	<Runtime>
+		<Import assembly="MonoDevelop.Database.Designer.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Core" version="0.14.0"/>
+		<Addin id="Core.Gui" version="0.14.0"/>
+		<Addin id="Projects" version="0.14.0"/>
+		<Addin id="Projects.Gui" version="0.14.0"/>
+		<Addin id="Ide" version="0.14.0"/>
+	</Dependencies>
+
+</Addin>

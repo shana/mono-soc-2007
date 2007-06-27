@@ -1,0 +1,22 @@
+<Addin	id		= "MonoDevelop.Database.Visualisation"
+	namespace	= "MonoDevelop"
+	name		= "MonoDevelop Database Visualisation"
+	author		= "Ben Motmans"
+	copyright	= "MIT X11"
+	url		= "http://www.monodevelop.com"
+	description	= ""
+	version		= "0.14.0">
+    
+	<Runtime>
+		<Import assembly="MonoDevelop.Database.Visualisation.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Core" version="0.14.0"/>
+		<Addin id="Core.Gui" version="0.14.0"/>
+		<Addin id="Projects" version="0.14.0"/>
+		<Addin id="Projects.Gui" version="0.14.0"/>
+		<Addin id="Ide" version="0.14.0"/>
+	</Dependencies>
+
+</Addin>
