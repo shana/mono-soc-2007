@@ -34,10 +34,12 @@ using System.Text;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Gendarme.Framework;
+using Cecil.FlowAnalysis;
+using Cecil.FlowAnalysis.ControlFlow;
 
 namespace Gendarme.Rules.Smells {
 	//TODO: Ask if I can create new files that contains classes for this rule.
-
+/*
 	class InstructionFillerVisitor : BaseCodeVisitor {
 		private IList instructionPairContainer;
 		private InstructionPair currentPair;
@@ -63,7 +65,8 @@ namespace Gendarme.Rules.Smells {
 				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
 		}
 		
-		private void FillInstructionPair (Instruction instruction) {
+		private void FillInstructionPair (Instruction instruction) 
+		{
 			if (currentPair.First != null) {
 				currentPair.Second = instruction;
 				instructionPairContainer.Add (currentPair);
@@ -90,7 +93,7 @@ namespace Gendarme.Rules.Smells {
 				}
 			}
 		}
-		
+
 		public IList InstructionPairContainer {
 			get {
 				return instructionPairContainer;
@@ -104,7 +107,8 @@ namespace Gendarme.Rules.Smells {
 		
 		public InstructionPair () {}
 		
-		public InstructionPair (Instruction firstInstruction, Instruction secondInstruction) {
+		public InstructionPair (Instruction firstInstruction, Instruction secondInstruction) 
+		{
 			this.firstInstruction = firstInstruction;
 			this.secondInstruction = secondInstruction;
 		}
@@ -133,7 +137,8 @@ namespace Gendarme.Rules.Smells {
 				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
 		}
 		
-		public override bool Equals (object obj) {
+		public override bool Equals (object obj) 
+		{
 			if (obj is InstructionPair) {
 				InstructionPair targetInstructionPair = (InstructionPair) obj;
 				
@@ -162,11 +167,13 @@ namespace Gendarme.Rules.Smells {
 			return false;
 		}
 		
-		public override int GetHashCode () {
+		public override int GetHashCode () 
+		{
 			return base.GetHashCode ();
 		}
 		
-		public override string ToString () {
+		public override string ToString () 
+		{
 			StringBuilder stringBuilder = new StringBuilder ();
 			stringBuilder.Append ("Instruction Pair:" + Environment.NewLine);
 			stringBuilder.Append (String.Format ("\tFirst: {0} {1}{2}", firstInstruction != null? firstInstruction.OpCode.Name : "null", firstInstruction != null? firstInstruction.Operand : "null", Environment.NewLine));
@@ -174,19 +181,24 @@ namespace Gendarme.Rules.Smells {
 			return stringBuilder.ToString ();
 		}
 	}
+	*/
 	
 	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
 		private StringCollection checkedMethods;
 
-		private IList FillInstructionPairContainerFrom (MethodBody methodBody) {
-			InstructionFillerVisitor instructionFillerVisitor = new InstructionFillerVisitor ();
-			methodBody.Accept (instructionFillerVisitor);
-			return instructionFillerVisitor.InstructionPairContainer;
+/*
+		private void DumpInstructionPairContainer (IList instructionPairContainer) 
+		{
+			Console.WriteLine ("Dumping Instruction Pair container");
+			foreach (InstructionPair instructionPair in instructionPairContainer) {
+				Console.WriteLine (instructionPair);
+			}
 		}
 		
-		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) {
+		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) 
+		{
 			bool existsRepliedInstructions = false;
-
+			
 			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
 				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
 					//If exists replied instructions I don't need check the following.
@@ -195,15 +207,18 @@ namespace Gendarme.Rules.Smells {
 			}
 			return existsRepliedInstructions;
 		}
-	
-		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) {
+*/	
+		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) 
+		{
 			// When check a method, it should have body.  Also I don't check 
 			// a method with itself.
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
-				IList currentInstructionPairContainer = FillInstructionPairContainerFrom (currentMethod.Body);
-				IList targetInstructionPairContainer = FillInstructionPairContainerFrom (targetMethod.Body);
+				IControlFlowGraph currentControlFlowGraph = FlowGraphFactory.CreateControlFlowGraph (currentMethod);
+				IControlFlowGraph targetControlFlowGraph = FlowGraphFactory.CreateControlFlowGraph (targetMethod);
 				
-				return ExistsRepliedInstructions (currentInstructionPairContainer, targetInstructionPairContainer);
+				Console.WriteLine ("Checking {0} against {1}", currentMethod.Name, targetMethod.Name);
+
+				//return ExistsRepliedInstructions (currentInstructionPairContainer, targetInstructionPairContainer);
 			}
 			return false;
 		}
