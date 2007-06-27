@@ -105,6 +105,7 @@
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ClassPad">
 		<NodeBuilder id = "CBinding.Navigation.ProjectNodeBuilderExtension" class = "CBinding.Navigation.ProjectNodeBuilderExtension"/>
+		<NodeBuilder id = "CBinding.Navigation.NamespaceNodeBuilder" class = "CBinding.Navigation.NamespaceNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">

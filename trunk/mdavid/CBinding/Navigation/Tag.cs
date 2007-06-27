@@ -30,10 +30,28 @@
 //
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 
 namespace CBinding.Navigation
 {
+	public enum TagKind {
+		Class = 'c',
+		Macro = 'd',
+		Enumerator = 'e',
+		Function = 'f',
+		Enumeration = 'g',
+		Local = 'l',
+		Member = 'm',
+		Namespace = 'n',
+		Prototype = 'p',
+		Structure = 's',
+		Typedef = 't',
+		Union = 'u',
+		Variable = 'v',
+		ExternalVariable = 'x',
+		Unknown = ' '
+	}
+	
 	public class Tag
 	{
 		private string name;
@@ -49,6 +67,7 @@ namespace CBinding.Navigation
 			this.tagField = tagField;
 		}
 		
+		// FIXEM: Its currently not working with defines
 		public static Tag CreateTag (string tagEntry)
 		{
 			int i1, i2;
@@ -61,13 +80,13 @@ namespace CBinding.Navigation
 			name = tagEntry.Substring (0, tagEntry.IndexOf ('\t'));
 			
 			i1 = tagEntry.IndexOf ('\t') + 1;
-			i2 = tagEntry.IndexOf ('\t', i1) - 1;
+			i2 = tagEntry.IndexOf ('\t', i1);
 			
 			file = tagEntry.Substring (i1, i2 - i1);
 			
-			delimiter = tagEntry[i2 + 2];
+			delimiter = tagEntry[i2 + 1];
 			
-			i1 = i2 + 3;
+			i1 = i2 + 2;
 			i2 = tagEntry.IndexOf (delimiter, i1) - 1;
 			
 			pattern = tagEntry.Substring (i1 + 1, i2 - i1 - 1);
@@ -91,6 +110,29 @@ namespace CBinding.Navigation
 		
 		public string TagField {
 			get { return tagField; }
+		}
+		
+		public string GetValue (string key)
+		{
+			if (tagField == null) return null;
+			
+			string[] fields = tagField.Split ('\t');
+			
+			foreach (string field in fields) {
+				int index = field.IndexOf (':');
+				
+				if (index > 0 && field.Substring (0, index).Equals (key))
+					return field.Substring (index + 1);
+			}
+
+			return null;
+		}
+		
+		public TagKind Kind {
+			get {
+				if (tagField == null) return TagKind.Unknown;
+				return (TagKind)tagField[0];
+			}
 		}
 	}
 }

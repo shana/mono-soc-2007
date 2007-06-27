@@ -30,23 +30,48 @@
 //
 
 using System;
+using System.IO;
+using System.Text;
+
+using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Navigation
 {
 	public class Namespace
 	{
+		private Project project;
 		private Namespace parentNamespace;
 		private string name;
 		private string file;
 		private string pattern;
 		
-		public Namespace (Tag tag)
+		public Namespace (Tag tag, Project project)
 		{
 			this.name = tag.Name;
 			this.file = tag.File;
 			this.pattern = tag.Pattern;
+			this.project = project;
 			
-			// TODO: get parent namespace
+			string parent;
+			
+			if ((parent = tag.GetValue ("namespace")) != null) {
+				int index = parent.LastIndexOf (':');
+				
+				if (index > 0)
+					parent = parent.Substring (index + 1);
+				
+				try {
+					Tag parentTag = TagDatabaseManager.Instance.FindTag (
+					    parent, TagKind.Namespace, project);
+					
+					if (parentTag != null)
+						parentNamespace = new Namespace (parentTag, this.project);
+					
+				} catch (IOException ex) {
+					IdeApp.Services.MessageService.ShowError (ex);
+				}
+			}
 		}
 		
 		public Namespace ParentNamespace {
@@ -56,15 +81,40 @@ namespace CBinding.Navigation
 		public string Name {
 			get { return name; }
 		}
+		
+		public string FullName {
+			get {
+				if (parentNamespace != null)
+					return parentNamespace.FullName + "." + name;
+				return name;
+			}
+		}
 
 		public string File {
 			get { return file; }
 		}
 
-		public virtual string Pattern {
-			get {
-				return pattern;
-			}
+		public string Pattern {
+			get { return pattern; }
+		}
+		
+		public Project Project {
+			get { return project; }
+		}
+		
+		public override bool Equals (object o)
+		{
+			Namespace other = o as Namespace;
+			
+			if (other != null && other.Name.Equals (name) && other.Project.Equals (project))
+				return true;
+			
+			return false;
+		}
+		
+		public override int GetHashCode ()
+		{
+			return (name + file + pattern + project.Name).GetHashCode ();
 		}
 	}
 }

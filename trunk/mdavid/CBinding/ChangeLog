@@ -1,3 +1,16 @@
+2007-06-26  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/Tag.cs: Fixed up a bit.
+	* Navigation/TagDatabaseManager.cs: The entire tag database for each
+	  project is managed here.
+	* Navigation/Namespace.cs, Navigation/ProjectNodeBuilderExtension.cs,
+	  Navigation/NamespaceNodeBuilder.cs, CBinding.addin.xml: Namespaces
+	  now appear in the Class Pad.
+	* Navigation/ProjectNavigationInformation.cs,
+	  Navigation/ProjectNavigationInformationManager.cs: Information on a
+	  project's navigation information is kept and managed here.
+	* Makefile.am, CBinding.mdp: Added new files.
+
 2007-06-25  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/Tag.cs, Navigation/Namespace.cs,
