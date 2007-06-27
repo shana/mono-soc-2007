@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
+using System.Windows.Media;
 #if Implementation
 using System.Windows;
 using System.Windows.Controls;
@@ -13,9 +14,24 @@ namespace System.Windows.Controls {
 		#region Dependency Properties
 		public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(ListBoxItem), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			ListBoxItem i = (ListBoxItem)d;
-			if ((bool)e.NewValue)
+			ListBox list_box = i.GetListBox();
+			if (list_box != null) {
+				switch (list_box.SelectionMode) {
+				case SelectionMode.Single:
+					object selected_item = list_box.SelectedItem;
+					if (selected_item != null) {
+						ListBoxItem selected_list_box_item = (ListBoxItem)list_box.ItemContainerGenerator.ContainerFromItem(selected_item);
+						if (selected_list_box_item != i)
+							selected_list_box_item.IsSelected = false;
+					}
+					break;
+				}
+			}
+			if ((bool)e.NewValue) {
 				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
-			else
+				if (list_box != null)
+					list_box.SelectedItem = list_box.ItemContainerGenerator.ItemFromContainer(i);
+			} else
 				i.OnUnselected(new RoutedEventArgs(UnselectedEvent, i));
 
 		}));
@@ -46,7 +62,7 @@ namespace System.Windows.Controls {
 		[Bindable(true)]
 		public bool IsSelected {
 			get { return (bool)GetValue(IsSelectedProperty); }
-			set { SetValue(IsSelectedProperty, value); }
+			set { SetValue(IsSelectedProperty , value); }
 		}
 		#endregion
 		#endregion
@@ -70,6 +86,8 @@ namespace System.Windows.Controls {
 
 		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
 			base.OnMouseLeftButtonDown(e);
+			if (IsInListBoxInShownWindow())
+				IsSelected = true;
 		}
 
 		protected override void OnMouseRightButtonDown(MouseButtonEventArgs e) {
@@ -101,6 +119,26 @@ namespace System.Windows.Controls {
 			remove { RemoveHandler(UnselectedEvent, value); }
 		}
 		#endregion
+		#endregion
+
+		#region Private Methods
+		ListBox GetListBox() {
+			return Parent as ListBox;
+		}
+		bool IsInListBoxInShownWindow() {
+			ListBox list_box = GetListBox();
+			if (list_box == null)
+				return false;
+			DependencyObject parent = list_box.Parent;
+			for(;;) {
+				if (parent == null)
+					return false;
+				Window window = parent as Window;
+				if (window != null)
+					return window.Visibility == Visibility.Visible;
+				parent = VisualTreeHelper.GetParent(parent);
+			}
+		}
 		#endregion
 	}
 }
