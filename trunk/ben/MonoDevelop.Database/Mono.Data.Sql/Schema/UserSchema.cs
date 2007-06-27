@@ -36,6 +36,11 @@ namespace Mono.Data.Sql
 		protected string password = String.Empty;
 		protected DateTime expires = DateTime.MinValue;
 		
+		public UserSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public virtual RoleSchema [] Roles {
 			get {
 				throw new NotImplementedException();

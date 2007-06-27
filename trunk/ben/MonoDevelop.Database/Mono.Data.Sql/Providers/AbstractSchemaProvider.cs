@@ -31,7 +31,7 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public abstract class SchemaProviderBase : ISchemaProvider
+	public abstract class AbstractSchemaProvider : ISchemaProvider
 	{
 		protected IConnectionProvider connectionProvider;
 		

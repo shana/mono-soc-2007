@@ -35,7 +35,7 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public class SqlSchemaProvider : SchemaProviderBase
+	public class SqlSchemaProvider : AbstractSchemaProvider
 	{
 		public SqlSchemaProvider (SqlConnectionProvider connectionProvider)
 			: base (connectionProvider)
@@ -60,8 +60,6 @@ namespace Mono.Data.Sql
 				return true;
 			else if (type == typeof(DatabaseSchema))
 				return true;
-			else if (type == typeof(UserSchema))
-				return true;
 			else if (type == typeof(ConstraintsSchema))
 				return true;
 			else
@@ -80,7 +78,7 @@ namespace Mono.Data.Sql
 			while (r.Read ()) {
 				DatabaseSchema db = new DatabaseSchema (this);
 				db.Name = r.GetString (0);
-				
+				databases.Add (db);
 			}
 			r.Close ();
 			r = null;

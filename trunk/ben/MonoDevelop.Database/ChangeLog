@@ -1,3 +1,10 @@
+2007-06-27  Ben Motmans  <ben.motmans@gmail.com>
+
+	* Providers/MySqlSchemaProvider.cs:
+	GetDatabases, GetTableConstraints, GetViews, GetProcedures, GetViewColumns, GetProcedureColumns implementation
+	improved support for MySql 5.x for the GetTables method
+	* Providers/AbstractConnectionProvider.cs: abstract connection provider
+
 2007-06-26  Ben Motmans  <ben.motmans@gmail.com>
 
 	* Providers/SqlSchemaProvider.cs: use Convert.IsDbNull instead of try-catch
