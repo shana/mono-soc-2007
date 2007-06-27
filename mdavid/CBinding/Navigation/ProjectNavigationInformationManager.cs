@@ -1,5 +1,5 @@
 //
-// ProjectNodeBuilderExtension.cs
+// ProjectNavigationInformationManager.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,50 +30,45 @@
 //
 
 using System;
-
-using Mono.Addins;
+using System.Collections.Generic;
 
 using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui.Pads;
-
-using CBinding;
 
 namespace CBinding.Navigation
 {
-	public class ProjectNodeBuilderExtension : NodeBuilderExtension
+	/// <summary>
+	/// Singleton class to manage the navigation information of each project
+	/// </summary>
+	public class ProjectNavigationInformationManager
 	{
-		public override bool CanBuildNode (Type dataType)
+		private static ProjectNavigationInformationManager instance;
+		private List<ProjectNavigationInformation> projects = new List<ProjectNavigationInformation> ();
+		
+		private ProjectNavigationInformationManager ()
 		{
-			return typeof(CProject).IsAssignableFrom (dataType);
 		}
 		
-		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
+		public ProjectNavigationInformation Get (Project project)
 		{
-			CProject p = dataObject as CProject;
-			
-			if (p == null) return;
-			
-			TagDatabaseManager.Instance.WriteTags (p);
-			TagDatabaseManager.Instance.FillProjectNavigationInformation (p);
-			
-			bool nestedNamespaces = builder.Options["NestedNamespaces"];
-			
-			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
-			
-			foreach (Namespace n in info.Namespaces) {
-				if (nestedNamespaces) {
-					if (n.ParentNamespace == null) {
-						builder.AddChild (n);
-					}
-				} else {
-					builder.AddChild (n);
+			foreach (ProjectNavigationInformation p in projects) {
+				if (project.Equals (p.Project)) {
+					return p;
 				}
 			}
+			
+			ProjectNavigationInformation newinfo = new ProjectNavigationInformation (project);
+			projects.Add (newinfo);
+			
+			return newinfo;
 		}
 		
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
-		{
-			return true;
+		public static ProjectNavigationInformationManager Instance {
+			get {
+				if (instance == null)
+					instance = new ProjectNavigationInformationManager ();
+				
+				return instance;
+			}
 		}
 	}
 }

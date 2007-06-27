@@ -57,10 +57,13 @@
     <File name="./icons/C.Source.File.Empty" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./Project/CProjectServiceExtension.cs" subtype="Code" buildaction="Compile" />
     <File name="./ChangeLog" subtype="Code" buildaction="Nothing" />
-    <File name="./Navigation" subtype="Directory" buildaction="Compile" />
     <File name="./Navigation/ProjectNodeBuilderExtension.cs" subtype="Code" buildaction="Compile" />
     <File name="./Navigation/Tag.cs" subtype="Code" buildaction="Compile" />
     <File name="./Navigation/Namespace.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Navigation/TagDatabaseManager.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Navigation/NamespaceNodeBuilder.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Navigation/ProjectNavigationInformation.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Navigation/ProjectNavigationInformationManager.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

@@ -1,5 +1,5 @@
 //
-// ProjectNodeBuilderExtension.cs
+// ProjectNavigationInformation.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,50 +30,33 @@
 //
 
 using System;
-
-using Mono.Addins;
+using System.Collections.Generic;
 
 using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui.Pads;
-
-using CBinding;
 
 namespace CBinding.Navigation
 {
-	public class ProjectNodeBuilderExtension : NodeBuilderExtension
+	public class ProjectNavigationInformation
 	{
-		public override bool CanBuildNode (Type dataType)
+		private Project project;
+		private List<Namespace> namespaces = new List<Namespace> ();
+		
+		public ProjectNavigationInformation (Project project)
 		{
-			return typeof(CProject).IsAssignableFrom (dataType);
+			this.project = project;
 		}
 		
-		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
+		public void Clear ()
 		{
-			CProject p = dataObject as CProject;
-			
-			if (p == null) return;
-			
-			TagDatabaseManager.Instance.WriteTags (p);
-			TagDatabaseManager.Instance.FillProjectNavigationInformation (p);
-			
-			bool nestedNamespaces = builder.Options["NestedNamespaces"];
-			
-			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
-			
-			foreach (Namespace n in info.Namespaces) {
-				if (nestedNamespaces) {
-					if (n.ParentNamespace == null) {
-						builder.AddChild (n);
-					}
-				} else {
-					builder.AddChild (n);
-				}
-			}
+			namespaces.Clear ();
 		}
 		
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
-		{
-			return true;
+		public Project Project {
+			get { return project; }
+		}
+		
+		public List<Namespace> Namespaces {
+			get { return namespaces; }
 		}
 	}
 }

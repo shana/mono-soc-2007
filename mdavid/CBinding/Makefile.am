@@ -41,8 +41,12 @@ FILES =  \
 	Gui/ProjectPackagesFolderNodeBuilder.cs \
 	Gui/ProjectReferencesExtension.cs \
 	Navigation/Namespace.cs \
+	Navigation/NamespaceNodeBuilder.cs \
+	Navigation/ProjectNavigationInformation.cs \
+	Navigation/ProjectNavigationInformationManager.cs \
 	Navigation/ProjectNodeBuilderExtension.cs \
 	Navigation/Tag.cs \
+	Navigation/TagDatabaseManager.cs \
 	Project/CCompilationParameters.cs \
 	Project/CProject.cs \
 	Project/CProjectBinding.cs \
