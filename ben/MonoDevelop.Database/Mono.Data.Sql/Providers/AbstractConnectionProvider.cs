@@ -1,4 +1,4 @@
-//
+﻿//
 // Authors:
 //	Christian Hergert  <chris@mosaix.net>
 //	Ben Motmans  <ben.motmans@gmail.com>
@@ -31,22 +31,46 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public interface IConnectionProvider
+	public abstract class AbstractConnectionProvider : IConnectionProvider
 	{
-		IDbConnection Connection { get; }
+		protected IDbConnection connection;
+		protected ConnectionSettings settings;
 		
-		ConnectionSettings Settings { get; }
+		protected AbstractConnectionProvider (ConnectionSettings settings)
+		{
+			if (settings == null)
+				throw new ArgumentNullException ("settings");
+			this.settings = settings;
+			
+			System.Reflection.Assembly ass;
+			
+		}
 		
-		bool IsOpen { get; }
+		public virtual IDbConnection Connection {
+			get { return connection; }
+			protected internal set { connection = value; }
+		}
 		
-		bool IsPooled { get; }
+		public virtual ConnectionSettings Settings {
+			get { return settings; }
+		}
 
-		bool IsConnectionStringWrong { get; }
-
-		bool Open (out string errorMessage);
-
-		void Close ();
+		public virtual bool IsOpen {
+			get { return connection.State == ConnectionState.Open; }
+		}
 		
-		IDbCommand CreateCommand (string sql);
+		public virtual bool IsPooled {
+			get { return false); }
+		}
+
+		public virtual bool IsConnectionStringWrong {
+			get { throw new NotImplementedException (); }
+		}
+
+		public abstract bool Open (out string errorMessage);
+
+		public abstract void Close ()
+		
+		public abstract IDbCommand CreateCommand (string sql);
 	}
 }
