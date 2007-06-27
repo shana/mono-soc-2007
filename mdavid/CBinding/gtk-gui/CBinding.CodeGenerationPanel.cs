@@ -243,7 +243,6 @@ namespace CBinding {
             this.noWarningRadio = new Gtk.RadioButton(Mono.Unix.Catalog.GetString("no warnings"));
             this.noWarningRadio.CanFocus = true;
             this.noWarningRadio.Name = "noWarningRadio";
-            this.noWarningRadio.Active = true;
             this.noWarningRadio.DrawIndicator = true;
             this.noWarningRadio.UseUnderline = true;
             this.noWarningRadio.Group = new GLib.SList(System.IntPtr.Zero);
@@ -297,9 +296,9 @@ namespace CBinding {
             // Container child GtkAlignment.Gtk.Container+ContainerChild
             this.table5 = new Gtk.Table(((uint)(2)), ((uint)(2)), false);
             this.table5.Name = "table5";
-            this.table5.RowSpacing = ((uint)(8));
-            this.table5.ColumnSpacing = ((uint)(12));
-            this.table5.BorderWidth = ((uint)(3));
+            this.table5.RowSpacing = ((uint)(6));
+            this.table5.ColumnSpacing = ((uint)(9));
+            this.table5.BorderWidth = ((uint)(6));
             // Container child table5.Gtk.Table+TableChild
             this.label11 = new Gtk.Label();
             this.label11.Name = "label11";
