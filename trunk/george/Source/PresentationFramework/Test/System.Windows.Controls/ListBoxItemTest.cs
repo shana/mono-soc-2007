@@ -1,5 +1,7 @@
 using NUnit.Framework;
+using System.Windows.Input;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 namespace Mono.System.Windows.Controls {
@@ -24,9 +26,9 @@ namespace System.Windows.Controls {
 			public OnSelectedListBoxItem() {
 				Selected += new RoutedEventHandler(OnSelectedListBoxItem_Selected);
 				Unselected += new RoutedEventHandler(OnSelectedListBoxItem_Unselected);
-				Assert.AreEqual(IsSelected, false, "1");
+				Assert.IsFalse(IsSelected, "1");
 				IsSelected = true;
-				Assert.AreEqual(IsSelected, true, "2");
+				Assert.IsTrue(IsSelected, "2");
 				Assert.AreEqual(on_selected_calls, 1, "3");
 				Assert.AreEqual(on_unselected_calls, 0, "4");
 				Assert.AreEqual(selected_calls, 1, "5");
@@ -60,6 +62,143 @@ namespace System.Windows.Controls {
 				Assert.AreSame(e.RoutedEvent, UnselectedEvent, "14");
 				on_unselected_calls++;
 				base.OnUnselected(e);
+			}
+		}
+		#endregion
+
+		#region OnMouseLeftButtonDown
+		[Test]
+		public void OnMouseLeftButtonDown() {
+			new OnMouseLeftButtonDownListBoxItem();
+		}
+
+		class OnMouseLeftButtonDownListBoxItem : ListBoxItem {
+			public OnMouseLeftButtonDownListBoxItem() {
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				OnMouseLeftButtonDown(e);
+				Assert.IsFalse(IsSelected);
+			}
+		}
+		#endregion
+
+		#region OnMouseLeftButtonDownInListBox
+		[Test]
+		public void OnMouseLeftButtonDownInListBox() {
+			new OnMouseLeftButtonDownInListBoxListBoxItem();
+		}
+
+		class OnMouseLeftButtonDownInListBoxListBoxItem : ListBoxItem {
+			public OnMouseLeftButtonDownInListBoxListBoxItem() {
+				ListBox l = new ListBox();
+				l.Items.Add(this);
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				OnMouseLeftButtonDown(e);
+				Assert.IsFalse(IsSelected);
+			}
+		}
+		#endregion
+
+		#region OnMouseLeftButtonDownInListBoxSource
+		[Test]
+		public void OnMouseLeftButtonDownInListBoxSource() {
+			new OnMouseLeftButtonDownInListBoxSourceListBoxItem();
+		}
+
+		class OnMouseLeftButtonDownInListBoxSourceListBoxItem : ListBoxItem {
+			public OnMouseLeftButtonDownInListBoxSourceListBoxItem() {
+				ListBox l = new ListBox();
+				l.Items.Add(this);
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				e.Source = this;
+				OnMouseLeftButtonDown(e);
+				Assert.IsFalse(IsSelected);
+			}
+		}
+		#endregion
+
+		#region OnMouseLeftButtonDownInListBoxSourceInWindow
+		[Test]
+		public void OnMouseLeftButtonDownInListBoxSourceInWindow() {
+			new OnMouseLeftButtonDownInListBoxSourceInWindowListBoxItem();
+		}
+
+		class OnMouseLeftButtonDownInListBoxSourceInWindowListBoxItem : ListBoxItem {
+			public OnMouseLeftButtonDownInListBoxSourceInWindowListBoxItem() {
+				ListBox l = new ListBox();
+				l.Items.Add(this);
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				e.Source = this;
+				Window w = new Window();
+				w.Content = l;
+				w.Show();
+				OnMouseLeftButtonDown(e);
+				Assert.IsTrue(IsSelected);
+			}
+		}
+		#endregion
+
+		#region OnMouseLeftButtonDownInListBoxInWindow
+		[Test]
+		public void OnMouseLeftButtonDownInListBoxInWindow() {
+			new OnMouseLeftButtonDownInListBoxInWindowListBoxItem();
+		}
+
+		class OnMouseLeftButtonDownInListBoxInWindowListBoxItem : ListBoxItem {
+			public OnMouseLeftButtonDownInListBoxInWindowListBoxItem() {
+				ListBox l = new ListBox();
+				l.Items.Add(this);
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				Window w = new Window();
+				w.Content = l;
+				w.Show();
+				OnMouseLeftButtonDown(e);
+				Assert.IsTrue(IsSelected);
+			}
+		}
+		#endregion
+
+		#region OnMouseLeftButtonDownInListBoxInWindowNotShown
+		[Test]
+		public void OnMouseLeftButtonDownInListBoxInWindowNotShown() {
+			new OnMouseLeftButtonDownInListBoxInWindowNotShownListBoxItem();
+		}
+
+		class OnMouseLeftButtonDownInListBoxInWindowNotShownListBoxItem : ListBoxItem {
+			public OnMouseLeftButtonDownInListBoxInWindowNotShownListBoxItem() {
+				ListBox l = new ListBox();
+				l.Items.Add(this);
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				Window w = new Window();
+				w.Content = l;
+				OnMouseLeftButtonDown(e);
+				Assert.IsFalse(IsSelected);
+			}
+		}
+		#endregion
+
+
+		#region OnMouseLeftButtonDownInListBoxInCanvas
+		[Test]
+		public void OnMouseLeftButtonDownInListBoxInCanvas() {
+			new OnMouseLeftButtonDownInListBoxInCanvasListBoxItem();
+		}
+
+		class OnMouseLeftButtonDownInListBoxInCanvasListBoxItem : ListBoxItem {
+			public OnMouseLeftButtonDownInListBoxInCanvasListBoxItem() {
+				ListBox l = new ListBox();
+				l.Items.Add(this);
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				Canvas c = new Canvas();
+				c.Children.Add(l);
+				OnMouseLeftButtonDown(e);
+				Assert.IsFalse(IsSelected);
 			}
 		}
 		#endregion
