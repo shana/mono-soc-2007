@@ -44,6 +44,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Mono.WindowsPresentationFoundation\ChangeLog" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System.Windows.Controls.Primitives\BulletDecorator.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ButtonBase.cs" />
