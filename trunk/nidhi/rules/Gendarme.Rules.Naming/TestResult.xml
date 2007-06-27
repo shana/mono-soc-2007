@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="/home/nidhi/cecil/gendarme/rules/Gendarme.Rules.Naming/Test.Rules.Naming.dll" total="13" failures="3" not-run="0" date="6/26/2007" time="10:33 PM">
+  <test-suite name="/home/nidhi/cecil/gendarme/rules/Gendarme.Rules.Naming/Test.Rules.Naming.dll" success="False" time="0.265116" asserts="0">
+    <results>
+      <test-suite name="Test" success="False" time="0.236349" asserts="0">
+        <results>
+          <test-suite name="Rules" success="False" time="0.228829" asserts="0">
+            <results>
+              <test-suite name="Naming" success="False" time="0.223216" asserts="0">
+                <results>
+                  <test-suite name="DetectNonAlphaNumericsInTypeNamesTest" success="False" time="0.209567" asserts="0">
+                    <results>
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.propertyTest" executed="True" success="True" time="0.014" asserts="2" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.eventTest" executed="True" success="True" time="0.001" asserts="2" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.conversionOperatorTest" executed="True" success="True" time="0.001" asserts="2" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.privateMethodWithUnderscoreTest" executed="True" success="True" time="0.001" asserts="1" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.publicMethodWithUnderscoreTest" executed="True" success="False" time="0.009" asserts="1">
+                        <failure>
+                          <message />
+                          <stack-trace>  at Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.publicMethodWithUnderscoreTest () [0x00000] 
+  at &lt;0x00000&gt; &lt;unknown method&gt;
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (object,object[])
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] 
+</stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.privateClassWithUnderscoreTest" executed="True" success="True" time="0.001" asserts="1" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.publicClassWithUnderscoreTest" executed="True" success="False" time="0.001" asserts="1">
+                        <failure>
+                          <message />
+                          <stack-trace>  at Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.publicClassWithUnderscoreTest () [0x00000] 
+  at &lt;0x00000&gt; &lt;unknown method&gt;
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (object,object[])
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] 
+</stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.privateInterfaceWithUnderscoreTest" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.publicInterfaceWithUnderscoreTest" executed="True" success="False" time="0.001" asserts="1">
+                        <failure>
+                          <message />
+                          <stack-trace>  at Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.publicInterfaceWithUnderscoreTest () [0x00000] 
+  at &lt;0x00000&gt; &lt;unknown method&gt;
+  at (wrapper managed-to-native) System.Reflection.MonoMethod:InternalInvoke (object,object[])
+  at System.Reflection.MonoMethod.Invoke (System.Object obj, BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00000] 
+</stack-trace>
+                        </failure>
+                      </test-case>
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.defaultPrivateClassTest" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.defaultPrivateMethodTest" executed="True" success="True" time="0.001" asserts="1" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.classWithoutUnderscoreTest" executed="True" success="True" time="0.000" asserts="1" />
+                      <test-case name="Test.Rules.Naming.DetectNonAlphaNumericsInTypeNamesTest.methodWithoutUnderscoreTest" executed="True" success="True" time="0.001" asserts="1" />
+                    </results>
+                  </test-suite>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
