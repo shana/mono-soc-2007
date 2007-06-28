@@ -182,7 +182,6 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-
 		#region OnMouseLeftButtonDownInListBoxInCanvas
 		[Test]
 		public void OnMouseLeftButtonDownInListBoxInCanvas() {

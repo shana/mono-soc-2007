@@ -60,5 +60,19 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void SelectionModeSingle() {
+			ListBox l = new ListBox();
+			Assert.AreEqual(l.SelectionMode, SelectionMode.Single, "1");
+			ListBoxItem i1 = new ListBoxItem();
+			i1.IsSelected = true;
+			l.Items.Add(i1);
+			ListBoxItem i2 = new ListBoxItem();
+			i2.IsSelected = true;
+			l.Items.Add(i2);
+			Assert.IsFalse(i1.IsSelected, "2");
+			Assert.IsTrue(i2.IsSelected, "3");
+		}
 	}
 }
