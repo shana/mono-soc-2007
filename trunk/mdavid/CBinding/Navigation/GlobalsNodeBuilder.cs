@@ -1,5 +1,5 @@
 //
-// NamespaceNodeBuilder.cs
+// GlobalsNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,8 +30,6 @@
 //
 
 using System;
-using System.IO;
-using System.Text;
 
 using Mono.Addins;
 
@@ -42,22 +40,32 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class NamespaceNodeBuilder : TypeNodeBuilder
-	{
-		public override Type NodeDataType {
-			get { return typeof(Namespace); }
+	public class Globals {
+		private static Globals instance;
+		
+		private Globals ()
+		{
 		}
 		
-		public override Type CommandHandlerType {
-			get { return typeof (NamespaceCommandHandler); }
+		public static Globals Instance {
+			get {
+				if (instance == null)
+					instance = new Globals ();
+				
+				return instance;
+			}
+		}
+	}
+	
+	public class GlobalsNodeBuilder : TypeNodeBuilder
+	{
+		public override Type NodeDataType {
+			get { return typeof(Globals); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			if (thisNode.Options["NestedNamespaces"])
-				return ((Namespace)dataObject).Name;
-			else
-				return ((Namespace)dataObject).FullName;
+			return "Globals";
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder,
@@ -66,12 +74,8 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			if (treeBuilder.Options["NestedNamespaces"])
-				label = ((Namespace)dataObject).Name;
-			else
-				label = ((Namespace)dataObject).FullName;
-			
-			icon = Context.GetIcon (Stock.NameSpace);
+			label = "Globals";
+			icon = Context.GetIcon (Stock.Method);
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
@@ -82,26 +86,13 @@ namespace CBinding.Navigation
 			
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
 			
-			Namespace thisNamespace = ((Namespace)dataObject);
-			
-			// Namespaces
-			if (treeBuilder.Options["NestedNamespaces"])
-				foreach (Namespace n in info.Namespaces)
-					if (n.ParentNamespace != null && n.ParentNamespace.Equals (thisNamespace))
-						treeBuilder.AddChild (n);
-			
-			// Classes
-			
-			// Structures
-			
 			// Functions
-			foreach (Function f in info.Functions)
-				if (f.Namespace != null && f.Namespace.Equals (thisNamespace))
+			foreach (Function f in info.Functions) {
+				if (f.Namespace == null) // && f.Classes == null
 					treeBuilder.AddChild (f);
+			}
 			
 			// Variables
-			
-			// Macros
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -111,32 +102,10 @@ namespace CBinding.Navigation
 		
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
-			return -1;
-		}
-	}
-	
-	public class NamespaceCommandHandler : NodeCommandHandler
-	{
-		public override void ActivateItem ()
-		{
-			Namespace n = (Namespace)CurrentNode.DataItem;
-			
-			Document doc = IdeApp.Workbench.OpenDocument (n.File);
-			
-			int lineNum = 0;
-			string line;
-			StringReader reader = new StringReader (doc.TextEditor.Text);
-			
-			while ((line = reader.ReadLine ()) != null) {
-				lineNum++;
-				
-				if (line.Equals (n.Pattern)) {
-					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
-					break;
-				}
-			}
-			
-			reader.Close ();
+			if (otherNode is Namespace)
+				return 1;
+			else
+				return -1;
 		}
 	}
 }

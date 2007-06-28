@@ -36,10 +36,9 @@ FILES =  \
 	Gui/CompilerPanel.cs \
 	Gui/EditPackagesDialog.cs \
 	Gui/OutputOptionsPanel.cs \
-	Gui/ProjectNodeExtension.cs \
-	Gui/ProjectPackageNodeBuilder.cs \
-	Gui/ProjectPackagesFolderNodeBuilder.cs \
-	Gui/ProjectReferencesExtension.cs \
+	Navigation/Function.cs \
+	Navigation/FunctionNodeBuilder.cs \
+	Navigation/GlobalsNodeBuilder.cs \
 	Navigation/Namespace.cs \
 	Navigation/NamespaceNodeBuilder.cs \
 	Navigation/ProjectNavigationInformation.cs \
@@ -54,7 +53,11 @@ FILES =  \
 	Project/CProjectServiceExtension.cs \
 	Project/ProjectPackage.cs \
 	Project/ProjectPackageCollection.cs \
-	Project/ProjectPackageEventArgs.cs
+	Project/ProjectPackageEventArgs.cs \
+	ProjectPad/ProjectNodeExtension.cs \
+	ProjectPad/ProjectPackageNodeBuilder.cs \
+	ProjectPad/ProjectPackagesFolderNodeBuilder.cs \
+	ProjectPad/ProjectReferencesExtension.cs
 
 RES =  \
 	icons/C.File.Empty \

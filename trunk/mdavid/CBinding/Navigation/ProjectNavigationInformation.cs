@@ -40,6 +40,7 @@ namespace CBinding.Navigation
 	{
 		private Project project;
 		private List<Namespace> namespaces = new List<Namespace> ();
+		private List<Function> functions = new List<Function> ();
 		
 		public ProjectNavigationInformation (Project project)
 		{
@@ -49,6 +50,7 @@ namespace CBinding.Navigation
 		public void Clear ()
 		{
 			namespaces.Clear ();
+			functions.Clear ();
 		}
 		
 		public Project Project {
@@ -57,6 +59,10 @@ namespace CBinding.Navigation
 		
 		public List<Namespace> Namespaces {
 			get { return namespaces; }
+		}
+		
+		public List<Function> Functions {
+			get { return functions; }
 		}
 	}
 }

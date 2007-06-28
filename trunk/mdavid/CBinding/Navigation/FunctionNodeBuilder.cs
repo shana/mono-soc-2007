@@ -1,5 +1,5 @@
 //
-// ProjectPackageNodeBuilder.cs
+// FunctionNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,34 +30,30 @@
 //
 
 using System;
+using System.IO;
 
 using Mono.Addins;
 
 using MonoDevelop.Ide.Gui;
-using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
-using MonoDevelop.Components.Commands;
-using MonoDevelop.Ide.Commands;
+using MonoDevelop.Core.Gui;
+using MonoDevelop.Projects;
 
-namespace CBinding
+namespace CBinding.Navigation
 {
-	public class ProjectPackageNodeBuilder : TypeNodeBuilder
+	public class FunctionNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(ProjectPackage); }
+			get { return typeof(Function); }
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof(PackageNodeCommandHandler); }
+			get { return typeof(FunctionCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return ((ProjectPackage)dataObject).Name;
-		}
-		
-		public override string ContextMenuAddinPath {
-			get { return "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode"; }
+			return ((Function)dataObject).Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder,
@@ -66,23 +62,52 @@ namespace CBinding
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			label = ((ProjectPackage)dataObject).Name;
-			icon = Context.GetIcon (Stock.Reference);
+			Function f = (Function)dataObject;
+				
+			label = f.Name;
+			
+			switch (f.Access)
+			{
+			case AccessModifier.Public:
+				icon = Context.GetIcon (Stock.Method);
+				break;
+			case AccessModifier.Protected:
+				icon = Context.GetIcon (Stock.PrivateMethod);
+				break;
+			case AccessModifier.Private:
+				icon = Context.GetIcon (Stock.ProtectedMethod);
+				break;
+			}
+		}
+		
+		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
+		{
+			return false;
 		}
 	}
 	
-	public class PackageNodeCommandHandler : NodeCommandHandler
+	public class FunctionCommandHandler : NodeCommandHandler
 	{
-		[CommandHandler (EditCommands.Delete)]
-		public void RomoveItem ()
+		public override void ActivateItem ()
 		{
-			ProjectPackage package = (ProjectPackage)CurrentNode.DataItem;
-			CProject project = (CProject)CurrentNode.GetParentDataItem (
-			    typeof(CProject), false);
+			Function function = (Function)CurrentNode.DataItem;
 			
-			project.Packages.Remove (package);
+			Document doc = IdeApp.Workbench.OpenDocument (function.File);
 			
-			IdeApp.ProjectOperations.SaveProject (project);
+			int lineNum = 0;
+			string line;
+			StringReader reader = new StringReader (doc.TextEditor.Text);
+			
+			while ((line = reader.ReadLine ()) != null) {
+				lineNum++;
+				
+				if (line.Equals (function.Pattern)) {
+					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
+					break;
+				}
+			}
+			
+			reader.Close ();
 		}
 	}
 }

@@ -1,3 +1,28 @@
+2007-06-27  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/Tag.cs: Created a new enum for access modifiers.
+	* Navigation/TagDatabaseManager.cs: ctags now also creates tags for
+	  function prototypes. (needed to identify a function's namespace if
+	  any).
+	* Navigation/Namespace.cs: Changed the separator between parent/child
+	  namespaces in a namespace's FullName to :: from .
+	* Navigation/ProjectNavigationInformation.cs: Added functions field.
+	* Navigation/ProjectNodeBuilderExtension.cs: Added the special
+	  "Globals" node.
+	* Navigation/GlobalsNodeBuilder.cs, Navigation/FunctionNodeBuilder.cs,
+	  Navigation/Function.cs: Added support for functions in the Class
+	  Pad, global functions that are not in any namespace are placed in a
+	  special "Globals" node.
+	* Navigation/NamespaceNodeBuilder.cs: This namespace's global functions
+	  are now added.
+	* Makefile.am, ProjectPad/ProjectPackagesFolderNodeBuilder.cs,
+	  ProjectPad/ProjectPackageNodeBuilder.cs,
+	  ProjectPad/ProjectReferencesExtension.cs,
+	  ProjectPad/ProjectNodeExtension.cs, CBinding.mdp: Moved to folder
+	  and namespace ProjectPad
+	* CBinding.addin.xml: Added support for functions in the Class Pad,
+	  global functions are placed in a special "Globals" node.
+
 2007-06-26  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* gtk-gui/CBinding.EditPackagesDialog.cs,

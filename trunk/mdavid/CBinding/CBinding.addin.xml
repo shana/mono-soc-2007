@@ -97,23 +97,25 @@
 	</ExtensionPoint>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ProjectPad">
-		<NodeBuilder id = "CBinding.ProjectReferencesExtension" class = "CBinding.ProjectReferencesExtension"/>
-		<NodeBuilder id = "CBinding.ProjectNodeExtension" class = "CBinding.ProjectNodeExtension"/>
-		<NodeBuilder id = "CBinding.ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPackagesFolderNodeBuilder"/>
-		<NodeBuilder id = "CBinding.ProjectPackageNodeBuilder" class = "CBinding.ProjectPackageNodeBuilder"/>
+		<NodeBuilder id = "CBinding.ProjectPad.ProjectReferencesExtension" class = "CBinding.ProjectPad.ProjectReferencesExtension"/>
+		<NodeBuilder id = "CBinding.ProjectPad.ProjectNodeExtension" class = "CBinding.ProjectPad.ProjectNodeExtension"/>
+		<NodeBuilder id = "CBinding.ProjectPad.ProjectPackagesFolderNodeBuilder" class = "CBinding.ProjectPad.ProjectPackagesFolderNodeBuilder"/>
+		<NodeBuilder id = "CBinding.ProjectPad.ProjectPackageNodeBuilder" class = "CBinding.ProjectPad.ProjectPackageNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads/MonoDevelop.Ide.Gui.Pads.ClassPad">
 		<NodeBuilder id = "CBinding.Navigation.ProjectNodeBuilderExtension" class = "CBinding.Navigation.ProjectNodeBuilderExtension"/>
 		<NodeBuilder id = "CBinding.Navigation.NamespaceNodeBuilder" class = "CBinding.Navigation.NamespaceNodeBuilder"/>
+		<NodeBuilder id = "CBinding.Navigation.FunctionNodeBuilder" class = "CBinding.Navigation.FunctionNodeBuilder"/>
+		<NodeBuilder id = "CBinding.Navigation.GlobalsNodeBuilder" class = "CBinding.Navigation.GlobalsNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">
-		<Command id = "CBinding.CProjectCommands.AddPackage" _label = "Edit Packages..."/>
+		<Command id = "CBinding.ProjectPad.CProjectCommands.AddPackage" _label = "Edit Packages..."/>
 	</Extension>
 	
 	<Extension path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode">
-		<CommandItem id = "CBinding.CProjectCommands.AddPackage"/>
+		<CommandItem id = "CBinding.ProjectPad.CProjectCommands.AddPackage"/>
 	</Extension>
 	
 	<Extension path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode">

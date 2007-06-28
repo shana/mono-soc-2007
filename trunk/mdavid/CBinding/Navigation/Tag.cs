@@ -38,11 +38,11 @@ namespace CBinding.Navigation
 		Class = 'c',
 		Macro = 'd',
 		Enumerator = 'e',
-		Function = 'f',
+		Function = 'f', // Done
 		Enumeration = 'g',
 		Local = 'l',
 		Member = 'm',
-		Namespace = 'n',
+		Namespace = 'n', // Done
 		Prototype = 'p',
 		Structure = 's',
 		Typedef = 't',
@@ -50,6 +50,12 @@ namespace CBinding.Navigation
 		Variable = 'v',
 		ExternalVariable = 'x',
 		Unknown = ' '
+	}
+	
+	public enum AccessModifier {
+		Private,
+		Protected,
+		Public
 	}
 	
 	public class Tag

@@ -36,7 +36,7 @@ using Mono.Addins;
 using MonoDevelop.Projects;
 using MonoDevelop.Ide.Gui.Pads;
 
-namespace CBinding
+namespace CBinding.ProjectPad
 {
 	public class ProjectReferencesExtension : NodeBuilderExtension
 	{
