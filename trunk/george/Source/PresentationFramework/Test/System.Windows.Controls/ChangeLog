@@ -1,5 +1,9 @@
 2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabControlTest.cs: Added or expanded some tests.
+
+2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ListBoxTest.cs, ListBoxItemTest.cs: Added or expanded some tests.
 
 2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
