@@ -217,13 +217,13 @@ namespace Ribbons
 			
 			if(state == ButtonState.Pressed)
 			{
-				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
 				bodyPattern.AddColorStopRgb (0.0, new Color (0.996, 0.847, 0.667));
 				bodyPattern.AddColorStopRgb (0.4, new Color (0.984, 0.710, 0.396));
 				bodyPattern.AddColorStopRgb (0.4, new Color (0.980, 0.616, 0.204));
 				bodyPattern.AddColorStopRgb (1.0, new Color (0.992, 0.933, 0.667));
 				
-				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
 				innerBorderPattern.AddColorStop (0.0, new Color (0.876, 0.718, 0.533, 1));
 				innerBorderPattern.AddColorStop (1.0, new Color (0, 0, 0, 0));
 				
@@ -231,13 +231,13 @@ namespace Ribbons
 			}
 			else
 			{
-				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
 				bodyPattern.AddColorStopRgb (0.0, new Color (1, 0.996, 0.890));
 				bodyPattern.AddColorStopRgb (0.4, new Color (1, 0.906, 0.592));
 				bodyPattern.AddColorStopRgb (0.4, new Color (1, 0.843, 0.314));
 				bodyPattern.AddColorStopRgb (1.0, new Color (1, 0.906, 0.588));
 				
-				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
 				innerBorderPattern.AddColorStop (0.0, new Color (1, 1, 0.969, 1));
 				innerBorderPattern.AddColorStop (1.0, new Color (0, 0, 0, 0));
 				
