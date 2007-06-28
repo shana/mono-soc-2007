@@ -1,5 +1,9 @@
 2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabControl.cs, TabItem.cs: More work.
+
+2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ListBox.cs, ListBoxItem.cs: More work.
 
 2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>

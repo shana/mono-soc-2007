@@ -146,13 +146,7 @@ namespace System.Windows.Controls {
 		/// </remarks>
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
 			base.OnSelectionChanged(e);
-			TabItem selected_tab_item = GetTabItemForItem(SelectedItem);
-			//FIXME: I should not do this here.
-			if (selected_tab_item != null)
-				selected_tab_item.IsSelected = true;
-			SelectedContent = selected_tab_item == null ? null : selected_tab_item.Content;
-			SelectedContentTemplate = selected_tab_item == null ? ContentTemplate : selected_tab_item.ContentTemplate ?? ContentTemplate;
-			SelectedContentTemplateSelector = selected_tab_item == null ? ContentTemplateSelector : selected_tab_item.ContentTemplateSelector ?? ContentTemplateSelector;
+			SetSelectedProperties();
 		}
 		#endregion
 
@@ -163,6 +157,16 @@ namespace System.Windows.Controls {
 				return tab_item;
 			else
 				return item_from_container;
+		}
+		
+		internal void SetSelectedProperties() {
+			TabItem selected_tab_item = GetTabItemForItem(SelectedItem);
+			//FIXME: I should not do this here.
+			if (selected_tab_item != null)
+				selected_tab_item.IsSelected = true;
+			SelectedContent = selected_tab_item == null ? null : selected_tab_item.Content;
+			SelectedContentTemplate = selected_tab_item == null ? ContentTemplate : selected_tab_item.ContentTemplate ?? ContentTemplate;
+			SelectedContentTemplateSelector = selected_tab_item == null ? ContentTemplateSelector : selected_tab_item.ContentTemplateSelector ?? ContentTemplateSelector;
 		}
 		#endregion
 
