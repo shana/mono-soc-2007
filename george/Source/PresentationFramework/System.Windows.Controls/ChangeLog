@@ -1,3 +1,7 @@
+2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs: The handler for ItemContainerGenerator.StatusChanged is now added where it is supposed to.
+
 2007-06-27  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ListBoxItem.cs: Some work.
