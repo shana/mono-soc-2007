@@ -40,10 +40,6 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public TabControl() {
-			ItemContainerGenerator.StatusChanged += delegate(object sender, EventArgs e) {
-				EnsureATabItemIsSelected();
-				UpdateTabStripPlacement();
-			};
 		}
 		#endregion
 
@@ -107,6 +103,7 @@ namespace System.Windows.Controls {
 
 		protected override void OnInitialized(EventArgs e) {
 			base.OnInitialized(e);
+			ItemContainerGenerator.StatusChanged += OnGeneratorStatusChanged;
 		}
 
 		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
@@ -170,6 +167,11 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Methods
+		void OnGeneratorStatusChanged(object sender, EventArgs e) {
+			EnsureATabItemIsSelected();
+			UpdateTabStripPlacement();
+		}
+
 		void EnsureATabItemIsSelected() {
 			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
 				return;
