@@ -20,10 +20,10 @@ namespace Ribbons
 		
 		public string Label
 		{
-			set { Child = new Label (value); }
+			set { Child = new Gtk.Label (value); }
 			get
 			{
-				Label lbl = Child as Label;
+				Label lbl = Child as Gtk.Label;
 				return lbl == null ? null : lbl.Text;
 			}
 		}
@@ -44,12 +44,14 @@ namespace Ribbons
 		{
 			base.OnSizeRequested (ref requisition);
 			
+			Requisition childRequisition = new Requisition ();
 			if(Child != null && Child.Visible)
 			{
-				Child.GetSizeRequest (out requisition.Width, out requisition.Height);
+				childRequisition = Child.SizeRequest ();
 			}
-			requisition.Height += (int)(lineWidth * 4);
-			requisition.Width += (int)(lineWidth * 4);
+			
+			requisition.Height = childRequisition.Height + (int)(lineWidth * 4);
+			requisition.Width = childRequisition.Width + (int)(lineWidth * 4);
 		}
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
@@ -86,14 +88,18 @@ namespace Ribbons
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
 		{
+			bool ret = base.OnButtonPressEvent (evnt);
 			state = Theme.ButtonState.Pressed;
-			return base.OnButtonPressEvent (evnt);
+			this.QueueDraw ();
+			return ret;
 		}
 		
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
+			bool ret = base.OnButtonReleaseEvent (evnt);
 			state = Theme.ButtonState.Hover;
-			return base.OnButtonReleaseEvent (evnt);
+			this.QueueDraw ();
+			return ret;
 		}
 		
 		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
