@@ -14,10 +14,19 @@ namespace Monodoc.Editor.Gui {
 public class DocumentEditor : TextView {
 	public DocumentEditor (TextBuffer buffer) : base (buffer)
 	{
+		InitializeProperties ();
 	}
 	
 	public DocumentEditor () : base (new DocumentBuffer ())
 	{
+		InitializeProperties ();
+	}
+	
+	private void InitializeProperties ()
+	{
+		this.CanFocus = true;
+		this.Editable = false;
+		this.WrapMode = WrapMode.Word;
 	}
 }
 }
