@@ -20,7 +20,7 @@ namespace System.Windows.Controls {
 				case SelectionMode.Single:
 					object selected_item = list_box.SelectedItem;
 					if (selected_item != null) {
-						ListBoxItem selected_list_box_item = (ListBoxItem)list_box.ItemContainerGenerator.ContainerFromItem(selected_item);
+						ListBoxItem selected_list_box_item = list_box.GetListBoxItemForItem(selected_item);
 						if (selected_list_box_item != i)
 							selected_list_box_item.IsSelected = false;
 					}
@@ -104,6 +104,15 @@ namespace System.Windows.Controls {
 
 		protected override void OnVisualParentChanged(DependencyObject oldParent) {
 			base.OnVisualParentChanged(oldParent);
+			ListBox old_list_box = oldParent as ListBox;
+			if (IsSelected) {
+				ListBox list_box = GetListBox();
+				if (list_box != null && list_box.SelectionMode == SelectionMode.Single) {
+					object selected_item = list_box.SelectedItem;
+					if (selected_item != null)
+						list_box.GetListBoxItemForItem(selected_item).IsSelected = false;
+				}
+			}
 		}
 		#endregion
 
@@ -125,6 +134,7 @@ namespace System.Windows.Controls {
 		ListBox GetListBox() {
 			return Parent as ListBox;
 		}
+
 		bool IsInListBoxInShownWindow() {
 			ListBox list_box = GetListBox();
 			if (list_box == null)
