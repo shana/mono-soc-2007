@@ -261,6 +261,36 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+		
+		#region OnApplyTemplateUpdatesSelectedProperties7
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties7() {
+			new OnApplyTemplateUpdatesSelectedProperties7TabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedProperties7TabControl : TabControl {
+			public OnApplyTemplateUpdatesSelectedProperties7TabControl() {
+				TestTabItem t = new TestTabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(SelectedIndex, 0, "2");
+				Assert.AreEqual((string)SelectedContent, "Test", "3");
+				Assert.AreEqual(SelectedIndex, 0, "4");
+			}
+
+			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
+			}
+
+			class TestTabItem : TabItem {
+				protected override void OnSelected(RoutedEventArgs e) {
+				}
+			}
+		}
+		#endregion
 
 		#region OnApplyTemplateUpdatesSelectedProperties5
 		[Test]
