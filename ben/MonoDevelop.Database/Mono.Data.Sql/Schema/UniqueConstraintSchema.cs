@@ -32,7 +32,8 @@ namespace Mono.Data.Sql
 {
 	public class UniqueConstraintSchema : ConstraintSchema
 	{
-		public UniqueConstraintSchema ()
+		public UniqueConstraintSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
 		{
 		}
 	}

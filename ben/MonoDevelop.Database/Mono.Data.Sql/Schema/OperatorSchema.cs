@@ -35,6 +35,11 @@ namespace Mono.Data.Sql
 		protected string leftDataType = String.Empty;
 		protected string rightDataType = String.Empty;
 		
+		public OperatorSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public override string Name {
 			get {
 				return name;

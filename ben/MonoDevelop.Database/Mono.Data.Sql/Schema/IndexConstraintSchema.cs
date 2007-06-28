@@ -32,5 +32,9 @@ namespace Mono.Data.Sql
 {
 	public class IndexConstraintSchema : ConstraintSchema
 	{
+		public IndexConstraintSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
 	}
 }

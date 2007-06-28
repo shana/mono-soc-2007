@@ -32,5 +32,9 @@ namespace Mono.Data.Sql
 {
 	public class CheckConstraintSchema : ConstraintSchema
 	{
+		public CheckConstraintSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
 	}
 }

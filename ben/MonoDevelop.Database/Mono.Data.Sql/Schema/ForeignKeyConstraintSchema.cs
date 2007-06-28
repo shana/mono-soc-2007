@@ -34,6 +34,11 @@ namespace Mono.Data.Sql
 	{
 		protected string referenceTable = String.Empty;
 		
+		public ForeignKeyConstraintSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public TableSchema ReferenceTable {
 			get {
 				throw new NotImplementedException();

@@ -87,7 +87,7 @@ namespace Mono.Data.Sql
 		/// <summary>
 		/// The connection provider associated with this SQL object.
 		/// </summary>
-		ISchemaProvider SchemaProvider { get; set; }
+		ISchemaProvider SchemaProvider { get; }
 
 		/// <summary>
 		/// Refresh the object from the database.

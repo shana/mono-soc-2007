@@ -32,5 +32,9 @@ namespace Mono.Data.Sql
 {
 	public class RuleSchema : AbstractSchema
 	{
+		public RuleSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
 	}
 }

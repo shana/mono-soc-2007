@@ -35,5 +35,9 @@ namespace Mono.Data.Sql
 // TODO: Should include a list of Privileges to object mappings. Also
 // needs to include what Identity this Role is connected to. IE: Group
 // or user.
+		public RoleSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
 	}
 }

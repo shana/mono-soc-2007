@@ -32,6 +32,11 @@ namespace Mono.Data.Sql
 {
 	public class SchemaSchema : AbstractSchema
 	{
+		public SchemaSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public override SchemaSchema Schema {
 			get {
 				return null;

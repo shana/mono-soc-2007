@@ -34,6 +34,11 @@ namespace Mono.Data.Sql
 	{
 		protected bool canGrant = false;
 		
+		public PrivilegeSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public bool CanGrant {
 			get {
 				return canGrant;

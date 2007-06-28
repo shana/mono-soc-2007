@@ -82,7 +82,7 @@ namespace Mono.Data.Sql
 				return language;
 			}
 			set {
-				if (language != null) {
+				if (language != value) {
 					language = value;
 					OnChanged ();
 				}
@@ -94,7 +94,7 @@ namespace Mono.Data.Sql
 				return isSystemProcedure;
 			}
 			set {
-				if (isSystemProcedure != null) {
+				if (isSystemProcedure != value) {
 					isSystemProcedure = value;
 					OnChanged ();
 				}

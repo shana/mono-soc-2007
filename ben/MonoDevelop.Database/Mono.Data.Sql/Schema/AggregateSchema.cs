@@ -32,6 +32,11 @@ namespace Mono.Data.Sql
 {
 	public class AggregateSchema : AbstractSchema
 	{
+		public AggregateSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public override string ToString()
 		{
 			return Name + "()";
