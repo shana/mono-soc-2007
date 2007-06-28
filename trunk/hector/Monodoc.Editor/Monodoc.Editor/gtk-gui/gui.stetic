@@ -57,10 +57,11 @@
             <node name="menubar1" type="Menubar">
               <node type="Menu" action="File">
                 <node type="Menuitem" action="Open" />
-                <node type="Menuitem" action="Quit" />
                 <node type="Separator" />
                 <node type="Menuitem" action="Save" />
                 <node type="Menuitem" action="SaveAs" />
+                <node type="Separator" />
+                <node type="Menuitem" action="Quit" />
               </node>
             </node>
           </widget>
