@@ -23,6 +23,7 @@ namespace Monodoc.Editor {
             Stetic.Gui.Initialize();
             // Widget Monodoc.Editor.OpenDocDialog
             this.Name = "Monodoc.Editor.OpenDocDialog";
+            this.Title = Mono.Unix.Catalog.GetString("File to Open");
             this.WindowPosition = ((Gtk.WindowPosition)(4));
             this.HasSeparator = false;
             // Internal child Monodoc.Editor.OpenDocDialog.VBox

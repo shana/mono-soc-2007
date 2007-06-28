@@ -23,6 +23,7 @@ namespace Monodoc.Editor {
             Stetic.Gui.Initialize();
             // Widget Monodoc.Editor.SaveDocDialog
             this.Name = "Monodoc.Editor.SaveDocDialog";
+            this.Title = Mono.Unix.Catalog.GetString("Save as...");
             this.WindowPosition = ((Gtk.WindowPosition)(4));
             this.HasSeparator = false;
             // Internal child Monodoc.Editor.SaveDocDialog.VBox
@@ -69,8 +70,8 @@ namespace Monodoc.Editor {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 779;
-            this.DefaultHeight = 599;
+            this.DefaultWidth = 703;
+            this.DefaultHeight = 178;
             this.Show();
             this.saveFileDialog.FileActivated += new System.EventHandler(this.OnSaveFileDialogFileActivated);
             this.buttonCancel.Clicked += new System.EventHandler(this.OnButtonCancelClicked);
