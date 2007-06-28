@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Reflection;
 using System.Windows.Data;
 using System.Windows.Input;
 #if Implementation
@@ -173,6 +174,7 @@ namespace System.Windows.Controls {
 
 		class OnApplyTemplateUpdatesSelectedPropertiesTabControl : TabControl {
 			bool call;
+
 			public OnApplyTemplateUpdatesSelectedPropertiesTabControl() {
 				Window w = new Window();
 				w.Content = this;
@@ -189,6 +191,70 @@ namespace System.Windows.Controls {
 			public override void OnApplyTemplate() {
 				if (call)
 					base.OnApplyTemplate();
+			}
+		}
+		#endregion
+
+		#region OnSelectionChangedCalled
+		[Test]
+		public void OnSelectionChangedCalled() {
+			new OnSelectionChangedCalledTabControl();
+		}
+
+		class OnSelectionChangedCalledTabControl : TabControl {
+			bool called;
+
+			public OnSelectionChangedCalledTabControl() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.IsFalse(called);
+			}
+
+			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
+				called = true;
+				base.OnSelectionChanged(e);
+			}
+		}
+		#endregion
+
+		#region ItemIsSelectedSet
+		[Test]
+		public void ItemIsSelectedSet() {
+			new ItemIsSelectedSetTabControl();
+		}
+
+		class ItemIsSelectedSetTabControl : TabControl {
+			public ItemIsSelectedSetTabControl() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.IsFalse(t.IsSelected);
+			}
+		}
+		#endregion
+
+		#region ItemIsSelectedSet2
+		[Test]
+		public void ItemIsSelectedSet2() {
+			new ItemIsSelectedSet2TabControl();
+		}
+
+		class ItemIsSelectedSet2TabControl : TabControl {
+			public ItemIsSelectedSet2TabControl() {
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.IsTrue(t.IsSelected);
 			}
 		}
 		#endregion
@@ -324,5 +390,58 @@ namespace System.Windows.Controls {
 			tab_control.SelectedItem = i2;
 			Assert.IsTrue(i2.IsSelected);
 		}
+
+		#region ItemContainerGeneratorStatusChanged
+		[Test]
+		public void ItemContainerGeneratorStatusChanged() {
+			ItemContainerGeneratorStatusChangedTabControl t = new ItemContainerGeneratorStatusChangedTabControl();
+			Assert.AreEqual(t.GetHandlerCount(), 1, "1");
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			Assert.AreEqual(t.GetHandlerCount(), 2, "2");
+		}
+
+		[Test]
+		public void ItemContainerGeneratorStatusChanged2() {
+			ItemContainerGeneratorStatusChangedTabControl t = new ItemContainerGeneratorStatusChangedTabControl();
+			t.ApplyTemplate();
+			Assert.AreEqual(t.GetHandlerCount(), 1);
+		}
+
+		[Test]
+		public void ItemContainerGeneratorStatusChanged3() {
+			new ItemContainerGeneratorStatusChangedTabControl3ItemContainerGeneratorStatusChangedTabControl();
+		}
+
+		class ItemContainerGeneratorStatusChangedTabControl3ItemContainerGeneratorStatusChangedTabControl : ItemContainerGeneratorStatusChangedTabControl {
+			public ItemContainerGeneratorStatusChangedTabControl3ItemContainerGeneratorStatusChangedTabControl() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+			}
+
+			public override void OnApplyTemplate() {
+				Assert.AreEqual(GetHandlerCount(), 2, "1");
+				base.OnApplyTemplate();
+				Assert.AreEqual(GetHandlerCount(), 2, "2");
+			}
+
+			protected override void OnInitialized(EventArgs e) {
+				Assert.AreEqual(GetHandlerCount(), 1, "3");
+				base.OnInitialized(e);
+				Assert.AreEqual(GetHandlerCount(), 2, "4");
+			}
+		}
+
+		class ItemContainerGeneratorStatusChangedTabControl : TabControl {
+			public int GetHandlerCount() {
+				EventHandler handler = (EventHandler)typeof(ItemContainerGenerator).GetField("StatusChanged", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(ItemContainerGenerator);
+				if (handler == null)
+					return 0;
+				return handler.GetInvocationList().GetLength(0);
+			}
+		}
+		#endregion
 	}
 }
