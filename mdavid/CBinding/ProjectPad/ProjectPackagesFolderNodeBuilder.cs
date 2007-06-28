@@ -40,7 +40,7 @@ using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Ide.Gui.Pads.ProjectPad;
 using MonoDevelop.Ide.Gui;
 
-namespace CBinding
+namespace CBinding.ProjectPad
 {
 	public enum CProjectCommands {
 		AddPackage

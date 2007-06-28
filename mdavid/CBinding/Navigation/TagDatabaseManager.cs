@@ -69,7 +69,7 @@ namespace CBinding.Navigation
 				Directory.CreateDirectory (tagsDir);
 			
 			// FIXME: fix Tag.CreateTag so here we can include defines
-			StringBuilder args = new StringBuilder ("--C++-kinds=-d --fields=+a --language-force=C++");
+			StringBuilder args = new StringBuilder ("--C++-kinds=-d+p --fields=+a --language-force=C++");
 			
 			foreach (ProjectFile file in project.ProjectFiles) 
 				args.AppendFormat (" {0}", file.Name);
@@ -113,6 +113,7 @@ namespace CBinding.Navigation
 					case TagKind.ExternalVariable:
 						break;
 					case TagKind.Function:
+						info.Functions.Add (new Function (tag, project));
 						break;
 					case TagKind.Local:
 						break;
@@ -140,7 +141,6 @@ namespace CBinding.Navigation
 			}
 		}
 		
-		// FIXME: Should improve search algorithm (binary search perhaps? tags are supposed to be sorted)
 		public Tag FindTag (string name, TagKind kind, Project project)
 		{
 			string tagsDir = Path.Combine (project.BaseDirectory, ".tags");

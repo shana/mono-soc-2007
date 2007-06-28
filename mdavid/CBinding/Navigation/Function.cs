@@ -1,5 +1,5 @@
 //
-// Namespace.cs
+// Function.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -31,39 +31,47 @@
 
 using System;
 using System.IO;
-using System.Text;
 
 using MonoDevelop.Projects;
 using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Navigation
 {
-	public class Namespace
+	public class Function
 	{
 		private Project project;
 		private Namespace parentNamespace;
+//		private Class parentClass;
 		private string name;
 		private string file;
 		private string pattern;
+		private AccessModifier access = AccessModifier.Public;
 		
-		public Namespace (Tag tag, Project project)
+		public Function (Tag tag, Project project)
 		{
 			this.name = tag.Name;
 			this.file = tag.File;
 			this.pattern = tag.Pattern;
 			this.project = project;
 			
-			string parent;
+			string n;
+//			string klass;
+			// We need the prototype tag because the implementation tag
+			// marks the belonging namespace as a class
+			Tag prototypeTag = TagDatabaseManager.Instance.FindTag (name, TagKind.Prototype, project);
 			
-			if ((parent = tag.GetValue ("namespace")) != null) {
-				int index = parent.LastIndexOf (':');
+			if (prototypeTag == null)				
+				return;
+			
+			if ((n = prototypeTag.GetValue ("namespace")) != null) {
+				int index = n.LastIndexOf (':');
 				
 				if (index > 0)
-					parent = parent.Substring (index + 1);
+					n = n.Substring (index + 1);
 				
 				try {
 					Tag parentTag = TagDatabaseManager.Instance.FindTag (
-					    parent, TagKind.Namespace, project);
+					    n, TagKind.Namespace, project);
 					
 					if (parentTag != null)
 						parentNamespace = new Namespace (parentTag, project);
@@ -72,42 +80,42 @@ namespace CBinding.Navigation
 					IdeApp.Services.MessageService.ShowError (ex);
 				}
 			}
-		}
-		
-		public Namespace ParentNamespace {
-			get { return parentNamespace; }
-		}
-
-		public string Name {
-			get { return name; }
-		}
-		
-		public string FullName {
-			get {
-				if (parentNamespace != null)
-					return parentNamespace.FullName + "::" + name;
-				return name;
-			}
-		}
-
-		public string File {
-			get { return file; }
-		}
-
-		public string Pattern {
-			get { return pattern; }
+			
+			// TODO: Get containing class
 		}
 		
 		public Project Project {
 			get { return project; }
 		}
 		
+		public Namespace Namespace {
+			get { return parentNamespace; }
+		}
+		
+		public string Name {
+			get { return name; }
+		}
+		
+		// TODO: FullName property
+		
+		public string File {
+			get { return file; }
+		}
+		
+		public string Pattern {
+			get { return pattern; }
+		}
+		
+		public AccessModifier Access {
+			get { return access; }
+		}
+		
 		public override bool Equals (object o)
 		{
-			Namespace other = o as Namespace;
+			Function other = o as Function;
 			
 			if (other != null &&
-			    other.FullName.Equals (FullName) &&
+			    other.Name.Equals (name) && // Should cjeck for full name
 			    other.Project.Equals (project))
 				return true;
 			
@@ -116,7 +124,7 @@ namespace CBinding.Navigation
 		
 		public override int GetHashCode ()
 		{
-			return (name + file + pattern + project.Name).GetHashCode ();
+			return (name + file + access + project.Name + pattern).GetHashCode ();
 		}
 	}
 }

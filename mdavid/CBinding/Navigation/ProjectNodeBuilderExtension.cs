@@ -60,6 +60,7 @@ namespace CBinding.Navigation
 			
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
 			
+			// Namespaces
 			foreach (Namespace n in info.Namespaces) {
 				if (nestedNamespaces) {
 					if (n.ParentNamespace == null) {
@@ -69,6 +70,15 @@ namespace CBinding.Navigation
 					builder.AddChild (n);
 				}
 			}
+			
+			// Classes
+			
+			// Structures
+			
+			// Globals
+			builder.AddChild (Globals.Instance);
+			
+			// Macros
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
