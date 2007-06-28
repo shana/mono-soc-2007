@@ -41,8 +41,6 @@ namespace Mono.Data.Sql
 		
 		bool IsPooled { get; }
 
-		bool IsConnectionStringWrong { get; }
-
 		bool Open (out string errorMessage);
 
 		void Close ();

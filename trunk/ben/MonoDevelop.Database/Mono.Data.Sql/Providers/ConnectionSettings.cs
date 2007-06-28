@@ -36,6 +36,7 @@ namespace Mono.Data.Sql
 		
 		private string server;
 		private int port;
+		private string database;
 		private string username;
 		private string password;
 		private bool savePassword;
@@ -51,6 +52,11 @@ namespace Mono.Data.Sql
 		public string ProviderName {
 			get { return providerName; }
 			set { providerName = value; }
+		}
+		
+		public string Database {
+			get { return database; }
+			set { database = value; }
 		}
 		
 		public string Server {

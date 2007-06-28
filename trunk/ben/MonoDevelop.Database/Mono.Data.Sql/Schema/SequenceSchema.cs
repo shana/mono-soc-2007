@@ -37,6 +37,11 @@ namespace Mono.Data.Sql
 		protected string currentValue = String.Empty;
 		protected string increment = String.Empty;
 		
+		public SequenceSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public string MinValue {
 			get {
 				return minValue;

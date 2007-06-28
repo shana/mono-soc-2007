@@ -1,10 +1,10 @@
 //
-// Schema/UserSchema.cs
-//
 // Authors:
-//   Christian Hergert	<chris@mosaix.net>
+//	Christian Hergert  <chris@mosaix.net>
+//	Ben Motmans  <ben.motmans@gmail.com>
 //
 // Copyright (C) 2005 Mosaix Communications, Inc.
+// Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
@@ -41,7 +42,7 @@ namespace Mono.Data.Sql
 		{
 		}
 		
-		public virtual RoleSchema [] Roles {
+		public virtual ICollection<RoleSchema> Roles {
 			get {
 				throw new NotImplementedException();
 			}

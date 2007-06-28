@@ -60,7 +60,7 @@ namespace Mono.Data.Sql
 				return true;
 			else if (type == typeof(DatabaseSchema))
 				return true;
-			else if (type == typeof(ConstraintsSchema))
+			else if (type == typeof(ConstraintSchema))
 				return true;
 			else
 				return false;
@@ -73,7 +73,7 @@ namespace Mono.Data.Sql
 			
 			//TODO: check if the current database is "master", the drawback is that this only works if you have sysadmin privileges
 			IDbCommand command = connectionProvider.CreateCommand ("select name from sysdatabases");
-			SqlDataReader r = command.ExecuteReader();
+			IDataReader r = command.ExecuteReader();
 			
 			while (r.Read ()) {
 				DatabaseSchema db = new DatabaseSchema (this);
@@ -101,11 +101,10 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY 1, 2"
 			);
-			SqlDataReader r = command.ExecuteReader();
+			IDataReader r = command.ExecuteReader();
 			
 			while (r.Read()) {
-				TableSchema table = new TableSchema(this);
-				table.Provider = this;
+				TableSchema table = new TableSchema (this);
 				table.Name = r.GetString(1);
 
 				table.IsSystemTable = r.GetString(4) == "S" ? true : false;
@@ -145,7 +144,7 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY sc.colid"
 			);
-			SqlDataReader r = command.ExecuteReader();
+			IDataReader r = command.ExecuteReader();
 			
 			while (r.Read()) {
 				ColumnSchema column = new ColumnSchema (this);
@@ -188,11 +187,10 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY 1, 2"
 			);
-			SqlDataReader r = command.ExecuteReader();
+			IDataReader r = command.ExecuteReader();
 			
 			while (r.Read()) {
 				ViewSchema view = new ViewSchema (this);
-				view.Provider = this;
 				
 				view.Name = r.GetString (1);
 				view.SchemaName = r.GetString (0);
@@ -217,10 +215,10 @@ namespace Mono.Data.Sql
 				"SELECT * FROM \"" + view.Name +
 				"\" WHERE 1 = 0"
 			);
-			SqlDataReader r = command.ExecuteReader();
+			IDataReader r = command.ExecuteReader();
 
 			for (int i = 0; i < r.FieldCount; i++) {
-				ColumnSchema column = new ColumnSchema();
+				ColumnSchema column = new ColumnSchema (this);
 				
 				column.Name = r.GetName(i);
 				column.DataTypeName = r.GetDataTypeName(i);
@@ -252,11 +250,10 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY 1, 2"
 			);
-			SqlDataReader r = command.ExecuteReader();
+			IDataReader r = command.ExecuteReader();
 			
 			while (r.Read ()) {
 				ProcedureSchema proc = new ProcedureSchema (this);
-				proc.Provider = this;
 				proc.Name = r.GetString (1);
 				proc.OwnerName = r.GetString (0);
 				proc.LanguageName = "TSQL";
@@ -312,8 +309,8 @@ namespace Mono.Data.Sql
 			CheckConnectionState ();
 			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
 			
-			SqlCommand command = connectionProvider.CreateCommand ("select name, xtype from sysobjects where xtype = 'F'");
-			SqlDataReader r = command.ExecuteReader();
+			IDbCommand command = connectionProvider.CreateCommand ("select name, xtype from sysobjects where xtype = 'F'");
+			IDataReader r = command.ExecuteReader();
 			
 			while (r.Read ()) {
 				ConstraintSchema constraint = new ConstraintSchema (this);
@@ -322,10 +319,10 @@ namespace Mono.Data.Sql
 				ColumnSchema fkColumn = new ColumnSchema (this);
 				
 				string name = r.GetString (0);
-				string[] tmp = r.GetString (1).Split (new char[] ('_'));
+				string[] tmp = r.GetString (1).Split ('_');
 				
 				fkColumn.OwnerName = tmp[1];
-				pkcolumn.OwnerName = tmp[2];
+				pkColumn.OwnerName = tmp[2];
 				
 				constraint.ForeignKey = fkColumn;
 				constraint.PrimaryKey = pkColumn;
@@ -491,6 +488,7 @@ namespace Mono.Data.Sql
 					break;
 				default:
 					dts = null;
+					break;
 			}
 			
 			return dts;
@@ -502,19 +500,22 @@ namespace Mono.Data.Sql
 			sb.AppendFormat ("-- Table: {0}\n", table.Name);
 			sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
 			sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
-				
+
+			
 			ICollection<ColumnSchema> columns = table.Columns;
 			string[] parts = new string[columns.Count];
-			for (int i = 0; i < parts.Length; i++)
-				parts[i] = "\t" + columns[i].Definition;
+			int i = 0;
+			foreach (ColumnSchema col in columns)
+				parts[i++] = col.Definition;
 			sb.Append (String.Join (",\n", parts));
 				
-			ICollection<ConstraintSchema> cons = table.Constraints;
-			parts = new string[cons.Count];
-			if (cons.Length > 0)
+			ICollection<ConstraintSchema> constraints = table.Constraints;
+			parts = new string[constraints.Count];
+			if (constraints.Count > 0)
 				sb.Append (",\n");
-			for (int i = 0; i < parts.Length; i++)
-				parts[i] = "\t" + cons[i].Definition;
+			i = 0;
+			foreach (ConstraintSchema constr in constraints)
+				parts[i++] = "\t" + constr.Definition;
 			sb.Append (String.Join (",\n", parts));
 				
 			sb.Append ("\n);\n");
@@ -541,7 +542,6 @@ namespace Mono.Data.Sql
 		
 		private string GetSource (string objectName) 
 		{
-			string sql = ;
 			CheckConnectionState ();
 			IDbCommand command = connectionProvider.CreateCommand (
 				String.Format ("EXEC [master].[dbo].[sp_helptext] '{0}', null", objectName)

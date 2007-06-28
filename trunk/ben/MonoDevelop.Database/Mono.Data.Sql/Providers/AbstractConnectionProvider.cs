@@ -41,9 +41,6 @@ namespace Mono.Data.Sql
 			if (settings == null)
 				throw new ArgumentNullException ("settings");
 			this.settings = settings;
-			
-			System.Reflection.Assembly ass;
-			
 		}
 		
 		public virtual IDbConnection Connection {
@@ -56,21 +53,23 @@ namespace Mono.Data.Sql
 		}
 
 		public virtual bool IsOpen {
-			get { return connection.State == ConnectionState.Open; }
+			get { return connection != null && connection.State == ConnectionState.Open; }
 		}
 		
 		public virtual bool IsPooled {
-			get { return false); }
-		}
-
-		public virtual bool IsConnectionStringWrong {
-			get { throw new NotImplementedException (); }
+			get { return false; }
 		}
 
 		public abstract bool Open (out string errorMessage);
 
-		public abstract void Close ()
+		public abstract void Close ();
 		
-		public abstract IDbCommand CreateCommand (string sql);
+		public virtual IDbCommand CreateCommand (string sql)
+		{
+			IDbCommand command = connection.CreateCommand ();
+			command.CommandText = sql;
+			command.CommandType = CommandType.Text;
+			return command;
+		}
 	}
 }

@@ -35,7 +35,7 @@ namespace Mono.Data.Sql
 	{
 		protected IConnectionProvider connectionProvider;
 		
-		protected SchemaProviderBase (IConnectionProvider connectionProvider)
+		protected AbstractSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			if (connectionProvider == null)
 				throw new ArgumentNullException ("connectionProvider");
@@ -125,7 +125,7 @@ namespace Mono.Data.Sql
 		protected virtual void CheckConnectionState ()
 		{
 			string error = null;
-			if (!connectionProvider.IsOpen () && !connectionProvider.Open (out error))
+			if (!connectionProvider.IsOpen && !connectionProvider.Open (out error))
 				throw new InvalidOperationException (String.Format ("Invalid Connection{0}", error == null ? "" : ": " + error));
 			
 			//TODO: if the connection is pooled, check if there is a connection available

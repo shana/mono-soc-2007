@@ -1,10 +1,10 @@
 //
-// Schema/ParameterSchema.cs
-//
 // Authors:
-//   Christian Hergert	<chris@mosaix.net>
+//	Christian Hergert  <chris@mosaix.net>
+//	Ben Motmans  <ben.motmans@gmail.com>
 //
 // Copyright (C) 2005 Mosaix Communications, Inc.
+// Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -34,9 +34,14 @@ namespace Mono.Data.Sql
 	{
 		protected string dataType = String.Empty;
 		
+		public ParameterSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public DataTypeSchema DataType {
 			get {
-				throw new NotImplementedException();
+				return provider.GetDataType (dataType);
 			}
 			set {
 				dataType = value.FullName;

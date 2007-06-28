@@ -34,6 +34,11 @@ namespace Mono.Data.Sql
 	{
 		protected string handler = String.Empty;
 		
+		public LanguageSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
+		
 		public ProcedureSchema Handler {
 			get {
 				// TODO: Get procedure

@@ -32,5 +32,9 @@ namespace Mono.Data.Sql
 {
 	public class PrimaryKeyConstraintSchema : ConstraintSchema
 	{
+		public PrimaryKeyConstraintSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
 	}
 }

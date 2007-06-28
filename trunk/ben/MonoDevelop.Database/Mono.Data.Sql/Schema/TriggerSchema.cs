@@ -32,6 +32,9 @@ namespace Mono.Data.Sql
 {
 	public class TriggerSchema : AbstractSchema
 	{
-		
+		public TriggerSchema (ISchemaProvider schemaProvider)
+			: base (schemaProvider)
+		{
+		}
 	}
 }
