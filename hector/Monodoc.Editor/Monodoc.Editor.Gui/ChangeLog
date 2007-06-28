@@ -1,3 +1,11 @@
+2007-06-28  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui.mdp, DocumentTab.cs: Added DocumentTab that
+	  represents a "Tab" ie a ScrolledWindow with an associated
+	  DocumentEditor.
+	* DocumentEditor.cs: Added a helper method to initialize several
+	  properties for the DocumentEditor.
+
 2007-06-25  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentTagTable.cs: Adding more tag for missing elements and
