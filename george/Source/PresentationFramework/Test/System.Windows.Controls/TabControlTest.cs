@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -195,6 +196,118 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region OnApplyTemplateUpdatesSelectedProperties2
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties2() {
+			new OnApplyTemplateUpdatesSelectedProperties2TabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedProperties2TabControl : TabControl {
+			public OnApplyTemplateUpdatesSelectedProperties2TabControl() {
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual((string)SelectedContent, "Test", "2");
+			}
+		}
+		#endregion
+
+		#region OnApplyTemplateUpdatesSelectedProperties3
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties3() {
+			new OnApplyTemplateUpdatesSelectedProperties3TabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedProperties3TabControl : TabControl {
+			public OnApplyTemplateUpdatesSelectedProperties3TabControl() {
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual((string)SelectedContent, "Test", "2");
+			}
+
+			public override void OnApplyTemplate() {
+			}
+		}
+		#endregion
+
+		#region OnApplyTemplateUpdatesSelectedProperties4
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties4() {
+			new OnApplyTemplateUpdatesSelectedProperties4TabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedProperties4TabControl : TabControl {
+			public OnApplyTemplateUpdatesSelectedProperties4TabControl() {
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual((string)SelectedContent, "Test", "2");
+			}
+
+			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
+			}
+		}
+		#endregion
+
+		#region OnApplyTemplateUpdatesSelectedProperties5
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties5() {
+			new OnApplyTemplateUpdatesSelectedProperties5TabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedProperties5TabControl : TabControl {
+			public OnApplyTemplateUpdatesSelectedProperties5TabControl() {
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual((string)SelectedContent, "Test", "2");
+			}
+
+			protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
+			}
+		}
+		#endregion
+
+		#region OnApplyTemplateUpdatesSelectedProperties6
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties6() {
+			new OnApplyTemplateUpdatesSelectedProperties6TabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedProperties6TabControl : TabControl {
+			public OnApplyTemplateUpdatesSelectedProperties6TabControl() {
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreNotEqual((string)SelectedContent, "Test", "2");
+			}
+
+			protected override void OnInitialized(EventArgs e) {
+			}
+		}
+		#endregion
+
 		#region OnSelectionChangedCalled
 		[Test]
 		public void OnSelectionChangedCalled() {
@@ -235,7 +348,36 @@ namespace System.Windows.Controls {
 				TabItem t = new TabItem();
 				t.Content = "Test";
 				Items.Add(t);
-				Assert.IsFalse(t.IsSelected);
+				Assert.IsFalse(t.IsSelected, "1");
+				OnApplyTemplate();
+				Assert.IsFalse(t.IsSelected, "2");
+			}
+		}
+		#endregion
+
+		#region ItemIsSelectedSetItemContainerGeneratorSetStatus
+		[Test]
+		public void ItemIsSelectedSetItemContainerGeneratorSetStatus() {
+			new ItemIsSelectedSetItemContainerGeneratorSetStatusTabControl();
+		}
+
+		class ItemIsSelectedSetItemContainerGeneratorSetStatusTabControl : ItemContainerGeneratorStatusChangedTabControl {
+			bool called;
+
+			public ItemIsSelectedSetItemContainerGeneratorSetStatusTabControl() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				TabItem t = new TabItem();
+				t.Content = "Test";
+				ItemContainerGenerator.StatusChanged += new EventHandler(ItemContainerGenerator_StatusChanged);
+				Assert.AreEqual(GetHandlerCount(), 3, "1");
+				Items.Add(t);
+				Assert.IsTrue(called, "2");
+			}
+
+			void ItemContainerGenerator_StatusChanged(object sender, EventArgs e) {
+				called = true;
 			}
 		}
 		#endregion
@@ -443,5 +585,7 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+
 	}
 }
