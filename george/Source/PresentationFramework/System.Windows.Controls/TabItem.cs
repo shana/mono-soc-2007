@@ -15,9 +15,13 @@ namespace System.Windows.Controls {
 		#region Dependency Properties
 		public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(TabItem), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			TabItem i = (TabItem)d;
-			if ((bool)e.NewValue)
+			if ((bool)e.NewValue) {
 				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
-			else {
+				TabControl tab_control = i.GetTabControl();
+				if (tab_control != null)
+					tab_control.SetSelectedProperties();
+
+			} else {
 				TabControl tab_control = i.GetTabControl();
 				if (tab_control != null) {
 					if (tab_control.SelectedItem == tab_control.GetItemForTabItem(i))
