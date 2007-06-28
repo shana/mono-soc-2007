@@ -193,5 +193,14 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void Theme() {
+			Button b = new Button();
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+			Assert.IsNotNull(b.Template);
+		}
 	}
 }

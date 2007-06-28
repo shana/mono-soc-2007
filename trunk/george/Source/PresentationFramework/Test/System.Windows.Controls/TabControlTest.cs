@@ -586,6 +586,13 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-
+		[Test]
+		public void Theme() {
+			TabControl t = new TabControl();
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			Assert.IsNotNull(t.Template);
+		}
 	}
 }

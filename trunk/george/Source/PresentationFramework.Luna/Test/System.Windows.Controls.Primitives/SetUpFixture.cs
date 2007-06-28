@@ -1,12 +1,6 @@
+#if !Implementation
 using NUnit.Framework;
-#if Implementation
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-namespace Mono.System.Windows.Controls.Primitives {
-#else
 namespace System.Windows.Controls.Primitives {
-#endif
 	[SetUpFixture]
 	public class SetUpFixture {
 		[SetUp]
@@ -17,3 +11,4 @@ namespace System.Windows.Controls.Primitives {
 		}
 	}
 }
+#endif
