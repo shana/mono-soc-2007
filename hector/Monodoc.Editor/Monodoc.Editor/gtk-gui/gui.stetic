@@ -89,20 +89,17 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.ScrolledWindow" id="scrolledwindow2">
+          <widget class="Gtk.VBox" id="edit_container">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="VscrollbarPolicy">Automatic</property>
-            <property name="HscrollbarPolicy">Automatic</property>
-            <property name="ShadowType">In</property>
+            <property name="Spacing">6</property>
             <child>
-              <widget class="Monodoc.Editor.Gui.DocumentEditor" id="docEditView">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="Editable">False</property>
-                <property name="Text" translatable="yes" />
-                <property name="WrapMode">Word</property>
-              </widget>
+              <placeholder />
+            </child>
+            <child>
+              <placeholder />
+            </child>
+            <child>
+              <placeholder />
             </child>
           </widget>
           <packing>
