@@ -5,6 +5,11 @@ namespace Ribbons
 {
 	public class Theme
 	{
+		internal enum ButtonState
+		{
+			Default, Hover, Pressed
+		}
+		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
 		public void DrawGroup (Context cr, Rectangle r, double roundSize, double lineWidth, double space, Pango.Layout l, RibbonGroup w)
@@ -198,6 +203,75 @@ namespace Ribbons
 				cr.Color = new Color (0, 0, 0, 0.2);
 				cr.Stroke ();
 			}
+		}
+		
+		internal void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, Button widget)
+		{
+			if(state == ButtonState.Default) return;
+			
+			double lineWidth05 = lineWidth / 2;
+			double lineWidth15 = lineWidth05 * 3;
+			
+			LinearGradient bodyPattern, innerBorderPattern;
+			Color borderColor;
+			
+			if(state == ButtonState.Pressed)
+			{
+				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				bodyPattern.AddColorStopRgb (0.0, new Color (0.996, 0.847, 0.667));
+				bodyPattern.AddColorStopRgb (0.4, new Color (0.984, 0.710, 0.396));
+				bodyPattern.AddColorStopRgb (0.4, new Color (0.980, 0.616, 0.204));
+				bodyPattern.AddColorStopRgb (1.0, new Color (0.992, 0.933, 0.667));
+				
+				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				innerBorderPattern.AddColorStop (0.0, new Color (0.876, 0.718, 0.533, 1));
+				innerBorderPattern.AddColorStop (1.0, new Color (0, 0, 0, 0));
+				
+				borderColor = new Color (0.824, 0.753, 0.553);
+			}
+			else
+			{
+				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				bodyPattern.AddColorStopRgb (0.0, new Color (1, 0.996, 0.890));
+				bodyPattern.AddColorStopRgb (0.4, new Color (1, 0.906, 0.592));
+				bodyPattern.AddColorStopRgb (0.4, new Color (1, 0.843, 0.314));
+				bodyPattern.AddColorStopRgb (1.0, new Color (1, 0.906, 0.588));
+				
+				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				innerBorderPattern.AddColorStop (0.0, new Color (1, 1, 0.969, 1));
+				innerBorderPattern.AddColorStop (1.0, new Color (0, 0, 0, 0));
+				
+				borderColor = new Color (0.671, 0.631, 0.549);
+			}
+			
+			cr.LineWidth = lineWidth;
+			
+			double x0 = bodyAllocation.X + lineWidth15, y0 = bodyAllocation.Y + lineWidth15;
+			double x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth15, y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth15;
+			
+			cr.MoveTo (x0, y0);
+			cr.LineTo (x1, y0);
+			cr.LineTo (x1, y1);
+			cr.LineTo (x0, y1);
+			cr.LineTo (x0, y0);
+			
+			cr.Pattern = bodyPattern;
+			cr.FillPreserve ();
+			
+			cr.Pattern = innerBorderPattern;
+			cr.Stroke ();
+			
+			x0 = bodyAllocation.X + lineWidth05; y0 = bodyAllocation.Y + lineWidth05;
+			x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth05; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth05;
+			
+			cr.MoveTo (x0, y0);
+			cr.LineTo (x1, y0);
+			cr.LineTo (x1, y1);
+			cr.LineTo (x0, y1);
+			cr.LineTo (x0, y0);
+			
+			cr.Color = borderColor;
+			cr.Stroke ();
 		}
 		
 		
