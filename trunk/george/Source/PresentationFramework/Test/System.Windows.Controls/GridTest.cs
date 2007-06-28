@@ -1116,5 +1116,23 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void Style() {
+			Style style = new Style();
+			style.TargetType = typeof(ColumnDefinition);
+			Setter setter = new Setter();
+			setter.Property = ColumnDefinition.WidthProperty;
+			setter.Value = "30";
+			style.Setters.Add(setter);
+			Grid g = new Grid();
+			ColumnDefinition d = new ColumnDefinition();
+			g.Resources.Add(1, style);
+			g.ColumnDefinitions.Add(d);
+			Window w = new Window();
+			w.Content = g;
+			w.Show();
+			Assert.AreEqual(d.Width.Value, 1);
+		}
 	}
 }
