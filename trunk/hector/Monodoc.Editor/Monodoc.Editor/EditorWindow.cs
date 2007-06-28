@@ -15,9 +15,29 @@ using Monodoc.Editor.Utils;
 
 namespace Monodoc.Editor {
 public partial class EditorWindow : Gtk.Window {
+	private DocumentTab current_tab;
+	private Notebook nb_tabs;
+	
 	public EditorWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		this.Build ();
+		
+		nb_tabs = new Notebook ();
+		nb_tabs.CanFocus = true;
+		nb_tabs.Scrollable = true;
+		
+		edit_container.Add (nb_tabs);
+		AddTab ();
+	}
+	
+	private void AddTab ()
+	{
+		current_tab = new DocumentTab ();
+		nb_tabs.AppendPage (current_tab, current_tab.TitleLabel);
+		nb_tabs.ShowTabs = (nb_tabs.NPages > 1);
+		nb_tabs.ShowAll ();
+		nb_tabs.CurrentPage = nb_tabs.PageNum (current_tab);
+		nb_tabs.SwitchPage += new SwitchPageHandler (OnChangeTab);
 	}
 	
 	private void OnDeleteEvent (object sender, DeleteEventArgs a)
@@ -37,7 +57,12 @@ public partial class EditorWindow : Gtk.Window {
 		if (dialog.Run () == (int) ResponseType.Ok) {
 			try {
 				MonoDocument doc = new MonoDocument (dialog.Document);
-				DocumentBufferArchiver.Deserialize (docEditView.Buffer, doc.Text);
+				
+				if (!current_tab.Title.Equals ("Untitled"))
+					AddTab ();
+				
+				current_tab.Title = doc.Name;
+				DocumentBufferArchiver.Deserialize (current_tab.Buffer, doc.Text);
 			} catch (ArgumentException argexp) {
 				Console.WriteLine (argexp.Message);
 			}
@@ -52,7 +77,7 @@ public partial class EditorWindow : Gtk.Window {
 		if (dialog.Run () == (int) ResponseType.Ok) {
 			using (FileStream fileStream = new FileStream (dialog.Document, FileMode.CreateNew)) {
 				using (StreamWriter streamWriter = new StreamWriter (fileStream)) {
-					streamWriter.Write (DocumentBufferArchiver.Serialize (docEditView.Buffer));
+					streamWriter.Write (DocumentBufferArchiver.Serialize (current_tab.Buffer));
 				}
 			}
 		}
@@ -62,7 +87,12 @@ public partial class EditorWindow : Gtk.Window {
 
 	private void OnSaveActivated (object sender, System.EventArgs e)
 	{
-		Console.WriteLine ("Serialize: \n{0}", DocumentBufferArchiver.Serialize (docEditView.Buffer));
+		Console.WriteLine ("Serialize: \n{0}", DocumentBufferArchiver.Serialize (current_tab.Buffer));
+	}
+	
+	private void OnChangeTab (object sender, SwitchPageArgs args)
+	{
+		current_tab = (DocumentTab) nb_tabs.GetNthPage((int) args.PageNum);
 	}
 }
 }

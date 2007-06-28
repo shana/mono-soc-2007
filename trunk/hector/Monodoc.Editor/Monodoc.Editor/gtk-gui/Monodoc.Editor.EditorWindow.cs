@@ -29,9 +29,7 @@ namespace Monodoc.Editor {
         
         private Gtk.Toolbar toolbar1;
         
-        private Gtk.ScrolledWindow scrolledwindow2;
-        
-        private Monodoc.Editor.Gui.DocumentEditor docEditView;
+        private Gtk.VBox edit_container;
         
         private Gtk.Statusbar statusbar1;
         
@@ -86,32 +84,22 @@ namespace Monodoc.Editor {
             w4.Expand = false;
             w4.Fill = false;
             // Container child vbox1.Gtk.Box+BoxChild
-            this.scrolledwindow2 = new Gtk.ScrolledWindow();
-            this.scrolledwindow2.CanFocus = true;
-            this.scrolledwindow2.Name = "scrolledwindow2";
-            this.scrolledwindow2.VscrollbarPolicy = ((Gtk.PolicyType)(1));
-            this.scrolledwindow2.HscrollbarPolicy = ((Gtk.PolicyType)(1));
-            this.scrolledwindow2.ShadowType = ((Gtk.ShadowType)(1));
-            // Container child scrolledwindow2.Gtk.Container+ContainerChild
-            this.docEditView = new Monodoc.Editor.Gui.DocumentEditor();
-            this.docEditView.CanFocus = true;
-            this.docEditView.Name = "docEditView";
-            this.docEditView.Editable = false;
-            this.docEditView.WrapMode = ((Gtk.WrapMode)(2));
-            this.scrolledwindow2.Add(this.docEditView);
-            this.vbox1.Add(this.scrolledwindow2);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox1[this.scrolledwindow2]));
-            w6.Position = 2;
+            this.edit_container = new Gtk.VBox();
+            this.edit_container.Name = "edit_container";
+            this.edit_container.Spacing = 6;
+            this.vbox1.Add(this.edit_container);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox1[this.edit_container]));
+            w5.Position = 2;
             // Container child vbox1.Gtk.Box+BoxChild
             this.statusbar1 = new Gtk.Statusbar();
             this.statusbar1.Name = "statusbar1";
             this.statusbar1.Spacing = 6;
             this.statusbar1.HasResizeGrip = false;
             this.vbox1.Add(this.statusbar1);
-            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vbox1[this.statusbar1]));
-            w7.Position = 3;
-            w7.Expand = false;
-            w7.Fill = false;
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox1[this.statusbar1]));
+            w6.Position = 3;
+            w6.Expand = false;
+            w6.Fill = false;
             this.Add(this.vbox1);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
