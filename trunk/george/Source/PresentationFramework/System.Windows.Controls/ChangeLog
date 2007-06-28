@@ -1,5 +1,9 @@
 2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* ListBox.cs, ListBoxItem.cs: More work.
+
+2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabControl.cs: Added a disabled partial fix.
 
 2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>

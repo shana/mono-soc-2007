@@ -30,7 +30,7 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-#region Public Constructors
+		#region Public Constructors
 		public ListBox() {
 		}
 		#endregion
@@ -107,6 +107,12 @@ namespace System.Windows.Controls {
 
 		protected bool SetSelectedItems(IEnumerable selectedItems) {
 			return false;
+		}
+		#endregion
+
+		#region Internal Methods
+		internal ListBoxItem GetListBoxItemForItem(object item) {
+			return (ListBoxItem)ItemContainerGenerator.ContainerFromItem(item);
 		}
 		#endregion
 	}
