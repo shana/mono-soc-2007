@@ -6,8 +6,9 @@ namespace Ribbons
 {
 	public class Button : Bin
 	{
+		protected Theme theme = new Theme ();
 		private GroupStyle groupStyle;
-		private bool isHot = false;
+		private Theme.ButtonState state = Theme.ButtonState.Default;
 		
 		protected double lineWidth = 1.0;
 		
@@ -15,11 +16,6 @@ namespace Ribbons
 		{
 			set { groupStyle = value; }
 			get { return groupStyle; }
-		}
-		
-		public bool IsHot
-		{
-			get { return isHot; }
 		}
 		
 		public string Label
@@ -84,18 +80,26 @@ namespace Ribbons
 		
 		protected void Draw (Context cr)
 		{
-			
+			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
+			theme.DrawButton (cr, rect, state, 3.0, lineWidth, this);
 		}
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
 		{
+			state = Theme.ButtonState.Pressed;
 			return base.OnButtonPressEvent (evnt);
+		}
+		
+		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
+		{
+			state = Theme.ButtonState.Hover;
+			return base.OnButtonReleaseEvent (evnt);
 		}
 		
 		protected override bool OnEnterNotifyEvent (Gdk.EventCrossing evnt)
 		{
 			bool ret = base.OnEnterNotifyEvent (evnt);
-			isHot = true;
+			state = Theme.ButtonState.Hover;
 			this.QueueDraw ();
 			return ret;
 		}
@@ -103,7 +107,7 @@ namespace Ribbons
 		protected override bool OnLeaveNotifyEvent (Gdk.EventCrossing evnt)
 		{
 			bool ret = base.OnLeaveNotifyEvent (evnt);
-			isHot = false;
+			state = Theme.ButtonState.Default;
 			this.QueueDraw ();
 			return ret;
 		}
