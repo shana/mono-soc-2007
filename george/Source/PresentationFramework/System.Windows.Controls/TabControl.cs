@@ -173,6 +173,8 @@ namespace System.Windows.Controls {
 		}
 
 		void EnsureATabItemIsSelected() {
+			//if (IsInitialized)
+			//    return;
 			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
 				return;
 			if (Items.Count == 0)
