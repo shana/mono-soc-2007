@@ -1,5 +1,10 @@
 2007-06-28  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Minor
+	  change moved Quit menu.
+
+2007-06-28  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* EditorWindow.cs, gtk-gui/Monodoc.Editor.EditorWindow.cs,
 	  gtk-gui/gui.stetic: Added a notebook to get "tab" functionality in
 	  the editor, each page in the notebook will be a DocumentTab ie an
