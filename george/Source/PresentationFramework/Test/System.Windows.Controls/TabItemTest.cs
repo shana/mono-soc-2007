@@ -212,6 +212,60 @@ namespace System.Windows.Controls {
 			Assert.IsTrue(i2.IsSelected, "4");
 		}
 
+		[Test]
+		public void OnSelected2() {
+			TabControl tab_control = new TabControl();
+			TabItem i1 = new TabItem();
+			tab_control.Items.Add(i1);
+			TabItem i2 = new TabItem();
+			tab_control.Items.Add(i2);
+			i1.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "1");
+			i2.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 1, "2");
+			Assert.IsFalse(i1.IsSelected, "3");
+			Assert.IsTrue(i2.IsSelected, "4");
+		}
+
+		[Test]
+		public void OnSelectedInWindow() {
+			Window w = new Window();
+			TabControl tab_control = new TabControl();
+			w.Content = tab_control;
+			w.Show();
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "1");
+			OnSelectedTabItem i1 = new OnSelectedTabItem();
+			tab_control.Items.Add(i1);
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "2");
+			OnSelectedTabItem i2 = new OnSelectedTabItem();
+			tab_control.Items.Add(i2);
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "3");
+			Assert.IsTrue(i1.IsSelected, "4");
+			i1.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "5");
+			i2.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "6");
+			Assert.IsTrue(i1.IsSelected, "7");
+			Assert.IsTrue(i2.IsSelected, "8");
+		}
+
+		[Test]
+		public void OnSelectedInWindow2() {
+			TabControl tab_control = new TabControl();
+			OnSelectedTabItem i1 = new OnSelectedTabItem();
+			tab_control.Items.Add(i1);
+			OnSelectedTabItem i2 = new OnSelectedTabItem();
+			tab_control.Items.Add(i2);
+			i1.IsSelected = true;
+			i2.IsSelected = true;
+			Window w = new Window();
+			w.Content = tab_control;
+			w.Show();
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "1");
+			Assert.IsTrue(i1.IsSelected, "2");
+			Assert.IsTrue(i2.IsSelected, "3");
+		}
+
 		class OnSelectedTabItem : TabItem {
 			protected override void OnSelected(RoutedEventArgs e) {
 			}
