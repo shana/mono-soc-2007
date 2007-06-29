@@ -38,7 +38,7 @@ namespace Ribbons
 			
 			Label = null;
 			HeightRequest = 90;
-			BorderWidth = 0;
+			BorderWidth = 1;
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
@@ -69,7 +69,7 @@ namespace Ribbons
 			{
 				int lw, lh;
 				lbl_layout.GetPixelSize (out lw, out lh);
-				int frame_size = (int)(2*lineWidth) + (int)BorderWidth;
+				int frame_size = (int)(2*lineWidth + BorderWidth);
 				int wi = allocation.Width - 2 * frame_size; 
 				int he = allocation.Height - 2 * frame_size - (lh + (int)(2*space)); 
 				Gdk.Rectangle r = new Gdk.Rectangle (allocation.X + frame_size, allocation.Y + frame_size, wi, he);
