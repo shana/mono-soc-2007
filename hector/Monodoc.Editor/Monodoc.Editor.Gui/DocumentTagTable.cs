@@ -202,6 +202,10 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsElement = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("InterfaceName:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("Members");
 		tag.IsElement = true;
 		Add (tag);
@@ -355,22 +359,6 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("remarks");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("remarks:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("para");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("para:Text");
-		tag.IsText = true;
-		Add (tag);
-		
 		tag = new DocumentTag ("param");
 		tag.IsElement = true;
 		Add (tag);
@@ -386,15 +374,15 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("paramref");
+		tag = new DocumentTag ("exception");
 		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("paramref:Attributes");
+		tag = new DocumentTag ("exception:Attributes");
 		Add (tag);
 		
-		tag = new DocumentTag ("paramref:name");
-		tag.IsAttribute = true;
+		tag = new DocumentTag ("exception:Text");
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("returns");
@@ -405,12 +393,193 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
+		tag = new DocumentTag ("remarks");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("remarks:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("value");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("value:Text");
+		tag.IsText = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("example");
 		tag.IsElement = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("example:Text");
 		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("permission");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("permission:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("permission:cref");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("permission:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("altmember");
+		tag.IsElement = true;
+		Add(tag);
+		
+		tag = new DocumentTag ("altmember:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("altmember:cref");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("altmember:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("altcompliant");
+		tag.IsElement = true;
+		Add(tag);
+		
+		tag = new DocumentTag ("altcompliant:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("altcompliant:cref");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("since");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("since:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("since:version");
+		tag.IsAttribute = true;
+		tag.Foreground = "orange";
+		Add (tag);
+		
+		tag = new DocumentTag ("threadsafe");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("typeparam");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("typeparam:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("typeparam:name");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("typeparam:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("para");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("para:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("block");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("block:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("block:subset");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("block:type");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("block:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("list");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("list:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("list:type");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("listheader");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("item");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("term");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("term:Text");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("description");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("description:Text");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("ul");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("li");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("li:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("c");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("c:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("SPAN");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("SPAN:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("SPAN:version");
+		tag.IsAttribute = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("code");
@@ -432,21 +601,12 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("c");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("c:Text");
+		tag = new DocumentTag ("code:Text");
 		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("value");
-		tag.IsElement = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("see");
 		tag.IsElement = true;
-		tag.Foreground = "red";
 		Add (tag);
 		
 		tag = new DocumentTag ("see:Attributes");
@@ -454,6 +614,7 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("see:cref");
 		tag.IsAttribute = true;
+		tag.Foreground = "red";
 		Add (tag);
 		
 		tag = new DocumentTag ("see:langword");
@@ -461,6 +622,28 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 		
 		tag = new DocumentTag ("see:qualify");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("paramref");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("paramref:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("paramref:name");
+		tag.IsAttribute = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("typeparamref");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("typeparamref:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("typeparamref:name");
 		tag.IsAttribute = true;
 		Add (tag);
 		
@@ -483,16 +666,35 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("since");
+		tag = new DocumentTag ("onequarter");
 		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("since:Attributes");
+		tag = new DocumentTag ("sub");
+		tag.IsElement = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("since:version");
+		tag = new DocumentTag ("sub:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("sup");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("sup:Text");
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("subscript");
+		tag.IsElement = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("subscript:Attributes");
+		Add (tag);
+		
+		tag = new DocumentTag ("subscript:term");
 		tag.IsAttribute = true;
-		tag.Foreground = "orange";
 		Add (tag);
 		
 		tag = new DocumentTag ("ignore");

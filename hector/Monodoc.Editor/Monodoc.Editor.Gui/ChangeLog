@@ -1,5 +1,11 @@
 2007-06-29  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs: Added a padding between empty elements.
+	* DocumentTagTable.cs: Added almost all the tags that represents
+	  elements and attributes used by monodoc.
+
+2007-06-29  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Test/TestDocumentBufferArchiver.cs: Minor changes to get the name of
 	  the document when one assert fails.
 	* DocumentBufferArchiver.cs: Added an ad-hoc try-catch block to get
