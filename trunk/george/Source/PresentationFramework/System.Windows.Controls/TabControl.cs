@@ -48,14 +48,14 @@ namespace System.Windows.Controls {
 			base.OnItemsChanged(e);
 			//if (IsInitialized)
 			//    return;
-			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
-				return;
-			if (Items.Count == 0)
-				return;
-			for (int item_index = 0; item_index < Items.Count; item_index++)
-				if (GetTabItemForItemAtIndex(item_index).IsSelected)
-					return;
-			GetTabItemForItemAtIndex(0).IsSelected = true;
+			if (ItemContainerGenerator.Status == global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated && Items.Count != 0) {
+				bool has_selected_items = false;
+				for (int item_index = 0; item_index < Items.Count; item_index++)
+					if (GetTabItemForItemAtIndex(item_index).IsSelected)
+						has_selected_items = true;
+				if (!has_selected_items)
+					GetTabItemForItemAtIndex(0).IsSelected = true;
+			}
 			// This needs to be done now but even if the user overrides this and does not call the base implementation.
 			ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
 		}
@@ -128,14 +128,14 @@ namespace System.Windows.Controls {
 		void OnGeneratorStatusChanged(object sender, EventArgs e) {
 			//if (IsInitialized)
 			//    return;
-			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
-				return;
-			if (Items.Count == 0)
-				return;
-			for (int item_index = 0; item_index < Items.Count; item_index++)
-				if (GetTabItemForItemAtIndex(item_index).IsSelected)
-					return;
-			GetTabItemForItemAtIndex(0).IsSelected = true;
+			if (ItemContainerGenerator.Status == global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated && Items.Count != 0) {
+				bool has_selected_items = false;
+				for (int item_index = 0; item_index < Items.Count; item_index++)
+					if (GetTabItemForItemAtIndex(item_index).IsSelected)
+						has_selected_items = true;
+				if (!has_selected_items)
+					GetTabItemForItemAtIndex(0).IsSelected = true;
+			}
 			UpdateTabStripPlacement();
 		}
 		#endregion
