@@ -595,20 +595,31 @@ namespace System.Windows.Controls {
 
 			public override void OnApplyTemplate() {
 				Assert.AreEqual(GetHandlerCount(), 2, "1");
+				Assert.AreEqual(GetItemsChangedHandlerCount(), 0, "1 1");
 				base.OnApplyTemplate();
 				Assert.AreEqual(GetHandlerCount(), 2, "2");
+				Assert.AreEqual(GetItemsChangedHandlerCount(), 0, "2 1");
 			}
 
 			protected override void OnInitialized(EventArgs e) {
 				Assert.AreEqual(GetHandlerCount(), 1, "3");
+				Assert.AreEqual(GetItemsChangedHandlerCount(), 0, "3 1");
 				base.OnInitialized(e);
 				Assert.AreEqual(GetHandlerCount(), 2, "4");
+				Assert.AreEqual(GetItemsChangedHandlerCount(), 0, "4 1");
 			}
 		}
 
 		class ItemContainerGeneratorStatusChangedTabControl : TabControl {
 			public int GetHandlerCount() {
 				EventHandler handler = (EventHandler)typeof(ItemContainerGenerator).GetField("StatusChanged", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(ItemContainerGenerator);
+				if (handler == null)
+					return 0;
+				return handler.GetInvocationList().GetLength(0);
+			}
+
+			public int GetItemsChangedHandlerCount() {
+				EventHandler handler = (EventHandler)typeof(ItemContainerGenerator).GetField("ItemsChanged", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(ItemContainerGenerator);
 				if (handler == null)
 					return 0;
 				return handler.GetInvocationList().GetLength(0);
