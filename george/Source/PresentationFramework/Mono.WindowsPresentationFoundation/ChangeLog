@@ -1,3 +1,7 @@
+2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Utility.cs: Added IsInVisibleWindow method.
+
 2007-06-26  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Utility.cs: The implemented Luna theme needs to be loaded here on Windows Vista, as theme loading is now done automatically.

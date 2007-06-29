@@ -173,5 +173,17 @@ namespace Mono.WindowsPresentationFoundation {
 			if (Environment.OSVersion.Version.Major == WindowsVistaMajorVersion)
 				Application.Current.Resources.MergedDictionaries.Add(Application.LoadComponent(new Uri("PresentationFramework.Luna;V3.0.0.0;31bf3856ad364e35;component\\themes/luna.normalcolor.xaml", UriKind.Relative)) as ResourceDictionary);
 		}
+
+		public static bool IsInVisibleWindow(DependencyObject visual) {
+			DependencyObject parent = visual;
+			for(;;) {
+				parent = VisualTreeHelper.GetParent(parent);
+				Window window = parent as Window;
+				if (window != null)
+					return window.Visibility == Visibility.Visible;
+				if (parent == null)
+					return false;
+			}
+		}
 	}
 }
