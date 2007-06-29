@@ -1,3 +1,4 @@
+using Mono.WindowsPresentationFoundation;
 using System.ComponentModel;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
@@ -16,11 +17,12 @@ namespace System.Windows.Controls {
 		public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(TabItem), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			TabItem i = (TabItem)d;
 			if ((bool)e.NewValue) {
-				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
 				TabControl tab_control = i.GetTabControl();
-				if (tab_control != null)
+				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
+				if (tab_control != null) {
+					tab_control.ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
 					tab_control.SetSelectedProperties();
-
+				}
 			} else {
 				TabControl tab_control = i.GetTabControl();
 				if (tab_control != null) {
@@ -29,9 +31,11 @@ namespace System.Windows.Controls {
 				}
 				i.OnUnselected(new RoutedEventArgs(UnselectedEvent, i));
 			}
+			#region Invalidate TabPanel arrange
 			TabPanel tab_panel = i.VisualParent as TabPanel;
 			if (tab_panel != null)
 				tab_panel.InvalidateArrange();
+			#endregion
 		}));
 		static readonly DependencyPropertyKey TabStripPlacementPropertyKey = DependencyProperty.RegisterReadOnly("TabStripPlacement", typeof(Dock), typeof(TabItem), new FrameworkPropertyMetadata(Dock.Top));
 		public static readonly DependencyProperty TabStripPlacementProperty = TabStripPlacementPropertyKey.DependencyProperty; 
