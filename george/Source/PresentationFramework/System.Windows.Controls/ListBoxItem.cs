@@ -1,3 +1,4 @@
+using Mono.WindowsPresentationFoundation;
 using System.ComponentModel;
 using System.Windows.Automation.Peers;
 using System.Windows.Input;
@@ -139,15 +140,7 @@ namespace System.Windows.Controls {
 			ListBox list_box = GetListBox();
 			if (list_box == null)
 				return false;
-			DependencyObject parent = list_box.Parent;
-			for(;;) {
-				if (parent == null)
-					return false;
-				Window window = parent as Window;
-				if (window != null)
-					return window.Visibility == Visibility.Visible;
-				parent = VisualTreeHelper.GetParent(parent);
-			}
+			return Utility.IsInVisibleWindow(list_box);
 		}
 		#endregion
 	}
