@@ -79,5 +79,23 @@ namespace Mono.FastCgi {
 		{
 			return new TcpSocket (address, port);
 		}
+		
+		/// <summary>
+		///    Creates a socket from a bound unmanaged socket.
+		/// </summary>
+		/// <param name="sock">
+		///    A <see cref="IntPtr" /> pointing to the bound socket.
+		/// </param>
+		/// <returns>
+		///    A <see cref="Socket" /> object bound to the specified
+		///    IP address and end point.
+		/// </returns>
+		/// <exception cref="System.Net.Sockets.SocketException">
+		///    The specified socket is not bound.
+		/// </exception>
+		public static Socket CreatePipeSocket (IntPtr sock)
+		{
+			return new UnmanagedSocket (sock);
+		}
 	}
 }
