@@ -364,10 +364,17 @@ namespace Mono.FastCgi {
 			if (index > data.Length - 4)
 				throw new ArgumentOutOfRangeException ("index");
 			
-			return (0x7F & (int) data [index++]) << 24
-				+ ((int) data [index++]) << 16
-				+ ((int) data [index++]) <<  8
+			
+			return (0x7F & (int) data [index++]) * 0x1000000
+				+ ((int) data [index++]) * 0x10000
+				+ ((int) data [index++]) *0x100
 				+ ((int) data [index++]);
+			
+			// TODO: Returns zero. What gives?
+			//return (0x7F & (int) data [index++]) << 24
+			//	+ ((int) data [index++]) << 16
+			//	+ ((int) data [index++]) <<  8
+			//	+ ((int) data [index++]);
 		}
 		
 		/// <summary>

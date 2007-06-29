@@ -42,7 +42,7 @@ namespace Mono.FastCgi {
 		private bool blocking = true;
 		private bool connected = false;
 		
-		public UnmanagedSocket (IntPtr socket)
+		unsafe public UnmanagedSocket (IntPtr socket)
 		{
 			if (!supports_libc)
 				throw new NotSupportedException ("Unmanaged sockets not supported.");
@@ -50,6 +50,13 @@ namespace Mono.FastCgi {
 			if ((int) socket < 0)
 				throw new ArgumentException ("Invalid socket.", "socket");
 			
+			byte [] address = new byte [1024];
+			int size = 1024;
+			fixed (byte* ptr = address)
+				if (getsockname (socket, ptr, ref size) != 0)
+					throw new sock.SocketException ();
+		
+		
 			this.socket = socket;
 		}
 		
@@ -144,6 +151,9 @@ namespace Mono.FastCgi {
 		
 		[DllImport ("libc", SetLastError=true, EntryPoint="accept")]
 		unsafe extern static IntPtr accept (IntPtr s, byte *addr, ref int addrlen);
+		
+		[DllImport("libc", SetLastError=true, EntryPoint="getsockname")]
+		unsafe static extern int getsockname(IntPtr s, byte *addr, ref int namelen);
 		
 		[DllImport ("libc", SetLastError=true, EntryPoint="listen")]
 		unsafe extern static int listen (IntPtr s, int count);

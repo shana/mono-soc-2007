@@ -1,3 +1,27 @@
+2007-06-29 Brian Nickel <brian.nickel@gmail.com>
+
+	* Mono.FastCgi/Structures/NameValuePair.cs: Was returning zero for long
+	values. Broke reading.
+	
+	* Mono.FastCgi/SocketFactory.cs: Added pipe socket.
+	
+	* Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: Throw an exception
+	if the socket isn't bound.
+	
+	* Mono.WebServer.FastCgi/AssemblyInfo.cs: Remove extra "(c)"
+	
+	* Mono.WebServer.FastCgi/ConfigurationManager.xml: New and improved
+	format.
+	
+	* Mono.WebServer.FastCgi/ConfigurationManager.cs: Added.
+	
+	* Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp: Added new file.
+	
+	* Mono.WebServer.FastCgi/server.cs: Use ConfigurationManager.
+	
+	* Mono.WebServer.FastCgi/fastcgi-mono-server.exe.config: Change
+	defaults.
+
 2007-06-24 Brian Nickel <brian.nickel@gmail.com>
 
 	* Mono.FastCgi/Structures/Record.cs: Added support for sending and 

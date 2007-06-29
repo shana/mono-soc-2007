@@ -30,7 +30,6 @@
 //
 
 using System;
-using System.Configuration;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -48,130 +47,48 @@ namespace Mono.WebServer.FastCgi
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly ();
 			string version = assembly.GetName ().Version.ToString ();
-			object [] att = assembly.GetCustomAttributes (typeof (AssemblyTitleAttribute), false);
-			//string title = ((AssemblyTitleAttribute) att [0]).Title;
-			att = assembly.GetCustomAttributes (typeof (AssemblyCopyrightAttribute), false);
-			string copyright = ((AssemblyCopyrightAttribute) att [0]).Copyright;
-			att = assembly.GetCustomAttributes (typeof (AssemblyDescriptionAttribute), false);
-			string description = ((AssemblyDescriptionAttribute) att [0]).Description;
+			object att;
+			
+			// att = assembly.GetCustomAttributes (
+			//	typeof (AssemblyTitleAttribute), false) [0];
+			// string title =
+			//	((AssemblyTitleAttribute) att).Title;
+			
+			att = assembly.GetCustomAttributes (
+				typeof (AssemblyCopyrightAttribute), false) [0];
+			string copyright =
+				((AssemblyCopyrightAttribute) att).Copyright;
+			
+			att = assembly.GetCustomAttributes (
+				typeof (AssemblyDescriptionAttribute), false) [0];
+			string description =
+				((AssemblyDescriptionAttribute) att).Description;
+			
 			Console.WriteLine ("{0} {1}\n(c) {2}\n{3}",
-					Path.GetFileName (assembly.Location), version, copyright, description);
+				Path.GetFileName (assembly.Location), version,
+				copyright, description);
 		}
 
 		static void ShowHelp ()
 		{
-			Console.WriteLine ("fastcgi-mono-server.exe is a ASP.NET server using FastCGI.");
+			string name = Path.GetFileName (
+				Assembly.GetExecutingAssembly ().Location);
+			
+			ShowVersion ();
+			Console.WriteLine ();
 			Console.WriteLine ("Usage is:\n");
-			Console.WriteLine ("    fastcgi-mono-server.exe [...]");
+			Console.WriteLine ("    {0} [...]", name);
 			Console.WriteLine ();
-			Console.WriteLine ("    The arguments --filename and --port are mutually exlusive.");
-			Console.WriteLine ("    --filename file: a unix socket filename to listen on.");
-			Console.WriteLine ("                    Default value: /tmp/fastcgi_mono_server");
-			Console.WriteLine ("                    AppSettings key name: MonoUnixSocket");
-			Console.WriteLine ();
-			Console.WriteLine ("    --port N: n is the tcp port to listen on.");
-			Console.WriteLine ("                    Default value: none");
-			Console.WriteLine ("                    AppSettings key name: MonoServerPort");
-			Console.WriteLine ();
-			Console.WriteLine ("    --address addr: addr is the ip address to listen on.");
-			Console.WriteLine ("                    Default value: 127.0.0.1");
-			Console.WriteLine ("                    AppSettings key name: MonoServerAddress");
-			Console.WriteLine ();
-			Console.WriteLine ("    --root rootdir: the server changes to this directory before");
-			Console.WriteLine ("                    anything else.");
-			Console.WriteLine ("                    Default value: current directory.");
-			Console.WriteLine ("                    AppSettings key name: MonoServerRootDir");
-			Console.WriteLine ();
-			Console.WriteLine ("    --appconfigfile FILENAME: adds application definitions from the XML");
-			Console.WriteLine ("                    configuration file. See sample configuration file that");
-			Console.WriteLine ("                    comes with the server.");
-			Console.WriteLine ("                    AppSettings key name: MonoApplicationsConfigFile");
-			Console.WriteLine ();
-			Console.WriteLine ("    --appconfigdir DIR: adds application definitions from all XML files");
-			Console.WriteLine ("                    found in the specified directory DIR. Files must have");
-			Console.WriteLine ("                    '.webapp' extension");
-			Console.WriteLine ("                    AppSettings key name: MonoApplicationsConfigDir");
-			Console.WriteLine ();
-			Console.WriteLine ("    --applications APPS:");
-			Console.WriteLine ("                    a comma separated list of virtual directory and");
-			Console.WriteLine ("                    real directory for all the applications we want to manage");
-			Console.WriteLine ("                    with this server. The virtual and real dirs. are separated");
-			Console.WriteLine ("                    by a colon. Optionally you may specify virtual host name");
-			Console.WriteLine ("                    and a port.");
-			Console.WriteLine ();
-			Console.WriteLine ("                           [[hostname:]port:]VPath:realpath,...");
-			Console.WriteLine ();
-			Console.WriteLine ("                    Samples: /:.");
-			Console.WriteLine ("                           the virtual / is mapped to the current directory.");
-			Console.WriteLine ();
-			Console.WriteLine ("                            /blog:../myblog");
-			Console.WriteLine ("                           the virtual /blog is mapped to ../myblog");
-			Console.WriteLine ();
-			Console.WriteLine ("                            myhost.someprovider.net:/blog:../myblog");
-			Console.WriteLine ("                           the virtual /blog at myhost.someprovider.net is mapped to ../myblog");
-			Console.WriteLine ();
-			Console.WriteLine ("                            /:.,/blog:../myblog");
-			Console.WriteLine ("                           Two applications like the above ones are handled.");
-			Console.WriteLine ("                    Default value: /:.");
-			Console.WriteLine ("                    AppSettings key name: MonoApplications");
-			Console.WriteLine ();
-			Console.WriteLine ("    --nonstop: don't stop the server by pressing enter. Must be used");
-			Console.WriteLine ("               when the server has no controlling terminal.");
-			Console.WriteLine ();
-			Console.WriteLine ("    --version: displays version information and exits.");
-			Console.WriteLine ("    --verbose: prints extra messages. Mainly useful for debugging.");
-
-			Console.WriteLine ();
+			configmanager.PrintHelp ();
 		}
 
-		[Flags]
-		enum Options {
-			NonStop = 1,
-			Verbose = 1 << 1,
-			Applications = 1 << 2,
-			AppConfigDir = 1 << 3,
-			AppConfigFile = 1 << 4,
-			Root = 1 << 5,
-			FileName = 1 << 6,
-			Address = 1 << 7,
-			Port = 1 << 8,
-			Terminate = 1 << 9,
-			Https = 1 << 10,
-			Master = 1 << 11
-		}
-
-		static void CheckAndSetOptions (string name, Options value, ref Options options)
-		{
-			if ((options & value) != 0) {
-				ShowHelp ();
-				Console.WriteLine ();
-				Console.WriteLine ("ERROR: Option '{0}' duplicated.", name);
-				Environment.Exit (1);
-			}
-
-			options |= value;
-			if ((options & Options.FileName) != 0 &&
-			    ((options & Options.Port) != 0 || (options & Options.Address) != 0)) {
-				ShowHelp ();
-				Console.WriteLine ();
-				Console.WriteLine ("ERROR: --port/--address and --filename are mutually exclusive");
-				Environment.Exit (1);
-			}
-		}
-
-		static NameValueCollection AppSettings {
-			get {
-#if NET_2_0
-				return ConfigurationManager.AppSettings;
-#else
-				return ConfigurationSettings.AppSettings;
-#endif
-			}
-		}
-		
 		private static ApplicationManager appmanager;
+		private static ConfigurationManager configmanager;
+		
 		public static ApplicationHost GetApplicationForPath (string vhost,
-			int port, string path,  bool defaultToRoot)
+		                                                     int port,
+		                                                     string path,
+		                                                     bool defaultToRoot)
 		{
 			return appmanager.GetApplicationForPath (vhost, port,
 				path, defaultToRoot).AppHost as ApplicationHost;
@@ -179,170 +96,211 @@ namespace Mono.WebServer.FastCgi
 		
 		public static int Main (string [] args)
 		{
-			bool nonstop = false;
-			bool verbose = false;
-			Trace.Listeners.Add (new TextWriterTraceListener (Console.Out));
-			string apps = AppSettings ["MonoApplications"];
-			string appConfigDir = AppSettings ["MonoApplicationsConfigDir"];
-			string appConfigFile = AppSettings ["MonoApplicationsConfigFile"];
-			string rootDir = AppSettings ["MonoServerRootDir"];
-			object oport;
-			string ip = AppSettings ["MonoServerAddress"];
-			bool master = false;
-			string filename = AppSettings ["MonoUnixSocket"];
-			if (ip == "" || ip == null)
-				ip = "0.0.0.0";
-
-			oport = AppSettings ["MonoServerPort"];
-			if (oport == null)
-				oport = 8080;
-
-			Options options = 0;
-			int hash = 0;
-			for (int i = 0; i < args.Length; i++){
-				string a = args [i];
-				int idx = (i + 1 < args.Length) ? i + 1 : i;
-				hash ^= args [idx].GetHashCode () + i;
-				
-				switch (a){
-				case "--filename":
-					CheckAndSetOptions (a, Options.FileName, ref options);
-					filename = args [++i];
-					break;
-				case "--port":
-					CheckAndSetOptions (a, Options.Port, ref options);
-					oport = args [++i];
-					break;
-				case "--address":
-					CheckAndSetOptions (a, Options.Address, ref options);
-					ip = args [++i];
-					break;
-				case "--root":
-					CheckAndSetOptions (a, Options.Root, ref options);
-					rootDir = args [++i];
-					break;
-				case "--applications":
-					CheckAndSetOptions (a, Options.Applications, ref options);
-					apps = args [++i];
-					break;
-				case "--appconfigfile":
-					CheckAndSetOptions (a, Options.AppConfigFile, ref options);
-					appConfigFile = args [++i];
-					break;
-				case "--appconfigdir":
-					CheckAndSetOptions (a, Options.AppConfigDir, ref options);
-					appConfigDir = args [++i];
-					break;
-				case "--nonstop":
-					nonstop = true;
-					break;
-				case "--help":
-					ShowHelp ();
-					return 0;
-				case "--version":
-					ShowVersion ();
-					return 0;
-				case "--verbose":
-					verbose = true;
-					break;
-				default:
-					Console.WriteLine ("Unknown argument: {0}", a);
-					ShowHelp ();
-					return 1;
-				}
-			}
-
-			if (hash < 0)
-				hash = -hash;
-
-			string lockfile;
-			bool useTCP = ((options & Options.Port) != 0);
-			if (!useTCP) {
-				if (filename == null || filename == "")
-					filename = "/tmp/fastcgi_mono_server";
-
-				if ((options & Options.Address) != 0) {
-					ShowHelp ();
-					Console.WriteLine ();
-					Console.WriteLine ("ERROR: --address without --port");
-					Environment.Exit (1);
-				} lockfile = Path.Combine (Path.GetTempPath (), Path.GetFileName (filename));
-				lockfile = String.Format ("{0}_{1}", lockfile, hash);
-			} else {
-				lockfile = Path.Combine (Path.GetTempPath (), "mod_mono_TCP_");
-				lockfile = String.Format ("{0}_{1}", lockfile, hash);
+			// Load the configuration file stored in the
+			// executable's resources.
+			configmanager = new ConfigurationManager (
+				typeof (Server).Assembly,
+				"ConfigurationManager.xml");
+			
+			configmanager.LoadCommandLineArgs (args);
+			
+			// Show the help and exit.
+			if ((bool) configmanager ["help"]) {
+				ShowHelp ();
+				return 0;
 			}
 			
+			// Show the version and exit.
+			if ((bool) configmanager ["version"]) {
+				ShowVersion ();
+				return 0;
+			}
 			
-			IPAddress ipaddr = null;
-			ushort port;
 			try {
-				port = Convert.ToUInt16 (oport);
-			} catch (Exception) {
-				Console.WriteLine ("The value given for the listen port is not valid: " + oport);
+				string config_file = (string)
+					configmanager ["configfile"];
+				if (config_file != null)
+					configmanager.LoadXmlConfig (
+						config_file);
+			} catch (ApplicationException e) {
+				Console.WriteLine (e.Message);
+				return 1;
+			} catch (System.Xml.XmlException e) {
+				Console.WriteLine (
+					"Error reading XML configuration: {0}",
+					e.Message);
 				return 1;
 			}
-
-			try {
-				ipaddr = IPAddress.Parse (ip);
-			} catch (Exception) {
-				Console.WriteLine ("The value given for the address is not valid: " + ip);
-				return 1;
-			}
-
-			if (rootDir != null && rootDir != "") {
-				try {
-					Environment.CurrentDirectory = rootDir;
-				} catch (Exception e) {
-					Console.WriteLine ("Error: {0}", e.Message);
-					return 1;
-				}
-			}
-
-			rootDir = Directory.GetCurrentDirectory ();
 			
+			// Send the trace to the console.
+			Trace.Listeners.Add (
+				new TextWriterTraceListener (Console.Out));
+			Console.WriteLine (
+				Assembly.GetExecutingAssembly ().GetName ().Name);
+			
+			
+			// Create the socket.
 			Socket socket;
 			
-			if (useTCP) {
-				socket = SocketFactory.CreateTcpSocket (ipaddr, port);
-			} else {
-				// FIXME: Add file socket support.
-				throw new NotImplementedException ("To be added.");
-			}
-
-			appmanager = new ApplicationManager (typeof (ApplicationHost));
-			appmanager.Verbose = verbose;
-
-			Console.WriteLine (Assembly.GetExecutingAssembly ().GetName ().Name);
-			if (apps != null)
-				appmanager.AddApplicationsFromCommandLine (apps);
-
-			if (appConfigFile != null)
-				appmanager.AddApplicationsFromConfigFile (appConfigFile);
-
-			if (appConfigDir != null)
-				appmanager.AddApplicationsFromConfigDirectory (appConfigDir);
-
-			if (!master && apps == null && appConfigDir == null && appConfigFile == null)
-				appmanager.AddApplicationsFromCommandLine ("/:.");
-			if (!useTCP) {
-				Console.WriteLine ("Listening on: {0}", filename);
-			} else
-			{
-				Console.WriteLine ("Listening on port: {0}", port);
-				Console.WriteLine ("Listening on address: {0}", ip);
+			// Socket strings are in the format
+			// "type[:ARG1[:ARG2[:...]]]".
+			string socket_type = configmanager ["socket"] as string;
+			if (socket_type == null)
+				socket_type = "pipe";
+			
+			string [] socket_parts = socket_type.Split (
+				new char [] {':'}, 3);
+			
+			switch (socket_parts [0].ToLower ()) {
+			case "pipe":
+				try {
+					socket = SocketFactory.CreatePipeSocket (
+						IntPtr.Zero);
+				} catch (System.Net.Sockets.SocketException){
+					Console.WriteLine (
+						"Error: Pipe socket is not bound.");
+					return 1;
+				}
+				break;
+			case "file":
+				// TODO: Add file socket support.
+				Console.WriteLine (
+					"File socket support to be added.");
+				return 1;
+			
+			// The TCP socket is of the format
+			// "tcp[[:ADDRESS]:PORT]".
+			case "tcp":
+				if (socket_parts.Length > 1)
+					configmanager ["port"] = socket_parts [
+						socket_parts.Length - 1];
+				
+				if (socket_parts.Length == 3)
+					configmanager ["address"] =
+						socket_parts [1];
+				
+				ushort port;
+				try {
+					port = (ushort) configmanager ["port"];
+				} catch (ApplicationException e) {
+					Console.WriteLine (e.Message);
+					return 1;
+				}
+				
+				string address_str =
+					(string) configmanager ["address"];
+				IPAddress address;
+				
+				try {
+					address = IPAddress.Parse (address_str);
+				} catch {
+					Console.WriteLine (
+						"Error in argument \"address\". \"{0}\" cannot be converted to an IP address.",
+						address_str);
+					return 1;
+				}
+				
+				try {
+					socket = SocketFactory.CreateTcpSocket (
+						address, port);
+				} catch (System.Net.Sockets.SocketException e){
+					Console.WriteLine (
+						"Error creating the socket: {0}",
+						e.Message);
+					return 1;
+				}
+				
+				Console.WriteLine ("Listening on port: {0}",
+					address_str);
+				Console.WriteLine ("Listening on address: {0}",
+					port);
+				break;
+				
+			default:
+				Console.WriteLine (
+					"Error in argument \"socket\". \"{0}\" cannot be converted to an IP address.",
+					socket_parts [0]);
+				return 1;
 			}
 			
-			Console.WriteLine ("Root directory: {0}", rootDir);
-			Mono.FastCgi.Server server = new Mono.FastCgi.Server (socket);
-			Logger.Open ("/home/brian/log.txt");
+			string root_dir = configmanager ["root"] as string;
+			if (root_dir != null && root_dir.Length != 0) {
+				try {
+					Environment.CurrentDirectory = root_dir;
+				} catch (Exception e) {
+					Console.WriteLine ("Error: {0}",
+						e.Message);
+					return 1;
+				}
+			}
+			
+			root_dir = Environment.CurrentDirectory;
+			
+			appmanager = new ApplicationManager (
+				typeof (ApplicationHost));
+			appmanager.Verbose = (bool) configmanager ["verbose"];
+			
+			
+			string applications = (string)
+				configmanager ["applications"];
+			string app_config_file;
+			string app_config_dir;
+			
+			try {
+				app_config_file = (string)
+					configmanager ["appconfigfile"];
+				app_config_dir = (string)
+					configmanager ["appconfigdir"];
+			} catch (ApplicationException e) {
+				Console.WriteLine (e.Message);
+				return 1;
+			}
+			
+			if (applications != null)
+				appmanager.AddApplicationsFromCommandLine (
+					applications);
+			
+			if (app_config_file != null)
+				appmanager.AddApplicationsFromConfigFile (
+					app_config_file);
+			
+			if (app_config_dir != null)
+				appmanager.AddApplicationsFromConfigDirectory (
+					app_config_dir);
+
+			if (applications == null && app_config_dir == null &&
+				app_config_file == null)
+				appmanager.AddApplicationsFromCommandLine (
+					"/:.");
+			
+			Console.WriteLine ("Root directory: {0}", root_dir);
+			Mono.FastCgi.Server server = new Mono.FastCgi.Server (
+				socket);
 			Logger.Level = LogLevel.All;
 			server.SetResponder (typeof (Responder));
-
+			
+			server.MaxConnections = (ushort)
+				configmanager ["maxconns"];
+			server.MaxRequests = (ushort)
+				configmanager ["maxreqs"];
+			server.MultiplexConnections = (bool)
+				configmanager ["multiplex"];
+			
+			Console.WriteLine ("Max connections: {0}",
+				server.MaxConnections);
+			Console.WriteLine ("Max requests: {0}",
+				server.MaxRequests);
+			Console.WriteLine ("Multiplex connections: {0}",
+				server.MultiplexConnections);
+			
+			bool nonstop = (bool) configmanager ["nonstop"];
 			server.Start (!nonstop);
-
+			
+			configmanager = null;
+			
 			if (!nonstop) {
-				Console.WriteLine ("Hit Return to stop the server.");
+				Console.WriteLine (
+					"Hit Return to stop the server.");
 				Console.ReadLine ();
 				server.Stop ();
 			}
