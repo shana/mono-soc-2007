@@ -46,7 +46,16 @@ namespace System.Windows.Controls {
 
 		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
 			base.OnItemsChanged(e);
-			EnsureATabItemIsSelected();
+			//if (IsInitialized)
+			//    return;
+			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+				return;
+			if (Items.Count == 0)
+				return;
+			for (int item_index = 0; item_index < Items.Count; item_index++)
+				if (GetTabItemForItemAtIndex(item_index).IsSelected)
+					return;
+			GetTabItemForItemAtIndex(0).IsSelected = true;
 			// This needs to be done now but even if the user overrides this and does not call the base implementation.
 			ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
 		}
@@ -117,11 +126,6 @@ namespace System.Windows.Controls {
 
 		#region Private Methods
 		void OnGeneratorStatusChanged(object sender, EventArgs e) {
-			EnsureATabItemIsSelected();
-			UpdateTabStripPlacement();
-		}
-
-		void EnsureATabItemIsSelected() {
 			//if (IsInitialized)
 			//    return;
 			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
@@ -132,6 +136,7 @@ namespace System.Windows.Controls {
 				if (GetTabItemForItemAtIndex(item_index).IsSelected)
 					return;
 			GetTabItemForItemAtIndex(0).IsSelected = true;
+			UpdateTabStripPlacement();
 		}
 		#endregion
 	}

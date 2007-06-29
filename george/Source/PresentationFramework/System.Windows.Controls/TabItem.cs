@@ -80,6 +80,7 @@ namespace System.Windows.Controls {
 		/// </remarks>
 		protected override void OnPreviewGotKeyboardFocus(KeyboardFocusChangedEventArgs e) {
 			base.OnPreviewGotKeyboardFocus(e);
+			//WDTDH
 		}
 
 		protected virtual void OnSelected(RoutedEventArgs e) {
