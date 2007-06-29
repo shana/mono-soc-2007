@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows.Automation.Peers;
+using System.Windows.Input;
 #if Implementation
 using System.Windows;
 using System.Windows.Controls;
@@ -33,12 +34,23 @@ namespace System.Windows.Controls {
 		#endregion
 		
 		#region Protected Methods
+		protected override void OnAccessKey(AccessKeyEventArgs e) {
+			base.OnAccessKey(e);
+			HandleUIAction();
+		}
+
 		protected override AutomationPeer OnCreateAutomationPeer() {
 #if Implementation
 			return null;
 #else
 			return new TabItemAutomationPeer(this);
 #endif
+		}
+
+		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
+			base.OnMouseLeftButtonDown(e);
+			HandleUIAction();
+			e.Handled = true;
 		}
 		#endregion
 
