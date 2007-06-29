@@ -1,5 +1,9 @@
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabControl.cs, TabItem.cs: More work.
+
+2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabItem trivial things.cs, TabItem.cs: Fixed UI action handling.
 	
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
