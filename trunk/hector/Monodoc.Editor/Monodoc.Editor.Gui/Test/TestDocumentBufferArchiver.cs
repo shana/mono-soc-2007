@@ -42,17 +42,17 @@ public class TestDocumentBufferArchiver {
 	[Test()]
 	public void Serialize()
 	{
-		string originalText, newText;
-		int count = 0;
+		string originalText, newText, filename;
 		
 		foreach (string file in files) {
 			MonoDocument document = new MonoDocument (file);
+			filename = Path.GetFileName (file);
 			originalText = document.Text;
 			
 			DocumentBufferArchiver.Deserialize (buffer, originalText);
 			newText = DocumentBufferArchiver.Serialize (buffer);
 			
-			Assert.AreEqual (originalText, newText, "SR" + count);
+			Assert.AreEqual (originalText, newText, "SR:" + filename);
 			buffer.Clear ();
 		}
 	}
@@ -60,10 +60,11 @@ public class TestDocumentBufferArchiver {
 	[Test()]
 	public void SerializePerformance ()
 	{
-		string originalText;
+		string originalText, filename;
 		
 		foreach (string file in files) {
 			MonoDocument document = new MonoDocument (file);
+			filename = Path.GetFileName (file);
 			originalText = document.Text;
 			
 			DocumentBufferArchiver.Deserialize (buffer, originalText);
@@ -72,7 +73,7 @@ public class TestDocumentBufferArchiver {
 			DateTime stopTime = DateTime.Now;
 			TimeSpan duration = stopTime - startTime;
 			
-			Assert.Less (duration.TotalMilliseconds, 500, "SP01");
+			Assert.Less (duration.TotalMilliseconds, 500, "SP:" + filename);
 			buffer.Clear ();
 		}
 	}
@@ -80,10 +81,11 @@ public class TestDocumentBufferArchiver {
 	[Test()]
 	public void DeserializePerformance ()
 	{
-		string originalText;
+		string originalText, filename;
 		
 		foreach (string file in files) {
 			MonoDocument document = new MonoDocument (file);
+			filename = Path.GetFileName (file);
 			originalText = document.Text;
 			
 			DateTime startTime = DateTime.Now;
@@ -91,7 +93,7 @@ public class TestDocumentBufferArchiver {
 			DateTime stopTime = DateTime.Now;
 			TimeSpan duration = stopTime - startTime;
 			
-			Assert.Less (duration.TotalMilliseconds, 100, "SP01");
+			Assert.Less (duration.TotalMilliseconds, 100, "SP:" + filename);
 			buffer.Clear ();
 		}
 	}

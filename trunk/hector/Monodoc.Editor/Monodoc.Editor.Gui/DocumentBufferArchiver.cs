@@ -170,7 +170,12 @@ public class DocumentBufferArchiver {
 					tagStart.Tag = buffer.TagTable.Lookup (xmlReader.Name);
 					
 					#if DEBUG
-					Console.WriteLine ("Element: {0} Start: {1}", tagStart.Tag.Name, tagStart.Start);
+					try {
+						Console.WriteLine ("Element: {0} Start: {1}", tagStart.Tag.Name, tagStart.Start);
+					} catch (NullReferenceException e) {
+						Console.WriteLine ("Error: Missing {0} element", xmlReader.Name);
+						Environment.Exit (1);
+					}
 					#endif
 					
 					if (xmlReader.HasAttributes)
