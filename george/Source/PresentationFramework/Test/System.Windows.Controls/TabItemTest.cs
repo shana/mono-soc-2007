@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Specialized;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -250,6 +251,72 @@ namespace System.Windows.Controls {
 		}
 
 		[Test]
+		public void OnSelectedInWindow3() {
+			Window w = new Window();
+			OnSelectedTabControl tab_control = new OnSelectedTabControl();
+			w.Content = tab_control;
+			w.Show();
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "1");
+			OnSelectedTabItem i1 = new OnSelectedTabItem();
+			tab_control.Items.Add(i1);
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "2");
+			OnSelectedTabItem i2 = new OnSelectedTabItem();
+			tab_control.Items.Add(i2);
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "3");
+			Assert.IsTrue(i1.IsSelected, "4");
+			i1.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "5");
+			i2.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "6");
+			Assert.IsTrue(i1.IsSelected, "7");
+			Assert.IsTrue(i2.IsSelected, "8");
+		}
+
+		[Test]
+		public void OnSelectedInWindow4() {
+			Window w = new Window();
+			OnSelectedTabControl2 tab_control = new OnSelectedTabControl2();
+			w.Content = tab_control;
+			w.Show();
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "1");
+			OnSelectedTabItem i1 = new OnSelectedTabItem();
+			tab_control.Items.Add(i1);
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "2");
+			OnSelectedTabItem i2 = new OnSelectedTabItem();
+			tab_control.Items.Add(i2);
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "3");
+			Assert.IsTrue(i1.IsSelected, "4");
+			i1.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "5");
+			i2.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "6");
+			Assert.IsTrue(i1.IsSelected, "7");
+			Assert.IsTrue(i2.IsSelected, "8");
+		}
+
+		[Test]
+		public void OnSelectedInWindow5() {
+			Window w = new Window();
+			TabControl tab_control = new TabControl();
+			w.Content = tab_control;
+			w.Show();
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "1");
+			OnSelectedTabItem2 i1 = new OnSelectedTabItem2();
+			tab_control.Items.Add(i1);
+			Assert.AreEqual(tab_control.SelectedIndex, -1, "2");
+			OnSelectedTabItem2 i2 = new OnSelectedTabItem2();
+			tab_control.Items.Add(i2);
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "3");
+			Assert.IsTrue(i1.IsSelected, "4");
+			i1.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "5");
+			i2.IsSelected = true;
+			Assert.AreEqual(tab_control.SelectedIndex, 0, "6");
+			Assert.IsTrue(i1.IsSelected, "7");
+			Assert.IsTrue(i2.IsSelected, "8");
+		}
+
+		[Test]
 		public void OnSelectedInWindow2() {
 			TabControl tab_control = new TabControl();
 			OnSelectedTabItem i1 = new OnSelectedTabItem();
@@ -268,6 +335,24 @@ namespace System.Windows.Controls {
 
 		class OnSelectedTabItem : TabItem {
 			protected override void OnSelected(RoutedEventArgs e) {
+			}
+		}
+
+		class OnSelectedTabItem2 : TabItem {
+			protected override void OnSelected(RoutedEventArgs e) {
+			}
+
+			protected override void OnUnselected(RoutedEventArgs e) {
+			}
+		}
+
+		class OnSelectedTabControl : TabControl {
+			protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
+			}
+		}
+
+		class OnSelectedTabControl2 : TabControl {
+			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
 			}
 		}
 		#endregion
@@ -307,5 +392,23 @@ namespace System.Windows.Controls {
 			i2.IsSelected = true;
 			Assert.IsFalse(i1.IsSelected, "2");
 		}
+
+		#region StrangeCase
+		[Test]
+		public void StrangeCase() {
+			TabControl t = new TabControl();
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			t.Items.Add(new StrangeCaseTabItem());
+			t.Items.Add(new StrangeCaseTabItem());
+			Assert.AreEqual(t.SelectedIndex, 0);
+		}
+
+		class StrangeCaseTabItem : TabItem {
+			protected override void OnSelected(RoutedEventArgs e) {
+			}
+		}
+		#endregion
 	}
 }
