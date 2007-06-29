@@ -379,8 +379,10 @@ namespace System.Windows.Controls {
 				t.Content = "Test";
 				Items.Add(t);
 				Assert.IsFalse(t.IsSelected, "1");
+				Assert.AreEqual(SelectedIndex, -1, "1 2");
 				OnApplyTemplate();
 				Assert.IsFalse(t.IsSelected, "2");
+				Assert.AreEqual(SelectedIndex, -1, "2 2");
 			}
 		}
 		#endregion

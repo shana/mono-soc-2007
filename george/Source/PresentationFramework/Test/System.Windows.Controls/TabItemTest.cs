@@ -401,13 +401,81 @@ namespace System.Windows.Controls {
 			w.Content = t;
 			w.Show();
 			t.Items.Add(new StrangeCaseTabItem());
+			Assert.AreEqual(t.SelectedIndex, -1, "1");
 			t.Items.Add(new StrangeCaseTabItem());
-			Assert.AreEqual(t.SelectedIndex, 0);
+			Assert.AreEqual(t.SelectedIndex, 0, "2");
 		}
 
 		class StrangeCaseTabItem : TabItem {
 			protected override void OnSelected(RoutedEventArgs e) {
 			}
+		}
+		#endregion
+
+		#region StrangeCase2
+		[Test]
+		public void StrangeCase2() {
+			TabControl t = new TabControl();
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			t.Items.Add(new StrangeCase2TabItem());
+			Assert.AreEqual(t.SelectedIndex, -1, "1");
+			t.Items.Add(new StrangeCase2TabItem());
+			Assert.AreEqual(t.SelectedIndex, 0, "2");
+		}
+
+		class StrangeCase2TabItem : TabItem {
+			protected override void OnSelected(RoutedEventArgs e) {
+			}
+
+			protected override void OnUnselected(RoutedEventArgs e) {
+			}
+		}
+		#endregion
+
+		#region StrangeCase3
+		[Test]
+		public void StrangeCase3() {
+			TabControl t = new TabControl();
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			t.Items.Add(new StrangeCase3TabItem());
+			Assert.AreEqual(t.SelectedIndex, -1, "1");
+			t.Items.Add(new StrangeCase3TabItem());
+			Assert.AreEqual(t.SelectedIndex, 0, "2");
+		}
+
+		class StrangeCase3TabItem : TabItem {
+			protected override void OnUnselected(RoutedEventArgs e) {
+			}
+		}
+		#endregion
+
+		#region StrangeCase4
+		[Test]
+		public void StrangeCase4() {
+			TabControl t = new TabControl();
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			Assert.AreEqual(t.SelectedIndex, -1, "0");
+			t.Items.Add(new TabItem());
+			Assert.AreEqual(t.SelectedIndex, -1, "1");
+			t.Items.Add(new TabItem());
+			Assert.AreEqual(t.SelectedIndex, 0, "2");
+		}
+		#endregion
+
+		#region StrangeCase5
+		[Test]
+		public void StrangeCase5() {
+			TabControl t = new TabControl();
+			t.Items.Add(new TabItem());
+			Assert.AreEqual(t.SelectedIndex, -1, "1");
+			t.Items.Add(new TabItem());
+			Assert.AreEqual(t.SelectedIndex, -1, "2");
 		}
 		#endregion
 	}

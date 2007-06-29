@@ -1,5 +1,9 @@
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabControlTest.cs, TabItemTest: Added or expanded some tests.
+
+2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* TabControlTest.cs: Added or expanded some tests.
 
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
