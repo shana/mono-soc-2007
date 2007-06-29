@@ -81,7 +81,8 @@ namespace System.Windows.Controls {
 		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
-			ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
+			if (Items.Count != 0)
+				SelectedIndex = 0;
 		}
 		#endregion
 
