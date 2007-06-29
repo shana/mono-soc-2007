@@ -156,6 +156,25 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region OnApplyTemplateSetsIsSelected2
+		[Test]
+		public void OnApplyTemplateSetsIsSelected2() {
+			new OnApplyTemplateSetsIsSelected2TabControl();
+		}
+
+		class OnApplyTemplateSetsIsSelected2TabControl : TabControl {
+			public OnApplyTemplateSetsIsSelected2TabControl() {
+				TabItem t = new TabItem();
+				Items.Add(t);
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.IsTrue(t.IsSelected);
+			}
+		}
+		#endregion
+
+
 		#region OnMouseLeftButtonDown
 		[Test]
 		public void OnMouseLeftButtonDown() {
@@ -498,6 +517,31 @@ namespace System.Windows.Controls {
 			Assert.AreEqual(t.SelectedIndex, -1, "1");
 			t.Items.Add(new TabItem());
 			Assert.AreEqual(t.SelectedIndex, -1, "2");
+		}
+		#endregion
+
+		#region StrangeCase6
+		[Test]
+		public void StrangeCase6() {
+			TabControl t = new TabControl();
+			t.Items.Add(new TabItem());
+			t.Items.Add(new TabItem());
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			Assert.AreEqual(t.SelectedIndex, 0);
+		}
+		#endregion
+
+		#region StrangeCase7
+		[Test]
+		public void StrangeCase7() {
+			TabControl t = new TabControl();
+			t.Items.Add(new TabItem());
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			Assert.AreEqual(t.SelectedIndex, 0);
 		}
 		#endregion
 	}

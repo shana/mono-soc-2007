@@ -1,6 +1,10 @@
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
 
-	* : Added OnMouseLeftButtonDownInCanvas test.
+	* TabItemTest.cs: Added a test.
+
+2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControlTest.cs: Added OnMouseLeftButtonDownInCanvas test.
 
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
 
