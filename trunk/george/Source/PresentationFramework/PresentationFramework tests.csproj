@@ -54,6 +54,7 @@
     <Compile Include="Test\System.Windows.Controls.Primitives\ButtonBaseTest.cs" />
     <None Include="Test\System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="Test\System.Windows.Controls\ChangeLog" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\SelectorTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\TabPanelTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\ThumbTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\TickBarTest.cs" />
