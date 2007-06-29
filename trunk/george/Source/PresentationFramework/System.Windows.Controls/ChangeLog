@@ -1,5 +1,9 @@
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* TabControl.cs: More work.
+
+2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ListBoxItem.cs: Refactored some common code.
 
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
