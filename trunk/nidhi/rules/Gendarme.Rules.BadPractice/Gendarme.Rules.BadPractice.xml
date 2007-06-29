@@ -1,0 +1,8 @@
+<rules>
+	<rule	Name="ImplementingEqualsButNotGetHashCodeAndViceVersaRule" 
+		Type="Gendarme.Rules.BadPractice.ImplementingEqualsButNotGetHashCodeAndViceVersaRule, Gendarme.Rules.BadPractice, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#ImplementingEqualsButNotGetHashCodeAndViceVersaRule" >
+		<problem>Only one method of Object.Equals (Object) and Object.GetHashCode () is implemented in '{0}'.</problem>
+		<solution>Implement the other method also.</solution>
+	</rule>
+</rules>
