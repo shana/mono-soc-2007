@@ -1,13 +1,46 @@
 <ui>
+    <menubar name="MainMenu">
+        <menu action="File">
+            <menuitem action="Open" />
+            <menuitem action="Save" />
+            <menuitem action="Export" />
+            <separator />
+            <menuitem action="Print" />
+            <separator />
+            <menuitem action="Quit" />
+        </menu>
+        <menu action="Edit">
+            <menuitem action="Clear" />
+            <separator />
+            <menuitem action="Undo" />
+            <menuitem action="Redo" />
+        </menu>
+        <menu action="Color">
+            <placeholder name="Colors">
+            </placeholder>
+        </menu>
+        <menu action="Style">
+            <placeholder name="Styles">
+            </placeholder>
+        </menu>
+        <menu action="Paper">
+            <!-- not really sure how to handle this -->
+        </menu>
+        <menu action="Help">
+            <menuitem action="About" />
+        </menu>
+    </menubar>
     <toolbar name="ControlBar">
-        <toolitem name="Clear" action="HandwritingClearAction" />
-        <toolitem name="Export" action="HandwritingExportAction" />
-        <toolitem name="Save" action="HandwritingSaveAction" />
-        <toolitem name="Open" action="HandwritingOpenAction" />
+        <toolitem action="Clear" />
+        <toolitem action="Export" />
+        <toolitem action="Save" />
+        <toolitem action="Open" />
         <separator />
-        <toolitem name="Undo" action="HandwritingUndoAction" />
-        <toolitem name="Redo" action="HandwritingRedoAction" />
+        <toolitem action="Undo" />
+        <toolitem action="Redo" />
         <separator />
+        <toolitem action="Pen Style" />
+<!--        <separator />
         <toolitem name="Yellow" action="HandwritingYellowToggle" />
         <separator />
         <toolitem name="WideRule" action="HandwritingWideRuleToggle" />
@@ -16,6 +49,6 @@
         <separator />
         <toolitem name="LeftMargin" action="HandwritingLeftMarginToggle" />
         <separator />
-        <toolitem name="BindingHoles" action="HandwritingBindingHolesToggle" />
+        <toolitem name="BindingHoles" action="HandwritingBindingHolesToggle" /> -->
     </toolbar>
 </ui>

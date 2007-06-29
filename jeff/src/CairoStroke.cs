@@ -3,18 +3,12 @@ using System.Xml;
 using System.Collections.Generic;
 using Cairo;
 
-namespace Tablet
+namespace VirtualPaper
 {
     public class CairoStroke : Stroke
     {
         protected List<Color> color;
-        protected bool eraser;
-
-        public bool Eraser {
-            get {
-                return eraser;
-            }
-        }
+        protected PenStyle style;
 
         public Gdk.Rectangle Bounds {
             get {
@@ -31,18 +25,25 @@ namespace Tablet
             }
         }
 
-        public CairoStroke(bool erase) : base()
+        protected CairoStroke() : base()
         {
             color = new List<Color>();
-            eraser = erase;
         }
 
-        public CairoStroke(XmlTextReader xml) : this(false)
+        public CairoStroke(PenStyle penStyle) : this()
+        {
+            style = penStyle;
+        }
+
+        public CairoStroke(XmlTextReader xml) : this()
         {
             minX = Convert.ToDouble(xml.GetAttribute("left"));
             minY = Convert.ToDouble(xml.GetAttribute("top"));
             maxX = Convert.ToDouble(xml.GetAttribute("right"));
             maxY = Convert.ToDouble(xml.GetAttribute("bottom"));
+
+            style = new PenStyle();
+            style.PenSize = Convert.ToDouble(xml.GetAttribute("size"));
 
             int depth = xml.Depth;
             while(xml.Read() && xml.Depth > depth) {
@@ -66,14 +67,13 @@ namespace Tablet
 
         public override void AddPoint(double x, double y)
         {
-            AddPoint(x, y, new Color(0.0,0.0,0.0,0.0));
+            AddPoint(x, y, 1.0);
         }
 
-
-        public Gdk.Rectangle AddPoint(double x, double y, Color color)
+        public Gdk.Rectangle AddPoint(double x, double y, double pressure)
         {
             base.AddPoint(x, y);
-            this.color.Add(color);
+            this.color.Add(Pressurize(pressure));
             if(this.x.Count > 1 && this.y.Count > 1) {
                 double oldX = this.x[this.x.Count - 2];
                 double oldY = this.y[this.y.Count - 2];
@@ -94,8 +94,21 @@ namespace Tablet
             return new Gdk.Rectangle((int)x, (int)y, 0, 0);
         }
 
+        private Color Pressurize(double pressure)
+        {
+            if(pressure > 1.0)      pressure = 1.0;
+            else if(pressure < 0.0) pressure = 0.0;
+
+            return new Color(style.PenColor.R,
+                             style.PenColor.G,
+                             style.PenColor.B,
+                             style.PenColor.A * pressure);
+        }
+
         public void Draw(Context cr, Gdk.Rectangle clip)
         {
+            cr.LineWidth = style.PenSize;
+
             for(int i = 1; i < count; i++) {
                 Gdk.Rectangle rect = new Gdk.Rectangle();
                 rect.X = (int)((x[i] < x[i-1]) ? x[i] : x[i-1]);
@@ -119,6 +132,7 @@ namespace Tablet
 
         protected override void WriteXmlPoints(XmlTextWriter xml)
         {
+            xml.WriteAttributeString("size", style.PenSize.ToString());
             for(int i = 0; i < count; i++) {
                 xml.WriteStartElement(null, "point", null);
                 xml.WriteAttributeString("x", x[i].ToString());
