@@ -1,6 +1,3 @@
-using Mono.WindowsPresentationFoundation;
-using System.ComponentModel;
-using System.Windows.Automation.Peers;
 using System.Windows.Input;
 #if Implementation
 using System.Windows;
@@ -11,7 +8,7 @@ namespace Mono.System.Windows.Controls {
 using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
-	public class TabItem : HeaderedContentControl {
+	partial class TabItem {
 		#region Public Fields
 		#region Dependency Properties
 		public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(TabItem), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -49,36 +46,12 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
-		#region Static Constructor
-		static TabItem() {
-#if Implementation
-			Theme.Load();
-#endif
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(TabItem), new FrameworkPropertyMetadata(typeof(TabItem)));
-		}
-		#endregion
-
 		#region Public Constructors
 		public TabItem() {
 			//TabControl.AddSelectedHandler(this, delegate(object sender, RoutedEventArgs e) {
 			//    IsSelected = true;
 			//});
 		}
-		#endregion
-
-		#region Public Properties
-		#region Dependency Properties
-		[Bindable(true)]
-		public bool IsSelected {
-			get { return (bool)GetValue(IsSelectedProperty); }
-			set { SetValue(IsSelectedProperty, value); }
-		}
-
-		public Dock TabStripPlacement {
-			get { return (Dock)GetValue(TabStripPlacementProperty); }
-			internal set { SetValue(TabStripPlacementPropertyKey, value); }
-		}
-		#endregion
 		#endregion
 
 		#region Protected Methods
@@ -104,14 +77,6 @@ namespace System.Windows.Controls {
 
 		protected override void OnContentTemplateSelectorChanged(DataTemplateSelector oldContentTemplateSelector, DataTemplateSelector newContentTemplateSelector) {
 			base.OnContentTemplateSelectorChanged(oldContentTemplateSelector, newContentTemplateSelector);
-		}
-
-		protected override AutomationPeer OnCreateAutomationPeer() {
-#if Implementation
-			return null;
-#else
-			return new TabItemAutomationPeer(this);
-#endif
 		}
 
 		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
@@ -158,10 +123,6 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Methods
-		TabControl GetTabControl() {
-			return ItemsControl.ItemsControlFromItemContainer(this) as TabControl;
-		}
-
 		void SelectIfInTabControl() {
 			TabControl tab_control = GetTabControl();
 			if (tab_control != null && tab_control.Parent != null)
