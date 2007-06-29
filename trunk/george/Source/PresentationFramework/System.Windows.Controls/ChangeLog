@@ -1,3 +1,7 @@
+2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs, TabItem.cs: Added handling for some strange cases.
+
 2007-06-28  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControl.cs, TabItem.cs: More work.

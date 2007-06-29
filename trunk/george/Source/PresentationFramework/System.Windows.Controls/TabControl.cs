@@ -81,6 +81,7 @@ namespace System.Windows.Controls {
 		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
+			ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
 		}
 		#endregion
 
@@ -109,6 +110,8 @@ namespace System.Windows.Controls {
 		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
 			base.OnItemsChanged(e);
 			EnsureATabItemIsSelected();
+			// This needs to be done now but even if the user overrides this and does not call the base implementation.
+			ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
 		}
 
 		/// <summary>
@@ -167,6 +170,11 @@ namespace System.Windows.Controls {
 			SelectedContent = selected_tab_item == null ? null : selected_tab_item.Content;
 			SelectedContentTemplate = selected_tab_item == null ? ContentTemplate : selected_tab_item.ContentTemplate ?? ContentTemplate;
 			SelectedContentTemplateSelector = selected_tab_item == null ? ContentTemplateSelector : selected_tab_item.ContentTemplateSelector ?? ContentTemplateSelector;
+		}
+
+		internal void ExecuteStrangeCaseSelectFirstItemInWeirdConditions() {
+			if (SelectedIndex == -1 && Utility.IsInVisibleWindow(this) && Items.Count > 1)
+				SelectedIndex = 0;
 		}
 		#endregion
 
