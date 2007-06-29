@@ -9,6 +9,7 @@ namespace Ribbons
 		protected Theme theme = new Theme ();
 		private GroupStyle groupStyle;
 		private Theme.ButtonState state = Theme.ButtonState.Default;
+		private Widget oldChild;
 		
 		protected double lineWidth = 1.0;
 		
@@ -38,6 +39,34 @@ namespace Ribbons
 		public Button (string Label) : this()
 		{
 			this.Label = Label;
+		}
+		
+		private void Child_ButtonPressEvent(object sender, ButtonPressEventArgs evnt)
+		{
+			ProcessEvent (evnt.Event);
+		}
+		
+		private void Child_ButtonReleaseEvent(object sender, ButtonReleaseEventArgs evnt)
+		{
+			ProcessEvent (evnt.Event);
+		}
+		
+		protected override void OnHierarchyChanged (Widget previous_toplevel)
+		{
+			if(oldChild != Child)
+			{
+				if(oldChild != null)
+				{
+					oldChild.ButtonPressEvent -= Child_ButtonPressEvent;
+					oldChild.ButtonReleaseEvent -= Child_ButtonReleaseEvent;
+				}
+				if(Child != null)
+				{
+					Child.ButtonPressEvent += Child_ButtonPressEvent;
+					Child.ButtonReleaseEvent += Child_ButtonReleaseEvent;
+				}
+				oldChild = Child;
+			}
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
