@@ -187,6 +187,28 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region OnMouseLeftButtonDownInCanvas
+		[Test]
+		public void OnMouseLeftButtonDownInCanvas() {
+			new OnMouseLeftButtonDownInCanvasTabItem();
+		}
+
+		class OnMouseLeftButtonDownInCanvasTabItem : TabItem {
+			public OnMouseLeftButtonDownInCanvasTabItem() {
+				MouseButtonEventArgs e = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left);
+				e.RoutedEvent = MouseLeftButtonDownEvent;
+				TabControl t = new TabControl();
+				t.Items.Add(new TabItem());
+				t.Items.Add(this);
+				Canvas c = new Canvas();
+				c.Children.Add(t);
+				OnMouseLeftButtonDown(e);
+				Assert.IsFalse(IsSelected, "1");
+				Assert.IsTrue(e.Handled, "2");
+			}
+		}
+		#endregion
+
 		[Test]
 		public void Focusable() {
 			Assert.IsTrue(new TabItem().Focusable);
