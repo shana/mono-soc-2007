@@ -219,35 +219,35 @@ namespace Ribbons
 			{
 				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
 				bodyPattern.AddColorStopRgb (0.0, new Color (0.996, 0.847, 0.667));
-				bodyPattern.AddColorStopRgb (0.4, new Color (0.984, 0.710, 0.396));
-				bodyPattern.AddColorStopRgb (0.4, new Color (0.980, 0.616, 0.204));
+				bodyPattern.AddColorStopRgb (0.37, new Color (0.984, 0.710, 0.396));
+				bodyPattern.AddColorStopRgb (0.43, new Color (0.980, 0.616, 0.204));
 				bodyPattern.AddColorStopRgb (1.0, new Color (0.992, 0.933, 0.667));
 				
-				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
+				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
 				innerBorderPattern.AddColorStop (0.0, new Color (0.876, 0.718, 0.533, 1));
-				innerBorderPattern.AddColorStop (1.0, new Color (0, 0, 0, 0));
+				innerBorderPattern.AddColorStop (1.0, new Color (0.876, 0.718, 0.533, 0));
 				
-				borderColor = new Color (0.824, 0.753, 0.553);
+				borderColor = new Color (0.671, 0.631, 0.549);
 			}
 			else
 			{
 				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
 				bodyPattern.AddColorStopRgb (0.0, new Color (1, 0.996, 0.890));
-				bodyPattern.AddColorStopRgb (0.4, new Color (1, 0.906, 0.592));
-				bodyPattern.AddColorStopRgb (0.4, new Color (1, 0.843, 0.314));
+				bodyPattern.AddColorStopRgb (0.37, new Color (1, 0.906, 0.592));
+				bodyPattern.AddColorStopRgb (0.43, new Color (1, 0.843, 0.314));
 				bodyPattern.AddColorStopRgb (1.0, new Color (1, 0.906, 0.588));
 				
-				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
+				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
 				innerBorderPattern.AddColorStop (0.0, new Color (1, 1, 0.969, 1));
-				innerBorderPattern.AddColorStop (1.0, new Color (0, 0, 0, 0));
+				innerBorderPattern.AddColorStop (1.0, new Color (1, 1, 0.969, 0));
 				
-				borderColor = new Color (0.671, 0.631, 0.549);
+				borderColor = new Color (0.824, 0.753, 0.553);
 			}
 			
 			cr.LineWidth = lineWidth;
 			
-			double x0 = bodyAllocation.X + lineWidth15, y0 = bodyAllocation.Y + lineWidth15;
-			double x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth15, y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth15;
+			double x0 = bodyAllocation.X + lineWidth, y0 = bodyAllocation.Y + lineWidth;
+			double x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth, y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth;
 			
 			cr.MoveTo (x0, y0);
 			cr.LineTo (x1, y0);
@@ -256,7 +256,16 @@ namespace Ribbons
 			cr.LineTo (x0, y0);
 			
 			cr.Pattern = bodyPattern;
-			cr.FillPreserve ();
+			cr.Fill ();
+			
+			x0 = bodyAllocation.X + lineWidth15; y0 = bodyAllocation.Y + lineWidth15;
+			x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth15; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth15;
+			
+			cr.MoveTo (x0, y0);
+			cr.LineTo (x1, y0);
+			cr.LineTo (x1, y1);
+			cr.LineTo (x0, y1);
+			cr.LineTo (x0, y0);
 			
 			cr.Pattern = innerBorderPattern;
 			cr.Stroke ();
