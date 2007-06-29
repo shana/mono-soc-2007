@@ -1,3 +1,39 @@
+2007-06-29  Jeff Tickle  <jeff at jeff tickle dot com>  0.1.3
+
+	* src/ColorToolButton.cs: Created a fancy pants color selection widget
+	that handles some pre-selected colors, plus user-selected colors.
+
+	* src/VirtualPaperUI.cs: Added the ColorToolButton for selecting pen
+	colors.
+
+2007-06-17  Jeff Tickle  <jeff at jeff tickle dot com>  0.1.3
+
+	* src/VirtualPaperUI.cs: Made into a proper GNOME Application, using
+	Gnome.App and Gnome.Program rather than justGtk.Window
+
+2007-06-10  Jeff Tickle  <jeff at jeff tickle dot com>  0.1.3
+
+	* src/VirtualPaperUI.cs:
+	* src/Handwritings.cs: Added support for pen styles (color and size)
+
+
+2007-06-05  Jeff Tickle  <jeff at jeff tickle dot com>  0.1.3
+
+	In this revision, the namespace changed from Tablet to VirtualPaper.  This
+	should probably be reviewed at some point, as the widget should be under
+	something like Gtk.Tablet, whereas the rest of the interface should be
+	part of the namespace VirtualPaper.  I shall need to talk to my mentor who
+	is much more versed in the ways of the Mono to help me out with this.
+
+	* src/HandwritingWindow.cs: File and Class renamed to VirtualPaper.
+
+	* src/Handwriting.cs:
+	* src/Paper.cs:
+	* src/NotebookPaper.cs:
+	* src/VirtualPaper.cs: Abstracted out Paper support.  The drawing of the
+	widget's background is now handled by subclasses of the VirtualPaper.Paper
+	class.
+
 2007-05-30  Jeff Tickle  <jeff at jeff tickle dot com>  0.1.2
 
 	Imported into mono-soc-2007 Subversion and picked an arbitrary version

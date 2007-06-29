@@ -2,7 +2,7 @@ using System;
 using System.Xml;
 using System.Collections.Generic;
 
-namespace Tablet
+namespace VirtualPaper
 {
     public class Stroke
     {
