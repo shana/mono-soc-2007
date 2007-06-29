@@ -172,7 +172,7 @@ public class DocumentBufferArchiver {
 					#if DEBUG
 					try {
 						Console.WriteLine ("Element: {0} Start: {1}", tagStart.Tag.Name, tagStart.Start);
-					} catch (NullReferenceException e) {
+					} catch (NullReferenceException) {
 						Console.WriteLine ("Error: Missing {0} element", xmlReader.Name);
 						Environment.Exit (1);
 					}
@@ -195,6 +195,10 @@ public class DocumentBufferArchiver {
 						}
 						
 						buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+						// Padding between tag regions
+						insertAt = buffer.GetIterAtOffset (offset);
+						buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+						offset += 1;
 						
 						#if DEBUG
 						Console.WriteLine ("Empty Element: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
@@ -278,6 +282,7 @@ public class DocumentBufferArchiver {
 				result = DeserializeAttributesNone (buffer, offset, xmlReader);
 				break;
 			default:
+				result = DeserializeAttributesNone (buffer, offset, xmlReader);
 				break;
 		}
 		
