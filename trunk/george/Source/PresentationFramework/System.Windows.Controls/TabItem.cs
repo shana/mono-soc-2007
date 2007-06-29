@@ -1,3 +1,4 @@
+using Mono.WindowsPresentationFoundation;
 using System.Windows.Input;
 #if Implementation
 using System.Windows;
@@ -55,34 +56,19 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Protected Methods
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		/// <remarks>
-		/// Disabling this causes the access keys not to work.
-		/// </remarks>
-		protected override void OnAccessKey(AccessKeyEventArgs e) {
-			base.OnAccessKey(e);
-			SelectIfInTabControl();
-		}
-
 		protected override void OnContentChanged(object oldContent, object newContent) {
 			base.OnContentChanged(oldContent, newContent);
+			//WDTDH
 		}
 
 		protected override void OnContentTemplateChanged(DataTemplate oldContentTemplate, DataTemplate newContentTemplate) {
 			base.OnContentTemplateChanged(oldContentTemplate, newContentTemplate);
+			//WDTDH
 		}
 
 		protected override void OnContentTemplateSelectorChanged(DataTemplateSelector oldContentTemplateSelector, DataTemplateSelector newContentTemplateSelector) {
 			base.OnContentTemplateSelectorChanged(oldContentTemplateSelector, newContentTemplateSelector);
-		}
-
-		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
-			base.OnMouseLeftButtonDown(e);
-			SelectIfInTabControl();
-			e.Handled = true;
+			//WDTDH
 		}
 
 		/// <summary>
@@ -123,9 +109,12 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Methods
-		void SelectIfInTabControl() {
+		/// <summary>
+		/// Does whatever it is supposed to do when the TabItem is selected through the UI.
+		/// </summary>
+		void HandleUIAction() {
 			TabControl tab_control = GetTabControl();
-			if (tab_control != null && tab_control.Parent != null)
+			if (tab_control != null && Utility.IsInVisibleWindow(tab_control))
 				IsSelected = true;
 		}
 		#endregion
