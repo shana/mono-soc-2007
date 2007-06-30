@@ -1,5 +1,5 @@
 //
-// NamespaceNodeBuilder.cs
+// FunctionNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -31,7 +31,6 @@
 
 using System;
 using System.IO;
-using System.Text;
 
 using Mono.Addins;
 
@@ -42,22 +41,19 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class NamespaceNodeBuilder : TypeNodeBuilder
+	public class ClassNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(Namespace); }
+			get { return typeof(Class); }
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof (NamespaceCommandHandler); }
+			get { return typeof(ClassCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			if (thisNode.Options["NestedNamespaces"])
-				return ((Namespace)dataObject).Name;
-			else
-				return ((Namespace)dataObject).FullName;
+			return ((Class)dataObject).Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder,
@@ -66,12 +62,22 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			if (treeBuilder.Options["NestedNamespaces"])
-				label = ((Namespace)dataObject).Name;
-			else
-				label = ((Namespace)dataObject).FullName;
+			Class c = (Class)dataObject;
+				
+			label = c.Name;
 			
-			icon = Context.GetIcon (Stock.NameSpace);
+			switch (c.Access)
+			{
+			case AccessModifier.Public:
+				icon = Context.GetIcon (Stock.Class);
+				break;
+			case AccessModifier.Protected:
+				icon = Context.GetIcon (Stock.ProtectedClass);
+				break;
+			case AccessModifier.Private:
+				icon = Context.GetIcon (Stock.PrivateClass);
+				break;
+			}
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
@@ -82,29 +88,17 @@ namespace CBinding.Navigation
 			
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
 			
-			Namespace thisNamespace = ((Namespace)dataObject);
-			
-			// Namespaces
-			if (treeBuilder.Options["NestedNamespaces"])
-				foreach (Namespace n in info.Namespaces)
-					if (n.Namespace != null && n.Namespace.Equals (thisNamespace))
-						treeBuilder.AddChild (n);
+			Class thisClass = (Class)dataObject;
 			
 			// Classes
 			foreach (Class c in info.Classes)
-				if (c.Namespace != null && c.Namespace.Equals (thisNamespace))
+				if (c.Class != null && c.Class.Equals (thisClass))
 					treeBuilder.AddChild (c);
-			
-			// Structures
 			
 			// Functions
 			foreach (Function f in info.Functions)
-				if (f.Namespace != null && f.Namespace.Equals (thisNamespace))
+				if (f.Class != null && f.Class.Equals (thisClass))
 					treeBuilder.AddChild (f);
-			
-			// Variables
-			
-			// Macros
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -118,13 +112,13 @@ namespace CBinding.Navigation
 		}
 	}
 	
-	public class NamespaceCommandHandler : NodeCommandHandler
+	public class ClassCommandHandler : NodeCommandHandler
 	{
 		public override void ActivateItem ()
 		{
-			Namespace n = (Namespace)CurrentNode.DataItem;
+			Class _class = (Class)CurrentNode.DataItem;
 			
-			Document doc = IdeApp.Workbench.OpenDocument (n.File);
+			Document doc = IdeApp.Workbench.OpenDocument (_class.File);
 			
 			int lineNum = 0;
 			string line;
@@ -133,7 +127,7 @@ namespace CBinding.Navigation
 			while ((line = reader.ReadLine ()) != null) {
 				lineNum++;
 				
-				if (line.Equals (n.Pattern)) {
+				if (line.Equals (_class.Pattern)) {
 					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
 					break;
 				}

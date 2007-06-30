@@ -86,9 +86,15 @@ namespace CBinding.Navigation
 			
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
 			
+			// Classes
+			foreach (Class c in info.Classes) {
+				if (c.Namespace == null && c.Class == null)
+					treeBuilder.AddChild (c);
+			}
+			
 			// Functions
 			foreach (Function f in info.Functions) {
-				if (f.Namespace == null) // && f.Classes == null
+				if (f.Namespace == null && f.Class == null)
 					treeBuilder.AddChild (f);
 			}
 			

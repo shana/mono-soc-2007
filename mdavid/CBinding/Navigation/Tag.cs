@@ -35,7 +35,7 @@ using System.IO;
 namespace CBinding.Navigation
 {
 	public enum TagKind {
-		Class = 'c',
+		Class = 'c', // Done
 		Macro = 'd',
 		Enumerator = 'e',
 		Function = 'f', // Done
