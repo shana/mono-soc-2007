@@ -1,5 +1,5 @@
 //
-// FunctionNodeBuilder.cs
+// StructureNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -41,10 +41,10 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class FunctionNodeBuilder : TypeNodeBuilder
+	public class StructureNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(Function); }
+			get { return typeof(Structure); }
 		}
 		
 		public override Type CommandHandlerType {
@@ -53,7 +53,7 @@ namespace CBinding.Navigation
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return ((Function)dataObject).Name;
+			return ((Structure)dataObject).Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder,
@@ -62,27 +62,63 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			Function f = (Function)dataObject;
+			Structure s = (Structure)dataObject;
 				
-			label = f.Name;
+			label = s.Name;
 			
-			switch (f.Access)
+			switch (s.Access)
 			{
 			case AccessModifier.Public:
-				icon = Context.GetIcon (Stock.Method);
+				icon = Context.GetIcon (Stock.Struct);
 				break;
 			case AccessModifier.Protected:
-				icon = Context.GetIcon (Stock.ProtectedMethod);
+				icon = Context.GetIcon (Stock.ProtectedStruct);
 				break;
 			case AccessModifier.Private:
-				icon = Context.GetIcon (Stock.PrivateMethod);
+				icon = Context.GetIcon (Stock.PrivateStruct);
 				break;
 			}
 		}
 		
+		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
+		{
+			CProject p = treeBuilder.GetParentDataItem (typeof(CProject), false) as CProject;
+			
+			if (p == null) return;
+			
+			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
+			
+			Structure thisStruct = (Structure)dataObject;
+			
+			// Classes
+			foreach (Class c in info.Classes)
+				if (c.Parent != null && c.Parent.Equals (thisStruct))
+					treeBuilder.AddChild (c);
+			
+			// Structures
+			foreach (Structure s in info.Structures)
+				if (s.Parent != null && s.Parent.Equals (thisStruct))
+					treeBuilder.AddChild (s);
+			
+			// Functions
+			foreach (Function f in info.Functions)
+				if (f.Parent != null && f.Parent.Equals (thisStruct))
+					treeBuilder.AddChild (f);
+			
+			// Variables
+		}
+		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return false;
+			return true;
+		}
+		
+		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
+		{
+			if (otherNode is Class)
+				return 1;
+			else
+				return -1;
 		}
 	}
 }

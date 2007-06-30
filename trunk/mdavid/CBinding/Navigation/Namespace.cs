@@ -44,13 +44,5 @@ namespace CBinding.Navigation
 		{			
 			GetNamespace (tag);
 		}
-		
-		public override string FullName {
-			get {
-				if (Namespace != null)
-					return Namespace.FullName + "::" + Name;
-				return Name;
-			}
-		}
 	}
 }

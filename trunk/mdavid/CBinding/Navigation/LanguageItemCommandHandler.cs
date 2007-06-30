@@ -1,5 +1,5 @@
 //
-// ProjectNavigationInformation.cs
+// FunctionNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,51 +30,39 @@
 //
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 
+using Mono.Addins;
+
+using MonoDevelop.Ide.Gui;
+using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Core.Gui;
 using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class ProjectNavigationInformation
+	public class LanguageItemCommandHandler : NodeCommandHandler
 	{
-		private Project project;
-		private List<Namespace> namespaces = new List<Namespace> ();
-		private List<Function> functions = new List<Function> ();
-		private List<Class> classes = new List<Class> ();
-		private List<Structure> structures = new List<Structure> ();
-		
-		public ProjectNavigationInformation (Project project)
+		public override void ActivateItem ()
 		{
-			this.project = project;
-		}
-		
-		public void Clear ()
-		{
-			namespaces.Clear ();
-			functions.Clear ();
-			classes.Clear ();
-			structures.Clear ();
-		}
-		
-		public Project Project {
-			get { return project; }
-		}
-		
-		public List<Namespace> Namespaces {
-			get { return namespaces; }
-		}
-		
-		public List<Function> Functions {
-			get { return functions; }
-		}
-		
-		public List<Class> Classes {
-			get { return classes; }
-		}
-		
-		public List<Structure> Structures {
-			get { return structures; }
+			LanguageItem item = (LanguageItem)CurrentNode.DataItem;
+			
+			Document doc = IdeApp.Workbench.OpenDocument (item.File);
+			
+			int lineNum = 0;
+			string line;
+			StringReader reader = new StringReader (doc.TextEditor.Text);
+			
+			while ((line = reader.ReadLine ()) != null) {
+				lineNum++;
+				
+				if (line.Equals (item.Pattern)) {
+					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
+					break;
+				}
+			}
+			
+			reader.Close ();
 		}
 	}
 }

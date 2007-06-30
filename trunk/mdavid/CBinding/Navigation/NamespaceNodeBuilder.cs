@@ -49,7 +49,7 @@ namespace CBinding.Navigation
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof (NamespaceCommandHandler); }
+			get { return typeof (LanguageItemCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -87,19 +87,22 @@ namespace CBinding.Navigation
 			// Namespaces
 			if (treeBuilder.Options["NestedNamespaces"])
 				foreach (Namespace n in info.Namespaces)
-					if (n.Namespace != null && n.Namespace.Equals (thisNamespace))
+					if (n.Parent != null && n.Parent.Equals (thisNamespace))
 						treeBuilder.AddChild (n);
 			
 			// Classes
 			foreach (Class c in info.Classes)
-				if (c.Namespace != null && c.Namespace.Equals (thisNamespace))
+				if (c.Parent != null && c.Parent.Equals (thisNamespace))
 					treeBuilder.AddChild (c);
 			
 			// Structures
+			foreach (Structure s in info.Structures)
+				if (s.Parent != null && s.Parent.Equals (thisNamespace))
+					treeBuilder.AddChild (s);
 			
 			// Functions
 			foreach (Function f in info.Functions)
-				if (f.Namespace != null && f.Namespace.Equals (thisNamespace))
+				if (f.Parent != null && f.Parent.Equals (thisNamespace))
 					treeBuilder.AddChild (f);
 			
 			// Variables
@@ -115,31 +118,6 @@ namespace CBinding.Navigation
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
 			return -1;
-		}
-	}
-	
-	public class NamespaceCommandHandler : NodeCommandHandler
-	{
-		public override void ActivateItem ()
-		{
-			Namespace n = (Namespace)CurrentNode.DataItem;
-			
-			Document doc = IdeApp.Workbench.OpenDocument (n.File);
-			
-			int lineNum = 0;
-			string line;
-			StringReader reader = new StringReader (doc.TextEditor.Text);
-			
-			while ((line = reader.ReadLine ()) != null) {
-				lineNum++;
-				
-				if (line.Equals (n.Pattern)) {
-					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
-					break;
-				}
-			}
-			
-			reader.Close ();
 		}
 	}
 }
