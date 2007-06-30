@@ -108,6 +108,7 @@
 		<NodeBuilder id = "CBinding.Navigation.NamespaceNodeBuilder" class = "CBinding.Navigation.NamespaceNodeBuilder"/>
 		<NodeBuilder id = "CBinding.Navigation.FunctionNodeBuilder" class = "CBinding.Navigation.FunctionNodeBuilder"/>
 		<NodeBuilder id = "CBinding.Navigation.GlobalsNodeBuilder" class = "CBinding.Navigation.GlobalsNodeBuilder"/>
+		<NodeBuilder id = "CBinding.Navigation.ClassNodeBuilder" class = "CBinding.Navigation.ClassNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">

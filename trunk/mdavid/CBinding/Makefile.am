@@ -36,9 +36,12 @@ FILES =  \
 	Gui/CompilerPanel.cs \
 	Gui/EditPackagesDialog.cs \
 	Gui/OutputOptionsPanel.cs \
+	Navigation/Class.cs \
+	Navigation/ClassNodeBuilder.cs \
 	Navigation/Function.cs \
 	Navigation/FunctionNodeBuilder.cs \
 	Navigation/GlobalsNodeBuilder.cs \
+	Navigation/LanguageItem.cs \
 	Navigation/Namespace.cs \
 	Navigation/NamespaceNodeBuilder.cs \
 	Navigation/ProjectNavigationInformation.cs \

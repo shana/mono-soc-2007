@@ -30,10 +30,12 @@
 //
 
 using System;
+using System.IO;
 
 using Mono.Addins;
 
 using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
 
 using CBinding;
@@ -53,8 +55,13 @@ namespace CBinding.Navigation
 			
 			if (p == null) return;
 			
-			TagDatabaseManager.Instance.WriteTags (p);
-			TagDatabaseManager.Instance.FillProjectNavigationInformation (p);
+			try {
+				TagDatabaseManager.Instance.WriteTags (p);
+				TagDatabaseManager.Instance.FillProjectNavigationInformation (p);
+			} catch (IOException ex) {
+				IdeApp.Services.MessageService.ShowError (ex);
+				return;
+			}
 			
 			bool nestedNamespaces = builder.Options["NestedNamespaces"];
 			
@@ -63,7 +70,7 @@ namespace CBinding.Navigation
 			// Namespaces
 			foreach (Namespace n in info.Namespaces) {
 				if (nestedNamespaces) {
-					if (n.ParentNamespace == null) {
+					if (n.Namespace == null) {
 						builder.AddChild (n);
 					}
 				} else {

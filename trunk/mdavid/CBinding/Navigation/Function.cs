@@ -37,94 +37,32 @@ using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Navigation
 {
-	public class Function
-	{
-		private Project project;
-		private Namespace parentNamespace;
-//		private Class parentClass;
-		private string name;
-		private string file;
-		private string pattern;
-		private AccessModifier access = AccessModifier.Public;
-		
-		public Function (Tag tag, Project project)
+	public class Function : LanguageItem
+	{	
+		public Function (Tag tag, Project project) : base (tag, project)
 		{
-			this.name = tag.Name;
-			this.file = tag.File;
-			this.pattern = tag.Pattern;
-			this.project = project;
-			
-			string n;
-//			string klass;
 			// We need the prototype tag because the implementation tag
-			// marks the belonging namespace as a class
-			Tag prototypeTag = TagDatabaseManager.Instance.FindTag (name, TagKind.Prototype, project);
+			// marks the belonging namespace as a if it were a class
+			// and it does not have the access field.
+			Tag prototypeTag = TagDatabaseManager.Instance.FindTag (Name, TagKind.Prototype, Project);
 			
-			if (prototypeTag == null)				
+			if (prototypeTag == null) {
+				// It does not have a prototype tag which means it is inline
+				// and when it is inline it does have all the info we need
+				
+				if (GetNamespace (tag)) return;
+				if (GetClass (tag)) return;
+				
 				return;
-			
-			if ((n = prototypeTag.GetValue ("namespace")) != null) {
-				int index = n.LastIndexOf (':');
-				
-				if (index > 0)
-					n = n.Substring (index + 1);
-				
-				try {
-					Tag parentTag = TagDatabaseManager.Instance.FindTag (
-					    n, TagKind.Namespace, project);
-					
-					if (parentTag != null)
-						parentNamespace = new Namespace (parentTag, project);
-					
-				} catch (IOException ex) {
-					IdeApp.Services.MessageService.ShowError (ex);
-				}
 			}
 			
-			// TODO: Get containing class
+			if (GetNamespace (prototypeTag)) return;
+			if (GetClass (prototypeTag)) return;
 		}
 		
-		public Project Project {
-			get { return project; }
-		}
-		
-		public Namespace Namespace {
-			get { return parentNamespace; }
-		}
-		
-		public string Name {
-			get { return name; }
-		}
-		
-		// TODO: FullName property
-		
-		public string File {
-			get { return file; }
-		}
-		
-		public string Pattern {
-			get { return pattern; }
-		}
-		
-		public AccessModifier Access {
-			get { return access; }
-		}
-		
-		public override bool Equals (object o)
-		{
-			Function other = o as Function;
-			
-			if (other != null &&
-			    other.Name.Equals (name) && // Should cjeck for full name
-			    other.Project.Equals (project))
-				return true;
-			
-			return false;
-		}
-		
-		public override int GetHashCode ()
-		{
-			return (name + file + access + project.Name + pattern).GetHashCode ();
+		// TODO
+		public override string FullName {
+			get { return Name; }
 		}
 	}
 }

@@ -1,5 +1,5 @@
 //
-// Namespace.cs
+// Class.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -31,26 +31,25 @@
 
 using System;
 using System.IO;
-using System.Text;
 
 using MonoDevelop.Projects;
 using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Navigation
 {
-	public class Namespace : LanguageItem
-	{	
-		public Namespace (Tag tag, Project project) : base (tag, project)
+	public class Class : LanguageItem
+	{		
+		public Class (Tag tag, Project project) : base (tag, project)
 		{			
-			GetNamespace (tag);
+			if (GetNamespace (tag)) return;
+			if (GetClass (tag)) return;
+			
+			// TODO: Check if class is embeded in a struct
 		}
 		
+		// TODO
 		public override string FullName {
-			get {
-				if (Namespace != null)
-					return Namespace.FullName + "::" + Name;
-				return Name;
-			}
+			get { return Name; }
 		}
 	}
 }

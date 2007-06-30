@@ -78,7 +78,7 @@ namespace CBinding.Navigation
 				ProcessWrapper p = Runtime.ProcessService.StartProcess ("ctags", args.ToString (), tagsDir, null);
 				p.WaitForExit ();
 			} catch (Exception ex) {
-				IdeApp.Services.MessageService.ShowError (ex, "Could not create tags database (You must have exuberant ctags installed).");
+				throw new IOException ("Could not create tags database (You must have exuberant ctags installed).", ex);
 			}
 		}
 		
@@ -105,6 +105,7 @@ namespace CBinding.Navigation
 					switch (tag.Kind)
 					{
 					case TagKind.Class:
+						info.Classes.Add (new Class (tag, project));
 						break;
 					case TagKind.Enumeration:
 						break;
