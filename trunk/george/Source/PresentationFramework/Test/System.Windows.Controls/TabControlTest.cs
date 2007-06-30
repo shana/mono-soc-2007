@@ -227,10 +227,12 @@ namespace System.Windows.Controls {
 				TabItem t = new TabItem();
 				t.Content = "Test";
 				Items.Add(t);
+				Assert.AreEqual(SelectedIndex, -1, "1 1");
 				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
 				Window w = new Window();
 				w.Content = this;
 				w.Show();
+				Assert.AreEqual(SelectedIndex, 0, "2 1");
 				Assert.AreEqual((string)SelectedContent, "Test", "2");
 			}
 
@@ -292,6 +294,39 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region OnApplyTemplateUpdatesSelectedProperties8
+		[Test]
+		public void OnApplyTemplateUpdatesSelectedProperties8() {
+			new OnApplyTemplateUpdatesSelectedProperties8TabControl();
+		}
+
+		class OnApplyTemplateUpdatesSelectedProperties8TabControl : TabControl {
+			public OnApplyTemplateUpdatesSelectedProperties8TabControl() {
+				TestTabItem t = new TestTabItem();
+				t.Content = "Test";
+				Items.Add(t);
+				Assert.AreNotEqual((string)SelectedContent, "Test", "1");
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(SelectedIndex, 0, "2");
+				Assert.AreEqual((string)SelectedContent, "Test", "3");
+				Assert.AreEqual(SelectedIndex, 0, "4");
+			}
+
+			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
+			}
+
+			public override void OnApplyTemplate() {
+			}
+
+			class TestTabItem : TabItem {
+				protected override void OnSelected(RoutedEventArgs e) {
+				}
+			}
+		}
+		#endregion
+		
 		#region OnApplyTemplateUpdatesSelectedProperties5
 		[Test]
 		public void OnApplyTemplateUpdatesSelectedProperties5() {
@@ -637,5 +672,139 @@ namespace System.Windows.Controls {
 			w.Show();
 			Assert.IsNotNull(t.Template);
 		}
+
+		#region OnItemsChangedCalledAfterOnGeneratorStatusChanged
+		[Test]
+		public void OnItemsChangedCalledAfterOnGeneratorStatusChanged() {
+			new OnItemsChangedCalledAfterOnGeneratorStatusChangedTabControl();
+		}
+
+		class OnItemsChangedCalledAfterOnGeneratorStatusChangedTabControl : TabControl {
+			int order;
+
+			public OnItemsChangedCalledAfterOnGeneratorStatusChangedTabControl() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Items.Add("1");
+				Assert.AreEqual(order, 2, "3");
+			}
+
+			protected override void OnInitialized(EventArgs e) {
+				base.OnInitialized(e);
+				ItemContainerGenerator.StatusChanged += OnGeneratorStatusChanged;
+			}
+
+			void OnGeneratorStatusChanged(object sender, EventArgs e) {
+				if (ItemContainerGenerator.Status == global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated && Items.Count == 1) {
+					Assert.AreEqual(order, 0, "1");
+					order++;
+				}
+			}
+
+			protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
+				base.OnItemsChanged(e);
+				Assert.AreEqual(order, 1, "2");
+				order++;
+			}
+		}
+		#endregion
+
+		#region OnGeneratorStatusChangedCalled
+		[Test]
+		public void OnGeneratorStatusChangedCalled() {
+			new OnGeneratorStatusChangedCalledTabControl();
+		}
+
+		class OnGeneratorStatusChangedCalledTabControl : TabControl {
+			int calls;
+
+			public OnGeneratorStatusChangedCalledTabControl() {
+				Assert.AreEqual(calls, 0, "1");
+				Items.Add(new object());
+				Assert.AreEqual(calls, 0, "2");
+				ApplyTemplate();
+				Assert.AreEqual(calls, 0, "3");
+				Window w = new Window();
+				w.Content = this;
+				Assert.AreEqual(calls, 0, "4");
+				w.Show();
+				Assert.AreEqual(calls, 2, "5");
+				Items.Add(new object());
+				Assert.AreEqual(calls, 4, "6");
+			}
+
+			protected override void OnInitialized(EventArgs e) {
+				base.OnInitialized(e);
+				ItemContainerGenerator.StatusChanged += OnGeneratorStatusChanged;
+			}
+
+			void OnGeneratorStatusChanged(object sender, EventArgs e) {
+				calls++;
+			}
+		}
+		#endregion
+
+		#region OnGeneratorStatusChangedCalled2
+		[Test]
+		public void OnGeneratorStatusChangedCalled2() {
+			new OnGeneratorStatusChangedCalled2TabControl();
+		}
+
+		class OnGeneratorStatusChangedCalled2TabControl : TabControl {
+			bool called;
+			bool check_items;
+			public OnGeneratorStatusChangedCalled2TabControl() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				check_items = true;
+				Items.Add(new object());
+				called = true;
+			}
+
+			protected override void OnInitialized(EventArgs e) {
+				base.OnInitialized(e);
+				ItemContainerGenerator.StatusChanged += OnGeneratorStatusChanged;
+			}
+
+			void OnGeneratorStatusChanged(object sender, EventArgs e) {
+				if (check_items)
+					Assert.AreEqual(Items.Count, 1, "1");
+				Assert.IsFalse(called, "2");
+			}
+		}
+		#endregion
+
+		#region OnItemsChangedCalled
+		[Test]
+		public void OnItemsChangedCalled() {
+			new OnItemsChangedCalledTabControl();
+		}
+
+		class OnItemsChangedCalledTabControl : TabControl {
+			int calls;
+
+			public OnItemsChangedCalledTabControl() {
+				Assert.AreEqual(calls, 0, "1");
+				Items.Add(new object());
+				Assert.AreEqual(calls, 1, "2");
+				ApplyTemplate();
+				Assert.AreEqual(calls, 1, "3");
+				Window w = new Window();
+				w.Content = this;
+				Assert.AreEqual(calls, 1, "4");
+				w.Show();
+				Assert.AreEqual(calls, 1, "5");
+				Items.Add(new object());
+				Assert.AreEqual(calls, 2, "6");
+			}
+
+			protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
+				base.OnItemsChanged(e);
+				calls++;
+			}
+		}
+		#endregion
 	}
 }

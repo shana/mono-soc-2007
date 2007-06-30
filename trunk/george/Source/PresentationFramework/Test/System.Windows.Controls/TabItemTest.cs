@@ -502,8 +502,11 @@ namespace System.Windows.Controls {
 			w.Content = t;
 			w.Show();
 			Assert.AreEqual(t.SelectedIndex, -1, "0");
-			t.Items.Add(new TabItem());
+			TabItem i = new TabItem();
+			i.Content = 1;
+			t.Items.Add(i);
 			Assert.AreEqual(t.SelectedIndex, -1, "1");
+			Assert.IsNull(t.SelectedContent, "1 1");
 			t.Items.Add(new TabItem());
 			Assert.AreEqual(t.SelectedIndex, 0, "2");
 		}
@@ -542,6 +545,42 @@ namespace System.Windows.Controls {
 			w.Content = t;
 			w.Show();
 			Assert.AreEqual(t.SelectedIndex, 0);
+		}
+		#endregion
+
+		#region StrangeCase8
+		[Test]
+		public void StrangeCase8() {
+			TabControl t = new TabControl();
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			t.Items.Add(new TabItem());
+			Assert.AreEqual(t.SelectedIndex, -1);
+		}
+		#endregion
+
+		#region StrangeCase71
+		[Test]
+		public void StrangeCase71() {
+			TabControl t = new TabControl();
+			t.Items.Add(new object());
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			Assert.AreEqual(t.SelectedIndex, 0);
+		}
+		#endregion
+
+		#region StrangeCase81
+		[Test]
+		public void StrangeCase81() {
+			TabControl t = new TabControl();
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			t.Items.Add(new object());
+			Assert.AreEqual(t.SelectedIndex, -1);
 		}
 		#endregion
 	}
