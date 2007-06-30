@@ -246,14 +246,33 @@ namespace Ribbons
 			
 			cr.LineWidth = lineWidth;
 			
-			double x0 = bodyAllocation.X + lineWidth, y0 = bodyAllocation.Y + lineWidth;
-			double x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth, y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth;
+			bool upLeft = true, upRight = true, downRight = true, downLeft = true;
+			switch(widget.GroupStyle)
+			{
+				case GroupStyle.Left:
+					upRight = downRight = false;
+					break;
+				case GroupStyle.Center:
+					upLeft = downLeft = upRight = downRight = false;
+					break;
+				case GroupStyle.Right:
+					upLeft = downLeft = false;
+					break;
+			}
 			
-			cr.MoveTo (x0, y0);
-			cr.LineTo (x1, y0);
-			cr.LineTo (x1, y1);
-			cr.LineTo (x0, y1);
-			cr.LineTo (x0, y0);
+			double x0 = bodyAllocation.X + lineWidth05, y0 = bodyAllocation.Y + lineWidth05;
+			double x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth05, y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth05;
+			
+			if(upLeft) cr.MoveTo (x0 + roundSize, y0);
+			else cr.MoveTo (x0, y0);
+			if(upRight) cr.Arc (x1 - roundSize, y0 + roundSize, roundSize, 1.5*Math.PI, 0);
+			else cr.LineTo (x1, y0);
+			if(downRight) cr.Arc (x1 - roundSize, y1 - roundSize, roundSize, 0, 0.5*Math.PI);
+			else cr.LineTo (x1, y1);
+			if(downLeft) cr.Arc (x0 + roundSize, y1 - roundSize, roundSize, 0.5*Math.PI, Math.PI);
+			else cr.LineTo (x0, y1);
+			if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
+			else cr.LineTo (x0, y0);
 			
 			cr.Pattern = bodyPattern;
 			cr.Fill ();
@@ -261,11 +280,18 @@ namespace Ribbons
 			x0 = bodyAllocation.X + lineWidth15; y0 = bodyAllocation.Y + lineWidth15;
 			x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth15; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth15;
 			
-			cr.MoveTo (x0, y0);
-			cr.LineTo (x1, y0);
-			cr.LineTo (x1, y1);
-			cr.LineTo (x0, y1);
-			cr.LineTo (x0, y0);
+			double roundSizeMinusLineWidth = roundSize - lineWidth;
+			
+			if(upLeft) cr.MoveTo (x0 + roundSizeMinusLineWidth, y0);
+			else cr.MoveTo (x0, y0);
+			if(upRight) cr.Arc (x1 - roundSizeMinusLineWidth, y0 + roundSizeMinusLineWidth, roundSizeMinusLineWidth, 1.5*Math.PI, 0);
+			else cr.LineTo (x1, y0);
+			if(downRight) cr.Arc (x1 - roundSizeMinusLineWidth, y1 - roundSizeMinusLineWidth, roundSizeMinusLineWidth, 0, 0.5*Math.PI);
+			else cr.LineTo (x1, y1);
+			if(downLeft) cr.Arc (x0 + roundSizeMinusLineWidth, y1 - roundSizeMinusLineWidth, roundSizeMinusLineWidth, 0.5*Math.PI, Math.PI);
+			else cr.LineTo (x0, y1);
+			if(upLeft) cr.Arc (x0 + roundSizeMinusLineWidth, y0 + roundSizeMinusLineWidth, roundSizeMinusLineWidth, Math.PI, 1.5*Math.PI);
+			else cr.LineTo (x0, y0);
 			
 			cr.Pattern = innerBorderPattern;
 			cr.Stroke ();
@@ -273,11 +299,16 @@ namespace Ribbons
 			x0 = bodyAllocation.X + lineWidth05; y0 = bodyAllocation.Y + lineWidth05;
 			x1 = bodyAllocation.X + bodyAllocation.Width - lineWidth05; y1 = bodyAllocation.Y + bodyAllocation.Height - lineWidth05;
 			
-			cr.MoveTo (x0, y0);
-			cr.LineTo (x1, y0);
-			cr.LineTo (x1, y1);
-			cr.LineTo (x0, y1);
-			cr.LineTo (x0, y0);
+			if(upLeft) cr.MoveTo (x0 + roundSize, y0);
+			else cr.MoveTo (x0, y0);
+			if(upRight) cr.Arc (x1 - roundSize, y0 + roundSize, roundSize, 1.5*Math.PI, 0);
+			else cr.LineTo (x1, y0);
+			if(downRight) cr.Arc (x1 - roundSize, y1 - roundSize, roundSize, 0, 0.5*Math.PI);
+			else cr.LineTo (x1, y1);
+			if(downLeft) cr.Arc (x0 + roundSize, y1 - roundSize, roundSize, 0.5*Math.PI, Math.PI);
+			else cr.LineTo (x0, y1);
+			if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
+			else cr.LineTo (x0, y0);
 			
 			cr.Color = borderColor;
 			cr.Stroke ();
