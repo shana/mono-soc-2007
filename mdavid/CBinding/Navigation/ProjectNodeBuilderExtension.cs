@@ -70,7 +70,7 @@ namespace CBinding.Navigation
 			// Namespaces
 			foreach (Namespace n in info.Namespaces) {
 				if (nestedNamespaces) {
-					if (n.Namespace == null) {
+					if (n.Parent == null) {
 						builder.AddChild (n);
 					}
 				} else {

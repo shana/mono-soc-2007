@@ -1,5 +1,5 @@
 //
-// ProjectNavigationInformation.cs
+// Structure.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,51 +30,20 @@
 //
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 
 using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Navigation
 {
-	public class ProjectNavigationInformation
+	public class Structure : LanguageItem
 	{
-		private Project project;
-		private List<Namespace> namespaces = new List<Namespace> ();
-		private List<Function> functions = new List<Function> ();
-		private List<Class> classes = new List<Class> ();
-		private List<Structure> structures = new List<Structure> ();
-		
-		public ProjectNavigationInformation (Project project)
+		public Structure(Tag tag, Project project) : base (tag, project)
 		{
-			this.project = project;
-		}
-		
-		public void Clear ()
-		{
-			namespaces.Clear ();
-			functions.Clear ();
-			classes.Clear ();
-			structures.Clear ();
-		}
-		
-		public Project Project {
-			get { return project; }
-		}
-		
-		public List<Namespace> Namespaces {
-			get { return namespaces; }
-		}
-		
-		public List<Function> Functions {
-			get { return functions; }
-		}
-		
-		public List<Class> Classes {
-			get { return classes; }
-		}
-		
-		public List<Structure> Structures {
-			get { return structures; }
+			if (GetNamespace (tag)) return;
+			if (GetClass (tag)) return;
+			if (GetStructure (tag)) return;
 		}
 	}
 }

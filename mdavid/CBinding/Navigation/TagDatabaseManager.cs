@@ -128,6 +128,7 @@ namespace CBinding.Navigation
 					case TagKind.Prototype:
 						break;
 					case TagKind.Structure:
+						info.Structures.Add (new Structure (tag, project));
 						break;
 					case TagKind.Typedef:
 						break;

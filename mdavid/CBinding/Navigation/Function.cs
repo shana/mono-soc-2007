@@ -52,17 +52,14 @@ namespace CBinding.Navigation
 				
 				if (GetNamespace (tag)) return;
 				if (GetClass (tag)) return;
+				if (GetStructure (tag)) return;
 				
 				return;
 			}
 			
 			if (GetNamespace (prototypeTag)) return;
 			if (GetClass (prototypeTag)) return;
-		}
-		
-		// TODO
-		public override string FullName {
-			get { return Name; }
+			if (GetStructure (prototypeTag)) return;
 		}
 	}
 }

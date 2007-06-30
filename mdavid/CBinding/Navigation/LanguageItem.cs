@@ -44,10 +44,7 @@ namespace CBinding.Navigation
 		private string file;
 		private string pattern;
 		private AccessModifier access = AccessModifier.Public;
-		private Namespace _namespace;
-		private Class _class;
-//		private Structure _structure;
-//		private Enum _enum;
+		private LanguageItem parent;
 		
 		public LanguageItem (Tag tag, Project project)
 		{
@@ -79,7 +76,7 @@ namespace CBinding.Navigation
 					    n, TagKind.Namespace, project);
 					
 					if (namespaceTag != null)
-						_namespace = new Namespace (namespaceTag, project);
+						parent = new Namespace (namespaceTag, project);
 					
 				} catch (IOException ex) {
 					IdeApp.Services.MessageService.ShowError (ex);
@@ -91,10 +88,6 @@ namespace CBinding.Navigation
 			return false;
 		}
 		
-		/// <summary>
-		/// Attempts to get the class this function belongs to.
-		/// Will return false if this function is not a method and true otherwise.
-		/// </summary>
 		protected bool GetClass (Tag tag)
 		{
 			string c;
@@ -112,7 +105,36 @@ namespace CBinding.Navigation
 					    c, TagKind.Class, project);
 					
 					if (classTag != null)
-						_class = new Class (classTag, project);
+						parent = new Class (classTag, project);
+					
+				} catch (IOException ex) {
+					IdeApp.Services.MessageService.ShowError (ex);
+				}
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		protected bool GetStructure (Tag tag)
+		{
+			string s;
+			
+			if ((s = tag.GetValue ("struct")) != null) {
+				access = (AccessModifier)Enum.Parse (typeof(AccessModifier), tag.GetValue ("access"), true);
+				
+				int index = s.LastIndexOf (':');
+				
+				if (index > 0)
+					s = s.Substring (index + 1);
+				
+				try {
+					Tag classTag = TagDatabaseManager.Instance.FindTag (
+					    s, TagKind.Structure, project);
+					
+					if (classTag != null)
+						parent = new Structure (classTag, project);
 					
 				} catch (IOException ex) {
 					IdeApp.Services.MessageService.ShowError (ex);
@@ -128,20 +150,20 @@ namespace CBinding.Navigation
 			get { return project; }
 		}
 		
-		public Namespace Namespace {
-			get { return _namespace; }
-		}
-		
-		public Class Class {
-			get { return _class; }
+		public LanguageItem Parent {
+			get { return parent; }
 		}
 		
 		public string Name {
 			get { return name; }
 		}
 		
-		public abstract string FullName {
-			get;
+		public string FullName {
+			get {
+				if (Parent != null)
+					return Parent.FullName + "::" + Name;
+				return Name;
+			}
 		}
 		
 		public string File {
@@ -161,7 +183,7 @@ namespace CBinding.Navigation
 			LanguageItem other = o as LanguageItem;
 			
 			if (other != null &&
-			    other.FullName.Equals (name) &&
+			    other.FullName.Equals (FullName) &&
 			    other.Project.Equals (project))
 				return true;
 			

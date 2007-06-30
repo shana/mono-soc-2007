@@ -48,7 +48,7 @@ namespace CBinding.Navigation
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof(ClassCommandHandler); }
+			get { return typeof(LanguageItemCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -92,13 +92,20 @@ namespace CBinding.Navigation
 			
 			// Classes
 			foreach (Class c in info.Classes)
-				if (c.Class != null && c.Class.Equals (thisClass))
+				if (c.Parent != null && c.Parent.Equals (thisClass))
 					treeBuilder.AddChild (c);
+			
+			// Structure
+			foreach (Structure s in info.Structures)
+				if (s.Parent != null && s.Parent.Equals (thisClass))
+					treeBuilder.AddChild (s);
 			
 			// Functions
 			foreach (Function f in info.Functions)
-				if (f.Class != null && f.Class.Equals (thisClass))
+				if (f.Parent != null && f.Parent.Equals (thisClass))
 					treeBuilder.AddChild (f);
+			
+			// Variables
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -109,31 +116,6 @@ namespace CBinding.Navigation
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
 			return -1;
-		}
-	}
-	
-	public class ClassCommandHandler : NodeCommandHandler
-	{
-		public override void ActivateItem ()
-		{
-			Class _class = (Class)CurrentNode.DataItem;
-			
-			Document doc = IdeApp.Workbench.OpenDocument (_class.File);
-			
-			int lineNum = 0;
-			string line;
-			StringReader reader = new StringReader (doc.TextEditor.Text);
-			
-			while ((line = reader.ReadLine ()) != null) {
-				lineNum++;
-				
-				if (line.Equals (_class.Pattern)) {
-					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
-					break;
-				}
-			}
-			
-			reader.Close ();
 		}
 	}
 }

@@ -43,13 +43,7 @@ namespace CBinding.Navigation
 		{			
 			if (GetNamespace (tag)) return;
 			if (GetClass (tag)) return;
-			
-			// TODO: Check if class is embeded in a struct
-		}
-		
-		// TODO
-		public override string FullName {
-			get { return Name; }
+			if (GetStructure (tag)) return;
 		}
 	}
 }
