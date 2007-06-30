@@ -1,5 +1,8 @@
 using Mono.WindowsPresentationFoundation;
 using System.Collections.Specialized;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Windows.Data;
 using System.Windows.Input;
 #if Implementation
 using System;
@@ -25,6 +28,10 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
+		#region Private Fields
+		List<object> items_processed_in_on_items_changed = new List<object>();
+		#endregion
+
 		#region Public Constructors
 		public TabControl() {
 		}
@@ -33,8 +40,9 @@ namespace System.Windows.Controls {
 		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
-			if (Items.Count != 0)
-				SelectedIndex = 0;
+			//This is wrong.
+			//if (Items.Count != 0)
+			//    SelectedIndex = 0;
 		}
 		#endregion
 
@@ -46,18 +54,27 @@ namespace System.Windows.Controls {
 
 		protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e) {
 			base.OnItemsChanged(e);
-			//if (IsInitialized)
-			//    return;
-			if (ItemContainerGenerator.Status == global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated && Items.Count != 0) {
-				bool has_selected_items = false;
-				for (int item_index = 0; item_index < Items.Count; item_index++)
-					if (GetTabItemForItemAtIndex(item_index).IsSelected)
-						has_selected_items = true;
-				if (!has_selected_items)
-					GetTabItemForItemAtIndex(0).IsSelected = true;
-			}
 			// This needs to be done now but even if the user overrides this and does not call the base implementation.
-			ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
+			switch (e.Action) {
+			case NotifyCollectionChangedAction.Add:
+				foreach (object item in e.NewItems)
+					items_processed_in_on_items_changed.Add(item);
+				break;
+			case NotifyCollectionChangedAction.Remove:
+				foreach (object item in e.NewItems)
+					items_processed_in_on_items_changed.Remove(item);
+				break;
+			}
+			//if (ItemContainerGenerator.Status == global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated && Items.Count != 0) {
+				//bool has_selected_items = false;
+				//for (int item_index = 0; item_index < Items.Count; item_index++)
+				//    if (GetTabItemForItemAtIndex(item_index).IsSelected)
+				//        has_selected_items = true;
+				//if (!has_selected_items)
+				//    GetTabItemForItemAtIndex(0).IsSelected = true;
+			//}
+			// This needs to be done now but even if the user overrides this and does not call the base implementation.
+			//ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
 		}
 
 		/// <summary>
@@ -126,15 +143,19 @@ namespace System.Windows.Controls {
 
 		#region Private Methods
 		void OnGeneratorStatusChanged(object sender, EventArgs e) {
-			//if (IsInitialized)
-			//    return;
-			if (ItemContainerGenerator.Status == global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated && Items.Count != 0) {
+			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+				return;
+			if (Items.Count != 0) {
 				bool has_selected_items = false;
 				for (int item_index = 0; item_index < Items.Count; item_index++)
 					if (GetTabItemForItemAtIndex(item_index).IsSelected)
 						has_selected_items = true;
-				if (!has_selected_items)
-					GetTabItemForItemAtIndex(0).IsSelected = true;
+				if (items_processed_in_on_items_changed.Count != 0) {
+					if (!has_selected_items)
+						GetTabItemForItemAtIndex(0).IsSelected = true;
+				}
+				if (has_selected_items && SelectedIndex == -1)
+					SelectedIndex = 0;
 			}
 			UpdateTabStripPlacement();
 		}
