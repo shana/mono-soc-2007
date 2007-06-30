@@ -313,23 +313,5 @@ namespace Ribbons
 			cr.Color = borderColor;
 			cr.Stroke ();
 		}
-		
-		
-		private void BottomRoundRectanglePath (Context cr, Rectangle r, double radius)
-		{
-			cr.Arc (r.X + r.Width - radius, r.Y + r.Height - radius, radius, 0, Math.PI/2);
-			cr.Arc (r.X + radius, r.Y + r.Height - radius, radius, Math.PI/2, Math.PI);
-			cr.LineTo (r.X, r.Y);
-			cr.LineTo (r.X + r.Width, r.Y);
-		}
-		
-		private void RoundRectanglePath (Context cr, Rectangle r, double radius)
-		{
-			cr.Arc (r.X + r.Width - radius, r.Y + r.Height - radius, radius, 0, Math.PI/2);
-			cr.Arc (r.X + radius, r.Y + r.Height - radius, radius, Math.PI/2, Math.PI);
-			cr.Arc (r.X + radius, r.Y + radius, radius, Math.PI, 3*Math.PI/2);
-			cr.Arc (r.X + r.Width - radius, r.Y + radius, radius, 3*Math.PI/2, 0);
-			cr.LineTo (r.X + r.Width, r.Y + r.Height - radius);
-		}
 	}
 }
