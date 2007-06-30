@@ -1,3 +1,7 @@
+2007-07-01  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabControl.cs: Some changes that make some tests pass. Stack traces reveal internal classes being used (MS.Internal....). The implementation of ItemsControl-derived classes will most likely require the implementation of ItemsControl and its related classes.
+
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* TabControl.cs: Fixed previous change.
