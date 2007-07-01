@@ -121,6 +121,16 @@ namespace Mono.Data.Sql
 		{
 			throw new NotImplementedException ();
 		}
+		
+		public virtual ICollection<RoleSchema> GetRoles ()
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual ICollection<TriggerSchema> GetTriggers ()
+		{
+			throw new NotImplementedException ();
+		}
 
 		protected virtual void CheckConnectionState ()
 		{

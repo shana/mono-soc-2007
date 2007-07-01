@@ -36,6 +36,8 @@ namespace Mono.Data.Sql
 	/// </summary>
 	public class TableSchema : AbstractSchema
 	{
+		//TODO: support for inherited table schemas
+		
 		protected bool isSystemTable = false;
 		protected string tableSpaceName;
 		

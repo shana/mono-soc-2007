@@ -32,6 +32,7 @@ namespace Mono.Data.Sql
 {
 	public class PrivilegeSchema : AbstractSchema
 	{
+		//TODO: grantee? + which role??
 		protected bool canGrant = false;
 		
 		public PrivilegeSchema (ISchemaProvider schemaProvider)

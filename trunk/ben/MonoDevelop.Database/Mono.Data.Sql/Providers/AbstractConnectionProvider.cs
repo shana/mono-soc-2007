@@ -27,6 +27,8 @@
 
 using System;
 using System.Data;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace Mono.Data.Sql
@@ -56,13 +58,22 @@ namespace Mono.Data.Sql
 			get { return connection != null && connection.State == ConnectionState.Open; }
 		}
 		
-		public virtual bool IsPooled {
-			get { return false; }
+		public virtual bool SupportsPooling {
+			get { return true; }
+		}
+		
+		public virtual bool SupportsAutomaticConnectionString {
+			get { return true; }
 		}
 
 		public abstract bool Open (out string errorMessage);
 
-		public abstract void Close ();
+		public virtual void Close ()
+		{
+			connection.Close ();
+			connection.Dispose ();
+			connection = null;
+		}
 		
 		public virtual IDbCommand CreateCommand (string sql)
 		{
@@ -70,6 +81,19 @@ namespace Mono.Data.Sql
 			command.CommandText = sql;
 			command.CommandType = CommandType.Text;
 			return command;
+		}
+		
+		protected virtual string SetConnectionStringParameter (string connectionString, string quoteChar, string parameter, string value)
+		{
+			Regex regex = new Regex (parameter + "[ \t]*=[ \t]*" + quoteChar + "([a-zA-Z0-9_.]+)" + quoteChar, RegexOptions.IgnoreCase);
+			Match match = regex.Match (connectionString);
+			if (match.Success) {
+				return connectionString.Substring (0, match.Index) + value + connectionString.Substring (match.Index + match.Length);
+			} else {
+				connectionString.TrimEnd ();
+				return String.Concat (connectionString, connectionString.EndsWith (';') ? "" : ";",
+					parameter, "=", quoteChar, value, quoteChar, ";");
+			}
 		}
 	}
 }

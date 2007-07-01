@@ -32,32 +32,15 @@ namespace Mono.Data.Sql
 {
 	public class ConstraintSchema : AbstractSchema
 	{
-		private ColumnSchema fkColumn;
-		private ColumnSchema pkColumn;
+		private ICollection<ColumnSchema> columns;
 		
 		public ConstraintSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
 		}
 		
-		public ColumnSchema ForeignKey {
-			get { return fkColumn; }
-			set {
-				if (fkColumn != value) {
-					fkColumn = value;
-					OnChanged ();
-				}
-			}
-		}
-		
-		public ColumnSchema PrimaryKey {
-			get { return pkColumn; }
-			set {
-				if (pkColumn != value) {
-					pkColumn = value;
-					OnChanged ();
-				}
-			}
+		public ICollection<ColumnSchema> Columns {
+			get { return columns; }
 		}
 	}
 }

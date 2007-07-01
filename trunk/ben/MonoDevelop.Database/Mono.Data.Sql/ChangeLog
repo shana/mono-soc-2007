@@ -1,24 +1,31 @@
+2007-07-02  Ben Motmans <ben.motmans@gmail.com> 
+
+	2007-07-01  Ben Motmans <ben.motmans@gmail.com>
+	
+		* Providers/IDbFactory.cs: Factory class to be implemented by each database provider
+		* Codons/DbFactoryCodon.cs: Codon for IDbFactory extensions
+		* Providers/DbFactoryService.cs: Service point for DbFactory codons
+		* Schema/*: added TODO items
+
+2007-07-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* Providers/IDbFactory.cs: Factory class to be implemented by each database provider
+	* Codons/DbFactoryCodon.cs: Codon for IDbFactory extensions
+	* Providers/DbFactoryService.cs: Service point for DbFactory codons
+	* Schema/*: added TODO items
+
 2007-06-27  Ben Motmans  <ben.motmans@gmail.com>
 
 	* Schema/*.cs: constructor with SchemaProvider parameter
 	* Schema/*.cs: use of generic collections instead of arrays
-	* Providers/SqlSchemaProvider.cs: various small bugfixes
-	* Providers/SqlConnectionProvider.cs: implementation
-	* Providers/SqlSchemaProvider.cs: various small fixes for compile issues
 	* Providers/ConnectionSettings.cs: database property
 
 2007-06-27  Ben Motmans  <ben.motmans@gmail.com>
 
-	* Providers/MySqlSchemaProvider.cs:
-	GetDatabases, GetTableConstraints, GetViews, GetProcedures, GetViewColumns, GetProcedureColumns implementation
-	improved support for MySql 5.x for the GetTables method
 	* Providers/AbstractConnectionProvider.cs: abstract connection provider
 
 2007-06-26  Ben Motmans  <ben.motmans@gmail.com>
 
-	* Providers/SqlSchemaProvider.cs: use Convert.IsDbNull instead of try-catch
-	* Providers/SqlSchemaProvider.cs: fixed sql bug in GetTableColumns method
-	* Providers/SqlSchemaProvider.cs: implemented GetDataType method
 	* Schema/DataTypeCategory.cs, Schema/DataTypeSchema.cs: added an enumeration to specify the category
 	of the data type, this can be used in the future for data migration
 
@@ -26,9 +33,6 @@
 
 	* Schema/TableSchema.cs, Schema/ViewSchema.cs, Schema/ProcedureSchema.cs, Schema/ColumnsSchema.cs,
 	Schema/ConstraintSchema.cs: lazy loaded columns, parameters, definition, ... parameters
-	* Providers/SqlSchemaProvider.cs: updated sql statements to allow lazy loading
-	* Providers/SqlSchemaProvider.cs: implemeted GetDatabases method
-	* Providers/SqlSchemaProvider.cs: implemented GetConstraints method
 	* Schema/Range.cs, Schema/DataTypeSchema.cs: length, precision and scale range properties
 
 2007-06-24  Ben Motmans  <ben.motmans@gmail.com>
