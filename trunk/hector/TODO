@@ -1,2 +1,0 @@
-1) Upload a stable version of monodoc, so we can change it without bothering the main branch in mono svn.
-2) Upload a MD project to test custom widgets for the editor.
