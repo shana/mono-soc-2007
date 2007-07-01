@@ -1,5 +1,12 @@
 2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* EditorWindow.cs: Rearrange OnOpenActivated handler to prevent GUI
+	  freezing.
+	* gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Set Save
+	  and SaveAs Actions to be insensitive at start of editor.
+
+2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* EditorWindow.cs: Minor changes.
 	* gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Changed
 	  named from statusbar1 to status_bar and added a ProgressBar named

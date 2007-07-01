@@ -56,40 +56,48 @@ public partial class EditorWindow : Gtk.Window {
 
 	private void OnOpenActivated(object sender, System.EventArgs e)
 	{
+		string filename = String.Empty;
 		OpenDocDialog dialog = new OpenDocDialog ();
-		if (dialog.Run () == (int) ResponseType.Ok) {
-			try {
-				MonoDocument doc = new MonoDocument (dialog.Document);
-				
-				if (!current_tab.Title.Equals ("Untitled"))
-					AddTab ();
-				
-				current_tab.Title = doc.Name;
-				DocumentBufferArchiver.Deserialize (current_tab.Buffer, doc.Text);
-			} catch (ArgumentException argexp) {
-				// TODO: Add message dialog about error.
-				Console.WriteLine (argexp.Message);
-			}
-		}
-		
+		if (dialog.Run () == (int) ResponseType.Ok)
+			filename = dialog.Document;
+			
 		dialog.Destroy ();
+		
+		try {
+			MonoDocument doc = new MonoDocument (filename);
+			
+			if (!current_tab.Title.Equals ("Untitled"))
+				AddTab ();
+				
+			current_tab.Title = doc.Name;
+			DocumentBuffer newBuffer = new DocumentBuffer ();
+			DocumentBufferArchiver.Deserialize (newBuffer, doc.Text);
+			current_tab.Buffer = newBuffer;
+			SaveAs.Sensitive = Save.Sensitive = true;
+		} catch (ArgumentException emsg) {
+			// TODO: Add message dialog about error.
+			Console.WriteLine (emsg.Message);
+		}
 	}
 
 	private void OnSaveAsActivated (object sender, System.EventArgs e)
 	{
 		string filename = String.Empty;
 		SaveDocDialog dialog = new SaveDocDialog ();
-		if (dialog.Run () == (int) ResponseType.Ok) {
+		if (dialog.Run () == (int) ResponseType.Ok)
 			filename = dialog.Document;
-			dialog.Destroy ();
-		}
 		
-		if (filename != String.Empty) {
+		dialog.Destroy ();
+		
+		try {
 			using (FileStream fileStream = new FileStream (filename, FileMode.CreateNew)) {
 				using (StreamWriter streamWriter = new StreamWriter (fileStream)) {
 					streamWriter.Write (DocumentBufferArchiver.Serialize (current_tab.Buffer));
 				}
 			}
+		} catch (IOException emsg) {
+			//TODO: Add message dialog about error.
+			Console.WriteLine (emsg.Message);
 		}
 	}
 

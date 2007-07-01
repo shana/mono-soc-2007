@@ -30,6 +30,7 @@
       <action id="Save">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">_Save</property>
+        <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">_Save</property>
         <property name="StockId">gtk-save</property>
         <signal name="Activated" handler="OnSaveActivated" />
@@ -37,6 +38,7 @@
       <action id="SaveAs">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Save _As</property>
+        <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">Save _As</property>
         <property name="StockId">gtk-save-as</property>
         <signal name="Activated" handler="OnSaveAsActivated" />
