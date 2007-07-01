@@ -1,3 +1,9 @@
+2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Added a check to any events pending to
+	  prevent any GUI freezing while serializing.
+	* DocumentTagTable.cs: Minor changes.
+
 2007-06-29  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs: Added a padding between empty elements.

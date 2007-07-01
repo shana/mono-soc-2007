@@ -136,6 +136,9 @@ public class DocumentBufferArchiver {
 			#if DEBUG
 			Console.WriteLine ("State: {0} Char: {1} \n", xmlWriter.WriteState.ToString (), currentIter.Char);
 			#endif
+			
+			while (Application.EventsPending ())
+				Application.RunIteration ();
 		}
 	}
 	
