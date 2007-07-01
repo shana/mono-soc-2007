@@ -1,5 +1,5 @@
 //
-// Function.cs
+// Member.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -35,32 +35,12 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class Function : LanguageItem
-	{	
-		public Function (Tag tag, Project project) : base (tag, project)
+	public class Member : LanguageItem
+	{
+		public Member (Tag tag, Project project) : base (tag, project)
 		{
-			// We need the prototype tag because the implementation tag
-			// marks the belonging namespace as a if it were a class
-			// and it does not have the access field.
-			Tag prototypeTag = TagDatabaseManager.Instance.FindTag (Name, TagKind.Prototype, Project);
-			
-			if (prototypeTag == null) {
-				// It does not have a prototype tag which means it is inline
-				// and when it is inline it does have all the info we need
-				
-				if (GetNamespace (tag)) return;
-				if (GetClass (tag)) return;
-				if (GetStructure (tag)) return;
-				
-				return;
-			}
-			
-			// we need to re-get the access
-			Access = prototypeTag.Access;
-			
-			if (GetNamespace (prototypeTag))return;
-			if (GetClass (prototypeTag)) return;
-			if (GetStructure (prototypeTag)) return;
+			if (GetClass (tag)) return;
+			if (GetStructure (tag)) return;
 		}
 	}
 }

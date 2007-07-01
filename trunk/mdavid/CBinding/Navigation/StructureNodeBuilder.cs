@@ -105,7 +105,10 @@ namespace CBinding.Navigation
 				if (f.Parent != null && f.Parent.Equals (thisStruct))
 					treeBuilder.AddChild (f);
 			
-			// Variables
+			// Members
+			foreach (Member m in info.Members)
+				if (m.Parent != null && m.Parent.Equals (thisStruct))
+					treeBuilder.AddChild (m);
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
