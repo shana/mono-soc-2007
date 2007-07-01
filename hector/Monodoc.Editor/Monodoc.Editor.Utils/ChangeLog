@@ -1,3 +1,10 @@
+2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* MonoDocument.cs: If the XML is not a Monodoc document a exception is
+	  raised.
+	* EcmaReader.cs: Now the Valid Property return true only if the
+	  Document Element of the XML is "Type".
+
 2007-06-28  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MonoDocument.cs: A new property to get the filename of the target

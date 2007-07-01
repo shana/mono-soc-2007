@@ -20,8 +20,11 @@ public class MonoDocument {
 	{
 		EcmaReader reader = new EcmaReader (filePath);
 		valid = reader.Valid;
-		name = Path.GetFileName (filePath);
 		
+		if (!valid)
+			throw new ArgumentException ("Error: Invalid XML document.", "filePath");
+			
+		name = Path.GetFileName (filePath);
 		using (FileStream filestream= new FileStream (filePath, FileMode.Open)) {
 			using (StreamReader stream = new StreamReader (filestream)) {
 				text = stream.ReadToEnd ();
