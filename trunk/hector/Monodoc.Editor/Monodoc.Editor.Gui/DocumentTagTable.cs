@@ -701,8 +701,15 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsAttribute = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("ignore");
+		tag = new DocumentTag ("padding-visible");
 		tag.IsSerializable = false;
+		tag.Invisible = false;
+		tag.IsText = true;
+		Add (tag);
+		
+		tag = new DocumentTag ("padding-invisible");
+		tag.IsSerializable = false;
+		tag.Invisible = true;
 		tag.IsText = true;
 		Add (tag);
 	}

@@ -49,7 +49,8 @@ public class DocumentBufferArchiver {
 		string elementText = "";
 		TextTag [] tags;
 		DocumentTag docTag;
-		TextTag ignore = buffer.TagTable.Lookup ("ignore");
+		TextTag paddingVisible = buffer.TagTable.Lookup ("padding-visible");
+		TextTag paddingInvisible = buffer.TagTable.Lookup ("padding-invisible");
 		nextIter.ForwardChar ();
 		
 		while (!currentIter.Equal (end)) {
@@ -63,7 +64,7 @@ public class DocumentBufferArchiver {
 				attributeValue += currentIter.Char;
 			}
 			
-			if (readingText && !currentIter.HasTag (ignore)) {
+			if (readingText && !currentIter.HasTag (paddingVisible) &&  !currentIter.HasTag (paddingInvisible)) {
 				elementText += currentIter.Char;
 			}
 			
@@ -189,8 +190,9 @@ public class DocumentBufferArchiver {
 							applyStart = buffer.GetIterAtOffset (tagStart.Start);
 							applyEnd = buffer.GetIterAtOffset (offset);
 						} else {
+							// Padding to conserve empty element
 							insertAt = buffer.GetIterAtOffset (offset);
-							buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+							buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
 							offset += 1;
 							
 							applyStart = buffer.GetIterAtOffset (tagStart.Start);
@@ -198,9 +200,10 @@ public class DocumentBufferArchiver {
 						}
 						
 						buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+						
 						// Padding between tag regions
 						insertAt = buffer.GetIterAtOffset (offset);
-						buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+						buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
 						offset += 1;
 						
 						#if DEBUG
@@ -234,8 +237,9 @@ public class DocumentBufferArchiver {
 						applyStart = buffer.GetIterAtOffset (tagStart.Start);
 						applyEnd = buffer.GetIterAtOffset (offset);
 					} else {
+						// Padding to conserve empty element
 						insertAt = buffer.GetIterAtOffset (offset);
-						buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+						buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
 						offset += 1;
 						
 						applyStart = buffer.GetIterAtOffset (tagStart.Start);
@@ -250,7 +254,7 @@ public class DocumentBufferArchiver {
 					
 					// Padding between tag regions
 					insertAt = buffer.GetIterAtOffset (offset);
-					buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+					buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
 					offset += 1;
 					break;
 				case XmlNodeType.Whitespace:
@@ -274,19 +278,19 @@ public class DocumentBufferArchiver {
 		TextIter applyStart, applyEnd;
 		
 		switch (tagName) {
-			case "Type":
-			case "TypeSignature":
-			case "Member":
-			case "MemberSignature":
-				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
-				break;
-			case "link":
-			case "see":
-				result = DeserializeAttributesSpace (buffer, offset, xmlReader);
-				break;
-			case "since":
-				result = DeserializeAttributesNone (buffer, offset, xmlReader);
-				break;
+//			case "Type":
+//			case "TypeSignature":
+//			case "Member":
+//			case "MemberSignature":
+//				result = DeserializeAttributesNewline (buffer, offset, xmlReader);
+//				break;
+//			case "link":
+//			case "see":
+//				result = DeserializeAttributesSpace (buffer, offset, xmlReader);
+//				break;
+//			case "since":
+//				result = DeserializeAttributesNone (buffer, offset, xmlReader);
+//				break;
 			default:
 				result = DeserializeAttributesNone (buffer, offset, xmlReader);
 				break;
@@ -312,7 +316,7 @@ public class DocumentBufferArchiver {
 		while (xmlReader.MoveToNextAttribute ()) {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.InsertWithTagsByName (ref insertAt, "\n", "ignore");
+			buffer.InsertWithTagsByName (ref insertAt, "\n", "padding-visible");
 		}
 		
 		#if DEBUG
@@ -330,7 +334,7 @@ public class DocumentBufferArchiver {
 		while (xmlReader.MoveToNextAttribute ()) {
 			string tagName = tagPrefix + xmlReader.Name;
 			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.InsertWithTagsByName (ref insertAt, " ", "ignore");
+			buffer.InsertWithTagsByName (ref insertAt, " ", "padding-visible");
 		}
 		
 		#if DEBUG

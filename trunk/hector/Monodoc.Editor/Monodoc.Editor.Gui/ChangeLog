@@ -1,5 +1,13 @@
 2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs, DocumentTagTable.cs: Changed the ignore
+	  tag for two new tags: padding-visible is for whitespace that is
+	  need to format the document so is visible to the view and
+	  padding-invisible that is need to catch certain elements and empty
+	  elements.
+
+2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBufferArchiver.cs: Minor change to prevent freezing of GUI.
 	* DocumentTab.cs: Added a setter for the buffer of a DocumentTab.
 
