@@ -65,7 +65,7 @@ namespace CBinding.Navigation
 		{
 			string n;
 			
-			if ((n = tag.GetValue ("namespace")) != null) {
+			if ((n = tag.Namespace) != null) {
 				int index = n.LastIndexOf (':');
 				
 				if (index > 0)
@@ -92,8 +92,10 @@ namespace CBinding.Navigation
 		{
 			string c;
 			
-			if ((c = tag.GetValue ("class")) != null) {
-				access = (AccessModifier)Enum.Parse (typeof(AccessModifier), tag.GetValue ("access"), true);
+			if ((c = tag.Class) != null) {
+				string a = tag.Access;
+				if (a != null)
+					access = (AccessModifier)Enum.Parse (typeof(AccessModifier), a, true);
 				
 				int index = c.LastIndexOf (':');
 				
@@ -121,8 +123,10 @@ namespace CBinding.Navigation
 		{
 			string s;
 			
-			if ((s = tag.GetValue ("struct")) != null) {
-				access = (AccessModifier)Enum.Parse (typeof(AccessModifier), tag.GetValue ("access"), true);
+			if ((s = tag.Structure) != null) {
+				string a = tag.Access;
+				if (a != null)
+					access = (AccessModifier)Enum.Parse (typeof(AccessModifier), a, true);
 				
 				int index = s.LastIndexOf (':');
 				

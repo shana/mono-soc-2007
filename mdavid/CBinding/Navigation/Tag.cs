@@ -44,7 +44,7 @@ namespace CBinding.Navigation
 		Member = 'm',
 		Namespace = 'n', // Done
 		Prototype = 'p',
-		Structure = 's',
+		Structure = 's', // Done
 		Typedef = 't',
 		Union = 'u',
 		Variable = 'v',
@@ -64,6 +64,14 @@ namespace CBinding.Navigation
 		private string file;
 		private string pattern;
 		private string tagField;
+		private TagKind kind;
+		
+		// fields
+		private string access;
+		private string _class;
+		private string _namespace;
+		private string _struct;
+		private string _enum;
 		
 		public Tag (string name, string file, string pattern, string tagField)
 		{
@@ -71,9 +79,48 @@ namespace CBinding.Navigation
 			this.file = file;
 			this.pattern = pattern;
 			this.tagField = tagField;
+			
+			// parse tag field
+			if (tagField == null)
+				kind = TagKind.Unknown;
+			else
+				kind = (TagKind)tagField[0];
+			
+			if (tagField == null)
+				return;
+			
+			// TODO: skip kind
+			string[] fields = tagField.Split ('\t');
+			int index;
+			
+			foreach (string field in fields) {
+				index = field.IndexOf (':');
+				
+				if (index > 0) {
+					string key = field.Substring (0, index);
+					string val = field.Substring (index + 1);
+					switch (key) {
+					case "access":
+						access = val;
+						break;
+					case "class":
+						_class = val;
+						break;
+					case "namespace":
+						_namespace = val;
+						break;
+					case "struct":
+						_struct = val;
+						break;
+					case "enum":
+						_enum = val;
+						break;
+					}
+				}
+			}
 		}
 		
-		// FIXEM: Its currently not working with defines
+		// FIXME: Its currently not working with defines
 		public static Tag CreateTag (string tagEntry)
 		{
 			int i1, i2;
@@ -118,27 +165,28 @@ namespace CBinding.Navigation
 			get { return tagField; }
 		}
 		
-		public string GetValue (string key)
-		{
-			if (tagField == null) return null;
-			
-			string[] fields = tagField.Split ('\t');
-			
-			foreach (string field in fields) {
-				int index = field.IndexOf (':');
-				
-				if (index > 0 && field.Substring (0, index).Equals (key))
-					return field.Substring (index + 1);
-			}
-
-			return null;
+		public string Access {
+			get { return access; }
+		}
+		
+		public string Class {
+			get { return _class; }
+		}
+		
+		public string Namespace {
+			get { return _namespace; }
+		}
+		
+		public string Structure {
+			get { return _struct; }
+		}
+		
+		public string Enum {
+			get { return _enum; }
 		}
 		
 		public TagKind Kind {
-			get {
-				if (tagField == null) return TagKind.Unknown;
-				return (TagKind)tagField[0];
-			}
+			get { return kind; }
 		}
 	}
 }
