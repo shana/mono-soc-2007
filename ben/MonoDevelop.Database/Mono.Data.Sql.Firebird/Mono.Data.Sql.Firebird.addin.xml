@@ -1,0 +1,21 @@
+<Addin	id		= "Mono.Data.Sql.Firebird"
+	namespace	= "Mono"
+	name		= "Firebird provider for Mono Data Sql"
+	author		= "Christian Hergert, Daniel Morgan, Ben Motmans"
+	copyright	= "MIT X11"
+	url		= "http://www.monodevelop.com"
+	description	= "Database Module"
+	version		= "0.14.0">
+    
+	<Runtime>
+		<Import assembly="Mono.Data.Sql.Firebird.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Mono.Data.Sql" version="0.14.0"/>
+	</Dependencies>
+
+	<ExtensionPoint path = "/Mono/Data/Sql">
+		<DbFactory id = "Firebird" class = "Mono.Data.Sql.FirebirdDbFactory"/>
+	</ExtensionPoint>
+</Addin>
