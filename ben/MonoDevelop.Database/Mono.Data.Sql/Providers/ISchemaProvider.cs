@@ -57,6 +57,10 @@ namespace Mono.Data.Sql
 
 		ICollection<UserSchema> GetUsers ();
 		
+		ICollection<RoleSchema> GetRoles ();
+		
+		ICollection<TriggerSchema> GetTriggers ();
+		
 		DataTypeSchema GetDataType (string name);
 		
 		string GetTableDefinition (TableSchema table);

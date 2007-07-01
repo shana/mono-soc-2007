@@ -37,6 +37,8 @@ namespace Mono.Data.Sql
 		protected string password = String.Empty;
 		protected DateTime expires = DateTime.MinValue;
 		
+		//TODO: list of allowed hosts?
+		
 		public UserSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{

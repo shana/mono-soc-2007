@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
@@ -55,7 +56,7 @@ namespace Mono.Data.Sql
 			}
 		}
 		
-		public ColumnSchema[] ReferenceColumns {
+		public ICollection<ColumnSchema> ReferenceColumns {
 			get {
 				return (ColumnSchema[]) null;
 			}

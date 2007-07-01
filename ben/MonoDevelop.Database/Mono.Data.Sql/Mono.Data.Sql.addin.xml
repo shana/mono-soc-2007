@@ -1,0 +1,18 @@
+<Addin	id		= "Mono.Data.Sql"
+	namespace	= "Mono"
+	name		= "Mono Data Sql"
+	author		= "Christian Hergert, Ben Motmans"
+	copyright	= "MIT X11"
+	url		= "http://www.monodevelop.com"
+	description	= "Database Module"
+	version		= "0.14.0">
+    
+	<Runtime>
+		<Import assembly="Mono.Data.Sql.dll"/>
+	</Runtime>
+	
+	<ExtensionPoint path = "/Mono/Data/Sql" name = "Mono database providers">
+		<Description>MonoDevelop database factory addins.</Description>
+		<ExtensionNode name="DbFactory" type="Mono.Data.Sql.DbFactoryCodon"/>
+	</ExtensionPoint>
+</Addin>

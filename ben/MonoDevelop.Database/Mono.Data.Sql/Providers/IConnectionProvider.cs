@@ -39,7 +39,9 @@ namespace Mono.Data.Sql
 		
 		bool IsOpen { get; }
 		
-		bool IsPooled { get; }
+		bool SupportsPooling { get; }
+		
+		bool SupportsAutomaticConnectionString { get; }
 
 		bool Open (out string errorMessage);
 

@@ -41,6 +41,10 @@ namespace Mono.Data.Sql
 		private string password;
 		private bool savePassword;
 		
+		private bool enablePooling;
+		private int minPoolSize;
+		private int maxPoolSize;
+		
 		private string connectionString;
 		private bool useConnectionString;
 		
@@ -84,6 +88,21 @@ namespace Mono.Data.Sql
 			set { savePassword = value; }
 		}
 		
+		public bool EnablePooling {
+			get { return enablePooling; }
+			set { enablePooling = value; }
+		}
+		
+		public int MinPoolSize {
+			get { return minPoolSize; }
+			set { minPoolSize = value; }
+		}
+		
+		public int MaxPoolSize {
+			get { return maxPoolSize; }
+			set { maxPoolSize = value; }
+		}
+
 		public string ConnectionString {
 			get { return connectionString; }
 			set { connectionString = value; }
