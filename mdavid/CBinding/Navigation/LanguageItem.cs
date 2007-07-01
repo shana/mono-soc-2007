@@ -43,7 +43,7 @@ namespace CBinding.Navigation
 		private string name;
 		private string file;
 		private string pattern;
-		private AccessModifier access = AccessModifier.Public;
+		private AccessModifier access;
 		private LanguageItem parent;
 		
 		public LanguageItem (Tag tag, Project project)
@@ -52,6 +52,7 @@ namespace CBinding.Navigation
 			this.name = tag.Name;
 			this.file = tag.File;
 			this.pattern = tag.Pattern;
+			this.access = tag.Access;
 		}
 		
 		/// <summary>
@@ -93,10 +94,6 @@ namespace CBinding.Navigation
 			string c;
 			
 			if ((c = tag.Class) != null) {
-				string a = tag.Access;
-				if (a != null)
-					access = (AccessModifier)Enum.Parse (typeof(AccessModifier), a, true);
-				
 				int index = c.LastIndexOf (':');
 				
 				if (index > 0)
@@ -124,10 +121,6 @@ namespace CBinding.Navigation
 			string s;
 			
 			if ((s = tag.Structure) != null) {
-				string a = tag.Access;
-				if (a != null)
-					access = (AccessModifier)Enum.Parse (typeof(AccessModifier), a, true);
-				
 				int index = s.LastIndexOf (':');
 				
 				if (index > 0)
@@ -180,6 +173,7 @@ namespace CBinding.Navigation
 		
 		public AccessModifier Access {
 			get { return access; }
+			set { access = value; }
 		}
 		
 		public override bool Equals (object o)

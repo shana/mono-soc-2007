@@ -57,7 +57,10 @@ namespace CBinding.Navigation
 				return;
 			}
 			
-			if (GetNamespace (prototypeTag)) return;
+			// we need to re-get the access
+			Access = prototypeTag.Access;
+			
+			if (GetNamespace (prototypeTag))return;
 			if (GetClass (prototypeTag)) return;
 			if (GetStructure (prototypeTag)) return;
 		}

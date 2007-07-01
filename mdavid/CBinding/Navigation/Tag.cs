@@ -63,90 +63,32 @@ namespace CBinding.Navigation
 		private string name;
 		private string file;
 		private string pattern;
-		private string tagField;
 		private TagKind kind;
-		
-		// fields
-		private string access;
+		private AccessModifier access;
 		private string _class;
 		private string _namespace;
 		private string _struct;
 		private string _enum;
 		
-		public Tag (string name, string file, string pattern, string tagField)
+		public Tag (string name,
+		            string file,
+		            string pattern,
+		            TagKind kind,
+		            AccessModifier access,
+		            string _class,
+		            string _namespace,
+		            string _struct,
+		            string _enum)
 		{
 			this.name = name;
 			this.file = file;
-			this.pattern = pattern;
-			this.tagField = tagField;
-			
-			// parse tag field
-			if (tagField == null)
-				kind = TagKind.Unknown;
-			else
-				kind = (TagKind)tagField[0];
-			
-			if (tagField == null)
-				return;
-			
-			// TODO: skip kind
-			string[] fields = tagField.Split ('\t');
-			int index;
-			
-			foreach (string field in fields) {
-				index = field.IndexOf (':');
-				
-				if (index > 0) {
-					string key = field.Substring (0, index);
-					string val = field.Substring (index + 1);
-					switch (key) {
-					case "access":
-						access = val;
-						break;
-					case "class":
-						_class = val;
-						break;
-					case "namespace":
-						_namespace = val;
-						break;
-					case "struct":
-						_struct = val;
-						break;
-					case "enum":
-						_enum = val;
-						break;
-					}
-				}
-			}
-		}
-		
-		// FIXME: Its currently not working with defines
-		public static Tag CreateTag (string tagEntry)
-		{
-			int i1, i2;
-			string file;
-			string pattern;
-			string name;
-			string tagField;
-			char delimiter;
-			
-			name = tagEntry.Substring (0, tagEntry.IndexOf ('\t'));
-			
-			i1 = tagEntry.IndexOf ('\t') + 1;
-			i2 = tagEntry.IndexOf ('\t', i1);
-			
-			file = tagEntry.Substring (i1, i2 - i1);
-			
-			delimiter = tagEntry[i2 + 1];
-			
-			i1 = i2 + 2;
-			i2 = tagEntry.IndexOf (delimiter, i1) - 1;
-			
-			pattern = tagEntry.Substring (i1 + 1, i2 - i1 - 1);
-			
-			tagField = tagEntry.Substring (i2 + 5);
-			
-			return new Tag (name, file, pattern, tagField);
+			this.pattern = pattern;	
+			this.kind = kind;
+			this.access = access;
+			this._class = _class;
+			this._namespace = _namespace;
+			this._struct = _struct;
+			this._enum = _enum;;
 		}
 		
 		public string Name {
@@ -161,11 +103,7 @@ namespace CBinding.Navigation
 			get { return pattern; }
 		}
 		
-		public string TagField {
-			get { return tagField; }
-		}
-		
-		public string Access {
+		public AccessModifier Access {
 			get { return access; }
 		}
 		
