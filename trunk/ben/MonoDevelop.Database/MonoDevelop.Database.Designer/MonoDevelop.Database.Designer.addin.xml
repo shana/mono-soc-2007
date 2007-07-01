@@ -14,8 +14,6 @@
 	<Dependencies>
 		<Addin id="Core" version="0.14.0"/>
 		<Addin id="Core.Gui" version="0.14.0"/>
-		<Addin id="Projects" version="0.14.0"/>
-		<Addin id="Projects.Gui" version="0.14.0"/>
 		<Addin id="Ide" version="0.14.0"/>
 	</Dependencies>
 
