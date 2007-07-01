@@ -9,6 +9,7 @@ namespace Ribbons
 	{
 		private static double ribbon_borderWidth = 2.0;
 		private static double ribbon_space = 2.0;
+		private static double ribbon_page_padding = 2.0;
 		private static double lineWidth = 1.0;
 		private static double roundSize = 4.0;
 		
@@ -18,6 +19,11 @@ namespace Ribbons
 		protected List<RibbonPage> pages;
 		protected int curPageIndex;
 		private Gdk.Rectangle bodyAllocation, pageAllocation;
+		
+		public event PageSelectedHandler PageSelected;
+		public event PageAddedHandler PageAdded;
+		public event PageMovedHandler PageMoved;
+		public event PageRemovedHandler PageRemoved;
 		
 		public int CurrentPageIndex
 		{
@@ -65,8 +71,6 @@ namespace Ribbons
 			
 			this.pages = new List<RibbonPage> ();
 			this.curPageIndex = -1;
-			
-			this.BorderWidth = 4;
 		}
 		
 		public void AppendPage (Widget Child, Widget Label)
@@ -121,6 +125,12 @@ namespace Ribbons
 			{
 				
 			};
+			
+			OnPageAdded (new PageEventArgs (p));
+			for(int idx = Position + 1 ; idx < pages.Count ; ++idx)
+			{
+				OnPageSelected (new PageEventArgs (pages[idx]));
+			}
 		}
 		
 		public void RemovePage (int PageNumber)
@@ -137,7 +147,10 @@ namespace Ribbons
 				}
 			}
 			
+			RibbonPage p = pages[PageNumber];
 			pages.RemoveAt (PageNumber);
+			
+			OnPageRemoved (new PageEventArgs (p));
 		}
 		
 		public int PageNum (Widget Child)
@@ -184,6 +197,7 @@ namespace Ribbons
 		{
 			int idx = RibbonPageNum (page);
 			if(idx != -1) CurrentPageIndex = idx;
+			OnPageSelected (new PageEventArgs (page));
 		}
 		
 		public void PrevPage ()
@@ -209,7 +223,7 @@ namespace Ribbons
 			base.OnSizeRequested (ref requisition);
 			RibbonPage page = CurrentPage;
 			
-			int vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
+			int tab_vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
 			
 			int headerWidth = 0, headerHeight = 0;
 			foreach(RibbonPage p in pages)
@@ -218,14 +232,14 @@ namespace Ribbons
 				headerWidth += req.Width;
 				headerHeight = Math.Max (headerHeight, req.Height);
 			}
-			headerHeight += vertPadding + (int)ribbon_space;
+			headerHeight += tab_vertPadding + (int)ribbon_space;
 			
 			int width = 0, height = 0;
 			if(page != null)
 			{
 				Gtk.Requisition req = page.Page.SizeRequest ();
 				width = req.Width;
-				height = req.Height + (int)(2*BorderWidth + ribbon_space);
+				height = req.Height + (int)(2*ribbon_page_padding + ribbon_space);
 			}
 			width = Math.Max (width, headerWidth);
 			width += (int)(2 * (ribbon_borderWidth + ribbon_space));
@@ -242,8 +256,8 @@ namespace Ribbons
 			
 			int x = allocation.X + (int)(ribbon_space + roundSize), y = allocation.Y + (int)ribbon_space, maxH = 0;
 			
-			int horizPadding = (int)(4*ribbon_space+2*ribbon_borderWidth);
-			int vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
+			int tab_horizPadding = (int)(4*ribbon_space+2*ribbon_borderWidth);
+			int tab_vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
 			
 			foreach(RibbonPage p in pages)
 			{
@@ -251,13 +265,13 @@ namespace Ribbons
 				Gdk.Rectangle alloc = p.LabelAllocation;
 				alloc.X = x;
 				alloc.Y = y;
-				alloc.Width = req.Width + horizPadding;
+				alloc.Width = req.Width + tab_horizPadding;
 				p.SetLabelAllocation (alloc);
 				
 				maxH = Math.Max(maxH, req.Height);
 				x += alloc.Width;
 			}
-			maxH += vertPadding;
+			maxH += tab_vertPadding;
 			
 			foreach(RibbonPage p in pages)
 			{
@@ -265,10 +279,10 @@ namespace Ribbons
 				alloc.Height = maxH;
 				p.SetLabelAllocation (alloc);
 				
-				alloc.X += horizPadding >> 1;
-				alloc.Y += vertPadding >> 1;
-				alloc.Width -= horizPadding;
-				alloc.Height -= vertPadding;
+				alloc.X += tab_horizPadding >> 1;
+				alloc.Y += tab_vertPadding >> 1;
+				alloc.Width -= tab_horizPadding;
+				alloc.Height -= tab_vertPadding;
 				p.Label.SizeAllocate (alloc);
 			}
 			
@@ -281,8 +295,8 @@ namespace Ribbons
 			if(page != null)
 			{
 				pageAllocation = bodyAllocation;
-				int bw = (int)BorderWidth;
-				pageAllocation.Inflate (-bw, -bw);
+				int pad = (int)ribbon_page_padding;
+				pageAllocation.Inflate (-pad, -pad);
 				page.Page.SizeAllocate (pageAllocation);
 			}
 			else
@@ -305,6 +319,26 @@ namespace Ribbons
 		protected void Draw (Context cr)
 		{
 			theme.DrawRibbon (cr, bodyAllocation, roundSize, lineWidth, this);
+		}
+		
+		protected virtual void OnPageSelected (PageEventArgs args)
+		{
+			if(PageSelected != null) PageSelected (this, args);
+		}
+		
+		protected virtual void OnPageAdded (PageEventArgs args)
+		{
+			if(PageAdded != null) PageAdded (this, args);
+		}
+		
+		protected virtual void OnPageMoved (PageEventArgs args)
+		{
+			if(PageMoved != null) PageMoved (this, args);
+		}
+		
+		protected virtual void OnPageRemoved (PageEventArgs args)
+		{
+			if(PageRemoved != null) PageRemoved (this, args);
 		}
 		
 		public class RibbonPage
