@@ -1,5 +1,10 @@
 2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs: Minor change to prevent freezing of GUI.
+	* DocumentTab.cs: Added a setter for the buffer of a DocumentTab.
+
+2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBufferArchiver.cs: Added a check to any events pending to
 	  prevent any GUI freezing while serializing.
 	* DocumentTagTable.cs: Minor changes.

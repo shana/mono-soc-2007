@@ -261,6 +261,9 @@ public class DocumentBufferArchiver {
 						    xmlReader.Value);
 					break;
 			}
+			
+			while (Application.EventsPending ())
+				Application.RunIteration ();
 		}
 	}
 	
