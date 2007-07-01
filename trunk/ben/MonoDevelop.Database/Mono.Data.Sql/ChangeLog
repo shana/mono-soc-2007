@@ -1,12 +1,3 @@
-2007-07-02  Ben Motmans <ben.motmans@gmail.com> 
-
-	2007-07-01  Ben Motmans <ben.motmans@gmail.com>
-	
-		* Providers/IDbFactory.cs: Factory class to be implemented by each database provider
-		* Codons/DbFactoryCodon.cs: Codon for IDbFactory extensions
-		* Providers/DbFactoryService.cs: Service point for DbFactory codons
-		* Schema/*: added TODO items
-
 2007-07-01  Ben Motmans <ben.motmans@gmail.com>
 
 	* Providers/IDbFactory.cs: Factory class to be implemented by each database provider
