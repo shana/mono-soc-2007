@@ -381,6 +381,10 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("exception:Attributes");
 		Add (tag);
 		
+		tag = new DocumentTag ("exception:cref");
+		tag.IsAttribute = true;
+		Add (tag);
+		
 		tag = new DocumentTag ("exception:Text");
 		tag.IsText = true;
 		Add (tag);
@@ -540,7 +544,7 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 		
 		tag = new DocumentTag ("term:Text");
-		tag.IsAttribute = true;
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("description");
@@ -548,7 +552,7 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 		
 		tag = new DocumentTag ("description:Text");
-		tag.IsAttribute = true;
+		tag.IsText = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("ul");
