@@ -50,9 +50,11 @@ namespace Monodoc.Editor {
             this.Open.ShortLabel = Mono.Unix.Catalog.GetString("_Open");
             w2.Add(this.Open, null);
             this.Save = new Gtk.Action("Save", Mono.Unix.Catalog.GetString("_Save"), null, "gtk-save");
+            this.Save.Sensitive = false;
             this.Save.ShortLabel = Mono.Unix.Catalog.GetString("_Save");
             w2.Add(this.Save, null);
             this.SaveAs = new Gtk.Action("SaveAs", Mono.Unix.Catalog.GetString("Save _As"), null, "gtk-save-as");
+            this.SaveAs.Sensitive = false;
             this.SaveAs.ShortLabel = Mono.Unix.Catalog.GetString("Save _As");
             w2.Add(this.SaveAs, null);
             w1.InsertActionGroup(w2, 0);
