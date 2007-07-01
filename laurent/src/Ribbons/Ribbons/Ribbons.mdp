@@ -26,6 +26,11 @@
     <File name="./SyntheticEventCrossing.cs" subtype="Code" buildaction="Compile" />
     <File name="./Button.cs" subtype="Code" buildaction="Compile" />
     <File name="./GroupStyle.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageSelectedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageAddedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageMovedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageRemovedHandler.cs" subtype="Code" buildaction="Compile" />
+    <File name="./PageEventArgs.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
