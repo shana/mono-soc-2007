@@ -31,7 +31,9 @@ namespace Monodoc.Editor {
         
         private Gtk.VBox edit_container;
         
-        private Gtk.Statusbar statusbar1;
+        private Gtk.Statusbar status_bar;
+        
+        private Gtk.ProgressBar progress_bar;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize();
@@ -91,21 +93,28 @@ namespace Monodoc.Editor {
             Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox1[this.edit_container]));
             w5.Position = 2;
             // Container child vbox1.Gtk.Box+BoxChild
-            this.statusbar1 = new Gtk.Statusbar();
-            this.statusbar1.Name = "statusbar1";
-            this.statusbar1.Spacing = 6;
-            this.statusbar1.HasResizeGrip = false;
-            this.vbox1.Add(this.statusbar1);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.vbox1[this.statusbar1]));
-            w6.Position = 3;
-            w6.Expand = false;
-            w6.Fill = false;
+            this.status_bar = new Gtk.Statusbar();
+            this.status_bar.Name = "status_bar";
+            this.status_bar.Spacing = 6;
+            this.status_bar.HasResizeGrip = false;
+            // Container child status_bar.Gtk.Box+BoxChild
+            this.progress_bar = new Gtk.ProgressBar();
+            this.progress_bar.Name = "progress_bar";
+            this.status_bar.Add(this.progress_bar);
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.status_bar[this.progress_bar]));
+            w6.Position = 1;
+            this.vbox1.Add(this.status_bar);
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vbox1[this.status_bar]));
+            w7.Position = 3;
+            w7.Expand = false;
+            w7.Fill = false;
             this.Add(this.vbox1);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.DefaultWidth = 740;
             this.DefaultHeight = 537;
+            this.progress_bar.Hide();
             this.Show();
             this.DeleteEvent += new Gtk.DeleteEventHandler(this.OnDeleteEvent);
             this.Quit.Activated += new System.EventHandler(this.OnQuitActivated);

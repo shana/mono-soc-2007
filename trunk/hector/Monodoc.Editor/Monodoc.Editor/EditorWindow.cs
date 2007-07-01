@@ -17,6 +17,7 @@ namespace Monodoc.Editor {
 public partial class EditorWindow : Gtk.Window {
 	private DocumentTab current_tab;
 	private Notebook nb_tabs;
+	private uint id = 1;
 	
 	public EditorWindow () : base (Gtk.WindowType.Toplevel)
 	{
@@ -28,6 +29,8 @@ public partial class EditorWindow : Gtk.Window {
 		
 		edit_container.Add (nb_tabs);
 		AddTab ();
+		
+		status_bar.Push (id, "Welcome");
 	}
 	
 	private void AddTab ()
@@ -64,6 +67,7 @@ public partial class EditorWindow : Gtk.Window {
 				current_tab.Title = doc.Name;
 				DocumentBufferArchiver.Deserialize (current_tab.Buffer, doc.Text);
 			} catch (ArgumentException argexp) {
+				// TODO: Add message dialog about error.
 				Console.WriteLine (argexp.Message);
 			}
 		}
@@ -73,16 +77,20 @@ public partial class EditorWindow : Gtk.Window {
 
 	private void OnSaveAsActivated (object sender, System.EventArgs e)
 	{
+		string filename = String.Empty;
 		SaveDocDialog dialog = new SaveDocDialog ();
 		if (dialog.Run () == (int) ResponseType.Ok) {
-			using (FileStream fileStream = new FileStream (dialog.Document, FileMode.CreateNew)) {
+			filename = dialog.Document;
+			dialog.Destroy ();
+		}
+		
+		if (filename != String.Empty) {
+			using (FileStream fileStream = new FileStream (filename, FileMode.CreateNew)) {
 				using (StreamWriter streamWriter = new StreamWriter (fileStream)) {
 					streamWriter.Write (DocumentBufferArchiver.Serialize (current_tab.Buffer));
 				}
 			}
 		}
-		
-		dialog.Destroy ();
 	}
 
 	private void OnSaveActivated (object sender, System.EventArgs e)
