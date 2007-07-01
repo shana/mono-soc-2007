@@ -48,7 +48,7 @@ public class EcmaReader {
 	
 	public bool Valid {
 		get {
-			return val_success;
+			return document.DocumentElement.Name.Equals ("Type");
 		}
 	}
 	
