@@ -43,6 +43,7 @@ namespace CBinding.Navigation
 		private List<Function> functions = new List<Function> ();
 		private List<Class> classes = new List<Class> ();
 		private List<Structure> structures = new List<Structure> ();
+		private List<Member> members = new List<Member> ();
 		
 		public ProjectNavigationInformation (Project project)
 		{
@@ -55,6 +56,7 @@ namespace CBinding.Navigation
 			functions.Clear ();
 			classes.Clear ();
 			structures.Clear ();
+			members.Clear ();
 		}
 		
 		public Project Project {
@@ -75,6 +77,10 @@ namespace CBinding.Navigation
 		
 		public List<Structure> Structures {
 			get { return structures; }
+		}
+		
+		public List<Member> Members {
+			get { return members; }
 		}
 	}
 }

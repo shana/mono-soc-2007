@@ -30,11 +30,8 @@
 //
 
 using System;
-using System.IO;
-using System.Text;
 
 using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Navigation
 {

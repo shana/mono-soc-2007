@@ -43,6 +43,8 @@ FILES =  \
 	Navigation/GlobalsNodeBuilder.cs \
 	Navigation/LanguageItem.cs \
 	Navigation/LanguageItemCommandHandler.cs \
+	Navigation/Member.cs \
+	Navigation/MemberNodeBuilder.cs \
 	Navigation/Namespace.cs \
 	Navigation/NamespaceNodeBuilder.cs \
 	Navigation/ProjectNavigationInformation.cs \

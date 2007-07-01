@@ -188,6 +188,7 @@ namespace CBinding.Navigation
 					case TagKind.Macro:
 						break;
 					case TagKind.Member:
+						info.Members.Add (new Member (tag, project));
 						break;
 					case TagKind.Namespace:
 						info.Namespaces.Add (new Namespace (tag, project));

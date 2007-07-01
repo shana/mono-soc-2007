@@ -41,7 +41,7 @@ namespace CBinding.Navigation
 		Function = 'f', // Done
 		Enumeration = 'g',
 		Local = 'l',
-		Member = 'm',
+		Member = 'm', // Done
 		Namespace = 'n', // Done
 		Prototype = 'p',
 		Structure = 's', // Done
