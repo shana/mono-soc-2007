@@ -82,6 +82,73 @@ namespace CBinding.Navigation
 			}
 		}
 		
+		// FIXME: Its currently not working with defines
+		private Tag ParseTag (string tagEntry)
+		{
+			int i1, i2;
+			string file;
+			string pattern;
+			string name;
+			string tagField;
+			TagKind kind;
+			AccessModifier access = AccessModifier.Public;
+			string _class = null;
+			string _namespace = null;
+			string _struct = null;
+			string _enum = null;
+			char delimiter;
+			
+			name = tagEntry.Substring (0, tagEntry.IndexOf ('\t'));
+			
+			i1 = tagEntry.IndexOf ('\t') + 1;
+			i2 = tagEntry.IndexOf ('\t', i1);
+			
+			file = tagEntry.Substring (i1, i2 - i1);
+			
+			delimiter = tagEntry[i2 + 1];
+			
+			i1 = i2 + 2;
+			i2 = tagEntry.IndexOf (delimiter, i1) - 1;
+			
+			pattern = tagEntry.Substring (i1 + 1, i2 - i1 - 1);
+			
+			tagField = tagEntry.Substring (i2 + 5);
+			
+			// parse tag field
+			kind = (TagKind)tagField[0];
+			
+			string[] fields = tagField.Split ('\t');
+			int index;
+			
+			foreach (string field in fields) {
+				index = field.IndexOf (':');
+				
+				if (index > 0) {
+					string key = field.Substring (0, index);
+					string val = field.Substring (index + 1);
+					switch (key) {
+					case "access":
+						access = (AccessModifier)System.Enum.Parse (typeof(AccessModifier), val, true);
+						break;
+					case "class":
+						_class = val;
+						break;
+					case "namespace":
+						_namespace = val;
+						break;
+					case "struct":
+						_struct = val;
+						break;
+					case "enum":
+						_enum = val;
+						break;
+					}
+				}
+			}
+			
+			return new Tag (name, file, pattern, kind, access, _class, _namespace, _struct, _enum);
+		}
+		
 		public void FillProjectNavigationInformation (Project project)
 		{
 			string tagsDir = Path.Combine (project.BaseDirectory, ".tags");
@@ -100,7 +167,7 @@ namespace CBinding.Navigation
 				while ((tagEntry = reader.ReadLine ()) != null) {
 					if (tagEntry.StartsWith ("!_")) continue;
 					
-					Tag tag = Tag.CreateTag (tagEntry);
+					Tag tag = ParseTag (tagEntry);
 					
 					switch (tag.Kind)
 					{
@@ -159,7 +226,7 @@ namespace CBinding.Navigation
 					if (tagEntry.StartsWith ("!_")) continue;
 					
 					if (tagEntry.Substring (0, tagEntry.IndexOf ('\t')).Equals (name)) {
-						tag = Tag.CreateTag (tagEntry);
+						tag = ParseTag (tagEntry);
 						
 						if (tag.Kind == kind)
 							return tag;
