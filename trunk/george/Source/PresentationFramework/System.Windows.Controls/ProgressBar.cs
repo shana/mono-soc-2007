@@ -54,7 +54,6 @@ namespace System.Windows.Controls {
 		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
-			SetIndicatorPosition();
 		}
 		#endregion
 
