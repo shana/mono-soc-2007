@@ -31,6 +31,10 @@ namespace Mono.Data.Sql
 {
 	public class SybaseDbFactory : IDbFactory
 	{
+		public string Identifier {
+			get { return "Mono.Data.SybaseClient"; }
+		}
+		
 		public string Name {
 			get { return "Sybase database"; }
 		}
@@ -43,6 +47,16 @@ namespace Mono.Data.Sql
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			return new SybaseSchemaProvider (connectionProvider);
+		}
+		
+		public ConnectionSettings GetDefaultConnectionSettings ()
+		{
+			ConnectionSettings settings = new ConnectionSettings ();
+			settings.ProviderIdentifier = Identifier;
+			settings.Server = "localhost";
+			settings.Port = 4100;
+			settings.Username = "sa";
+			return settings;
 		}
 	}
 }
