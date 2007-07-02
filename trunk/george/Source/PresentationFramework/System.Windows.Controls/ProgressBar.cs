@@ -78,7 +78,12 @@ namespace System.Windows.Controls {
 			FrameworkElement track = (FrameworkElement)GetTemplateChild("PART_Track");
 			if (track == null)
 				return;
-			((FrameworkElement)GetTemplateChild("PART_Indicator")).Width = track.ActualWidth * Value / Maximum;
+			FrameworkElement indicator = (FrameworkElement)GetTemplateChild("PART_Indicator");
+			double ratio = Value / Maximum;
+			if (Orientation == Orientation.Horizontal)
+				indicator.Width = track.ActualWidth * ratio;
+			else
+				indicator.Height = track.ActualHeight * ratio;
 		}
 		#endregion
 	}
