@@ -31,6 +31,10 @@ namespace Mono.Data.Sql
 {
 	public class OdbcDbFactory : IDbFactory
 	{
+		public string Identifier {
+			get { return "System.Data.Odbc"; }
+		}
+		
 		public string Name {
 			get { return "ODBC data sources"; }
 		}
@@ -43,6 +47,13 @@ namespace Mono.Data.Sql
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			return new OdbcSchemaProvider (connectionProvider);
+		}
+		
+		public ConnectionSettings GetDefaultConnectionSettings ()
+		{
+			ConnectionSettings settings = new ConnectionSettings ();
+			settings.ProviderIdentifier = Identifier;
+			return settings;
 		}
 	}
 }
