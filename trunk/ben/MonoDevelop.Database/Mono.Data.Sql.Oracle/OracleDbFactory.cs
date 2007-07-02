@@ -31,6 +31,10 @@ namespace Mono.Data.Sql
 {
 	public class OracleDbFactory : IDbFactory
 	{
+		public string Identifier {
+			get { return "System.Data.OracleClient"; }
+		}
+		
 		public string Name {
 			get { return "Oracle database"; }
 		}
@@ -43,6 +47,14 @@ namespace Mono.Data.Sql
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			return new OracleSchemaProvider (connectionProvider);
+		}
+		
+		public ConnectionSettings GetDefaultConnectionSettings ()
+		{
+			ConnectionSettings settings = new ConnectionSettings ();
+			settings.ProviderIdentifier = Identifier;
+			settings.Port = 1521;
+			return settings;
 		}
 	}
 }
