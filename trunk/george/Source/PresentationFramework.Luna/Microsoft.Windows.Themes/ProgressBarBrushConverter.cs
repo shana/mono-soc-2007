@@ -10,12 +10,21 @@ namespace Microsoft.Windows.Themes {
 #endif
 	public class ProgressBarBrushConverter : IMultiValueConverter {
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
-			Brush foreground = (Brush)values[0];
+			Brush foreground;
 			//FIXME: How is it used?
-			bool is_indeterminate = (bool)values[1];
-			double indicator_lenght_in_orientation_direction = (double)values[2];
-			double indicator_lenght_in_other_direction = (double)values[3];
-			double track_lenght_in_orientation_direction = (double)values[4];
+			bool is_indeterminate;
+			double indicator_lenght_in_orientation_direction;
+			double indicator_lenght_in_other_direction;
+			double track_lenght_in_orientation_direction;
+			try {
+				foreground = (Brush)values[0];
+				is_indeterminate = (bool)values[1];
+				indicator_lenght_in_orientation_direction = (double)values[2];
+				indicator_lenght_in_other_direction = (double)values[3];
+				track_lenght_in_orientation_direction = (double)values[4];
+			} catch (InvalidCastException) {
+				return null;
+			}
 			const double LineWidth = 6;
 			const double LineSpacing = 2;
 			DrawingGroup drawing = new DrawingGroup();
@@ -28,8 +37,8 @@ namespace Microsoft.Windows.Themes {
 			drawing_context.Close();
 			DrawingBrush result = new DrawingBrush(drawing);
 			result.Stretch = Stretch.None;
-			result.AlignmentX = AlignmentX.Left;
-			result.AlignmentY = AlignmentY.Top;
+			result.Viewbox = new Rect(new Size(indicator_lenght_in_orientation_direction, indicator_lenght_in_other_direction));
+			result.Viewport = result.Viewbox;
 			return result;
 		}
 
