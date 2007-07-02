@@ -1,0 +1,328 @@
+Index: testcases/FlowAnalysis/SimpleTryCatchFinally-cfg.txt
+===================================================================
+--- testcases/FlowAnalysis/SimpleTryCatchFinally-cfg.txt	(revisión: 0)
++++ testcases/FlowAnalysis/SimpleTryCatchFinally-cfg.txt	(revisión: 0)
+@@ -0,0 +1,31 @@
++block 1:
++	body:
++		IL_0000: ldstr "message"
++		IL_0005: call void System.Console::WriteLine(string)
++	successors:
++		block 2
++block 2:
++	body:
++		IL_000a: ldstr "TestTryCatch"
++		IL_000f: call void System.Console::WriteLine(string)
++		IL_0014: leave IL_002c
++	successors:
++		block 3
++		block 4
++block 3:
++	body:
++		IL_0019: pop
++		IL_001a: rethrow
++		IL_001c: leave IL_002c
++	successors:
++		block 4
++block 4:
++	body:
++		IL_0021: ldstr "Finally"
++		IL_0026: call void System.Console::WriteLine(string)
++		IL_002b: endfinally
++	successors:
++		block 5
++block 5:
++	body:
++		IL_002c: ret
+\ Sin fin-de-línea al final del archivo
+Index: testcases/FlowAnalysis/SimpleTryCatchCatch.il
+===================================================================
+--- testcases/FlowAnalysis/SimpleTryCatchCatch.il	(revisión: 0)
++++ testcases/FlowAnalysis/SimpleTryCatchCatch.il	(revisión: 0)
+@@ -0,0 +1,28 @@
++.assembly TestCase {}
++
++.class public auto ansi beforefieldinit TestCase
++	extends [mscorlib]System.Object
++{
++	.method public hidebysig static void Main() cil managed
++	{
++		.maxstack 3
++		IL_0000:  ldstr "message"
++		IL_0005:  call void class [mscorlib]System.Console::WriteLine(string)
++		.try { // 0
++			IL_000a:  ldstr "TestTryCatch"
++			IL_000f:  call void class [mscorlib]System.Console::WriteLine(string)
++			IL_0014:  leave IL_0029
++		} // end .try 0
++		catch [mscorlib]System.SystemException { // 0
++			IL_0019:  pop 
++			IL_001a:  rethrow 
++			IL_001c:  leave IL_0029
++		} // end handler 0
++		catch [mscorlib]System.Exception { // 1
++			IL_0021:  pop 
++			IL_0022:  rethrow 
++			IL_0024:  leave IL_0029
++		} // end handler 1
++		IL_0029:  ret 
++	}
++}
+Index: testcases/FlowAnalysis/SimpleTryCatch-cfg.txt
+===================================================================
+--- testcases/FlowAnalysis/SimpleTryCatch-cfg.txt	(revisión: 0)
++++ testcases/FlowAnalysis/SimpleTryCatch-cfg.txt	(revisión: 0)
+@@ -0,0 +1,24 @@
++block 1:
++	body:
++		IL_0000: ldstr "message"
++		IL_0005: call void System.Console::WriteLine(string)
++	successors:
++		block 2
++block 2:
++	body:
++		IL_000a: ldstr "TestTryCatch"
++		IL_000f: call void System.Console::WriteLine(string)
++		IL_0014: leave IL_0021
++	successors:
++		block 3
++		block 4
++block 3:
++	body:
++		IL_0019: pop
++		IL_001a: rethrow
++		IL_001c: leave IL_0021
++	successors:
++		block 4
++block 4:
++	body:
++		IL_0021: ret
+\ Sin fin-de-línea al final del archivo
+Index: testcases/FlowAnalysis/SimpleTryCatchFinally.il
+===================================================================
+--- testcases/FlowAnalysis/SimpleTryCatchFinally.il	(revisión: 0)
++++ testcases/FlowAnalysis/SimpleTryCatchFinally.il	(revisión: 0)
+@@ -0,0 +1,30 @@
++.assembly TestCase {}
++
++.class public auto ansi beforefieldinit TestCase
++	extends [mscorlib]System.Object
++{
++	.method public hidebysig static void Main() cil managed
++	{
++		.maxstack 3
++		IL_0000:  ldstr "message"
++		IL_0005:  call void class [mscorlib]System.Console::WriteLine(string)
++		.try {
++			.try {
++				IL_000a:  ldstr "TestTryCatch"
++				IL_000f:  call void class [mscorlib]System.Console::WriteLine(string)
++				IL_0014:  leave IL_002c
++			}
++			catch [mscorlib]System.Object {
++				IL_0019:  pop 
++				IL_001a:  rethrow 
++				IL_001c:  leave IL_002c
++			} 
++		} 
++		finally  { 
++			IL_0021:  ldstr "Finally"
++			IL_0026:  call void class [mscorlib]System.Console::WriteLine(string)
++			IL_002b:  endfinally 
++		}
++		IL_002c:  ret 
++	}
++}
+Index: testcases/FlowAnalysis/SimpleTryCatch.il
+===================================================================
+--- testcases/FlowAnalysis/SimpleTryCatch.il	(revisión: 0)
++++ testcases/FlowAnalysis/SimpleTryCatch.il	(revisión: 0)
+@@ -0,0 +1,23 @@
++.assembly TestCase {}
++
++.class public auto ansi beforefieldinit TestCase
++	extends [mscorlib]System.Object
++{
++	.method public hidebysig static void Main() cil managed
++	{
++		.maxstack 3
++		IL_0000: ldstr "message"
++		IL_0005: call void class [mscorlib]System.Console::WriteLine(string)
++		.try {
++			IL_000a: ldstr "TestTryCatch"
++			IL_000f: call void class [mscorlib]System.Console::WriteLine(string)
++			IL_0014: leave IL_0021
++		}
++		catch [mscorlib]System.Object { 
++			IL_0019: pop 
++			IL_001a: rethrow 
++			IL_001c: leave IL_0021
++		} 
++		IL_0021: ret 
++	}
++}
+Index: testcases/FlowAnalysis/SimpleTryCatchCatch-cfg.txt
+===================================================================
+--- testcases/FlowAnalysis/SimpleTryCatchCatch-cfg.txt	(revisión: 0)
++++ testcases/FlowAnalysis/SimpleTryCatchCatch-cfg.txt	(revisión: 0)
+@@ -0,0 +1,32 @@
++block 1:
++	body:
++		IL_0000: ldstr "message"
++		IL_0005: call void System.Console::WriteLine(string)
++	successors:
++		block 2
++block 2:
++	body:
++		IL_000a: ldstr "TestTryCatch"
++		IL_000f: call void System.Console::WriteLine(string)
++		IL_0014: leave IL_0029
++	successors:
++		block 3
++		block 4
++		block 5
++block 3:
++	body:
++		IL_0019: pop
++		IL_001a: rethrow
++		IL_001c: leave IL_0029
++	successors:
++		block 5
++block 4:
++	body:
++		IL_0021: pop
++		IL_0022: rethrow
++		IL_0024: leave IL_0029
++	successors:
++		block 5
++block 5:
++	body:
++		IL_0029: ret
+\ Sin fin-de-línea al final del archivo
+Index: Cecil.FlowAnalysis/Impl/ControlFlow/FlowGraphBuilder.cs
+===================================================================
+--- Cecil.FlowAnalysis/Impl/ControlFlow/FlowGraphBuilder.cs	(revisión: 80813)
++++ Cecil.FlowAnalysis/Impl/ControlFlow/FlowGraphBuilder.cs	(copia de trabajo)
+@@ -41,9 +41,6 @@
+ 
+ 		internal FlowGraphBuilder (MethodDefinition method)
+ 		{
+-			if (method.Body.ExceptionHandlers.Count > 0) {
+-				throw new ArgumentException ("Exception handlers are not supported.", "body");
+-			}
+ 			_SystemVoid = method.DeclaringType.Module.Import (typeof(void));
+ 			_body = method.Body;
+ 			DelimitBlocks ();
+@@ -82,6 +79,12 @@
+ 					if (null != instruction.Next) MarkBlockStart (instruction.Next);
+ 				}
+ 			}
++			// the first instruction in a try block starts a blocks
++			foreach (ExceptionHandler exceptionHandler in _body.ExceptionHandlers) {
++				if (exceptionHandler.TryStart != null) {
++					MarkBlockStart (exceptionHandler.TryStart);
++				}
++			}
+ 		}
+ 
+ 		private void MarkBlockEnds (InstructionCollection instructions)
+@@ -313,7 +316,71 @@
+ 					}
+ 				}
+ 			}
++			ConnectExceptionHandlerBlocks ();
+ 		}
++		
++		private void ConnectExceptionHandlerBlocks () {
++			foreach (ExceptionHandler exceptionHandler in _body.ExceptionHandlers) {
++				if (exceptionHandler.TryStart != null) {
++					ArrayList catchHandlers = GetCatchHandlersForTryBlock (exceptionHandler.TryStart);
++					ArrayList finallyHandlers = GetFinallyHandlersForTryBlock (exceptionHandler.TryStart);
++					
++					InstructionBlock tryBlock = GetBlock (exceptionHandler.TryStart);
++					ArrayList successors = ConvertCatchHandlersToBlocks (catchHandlers);
++					if (finallyHandlers.Count != 0) {
++						successors = AddFinallyHandlers (successors, finallyHandlers);
++					}
++					else {
++						successors.Add (GetBranchTargetBlock (tryBlock.LastInstruction));
++					}
++					tryBlock.SetSuccessors ((IInstructionBlock[])successors.ToArray (typeof (IInstructionBlock)));
++				}
++			}
++		}
++		
++		private ArrayList AddFinallyHandlers (ArrayList successors, ArrayList finallyHandlers) {
++			ArrayList successorsAux = new ArrayList (successors);
++			foreach (InstructionBlock catchBlock in successors) {
++				foreach (ExceptionHandler finallyHandler in finallyHandlers) {
++					InstructionBlock finallyBlock = GetBlock (finallyHandler.HandlerStart);
++					finallyBlock.SetSuccessors (new IInstructionBlock[] {GetBlock (finallyBlock.LastInstruction.Next)});
++					catchBlock.SetSuccessors (new IInstructionBlock [] {finallyBlock});
++					successorsAux.Add (finallyBlock);
++				}
++			}
++			return successorsAux;
++		}
++		
++		private ArrayList ConvertCatchHandlersToBlocks (ArrayList catchHandlers) {
++			ArrayList catchBlocks = new ArrayList ();
++			foreach (ExceptionHandler catchHandler in catchHandlers) {
++				if (catchHandler.HandlerStart != null)
++					catchBlocks.Add (GetBlock (catchHandler.HandlerStart));
++			}
++			return catchBlocks;
++		}
++		
++		private ArrayList GetCatchHandlersForTryBlock (Instruction tryStart) {		
++			ArrayList catchHandlers = new ArrayList ();
++			foreach (ExceptionHandler exceptionHandler in _body.ExceptionHandlers) {
++				if (exceptionHandler.TryStart == tryStart) {
++					if (exceptionHandler.Type == ExceptionHandlerType.Catch)
++						catchHandlers.Add (exceptionHandler);
++				}
++			}
++			return catchHandlers;			
++		}
++		
++		private ArrayList GetFinallyHandlersForTryBlock (Instruction tryStart) {
++			ArrayList finallyHandlers = new ArrayList ();
++			foreach (ExceptionHandler exceptionHandler in _body.ExceptionHandlers) {
++				if (exceptionHandler.TryStart == tryStart) {
++					if (exceptionHandler.Type == ExceptionHandlerType.Finally)
++						finallyHandlers.Add (exceptionHandler);
++				}
++			}
++			return finallyHandlers;
++		}
+ 
+ 		private IInstructionBlock GetBranchTargetBlock (Instruction instruction)
+ 		{
+Index: Cecil.FlowAnalysis.Tests/ControlFlowTestFixture.cs
+===================================================================
+--- Cecil.FlowAnalysis.Tests/ControlFlowTestFixture.cs	(revisión: 80813)
++++ Cecil.FlowAnalysis.Tests/ControlFlowTestFixture.cs	(copia de trabajo)
+@@ -237,5 +237,23 @@
+ 		{
+ 			RunTestCase ("StringPredicate");
+ 		}
++		
++		[Test]
++		public void SimpleTryCatch () 
++		{
++			RunTestCase ("SimpleTryCatch");
++		}
++		
++		[Test]
++		public void SimpleTryTryCatch () 
++		{
++			RunTestCase ("SimpleTryCatchCatch");
++		}
++		
++		[Test]
++		public void SimpleTryCatchFinally () 
++		{
++			RunTestCase ("SimpleTryCatchFinally");
++		}
+ 	}
+ }
