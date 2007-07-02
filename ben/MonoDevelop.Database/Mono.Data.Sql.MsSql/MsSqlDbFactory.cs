@@ -31,6 +31,10 @@ namespace Mono.Data.Sql
 {
 	public class MsSqlDbFactory : IDbFactory
 	{
+		public string Identifier {
+			get { return "System.Data.SqlClient"; }
+		}
+		
 		public string Name {
 			get { return "SQL Server database"; }
 		}
@@ -43,6 +47,16 @@ namespace Mono.Data.Sql
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			return new MsSqlSchemaProvider (connectionProvider);
+		}
+		
+		public ConnectionSettings GetDefaultConnectionSettings ()
+		{
+			ConnectionSettings settings = new ConnectionSettings ();
+			settings.ProviderIdentifier = Identifier;
+			settings.Server = "localhost";
+			settings.Port = 1433;
+			settings.Username = "sa";
+			return settings;
 		}
 	}
 }

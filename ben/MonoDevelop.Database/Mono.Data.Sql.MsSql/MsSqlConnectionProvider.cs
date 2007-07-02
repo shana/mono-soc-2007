@@ -32,9 +32,9 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public class SqlConnectionProvider : AbstractConnectionProvider
+	public class MsSqlConnectionProvider : AbstractConnectionProvider
 	{
-		public SqlConnectionProvider (ConnectionSettings settings)
+		public MsSqlConnectionProvider (ConnectionSettings settings)
 			: base (settings)
 		{
 		}

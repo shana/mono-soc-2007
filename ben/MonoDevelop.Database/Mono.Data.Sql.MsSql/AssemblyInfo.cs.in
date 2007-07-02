@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("http://www.monodevelop.com")]
-[assembly: AssemblyCopyright("MIT X11")]
+[assembly: AssemblyCopyright("MIT X11 - Christian Hergert, Daniel Morgan, Sureshkumar T, Ben Motmans")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -14,7 +14,3 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
-
-[assembly: Mono.About ("http://www.monodevelop.com")]
-[assembly: Mono.UsageComplement ("")]
-[assembly: Mono.Author ("Christian Hergert, Daniel Morgan, Sureshkumar T, Ben Motmans")]

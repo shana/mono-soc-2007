@@ -37,9 +37,9 @@ namespace Mono.Data.Sql
 {
 	// see:
 	// http://www.alberton.info/sql_server_meta_info.html
-	public class SqlSchemaProvider : AbstractSchemaProvider
+	public class MsSqlSchemaProvider : AbstractSchemaProvider
 	{
-		public SqlSchemaProvider (SqlConnectionProvider connectionProvider)
+		public MsSqlSchemaProvider (IConnectionProvider connectionProvider)
 			: base (connectionProvider)
 		{
 		}
@@ -75,17 +75,16 @@ namespace Mono.Data.Sql
 			
 			//TODO: check if the current database is "master", the drawback is that this only works if you have sysadmin privileges
 			IDbCommand command = connectionProvider.CreateCommand ("select name from sysdatabases");
-			IDataReader r = command.ExecuteReader();
-			
-			while (r.Read ()) {
-				DatabaseSchema db = new DatabaseSchema (this);
-				db.Name = r.GetString (0);
-				databases.Add (db);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read()) {
+						DatabaseSchema db = new DatabaseSchema (this);
+						db.Name = r.GetString (0);
+						databases.Add (db);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose ();
-			command = null;
 
 			return databases;
 		}
@@ -103,24 +102,23 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY 1, 2"
 			);
-			IDataReader r = command.ExecuteReader();
-			
-			while (r.Read()) {
-				TableSchema table = new TableSchema (this);
-				table.Name = r.GetString(1);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read()) {
+						TableSchema table = new TableSchema (this);
+						table.Name = r.GetString(1);
 
-				table.IsSystemTable = r.GetString(4) == "S" ? true : false;
-				
-				table.SchemaName = r.GetString(0);
-				table.OwnerName = r.GetString(0);
-				table.Comment = "";
-				
-				tables.Add (table);
+						table.IsSystemTable = r.GetString(4) == "S" ? true : false;
+						
+						table.SchemaName = r.GetString(0);
+						table.OwnerName = r.GetString(0);
+						table.Definition = GetTableDefinition (table);
+						
+						tables.Add (table);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose ();
-			command = null;
 			
 			return tables;
 		}
@@ -146,32 +144,31 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY sc.colid"
 			);
-			IDataReader r = command.ExecuteReader();
-			
-			while (r.Read()) {
-				ColumnSchema column = new ColumnSchema (this);
-				
-				column.Name = r.GetString (2);
-				column.DataTypeName = r.GetString (3);
-				column.Default = String.Empty;
-				column.Comment = String.Empty;
-				column.OwnerName = table.OwnerName;
-				column.SchemaName = table.SchemaName;
-				column.NotNull = r.GetValue (7).ToString () == "0" ? true : false;
-				column.Length = r.GetInt32 (4);
-				column.Precision = r.IsDBNull (5) ? 0 : r.GetInt32 (5);
-				column.Scale = r.IsDBNull (6) ? 0 : r.GetInt32 (6);
-				column.Definition = String.Concat (column.Name, " ", column.DataTypeName, " ",
-					column.Length > 0 ? "(" + column.Length + ")" : "",
-					column.NotNull ? " NOT NULL" : " NULL");
-				//TODO: append " DEFAULT ..." if column.Default.Length > 0
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read()) {
+						ColumnSchema column = new ColumnSchema (this);
+						
+						column.Name = r.GetString (2);
+						column.DataTypeName = r.GetString (3);
+						column.Default = String.Empty;
+						column.Comment = String.Empty;
+						column.OwnerName = table.OwnerName;
+						column.SchemaName = table.SchemaName;
+						column.NotNull = r.GetValue (7).ToString () == "0" ? true : false;
+						column.Length = r.GetInt32 (4);
+						column.Precision = r.IsDBNull (5) ? 0 : r.GetInt32 (5);
+						column.Scale = r.IsDBNull (6) ? 0 : r.GetInt32 (6);
+						column.Definition = String.Concat (column.Name, " ", column.DataTypeName, " ",
+							column.Length > 0 ? "(" + column.Length + ")" : "",
+							column.NotNull ? " NOT NULL" : " NULL");
+						//TODO: append " DEFAULT ..." if column.Default.Length > 0
 
-				columns.Add (column);
+						columns.Add (column);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose ();
-			command = null;
 			
 			return columns;
 		}
@@ -189,21 +186,26 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY 1, 2"
 			);
-			IDataReader r = command.ExecuteReader();
-			
-			while (r.Read()) {
-				ViewSchema view = new ViewSchema (this);
-				
-				view.Name = r.GetString (1);
-				view.SchemaName = r.GetString (0);
-				view.OwnerName = r.GetString (0);
-				
-				views.Add (view);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read()) {
+						ViewSchema view = new ViewSchema (this);
+						
+						view.Name = r.GetString (1);
+						view.SchemaName = r.GetString (0);
+						view.OwnerName = r.GetString (0);
+						
+						StringBuilder sb = new StringBuilder();
+						sb.AppendFormat ("-- View: {0}\n", view.Name);
+						sb.AppendFormat ("-- DROP VIEW {0};\n\n", view.Name);
+						sb.AppendFormat ("  {0}\n);", GetSource (view.Owner + "." + view.Name));
+						view.Definition = sb.ToString ();
+						
+						views.Add (view);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose();
-			command = null;
 			
 			return views;
 		}
@@ -217,25 +219,24 @@ namespace Mono.Data.Sql
 				"SELECT * FROM \"" + view.Name +
 				"\" WHERE 1 = 0"
 			);
-			IDataReader r = command.ExecuteReader();
-
-			for (int i = 0; i < r.FieldCount; i++) {
-				ColumnSchema column = new ColumnSchema (this);
-				
-				column.Name = r.GetName(i);
-				column.DataTypeName = r.GetDataTypeName(i);
-				column.Default = "";
-				column.Definition = "";
-				column.OwnerName = view.OwnerName;
-				column.SchemaName = view.OwnerName;
-				
-				columns.Add (column);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					for (int i = 0; i < r.FieldCount; i++) {
+						ColumnSchema column = new ColumnSchema (this);
+						
+						column.Name = r.GetName(i);
+						column.DataTypeName = r.GetDataTypeName(i);
+						column.Default = "";
+						column.Definition = "";
+						column.OwnerName = view.OwnerName;
+						column.SchemaName = view.OwnerName;
+						
+						columns.Add (column);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose ();
-			command = null;
-
+			
 			return columns;
 		}
 
@@ -252,21 +253,25 @@ namespace Mono.Data.Sql
 				"AND su.uid = so.uid " +
 				"ORDER BY 1, 2"
 			);
-			IDataReader r = command.ExecuteReader();
-			
-			while (r.Read ()) {
-				ProcedureSchema proc = new ProcedureSchema (this);
-				proc.Name = r.GetString (1);
-				proc.OwnerName = r.GetString (0);
-				proc.LanguageName = "TSQL";
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ()) {
+						ProcedureSchema procedure = new ProcedureSchema (this);
+						procedure.Name = r.GetString (1);
+						procedure.OwnerName = r.GetString (0);
+						procedure.LanguageName = "TSQL";
+						
+						StringBuilder sb = new StringBuilder();
+						sb.AppendFormat ("-- Procedure: {0}\n", procedure.Name);
+						sb.AppendFormat ("  {0}\n);", GetSource (procedure.Owner + "." + procedure.Name));
+						procedure.Definition = sb.ToString ();
 
-				// FIXME : get sysproc or not
-				procedures.Add (proc);
+						// FIXME : get sysproc or not
+						procedures.Add (procedure);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose ();
-			command = null;
 			
 			return procedures; 
 		}
@@ -283,19 +288,18 @@ namespace Mono.Data.Sql
 			owner.Value = procedure.OwnerName;
 			name.Value = procedure.Name;
 				
-			SqlDataReader r = command.ExecuteReader();
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ()) {
+						ColumnSchema column = new ColumnSchema (this);
+						column.Name = (string) r ["COLUMN_NAME"];
+						column.DataTypeName = (string) r ["TYPE_NAME"];
 
-			while (r.Read ()) {
-				ColumnSchema column = new ColumnSchema (this);
-				column.Name = (string) r ["COLUMN_NAME"];
-				column.DataTypeName = (string) r ["TYPE_NAME"];
-
-				columns.Add (column);
+						columns.Add (column);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose ();
-			command = null;
 		      
 			return columns;
 		}
@@ -312,37 +316,23 @@ namespace Mono.Data.Sql
 			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
 			
 			IDbCommand command = connectionProvider.CreateCommand ("select name, xtype from sysobjects where xtype = 'F'");
-			IDataReader r = command.ExecuteReader();
-			
-			while (r.Read ()) {
-				ConstraintSchema constraint = new ConstraintSchema (this);
-			
-				ColumnSchema pkColumn = new ColumnSchema (this);
-				ColumnSchema fkColumn = new ColumnSchema (this);
-				
-				string name = r.GetString (0);
-				string[] tmp = r.GetString (1).Split ('_');
-				
-				fkColumn.OwnerName = tmp[1];
-				pkColumn.OwnerName = tmp[2];
-				
-				constraint.ForeignKey = fkColumn;
-				constraint.PrimaryKey = pkColumn;
-				
-				constraints.Add (constraint);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ()) {
+						string name = r.GetString (0);
+						string[] tmp = r.GetString (1).Split ('_');
+	
+						ForeignKeyConstraintSchema constraint = new ForeignKeyConstraintSchema (this);
+						constraint.ReferenceTableName = tmp[1];
+						constraint.Name = name;
+						
+						constraints.Add (constraint);
+					}
+					r.Close ();
+				}
 			}
-			r.Close ();
-			r = null;
-			command.Dispose ();
-			command = null;
 
 			return constraints;
-		}
-
-		public override ICollection<UserSchema> GetUsers ()
-		{
-			CheckConnectionState ();
-			throw new NotImplementedException ();
 		}
 		
 		// see:
@@ -496,14 +486,13 @@ namespace Mono.Data.Sql
 			return dts;
 		}
 		
-		public override string GetTableDefinition (TableSchema table)
+		protected string GetTableDefinition (TableSchema table)
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.AppendFormat ("-- Table: {0}\n", table.Name);
 			sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
 			sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
 
-			
 			ICollection<ColumnSchema> columns = table.Columns;
 			string[] parts = new string[columns.Count];
 			int i = 0;
@@ -524,43 +513,21 @@ namespace Mono.Data.Sql
 			//sb.AppendFormat ("COMMENT ON TABLE {0} IS '{1}';", table.Name, table.Comment);
 			return sb.ToString ();
 		}
-		
-		public override string GetViewDefinition (ViewSchema view)
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.AppendFormat ("-- View: {0}\n", view.Name);
-			sb.AppendFormat ("-- DROP VIEW {0};\n\n", view.Name);
-			sb.AppendFormat ("  {0}\n);", GetSource (view.Owner + "." + view.Name));
-			return sb.ToString ();
-		}
-		
-		public override string GetProcedureDefinition (ProcedureSchema procedure)
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.AppendFormat ("-- Procedure: {0}\n", procedure.Name);
-			sb.AppendFormat ("  {0}\n);", GetSource (procedure.Owner + "." + procedure.Name));
-			return sb.ToString ();
-		}
-		
+
 		private string GetSource (string objectName) 
 		{
 			CheckConnectionState ();
 			IDbCommand command = connectionProvider.CreateCommand (
 				String.Format ("EXEC [master].[dbo].[sp_helptext] '{0}', null", objectName)
 			);
-			IDataReader reader = command.ExecuteReader ();
-
 			StringBuilder sb = new StringBuilder ();
-
-			while (reader.Read ()) {
-				string text = reader.GetString (0);
-				sb.Append (text);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ())
+						sb.Append (r.GetString (0));
+					r.Close ();
+				}
 			}
-
-			reader.Close ();
-			reader = null;
-			command.Dispose ();
-			command = null;
 
 			return sb.ToString ();
 		}
