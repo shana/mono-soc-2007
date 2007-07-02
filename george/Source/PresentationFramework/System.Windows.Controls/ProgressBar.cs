@@ -21,6 +21,11 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
+		#region Private Fields
+		FrameworkElement _indicator;
+		FrameworkElement _track;
+		#endregion
+
 		#region Static Constructor
 		static ProgressBar() {
 #if Implementation
@@ -54,6 +59,8 @@ namespace System.Windows.Controls {
 		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
+			_track = (FrameworkElement)GetTemplateChild("PART_Track");
+			_indicator = (FrameworkElement)GetTemplateChild("PART_Indicator");
 		}
 		#endregion
 
@@ -74,15 +81,13 @@ namespace System.Windows.Controls {
 
 		#region Private Methods
 		void SetIndicatorPosition() {
-			FrameworkElement track = (FrameworkElement)GetTemplateChild("PART_Track");
-			if (track == null)
+			if (_track == null)
 				return;
-			FrameworkElement indicator = (FrameworkElement)GetTemplateChild("PART_Indicator");
 			double ratio = Value / Maximum;
 			if (Orientation == Orientation.Horizontal)
-				indicator.Width = track.ActualWidth * ratio;
+				_indicator.Width = _track.ActualWidth * ratio;
 			else
-				indicator.Height = track.ActualHeight * ratio;
+				_indicator.Height = _track.ActualHeight * ratio;
 		}
 		#endregion
 	}
