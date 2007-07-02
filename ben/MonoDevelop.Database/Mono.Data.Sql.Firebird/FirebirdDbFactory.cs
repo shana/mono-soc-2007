@@ -31,6 +31,10 @@ namespace Mono.Data.Sql
 {
 	public class FirebirdDbFactory : IDbFactory
 	{
+		public string Identifier {
+			get { return "FirebirdSql.Data.Firebird"; }
+		}
+		
 		public string Name {
 			get { return "Firebird database"; }
 		}
@@ -43,6 +47,15 @@ namespace Mono.Data.Sql
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			return new FirebirdSchemaProvider (connectionProvider);
+		}
+		
+		public ConnectionSettings GetDefaultConnectionSettings ()
+		{
+			ConnectionSettings settings = new ConnectionSettings ();
+			settings.ProviderIdentifier = Identifier;
+			settings.Server = "localhost";
+			settings.Username = "firebird";
+			return settings;
 		}
 	}
 }

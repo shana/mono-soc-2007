@@ -39,7 +39,7 @@ namespace Mono.Data.Sql
 	// http://www.alberton.info/firebird_sql_meta_info.html
 	public class FirebirdSchemaProvider : AbstractSchemaProvider
 	{
-		public FirebirdSchemaProvider (FirebirdConnectionProvider connectionProvider)
+		public FirebirdSchemaProvider (IConnectionProvider connectionProvider)
 			: base (connectionProvider)
 		{
 		}
@@ -102,6 +102,7 @@ namespace Mono.Data.Sql
 						
 						tables.Add (table);
 					}
+					r.Close ();
 				}
 			}
 
@@ -119,7 +120,7 @@ namespace Mono.Data.Sql
 			List<ViewSchema> views = new List<ViewSchema> ();
 
 			IDbCommand command = connectionProvider.CreateCommand (
-				"SELECT RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$OWNER_NAME, RDB$DESCRIPTION FROM RDB$RELATIONS "+
+				"SELECT RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$OWNER_NAME, RDB$DESCRIPTION, RDB$VIEW_SOURCE FROM RDB$RELATIONS "+
 				"WHERE RDB$VIEW_SOURCE IS NOT NULL;"
 			);
 			using (command) {
@@ -131,8 +132,11 @@ namespace Mono.Data.Sql
 						view.IsSystemView = (!r.IsDBNull (1) && r.GetInt32 (1) != 0);
 						view.OwnerName = r.GetString (2);
 						view.Comment = r.GetString (3);
+						//TODO: view.Definition = 4 (ascii blob)
+
 						views.Add (view);
 					}
+					r.Close ();
 				}
 			}
 			return views;
@@ -149,7 +153,7 @@ namespace Mono.Data.Sql
 			List<ProcedureSchema> procedures = new List<ProcedureSchema> ();
 
 			IDbCommand command = connectionProvider.CreateCommand (
-				"SELECT RDB$PROCEDURE_NAME, RDB$SYSTEM_FLAG, RDB$OWNER_NAME, RDB$DESCRIPTION FROM RDB$PROCEDURES;"
+				"SELECT RDB$PROCEDURE_NAME, RDB$SYSTEM_FLAG, RDB$OWNER_NAME, RDB$DESCRIPTION, RDB$PROCEDURE_SOURCE FROM RDB$PROCEDURES;"
 			);
 			
 			using (command) {
@@ -161,9 +165,11 @@ namespace Mono.Data.Sql
 						procedure.IsSystemProcedure = (!r.IsDBNull (1) && r.GetInt32 (1) != 0);
 						procedure.OwnerName = r.GetString (2);
 						procedure.Comment = r.GetString (3);
+						//TODO: procedure.Definition = 4 (ascii blob)
 			    			
 			    			procedures.Add (procedure);
 			    		}
+					r.Close ();
 				}
 			}
 			
@@ -195,6 +201,7 @@ namespace Mono.Data.Sql
 			    				
 			    			columns.Add (column);
 			    		}
+					r.Close ();
 				}
 			}
 			
@@ -226,6 +233,7 @@ namespace Mono.Data.Sql
 			    				
 			    			parameters.Add (parameter);
 			    		}
+					r.Close ();
 				}
 			}
 			
@@ -246,6 +254,7 @@ namespace Mono.Data.Sql
 //					constraint.ForeignKey = fkColumn;
 //							
 //					constraints.Add (constraint);
+					r.Close ();
 				}
 			}
 
@@ -265,20 +274,14 @@ namespace Mono.Data.Sql
 						user.Name = r.GetString (0);
 						users.Add (user);
 					}
-	
 					r.Close ();
 				}
 			}
 
 			return users;
 		}
-
-		public virtual ICollection<RoleSchema> GetRoles ()
-		{
-			throw new NotImplementedException ();
-		}
 		
-		public virtual ICollection<TriggerSchema> GetTriggers ()
+		public override ICollection<TriggerSchema> GetTriggers ()
 		{
 			CheckConnectionState ();
 			List<TriggerSchema> triggers = new List<TriggerSchema> ();
@@ -292,7 +295,6 @@ namespace Mono.Data.Sql
 						//TODO: table and type
 						triggers.Add (trigger);
 					}
-	
 					r.Close ();
 				}
 			}
@@ -315,49 +317,10 @@ namespace Mono.Data.Sql
 					break;
 				default:
 					dts = null;
+					break;
 			}
 			
 			return dts;
-		}
-
-		//TODO: 
-		public override string GetTableDefinition (TableSchema table)
-		{
-			CheckConnectionState ();
-
-			throw new NotImplementedException ();
-		}
-
-		public override string GetViewDefinition (ViewSchema view)
-		{
-			CheckConnectionState ();
-
-			IDbCommand command = connectionProvider.CreateCommand (
-				"SELECT RDB$VIEW_SOURCE FROM RDB$RELATIONS "+
-				"WHERE RDB$RELATION_NAME='" + view.Name + "';"
-			);
-			
-			string src = null;
-			using (command) {
-				byte[] blob = command.ExecuteScalar () as byte[];
-				src = System.Text.Encoding.ASCII.GetString (blob); //TODO: is this ascii or utf?
-			}
-			return src;
-		}
-
-		public override string GetProcedureDefinition (ProcedureSchema procedure)
-		{
-			IDbCommand command = connectionProvider.CreateCommand (
-				"SELECT RDB$PROCEDURE_SOURCE FROM RDB$PROCEDURES "+
-				"WHERE RDB$PROCEDURE_NAME='" + procedure.Name + "';"
-			);
-			
-			string src = null;
-			using (command) {
-				byte[] blob = command.ExecuteScalar () as byte[];
-				src = System.Text.Encoding.ASCII.GetString (blob); //TODO: is this ascii or utf?
-			}
-			return src;
 		}
 						
 		private ICollection<ColumnSchema> GetTableOrViewColumns (string name)
@@ -387,15 +350,18 @@ namespace Mono.Data.Sql
 						ColumnSchema column = new ColumnSchema (this);
 		
 						column.Name = r.GetString (0);
-						column.DataType.DataTypeName = r.GetString (8);
+						column.DataTypeName = r.GetString (8);
 						column.NotNull = (!r.IsDBNull (3) && r.GetInt32 (3) == 1);
 						column.Default = r.GetString (2);
 						column.Comment = r.GetString (1);
 						column.OwnerName = name;
-						//TODO: scale, precision and length
+						column.Length = r.GetInt32 (4);
+						column.Precision = r.GetInt32 (5);
+						column.Scale = r.GetInt32 (6);
 		
 						columns.Add (column);
 					}
+					r.Close ();
 				};
 			}
 
