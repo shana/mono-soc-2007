@@ -38,5 +38,36 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region IndicatorLenght
+		[Test]
+		public void IndicatorLenght() {
+			new IndicatorLenghtProgressBar();
+		}
+
+		class IndicatorLenghtProgressBar : ProgressBar {
+			public IndicatorLenghtProgressBar() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Value = Maximum;
+				Assert.AreEqual(Indicator.Width, Track.Width, "1");
+				Value = Maximum / 2;
+				Assert.AreEqual(Indicator.Width, Track.Width / 2, "2");
+			}
+
+			FrameworkElement Track {
+				get {
+					return (FrameworkElement)GetTemplateChild("PART_Track");
+				}
+			}
+
+			FrameworkElement Indicator {
+				get {
+					return (FrameworkElement)GetTemplateChild("Indicator");
+				}
+			}
+		}
+		#endregion
 	}
 }
