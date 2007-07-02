@@ -1,0 +1,5 @@
+2007-07-02  Ben Motmans <ben.motmans@gmail.com>
+
+	* NewConnectionDialog.cs: Remake of the old dialog using the integrated MD designer,
+	the new dialog also includes pooling options
+
