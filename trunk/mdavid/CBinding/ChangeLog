@@ -1,3 +1,14 @@
+2007-07-02  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/Tag.cs, Navigation/Variable.cs,
+	  Navigation/TagDatabaseManager.cs,
+	  Navigation/ProjectNavigationInformation.cs,
+	  Navigation/GlobalsNodeBuilder.cs,
+	  Navigation/VariableNodeBuilder.cs, Makefile.am, CBinding.addin.xml,
+	  CBinding.mdp: Added support for global variables to be added to the
+	  class pad. Also fixed options sent to ctags so macro difinitions
+	  can now be easily handled.
+
 2007-07-01  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/Tag.cs, Navigation/StructureNodeBuilder.cs,

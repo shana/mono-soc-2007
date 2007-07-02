@@ -1,5 +1,5 @@
 //
-// ProjectNavigationInformation.cs
+// Variable.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,63 +30,15 @@
 //
 
 using System;
-using System.Collections.Generic;
 
 using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class ProjectNavigationInformation
+	public class Variable : LanguageItem
 	{
-		private Project project;
-		private List<Namespace> namespaces = new List<Namespace> ();
-		private List<Function> functions = new List<Function> ();
-		private List<Class> classes = new List<Class> ();
-		private List<Structure> structures = new List<Structure> ();
-		private List<Member> members = new List<Member> ();
-		private List<Variable> variables = new List<Variable> ();
-		
-		public ProjectNavigationInformation (Project project)
+		public Variable (Tag tag, Project project) : base (tag, project)
 		{
-			this.project = project;
-		}
-		
-		public void Clear ()
-		{
-			namespaces.Clear ();
-			functions.Clear ();
-			classes.Clear ();
-			structures.Clear ();
-			members.Clear ();
-			variables.Clear ();
-		}
-		
-		public Project Project {
-			get { return project; }
-		}
-		
-		public List<Namespace> Namespaces {
-			get { return namespaces; }
-		}
-		
-		public List<Function> Functions {
-			get { return functions; }
-		}
-		
-		public List<Class> Classes {
-			get { return classes; }
-		}
-		
-		public List<Structure> Structures {
-			get { return structures; }
-		}
-		
-		public List<Member> Members {
-			get { return members; }
-		}
-		
-		public List<Variable> Variables {
-			get { return variables; }
 		}
 	}
 }

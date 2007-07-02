@@ -54,6 +54,8 @@ FILES =  \
 	Navigation/StructureNodeBuilder.cs \
 	Navigation/Tag.cs \
 	Navigation/TagDatabaseManager.cs \
+	Navigation/Variable.cs \
+	Navigation/VariableNodeBuilder.cs \
 	Project/CCompilationParameters.cs \
 	Project/CProject.cs \
 	Project/CProjectBinding.cs \

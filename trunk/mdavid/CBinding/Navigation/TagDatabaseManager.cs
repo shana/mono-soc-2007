@@ -68,8 +68,9 @@ namespace CBinding.Navigation
 			if (!Directory.Exists (tagsDir))
 				Directory.CreateDirectory (tagsDir);
 			
-			// FIXME: fix Tag.CreateTag so here we can include defines
-			StringBuilder args = new StringBuilder ("--C++-kinds=-d+p --fields=+a --language-force=C++");
+			string ctags_options = "--C++-kinds=+p --fields=+a --language-force=C++ --excmd=pattern";
+			
+			StringBuilder args = new StringBuilder (ctags_options);
 			
 			foreach (ProjectFile file in project.ProjectFiles) 
 				args.AppendFormat (" {0}", file.Name);
@@ -82,7 +83,6 @@ namespace CBinding.Navigation
 			}
 		}
 		
-		// FIXME: Its currently not working with defines
 		private Tag ParseTag (string tagEntry)
 		{
 			int i1, i2;
@@ -203,6 +203,7 @@ namespace CBinding.Navigation
 					case TagKind.Union:
 						break;
 					case TagKind.Variable:
+						info.Variables.Add (new Variable (tag, project));
 						break;
 					default:
 						break;
