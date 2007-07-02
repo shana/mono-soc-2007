@@ -1,5 +1,5 @@
 //
-// GlobalsNodeBuilder.cs
+// VariableNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,6 +30,7 @@
 //
 
 using System;
+using System.IO;
 
 using Mono.Addins;
 
@@ -40,32 +41,19 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class Globals {
-		private static Globals instance;
-		
-		private Globals ()
-		{
-		}
-		
-		public static Globals Instance {
-			get {
-				if (instance == null)
-					instance = new Globals ();
-				
-				return instance;
-			}
-		}
-	}
-	
-	public class GlobalsNodeBuilder : TypeNodeBuilder
+	public class VariableNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(Globals); }
+			get { return typeof(Variable); }
+		}
+		
+		public override Type CommandHandlerType {
+			get { return typeof(LanguageItemCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return "Globals";
+			return ((Variable)dataObject).Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder,
@@ -74,46 +62,35 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			label = "Globals";
-			icon = Context.GetIcon (Stock.Method);
-		}
-		
-		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
-		{
-			CProject p = treeBuilder.GetParentDataItem (typeof(CProject), false) as CProject;
+			Variable v = (Variable)dataObject;
+				
+			label = v.Name;
 			
-			if (p == null) return;
-			
-			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
-			
-			// Classes
-			foreach (Class c in info.Classes)
-				if (c.Parent == null)
-					treeBuilder.AddChild (c);
-			
-			// Structures
-			foreach (Structure s in info.Structures)
-				if (s.Parent == null)
-					treeBuilder.AddChild (s);
-			
-			// Functions
-			foreach (Function f in info.Functions)
-				if (f.Parent == null)
-					treeBuilder.AddChild (f);
-			
-			// Variables
-			foreach (Variable v in info.Variables)
-				treeBuilder.AddChild (v);
+			switch (v.Access)
+			{
+			case AccessModifier.Public:
+				icon = Context.GetIcon (Stock.Field);
+				break;
+			case AccessModifier.Protected:
+				icon = Context.GetIcon (Stock.ProtectedField);
+				break;
+			case AccessModifier.Private:
+				icon = Context.GetIcon (Stock.PrivateField);
+				break;
+			}
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return true;
+			return false;
 		}
 		
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
-			return 1;
+			if (otherNode.DataItem is Function)
+				return 1;
+			else
+				return -1;
 		}
 	}
 }

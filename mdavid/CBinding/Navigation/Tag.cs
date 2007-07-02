@@ -47,7 +47,7 @@ namespace CBinding.Navigation
 		Structure = 's', // Done
 		Typedef = 't',
 		Union = 'u',
-		Variable = 'v',
+		Variable = 'v', // Done
 		ExternalVariable = 'x',
 		Unknown = ' '
 	}
