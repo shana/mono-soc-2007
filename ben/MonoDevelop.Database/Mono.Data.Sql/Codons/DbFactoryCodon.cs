@@ -31,7 +31,7 @@ using Mono.Addins;
 namespace Mono.Data.Sql
 {
 	[ExtensionNode ("DbFactory", "A database factory. The specified class must implement Mono.Data.Sql.IDbFactory.")]
-	internal class DbFactoryCodon : ExtensionNode
+	internal class DbFactoryCodon : TypeExtensionNode
 	{
 		public IDbFactory DbFactory {
 			get { return GetInstance () as IDbFactory; }

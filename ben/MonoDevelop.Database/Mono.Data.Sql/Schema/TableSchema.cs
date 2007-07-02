@@ -72,15 +72,6 @@ namespace Mono.Data.Sql
 			}
 		}
 		
-		public override string Definition {
-			get {
-				if (definition == null)
-					definition = provider.GetTableDefinition (this);
-				return definition;
-			}
-			set { base.Definition = value; }
-		}
-		
 		/// <summary>
 		/// Override ToString() to show the tables FullName
 		/// <remarks>

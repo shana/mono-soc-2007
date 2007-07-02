@@ -1,3 +1,15 @@
+2007-07-02  Ben Motmans <ben.motmans@gmail.com>
+
+	* Providers/ISchemaProvider.cs: 
+	* Providers/AbstractSchemaProvider.cs: 
+	removed table,view and procedure Get*Definition methods and integrated them in GetTable, GetView and GetProcedure
+
+	* Providers/IDbFactory.cs: 
+	Added Identifier property
+	Added GetDefaultConnectionSettings property
+	
+	* Schema/*: fixed small compilation issues
+
 2007-07-01  Ben Motmans <ben.motmans@gmail.com>
 
 	* Providers/IDbFactory.cs: Factory class to be implemented by each database provider

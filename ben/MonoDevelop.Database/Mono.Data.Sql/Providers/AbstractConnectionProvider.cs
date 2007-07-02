@@ -91,7 +91,7 @@ namespace Mono.Data.Sql
 				return connectionString.Substring (0, match.Index) + value + connectionString.Substring (match.Index + match.Length);
 			} else {
 				connectionString.TrimEnd ();
-				return String.Concat (connectionString, connectionString.EndsWith (';') ? "" : ";",
+				return String.Concat (connectionString, connectionString.EndsWith (";") ? "" : ";",
 					parameter, "=", quoteChar, value, quoteChar, ";");
 			}
 		}

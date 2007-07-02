@@ -32,7 +32,7 @@ namespace Mono.Data.Sql
 	public class ConnectionSettings
 	{
 		private string name;
-		private string providerName;
+		private string providerIdentifier;
 		
 		private string server;
 		private int port;
@@ -53,9 +53,9 @@ namespace Mono.Data.Sql
 			set { name = value; }
 		}
 		
-		public string ProviderName {
-			get { return providerName; }
-			set { providerName = value; }
+		public string ProviderIdentifier {
+			get { return providerIdentifier; }
+			set { providerIdentifier = value; }
 		}
 		
 		public string Database {

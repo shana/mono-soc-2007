@@ -62,11 +62,5 @@ namespace Mono.Data.Sql
 		ICollection<TriggerSchema> GetTriggers ();
 		
 		DataTypeSchema GetDataType (string name);
-		
-		string GetTableDefinition (TableSchema table);
-		
-		string GetViewDefinition (ViewSchema view);
-		
-		string GetProcedureDefinition (ProcedureSchema procedure);
 	}
 }
