@@ -31,6 +31,10 @@ namespace Mono.Data.Sql
 {
 	public class MySqlDbFactory : IDbFactory
 	{
+		public string Identifier {
+			get { return "ByteFX.Data.MySqlClient"; }
+		}
+		
 		public string Name {
 			get { return "MySql database"; }
 		}
@@ -43,6 +47,16 @@ namespace Mono.Data.Sql
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			return new MySqlSchemaProvider (connectionProvider);
+		}
+		
+		public ConnectionSettings GetDefaultConnectionSettings ()
+		{
+			ConnectionSettings settings = new ConnectionSettings ();
+			settings.ProviderIdentifier = Identifier;
+			settings.Server = "localhost";
+			settings.Port = 3306;
+			settings.Username = "root";
+			return settings;
 		}
 	}
 }
