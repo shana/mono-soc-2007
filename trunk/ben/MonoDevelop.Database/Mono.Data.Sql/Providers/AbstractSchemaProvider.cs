@@ -107,21 +107,6 @@ namespace Mono.Data.Sql
 			throw new NotImplementedException ();
 		}
 		
-		public virtual string GetTableDefinition (TableSchema table)
-		{
-			throw new NotImplementedException ();
-		}
-		
-		public virtual string GetViewDefinition (ViewSchema view)
-		{
-			throw new NotImplementedException ();
-		}
-		
-		public virtual string GetProcedureDefinition (ProcedureSchema procedure)
-		{
-			throw new NotImplementedException ();
-		}
-		
 		public virtual ICollection<RoleSchema> GetRoles ()
 		{
 			throw new NotImplementedException ();
@@ -139,6 +124,26 @@ namespace Mono.Data.Sql
 				throw new InvalidOperationException (String.Format ("Invalid Connection{0}", error == null ? "" : ": " + error));
 			
 			//TODO: if the connection is pooled, check if there is a connection available
+		}
+		
+		protected int GetCheckedInt32 (IDataReader reader, int field)
+		{
+			if (reader.IsDBNull (field))
+				return 0;
+
+			object o = reader.GetValue (field);
+			int res = 0;
+			if (int.TryParse (o.ToString (), out res))
+				return res;
+			return 0;
+		}
+			    
+		protected string GetCheckedString (IDataReader reader, int field)
+		{
+			if (reader.IsDBNull (field))
+				return null;
+
+			return reader.GetValue (field).ToString ();
 		}
 	}
 }

@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
@@ -37,8 +38,7 @@ namespace Mono.Data.Sql
 		public ConstraintSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
-		}
-		
+		}		
 		public ICollection<ColumnSchema> Columns {
 			get { return columns; }
 		}

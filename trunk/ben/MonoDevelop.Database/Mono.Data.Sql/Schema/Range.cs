@@ -32,7 +32,6 @@ namespace Mono.Data.Sql
 	{
 		private int min;
 		private int max;
-		private int? defaultValue = null;
 
 		public Range (int min, int max)
 		{
@@ -46,14 +45,8 @@ namespace Mono.Data.Sql
 			this.max = max;
 		}
 		
-		public Range (int min, int max, int defaultValue)
-			: this (min, max)
-		{
-			this.defaultValue = defaultValue;
-		}
-		
-		public Range (int defaultValue)
-			: this (defaultValue, defaultValue, defaultValue)
+		public Range (int constRange)
+			: this (constRange, constRange)
 		{
 		}
 		
@@ -65,15 +58,7 @@ namespace Mono.Data.Sql
 		public int Max {
 			get { return max; }
 		}
-		
-		public bool HasDefaultValue {
-			get { return defaultValue.HasValue; }
-		}
-		
-		public int DefaultValue {
-			get { return defaultValue.Value; }
-		}
-		
+
 		public bool IsInRange (int value)
 		{
 			return value >= min && value <= max;

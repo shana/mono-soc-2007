@@ -49,15 +49,6 @@ namespace Mono.Data.Sql
 			}
 		}
 		
-		public override string Definition {
-			get {
-				if (definition == null)
-					definition = provider.GetViewDefinition (this);
-				return definition;
-			}
-			set { base.Definition = value; }
-		}
-		
 		/// <summary>
 		/// Refresh the information associated with this view.
 		/// </summary>

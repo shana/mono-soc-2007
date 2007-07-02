@@ -31,7 +31,11 @@ namespace Mono.Data.Sql
 {
 	public interface IDbFactory
 	{
+		string Identifier { get; }
+		
 		string Name { get; }
+		
+		ConnectionSettings GetDefaultConnectionSettings ();
 		
 		IConnectionProvider CreateConnectionProvider (ConnectionSettings settings);
 		

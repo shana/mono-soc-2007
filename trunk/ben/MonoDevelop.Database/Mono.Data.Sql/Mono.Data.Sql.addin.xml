@@ -15,4 +15,8 @@
 		<Description>MonoDevelop database factory addins.</Description>
 		<ExtensionNode name="DbFactory" type="Mono.Data.Sql.DbFactoryCodon"/>
 	</ExtensionPoint>
+	
+	<Extension path = "/Workspace/Services">
+		<Class id = "DbFactoryService" class = "Mono.Data.Sql.DbFactoryService"/>
+	</Extension>
 </Addin>

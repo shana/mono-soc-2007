@@ -59,15 +59,6 @@ namespace Mono.Data.Sql
 			}
 		}
 		
-		public override string Definition {
-			get {
-				if (definition == null)
-					definition = provider.GetProcedureDefinition (this);
-				return definition;
-			}
-			set { base.Definition = value; }
-		}
-		
 		public LanguageSchema Language {
 			get {
 				throw new NotImplementedException();
