@@ -33,6 +33,9 @@ namespace System.Windows.Controls {
 		#region Public Constructors
 		public ProgressBar() {
 			Maximum = 100;
+			SizeChanged += delegate(object sender, SizeChangedEventArgs e) {
+				SetIndicatorPosition();
+			};
 		}
 		#endregion
 
