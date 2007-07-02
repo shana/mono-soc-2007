@@ -59,6 +59,7 @@
     <Compile Include="..\PresentationFramework\Mono.WindowsPresentationFoundation\Utility.cs">
       <Link>Mono.WindowsPresentationFoundation\Utility.cs</Link>
     </Compile>
+    <Compile Include="Microsoft.Windows.Themes\SystemDropShadowChrome.cs" />
     <Compile Include="Microsoft.Windows.Themes\ThemeColor.cs" />
     <Compile Include="Microsoft.Windows.Themes\ScrollGlyph.cs" />
     <Compile Include="Microsoft.Windows.Themes\PlatformCulture.cs" />
