@@ -1,5 +1,9 @@
 2007-07-02  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* CBinding.addin.xml: Fixed a typo.
+
+2007-07-02  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Navigation/Tag.cs, Navigation/MacroNodeBuilder.cs,
 	  Navigation/ProjectNodeBuilderExtension.cs,
 	  Navigation/TagDatabaseManager.cs,
