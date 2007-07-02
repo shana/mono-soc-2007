@@ -1,5 +1,5 @@
 //
-// GlobalsNodeBuilder.cs
+// MacroDefinitionsNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -40,33 +40,33 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class Globals
+	public class MacroDefinitions
 	{
-		private static Globals instance;
+		private static MacroDefinitions instance;
 		
-		private Globals ()
+		private MacroDefinitions ()
 		{
 		}
 		
-		public static Globals Instance {
+		public static MacroDefinitions Instance {
 			get {
 				if (instance == null)
-					instance = new Globals ();
+					instance = new MacroDefinitions ();
 				
 				return instance;
 			}
 		}
 	}
 	
-	public class GlobalsNodeBuilder : TypeNodeBuilder
+	public class MacroDefinitionsNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(Globals); }
+			get { return typeof(MacroDefinitions); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return "Globals";
+			return "Macro Definitions";
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder,
@@ -75,8 +75,8 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			label = "Globals";
-			icon = Context.GetIcon (Stock.Method);
+			label = "Macro Definitions";
+			icon = Context.GetIcon (Stock.Literal);
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
@@ -87,24 +87,8 @@ namespace CBinding.Navigation
 			
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
 			
-			// Classes
-			foreach (Class c in info.Classes)
-				if (c.Parent == null)
-					treeBuilder.AddChild (c);
-			
-			// Structures
-			foreach (Structure s in info.Structures)
-				if (s.Parent == null)
-					treeBuilder.AddChild (s);
-			
-			// Functions
-			foreach (Function f in info.Functions)
-				if (f.Parent == null)
-					treeBuilder.AddChild (f);
-			
-			// Variables
-			foreach (Variable v in info.Variables)
-				treeBuilder.AddChild (v);
+			foreach (Macro m in info.Macros)
+				treeBuilder.AddChild (m);
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -114,7 +98,7 @@ namespace CBinding.Navigation
 		
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
-			if (otherNode.DataItem is Structure)
+			if (otherNode.DataItem is Globals)
 				return 1;
 			else
 				return -1;

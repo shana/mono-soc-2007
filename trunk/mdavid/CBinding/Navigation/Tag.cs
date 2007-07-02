@@ -36,7 +36,7 @@ namespace CBinding.Navigation
 {
 	public enum TagKind {
 		Class = 'c', // Done
-		Macro = 'd',
+		Macro = 'd', // Done
 		Enumerator = 'e',
 		Function = 'f', // Done
 		Enumeration = 'g',

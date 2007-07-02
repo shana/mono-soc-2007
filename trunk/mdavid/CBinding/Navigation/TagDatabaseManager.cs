@@ -186,6 +186,7 @@ namespace CBinding.Navigation
 					case TagKind.Local:
 						break;
 					case TagKind.Macro:
+						info.Macros.Add (new Macro (tag, project));
 						break;
 					case TagKind.Member:
 						info.Members.Add (new Member (tag, project));
