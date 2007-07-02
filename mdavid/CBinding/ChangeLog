@@ -11,8 +11,8 @@
 	  Navigation/GlobalsNodeBuilder.cs, Navigation/Macro.cs,
 	  Navigation/MacroDefinitionsNodeBuilder.cs, Makefile.am,
 	  CBinding.addin.xml, CBinding.mdp: Added support for macro
-	  definitions to appear in the class pad. The will appear in a
-	  special node callde "Macro Definitions".
+	  definitions to appear in the class pad. They will appear in a
+	  special node called "Macro Definitions".
 
 2007-07-02  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
