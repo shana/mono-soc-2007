@@ -834,7 +834,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 										<Rectangle.Fill>
 											<MultiBinding>
 												<MultiBinding.Converter>
-													<theme:ProgressBarBrushConverter/>
+													<mono_theme:ProgressBarBrushConverter/>
 												</MultiBinding.Converter>
 												<Binding Path="Foreground"
                                                          RelativeSource="{RelativeSource TemplatedParent}"/>
@@ -885,7 +885,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 												<Rectangle.Fill>
 													<MultiBinding>
 														<MultiBinding.Converter>
-															<theme:ProgressBarBrushConverter/>
+															<mono_theme:ProgressBarBrushConverter/>
 														</MultiBinding.Converter>
 														<Binding Path="Foreground"
 																 RelativeSource="{RelativeSource TemplatedParent}"/>
