@@ -31,6 +31,10 @@ namespace Mono.Data.Sql
 {
 	public class SqliteDbFactory : IDbFactory
 	{
+		public string Identifier {
+			get { return "Mono.Data.SqliteClient"; }
+		}
+		
 		public string Name {
 			get { return "SQLite database"; }
 		}
@@ -43,6 +47,13 @@ namespace Mono.Data.Sql
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
 			return new SqliteSchemaProvider (connectionProvider);
+		}
+		
+		public ConnectionSettings GetDefaultConnectionSettings ()
+		{
+			ConnectionSettings settings = new ConnectionSettings ();
+			settings.ProviderIdentifier = Identifier;
+			return settings;
 		}
 	}
 }

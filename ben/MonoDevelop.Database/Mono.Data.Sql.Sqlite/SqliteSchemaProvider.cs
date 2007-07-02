@@ -35,9 +35,93 @@ namespace Mono.Data.Sql
 {
 	public class SqliteSchemaProvider : AbstractSchemaProvider
 	{
-		public SqliteSchemaProvider (SqliteConnectionProvider connectionProvider)
+		public SqliteSchemaProvider (IConnectionProvider connectionProvider)
 			: base (connectionProvider)
 		{
+		}
+		
+		public override bool SupportsSchemaType (Type type)
+		{
+			if (type == typeof(TableSchema))
+				return true;
+			if (type == typeof(ColumnSchema))
+				return true;
+			else if (type == typeof(UserSchema))
+				return false;
+			else
+				return false;
+		}
+
+		public override ICollection<TableSchema> GetTables ()
+		{
+			CheckConnectionState ();
+			List<TableSchema> tables = new List<TableSchema> ();
+			
+			IDbCommand command = connectionProvider.CreateCommand (
+				"select * from sqlite_master where type = 'table'"
+			);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ()) {
+						TableSchema table = new TableSchema (this);
+	
+						table.Name = r.GetString (1);
+						
+						tables.Add (table);
+					}
+					r.Close ();
+				}
+			}
+
+			return tables;
+		}
+		
+		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
+		{
+			CheckConnectionState ();
+			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			
+			IDbCommand command = connectionProvider.CreateCommand (
+				"PRAGMA table_info('" +  table.Name + "')"
+			);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ()) {
+						ColumnSchema column = new ColumnSchema (this);
+		
+						column.ColumnID = r.GetInt32 (0);
+						column.Name = r.GetString (1);
+						column.DataTypeName = r.GetString (2);
+						column.NotNull = r.IsDBNull (3);
+						column.Default = r.GetString (4);
+		
+						columns.Add (column);
+					}
+					r.Close ();
+				};
+			}
+
+			return columns;
+		}
+
+		public override DataTypeSchema GetDataType (string name)
+		{
+			if (name == null)
+				throw new ArgumentNullException ("name");
+			name = name.ToUpper ();
+
+			DataTypeSchema dts = new DataTypeSchema (this);
+			dts.Name = name;
+			switch (name) {
+					//TODO: IMPLEMENT
+				case "":
+					break;
+				default:
+					dts = null;
+					break;
+			}
+			
+			return dts;
 		}
 	}
 }
