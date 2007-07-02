@@ -43,6 +43,9 @@ FILES =  \
 	Navigation/GlobalsNodeBuilder.cs \
 	Navigation/LanguageItem.cs \
 	Navigation/LanguageItemCommandHandler.cs \
+	Navigation/Macro.cs \
+	Navigation/MacroDefinitionsNodeBuilder.cs \
+	Navigation/MacroNodeBuilder.cs \
 	Navigation/Member.cs \
 	Navigation/MemberNodeBuilder.cs \
 	Navigation/Namespace.cs \

@@ -1,5 +1,17 @@
 2007-07-02  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* Navigation/Tag.cs, Navigation/MacroNodeBuilder.cs,
+	  Navigation/ProjectNodeBuilderExtension.cs,
+	  Navigation/TagDatabaseManager.cs,
+	  Navigation/ProjectNavigationInformation.cs,
+	  Navigation/GlobalsNodeBuilder.cs, Navigation/Macro.cs,
+	  Navigation/MacroDefinitionsNodeBuilder.cs, Makefile.am,
+	  CBinding.addin.xml, CBinding.mdp: Added support for macro
+	  definitions to appear in the class pad. The will appear in a
+	  special node callde "Macro Definitions".
+
+2007-07-02  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Navigation/Tag.cs, Navigation/Variable.cs,
 	  Navigation/TagDatabaseManager.cs,
 	  Navigation/ProjectNavigationInformation.cs,

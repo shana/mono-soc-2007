@@ -45,6 +45,7 @@ namespace CBinding.Navigation
 		private List<Structure> structures = new List<Structure> ();
 		private List<Member> members = new List<Member> ();
 		private List<Variable> variables = new List<Variable> ();
+		private List<Macro> macros = new List<Macro> ();
 		
 		public ProjectNavigationInformation (Project project)
 		{
@@ -59,6 +60,7 @@ namespace CBinding.Navigation
 			structures.Clear ();
 			members.Clear ();
 			variables.Clear ();
+			macros.Clear ();
 		}
 		
 		public Project Project {
@@ -87,6 +89,10 @@ namespace CBinding.Navigation
 		
 		public List<Variable> Variables {
 			get { return variables; }
+		}
+		
+		public List<Macro> Macros {
+			get { return macros; }
 		}
 	}
 }

@@ -112,6 +112,8 @@
 		<NodeBuilder id = "CBinding.Navigation.StructureNodeBuilder" class = "CBinding.Navigation.StructureNodeBuilder"/>
 		<NodeBuilder id = "CBinding.Navigation.MemberNodeBuilder" class = "CBinding.Navigation.MemberNodeBuilder"/>
 		<NodeBuilder id = "CBinding.Navigation.VariableNodeBuilder" class = "CBinding.Navigation.VariableNodeBuilder"/>
+		<NodeBuilder id = "CBinding.Navigation.MacroDifinitionsNodeBuilder" class = "CBinding.Navigation.MacroDifinitionsNodeBuilder"/>
+		<NodeBuilder id = "CBinding.Navigation.MacroNodeBuilder" class = "CBinding.Navigation.MacroNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">
