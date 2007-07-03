@@ -75,6 +75,7 @@
       <Link>Test\System.Windows.Controls\Utility.cs</Link>
     </Compile>
     <Compile Include="Test\Microsoft.Windows.Themes\ButtonChromeTest.cs" />
+    <Compile Include="Test\Microsoft.Windows.Themes\SystemDropShadowChromeTest.cs" />
     <Compile Include="Test\Microsoft.Windows.Themes\ProgressBarBrushConverterTest.cs" />
     <Compile Include="Test\Microsoft.Windows.Themes\ScrollChromeTest.cs" />
     <Compile Include="Test\Microsoft.Windows.Themes\BulletChromeTest.cs" />

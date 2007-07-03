@@ -1,3 +1,8 @@
+2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ScrollChromeTest.cs: Added or expanded some tests.
+	* SystemDropShadowChromeTest.cs: Added.
+
 2007-07-02  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ProgressBarBrushConverterTest.cs: Added.
