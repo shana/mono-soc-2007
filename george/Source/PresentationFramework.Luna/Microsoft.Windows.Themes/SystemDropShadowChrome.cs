@@ -38,26 +38,35 @@ namespace Microsoft.Windows.Themes {
 			base.OnRender(drawingContext);
 			const double BorderSize = 5;
 			drawingContext.PushTransform(new TranslateTransform(0, 0));
-			RadialGradientBrush radial_gradient_brush;
-			radial_gradient_brush = new RadialGradientBrush(color, Colors.Transparent);
-			radial_gradient_brush.Center = new Point(1, 1);
-			radial_gradient_brush.RadiusX = 1;
-			radial_gradient_brush.RadiusX = 2;
-			drawingContext.DrawRectangle(radial_gradient_brush, null, new Rect(BorderSize, BorderSize, BorderSize, BorderSize));
-			drawingContext.DrawRectangle(brush, null, new Rect(2 * BorderSize, BorderSize, ActualHeight - 2 * BorderSize, BorderSize));
-			drawingContext.DrawRectangle(brush, null, new Rect(ActualWidth, BorderSize, BorderSize, BorderSize));
-			drawingContext.DrawRectangle(brush, null, new Rect(BorderSize, 2 * BorderSize, BorderSize, ActualHeight - 2 * BorderSize));
-			drawingContext.DrawRectangle(brush, null, new Rect(ActualWidth, 2 * BorderSize, BorderSize, ActualHeight - 2 * BorderSize));
-			drawingContext.DrawRectangle(brush, null, new Rect(BorderSize, ActualHeight, BorderSize, BorderSize));
-			drawingContext.DrawRectangle(brush, null, new Rect(2 * BorderSize, ActualHeight, ActualWidth - 2 * BorderSize, BorderSize));
-			drawingContext.DrawRectangle(brush, null, new Rect(ActualWidth, ActualHeight, BorderSize, BorderSize));
+			drawingContext.DrawRectangle(CreateRadialBrush(1, 1, 1, 1), null, new Rect(BorderSize, BorderSize, BorderSize, BorderSize));
+			drawingContext.DrawRectangle(CreateLinearBrush(0, 1, 0, 0), null, new Rect(2 * BorderSize, BorderSize, ActualHeight - 2 * BorderSize, BorderSize));
+			drawingContext.DrawRectangle(CreateRadialBrush(0, 1, 1, 1), null, new Rect(ActualWidth, BorderSize, BorderSize, BorderSize));
+			drawingContext.DrawRectangle(CreateLinearBrush(1, 0, 0, 0), null, new Rect(BorderSize, 2 * BorderSize, BorderSize, ActualHeight - 2 * BorderSize));
+			drawingContext.DrawRectangle(CreateLinearBrush(0, 0, 1, 0), null, new Rect(ActualWidth, 2 * BorderSize, BorderSize, ActualHeight - 2 * BorderSize));
+			drawingContext.DrawRectangle(CreateRadialBrush(1, 0, 1, 1), null, new Rect(BorderSize, ActualHeight, BorderSize, BorderSize));
+			drawingContext.DrawRectangle(CreateLinearBrush(0, 0, 0, 1), null, new Rect(2 * BorderSize, ActualHeight, ActualWidth - 2 * BorderSize, BorderSize));
+			drawingContext.DrawRectangle(CreateRadialBrush(0, 0, 1, 1), null, new Rect(ActualWidth, ActualHeight, BorderSize, BorderSize));
 			drawingContext.DrawRectangle(new SolidColorBrush(Color), null, new Rect(2 * BorderSize, 2 * BorderSize, ActualWidth - 2 * BorderSize, ActualHeight - 2 * BorderSize));
 			drawingContext.Pop();
 		}
 		#endregion
 
 		#region Private Methods
-		Brush CreateRadialBrush(double centerX, double centerY, double radiusX, double radiu
+		Brush CreateRadialBrush(double centerX, double centerY, double radiusX, double radiusY) {
+			RadialGradientBrush result = new RadialGradientBrush(Color, Colors.Transparent);
+			result.Center = new Point(centerX, centerY);
+			result.GradientOrigin = result.Center;
+			result.RadiusX = radiusX;
+			result.RadiusY = radiusY;
+			return result;
+		}
+
+		Brush CreateLinearBrush(double startPointX, double startPointY, double endPointX, double endPointY) {
+			LinearGradientBrush result = new LinearGradientBrush(Color, Colors.Transparent, 0);
+			result.StartPoint = new Point(startPointX, startPointY);
+			result.EndPoint = new Point(endPointX, endPointY);
+			return result;
+		}
 		#endregion
 	}
 }
