@@ -68,6 +68,7 @@ namespace Microsoft.Windows.Themes {
 			Assert.AreEqual(((RadialGradientBrush)((GeometryDrawing)g.Children[7]).Brush).RadiusY, 1, "10 radius y");
 
 			Assert.AreEqual(((RectangleGeometry)((GeometryDrawing)g.Children[8]).Geometry).Rect, new Rect(10, 10, 90, 90), "11");
+			Assert.AreEqual(((SolidColorBrush)((GeometryDrawing)g.Children[8]).Brush).Color, s.Color, "10 color");
 		}
 	}
 }
