@@ -1,5 +1,5 @@
 //
-// FunctionNodeBuilder.cs
+// Enumeration.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,39 +30,18 @@
 //
 
 using System;
-using System.IO;
 
-using Mono.Addins;
-
-using MonoDevelop.Ide.Gui;
-using MonoDevelop.Ide.Gui.Pads;
-using MonoDevelop.Core.Gui;
 using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class LanguageItemCommandHandler : NodeCommandHandler
+	public class Enumeration : LanguageItem
 	{
-		public override void ActivateItem ()
+		public Enumeration (Tag tag, Project project) : base (tag, project)
 		{
-			LanguageItem item = (LanguageItem)CurrentNode.DataItem;
-			
-			Document doc = IdeApp.Workbench.OpenDocument (item.File);
-			
-			int lineNum = 0;
-			string line;
-			StringReader reader = new StringReader (doc.TextEditor.Text);
-			
-			while ((line = reader.ReadLine ()) != null) {
-				lineNum++;
-				
-				if (line.Contains (item.Pattern)) {
-					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
-					break;
-				}
-			}
-			
-			reader.Close ();
+			if (GetNamespace (tag)) return;
+			if (GetClass (tag)) return;
+			if (GetStructure (tag)) return;
 		}
 	}
 }

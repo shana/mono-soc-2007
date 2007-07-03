@@ -38,6 +38,10 @@ FILES =  \
 	Gui/OutputOptionsPanel.cs \
 	Navigation/Class.cs \
 	Navigation/ClassNodeBuilder.cs \
+	Navigation/Enumeration.cs \
+	Navigation/EnumerationNodeBuilder.cs \
+	Navigation/Enumerator.cs \
+	Navigation/EnumeratorNodeBuilder.cs \
 	Navigation/Function.cs \
 	Navigation/FunctionNodeBuilder.cs \
 	Navigation/GlobalsNodeBuilder.cs \
