@@ -88,11 +88,18 @@ namespace Microsoft.Windows.Themes {
 			} else
 				padded = false;
 			double actual_width_without_padding = ActualWidth - Padding.Left - Padding.Right;
+			if (actual_width_without_padding <= 0)
+				return;
 			double actual_height_without_padding = ActualHeight - Padding.Top - Padding.Bottom;
+			if (actual_height_without_padding <= 0)
+				return;
 			if (HasOuterBorder) {
 				#region Shadow
+				double shadow_width = actual_width_without_padding - 1;
+				if (shadow_width <= 0)
+					return;
 				Brush shadow_brush = new LinearGradientBrush(Colors.White, Colors.LightBlue, 45);
-				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(1, 0, actual_width_without_padding - 1, actual_height_without_padding), 3, 3);
+				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(1, 0, shadow_width, actual_height_without_padding), 3, 3);
 				#endregion
 				#region White
 				if (actual_width_without_padding > 1 && actual_height_without_padding > 1)
