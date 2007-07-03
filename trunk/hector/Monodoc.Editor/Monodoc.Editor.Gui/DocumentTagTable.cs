@@ -8,28 +8,39 @@
 //
 
 using System;
+using System.Collections;
 using Gtk;
 using Pango;
 
 namespace Monodoc.Editor.Gui {
 public class DocumentTagTable : TextTagTable {
-	
-	private static DocumentTagTable instance;
-	
-	public static DocumentTagTable Instance {
-		get {
-			if (instance == null)
-				instance = new DocumentTagTable ();
-			return instance;
-		}
-	}
+	private Hashtable dynamic_tags;
 	
 	public DocumentTagTable () : base ()
 	{
-		InitCommonTags ();
+		dynamic_tags = new Hashtable ();
+		InitNormalTags ();
+		InitDynamicTags ();
 	}
 	
-	private void InitCommonTags ()
+	
+	public bool IsDynamic (string name) 
+	{
+		return dynamic_tags [name] != null;
+	}
+	
+	public DocumentTag CreateDynamicTag (string fullTagName)
+	{
+		DocumentTag tag;
+		tag = new DocumentTag (fullTagName);
+		tag.IsDynamic = true;
+		InitializeTag (tag);
+		Add (tag);
+		
+		return tag;
+	}
+	
+	private void InitNormalTags ()
 	{
 		DocumentTag tag;
 		
@@ -413,14 +424,6 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("example");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("example:Text");
-		tag.IsText = true;
-		Add (tag);
-		
 		tag = new DocumentTag ("permission");
 		tag.IsElement = true;
 		Add (tag);
@@ -493,214 +496,72 @@ public class DocumentTagTable : TextTagTable {
 		tag.IsText = true;
 		Add (tag);
 		
-		tag = new DocumentTag ("para");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("para:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("block");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("block:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("block:subset");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("block:type");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("block:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("list");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("list:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("list:type");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("listheader");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("item");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("term");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("term:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("description");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("description:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("ul");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("li");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("li:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("c");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("c:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("SPAN");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("SPAN:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("SPAN:version");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("code");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("code:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("code:lang");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("code:language");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("code:source");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("code:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("see");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("see:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("see:cref");
-		tag.IsAttribute = true;
-		tag.Foreground = "red";
-		Add (tag);
-		
-		tag = new DocumentTag ("see:langword");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("see:qualify");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("paramref");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("paramref:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("paramref:name");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("typeparamref");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("typeparamref:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("typeparamref:name");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("link");
-		tag.IsElement = true;
-		tag.Underline = Pango.Underline.Single;
-		tag.Foreground = "#204a87";
-		Add (tag);
-		
-		tag = new DocumentTag ("link:Attributes");
-		tag.Foreground = "purple";
-		tag.Underline = Pango.Underline.None;
-		Add (tag);
-		
-		tag = new DocumentTag ("link:location");
-		tag.IsAttribute = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("link:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("onequarter");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("sub");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("sub:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("sup");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("sup:Text");
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("subscript");
-		tag.IsElement = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("subscript:Attributes");
-		Add (tag);
-		
-		tag = new DocumentTag ("subscript:term");
-		tag.IsAttribute = true;
-		Add (tag);
-		
+
+//		tag = new DocumentTag ("ul");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("li");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("li:Text");
+//		tag.IsText = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("SPAN");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("SPAN:Attributes");
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("SPAN:version");
+//		tag.IsAttribute = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("typeparamref");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("typeparamref:Attributes");
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("typeparamref:name");
+//		tag.IsAttribute = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("onequarter");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("sub");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("sub:Text");
+//		tag.IsText = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("sup");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("sup:Text");
+//		tag.IsText = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("subscript");
+//		tag.IsElement = true;
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("subscript:Attributes");
+//		Add (tag);
+//		
+//		tag = new DocumentTag ("subscript:term");
+//		tag.IsAttribute = true;
+//		Add (tag);
+//		
 		tag = new DocumentTag ("padding-visible");
 		tag.IsSerializable = false;
 		tag.Invisible = false;
@@ -712,6 +573,146 @@ public class DocumentTagTable : TextTagTable {
 		tag.Invisible = true;
 		tag.IsText = true;
 		Add (tag);
+	}
+	
+	private void InitDynamicTags ()
+	{
+		dynamic_tags ["block"] = true;
+		dynamic_tags ["code"] = true;
+		dynamic_tags ["c"] = true;
+		dynamic_tags ["description"] = true;
+		dynamic_tags ["example"] = true;
+		dynamic_tags ["item"] = true;
+		dynamic_tags ["link"] = true;
+		dynamic_tags ["list"] = true;
+		dynamic_tags ["listheader"] = true;
+		dynamic_tags ["para"] = true;
+		dynamic_tags ["paramref"] = true;
+		dynamic_tags ["see"] = true;
+		dynamic_tags ["term"] = true;
+	}
+	
+	private void InitializeTag (DocumentTag tag)
+	{
+		string tagName = tag.Name.Split ('#')[0];
+		switch (tagName) {
+			case "block":
+				tag.IsElement = true;
+				break;
+			case "block:Attributes":
+				break;
+			case "block:subset":
+				tag.IsAttribute = true;
+				break;
+			case "block:type":
+				tag.IsAttribute = true;
+				break;
+			case "block:Text":
+				tag.IsText = true;
+				break;
+			case "c":
+				tag.IsElement = true;
+				break;
+			case "c:Text":
+				tag.IsText = true;
+				break;
+			case "code":
+				tag.IsElement = true;
+				break;
+			case "code:Attributes":
+				break;
+			case "code:lang":
+				tag.IsAttribute = true;
+				break;
+			case "code:language":
+				tag.IsAttribute = true;
+				break;
+			case "code:source":
+				tag.IsAttribute = true;
+				break;
+			case "code:Text":
+				tag.IsText = true;
+				break;
+			case "description":
+				tag.IsElement = true;
+				break;
+			case "description:Text":
+				tag.IsText = true;
+				break;
+			case "example":
+				tag.IsElement = true;
+				break;
+			case "example:Text":
+				tag.IsText = true;
+				break;
+			case "item":
+				tag.IsElement = true;
+				break;
+			case "link":
+				tag.IsElement = true;
+				tag.Underline = Pango.Underline.Single;
+				tag.Foreground = "#204a87";
+				break;
+			case "link:Attributes":
+				tag.Foreground = "purple";
+				tag.Underline = Pango.Underline.None;
+				break;
+			case "link:location":
+				tag.IsAttribute = true;
+				break;
+			case "link:Text":
+				tag.IsText = true;
+				break;
+			case "list":
+				tag.IsElement = true;
+				break;
+			case "list:Attributes":
+				break;
+			case "list:type":
+				tag.IsAttribute = true;
+				break;
+			case "listheader":
+				tag.IsElement = true;
+				break;
+			case "para":
+				tag.IsElement = true;
+				break;
+			case "para:Text":
+				tag.IsText = true;
+				break;
+			case "paramref":
+				tag.IsElement = true;
+				break;
+			case "paramref:Attributes":
+				break;
+			case "paramref:name":
+				tag.IsAttribute = true;
+				break;
+			case "see":
+				tag.IsElement = true;
+				break;
+			case "see:Attributes":
+				break;
+			case "see:cref":
+				tag.IsAttribute = true;
+				tag.Foreground = "red";
+				break;
+			case "see:langword":
+				tag.IsAttribute = true;
+				tag.Foreground = "yellow";
+				break;
+			case "see:qualify":
+				tag.IsAttribute = true;
+				break;
+			case "term":
+				tag.IsElement = true;
+				break;
+			case "term:Text":
+				tag.IsText = true;
+				break;
+			default:
+				break;
+		}
 	}
 }
 }
