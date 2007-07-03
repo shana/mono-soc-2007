@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Windows;
+using System.Windows.Media;
 #if Implementation
 using Microsoft.Windows.Themes;
 namespace Mono.Microsoft.Windows.Themes {
@@ -38,6 +39,16 @@ namespace Microsoft.Windows.Themes {
 			Assert.AreEqual(s.DesiredSize.Height, 0, "DesiredSize.Height");
 			Assert.AreEqual(s.Width, double.NaN, "Width");
 			Assert.AreEqual(s.Height, double.NaN, "Height");
+		}
+
+		[Test]
+		public void Drawing() {
+			ScrollChrome s = new ScrollChrome();
+			Window w = new Window();
+			w.Content = s;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(s);
+			Assert.AreEqual(drawing_group.Children.Count, 3, "1");
 		}
 	}
 }
