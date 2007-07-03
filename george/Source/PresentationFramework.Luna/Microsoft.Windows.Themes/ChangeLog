@@ -1,5 +1,9 @@
 2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* SystemDropShadowChrome.cs: Some work.
+
+2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ScrollChrome.cs: Finally noticed that the glyph matters.
 
 2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
