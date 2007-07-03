@@ -1,5 +1,9 @@
 2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* ScrollChrome.cs: Some fixes.
+
+2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ScrollChrome.cs: Added some checks.
 
 2007-07-02  George Giolfan  <georgegiolfan@yahoo.com>

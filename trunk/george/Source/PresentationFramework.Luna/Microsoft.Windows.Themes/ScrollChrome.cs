@@ -95,15 +95,12 @@ namespace Microsoft.Windows.Themes {
 				return;
 			if (HasOuterBorder) {
 				#region Shadow
-				double shadow_width = actual_width_without_padding - 1;
-				if (shadow_width <= 0)
-					return;
 				Brush shadow_brush = new LinearGradientBrush(Colors.White, Colors.LightBlue, 45);
-				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(1, 0, shadow_width, actual_height_without_padding), 3, 3);
+				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(0, 0, actual_width_without_padding, actual_height_without_padding), 3, 3);
 				#endregion
 				#region White
 				if (actual_width_without_padding > 1 && actual_height_without_padding > 1)
-					drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(1, 0, actual_width_without_padding - 2, actual_height_without_padding - 1), 3, 3);
+					drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(0, 0, actual_width_without_padding - 1, actual_height_without_padding - 1), 3, 3);
 				#endregion
 			}
 			#region Interior
@@ -126,7 +123,7 @@ namespace Microsoft.Windows.Themes {
 			} else
 				outer_border_offset = 0;
 			if (interior_width > 0 && interior_height > 0)
-				drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(outer_border_offset + 1.5, outer_border_offset + 0.5, interior_width - 1, interior_height), 1, 1);
+				drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(outer_border_offset + 0.5, outer_border_offset + 0.5, interior_width, interior_height), 1, 1);
 			#endregion
 			#region Glyph
 			ScrollGlyph glyph = GetScrollGlyph(this);
