@@ -51,3 +51,7 @@ http://devpinoy.org/blogs/smash/archive/2006/10/28/Forcing-a-visual-tree-repaint
 
 Not related to WPF (I needed to determine where an event handler was added to ItemContainerGenerator.StatusChanged in TabControl)
 http://msdn.microsoft.com/msdnmag/issues/05/06/EventHandling/
+
+Visual tree
+http://www.artfulbits.com/Technologies/WinFX/UIAutomation1.aspx
+http://www.blois.us/Snoop/
