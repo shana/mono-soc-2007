@@ -37,7 +37,8 @@ namespace Microsoft.Windows.Themes {
 		protected override void OnRender(DrawingContext drawingContext) {
 			base.OnRender(drawingContext);
 			const double BorderSize = 5;
-			drawingContext.PushTransform(new TranslateTransform(0, 0));
+			// I think the Microsoft implementation does a translate transform here (possibly 5, 5).
+			drawingContext.PushTransform(Transform.Identity);
 			drawingContext.DrawRectangle(CreateRadialBrush(1, 1, 1, 1), null, new Rect(BorderSize, BorderSize, BorderSize, BorderSize));
 			drawingContext.DrawRectangle(CreateLinearBrush(0, 1, 0, 0), null, new Rect(2 * BorderSize, BorderSize, ActualHeight - 2 * BorderSize, BorderSize));
 			drawingContext.DrawRectangle(CreateRadialBrush(0, 1, 1, 1), null, new Rect(ActualWidth, BorderSize, BorderSize, BorderSize));

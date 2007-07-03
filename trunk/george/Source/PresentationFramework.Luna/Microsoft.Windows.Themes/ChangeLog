@@ -1,5 +1,9 @@
 2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* SystemDropShadowChrome.cs: Improved a call.
+
+2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* SystemDropShadowChrome.cs: Finished previous work. (Does not support CornerRadius yet.)
 
 2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
