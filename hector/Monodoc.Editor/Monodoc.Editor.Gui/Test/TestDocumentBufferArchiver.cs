@@ -18,7 +18,6 @@ public class TestDocumentBufferArchiver {
 	
 	private string pathTest;
 	private string [] files;
-	private TextBuffer buffer;
 	
 	[SetUp()]
 	public void Initialize ()
@@ -28,9 +27,6 @@ public class TestDocumentBufferArchiver {
 		files = Directory.GetFiles (pathTest, "*.xml");
 		
 		Application.Init ();
-		
-		DocumentEditor editor = new DocumentEditor ();
-		buffer = editor.Buffer;
 	}
 	
 	[TearDown()]
@@ -45,6 +41,9 @@ public class TestDocumentBufferArchiver {
 		string originalText, newText, filename;
 		
 		foreach (string file in files) {
+			DocumentEditor editor = new DocumentEditor ();
+			TextBuffer buffer = editor.Buffer;
+			
 			MonoDocument document = new MonoDocument (file);
 			filename = Path.GetFileName (file);
 			originalText = document.Text;
@@ -53,7 +52,6 @@ public class TestDocumentBufferArchiver {
 			newText = DocumentBufferArchiver.Serialize (buffer);
 			
 			Assert.AreEqual (originalText, newText, "SR:" + filename);
-			buffer.Clear ();
 		}
 	}
 	
@@ -63,6 +61,9 @@ public class TestDocumentBufferArchiver {
 		string originalText, filename;
 		
 		foreach (string file in files) {
+			DocumentEditor editor = new DocumentEditor ();
+			TextBuffer buffer = editor.Buffer;
+			
 			MonoDocument document = new MonoDocument (file);
 			filename = Path.GetFileName (file);
 			originalText = document.Text;
@@ -74,7 +75,6 @@ public class TestDocumentBufferArchiver {
 			TimeSpan duration = stopTime - startTime;
 			
 			Assert.Less (duration.TotalMilliseconds, 500, "SP:" + filename);
-			buffer.Clear ();
 		}
 	}
 	
@@ -84,6 +84,9 @@ public class TestDocumentBufferArchiver {
 		string originalText, filename;
 		
 		foreach (string file in files) {
+			DocumentEditor editor = new DocumentEditor ();
+			TextBuffer buffer = editor.Buffer;
+			
 			MonoDocument document = new MonoDocument (file);
 			filename = Path.GetFileName (file);
 			originalText = document.Text;
@@ -94,7 +97,6 @@ public class TestDocumentBufferArchiver {
 			TimeSpan duration = stopTime - startTime;
 			
 			Assert.Less (duration.TotalMilliseconds, 100, "SP:" + filename);
-			buffer.Clear ();
 		}
 	}
 }

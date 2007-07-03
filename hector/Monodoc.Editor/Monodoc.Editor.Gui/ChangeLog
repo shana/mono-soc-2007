@@ -1,3 +1,24 @@
+2007-07-03  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/TestDocumentBufferArchiver.cs: Some changes to test units
+	  because the major changes in DocumentTagTable.
+	* DocumentBufferArchiver.cs: Modified Serialize so that it takes in
+	  account the suffix '#[0-9]*" that dynamics can have, modified
+	  deserialize to create dynamic tags if the element is dynamic. To
+	  minimize the creation of dynamic tags we try to reuse previous
+	  dynamic tags that maintains the priority if not we create another
+	  dynamic tag.
+	* DocumentTagTable.cs: Removed singleton pattern because we now need a
+	  table for each buffer because of the use of dynamic tags. I added
+	  IsDynamic method that check if a certain element is dynamic. Added
+	  CreateDynamicTag that expects the name of the new tag, initilizes
+	  its properties, adds it to the table and finally returns the
+	  created tag.
+	* DocumentBuffer.cs: Removed the call to Instance, now each buffer has
+	  one ad-hoc table because where are using dynamic tags.
+	* DocumentTag.cs: Added IsDynamic flag that indicates if the tag
+	  represents a dynamic element like para, block, SPAN, see, etc.
+
 2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs, DocumentTagTable.cs: Changed the ignore

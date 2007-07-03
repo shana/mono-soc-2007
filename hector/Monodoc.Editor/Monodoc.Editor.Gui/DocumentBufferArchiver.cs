@@ -77,13 +77,14 @@ public class DocumentBufferArchiver {
 					docTag = tag as DocumentTag;
 					
 					if (docTag.IsElement) {
-						xmlWriter.WriteStartElement (null, docTag.Name, null);
+						string elementName = docTag.Name.Split ('#')[0];
+						xmlWriter.WriteStartElement (null, elementName, null);
 						
 						#if DEBUG
-						Console.WriteLine ("Wrote Start Element: " + docTag.Name);
+						Console.WriteLine ("Wrote Start Element: " + elementName);
 						#endif
 					} else if (docTag.IsAttribute) {
-						attributeName = docTag.Name.Split (':')[1];
+						attributeName = docTag.Name.Split (':')[1].Split ('#')[0];
 						xmlWriter.WriteStartAttribute (null, attributeName, null);
 						
 						#if DEBUG
@@ -159,19 +160,40 @@ public class DocumentBufferArchiver {
 	public static void Deserialize (TextBuffer buffer, TextIter start,  XmlTextReader xmlReader)
 	{
 		int offset = start.Offset;
-		bool emptyElement;
+		int depth = 0;
+		bool emptyElement, isDynamic;
+		string dSuffix;
 		Stack stack = new Stack ();
 		TagStart tagStart;
 		TextIter insertAt, applyStart, applyEnd;
-		
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextTag tag;
+		int count = 1;
 		
 		while (xmlReader.Read ()) {
 			switch (xmlReader.NodeType) {
 				case XmlNodeType.Element:
 					emptyElement = xmlReader.IsEmptyElement;
+					isDynamic = tagTable.IsDynamic (xmlReader.Name);
+					dSuffix = String.Empty;
 					tagStart = new TagStart ();
 					tagStart.Start = offset;
-					tagStart.Tag = buffer.TagTable.Lookup (xmlReader.Name);
+					depth++;
+					
+					// Check first if element is dynamic, if true try to lookup a previous creation, if not we create it
+					// If false we lookup in the table.
+					if (isDynamic) {
+						dSuffix = '#' + depth.ToString ();
+					}
+					
+					tagStart.Tag = tagTable.Lookup (xmlReader.Name + dSuffix);
+					if (isDynamic && tagStart.Tag == null)
+						tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + dSuffix);
+					else if (isDynamic && tagStart.Tag != null &&  tagStart.Tag.Priority < ((TagStart) stack.Peek ()).Tag.Priority) {
+						tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + dSuffix + "." + count);
+						dSuffix += "." + count;
+						count++;
+					}
 					
 					#if DEBUG
 					try {
@@ -183,7 +205,7 @@ public class DocumentBufferArchiver {
 					#endif
 					
 					if (xmlReader.HasAttributes)
-						offset = DeserializeAttributes (buffer, offset, xmlReader);
+						offset = DeserializeAttributes (buffer, offset, xmlReader, dSuffix);
 					
 					if (emptyElement) {
 						if (tagStart.Start != offset) {
@@ -205,6 +227,7 @@ public class DocumentBufferArchiver {
 						insertAt = buffer.GetIterAtOffset (offset);
 						buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
 						offset += 1;
+						depth--;
 						
 						#if DEBUG
 						Console.WriteLine ("Empty Element: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
@@ -214,15 +237,28 @@ public class DocumentBufferArchiver {
 						stack.Push (tagStart);
 					break;
 				case XmlNodeType.Text:
+					string tagName;
 					tagStart = stack.Peek () as TagStart;
-					string tagName = tagStart.Tag.Name + ":Text";
+					
+					DocumentTag docTag = (DocumentTag) tagStart.Tag;
+					
+					// Check first if element text is dynamic, if true try to lookup a previous creation, if not we create it
+					// If false we lookup in the table.
+					if (docTag.IsDynamic)
+						tagName = docTag.Name.Split ('#')[0] + ":Text" + '#' + docTag.Name.Split ('#')[1];
+					else
+						tagName = docTag.Name + ":Text";
+					
+					tag = tagTable.Lookup (tagName);
+					if (tag == null)
+						tag = tagTable.CreateDynamicTag (tagName);
 					
 					#if DEBUG
 					Console.WriteLine ("Text: {0} Value: {1} Start: {2}", tagName, xmlReader.Value, offset);
 					#endif
 					
 					insertAt = buffer.GetIterAtOffset (offset);
-					buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
+					buffer.InsertWithTags (ref insertAt, xmlReader.Value, tag);
 					
 					offset += xmlReader.Value.Length;
 					break;
@@ -256,6 +292,7 @@ public class DocumentBufferArchiver {
 					insertAt = buffer.GetIterAtOffset (offset);
 					buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
 					offset += 1;
+					depth--;
 					break;
 				case XmlNodeType.Whitespace:
 					break;
@@ -271,11 +308,13 @@ public class DocumentBufferArchiver {
 		}
 	}
 	
-	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
 	{
 		int result = offset;
 		string tagName = xmlReader.Name;
 		TextIter applyStart, applyEnd;
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextTag tagAttributes;
 		
 		switch (tagName) {
 //			case "Type":
@@ -292,11 +331,16 @@ public class DocumentBufferArchiver {
 //				result = DeserializeAttributesNone (buffer, offset, xmlReader);
 //				break;
 			default:
-				result = DeserializeAttributesNone (buffer, offset, xmlReader);
+				result = DeserializeAttributesNone (buffer, offset, xmlReader, tagSuffix);
 				break;
 		}
 		
-		TextTag tagAttributes = buffer.TagTable.Lookup (tagName + ":Attributes");
+		tagName += ":Attributes" + tagSuffix;
+		tagAttributes = tagTable.Lookup (tagName);
+		
+		if (!tagSuffix.Equals (String.Empty) && tagAttributes == null)
+			tagAttributes = tagTable.CreateDynamicTag (tagName);
+		
 		applyStart = buffer.GetIterAtOffset (offset);
 		applyEnd = buffer.GetIterAtOffset (result);
 		buffer.ApplyTag (tagAttributes, applyStart, applyEnd);
@@ -308,54 +352,61 @@ public class DocumentBufferArchiver {
 		return result;
 	}
 	
-	private static int DeserializeAttributesNewline (TextBuffer buffer, int offset, XmlTextReader xmlReader)
-	{
-		string tagPrefix = xmlReader.Name + ":";
-		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		while (xmlReader.MoveToNextAttribute ()) {
-			string tagName = tagPrefix + xmlReader.Name;
-			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.InsertWithTagsByName (ref insertAt, "\n", "padding-visible");
-		}
-		
-		#if DEBUG
-		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
-		#endif
-		
-		return insertAt.Offset;
-	}
+//	private static int DeserializeAttributesNewline (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+//	{
+//		string tagPrefix = xmlReader.Name + ":";
+//		
+//		TextIter insertAt = buffer.GetIterAtOffset (offset);
+//		while (xmlReader.MoveToNextAttribute ()) {
+//			string tagName = tagPrefix + xmlReader.Name;
+//			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
+//			buffer.InsertWithTagsByName (ref insertAt, "\n", "padding-visible");
+//		}
+//		
+//		#if DEBUG
+//		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
+//		#endif
+//		
+//		return insertAt.Offset;
+//	}
+//	
+//	private static int DeserializeAttributesSpace (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+//	{
+//		string tagPrefix = xmlReader.Name + ":";
+//		
+//		TextIter insertAt = buffer.GetIterAtOffset (offset);
+//		while (xmlReader.MoveToNextAttribute ()) {
+//			string tagName = tagPrefix + xmlReader.Name;
+//			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
+//			buffer.InsertWithTagsByName (ref insertAt, " ", "padding-visible");
+//		}
+//		
+//		#if DEBUG
+//		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
+//		#endif
+//		
+//		return insertAt.Offset;
+//	}
 	
-	private static int DeserializeAttributesSpace (TextBuffer buffer, int offset, XmlTextReader xmlReader)
+	private static int DeserializeAttributesNone (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
 	{
+		string tagName = String.Empty;
 		string tagPrefix = xmlReader.Name + ":";
 		
 		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		while (xmlReader.MoveToNextAttribute ()) {
-			string tagName = tagPrefix + xmlReader.Name;
-			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-			buffer.InsertWithTagsByName (ref insertAt, " ", "padding-visible");
+			tagName = tagPrefix + xmlReader.Name + tagSuffix;
+			
+			TextTag tag = tagTable.Lookup (tagName);
+			if (tag == null)
+				tag = tagTable.CreateDynamicTag (tagName);
+			
+			buffer.InsertWithTags (ref insertAt, xmlReader.Value, tag);
 		}
 		
 		#if DEBUG
-		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
-		#endif
-		
-		return insertAt.Offset;
-	}
-	
-	private static int DeserializeAttributesNone (TextBuffer buffer, int offset, XmlTextReader xmlReader)
-	{
-		string tagPrefix = xmlReader.Name + ":";
-		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		while (xmlReader.MoveToNextAttribute ()) {
-			string tagName = tagPrefix + xmlReader.Name;
-			buffer.InsertWithTagsByName (ref insertAt, xmlReader.Value, tagName);
-		}
-		
-		#if DEBUG
-		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagPrefix + xmlReader.Name, offset, insertAt.Offset);
+		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
 		#endif
 		
 		return insertAt.Offset;

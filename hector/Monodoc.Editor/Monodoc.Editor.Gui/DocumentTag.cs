@@ -18,6 +18,7 @@ public class DocumentTag : TextTag {
 		IsElement = 0x0002,
 		IsAttribute = 0x0004,
 		IsText = 0x0008,
+		IsDynamic = 0x0010,
 		IsSerializableText = (IsSerializable | IsText)
 	};
 	
@@ -83,6 +84,19 @@ public class DocumentTag : TextTag {
 				flags |= TagFlags.IsText;
 			else
 				flags &= ~TagFlags.IsText;
+		}
+	}
+	
+	public bool IsDynamic {
+		get {
+			return (flags & TagFlags.IsDynamic) == TagFlags.IsDynamic;
+		}
+		
+		set {
+			if (value)
+				flags |= TagFlags.IsDynamic;
+			else
+				flags &= ~TagFlags.IsDynamic;
 		}
 	}
 	
