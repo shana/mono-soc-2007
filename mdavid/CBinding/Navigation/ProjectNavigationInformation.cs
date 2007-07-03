@@ -46,6 +46,8 @@ namespace CBinding.Navigation
 		private List<Member> members = new List<Member> ();
 		private List<Variable> variables = new List<Variable> ();
 		private List<Macro> macros = new List<Macro> ();
+		private List<Enumeration> enumerations = new List<Enumeration> ();
+		private List<Enumerator> enumerators = new List<Enumerator> ();
 		
 		public ProjectNavigationInformation (Project project)
 		{
@@ -61,6 +63,8 @@ namespace CBinding.Navigation
 			members.Clear ();
 			variables.Clear ();
 			macros.Clear ();
+			enumerations.Clear ();
+			enumerators.Clear ();
 		}
 		
 		public Project Project {
@@ -93,6 +97,14 @@ namespace CBinding.Navigation
 		
 		public List<Macro> Macros {
 			get { return macros; }
+		}
+		
+		public List<Enumeration> Enumerations {
+			get { return enumerations; }
+		}
+		
+		public List<Enumerator> Enumerators {
+			get { return enumerators; }
 		}
 	}
 }

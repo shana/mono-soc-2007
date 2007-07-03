@@ -68,7 +68,7 @@ namespace CBinding.Navigation
 			if (!Directory.Exists (tagsDir))
 				Directory.CreateDirectory (tagsDir);
 			
-			string ctags_options = "--C++-kinds=+p --fields=+a --language-force=C++ --excmd=pattern";
+			string ctags_options = "--C++-kinds=+p --fields=+a-f --language-force=C++ --excmd=pattern";
 			
 			StringBuilder args = new StringBuilder (ctags_options);
 			
@@ -175,8 +175,10 @@ namespace CBinding.Navigation
 						info.Classes.Add (new Class (tag, project));
 						break;
 					case TagKind.Enumeration:
+						info.Enumerations.Add (new Enumeration (tag, project));
 						break;
 					case TagKind.Enumerator:
+						info.Enumerators.Add (new Enumerator (tag, project));
 						break;
 					case TagKind.ExternalVariable:
 						break;

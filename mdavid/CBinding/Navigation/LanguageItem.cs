@@ -143,6 +143,33 @@ namespace CBinding.Navigation
 			return false;
 		}
 		
+		protected bool GetEnumeration (Tag tag)
+		{
+			string e;
+			
+			if ((e = tag.Enum) != null) {
+				int index = e.LastIndexOf (':');
+				
+				if (index > 0)
+					e = e.Substring (index + 1);
+				
+				try {
+					Tag enumTag = TagDatabaseManager.Instance.FindTag (
+					    e, TagKind.Enumeration, project);
+					
+					if (enumTag != null)
+						parent = new Enumeration (enumTag, project);
+					
+				} catch (IOException ex) {
+					IdeApp.Services.MessageService.ShowError (ex);
+				}
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
 		public Project Project {
 			get { return project; }
 		}

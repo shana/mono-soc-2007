@@ -97,6 +97,11 @@ namespace CBinding.Navigation
 				if (s.Parent == null)
 					treeBuilder.AddChild (s);
 			
+			// Enumerations
+			foreach (Enumeration e in info.Enumerations)
+				if (e.Parent == null)
+					treeBuilder.AddChild (e);
+			
 			// Functions
 			foreach (Function f in info.Functions)
 				if (f.Parent == null)

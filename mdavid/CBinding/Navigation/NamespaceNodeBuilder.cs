@@ -30,8 +30,6 @@
 //
 
 using System;
-using System.IO;
-using System.Text;
 
 using Mono.Addins;
 
@@ -99,6 +97,11 @@ namespace CBinding.Navigation
 			foreach (Structure s in info.Structures)
 				if (s.Parent != null && s.Parent.Equals (thisNamespace))
 					treeBuilder.AddChild (s);
+			
+			// Enumerations
+			foreach (Enumeration e in info.Enumerations)
+				if (e.Parent != null && e.Parent.Equals (thisNamespace))
+					treeBuilder.AddChild (e);
 			
 			// Functions
 			foreach (Function f in info.Functions)
