@@ -1,5 +1,11 @@
 2007-07-03  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Test/Examples/Convert.xml, Test/Examples/Widget.xml,
+	  Monodoc.Editor.Gui.mdp: Added Convert.xml and Widget.xml for use in
+	  unit tests.
+
+2007-07-03  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Test/TestDocumentBufferArchiver.cs: Some changes to test units
 	  because the major changes in DocumentTagTable.
 	* DocumentBufferArchiver.cs: Modified Serialize so that it takes in
