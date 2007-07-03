@@ -91,16 +91,26 @@ namespace Microsoft.Windows.Themes {
 			if (actual_width_without_padding <= 0)
 				return;
 			double actual_height_without_padding = ActualHeight - Padding.Top - Padding.Bottom;
+			ScrollGlyph glyph = GetScrollGlyph(this);
+			double glyph_one_pixel_horizontal_offset = glyph == ScrollGlyph.None ? 0 : 1;
 			if (actual_height_without_padding <= 0)
 				return;
 			if (HasOuterBorder) {
 				#region Shadow
+				double shadow_width = actual_width_without_padding - glyph_one_pixel_horizontal_offset;
+				if (shadow_width <= 0)
+					return;
 				Brush shadow_brush = new LinearGradientBrush(Colors.White, Colors.LightBlue, 45);
-				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(0, 0, actual_width_without_padding, actual_height_without_padding), 3, 3);
+				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(glyph_one_pixel_horizontal_offset, 0, shadow_width, actual_height_without_padding), 3, 3);
 				#endregion
 				#region White
-				if (actual_width_without_padding > 1 && actual_height_without_padding > 1)
-					drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(0, 0, actual_width_without_padding - 1, actual_height_without_padding - 1), 3, 3);
+				double white_width = actual_width_without_padding - 1 - glyph_one_pixel_horizontal_offset;
+				if (white_width <= 0)
+					return;
+				double white_height = actual_height_without_padding - 1;
+				if (white_height <= 0)
+					return;
+				drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(glyph_one_pixel_horizontal_offset, 0, white_width, white_height), 3, 3);
 				#endregion
 			}
 			#region Interior
@@ -122,11 +132,12 @@ namespace Microsoft.Windows.Themes {
 				outer_border_offset = 1;
 			} else
 				outer_border_offset = 0;
-			if (interior_width > 0 && interior_height > 0)
-				drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(outer_border_offset + 0.5, outer_border_offset + 0.5, interior_width, interior_height), 1, 1);
+			interior_width -= glyph_one_pixel_horizontal_offset;
+			if (interior_width <= 0 || interior_height <= 0)
+				return;
+			drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(outer_border_offset + 0.5 + glyph_one_pixel_horizontal_offset, outer_border_offset + 0.5, interior_width, interior_height), 1, 1);
 			#endregion
 			#region Glyph
-			ScrollGlyph glyph = GetScrollGlyph(this);
 			const double BorderSize = 4;
 			switch (glyph) {
 				case ScrollGlyph.UpArrow:
