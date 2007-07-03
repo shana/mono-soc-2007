@@ -147,12 +147,12 @@ namespace Test.Rules.Smells {
 		}
 		
 		public void IfConditionAndRemove () {
-			if (myList.Contains ("MoreFoo"))
+			if (myList.Contains ("MoreFoo") & myList.Contains ("MoreBar"))
 				myList.Remove ("MoreFoo");
 		}
 		
 		public void IfConditionAndRemoveReplied () {
-			if (myList.Contains ("MoreFoo"))
+			if (myList.Contains ("MoreFoo") & myList.Contains ("MoreFoo"))
 				myList.Remove ("MoreFoo");
 		}
 	}
@@ -184,8 +184,10 @@ namespace Test.Rules.Smells {
 		
 		private void DumpMessageCollection (MessageCollection messageCollection)
 		{
-			foreach (Message message in messageCollection) {
-				Console.WriteLine ("{0} - {1}", message.Type, message.ToString ());
+			if (messageCollection != null) {
+				foreach (Message message in messageCollection) {
+					Console.WriteLine ("{0} - {1}", message.Type, message.ToString ());
+				}
 			}
 		}
 		
@@ -194,7 +196,7 @@ namespace Test.Rules.Smells {
 		{
 			type = assembly.MainModule.Types ["Test.Rules.Smells.ClassWithoutCodeDuplicated"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
-			//DumpMessageCollection (messageCollection);
+			DumpMessageCollection (messageCollection);
 			Assert.IsNull (messageCollection);
 		}
 		
