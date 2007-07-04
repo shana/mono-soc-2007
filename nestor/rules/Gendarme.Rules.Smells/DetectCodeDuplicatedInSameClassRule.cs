@@ -34,191 +34,174 @@ using System.Text;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Gendarme.Framework;
-using Cecil.FlowAnalysis;
-using Cecil.FlowAnalysis.ControlFlow;
 
 namespace Gendarme.Rules.Smells {
-	//TODO: Ask if I can create new files that contains classes for this rule.
-/*
-	class InstructionFillerVisitor : BaseCodeVisitor {
-		private IList instructionPairContainer;
-		private InstructionPair currentPair;
-		
-		public	InstructionFillerVisitor () : base () {
-		}
-		
+	
+	class ExpressionFiller : BaseCodeVisitor {
+                private IList expressionContainer;
+                private Expression currentExpression;
+                
+	
+		public ExpressionFiller () : base () {}
+	
 		public override void VisitMethodBody (MethodBody methodBody) 
 		{
-			instructionPairContainer = new ArrayList ();
-			currentPair = new InstructionPair ();
+                        expressionContainer = new ArrayList ();
+                        currentExpression = null;
 		}
 		
-		private bool IsAcceptable (Instruction instruction) 
-		{
-			return instruction.OpCode.FlowControl == FlowControl.Call 
-				|| IsABranchInstruction (instruction);
-		}
-		
-		private bool IsABranchInstruction (Instruction instruction) 
-		{
-			return instruction.OpCode.FlowControl == FlowControl.Branch ||
-				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
-		}
-		
-		private void FillInstructionPair (Instruction instruction) 
-		{
-			if (currentPair.First != null) {
-				currentPair.Second = instruction;
-				instructionPairContainer.Add (currentPair);
-				currentPair = new InstructionPair ();
-				currentPair.First = instruction;
-			}
-			else {
-				currentPair.First = instruction;
-			}
-		}
-		
-		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
-		{
-			foreach (Instruction instruction in instructionCollection) {
-				if (IsAcceptable (instruction)) {
-					// I will anticipate to branches and put the instructions 
-					// before and after the call.  In IL are placed after the call.
-					// This is useful for detect FlowControl
-					// IL_000b:  callvirt instance bool class [mscorlib]System.Collections.IList::Contains(object)
-        			// IL_0010:  brfalse IL_0025
-					if (IsABranchInstruction (instruction.Next)) 
-						FillInstructionPair (instruction.Next);
-					FillInstructionPair (instruction);
-				}
-			}
-		}
+                private bool IsAcceptable (Instruction instruction) {
+                        return instruction.OpCode.FlowControl == FlowControl.Call | instruction.OpCode.FlowControl == FlowControl.Branch | instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
+                }
 
-		public IList InstructionPairContainer {
-			get {
-				return instructionPairContainer;
-			}
-		}
+		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
+                {
+                        foreach (Instruction instruction in instructionCollection) {
+                                if (instruction.OpCode.Name == "ldarg.0" | instruction.OpCode.FlowControl == FlowControl.Branch) {
+                                        currentExpression = new Expression ();
+                                        expressionContainer.Add (currentExpression);
+                                }
+
+                                if (IsAcceptable (instruction)) {
+                                        if (currentExpression == null) {
+                                                currentExpression = new Expression ();
+                                                expressionContainer.Add (currentExpression);
+                                        }
+                                        currentExpression.Add (instruction);
+                                }
+                        }
+                }
+
+                public ICollection Expressions {
+                        get {
+                                return expressionContainer;
+                        }
+                }
 	}
+
+        class Expression : CollectionBase {
+
+                public Expression () : base () {}
+
+                public void Add (Instruction instruction) 
+                {
+                        InnerList.Add (instruction);
+                }
+
+                public Instruction this[int index] {
+                        get {
+                                return (Instruction) InnerList[index];
+                        }
+                }
+                
+                protected override void OnValidate (object value) 
+                {
+                        if (!(value is Instruction))
+                                throw new ArgumentException ("You should use this class with Mono.Cecil.Cil.Instruction", "value");
+                }
+
+                public override bool Equals (object value) 
+                {
+                        if (!(value is Expression))
+                                throw new ArgumentException ("The value argument should be an Expression", "value");
+                        
+                        Expression targetExpression = (Expression) value;
+                        
+                        if (Count != targetExpression.Count) {
+                                return false;
+                        }
+                        else {
+                                bool equality = true;
+                                 for (int index = 0; index < Count; index++) {
+                                        Instruction instruction = this[index];
+                                        Instruction targetInstruction = targetExpression[index];
+                                        
+                                        if (CheckEqualityForOpCodes (instruction, targetInstruction)) {
+                                                if (instruction.OpCode.FlowControl == FlowControl.Call) {
+                                                        equality = equality & (instruction.Operand == targetInstruction.Operand);
+                                                }
+                                        }
+                                        else
+                                                return false;;
+                                                
+                                }
+                                return equality;
+                        }
+                }
+
+                private bool CheckEqualityForOpCodes (Instruction currentInstruction, Instruction targetInstruction) 
+                {
+                        if (currentInstruction.OpCode.Name == targetInstruction.OpCode.Name)
+                                return true;
+                        else {
+                                if (currentInstruction.OpCode.Name == "call" & targetInstruction.OpCode.Name == "callVirt")
+                                        return true;
+                                else if (currentInstruction.OpCode.Name == "callvirt" & targetInstruction.OpCode.Name == "call")
+                                        return true;
+                                else
+                                        return false;
+                        }
+                }
+
+                public override int GetHashCode () 
+                {
+                        return base.GetHashCode ();
+                }
+
+                public override string ToString () 
+                {
+                        StringBuilder stringBuilder = new StringBuilder ();
+                        stringBuilder.Append ("\tFor the expression:\n");
+                        foreach (Instruction instruction in InnerList) {
+                                stringBuilder.Append (String.Format ("\t\tInstruction: {0} {1}\n", instruction.OpCode.Name, instruction.Operand));
+                        }
+                        return stringBuilder.ToString ();
+                }
+
+        }
 	
-	class InstructionPair {
-		private Instruction firstInstruction;
-		private Instruction secondInstruction;
-		
-		public InstructionPair () {}
-		
-		public InstructionPair (Instruction firstInstruction, Instruction secondInstruction) 
-		{
-			this.firstInstruction = firstInstruction;
-			this.secondInstruction = secondInstruction;
-		}
-		
-		public Instruction First {
-			get {
-				return firstInstruction;
-			}
-			set {
-				firstInstruction = value;
-			}
-		}
-		
-		public Instruction Second {
-			get {
-				return secondInstruction;
-			}
-			set {
-				secondInstruction = value;
-			}
-		}
-		
-		private bool IsABranchInstruction (Instruction instruction) 
-		{
-			return instruction.OpCode.FlowControl == FlowControl.Branch ||
-				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
-		}
-		
-		public override bool Equals (object obj) 
-		{
-			if (obj is InstructionPair) {
-				InstructionPair targetInstructionPair = (InstructionPair) obj;
-				
-				// When detect a branch, only check the OpCode.
-				if (IsABranchInstruction (firstInstruction) && 
-					IsABranchInstruction (targetInstructionPair.First)) {
-					return firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
-						secondInstruction.OpCode == targetInstructionPair.Second.OpCode &&
-						secondInstruction.Operand == targetInstructionPair.Second.Operand;
-				}
-				
-				if (IsABranchInstruction (secondInstruction) && 
-					IsABranchInstruction (targetInstructionPair.Second)) {
-					
-					return firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
-						firstInstruction.Operand == targetInstructionPair.First.Operand &&
-						secondInstruction.OpCode == targetInstructionPair.Second.OpCode;
-				}
-				// This is the normal case.
-				return  firstInstruction.OpCode == targetInstructionPair.First.OpCode &&
-						firstInstruction.Operand == targetInstructionPair.First.Operand &&
-						secondInstruction.OpCode == targetInstructionPair.Second.OpCode &&
-						secondInstruction.Operand == targetInstructionPair.Second.Operand
-						;
-			}
-			return false;
-		}
-		
-		public override int GetHashCode () 
-		{
-			return base.GetHashCode ();
-		}
-		
-		public override string ToString () 
-		{
-			StringBuilder stringBuilder = new StringBuilder ();
-			stringBuilder.Append ("Instruction Pair:" + Environment.NewLine);
-			stringBuilder.Append (String.Format ("\tFirst: {0} {1}{2}", firstInstruction != null? firstInstruction.OpCode.Name : "null", firstInstruction != null? firstInstruction.Operand : "null", Environment.NewLine));
-			stringBuilder.Append (String.Format ("\tSecond: {0} {1}{2}", secondInstruction != null? secondInstruction.OpCode.Name : "null", secondInstruction != null ? secondInstruction.Operand : "null", Environment.NewLine));
-			return stringBuilder.ToString ();
-		}
-	}
-	*/
 	
 	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
 		private StringCollection checkedMethods;
 
-/*
-		private void DumpInstructionPairContainer (IList instructionPairContainer) 
-		{
-			Console.WriteLine ("Dumping Instruction Pair container");
-			foreach (InstructionPair instructionPair in instructionPairContainer) {
-				Console.WriteLine (instructionPair);
-			}
-		}
-		
-		private bool ExistsRepliedInstructions (IList currentInstructionSet, IList targetInstructionSet) 
-		{
-			bool existsRepliedInstructions = false;
-			
-			foreach (InstructionPair currentInstructionPair in currentInstructionSet) {
-				foreach (InstructionPair targetInstructionPair in targetInstructionSet) {
-					//If exists replied instructions I don't need check the following.
-					existsRepliedInstructions = existsRepliedInstructions || currentInstructionPair.Equals (targetInstructionPair);
-				}
-			}
-			return existsRepliedInstructions;
-		}
-*/	
+
+                //TODO: 2 Equals -> error !
+                private bool ExistsExpressionsReplied (ICollection currentExpressions, ICollection targetExpressions) {
+                        IEnumerator currentEnumerator = currentExpressions.GetEnumerator ();
+                        IEnumerator targetEnumerator = targetExpressions.GetEnumerator ();
+                        bool equality = false;
+
+                        while (currentEnumerator.MoveNext () & targetEnumerator.MoveNext ()) {
+                                Expression currentExpression = (Expression) currentEnumerator.Current;
+                                Expression targetExpression = (Expression) targetEnumerator.Current;
+
+                                if (equality & currentExpression.Equals (targetExpression))
+                                        return true;
+                                else {
+                                        equality = currentExpression.Equals (targetExpression);
+                                }
+                        }
+                        return false;
+                }
+
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) 
 		{
 			// When check a method, it should have body.  Also I don't check 
 			// a method with itself.
 			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
-				IControlFlowGraph currentControlFlowGraph = FlowGraphFactory.CreateControlFlowGraph (currentMethod);
-				IControlFlowGraph targetControlFlowGraph = FlowGraphFactory.CreateControlFlowGraph (targetMethod);
-				
-				Console.WriteLine ("Checking {0} against {1}", currentMethod.Name, targetMethod.Name);
+                                ExpressionFiller expressionFiller = new ExpressionFiller ();
+				currentMethod.Body.Accept (expressionFiller);
+                                ICollection currentExpressions = expressionFiller.Expressions;
 
-				//return ExistsRepliedInstructions (currentInstructionPairContainer, targetInstructionPairContainer);
+                                targetMethod.Body.Accept (expressionFiller);
+                                ICollection targetExpressions = expressionFiller.Expressions;
+                                        
+                                Console.WriteLine ("Method: {0}", currentMethod.Name);
+                                foreach (Expression expression in currentExpressions) {
+                                        Console.WriteLine (expression);
+                                }
+                                
+                                return ExistsExpressionsReplied (currentExpressions, targetExpressions);
 			}
 			return false;
 		}
