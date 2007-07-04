@@ -48,6 +48,8 @@ namespace CBinding.Navigation
 		private List<Macro> macros = new List<Macro> ();
 		private List<Enumeration> enumerations = new List<Enumeration> ();
 		private List<Enumerator> enumerators = new List<Enumerator> ();
+		private List<Union> unions = new List<Union> ();
+		private List<Typedef> typedefs = new List<Typedef> ();
 		
 		public ProjectNavigationInformation (Project project)
 		{
@@ -65,6 +67,8 @@ namespace CBinding.Navigation
 			macros.Clear ();
 			enumerations.Clear ();
 			enumerators.Clear ();
+			unions.Clear ();
+			typedefs.Clear ();
 		}
 		
 		public Project Project {
@@ -105,6 +109,14 @@ namespace CBinding.Navigation
 		
 		public List<Enumerator> Enumerators {
 			get { return enumerators; }
+		}
+		
+		public List<Union> Unions {
+			get { return unions; } 
+		}
+		
+		public List<Typedef> Typedefs {
+			get { return typedefs; }
 		}
 	}
 }

@@ -61,6 +61,10 @@ FILES =  \
 	Navigation/StructureNodeBuilder.cs \
 	Navigation/Tag.cs \
 	Navigation/TagDatabaseManager.cs \
+	Navigation/Typedef.cs \
+	Navigation/TypedefNodeBuilder.cs \
+	Navigation/Union.cs \
+	Navigation/UnionNodeBuilder.cs \
 	Navigation/Variable.cs \
 	Navigation/VariableNodeBuilder.cs \
 	Project/CCompilationParameters.cs \
@@ -77,10 +81,14 @@ FILES =  \
 	ProjectPad/ProjectReferencesExtension.cs
 
 RES =  \
+	gtk-gui/gui.stetic \
 	icons/C.File.Empty \
 	icons/C.Project.Empty \
 	icons/C.Source.File.Empty \
 	icons/Cpp.Project.Empty \
+	icons/Icons.16x16.PrivateUnion \
+	icons/Icons.16x16.ProtectedUnion \
+	icons/Icons.16x16.Union \
 	templates/EmptyCFile.xft.xml \
 	templates/EmptyCppProject.xpt.xml \
 	templates/EmptyCProject.xpt.xml

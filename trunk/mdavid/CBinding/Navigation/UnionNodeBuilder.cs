@@ -1,5 +1,5 @@
 //
-// NamespaceNodeBuilder.cs
+// UnionNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,6 +30,8 @@
 //
 
 using System;
+using System.IO;
+using System.Reflection;
 
 using Mono.Addins;
 
@@ -40,22 +42,19 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class NamespaceNodeBuilder : TypeNodeBuilder
+	public class UnionNodeBuilder : TypeNodeBuilder
 	{
 		public override Type NodeDataType {
-			get { return typeof(Namespace); }
+			get { return typeof(Union); }
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof (LanguageItemCommandHandler); }
+			get { return typeof(LanguageItemCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			if (thisNode.Options["NestedNamespaces"])
-				return ((Namespace)dataObject).Name;
-			else
-				return ((Namespace)dataObject).FullName;
+			return ((Union)dataObject).Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder,
@@ -64,12 +63,22 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf icon,
 		                                ref Gdk.Pixbuf closedIcon)
 		{
-			if (treeBuilder.Options["NestedNamespaces"])
-				label = ((Namespace)dataObject).Name;
-			else
-				label = ((Namespace)dataObject).FullName;
+			Union u = (Union)dataObject;
+				
+			label = u.Name;
 			
-			icon = Context.GetIcon (Stock.NameSpace);
+			switch (u.Access)
+			{
+			case AccessModifier.Public:
+				icon = new Gdk.Pixbuf (Assembly.GetExecutingAssembly (), "Icons.16x16.Union");
+				break;
+			case AccessModifier.Protected:
+				icon = new Gdk.Pixbuf (Assembly.GetExecutingAssembly (), "Icons.16x16.ProtectedUnion");
+				break;
+			case AccessModifier.Private:
+				icon = new Gdk.Pixbuf (Assembly.GetExecutingAssembly (), "Icons.16x16.PrivateUnion");
+				break;
+			}
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
@@ -80,43 +89,42 @@ namespace CBinding.Navigation
 			
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
 			
-			Namespace thisNamespace = ((Namespace)dataObject);
-			
-			// Namespaces
-			if (treeBuilder.Options["NestedNamespaces"])
-				foreach (Namespace n in info.Namespaces)
-					if (n.Parent != null && n.Parent.Equals (thisNamespace))
-						treeBuilder.AddChild (n);
+			Union thisUnion = (Union)dataObject;
 			
 			// Classes
 			foreach (Class c in info.Classes)
-				if (c.Parent != null && c.Parent.Equals (thisNamespace))
+				if (c.Parent != null && c.Parent.Equals (thisUnion))
 					treeBuilder.AddChild (c);
 			
 			// Structures
 			foreach (Structure s in info.Structures)
-				if (s.Parent != null && s.Parent.Equals (thisNamespace))
+				if (s.Parent != null && s.Parent.Equals (thisUnion))
 					treeBuilder.AddChild (s);
 			
 			// Unions
 			foreach (Union u in info.Unions)
-				if (u.Parent != null && u.Parent.Equals (thisNamespace))
+				if (u.Parent != null && u.Parent.Equals (thisUnion))
 					treeBuilder.AddChild (u);
 			
 			// Enumerations
 			foreach (Enumeration e in info.Enumerations)
-				if (e.Parent != null && e.Parent.Equals (thisNamespace))
+				if (e.Parent != null && e.Parent.Equals (thisUnion))
 					treeBuilder.AddChild (e);
 			
 			// Typedefs
 			foreach (Typedef t in info.Typedefs)
-				if (t.Parent != null && t.Parent.Equals (thisNamespace))
+				if (t.Parent != null && t.Parent.Equals (thisUnion))
 					treeBuilder.AddChild (t);
 			
 			// Functions
 			foreach (Function f in info.Functions)
-				if (f.Parent != null && f.Parent.Equals (thisNamespace))
+				if (f.Parent != null && f.Parent.Equals (thisUnion))
 					treeBuilder.AddChild (f);
+			
+			// Members
+			foreach (Member m in info.Members)
+				if (m.Parent != null && m.Parent.Equals (thisUnion))
+					treeBuilder.AddChild (m);
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -126,7 +134,10 @@ namespace CBinding.Navigation
 		
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
-			return -1;
+			if (otherNode.DataItem is Structure)
+				return 1;
+			else
+				return -1;
 		}
 	}
 }

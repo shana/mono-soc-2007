@@ -1,5 +1,5 @@
 //
-// Enumeration.cs
+// TypedefNodeBuilder.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,19 +30,55 @@
 //
 
 using System;
+using System.IO;
 
+using Mono.Addins;
+
+using MonoDevelop.Ide.Gui;
+using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Core.Gui;
 using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class Enumeration : LanguageItem
+	public class TypedefNodeBuilder : TypeNodeBuilder
 	{
-		public Enumeration (Tag tag, Project project) : base (tag, project)
+		public override Type NodeDataType {
+			get { return typeof(Typedef); }
+		}
+		
+		public override Type CommandHandlerType {
+			get { return typeof(LanguageItemCommandHandler); }
+		}
+		
+		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			if (GetNamespace (tag)) return;
-			if (GetClass (tag)) return;
-			if (GetStructure (tag)) return;
-			if (GetUnion (tag)) return;
+			return ((Typedef)dataObject).Name;
+		}
+		
+		public override void BuildNode (ITreeBuilder treeBuilder,
+		                                object dataObject,
+		                                ref string label,
+		                                ref Gdk.Pixbuf icon,
+		                                ref Gdk.Pixbuf closedIcon)
+		{
+			Typedef t = (Typedef)dataObject;
+				
+			label = t.Name;
+			icon = Context.GetIcon (Stock.Interface);
+		}
+		
+		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
+		{
+			return false;
+		}
+		
+		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
+		{
+			if (otherNode.DataItem is Enumeration)
+				return 1;
+			else
+				return -1;
 		}
 	}
 }

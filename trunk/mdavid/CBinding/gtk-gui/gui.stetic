@@ -3,9 +3,6 @@
   <configuration>
     <images-root-path>../</images-root-path>
   </configuration>
-  <import>
-    <widget-library name="../bin/Debug/CBinding.dll" internal="true" />
-  </import>
   <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="505 431">
     <property name="MemberName" />
     <child>

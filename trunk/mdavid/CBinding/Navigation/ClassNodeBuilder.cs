@@ -94,15 +94,25 @@ namespace CBinding.Navigation
 				if (c.Parent != null && c.Parent.Equals (thisClass))
 					treeBuilder.AddChild (c);
 			
-			// Structure
+			// Structures
 			foreach (Structure s in info.Structures)
 				if (s.Parent != null && s.Parent.Equals (thisClass))
 					treeBuilder.AddChild (s);
+			
+			// Unions
+			foreach (Union u in info.Unions)
+				if (u.Parent != null && u.Parent.Equals (thisClass))
+					treeBuilder.AddChild (u);
 			
 			// Enumerations
 			foreach (Enumeration e in info.Enumerations)
 				if (e.Parent != null && e.Parent.Equals (thisClass))
 					treeBuilder.AddChild (e);
+			
+			// Typedefs
+			foreach (Typedef t in info.Typedefs)
+				if (t.Parent != null && t.Parent.Equals (thisClass))
+					treeBuilder.AddChild (t);
 			
 			// Functions
 			foreach (Function f in info.Functions)

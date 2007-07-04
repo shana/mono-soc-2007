@@ -46,7 +46,7 @@ namespace CBinding.Navigation
 		Prototype = 'p',
 		Structure = 's', // Done
 		Typedef = 't',
-		Union = 'u',
+		Union = 'u', // Done
 		Variable = 'v', // Done
 		ExternalVariable = 'x',
 		Unknown = ' '
@@ -65,30 +65,33 @@ namespace CBinding.Navigation
 		private string pattern;
 		private TagKind kind;
 		private AccessModifier access;
-		private string _class;
-		private string _namespace;
-		private string _struct;
-		private string _enum;
+		private string field_class;
+		private string field_namespace;
+		private string field_struct;
+		private string field_union;
+		private string field_enum;
 		
 		public Tag (string name,
 		            string file,
 		            string pattern,
 		            TagKind kind,
 		            AccessModifier access,
-		            string _class,
-		            string _namespace,
-		            string _struct,
-		            string _enum)
+		            string field_class,
+		            string field_namespace,
+		            string field_struct,
+		            string field_union,
+		            string field_enum)
 		{
 			this.name = name;
 			this.file = file;
 			this.pattern = pattern;	
 			this.kind = kind;
 			this.access = access;
-			this._class = _class;
-			this._namespace = _namespace;
-			this._struct = _struct;
-			this._enum = _enum;;
+			this.field_class = field_class;
+			this.field_namespace = field_namespace;
+			this.field_struct = field_struct;
+			this.field_union = field_union;
+			this.field_enum = field_enum;
 		}
 		
 		public string Name {
@@ -103,28 +106,32 @@ namespace CBinding.Navigation
 			get { return pattern; }
 		}
 		
+		public TagKind Kind {
+			get { return kind; }
+		}
+		
 		public AccessModifier Access {
 			get { return access; }
 		}
 		
 		public string Class {
-			get { return _class; }
+			get { return field_class; }
 		}
 		
 		public string Namespace {
-			get { return _namespace; }
+			get { return field_namespace; }
 		}
 		
 		public string Structure {
-			get { return _struct; }
+			get { return field_struct; }
+		}
+		
+		public string Union {
+			get { return field_union; }
 		}
 		
 		public string Enum {
-			get { return _enum; }
-		}
-		
-		public TagKind Kind {
-			get { return kind; }
+			get { return field_enum; }
 		}
 	}
 }

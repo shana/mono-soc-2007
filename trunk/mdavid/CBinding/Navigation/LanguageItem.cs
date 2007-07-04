@@ -170,6 +170,33 @@ namespace CBinding.Navigation
 			return false;
 		}
 		
+		protected bool GetUnion (Tag tag)
+		{
+			string u;
+			
+			if ((u = tag.Union) != null) {
+				int index = u.LastIndexOf (':');
+				
+				if (index > 0)
+					u = u.Substring (index + 1);
+				
+				try {
+					Tag unionTag = TagDatabaseManager.Instance.FindTag (
+					    u, TagKind.Union, project);
+					
+					if (unionTag != null)
+						parent = new Union (unionTag, project);
+					
+				} catch (IOException ex) {
+					IdeApp.Services.MessageService.ShowError (ex);
+				}
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
 		public Project Project {
 			get { return project; }
 		}

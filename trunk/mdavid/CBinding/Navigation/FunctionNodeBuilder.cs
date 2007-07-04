@@ -84,5 +84,13 @@ namespace CBinding.Navigation
 		{
 			return false;
 		}
+		
+		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
+		{
+			if (otherNode.DataItem is Typedef)
+				return 1;
+			else
+				return -1;
+		}
 	}
 }

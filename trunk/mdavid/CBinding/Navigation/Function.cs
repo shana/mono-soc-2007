@@ -51,6 +51,7 @@ namespace CBinding.Navigation
 				if (GetNamespace (tag)) return;
 				if (GetClass (tag)) return;
 				if (GetStructure (tag)) return;
+				if (GetUnion (tag)) return;
 				
 				return;
 			}
@@ -61,6 +62,7 @@ namespace CBinding.Navigation
 			if (GetNamespace (prototypeTag))return;
 			if (GetClass (prototypeTag)) return;
 			if (GetStructure (prototypeTag)) return;
+			if (GetUnion (prototypeTag)) return;
 		}
 	}
 }

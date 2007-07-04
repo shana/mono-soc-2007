@@ -116,6 +116,8 @@
 		<NodeBuilder id = "CBinding.Navigation.MacroNodeBuilder" class = "CBinding.Navigation.MacroNodeBuilder"/>
 		<NodeBuilder id = "CBinding.Navigation.EnumerationNodeBuilder" class = "CBinding.Navigation.EnumerationNodeBuilder"/>
 		<NodeBuilder id = "CBinding.Navigation.EnumeratorNodeBuilder" class = "CBinding.Navigation.EnumeratorNodeBuilder"/>
+		<NodeBuilder id = "CBinding.Navigation.UnionNodeBuilder" class = "CBinding.Navigation.UnionNodeBuilder"/>
+		<NodeBuilder id = "CBinding.Navigation.TypedefNodeBuilder" class = "CBinding.Navigation.TypedefNodeBuilder"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Commands">

@@ -41,6 +41,7 @@ namespace CBinding.Navigation
 		{
 			if (GetClass (tag)) return;
 			if (GetStructure (tag)) return;
+			if (GetUnion (tag)) return;
 		}
 	}
 }

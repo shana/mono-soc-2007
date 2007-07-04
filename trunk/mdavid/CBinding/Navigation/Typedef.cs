@@ -1,5 +1,5 @@
 //
-// Enumeration.cs
+// Typedef.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -35,10 +35,10 @@ using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
 {
-	public class Enumeration : LanguageItem
-	{
-		public Enumeration (Tag tag, Project project) : base (tag, project)
-		{
+	public class Typedef : LanguageItem
+	{		
+		public Typedef (Tag tag, Project project) : base (tag, project)
+		{			
 			if (GetNamespace (tag)) return;
 			if (GetClass (tag)) return;
 			if (GetStructure (tag)) return;
