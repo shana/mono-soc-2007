@@ -7,9 +7,11 @@ namespace Ribbons
 {
 	public class Ribbon : Container
 	{
-		private static double ribbon_borderWidth = 2.0;
-		private static double ribbon_space = 2.0;
-		private static double ribbon_page_padding = 2.0;
+		private static double borderWidth = 2.0;
+		private static double space = 2.0;
+		private static double pagePadding = 3.0;
+		private static double tabPadding = 4.0;
+		private static double minimalTabsHorizontalPosition = 8.0;
 		private static double lineWidth = 1.0;
 		private static double roundSize = 4.0;
 		
@@ -18,7 +20,12 @@ namespace Ribbons
 		
 		protected List<RibbonPage> pages;
 		protected int curPageIndex;
+		protected Widget shortcuts;
 		private Gdk.Rectangle bodyAllocation, pageAllocation;
+		
+		private Gtk.Requisition shortcutsRequisition;
+		private Gtk.Requisition pageRequisition;
+		private double headerHeight;
 		
 		public event PageSelectedHandler PageSelected;
 		public event PageAddedHandler PageAdded;
@@ -41,7 +48,7 @@ namespace Ribbons
 					CurrentPage.Page.Parent = this;
 				}
 				
-				this.QueueDraw ();
+				QueueDraw ();
 			}
 			get
 			{
@@ -61,6 +68,18 @@ namespace Ribbons
 		public int NPages
 		{
 			get { return pages.Count; }
+		}
+		
+		public Widget Shortcuts
+		{
+			set
+			{
+				if(shortcuts != null) shortcuts.Unparent ();
+				shortcuts = value;
+				if(shortcuts != null) shortcuts.Parent = this;
+				QueueDraw ();
+			}
+			get { return shortcuts; }
 		}
 		
 		public Ribbon()
@@ -214,6 +233,7 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
+			if(Shortcuts != null) callback (Shortcuts);
 			foreach(RibbonPage p in pages) callback (p.Label);
 			if(CurrentPage != null) callback (CurrentPage.Page);
 		}
@@ -223,30 +243,51 @@ namespace Ribbons
 			base.OnSizeRequested (ref requisition);
 			RibbonPage page = CurrentPage;
 			
-			int tab_vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
-			
-			int headerWidth = 0, headerHeight = 0;
+			double tabsWidth = 0, tabsHeight = 0;
 			foreach(RibbonPage p in pages)
 			{
 				Gtk.Requisition req = p.Label.SizeRequest ();
-				headerWidth += req.Width;
-				headerHeight = Math.Max (headerHeight, req.Height);
+				tabsWidth += req.Width;
+				tabsHeight = Math.Max (tabsHeight, req.Height);
+				p.LabelRequisition = req;
 			}
-			headerHeight += tab_vertPadding + (int)ribbon_space;
+			tabsWidth += pages.Count * 2 * tabPadding;
+			tabsHeight += 2 * tabPadding;
 			
-			int width = 0, height = 0;
+			double headerWidth = tabsWidth;
+			
+			if(shortcuts != null)
+			{
+				shortcutsRequisition = shortcuts.SizeRequest ();
+				double x = shortcutsRequisition.Width + space;
+				headerWidth += Math.Max (x, minimalTabsHorizontalPosition);
+			}
+			else
+			{
+				shortcutsRequisition = new Gtk.Requisition ();
+				headerWidth += minimalTabsHorizontalPosition;
+			}
+			
+			headerHeight = Math.Max (tabsHeight, shortcutsRequisition.Height);
+			
+			double pageWidth = 0, pageHeight = 0;
 			if(page != null)
 			{
-				Gtk.Requisition req = page.Page.SizeRequest ();
-				width = req.Width;
-				height = req.Height + (int)(2*ribbon_page_padding + ribbon_space);
+				pageRequisition = page.Page.SizeRequest ();
+				pageWidth = pageRequisition.Width + 2 * pagePadding;
+				pageHeight = pageRequisition.Height + 2 * pagePadding;
 			}
-			width = Math.Max (width, headerWidth);
-			width += (int)(2 * (ribbon_borderWidth + ribbon_space));
-			height += headerHeight;
+			else
+			{
+				pageRequisition = new Gtk.Requisition ();
+			}
 			
-			requisition.Width = width;
-			requisition.Height = height;
+			double width = Math.Max (headerWidth, pageWidth);
+			width = borderWidth + width + borderWidth;
+			double height = borderWidth + headerHeight + pageHeight + borderWidth;
+			
+			requisition.Width = (int)Math.Ceiling (width - double.Epsilon);
+			requisition.Height = (int)Math.Ceiling (height - double.Epsilon);
 		}
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
@@ -254,10 +295,64 @@ namespace Ribbons
 			base.OnSizeAllocated (allocation);
 			RibbonPage page = CurrentPage;
 			
-			int x = allocation.X + (int)(ribbon_space + roundSize), y = allocation.Y + (int)ribbon_space, maxH = 0;
+			if(allocation.Height < headerHeight + borderWidth) return;
 			
-			int tab_horizPadding = (int)(4*ribbon_space+2*ribbon_borderWidth);
-			int tab_vertPadding = (int)(2*ribbon_space + ribbon_borderWidth); 
+			double headerBottom = allocation.X + borderWidth + headerHeight;
+			double currentX = space;
+			
+			if(shortcuts != null)
+			{
+				Gdk.Rectangle alloc;
+				alloc.X = (int)currentX;
+				alloc.Y = (int)(headerBottom - shortcutsRequisition.Height);
+				alloc.Width = shortcutsRequisition.Width;
+				alloc.Height = shortcutsRequisition.Height;
+				shortcuts.SizeAllocate (alloc);
+				currentX += shortcutsRequisition.Width;
+			}
+			currentX += space;
+			currentX = Math.Max (currentX, minimalTabsHorizontalPosition);
+			
+			foreach(RibbonPage p in pages)
+			{
+				Gdk.Rectangle alloc;
+				alloc.X = (int)(currentX + tabPadding);
+				alloc.Y = (int)(headerBottom - tabPadding - p.LabelRequisition.Height);
+				alloc.Width = p.LabelRequisition.Width;
+				alloc.Height = p.LabelRequisition.Height;
+				p.Label.SizeAllocate (alloc);
+				
+				alloc.X = (int)currentX;
+				alloc.Y = (int)(headerBottom - tabPadding - p.LabelRequisition.Height - tabPadding);
+				alloc.Width = (int)(tabPadding + p.LabelRequisition.Width + tabPadding);
+				alloc.Height = (int)(tabPadding + p.LabelRequisition.Height + tabPadding);
+				p.SetLabelAllocation (alloc);
+				
+				currentX += p.LabelRequisition.Width + 2 * tabPadding;
+			}
+			
+			bodyAllocation.X = allocation.X + (int)borderWidth;
+			bodyAllocation.Y = (int)headerBottom;
+			bodyAllocation.Width = allocation.Width - bodyAllocation.X  - (int)borderWidth;
+			bodyAllocation.Height = allocation.Height - bodyAllocation.Y - (int)borderWidth;
+			
+			if(page != null)
+			{
+				pageAllocation = bodyAllocation;
+				int pad = (int)pagePadding;
+				pageAllocation.Inflate (-pad, -pad);
+				page.Page.SizeAllocate (pageAllocation);
+			}
+			else
+			{
+				pageAllocation = Gdk.Rectangle.Zero;
+			}
+			
+			
+			/*int x = allocation.X + (int)(ribbon_space + roundSize), y = allocation.Y + (int)ribbon_space, maxH = 0;
+			
+			int tab_horizPadding = (int)(4*ribbon_space+2*borderWidth);
+			int tab_vertPadding = (int)(2*ribbon_space + borderWidth); 
 			
 			foreach(RibbonPage p in pages)
 			{
@@ -295,14 +390,14 @@ namespace Ribbons
 			if(page != null)
 			{
 				pageAllocation = bodyAllocation;
-				int pad = (int)ribbon_page_padding;
+				int pad = (int)pagePadding;
 				pageAllocation.Inflate (-pad, -pad);
 				page.Page.SizeAllocate (pageAllocation);
 			}
 			else
 			{
 				pageAllocation = Gdk.Rectangle.Zero;
-			}
+			}*/
 		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
@@ -345,6 +440,7 @@ namespace Ribbons
 		{
 			private Ribbon parent;
 			private Widget label, page;
+			private Requisition labelReq;
 			private Gdk.Rectangle labelAlloc;
 			
 			public Widget Label
@@ -364,9 +460,14 @@ namespace Ribbons
 				get { return page; }
 			}
 			
+			internal Requisition LabelRequisition
+			{
+				set { labelReq = value; }
+				get { return labelReq; }
+			}
+			
 			public Gdk.Rectangle LabelAllocation
 			{
-				//set { labelAlloc = value; }
 				get { return labelAlloc; }
 			}
 			
@@ -377,7 +478,7 @@ namespace Ribbons
 				this.Page = Page;
 			}
 			
-			internal void SetLabelAllocation (Gdk.Rectangle r)
+			public void SetLabelAllocation (Gdk.Rectangle r)
 			{
 				labelAlloc = r;
 			}
