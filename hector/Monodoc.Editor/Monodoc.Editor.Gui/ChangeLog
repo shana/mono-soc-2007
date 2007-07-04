@@ -1,3 +1,8 @@
+2007-07-04  Hector E. Gomez Morales. <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs, DocumentTagTable.cs: Following Mono Coding
+	  Guidelines for switch cases.
+
 2007-07-04  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentTagTable.cs: Added all the Monodoc tags that where left to be
