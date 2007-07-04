@@ -527,175 +527,175 @@ public class DocumentTagTable : TextTagTable {
 	{
 		string tagName = tag.Name.Split ('#')[0];
 		switch (tagName) {
-			case "block":
-				tag.IsElement = true;
-				break;
-			case "block:Attributes":
-				break;
-			case "block:subset":
-				tag.IsAttribute = true;
-				break;
-			case "block:type":
-				tag.IsAttribute = true;
-				break;
-			case "block:Text":
-				tag.IsText = true;
-				break;
-			case "c":
-				tag.IsElement = true;
-				break;
-			case "c:Text":
-				tag.IsText = true;
-				break;
-			case "code":
-				tag.IsElement = true;
-				break;
-			case "code:Attributes":
-				break;
-			case "code:lang":
-				tag.IsAttribute = true;
-				break;
-			case "code:language":
-				tag.IsAttribute = true;
-				break;
-			case "code:source":
-				tag.IsAttribute = true;
-				break;
-			case "code:Text":
-				tag.IsText = true;
-				break;
-			case "description":
-				tag.IsElement = true;
-				break;
-			case "description:Text":
-				tag.IsText = true;
-				break;
-			case "example":
-				tag.IsElement = true;
-				break;
-			case "example:Text":
-				tag.IsText = true;
-				break;
-			case "item":
-				tag.IsElement = true;
-				break;
-			case "li":
-				tag.IsElement = true;
-				break;
-			case "li:Text":
-				tag.IsText = true;
-				break;
-			case "link":
-				tag.IsElement = true;
-				tag.Underline = Pango.Underline.Single;
-				tag.Foreground = "#204a87";
-				break;
-			case "link:Attributes":
-				tag.Foreground = "purple";
-				tag.Underline = Pango.Underline.None;
-				break;
-			case "link:location":
-				tag.IsAttribute = true;
-				break;
-			case "link:Text":
-				tag.IsText = true;
-				break;
-			case "list":
-				tag.IsElement = true;
-				break;
-			case "list:Attributes":
-				break;
-			case "list:type":
-				tag.IsAttribute = true;
-				break;
-			case "listheader":
-				tag.IsElement = true;
-				break;
-			case "onequarter":
-				tag.IsElement = true;
-				break;
-			case "para":
-				tag.IsElement = true;
-				break;
-			case "para:Text":
-				tag.IsText = true;
-				break;
-			case "paramref":
-				tag.IsElement = true;
-				break;
-			case "paramref:Attributes":
-				break;
-			case "paramref:name":
-				tag.IsAttribute = true;
-				break;
-			case "see":
-				tag.IsElement = true;
-				break;
-			case "see:Attributes":
-				break;
-			case "see:cref":
-				tag.IsAttribute = true;
-				tag.Foreground = "red";
-				break;
-			case "see:langword":
-				tag.IsAttribute = true;
-				tag.Foreground = "yellow";
-				break;
-			case "see:qualify":
-				tag.IsAttribute = true;
-				break;
-			case "SPAN":
-				tag.IsElement = true;
-				break;
-			case "SPAN:Attributes":
-				break;
-			case "SPAN:version":
-				tag.IsAttribute = true;
-				break;
-			case "sub":
-				tag.IsElement = true;
-				break;
-			case "sub:Text":
-				tag.IsText = true;
-				break;
-			case "subscript":
-				tag.IsElement = true;
-				break;
-			case "subscript:Attributes":
-				break;
-			case "subscript:term":
-				tag.IsAttribute = true;
-				break;
-			case "sup":
-				tag.IsElement = true;
-				break;
-			case "sup:Text":
-				tag.IsText = true;
-				break;
-			case "term":
-				tag.IsElement = true;
-				break;
-			case "term:Text":
-				tag.IsText = true;
-				break;
-			case "typeparamref":
-				tag.IsElement = true;
-				break;
-			case "typeparamref:Attributes":
-				break;
-			case "typeparamref:name":
-				tag.IsAttribute = true;
-				break;
-			case "ul":
-				tag.IsElement = true;
-				break;
-			case "padding-invisible":
-				tag.IsText = true;
-				tag.IsSerializable = false;
-				tag.Invisible = true;
-				break;
-			default:
-				break;
+		case "block":
+			tag.IsElement = true;
+			break;
+		case "block:Attributes":
+			break;
+		case "block:subset":
+			tag.IsAttribute = true;
+			break;
+		case "block:type":
+			tag.IsAttribute = true;
+			break;
+		case "block:Text":
+			tag.IsText = true;
+			break;
+		case "c":
+			tag.IsElement = true;
+			break;
+		case "c:Text":
+			tag.IsText = true;	
+			break;
+		case "code":
+			tag.IsElement = true;
+			break;
+		case "code:Attributes":
+			break;
+		case "code:lang":
+			tag.IsAttribute = true;
+			break;
+		case "code:language":
+			tag.IsAttribute = true;
+		break;
+		case "code:source":
+			tag.IsAttribute = true;
+			break;
+		case "code:Text":
+			tag.IsText = true;
+			break;
+		case "description":
+			tag.IsElement = true;
+			break;
+		case "description:Text":
+			tag.IsText = true;
+			break;
+		case "example":
+			tag.IsElement = true;
+			break;
+		case "example:Text":
+			tag.IsText = true;
+			break;
+		case "item":
+			tag.IsElement = true;
+			break;
+		case "li":	
+			tag.IsElement = true;
+			break;
+		case "li:Text":
+			tag.IsText = true;
+			break;
+		case "link":
+			tag.IsElement = true;
+			tag.Underline = Pango.Underline.Single;
+			tag.Foreground = "#204a87";
+			break;
+		case "link:Attributes":
+			tag.Foreground = "purple";
+			tag.Underline = Pango.Underline.None;
+			break;
+		case "link:location":
+			tag.IsAttribute = true;
+			break;
+		case "link:Text":
+			tag.IsText = true;
+			break;
+		case "list":
+			tag.IsElement = true;
+			break;
+		case "list:Attributes":
+			break;
+		case "list:type":
+			tag.IsAttribute = true;
+			break;
+		case "listheader":
+			tag.IsElement = true;
+			break;
+		case "onequarter":
+			tag.IsElement = true;
+			break;
+		case "para":
+			tag.IsElement = true;
+			break;
+		case "para:Text":
+			tag.IsText = true;
+			break;
+		case "paramref":
+			tag.IsElement = true;
+			break;
+		case "paramref:Attributes":
+			break;
+		case "paramref:name":
+			tag.IsAttribute = true;	
+			break;
+		case "see":
+			tag.IsElement = true;
+			break;
+		case "see:Attributes":
+			break;
+		case "see:cref":
+			tag.IsAttribute = true;
+			tag.Foreground = "red";
+			break;
+		case "see:langword":
+			tag.IsAttribute = true;
+			tag.Foreground = "yellow";
+			break;
+		case "see:qualify":
+			tag.IsAttribute = true;
+			break;
+		case "SPAN":
+			tag.IsElement = true;
+			break;
+		case "SPAN:Attributes":
+			break;
+		case "SPAN:version":
+			tag.IsAttribute = true;
+			break;
+		case "sub":
+			tag.IsElement = true;
+			break;
+		case "sub:Text":
+			tag.IsText = true;
+			break;
+		case "subscript":
+			tag.IsElement = true;
+			break;
+		case "subscript:Attributes":
+			break;
+		case "subscript:term":
+			tag.IsAttribute = true;
+			break;
+		case "sup":
+			tag.IsElement = true;
+			break;
+		case "sup:Text":
+			tag.IsText = true;
+			break;
+		case "term":
+			tag.IsElement = true;
+			break;
+		case "term:Text":
+			tag.IsText = true;
+			break;
+		case "typeparamref":
+			tag.IsElement = true;
+			break;
+		case "typeparamref:Attributes":
+			break;
+		case "typeparamref:name":
+			tag.IsAttribute = true;
+			break;
+		case "ul":
+			tag.IsElement = true;
+			break;
+		case "padding-invisible":
+			tag.IsText = true;
+			tag.IsSerializable = false;
+			tag.Invisible = true;
+			break;
+		default:
+			break;
 		}
 	}
 }
