@@ -1,0 +1,1 @@
+mono mdb-gui.exe -run TestApp.exe
