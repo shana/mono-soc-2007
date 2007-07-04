@@ -1,3 +1,11 @@
+2007-07-04  Hector E. Gomez Morales. <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Huge refactoring of
+	  Serialize created three methods for each case. InsertStartElement
+	  when we encounter the start of an element, InsertText when we
+	  encounter Text, InsertEndElement when we encounter the end of an
+	  element.
+
 2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	
