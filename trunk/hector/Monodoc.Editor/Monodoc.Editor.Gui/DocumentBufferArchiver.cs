@@ -50,6 +50,7 @@ public class DocumentBufferArchiver {
 		DocumentTag docTag;
 		nextIter.ForwardChar ();
 		
+		// We iterate over all the buffer.
 		while (!currentIter.Equal (end)) {
 			ArrayList beginTags, endTags;
 			beginTags = new ArrayList ();
@@ -157,155 +158,25 @@ public class DocumentBufferArchiver {
 	public static void Deserialize (TextBuffer buffer, TextIter start,  XmlTextReader xmlReader)
 	{
 		int offset = start.Offset;
-		int depth = 0;
-		int count = 1;
-		bool emptyElement, isDynamic;
-		string suffix;
+		int depth, count;
+		count = depth = 0;
 		Stack stack = new Stack ();
 		TagStart tagStart;
-		TextIter insertAt, applyStart, applyEnd;
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		TextTag tag;
 		
 		while (xmlReader.Read ()) {
 			switch (xmlReader.NodeType) {
 			case XmlNodeType.Element:
-				emptyElement = xmlReader.IsEmptyElement;
-				isDynamic = tagTable.IsDynamic (xmlReader.Name);
-				suffix = String.Empty;
-				tagStart = new TagStart ();
-				tagStart.Start = offset;
-				depth++;
-				
-				// Check first if element is dynamic, if true try to lookup a previous creation, if not we create it
-				// If false we lookup in the table.
-				if (isDynamic)
-					suffix = '#' + depth.ToString ();
-				
-				tagStart.Tag = tagTable.Lookup (xmlReader.Name + suffix);
-				if (isDynamic && tagStart.Tag == null)
-					tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + suffix);
-				else if (isDynamic && tagStart.Tag != null &&  tagStart.Tag.Priority < ((TagStart) stack.Peek ()).Tag.Priority) {
-					tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + suffix + "." + count);
-					suffix += "." + count;
-					count++;
-				}
-					
-				#if DEBUG
-				try {
-					Console.WriteLine ("Element: {0} Start: {1}", tagStart.Tag.Name, tagStart.Start);
-				} catch (NullReferenceException) {
-					Console.WriteLine ("Error: Missing {0} element", xmlReader.Name);
-					Environment.Exit (1);
-				}
-				#endif
-				
-				if (xmlReader.HasAttributes)
-					offset = DeserializeAttributes (buffer, offset, xmlReader, suffix);
-				
-				if (emptyElement) {
-					if (tagStart.Start != offset) {
-						applyStart = buffer.GetIterAtOffset (tagStart.Start);
-						applyEnd = buffer.GetIterAtOffset (offset);
-					} else {
-						// Padding to conserve empty element
-						insertAt = buffer.GetIterAtOffset (offset);
-						tag = tagTable.Lookup ("padding-invisible" + suffix);
-						if (tag == null)
-							tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
-						buffer.InsertWithTags (ref insertAt, " ", tag);
-						offset += 1;
-							
-						applyStart = buffer.GetIterAtOffset (tagStart.Start);
-						applyEnd = buffer.GetIterAtOffset (offset);
-					}
-					
-					buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
-					
-					// Padding between tag regions
-					insertAt = buffer.GetIterAtOffset (offset);
-					tag = tagTable.Lookup ("padding-invisible" + suffix + ".1");
-					if (tag == null)
-						tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix + ".1");
-					buffer.InsertWithTags (ref insertAt, " ", tag);
-					offset += 1;
-					depth--;
-					
-					#if DEBUG
-					Console.WriteLine ("Empty Element: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
-					#endif
-					break;
-				}
-				
-				stack.Push (tagStart);
+				offset = InsertStartElement (buffer, offset, xmlReader, stack, ref depth, ref count);
 				break;
 			case XmlNodeType.Text:
-				string tagName;
-				tagStart = stack.Peek () as TagStart;
-				
+				tagStart = (TagStart) stack.Peek ();
 				DocumentTag docTag = (DocumentTag) tagStart.Tag;
-				
-				// Check first if element text is dynamic, if true try to lookup a previous creation, if not we create it
-				// If false we lookup in the table.
-				if (docTag.IsDynamic)
-					tagName = docTag.Name.Split ('#')[0] + ":Text" + '#' + docTag.Name.Split ('#')[1];
-				else
-					tagName = docTag.Name + ":Text";
-				
-				tag = tagTable.Lookup (tagName);
-				if (tag == null)
-					tag = tagTable.CreateDynamicTag (tagName);
-				
-				#if DEBUG
-				Console.WriteLine ("Text: {0} Value: {1} Start: {2}", tagName, xmlReader.Value, offset);
-				#endif
-				
-				insertAt = buffer.GetIterAtOffset (offset);
-				buffer.InsertWithTags (ref insertAt, xmlReader.Value, tag);
-				
-				offset += xmlReader.Value.Length;
+				offset = InsertText (buffer, offset, xmlReader.Value, docTag);
 				break;
 			case XmlNodeType.EndElement:
-				tagStart = stack.Pop () as TagStart;
-				
-				#if DEBUG
-				Console.WriteLine ("Element: {0}, End: {1}", tagStart.Tag.Name, offset);
-				#endif
-				
-				if (tagStart.Start != offset) {
-					applyStart = buffer.GetIterAtOffset (tagStart.Start);
-					applyEnd = buffer.GetIterAtOffset (offset);
-				} else {
-					// Padding to conserve empty element
-					insertAt = buffer.GetIterAtOffset (offset);
-					
-					suffix = '#' + depth.ToString ();
-					tag = tagTable.Lookup ("padding-invisible" + suffix);
-					if (tag == null)
-						tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
-					buffer.InsertWithTags (ref insertAt, " ", tag);
-					offset += 1;
-					
-					applyStart = buffer.GetIterAtOffset (tagStart.Start);
-					applyEnd = buffer.GetIterAtOffset (offset); 
-				}
-				
-				buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+				tagStart = (TagStart) stack.Pop ();
+				offset = InsertEndElement (buffer, offset, depth, tagStart); 
 				depth--;
-					
-				#if DEBUG
-				Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
-				#endif
-				
-				// Padding between tag regions
-				insertAt = buffer.GetIterAtOffset (offset);
-				
-				suffix = '#' + depth.ToString ();
-				tag = tagTable.Lookup ("padding-invisible" + suffix);
-				if (tag == null)
-					tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
-				buffer.InsertWithTags (ref insertAt, " ", tag);
-				offset += 1;
 				break;
 			case XmlNodeType.Whitespace:
 				break;
@@ -319,6 +190,160 @@ public class DocumentBufferArchiver {
 //			while (Application.EventsPending ())
 //				Application.RunIteration ();
 		}
+	}
+	
+	private static int InsertStartElement (TextBuffer buffer, int offset, XmlTextReader xmlReader, Stack stack, ref int depth, ref int count)
+	{
+		string elementName = xmlReader.Name;
+		bool emptyElement = xmlReader.IsEmptyElement;
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		bool isDynamic = tagTable.IsDynamic (elementName);
+		string suffix = String.Empty;
+		TextIter insertAt, applyStart, applyEnd;
+		TagStart tagStart = new TagStart ();
+		tagStart.Start = offset;
+		TextTag tag;
+		depth++;
+				
+		// Check first if element is dynamic, if true try to lookup a previous creation, if not we create it
+		// If false we lookup in the table.
+		if (isDynamic)
+			suffix = '#' + depth.ToString ();
+		
+		tagStart.Tag = tagTable.Lookup (elementName + suffix);
+		if (isDynamic && tagStart.Tag == null)
+			tagStart.Tag = tagTable.CreateDynamicTag (elementName + suffix);
+		else if (isDynamic && tagStart.Tag != null &&  tagStart.Tag.Priority < ((TagStart) stack.Peek ()).Tag.Priority) {
+			suffix += "." + count;
+			tagStart.Tag = tagTable.CreateDynamicTag (elementName + suffix);
+			count++;
+		}
+					
+		#if DEBUG
+		try {
+			Console.WriteLine ("Element: {0} Start: {1}", tagStart.Tag.Name, tagStart.Start);
+		} catch (NullReferenceException) {
+			Console.WriteLine ("Error: Missing {0} element", xmlReader.Name);
+			Environment.Exit (1);
+		}
+		#endif
+		
+		if (xmlReader.HasAttributes)
+			offset = DeserializeAttributes (buffer, offset, xmlReader, suffix);
+		
+		if (emptyElement) {
+			if (tagStart.Start != offset) {
+				applyStart = buffer.GetIterAtOffset (tagStart.Start);
+				applyEnd = buffer.GetIterAtOffset (offset);
+			} else {
+				// Padding to conserve empty element
+				insertAt = buffer.GetIterAtOffset (offset);
+				tag = tagTable.Lookup ("padding-invisible" + suffix);
+				if (tag == null)
+					tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
+				buffer.InsertWithTags (ref insertAt, " ", tag);
+				offset += 1;
+							
+				applyStart = buffer.GetIterAtOffset (tagStart.Start);
+				applyEnd = buffer.GetIterAtOffset (offset);
+			}
+					
+			buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+					
+			// Padding between tag regions
+			insertAt = buffer.GetIterAtOffset (offset);
+			tag = tagTable.Lookup ("padding-invisible" + suffix + ".1");
+			if (tag == null)
+				tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix + ".1");
+			buffer.InsertWithTags (ref insertAt, " ", tag);
+			offset += 1;
+			depth--;
+					
+			#if DEBUG
+			Console.WriteLine ("Empty Element: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
+			#endif
+		} else
+			stack.Push (tagStart);
+		
+		return offset;
+	}
+	
+	private static int InsertText (TextBuffer buffer, int offset, string data, DocumentTag elementTag)
+	{
+		string tagName;
+		TextTag textTag;
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		
+		// Check first if element text is dynamic, if true try to lookup a previous creation, if not we create it
+		// If false we lookup in the table.
+		if (elementTag.IsDynamic)
+			tagName = elementTag.Name.Split ('#')[0] + ":Text" + '#' + elementTag.Name.Split ('#')[1];
+		else
+			tagName = elementTag.Name + ":Text";
+		
+		textTag = tagTable.Lookup (tagName);
+		if (textTag == null)
+			textTag = tagTable.CreateDynamicTag (tagName);
+				
+		#if DEBUG
+		Console.WriteLine ("Text: {0} Value: {1} Start: {2}", tagName, data, offset);
+		#endif
+				
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		buffer.InsertWithTags (ref insertAt, data, textTag);
+		offset += data.Length;
+		
+		return offset;
+	}
+	
+	private static int InsertEndElement (TextBuffer buffer, int offset, int depth, TagStart tagStart)
+	{
+		string suffix;
+		TextTag tag;
+		TextIter insertAt, applyStart, applyEnd;
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		
+		#if DEBUG
+		Console.WriteLine ("Element: {0}, End: {1}", tagStart.Tag.Name, offset);
+		#endif
+		
+		if (tagStart.Start != offset) {
+			applyStart = buffer.GetIterAtOffset (tagStart.Start);
+			applyEnd = buffer.GetIterAtOffset (offset);
+		} else {
+			// Padding to conserve empty element
+			insertAt = buffer.GetIterAtOffset (offset);
+			
+			suffix = '#' + depth.ToString ();
+			tag = tagTable.Lookup ("padding-invisible" + suffix);
+			if (tag == null)
+				tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
+				
+			buffer.InsertWithTags (ref insertAt, " ", tag);
+			offset += 1;
+					
+			applyStart = buffer.GetIterAtOffset (tagStart.Start);
+			applyEnd = buffer.GetIterAtOffset (offset); 
+		}
+		
+		buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+		
+		#if DEBUG
+		Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
+		#endif
+		
+		// Padding between tag regions
+		insertAt = buffer.GetIterAtOffset (offset);
+				
+		suffix = '#' + (depth - 1).ToString ();
+		tag = tagTable.Lookup ("padding-invisible" + suffix);
+		if (tag == null)
+			tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
+			
+		buffer.InsertWithTags (ref insertAt, " ", tag);
+		offset += 1;
+		
+		return offset;
 	}
 	
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
