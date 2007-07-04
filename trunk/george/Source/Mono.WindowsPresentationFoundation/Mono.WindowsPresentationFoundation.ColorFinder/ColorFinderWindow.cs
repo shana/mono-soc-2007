@@ -18,7 +18,7 @@ namespace Mono.WindowsPresentationFoundation.ColorFinder {
 			ArgbInputBox argb_input_box = new ArgbInputBox();
 			Button find_button = new Button();
 			find_button.Content = "_Find";
-			find_button.ToolTip = "Searched the Colors and SystemColors classes for members that have the specified ARGB values. The first item found is copied to clipboard.";
+			find_button.ToolTip = "Searches the Colors and SystemColors classes for members that have the specified ARGB values. The first item found is copied to clipboard.";
 			find_button.Margin = new Thickness(ElementMargin);
 			find_button.Width = ElementSize;
 			argb_panel.Children.Add(argb_input_box);
