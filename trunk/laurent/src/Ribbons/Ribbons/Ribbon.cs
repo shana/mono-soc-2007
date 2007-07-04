@@ -256,7 +256,7 @@ namespace Ribbons
 			
 			double headerWidth = tabsWidth;
 			
-			if(shortcuts != null)
+			if(shortcuts != null && shortcuts.Visible)
 			{
 				shortcutsRequisition = shortcuts.SizeRequest ();
 				double x = shortcutsRequisition.Width + space;
@@ -300,7 +300,7 @@ namespace Ribbons
 			double headerBottom = allocation.X + borderWidth + headerHeight;
 			double currentX = space;
 			
-			if(shortcuts != null)
+			if(shortcuts != null && shortcuts.Visible)
 			{
 				Gdk.Rectangle alloc;
 				alloc.X = (int)currentX;
