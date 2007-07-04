@@ -562,17 +562,6 @@ public class DocumentTagTable : TextTagTable {
 //		tag.IsAttribute = true;
 //		Add (tag);
 //		
-		tag = new DocumentTag ("padding-visible");
-		tag.IsSerializable = false;
-		tag.Invisible = false;
-		tag.IsText = true;
-		Add (tag);
-		
-		tag = new DocumentTag ("padding-invisible");
-		tag.IsSerializable = false;
-		tag.Invisible = true;
-		tag.IsText = true;
-		Add (tag);
 	}
 	
 	private void InitDynamicTags ()
@@ -590,6 +579,7 @@ public class DocumentTagTable : TextTagTable {
 		dynamic_tags ["paramref"] = true;
 		dynamic_tags ["see"] = true;
 		dynamic_tags ["term"] = true;
+		dynamic_tags ["padding-invisible"] = true;
 	}
 	
 	private void InitializeTag (DocumentTag tag)
@@ -709,6 +699,11 @@ public class DocumentTagTable : TextTagTable {
 				break;
 			case "term:Text":
 				tag.IsText = true;
+				break;
+			case "padding-invisible":
+				tag.IsText = true;
+				tag.IsSerializable = false;
+				tag.Invisible = true;
 				break;
 			default:
 				break;

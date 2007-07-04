@@ -1,3 +1,18 @@
+2007-07-04  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/Examples/TreeView.xml, Monodoc.Editor.Gui.mdp: Added
+	  TreeView.xml for use in test units.
+	* DocumentBufferArchiver.cs: Added GetArrays that initializes two
+	  ArrayLists: beginTags and endTags. Checks the last item in the
+	  array from the tags property of the TextIter. We only need to check
+	  if the last tag begins or ends in the iter to initialize the two
+	  lists. We use the dynamic tag padding-invisible to insert it when
+	  we need some padding. I moved the dyamic creation of the tag in
+	  DeserializeAttributes so the priority order is correct ie
+	  Attributes < InvidualAttributes.
+	* DocumentTagTable.cs: Added a new dynamic tag that represents any
+	  padding that is invisible to the user.
+
 2007-07-03  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Test/Examples/Convert.xml, Test/Examples/Widget.xml,

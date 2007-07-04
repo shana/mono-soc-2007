@@ -47,14 +47,14 @@ public class DocumentBufferArchiver {
 		string attributeName = "";
 		string attributeValue = "";
 		string elementText = "";
-		TextTag [] tags;
 		DocumentTag docTag;
-		TextTag paddingVisible = buffer.TagTable.Lookup ("padding-visible");
-		TextTag paddingInvisible = buffer.TagTable.Lookup ("padding-invisible");
 		nextIter.ForwardChar ();
 		
 		while (!currentIter.Equal (end)) {
-			tags = currentIter.Tags;
+			ArrayList beginTags, endTags;
+			beginTags = new ArrayList ();
+			endTags = new ArrayList ();
+			GetArrays (currentIter, nextIter, beginTags, endTags);
 			
 			#if DEBUG
 			Console.WriteLine ("Offset: {0} Char: {1}", currentIter.Offset, currentIter.Char);
@@ -64,13 +64,13 @@ public class DocumentBufferArchiver {
 				attributeValue += currentIter.Char;
 			}
 			
-			if (readingText && !currentIter.HasTag (paddingVisible) &&  !currentIter.HasTag (paddingInvisible)) {
+			if (readingText) {
 				elementText += currentIter.Char;
 			}
 			
-			foreach (TextTag tag in tags) {
+			foreach (TextTag tag in beginTags) {
 				#if DEBUG
-				Console.WriteLine ("Posible Begin Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
+				Console.WriteLine ("Begin Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
 				#endif
 				
 				if (currentIter.BeginsTag (tag)) {
@@ -100,10 +100,9 @@ public class DocumentBufferArchiver {
 				}
 			}
 			
-			Array.Reverse (tags);
-			foreach (TextTag tag in tags) {
+			foreach (TextTag tag in endTags) {
 				#if DEBUG
-				Console.WriteLine ("Posible End Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
+				Console.WriteLine ("End Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
 				#endif
 				
 				if (TagEndsHere (tag, currentIter, nextIter)) {
@@ -139,8 +138,8 @@ public class DocumentBufferArchiver {
 			Console.WriteLine ("State: {0} Char: {1} \n", xmlWriter.WriteState.ToString (), currentIter.Char);
 			#endif
 			
-			while (Application.EventsPending ())
-				Application.RunIteration ();
+//			while (Application.EventsPending ())
+//				Application.RunIteration ();
 		}
 	}
 	
@@ -161,21 +160,21 @@ public class DocumentBufferArchiver {
 	{
 		int offset = start.Offset;
 		int depth = 0;
+		int count = 1;
 		bool emptyElement, isDynamic;
-		string dSuffix;
+		string suffix;
 		Stack stack = new Stack ();
 		TagStart tagStart;
 		TextIter insertAt, applyStart, applyEnd;
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		TextTag tag;
-		int count = 1;
 		
 		while (xmlReader.Read ()) {
 			switch (xmlReader.NodeType) {
 				case XmlNodeType.Element:
 					emptyElement = xmlReader.IsEmptyElement;
 					isDynamic = tagTable.IsDynamic (xmlReader.Name);
-					dSuffix = String.Empty;
+					suffix = String.Empty;
 					tagStart = new TagStart ();
 					tagStart.Start = offset;
 					depth++;
@@ -183,15 +182,15 @@ public class DocumentBufferArchiver {
 					// Check first if element is dynamic, if true try to lookup a previous creation, if not we create it
 					// If false we lookup in the table.
 					if (isDynamic) {
-						dSuffix = '#' + depth.ToString ();
+						suffix = '#' + depth.ToString ();
 					}
 					
-					tagStart.Tag = tagTable.Lookup (xmlReader.Name + dSuffix);
+					tagStart.Tag = tagTable.Lookup (xmlReader.Name + suffix);
 					if (isDynamic && tagStart.Tag == null)
-						tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + dSuffix);
+						tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + suffix);
 					else if (isDynamic && tagStart.Tag != null &&  tagStart.Tag.Priority < ((TagStart) stack.Peek ()).Tag.Priority) {
-						tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + dSuffix + "." + count);
-						dSuffix += "." + count;
+						tagStart.Tag = tagTable.CreateDynamicTag (xmlReader.Name + suffix + "." + count);
+						suffix += "." + count;
 						count++;
 					}
 					
@@ -205,7 +204,7 @@ public class DocumentBufferArchiver {
 					#endif
 					
 					if (xmlReader.HasAttributes)
-						offset = DeserializeAttributes (buffer, offset, xmlReader, dSuffix);
+						offset = DeserializeAttributes (buffer, offset, xmlReader, suffix);
 					
 					if (emptyElement) {
 						if (tagStart.Start != offset) {
@@ -214,7 +213,10 @@ public class DocumentBufferArchiver {
 						} else {
 							// Padding to conserve empty element
 							insertAt = buffer.GetIterAtOffset (offset);
-							buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
+							tag = tagTable.Lookup ("padding-invisible" + suffix);
+							if (tag == null)
+								tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
+							buffer.InsertWithTags (ref insertAt, " ", tag);
 							offset += 1;
 							
 							applyStart = buffer.GetIterAtOffset (tagStart.Start);
@@ -225,7 +227,10 @@ public class DocumentBufferArchiver {
 						
 						// Padding between tag regions
 						insertAt = buffer.GetIterAtOffset (offset);
-						buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
+						tag = tagTable.Lookup ("padding-invisible" + suffix + ".1");
+						if (tag == null)
+							tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix + ".1");
+						buffer.InsertWithTags (ref insertAt, " ", tag);
 						offset += 1;
 						depth--;
 						
@@ -275,7 +280,12 @@ public class DocumentBufferArchiver {
 					} else {
 						// Padding to conserve empty element
 						insertAt = buffer.GetIterAtOffset (offset);
-						buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
+						
+						suffix = '#' + depth.ToString ();
+						tag = tagTable.Lookup ("padding-invisible" + suffix);
+						if (tag == null)
+							tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
+						buffer.InsertWithTags (ref insertAt, " ", tag);
 						offset += 1;
 						
 						applyStart = buffer.GetIterAtOffset (tagStart.Start);
@@ -283,6 +293,7 @@ public class DocumentBufferArchiver {
 					}
 					
 					buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+					depth--;
 					
 					#if DEBUG
 					Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
@@ -290,9 +301,13 @@ public class DocumentBufferArchiver {
 					
 					// Padding between tag regions
 					insertAt = buffer.GetIterAtOffset (offset);
-					buffer.InsertWithTagsByName (ref insertAt, " ", "padding-invisible");
+					
+					suffix = '#' + depth.ToString ();
+					tag = tagTable.Lookup ("padding-invisible" + suffix);
+					if (tag == null)
+						tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
+					buffer.InsertWithTags (ref insertAt, " ", tag);
 					offset += 1;
-					depth--;
 					break;
 				case XmlNodeType.Whitespace:
 					break;
@@ -303,20 +318,27 @@ public class DocumentBufferArchiver {
 					break;
 			}
 			
-			while (Application.EventsPending ())
-				Application.RunIteration ();
+//			while (Application.EventsPending ())
+//				Application.RunIteration ();
 		}
 	}
 	
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
 	{
 		int result = offset;
+		string element = xmlReader.Name;
 		string tagName = xmlReader.Name;
 		TextIter applyStart, applyEnd;
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		TextTag tagAttributes;
 		
-		switch (tagName) {
+		tagName += ":Attributes" + tagSuffix;
+		tagAttributes = tagTable.Lookup (tagName);
+		
+		if (tagAttributes == null)
+			tagAttributes = tagTable.CreateDynamicTag (tagName);
+			
+		switch (element) {
 //			case "Type":
 //			case "TypeSignature":
 //			case "Member":
@@ -334,12 +356,6 @@ public class DocumentBufferArchiver {
 				result = DeserializeAttributesNone (buffer, offset, xmlReader, tagSuffix);
 				break;
 		}
-		
-		tagName += ":Attributes" + tagSuffix;
-		tagAttributes = tagTable.Lookup (tagName);
-		
-		if (!tagSuffix.Equals (String.Empty) && tagAttributes == null)
-			tagAttributes = tagTable.CreateDynamicTag (tagName);
 		
 		applyStart = buffer.GetIterAtOffset (offset);
 		applyEnd = buffer.GetIterAtOffset (result);
@@ -415,6 +431,27 @@ public class DocumentBufferArchiver {
 	private static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)
 	{
 		return (currentIter.HasTag (tag) && !nextIter.HasTag (tag));
+	}
+	
+	private static void GetArrays (TextIter currentIter, TextIter nextIter, ArrayList beginTags, ArrayList endTags)
+	{
+		TextTag [] tags = currentIter.Tags;
+		int last_index = tags.Length  - 1;
+		TextTag last = tags [last_index];
+		
+		if (currentIter.BeginsTag (last)) {
+			beginTags.InsertRange (0, tags);
+			
+			if (TagEndsHere (last,currentIter, nextIter)) {
+				Array.Reverse (tags);
+				endTags.InsertRange (0, tags);
+			} else
+				endTags = null;
+		} else if (TagEndsHere (last, currentIter, nextIter)) {
+			beginTags = null;
+			Array.Reverse (tags);
+			endTags.InsertRange (0, tags);
+		}
 	}
 }
 }
