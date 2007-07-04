@@ -495,73 +495,6 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("typeparam:Text");
 		tag.IsText = true;
 		Add (tag);
-		
-
-//		tag = new DocumentTag ("ul");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("li");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("li:Text");
-//		tag.IsText = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("SPAN");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("SPAN:Attributes");
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("SPAN:version");
-//		tag.IsAttribute = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("typeparamref");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("typeparamref:Attributes");
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("typeparamref:name");
-//		tag.IsAttribute = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("onequarter");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("sub");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("sub:Text");
-//		tag.IsText = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("sup");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("sup:Text");
-//		tag.IsText = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("subscript");
-//		tag.IsElement = true;
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("subscript:Attributes");
-//		Add (tag);
-//		
-//		tag = new DocumentTag ("subscript:term");
-//		tag.IsAttribute = true;
-//		Add (tag);
-//		
 	}
 	
 	private void InitDynamicTags ()
@@ -572,13 +505,21 @@ public class DocumentTagTable : TextTagTable {
 		dynamic_tags ["description"] = true;
 		dynamic_tags ["example"] = true;
 		dynamic_tags ["item"] = true;
+		dynamic_tags ["li"] = true;
 		dynamic_tags ["link"] = true;
 		dynamic_tags ["list"] = true;
 		dynamic_tags ["listheader"] = true;
+		dynamic_tags ["onequarter"] = true;
 		dynamic_tags ["para"] = true;
 		dynamic_tags ["paramref"] = true;
 		dynamic_tags ["see"] = true;
+		dynamic_tags ["SPAN"] = true;
+		dynamic_tags ["sub"] = true;
+		dynamic_tags ["subscript"] = true;
+		dynamic_tags ["sup"] = true;
 		dynamic_tags ["term"] = true;
+		dynamic_tags ["typeparamref"] = true;
+		dynamic_tags ["ul"] = true;
 		dynamic_tags ["padding-invisible"] = true;
 	}
 	
@@ -638,6 +579,12 @@ public class DocumentTagTable : TextTagTable {
 			case "item":
 				tag.IsElement = true;
 				break;
+			case "li":
+				tag.IsElement = true;
+				break;
+			case "li:Text":
+				tag.IsText = true;
+				break;
 			case "link":
 				tag.IsElement = true;
 				tag.Underline = Pango.Underline.Single;
@@ -662,6 +609,9 @@ public class DocumentTagTable : TextTagTable {
 				tag.IsAttribute = true;
 				break;
 			case "listheader":
+				tag.IsElement = true;
+				break;
+			case "onequarter":
 				tag.IsElement = true;
 				break;
 			case "para":
@@ -694,11 +644,50 @@ public class DocumentTagTable : TextTagTable {
 			case "see:qualify":
 				tag.IsAttribute = true;
 				break;
+			case "SPAN":
+				tag.IsElement = true;
+				break;
+			case "SPAN:Attributes":
+				break;
+			case "SPAN:version":
+				tag.IsAttribute = true;
+				break;
+			case "sub":
+				tag.IsElement = true;
+				break;
+			case "sub:Text":
+				tag.IsText = true;
+				break;
+			case "subscript":
+				tag.IsElement = true;
+				break;
+			case "subscript:Attributes":
+				break;
+			case "subscript:term":
+				tag.IsAttribute = true;
+				break;
+			case "sup":
+				tag.IsElement = true;
+				break;
+			case "sup:Text":
+				tag.IsText = true;
+				break;
 			case "term":
 				tag.IsElement = true;
 				break;
 			case "term:Text":
 				tag.IsText = true;
+				break;
+			case "typeparamref":
+				tag.IsElement = true;
+				break;
+			case "typeparamref:Attributes":
+				break;
+			case "typeparamref:name":
+				tag.IsAttribute = true;
+				break;
+			case "ul":
+				tag.IsElement = true;
 				break;
 			case "padding-invisible":
 				tag.IsText = true;

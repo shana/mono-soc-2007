@@ -1,5 +1,10 @@
 2007-07-04  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentTagTable.cs: Added all the Monodoc tags that where left to be
+	  added.
+
+2007-07-04  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Test/Examples/TreeView.xml, Monodoc.Editor.Gui.mdp: Added
 	  TreeView.xml for use in test units.
 	* DocumentBufferArchiver.cs: Added GetArrays that initializes two
