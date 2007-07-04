@@ -29,6 +29,8 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected Viewport viewportThreads;
 		StringWriter consoleOutWriter = new StringWriter();
 		
+		CallstackPad callstackPad;
+		
 		public static void Main(string[] args)
 		{
 			new MdbGui(args);
@@ -68,6 +70,9 @@ namespace Mono.Debugger.Frontend
 			Glade.XML gxml = new Glade.XML("gui.glade", "mainWindow", null);
 			gxml.Autoconnect(this);
 			sourceView.Buffer.Text = "No source file";
+			
+			callstackPad = new CallstackPad(interpreter);
+			viewportCallstack.Add(callstackPad);
 			
 			consoleIn.GrabFocus();
 			
@@ -123,10 +128,14 @@ namespace Mono.Debugger.Frontend
 		/// <summary> Execute entered command </summary>
 		protected void OnConsoleIn_activate(object o, EventArgs e) 
 		{
-			parser.Append (consoleIn.Text);
-			if (parser.IsComplete ()){
-				parser.Execute ();
-				parser.Reset ();
+			if (consoleIn.Text == "g") {
+				callstackPad.UpdateDisplay();
+			} else {
+				parser.Append (consoleIn.Text);
+				if (parser.IsComplete ()){
+					parser.Execute ();
+					parser.Reset ();
+				}
 			}
 			
 			consoleIn.Text = String.Empty;
