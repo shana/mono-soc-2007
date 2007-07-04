@@ -1,5 +1,5 @@
 //
-// Enumeration.cs
+// Union.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,14 +30,16 @@
 //
 
 using System;
+using System.IO;
 
 using MonoDevelop.Projects;
+using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Navigation
 {
-	public class Enumeration : LanguageItem
+	public class Union : LanguageItem
 	{
-		public Enumeration (Tag tag, Project project) : base (tag, project)
+		public Union (Tag tag, Project project) : base (tag, project)
 		{
 			if (GetNamespace (tag)) return;
 			if (GetClass (tag)) return;

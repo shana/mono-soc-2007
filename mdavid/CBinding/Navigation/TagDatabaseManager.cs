@@ -68,7 +68,7 @@ namespace CBinding.Navigation
 			if (!Directory.Exists (tagsDir))
 				Directory.CreateDirectory (tagsDir);
 			
-			string ctags_options = "--C++-kinds=+p --fields=+a-f --language-force=C++ --excmd=pattern";
+			string ctags_options = "--C++-kinds=+p+u --fields=+a-f --language-force=C++ --excmd=pattern";
 			
 			StringBuilder args = new StringBuilder (ctags_options);
 			
@@ -95,6 +95,7 @@ namespace CBinding.Navigation
 			string _class = null;
 			string _namespace = null;
 			string _struct = null;
+			string _union = null;
 			string _enum = null;
 			char delimiter;
 			
@@ -139,6 +140,9 @@ namespace CBinding.Navigation
 					case "struct":
 						_struct = val;
 						break;
+					case "union":
+						_union = val;
+						break;
 					case "enum":
 						_enum = val;
 						break;
@@ -146,7 +150,7 @@ namespace CBinding.Navigation
 				}
 			}
 			
-			return new Tag (name, file, pattern, kind, access, _class, _namespace, _struct, _enum);
+			return new Tag (name, file, pattern, kind, access, _class, _namespace, _struct, _union, _enum);
 		}
 		
 		public void FillProjectNavigationInformation (Project project)
@@ -202,8 +206,10 @@ namespace CBinding.Navigation
 						info.Structures.Add (new Structure (tag, project));
 						break;
 					case TagKind.Typedef:
+						info.Typedefs.Add (new Typedef (tag, project));
 						break;
 					case TagKind.Union:
+						info.Unions.Add (new Union (tag, project));
 						break;
 					case TagKind.Variable:
 						info.Variables.Add (new Variable (tag, project));

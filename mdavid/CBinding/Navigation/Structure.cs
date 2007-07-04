@@ -39,11 +39,12 @@ namespace CBinding.Navigation
 {
 	public class Structure : LanguageItem
 	{
-		public Structure(Tag tag, Project project) : base (tag, project)
+		public Structure (Tag tag, Project project) : base (tag, project)
 		{
 			if (GetNamespace (tag)) return;
 			if (GetClass (tag)) return;
 			if (GetStructure (tag)) return;
+			if (GetUnion (tag)) return;
 		}
 	}
 }

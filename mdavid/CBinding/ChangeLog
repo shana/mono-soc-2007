@@ -1,3 +1,20 @@
+2007-07-03  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/TypedefNodeBuilder.cs, Navigation/StructureNodeBuilder.cs,
+	  Navigation/Function.cs, Navigation/Enumeration.cs,
+	  Navigation/TagDatabaseManager.cs,
+	  Navigation/ProjectNavigationInformation.cs,
+	  Navigation/GlobalsNodeBuilder.cs, Navigation/Member.cs,
+	  Navigation/Tag.cs, Navigation/ClassNodeBuilder.cs,
+	  Navigation/Union.cs, Navigation/Structure.cs,
+	  Navigation/Typedef.cs, Navigation/FunctionNodeBuilder.cs,
+	  Navigation/LanguageItem.cs, Navigation/Class.cs,
+	  Navigation/UnionNodeBuilder.cs, Navigation/NamespaceNodeBuilder.cs,
+	  gtk-gui/gui.stetic, Makefile.am, CBinding.addin.xml,
+	  icons/Icons.16x16.ProtectedUnion, icons/Icons.16x16.PrivateUnion,
+	  icons/Icons.16x16.Union, CBinding.mdp: Added support for typedefs
+	  and unions in the class pad.
+
 2007-07-02  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/Tag.cs, Navigation/StructureNodeBuilder.cs,

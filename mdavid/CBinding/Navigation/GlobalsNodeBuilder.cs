@@ -97,10 +97,20 @@ namespace CBinding.Navigation
 				if (s.Parent == null)
 					treeBuilder.AddChild (s);
 			
+			// Unions
+			foreach (Union u in info.Unions)
+				if (u.Parent == null)
+					treeBuilder.AddChild (u);
+			
 			// Enumerations
 			foreach (Enumeration e in info.Enumerations)
 				if (e.Parent == null)
 					treeBuilder.AddChild (e);
+			
+			// Typedefs
+			foreach (Typedef t in info.Typedefs)
+				if (t.Parent == null)
+					treeBuilder.AddChild (t);
 			
 			// Functions
 			foreach (Function f in info.Functions)

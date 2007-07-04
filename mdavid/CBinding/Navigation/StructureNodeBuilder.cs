@@ -100,10 +100,20 @@ namespace CBinding.Navigation
 				if (s.Parent != null && s.Parent.Equals (thisStruct))
 					treeBuilder.AddChild (s);
 			
+			// Unions
+			foreach (Union u in info.Unions)
+				if (u.Parent != null && u.Parent.Equals (thisStruct))
+					treeBuilder.AddChild (u);
+			
 			// Enumerations
 			foreach (Enumeration e in info.Enumerations)
 				if (e.Parent != null && e.Parent.Equals (thisStruct))
 					treeBuilder.AddChild (e);
+			
+			// Typedefs
+			foreach (Typedef t in info.Typedefs)
+				if (t.Parent != null && t.Parent.Equals (thisStruct))
+					treeBuilder.AddChild (t);
 			
 			// Functions
 			foreach (Function f in info.Functions)
@@ -123,7 +133,7 @@ namespace CBinding.Navigation
 		
 		public override int CompareObjects (ITreeNavigator thisNode, ITreeNavigator otherNode)
 		{
-			if (otherNode is Class)
+			if (otherNode.DataItem is Class)
 				return 1;
 			else
 				return -1;
