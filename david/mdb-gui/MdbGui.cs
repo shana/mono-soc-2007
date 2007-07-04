@@ -24,6 +24,9 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected TextView sourceView;
 		[Widget] protected Entry consoleIn;
 		[Widget] protected TextView consoleOut;
+		[Widget] protected Viewport viewportLocalVariables;
+		[Widget] protected Viewport viewportCallstack;
+		[Widget] protected Viewport viewportThreads;
 		StringWriter consoleOutWriter = new StringWriter();
 		
 		public static void Main(string[] args)
