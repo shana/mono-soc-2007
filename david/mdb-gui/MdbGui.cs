@@ -30,6 +30,7 @@ namespace Mono.Debugger.Frontend
 		StringWriter consoleOutWriter = new StringWriter();
 		
 		CallstackPad callstackPad;
+		ThreadPad threadPad;
 		
 		public static void Main(string[] args)
 		{
@@ -73,6 +74,8 @@ namespace Mono.Debugger.Frontend
 			
 			callstackPad = new CallstackPad(interpreter);
 			viewportCallstack.Add(callstackPad);
+			threadPad = new ThreadPad(interpreter);
+			viewportThreads.Add(threadPad);
 			
 			consoleIn.GrabFocus();
 			
@@ -130,6 +133,7 @@ namespace Mono.Debugger.Frontend
 		{
 			if (consoleIn.Text == "g") {
 				callstackPad.UpdateDisplay();
+				threadPad.UpdateDisplay();
 			} else {
 				parser.Append (consoleIn.Text);
 				if (parser.IsComplete ()){
