@@ -29,6 +29,7 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected Viewport viewportThreads;
 		StringWriter consoleOutWriter = new StringWriter();
 		
+		LocalsPad localsPad;
 		CallstackPad callstackPad;
 		ThreadPad threadPad;
 		
@@ -76,6 +77,8 @@ namespace Mono.Debugger.Frontend
 			viewportCallstack.Add(callstackPad);
 			threadPad = new ThreadPad(interpreter);
 			viewportThreads.Add(threadPad);
+			localsPad = new LocalsPad(interpreter);
+			viewportLocalVariables.Add(localsPad);
 			
 			consoleIn.GrabFocus();
 			
@@ -132,8 +135,10 @@ namespace Mono.Debugger.Frontend
 		protected void OnConsoleIn_activate(object o, EventArgs e) 
 		{
 			if (consoleIn.Text == "g") {
-				callstackPad.UpdateDisplay();
+				// Roughly the fastest ones first
 				threadPad.UpdateDisplay();
+				callstackPad.UpdateDisplay();
+				localsPad.UpdateDisplay();
 			} else {
 				parser.Append (consoleIn.Text);
 				if (parser.IsComplete ()){

@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="MdbGui.cs" />
     <Compile Include="Pads\CallstackPad.cs" />
+    <Compile Include="Pads\LocalsPad.cs" />
     <Compile Include="Pads\ThreadPad.cs" />
   </ItemGroup>
   <ItemGroup>
