@@ -21,12 +21,19 @@ namespace Mono.Debugger.Frontend
 		DebuggerEngine engine;
 		LineParser parser;
 		
-		[Widget] protected TextView sourceView;
-		[Widget] protected Entry consoleIn;
-		[Widget] protected TextView consoleOut;
+		[Widget] protected ToolButton toolbuttonRun;
+		[Widget] protected ToolButton toolbuttonStop;
+		[Widget] protected ToolButton toolbuttonStepIn;
+		[Widget] protected ToolButton toolbuttonStepOver;
+		[Widget] protected ToolButton toolbuttonStepOut;
+		
 		[Widget] protected Viewport viewportLocalVariables;
 		[Widget] protected Viewport viewportCallstack;
 		[Widget] protected Viewport viewportThreads;
+		
+		[Widget] protected TextView sourceView;
+		[Widget] protected Entry consoleIn;
+		[Widget] protected TextView consoleOut;
 		StringWriter consoleOutWriter = new StringWriter();
 		
 		LocalsPad localsPad;
@@ -72,6 +79,19 @@ namespace Mono.Debugger.Frontend
 			// Load XML file
 			Glade.XML gxml = new Glade.XML("gui.glade", "mainWindow", null);
 			gxml.Autoconnect(this);
+			
+			// Load icons
+			string imageBase = "Mono.Debugger.Frontend.pixmaps.";
+			toolbuttonRun.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.Start.png");
+			toolbuttonRun.IconWidget.Show();
+			toolbuttonStop.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StopProcess.png");
+			toolbuttonStop.IconWidget.Show();
+			toolbuttonStepIn.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StepInto.png");
+			toolbuttonStepIn.IconWidget.Show();
+			toolbuttonStepOver.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StepOver.png");
+			toolbuttonStepOver.IconWidget.Show();
+			toolbuttonStepOut.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StepOut.png");
+			toolbuttonStepOut.IconWidget.Show();
 			
 			// Default source view
 			TextTag  tag   = new TextTag("currentLine");
