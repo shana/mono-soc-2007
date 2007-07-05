@@ -113,26 +113,51 @@ namespace Mono.Debugger.Frontend
 		protected void OnToolbuttonRun_clicked(object o, EventArgs e) 
 		{
 			Console.WriteLine("OnToolbuttonRun_clicked");
+			if (interpreter.HasTarget) {
+				Console.WriteLine("Error - alredy running");
+			} else {
+				interpreter.Start();
+			}
 		}
 		
 		protected void OnToolbuttonStop_clicked(object o, EventArgs e) 
 		{
 			Console.WriteLine("OnToolbuttonStop_clicked");
+			if (interpreter.HasCurrentProcess) {
+				interpreter.Kill(interpreter.CurrentProcess);
+			} else {
+				Console.WriteLine("Error - nothing to stop");
+			}
 		}
 		
 		protected void OnToolbuttonStepIn_clicked(object o, EventArgs e) 
 		{
 			Console.WriteLine("OnToolbuttonStepIn_clicked");
+			if (interpreter.HasCurrentThread) {
+				interpreter.CurrentThread.StepLine();
+			} else {
+				Console.WriteLine("Error - no current thread");
+			}
 		}
 		
 		public void OnToolbuttonStepOver_clicked(object o, EventArgs e) 
 		{
 			Console.WriteLine("OnToolbuttonStepOver_clicked");
+			if (interpreter.HasCurrentThread) {
+				interpreter.CurrentThread.NextLine();
+			} else {
+				Console.WriteLine("Error - no current thread");
+			}
 		}
 		
 		protected void OnToolbuttonStepOut_clicked(object o, EventArgs e) 
 		{
 			Console.WriteLine("OnToolbuttonStepOut_clicked");
+			if (interpreter.HasCurrentThread) {
+				interpreter.CurrentThread.Finish(false);  // TODO: native param
+			} else {
+				Console.WriteLine("Error - no current thread");
+			}
 		}
 		
 		/// <summary> Execute entered command </summary>
