@@ -71,6 +71,10 @@ namespace Mono.Debugger.Frontend
 			
 			Glade.XML gxml = new Glade.XML("gui.glade", "mainWindow", null);
 			gxml.Autoconnect(this);
+			
+			TextTag  tag   = new TextTag("currentLine");
+			tag.Background = "yellow";
+			sourceView.Buffer.TagTable.Add(tag);
 			sourceView.Buffer.Text = "No source file";
 			
 			callstackPad = new CallstackPad(interpreter);
@@ -139,6 +143,29 @@ namespace Mono.Debugger.Frontend
 				threadPad.UpdateDisplay();
 				callstackPad.UpdateDisplay();
 				localsPad.UpdateDisplay();
+				
+				StackFrame currentFrame = null;
+				if (interpreter.HasCurrentThread) {
+					currentFrame = interpreter.CurrentThread.CurrentFrame;
+				}
+				if (currentFrame != null &&
+				    currentFrame.SourceAddress != null &&
+				    currentFrame.SourceAddress.Location != null &&
+				    currentFrame.SourceAddress.Location.FileName != null) {
+					
+					SourceBuffer buffer = interpreter.ReadFile(currentFrame.SourceAddress.Location.FileName);
+					string[] sourceCode = buffer.Contents;
+					sourceView.Buffer.Text = string.Join("\n", sourceCode);
+					
+					int line = currentFrame.SourceAddress.Location.Line;
+					TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
+					TextIter end   = sourceView.Buffer.GetIterAtLine(line);
+					sourceView.Buffer.ApplyTag("currentLine", begin, end);
+					
+					sourceView.ScrollToIter(end, 0, false, 0, 0);
+				} else {
+					sourceView.Buffer.Text = "No source code";
+				}
 			} else {
 				parser.Append (consoleIn.Text);
 				if (parser.IsComplete ()){

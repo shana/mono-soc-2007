@@ -86,7 +86,7 @@ namespace Mono.Debugger.Frontend
 			}
 			
 			Mono.Debugger.Thread currentThread = interpreter.CurrentThread;
-			StackFrame currentFrame = currentThread.GetBacktrace().CurrentFrame;
+			StackFrame currentFrame = currentThread.CurrentFrame;
 			
 			store.Clear();
 			TargetVariable[] localVars = currentFrame.Locals;
