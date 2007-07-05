@@ -2,19 +2,77 @@
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
       <Output directory="./bin/Debug" assembly="MonoDevelop.Database.Query" />
-      <Build debugmode="True" target="Exe" />
+      <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
       <Output directory="./bin/Release" assembly="MonoDevelop.Database.Query" />
-      <Build debugmode="False" target="Exe" />
+      <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
-      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="True" ctype="CSharpCompilerParameters" />
     </Configuration>
   </Configurations>
   <Contents>
-    <File name="./MonoDevelop.Database.Query.addin.xml" subtype="Code" buildaction="Compile" />
+    <File name="./MonoDevelop.Database.Query.addin.xml" subtype="Code" buildaction="FileCopy" />
+    <File name="./DataGrid" subtype="Directory" buildaction="Compile" />
+    <File name="./gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./DataGrid/DataGrid.cs" subtype="Code" buildaction="Compile" />
+    <File name="./DataGrid/DataGridColumn.cs" subtype="Code" buildaction="Compile" />
+    <File name="./DataGrid/DataGridColumnType.cs" subtype="Code" buildaction="Compile" />
+    <File name="./DataGrid/Renderers" subtype="Directory" buildaction="Compile" />
+    <File name="./DataGrid/Visualizers" subtype="Directory" buildaction="Compile" />
+    <File name="./Codons" subtype="Directory" buildaction="Compile" />
+    <File name="./DataGrid/Renderers/StringCellRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./DataGrid/Renderers/BaseCellRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./DataGrid/Renderers/BinaryCellRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./DataGrid/Visualizers/IDataVisualizer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Query.DataGrid.cs" subtype="Code" buildaction="Compile" />
+    <File name="./QueryResultView.cs" subtype="Code" buildaction="Compile" />
+    <File name="./SqlQueryView.cs" subtype="Code" buildaction="Compile" />
+    <File name="./icons/Icons.16x16.Database.Column.Add.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Column.Key.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Column.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Column.Remove.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Connection.Add.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Connection.Edit.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Connection.Error.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Connection.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Connection.Remove.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Constraints.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Database.Error.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Database.Ok.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Database.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Execute.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Parameter.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Procedure.Add.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Procedure.Edit.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Procedure.Error.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Procedure.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Procedure.Remove.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Procedure.Source.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Relations.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Table.Add.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Table.Edit.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Table.Error.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Table.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Table.Refresh.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Table.Remove.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Tables.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.User.Add.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.User.Edit.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.User.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.User.Remove.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Users.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.View.Add.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.View.Edit.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.View.Error.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.View.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.View.Remove.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.View.Source.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/Icons.16x16.Database.Views.png" subtype="Code" buildaction="EmbedAsResource" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -28,5 +86,14 @@
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Core.Gui, Version=0.14.0.0, Culture=neutral" />
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Ide, Version=0.14.0.0, Culture=neutral" />
     <ProjectReference type="Project" localcopy="True" refto="Mono.Data.Sql" />
+    <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+    <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
   </References>
+  <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
+    <ExportedWidgets>
+      <Widget>MonoDevelop.Database.Query.DataGrid</Widget>
+      <Widget>MonoDevelop.Database.Query.SqlQueryControl</Widget>
+    </ExportedWidgets>
+  </GtkDesignInfo>
 </Project>
