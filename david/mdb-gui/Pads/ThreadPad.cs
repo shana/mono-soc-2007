@@ -21,8 +21,10 @@ namespace Mono.Debugger.Frontend
 		
 		string[] columnHeaders = new string[] {
 			" ",
-			"Id",
+			"ID",
 			"PID",
+			"TID",
+			"Name",
 			"State",
 			"Current Location"
 		};
@@ -39,6 +41,8 @@ namespace Mono.Debugger.Frontend
 				typeof (string),
 				typeof (int),
 				typeof (int),
+				typeof (string),
+				typeof (string),
 				typeof (string),
 				typeof (string)
 			);
@@ -92,8 +96,10 @@ namespace Mono.Debugger.Frontend
 				store.SetValue (it, 0, current ? "*" : " ");
 				store.SetValue (it, 1, thread.ID);
 				store.SetValue (it, 2, thread.PID);
-				store.SetValue (it, 3, thread.State.ToString());
-				store.SetValue (it, 4, location);
+				store.SetValue (it, 3, String.Format("{0:x}", thread.TID));
+				store.SetValue (it, 4, thread.Name);
+				store.SetValue (it, 5, thread.State.ToString());
+				store.SetValue (it, 6, location);
 			} else {
 				AddThread (thread);
 			}
