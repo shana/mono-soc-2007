@@ -178,10 +178,8 @@ namespace Gendarme.Rules.Smells {
 				stringBuilder.Append (Environment.NewLine);
 			}
 			return stringBuilder.ToString ();
-			}
-
 		}
-	
+	}
 	
 	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
 		private StringCollection checkedMethods;
