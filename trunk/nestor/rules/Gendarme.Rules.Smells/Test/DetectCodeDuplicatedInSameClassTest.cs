@@ -116,11 +116,11 @@ namespace Test.Rules.Smells {
 			myList.Remove ("FooReplied");
 		} 
 		
-                //This two methods contains code duplicated, but by the moment
-                //the comparer can't detect it, because is a special case and
-                //for the next improvements I will improve the compararer for
-                //detect also subsets.
-                /*
+		//This two methods contains code duplicated, but by the moment
+		//the comparer can't detect it, because is a special case and
+		//for the next improvements I will improve the compararer for
+		//detect also subsets.
+		/*
 		public void ShowBannerAndAdd () 
 		{
 			Console.WriteLine ("Banner");
@@ -134,7 +134,7 @@ namespace Test.Rules.Smells {
 			Console.WriteLine ("Banner");
 			Console.WriteLine ("Print");
 		}
-                */
+		*/
 		
 		public void PrintUsingAForLoopAndAddAValue () 
 		{
