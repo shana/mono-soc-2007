@@ -41,6 +41,7 @@ namespace System.Windows.Controls {
 				Assert.IsTrue(on_unselected_called, "9");
 				Assert.AreEqual(on_unselected_event_args.Source, this, "10");
 				RoutedEvent unselected_event = on_unselected_event_args.RoutedEvent;
+				Assert.AreSame(unselected_event, Selector.UnselectedEvent, "10 1");
 				Assert.AreEqual(unselected_event.Name, "Unselected", "11");
 				Assert.AreEqual(unselected_event.RoutingStrategy, RoutingStrategy.Bubble, "12");
 				IsSelected = true;
