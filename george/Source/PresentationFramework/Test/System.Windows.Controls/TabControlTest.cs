@@ -561,9 +561,9 @@ namespace System.Windows.Controls {
 
 		[Test]
 		public void SelectedIndex() {
-			PropertyMetadata default_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedIndexProperty.DefaultMetadata;
-			PropertyMetadata selector_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedIndexProperty.GetMetadata(typeof(global::System.Windows.Controls.Primitives.Selector));
-			PropertyMetadata tab_control_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedIndexProperty.GetMetadata(typeof(TabControl));
+			PropertyMetadata default_metadata = Selector.SelectedIndexProperty.DefaultMetadata;
+			PropertyMetadata selector_metadata = Selector.SelectedIndexProperty.GetMetadata(typeof(Selector));
+			PropertyMetadata tab_control_metadata = Selector.SelectedIndexProperty.GetMetadata(typeof(TabControl));
 			Assert.AreNotSame(default_metadata, tab_control_metadata, "1");
 			Assert.AreSame(selector_metadata, tab_control_metadata, "2");
 			Assert.AreEqual(tab_control_metadata.DefaultValue, -1, "3");
@@ -571,9 +571,9 @@ namespace System.Windows.Controls {
 
 		[Test]
 		public void SelectedItem() {
-			PropertyMetadata default_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedItemProperty.DefaultMetadata;
-			PropertyMetadata selector_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedItemProperty.GetMetadata(typeof(global::System.Windows.Controls.Primitives.Selector));
-			PropertyMetadata tab_control_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedItemProperty.GetMetadata(typeof(TabControl));
+			PropertyMetadata default_metadata = Selector.SelectedItemProperty.DefaultMetadata;
+			PropertyMetadata selector_metadata = Selector.SelectedItemProperty.GetMetadata(typeof(Selector));
+			PropertyMetadata tab_control_metadata = Selector.SelectedItemProperty.GetMetadata(typeof(TabControl));
 			Assert.AreNotSame(default_metadata, tab_control_metadata, "1");
 			Assert.AreSame(selector_metadata, tab_control_metadata, "2");
 			Assert.AreEqual(tab_control_metadata.DefaultValue, null, "3");
@@ -581,9 +581,9 @@ namespace System.Windows.Controls {
 
 		[Test]
 		public void SelectedValue() {
-			PropertyMetadata default_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedValueProperty.DefaultMetadata;
-			PropertyMetadata selector_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedValueProperty.GetMetadata(typeof(global::System.Windows.Controls.Primitives.Selector));
-			PropertyMetadata tab_control_metadata = global::System.Windows.Controls.Primitives.Selector.SelectedValueProperty.GetMetadata(typeof(TabControl));
+			PropertyMetadata default_metadata = Selector.SelectedValueProperty.DefaultMetadata;
+			PropertyMetadata selector_metadata = Selector.SelectedValueProperty.GetMetadata(typeof(Selector));
+			PropertyMetadata tab_control_metadata = Selector.SelectedValueProperty.GetMetadata(typeof(TabControl));
 			Assert.AreNotSame(default_metadata, tab_control_metadata, "1");
 			Assert.AreSame(selector_metadata, tab_control_metadata, "2");
 			Assert.AreEqual(tab_control_metadata.DefaultValue, null, "3");

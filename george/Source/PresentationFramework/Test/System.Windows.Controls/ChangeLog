@@ -1,6 +1,10 @@
 2007-07-05  George Giolfan  <georgegiolfan@yahoo.com>
 
-	* TabItem.cs: Expanded Selected test.
+	* TabControlTest.cs: Switched to implemented Selector.
+
+2007-07-05  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabItemTest.cs: Expanded Selected test.
 
 2007-07-02  George Giolfan  <georgegiolfan@yahoo.com>
 
