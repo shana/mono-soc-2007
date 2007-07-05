@@ -167,9 +167,11 @@ namespace Gendarme.Rules.Smells {
                 public override string ToString () 
                 {
                         StringBuilder stringBuilder = new StringBuilder ();
-                        stringBuilder.Append ("\tFor the expression:\n");
+                        stringBuilder.Append ("\tFor the expression:");
+                        stringBuilder.Append (Environment.NewLine);
                         foreach (Instruction instruction in InnerList) {
-                                stringBuilder.Append (String.Format ("\t\tInstruction: {0} {1}\n", instruction.OpCode.Name, instruction.Operand));
+                                stringBuilder.Append (String.Format ("\t\tInstruction: {0} {1}", instruction.OpCode.Name, instruction.Operand));
+                                stringBuilder.Append (Environment.NewLine);
                         }
                         return stringBuilder.ToString ();
                 }
