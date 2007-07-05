@@ -18,67 +18,48 @@ namespace Mono.Debugger.Frontend
 		Gtk.TreeView tree;
 		Gtk.TreeStore store;
 		Hashtable threadRows;
+		
+		string[] columnHeaders = new string[] {
+			" ",
+			"Id",
+			"PID",
+			"State",
+			"Current Location"
+		};
 
 		public ThreadPad (Interpreter interpreter)
 		{
 			this.interpreter = interpreter;
 			
 			threadRows = new Hashtable ();
-
+			
 			this.ShadowType = ShadowType.In;
-
-			store = new TreeStore (typeof (int),
-					       typeof (int),
-					       typeof (string),
-					       typeof (string));
-
+			
+			store = new TreeStore (
+				typeof (string),
+				typeof (int),
+				typeof (int),
+				typeof (string),
+				typeof (string)
+			);
+			
 			tree = new TreeView (store);
 			tree.RulesHint = true;
 			tree.HeadersVisible = true;
-
-			TreeViewColumn Col;
-			CellRenderer ThreadRenderer;
-
-			Col = new TreeViewColumn ();
-			ThreadRenderer = new CellRendererText ();
-			Col.Title = "Id";
-			Col.PackStart (ThreadRenderer, true);
-			Col.AddAttribute (ThreadRenderer, "text", 0);
-			Col.Resizable = true;
-			Col.Alignment = 0.0f;
-			tree.AppendColumn (Col);
-
-			Col = new TreeViewColumn ();
-			ThreadRenderer = new CellRendererText ();
-			Col.Title = "PID";
-			Col.PackStart (ThreadRenderer, true);
-			Col.AddAttribute (ThreadRenderer, "text", 1);
-			Col.Resizable = true;
-			Col.Alignment = 0.0f;
-			tree.AppendColumn (Col);
-
-			Col = new TreeViewColumn ();
-			ThreadRenderer = new CellRendererText ();
-			Col.Title = "State";
-			Col.PackStart (ThreadRenderer, true);
-			Col.AddAttribute (ThreadRenderer, "text", 2);
-			Col.Resizable = true;
-			Col.Alignment = 0.0f;
-			tree.AppendColumn (Col);
-
-			Col = new TreeViewColumn ();
-			ThreadRenderer = new CellRendererText ();
-			Col.Title = "Current Location";
-			Col.PackStart (ThreadRenderer, true);
-			Col.AddAttribute (ThreadRenderer, "text", 3);
-			Col.Resizable = true;
-			Col.Alignment = 0.0f;
-			tree.AppendColumn (Col);
-
+			
+			for(int i = 0; i < columnHeaders.Length; i++) {
+				TreeViewColumn column = new TreeViewColumn ();
+				CellRenderer renderer = new CellRendererText ();
+				column.Title = columnHeaders[i];
+				column.PackStart (renderer, true);
+				column.AddAttribute (renderer, "text", i);
+				column.Resizable = true;
+				column.Alignment = 0.0f;
+				tree.AppendColumn (column);
+			}
+			
 			Add (tree);
 			ShowAll ();
-
-//			((DebuggingService)Services.DebuggingService).ThreadStateEvent += (EventHandler) Services.DispatchService.GuiDispatch (new EventHandler (OnThreadEvent));
 		}
 		
 //		void IPadContent.Initialize (IPadWindow window)
@@ -100,17 +81,19 @@ namespace Mono.Debugger.Frontend
 			TreeIter it;
 
 			if (row != null && store.GetIter (out it, row.Path)) {
-				store.SetValue (it, 0, thread.ID);
-				store.SetValue (it, 1, thread.PID);
-				store.SetValue (it, 2, thread.State.ToString());
-
+				bool current = interpreter.HasCurrentThread && interpreter.CurrentThread.ID == thread.ID;
+				
 				string location;
 				if (thread.IsStopped)
 					location = thread.GetBacktrace().Frames[0].SourceAddress.Name;
 				else
 					location = "";
-
-				store.SetValue (it, 3, location);
+				
+				store.SetValue (it, 0, current ? "*" : " ");
+				store.SetValue (it, 1, thread.ID);
+				store.SetValue (it, 2, thread.PID);
+				store.SetValue (it, 3, thread.State.ToString());
+				store.SetValue (it, 4, location);
 			} else {
 				AddThread (thread);
 			}
