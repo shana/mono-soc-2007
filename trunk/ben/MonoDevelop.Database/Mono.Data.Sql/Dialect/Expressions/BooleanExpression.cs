@@ -26,14 +26,43 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class BooleanExpression : IConditionalExpression
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected IExpression left;
+		protected IExpression right;
+		protected BooleanOperator op;
+		
+		public BooleanExpression (IExpression left, BooleanOperator op, IExpression right)
+		{
+			Left = left;
+			Operator = op;
+			Right = right;
+		}
+
+		public IExpression Left {
+			get { return left; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("left");
+				left = value;
+			}
+		}
+		
+		public IExpression Right {
+			get { return right; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("right");
+				right = value;
+			}
+		}
+		
+		public BooleanOperator Operator {
+			get { return op; }
+			set { op = value; }
 		}
 	}
 }

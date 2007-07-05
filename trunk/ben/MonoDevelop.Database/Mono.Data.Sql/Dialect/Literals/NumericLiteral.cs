@@ -26,14 +26,44 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class NumericLiteral : StringLiteral
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		public NumericLiteral (int value)
+		{
+			Value = value.ToString ();
+		}
+		
+		public NumericLiteral (uint value)
+		{
+			Value = value.ToString ();
+		}
+		
+		public NumericLiteral (long value)
+		{
+			Value = value.ToString ();
+		}
+		
+		public NumericLiteral (ulong value)
+		{
+			Value = value.ToString ();
+		}
+		
+		public NumericLiteral (float value)
+		{
+			Value = value.ToString ();
+		}
+		
+		public NumericLiteral (double value)
+		{
+			Value = value.ToString ();
+		}
+		
+		public NumericLiteral (decimal value)
+		{
+			Value = value.ToString ();
 		}
 	}
 }

@@ -26,14 +26,28 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public enum Operator
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
-		}
+		Equals,
+		NotEqual,
+
+		GreaterThanOrEqual,
+		GreaterThan,
+		LessThanOrEqual,
+		LessThan,
+
+		Plus,
+		Minus,
+		Divide,
+		Multiply,
+		Modus,
+
+		Is,
+		IsNot,
+		In,
+		Like
 	}
 }

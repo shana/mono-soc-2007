@@ -26,14 +26,14 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	[Flags]
+	public enum BooleanOperator
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
-		}
+		And,
+		Or,
+		Not
 	}
 }

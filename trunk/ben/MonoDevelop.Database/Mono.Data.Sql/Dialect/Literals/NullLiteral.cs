@@ -26,40 +26,10 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using MonoDevelop.Core;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public sealed class DbFactoryService : AbstractService
+	public class NullLiteral : ILiteral
 	{
-		private Dictionary<string, IDbFactory> factories;
-		
-		public override void InitializeService ()
-		{
-			base.InitializeService ();
-			
-			factories = new Dictionary<string, IDbFactory> ();
-			foreach (DbFactoryCodon codon in AddinManager.GetExtensionNodes ("/Mono/Data/Sql"))
-				factories.Add (codon.Id, codon.DbFactory);
-		}
-
-		public override void UnloadService ()
-		{
-			base.UnloadService ();
-			factories = null;
-		}
-
-		public ICollection<IDbFactory> DbFactories {
-			get { return factories.Values; }
-		}
-		
-		public IDbFactory GetDbFactory (string id)
-		{
-			IDbFactory fac = null;
-			if (factories.TryGetValue (id, out fac))
-				return fac;
-			return null;
-		}
 	}
 }

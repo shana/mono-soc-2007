@@ -26,14 +26,24 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public interface ISqlDialect
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
-		}
+		//TODO: method for checking if the statement/clause/... is supported
+		//TODO: do we need support for a seperate prefix and postfix, like [xxx] for SqlServer ?
+		//or do all servers support '"'
+		string QuoteChar { get; }
+		
+		string ParameterChar { get; }
+		
+		string GetSql (IStatement statement);
+		
+		string GetSql (IClause clause);
+		
+		string GetSql (IExpression expression);
+		
+		string GetSql (ILiteral literal);
 	}
 }

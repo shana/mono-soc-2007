@@ -29,6 +29,7 @@ using System;
 using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace Mono.Data.Sql
@@ -37,12 +38,21 @@ namespace Mono.Data.Sql
 	{
 		protected IDbConnection connection;
 		protected ConnectionSettings settings;
+		protected IDbFactory factory;
 		
-		protected AbstractConnectionProvider (ConnectionSettings settings)
+		protected AbstractConnectionProvider (IDbFactory factory, ConnectionSettings settings)
 		{
+			if (factory == null)
+				throw new ArgumentNullException ("factory");
 			if (settings == null)
 				throw new ArgumentNullException ("settings");
+			
+			this.factory = factory;
 			this.settings = settings;
+		}
+		
+		public virtual IDbFactory DbFactory {
+			get { return factory; }
 		}
 		
 		public virtual IDbConnection Connection {
@@ -82,6 +92,82 @@ namespace Mono.Data.Sql
 			command.CommandType = CommandType.Text;
 			return command;
 		}
+
+		public virtual void ExecuteQuery (IStatement statement)
+		{
+			if (statement == null)
+				throw new ArgumentNullException ("statement");
+			string sql = DbFactory.Dialect.GetSql (statement);
+			ExecuteQuery (sql);
+		}
+
+		public virtual void ExecuteQuery (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+			IDbCommand command = CreateCommand (sql);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (ExecuteQueryThreaded), command);
+		}
+
+		public virtual DataSet ExecuteQueryAsDataSet (IStatement statement)
+		{
+			if (statement == null)
+				throw new ArgumentNullException ("statement");
+			string sql = DbFactory.Dialect.GetSql (statement);
+			return ExecuteQueryAsDataSet (sql);
+		}
+
+		public abstract DataSet ExecuteQueryAsDataSet (string sql);
+		
+		public virtual DataTable ExecuteQueryAsDataTable (IStatement statement)
+		{
+			if (statement == null)
+				throw new ArgumentNullException ("statement");
+			string sql = DbFactory.Dialect.GetSql (statement);
+			return ExecuteQueryAsDataTable (sql);
+		}
+
+		public abstract DataTable ExecuteQueryAsDataTable (string sql);
+		
+		public virtual void ExecuteQueryAsDataSetAsync (IStatement statement, SqlResultCallback<DataSet> callback)
+		{
+			if (statement == null)
+				throw new ArgumentNullException ("statement");
+			string sql = DbFactory.Dialect.GetSql (statement);
+			ExecuteQueryAsDataSetAsync (sql, callback);
+		}
+
+		public virtual void ExecuteQueryAsDataSetAsync (string sql, SqlResultCallback<DataSet> callback)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+			if (callback == null)
+				throw new ArgumentNullException ("callback");
+			
+			ThreadPool.QueueUserWorkItem (new WaitCallback (ExecuteQueryAsDataSetThreaded),
+				new object[] {sql, callback} as object
+			);
+		}
+		
+		public virtual void ExecuteQueryAsDataTableAsync (IStatement statement, SqlResultCallback<DataTable> callback)
+		{
+			if (statement == null)
+				throw new ArgumentNullException ("statement");
+			string sql = DbFactory.Dialect.GetSql (statement);
+			ExecuteQueryAsDataTableAsync (sql, callback);
+		}
+		
+		public virtual void ExecuteQueryAsDataTableAsync (string sql, SqlResultCallback<DataTable> callback)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+			if (callback == null)
+				throw new ArgumentNullException ("callback");
+			
+			ThreadPool.QueueUserWorkItem (new WaitCallback (ExecuteQueryAsDataTableThreaded),
+				new object[] {sql, callback}
+			);
+		}
 		
 		protected virtual string SetConnectionStringParameter (string connectionString, string quoteChar, string parameter, string value)
 		{
@@ -94,6 +180,33 @@ namespace Mono.Data.Sql
 				return String.Concat (connectionString, connectionString.EndsWith (";") ? "" : ";",
 					parameter, "=", quoteChar, value, quoteChar, ";");
 			}
+		}
+			
+		private void ExecuteQueryThreaded (object state)
+		{
+			IDbCommand command = (IDbCommand)state;
+			command.ExecuteNonQuery ();
+			command.Connection.Close ();
+		}
+				
+		private void ExecuteQueryAsDataSetThreaded (object state)
+		{
+			object[] data = state as object[];
+			string sql = data[0] as string;
+			SqlResultCallback<DataSet> callback = data[1] as SqlResultCallback<DataSet>;
+					
+			DataSet set = ExecuteQueryAsDataSet (sql);
+			callback (this, set);
+		}
+				
+		private void ExecuteQueryAsDataTableThreaded (object state)
+		{
+			object[] data = state as object[];
+			string sql = data[0] as string;
+			SqlResultCallback<DataTable> callback = data[1] as SqlResultCallback<DataTable>;
+					
+			DataTable table = ExecuteQueryAsDataTable (sql);
+			callback (this, table);
 		}
 	}
 }

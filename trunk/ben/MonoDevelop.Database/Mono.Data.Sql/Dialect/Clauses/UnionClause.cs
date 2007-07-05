@@ -26,14 +26,25 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class UnionClause : IClause
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected SelectStatement union;
+		
+		public UnionClause (SelectStatement union)
+		{
+			Union = union;
+		}
+		
+		public SelectStatement Union {
+			get { return union; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("union");
+				union = value;
+			}
 		}
 	}
 }

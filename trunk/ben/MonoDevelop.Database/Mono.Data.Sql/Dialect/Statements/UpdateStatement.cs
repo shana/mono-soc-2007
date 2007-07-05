@@ -26,14 +26,47 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class UpdateStatement : IStatement
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected IdentifierExpression identifier;
+		protected List<IdentifierExpression> columns;
+		protected List<IExpression> values;
+		protected WhereClause where;
+		
+		public UpdateStatement (IdentifierExpression identifier, IEnumerable<IdentifierExpression> columns, IEnumerable<IExpression> values)
+		{
+			Identifier = identifier;
+			
+			this.columns = new List<IdentifierExpression> ();
+			this.values = new List<IExpression> ();
+			
+			this.columns.AddRange (columns);
+			this.values.AddRange (values);
+		}
+
+		public IdentifierExpression Identifier {
+			get { return identifier; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("identifier");
+				identifier = value;
+			}
+		}
+
+		public List<IdentifierExpression> Columns {
+			get { return columns; }
+		}
+		
+		public List<IExpression> Values {
+			get { return values; }
+		}
+		
+		public WhereClause Where {
+			get { return where; }
+			set { where = value; }
 		}
 	}
 }

@@ -26,14 +26,29 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class StringLiteral : ILiteral
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected string val;
+		
+		protected StringLiteral ()
+		{
+		}
+		
+		public StringLiteral (string value)
+		{
+			Value = value;
+		}
+		
+		public string Value {
+			get { return val; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("value");
+				val = value;
+			}
 		}
 	}
 }

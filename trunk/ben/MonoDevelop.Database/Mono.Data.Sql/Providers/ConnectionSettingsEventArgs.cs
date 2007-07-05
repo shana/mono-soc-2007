@@ -1,9 +1,7 @@
 //
 // Authors:
-//	Christian Hergert  <chris@mosaix.net>
 //	Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,46 +24,23 @@
 //
 
 using System;
-using System.Data;
 using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public delegate void SqlResultCallback<T> (object sender, T Results);
+	public delegate void ConnectionSettingsEventHandler (object sender, ConnectionSettingsEventArgs args);
 	
-	public interface IConnectionProvider
+	public class ConnectionSettingsEventArgs : EventArgs
 	{
-		IDbFactory DbFactory { get; }
+		protected ConnectionSettings settings;
 		
-		IDbConnection Connection { get; }
+		public ConnectionSettingsEventArgs (ConnectionSettings settings)
+		{
+			this.settings = settings;
+		}
 		
-		ConnectionSettings Settings { get; }
-		
-		bool IsOpen { get; }
-		
-		bool SupportsPooling { get; }
-		
-		bool SupportsAutomaticConnectionString { get; }
-
-		bool Open (out string errorMessage);
-
-		void Close ();
-		
-		IDbCommand CreateCommand (string sql);
-		
-		void ExecuteQuery (IStatement statement);
-		void ExecuteQuery (string sql);
-		
-		DataSet ExecuteQueryAsDataSet (IStatement statement);
-		DataSet ExecuteQueryAsDataSet (string sql);
-		
-		DataTable ExecuteQueryAsDataTable (IStatement statement);
-		DataTable ExecuteQueryAsDataTable (string sql);
-		
-		void ExecuteQueryAsDataSetAsync (IStatement statement, SqlResultCallback<DataSet> callback);
-		void ExecuteQueryAsDataSetAsync (string sql, SqlResultCallback<DataSet> callback);
-		
-		void ExecuteQueryAsDataTableAsync (IStatement statement, SqlResultCallback<DataTable> callback);
-		void ExecuteQueryAsDataTableAsync (string sql, SqlResultCallback<DataTable> callback);
+		public ConnectionSettings ConnectionSettings {
+			get { return settings; }
+		}
 	}
 }

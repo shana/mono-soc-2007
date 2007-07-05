@@ -26,14 +26,25 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class FromSelectClause : FromClause
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected SelectStatement source;
+		
+		public FromSelectClause (SelectStatement source)
+		{
+			Source = source;
+		}
+		
+		public SelectStatement Source {
+			get { return source; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("source");
+				source = value;
+			}
 		}
 	}
 }
