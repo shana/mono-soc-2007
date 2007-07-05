@@ -52,8 +52,8 @@ namespace Gendarme.Rules.Smells {
 		
                 private bool IsAcceptable (Instruction instruction) 
                 {
-                        return instruction.OpCode.FlowControl == FlowControl.Call | 
-                                instruction.OpCode.FlowControl == FlowControl.Branch | 
+                        return instruction.OpCode.FlowControl == FlowControl.Call || 
+                                instruction.OpCode.FlowControl == FlowControl.Branch || 
                                 instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
                 }
 
@@ -65,7 +65,7 @@ namespace Gendarme.Rules.Smells {
 
                 private bool IsDelimiter (Instruction instruction) 
                 {
-                        return instruction.OpCode.Name == "ldarg.0" |
+                        return instruction.OpCode.Name == "ldarg.0" ||
                                 instruction.OpCode.FlowControl == FlowControl.Branch;
                 }
 
@@ -155,9 +155,9 @@ namespace Gendarme.Rules.Smells {
                         if (currentInstruction.OpCode.Name == targetInstruction.OpCode.Name)
                                 return true;
                         else {
-                                if (currentInstruction.OpCode.Name == "call" & targetInstruction.OpCode.Name == "callVirt")
+                                if (currentInstruction.OpCode.Name == "call" && targetInstruction.OpCode.Name == "callvirt")
                                         return true;
-                                else if (currentInstruction.OpCode.Name == "callvirt" & targetInstruction.OpCode.Name == "call")
+                                else if (currentInstruction.OpCode.Name == "callvirt" && targetInstruction.OpCode.Name == "call")
                                         return true;
                                 else
                                         return false;
@@ -198,7 +198,7 @@ namespace Gendarme.Rules.Smells {
                                 Expression currentExpression = (Expression) currentEnumerator.Current;
                                 Expression targetExpression = (Expression) targetEnumerator.Current;
 
-                                if (equality & currentExpression.Equals (targetExpression))
+                                if (equality && currentExpression.Equals (targetExpression))
                                         return true;
                                 else {
                                         equality = currentExpression.Equals (targetExpression);
