@@ -225,7 +225,8 @@ namespace Mono.Debugger.Frontend
 				TextIter end   = sourceView.Buffer.GetIterAtLine(line);
 				sourceView.Buffer.ApplyTag("currentLine", begin, end);
 				
-				sourceView.ScrollToIter(end, 0, false, 0, 0);
+				TextMark mark = sourceView.Buffer.CreateMark(null, end, false);
+				sourceView.ScrollToMark(mark, 0, false, 0, 0);
 			} else {
 				sourceView.Buffer.Text = "No source code";
 			}
