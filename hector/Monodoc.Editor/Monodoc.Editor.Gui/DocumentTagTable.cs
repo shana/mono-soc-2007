@@ -60,7 +60,6 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("Type:FullName");
 		tag.IsAttribute = true;
 		tag.Scale = Pango.Scale.XXLarge;
-		tag.PixelsBelowLines = 10;
 		Add (tag);
 		
 		tag = new DocumentTag ("Type:FullNameSP");
@@ -74,8 +73,7 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("TypeSignature");
 		tag.IsElement = true;
 		tag.Scale = Pango.Scale.Large;
-		tag.PixelsBelowLines = 10;
-		tag.LeftMargin = 50;
+		tag.LeftMargin = 20;
 		Add (tag);
 		
 		tag = new DocumentTag ("TypeSignature:Attributes");
@@ -103,8 +101,8 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("AssemblyInfo");
 		tag.IsElement = true;
-		tag.Scale = Pango.Scale.Large;
-		tag.LeftMargin = 50;
+		tag.Scale = Pango.Scale.Medium;
+		tag.LeftMargin = 20;
 		Add (tag);
 		
 		tag = new DocumentTag ("AssemblyName");
@@ -161,6 +159,9 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("ThreadSafetyStatement");
 		tag.IsElement = true;
+		tag.Scale = Pango.Scale.Small;
+		tag.PixelsAboveLines = 10;
+		tag.PixelsBelowLines = 10;
 		Add (tag);
 		
 		tag = new DocumentTag ("ThreadSafetyStatement:Text");
@@ -173,6 +174,7 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("BaseTypeName");
 		tag.IsElement = true;
+		tag.Invisible = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("BaseTypeName:Text");
@@ -369,6 +371,7 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("summary");
 		tag.IsElement = true;
+		tag.PixelsBelowLines = 10;
 		Add (tag);
 		
 		tag = new DocumentTag ("summary:Text");
@@ -603,6 +606,7 @@ public class DocumentTagTable : TextTagTable {
 			break;
 		case "link:location":
 			tag.IsAttribute = true;
+			tag.Invisible = true;
 			break;
 		case "link:Text":
 			tag.IsText = true;
