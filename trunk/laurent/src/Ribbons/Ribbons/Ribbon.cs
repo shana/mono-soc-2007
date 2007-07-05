@@ -347,57 +347,6 @@ namespace Ribbons
 			{
 				pageAllocation = Gdk.Rectangle.Zero;
 			}
-			
-			
-			/*int x = allocation.X + (int)(ribbon_space + roundSize), y = allocation.Y + (int)ribbon_space, maxH = 0;
-			
-			int tab_horizPadding = (int)(4*ribbon_space+2*borderWidth);
-			int tab_vertPadding = (int)(2*ribbon_space + borderWidth); 
-			
-			foreach(RibbonPage p in pages)
-			{
-				Gtk.Requisition req = p.Label.SizeRequest ();
-				Gdk.Rectangle alloc = p.LabelAllocation;
-				alloc.X = x;
-				alloc.Y = y;
-				alloc.Width = req.Width + tab_horizPadding;
-				p.SetLabelAllocation (alloc);
-				
-				maxH = Math.Max(maxH, req.Height);
-				x += alloc.Width;
-			}
-			maxH += tab_vertPadding;
-			
-			foreach(RibbonPage p in pages)
-			{
-				Gdk.Rectangle alloc = p.LabelAllocation;
-				alloc.Height = maxH;
-				p.SetLabelAllocation (alloc);
-				
-				alloc.X += tab_horizPadding >> 1;
-				alloc.Y += tab_vertPadding >> 1;
-				alloc.Width -= tab_horizPadding;
-				alloc.Height -= tab_vertPadding;
-				p.Label.SizeAllocate (alloc);
-			}
-			
-			y += maxH;
-			bodyAllocation.X = allocation.X + (int)ribbon_space;
-			bodyAllocation.Y = y;
-			bodyAllocation.Width = allocation.Width - bodyAllocation.X  - (int)ribbon_space;
-			bodyAllocation.Height = allocation.Height - bodyAllocation.Y - (int)ribbon_space;
-			
-			if(page != null)
-			{
-				pageAllocation = bodyAllocation;
-				int pad = (int)pagePadding;
-				pageAllocation.Inflate (-pad, -pad);
-				page.Page.SizeAllocate (pageAllocation);
-			}
-			else
-			{
-				pageAllocation = Gdk.Rectangle.Zero;
-			}*/
 		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
