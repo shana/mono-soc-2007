@@ -223,10 +223,10 @@ namespace Gendarme.Rules.Smells {
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) 
 		{
 			if (CanCompareMethods (currentMethod, targetMethod)) {
-								ICollection currentExpressions = GetExpressionsFrom (currentMethod.Body);
-								ICollection targetExpressions = GetExpressionsFrom (targetMethod.Body);
+				ICollection currentExpressions = GetExpressionsFrom (currentMethod.Body);
+				ICollection targetExpressions = GetExpressionsFrom (targetMethod.Body);
 										
-								return ExistsExpressionsReplied (currentExpressions, targetExpressions);
+				return ExistsExpressionsReplied (currentExpressions, targetExpressions);
 			}
 			return false;
 		}
