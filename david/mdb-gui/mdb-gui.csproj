@@ -87,14 +87,7 @@
     <Compile Include="Pads\CallstackPad.cs" />
     <Compile Include="Pads\LocalsPad.cs" />
     <Compile Include="Pads\ThreadPad.cs" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.Break.png" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.Continue.png" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.Start.png" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.StartWithoutDebugging.png" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.StepInto.png" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.StepOut.png" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.StepOver.png" />
-    <EmbeddedResource Include="pixmaps\Icons.16x16.Debug.StopProcess.png" />
+    <EmbeddedResource Include="pixmaps\*" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pads" />
