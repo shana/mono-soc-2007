@@ -16,7 +16,7 @@ namespace System.Windows.Controls {
 			TabItem i = (TabItem)d;
 			if ((bool)e.NewValue) {
 				TabControl tab_control = i.GetTabControl();
-				i.OnSelected(new RoutedEventArgs(SelectedEvent, i));
+				i.OnSelected(new RoutedEventArgs(global::System.Windows.Controls.Primitives.Selector.SelectedEvent, i));
 				if (tab_control != null) {
 					tab_control.ExecuteStrangeCaseSelectFirstItemInWeirdConditions();
 					tab_control.SetSelectedProperties();
@@ -27,7 +27,7 @@ namespace System.Windows.Controls {
 					if (tab_control.SelectedItem == tab_control.GetItemForTabItem(i))
 						tab_control.SelectedItem = null;
 				}
-				i.OnUnselected(new RoutedEventArgs(UnselectedEvent, i));
+				i.OnUnselected(new RoutedEventArgs(global::System.Windows.Controls.Primitives.Selector.UnselectedEvent, i));
 			}
 			#region Invalidate TabPanel arrange
 			TabPanel tab_panel = i.VisualParent as TabPanel;
