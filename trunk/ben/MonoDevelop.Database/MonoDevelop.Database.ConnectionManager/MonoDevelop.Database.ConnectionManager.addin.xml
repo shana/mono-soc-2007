@@ -1,0 +1,77 @@
+<Addin	id		= "Database.ConnectionManager"
+	namespace	= "MonoDevelop"
+	name		= "MonoDevelop Database ConnectionManager"
+	author		= "Christian Hergert, Ben Motmans"
+	copyright	= "MIT X11"
+	url		= "http://www.monodevelop.com"
+	description	= "Database ConnectionManager Module"
+	version		= "0.14.0">
+    
+	<Runtime>
+		<Import assembly="MonoDevelop.Database.ConnectionManager.dll"/>
+	</Runtime>
+	
+	<Dependencies>
+		<Addin id="Core" version="0.14.0"/>
+		<Addin id="Core.Gui" version="0.14.0"/>
+		<Addin id="Ide" version="0.14.0"/>
+		<Addin id="Mono.Data.Sql" version="0.14.0"/>
+		<Addin id="Database.Query" version="0.14.0"/>
+		<Addin id="Database.Visualization" version="0.14.0"/>
+	</Dependencies>
+
+	<Extension path = "/Workspace/Services">
+		<Class id = "ConnectionManagerService" class = "MonoDevelop.Database.ConnectionManager.ConnectionManagerService"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/Pads">
+		<SolutionPad id = "ConnectionManagerPad" class = "MonoDevelop.Database.ConnectionManager.ConnectionManagerPad" defaultPlacement = "Left" _label = "Database Browser" icon = "md-db-database">
+			<PadOption id = "ShowSystemObjects" _label = "Show System Objects" defaultValue = "False"/>
+			<NodeBuilder id = "ConnectionCollectionNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionCollectionNodeBuilder"/>
+			<NodeBuilder id = "ConnectionContextNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionContextNodeBuilder"/>
+			<NodeBuilder id = "TablesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TablesNodeBuilder"/>
+			<NodeBuilder id = "ViewsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ViewsNodeBuilder"/>
+			<NodeBuilder id = "UsersNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.UsersNodeBuilder"/>
+			<NodeBuilder id = "ProceduresNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ProceduresNodeBuilder"/>
+		</SolutionPad>
+	</Extension>
+
+	<Extension path = "/SharpDevelop/Workbench/Contexts/Edit">
+		<ContextPad id = "ConnectionManagerPad"/>
+	</Extension>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TablesNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewsNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UsersNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProceduresNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<Extension path = "/SharpDevelop/Commands">
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AddConnection"
+			defaultHandler = "MonoDevelop.Database.ConnectionManager.AddConnectionHandler"
+			_label = "Add connection"
+			icon = "md-db-connection-add"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AddConnection"/>
+	</Extension>
+</Addin>
