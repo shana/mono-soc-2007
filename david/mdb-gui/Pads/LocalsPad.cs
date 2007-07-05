@@ -80,7 +80,9 @@ namespace Mono.Debugger.Frontend
 		
 		public void UpdateDisplay ()
 		{
-			if (!interpreter.HasCurrentThread) {
+			if (!interpreter.HasCurrentThread ||
+			    interpreter.CurrentThread.CurrentFrame == null) {
+				
 				store.Clear();
 				return;
 			}

@@ -96,6 +96,7 @@ namespace Mono.Debugger.Frontend
 			
 			DebuggerInit(args);
 			GuiInit();
+			UpdateGUI();
 			
 			Application.Run();
 		}
@@ -127,7 +128,8 @@ namespace Mono.Debugger.Frontend
 			if (interpreter.HasTarget) {
 				Console.WriteLine("Error - alredy running");
 			} else {
-				interpreter.Start();
+				new RunCommand().Execute(engine);
+				UpdateGUI();
 			}
 		}
 		
@@ -135,7 +137,8 @@ namespace Mono.Debugger.Frontend
 		{
 			Console.WriteLine("OnToolbuttonStop_clicked");
 			if (interpreter.HasCurrentProcess) {
-				interpreter.Kill(interpreter.CurrentProcess);
+				new KillCommand().Execute(engine);
+				UpdateGUI();
 			} else {
 				Console.WriteLine("Error - nothing to stop");
 			}
@@ -145,7 +148,8 @@ namespace Mono.Debugger.Frontend
 		{
 			Console.WriteLine("OnToolbuttonStepIn_clicked");
 			if (interpreter.HasCurrentThread) {
-				interpreter.CurrentThread.StepLine();
+				new StepCommand().Execute(engine);
+				UpdateGUI();
 			} else {
 				Console.WriteLine("Error - no current thread");
 			}
@@ -155,7 +159,8 @@ namespace Mono.Debugger.Frontend
 		{
 			Console.WriteLine("OnToolbuttonStepOver_clicked");
 			if (interpreter.HasCurrentThread) {
-				interpreter.CurrentThread.NextLine();
+				new NextCommand().Execute(engine);
+				UpdateGUI();
 			} else {
 				Console.WriteLine("Error - no current thread");
 			}
@@ -165,7 +170,8 @@ namespace Mono.Debugger.Frontend
 		{
 			Console.WriteLine("OnToolbuttonStepOut_clicked");
 			if (interpreter.HasCurrentThread) {
-				interpreter.CurrentThread.Finish(false);  // TODO: native param
+				new FinishCommand().Execute(engine);
+				UpdateGUI();
 			} else {
 				Console.WriteLine("Error - no current thread");
 			}
@@ -181,6 +187,7 @@ namespace Mono.Debugger.Frontend
 				if (parser.IsComplete ()){
 					parser.Execute ();
 					parser.Reset ();
+					UpdateGUI();
 				}
 			}
 			

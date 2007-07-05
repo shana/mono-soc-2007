@@ -131,10 +131,12 @@ namespace Mono.Debugger.Frontend
 		{
 			Hashtable threadsToRemove = (Hashtable)threadRows.Clone();
 			
-			foreach (Process process in interpreter.Processes) {
-				foreach (Thread thread in process.GetThreads ()) {
-					UpdateThread(thread);
-					threadsToRemove.Remove(thread);
+			if (interpreter.HasTarget) {
+				foreach (Process process in interpreter.Processes) {
+					foreach (Thread thread in process.GetThreads ()) {
+						UpdateThread(thread);
+						threadsToRemove.Remove(thread);
+					}
 				}
 			}
 			
