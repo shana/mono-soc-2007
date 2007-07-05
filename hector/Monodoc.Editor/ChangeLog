@@ -1,3 +1,9 @@
+2007-07-04  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Added method AddPadding
+	  that add a space in the buffer that is invisible so that certain
+	  elements (like empty ones) are conserved.
+
 2007-07-04  Hector E. Gomez Morales. <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Huge refactoring of

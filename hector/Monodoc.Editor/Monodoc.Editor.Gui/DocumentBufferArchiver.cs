@@ -175,8 +175,7 @@ public class DocumentBufferArchiver {
 				break;
 			case XmlNodeType.EndElement:
 				tagStart = (TagStart) stack.Pop ();
-				offset = InsertEndElement (buffer, offset, depth, tagStart); 
-				depth--;
+				offset = InsertEndElement (buffer, offset, tagStart, ref depth); 
 				break;
 			case XmlNodeType.Whitespace:
 				break;
@@ -199,10 +198,9 @@ public class DocumentBufferArchiver {
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		bool emptyElement = xmlReader.IsEmptyElement;
 		bool isDynamic = tagTable.IsDynamic (elementName);
-		TextIter insertAt, applyStart, applyEnd;
+		TextIter applyStart, applyEnd;
 		TagStart tagStart = new TagStart ();
 		tagStart.Start = offset;
-		TextTag tag;
 		depth++;
 		
 		// We define a suffix so each dynamic tag has an unique name.
@@ -247,12 +245,7 @@ public class DocumentBufferArchiver {
 				applyEnd = buffer.GetIterAtOffset (offset);
 			} else {
 				// Padding to conserve empty element
-				insertAt = buffer.GetIterAtOffset (offset);
-				tag = tagTable.Lookup ("padding-invisible" + suffix);
-				if (tag == null)
-					tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
-				buffer.InsertWithTags (ref insertAt, " ", tag);
-				offset += 1;
+				offset = AddPadding (buffer, offset, suffix);
 				
 				applyStart = buffer.GetIterAtOffset (tagStart.Start);
 				applyEnd = buffer.GetIterAtOffset (offset);
@@ -261,12 +254,7 @@ public class DocumentBufferArchiver {
 			buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
 			
 			// Padding between tag regions
-			insertAt = buffer.GetIterAtOffset (offset);
-			tag = tagTable.Lookup ("padding-invisible" + suffix + ".1");
-			if (tag == null)
-				tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix + ".1");
-			buffer.InsertWithTags (ref insertAt, " ", tag);
-			offset += 1;
+			offset = AddPadding (buffer, offset, suffix + ".1");
 			depth--;
 			
 			#if DEBUG
@@ -284,8 +272,9 @@ public class DocumentBufferArchiver {
 		TextTag textTag;
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		
-		// Check first if element text is dynamic, if true try to lookup a previous creation, if not we create it
-		// If false we lookup in the table.
+		// Check if element is dynamic:
+		// True: We create a tagname with suffix :Text#[0-9]* so its unique.
+		// False: We create a tagname with a standard suffix :Text
 		if (elementTag.IsDynamic)
 			tagName = elementTag.Name.Split ('#')[0] + ":Text" + '#' + elementTag.Name.Split ('#')[1];
 		else
@@ -306,12 +295,10 @@ public class DocumentBufferArchiver {
 		return offset;
 	}
 	
-	private static int InsertEndElement (TextBuffer buffer, int offset, int depth, TagStart tagStart)
+	private static int InsertEndElement (TextBuffer buffer, int offset, TagStart tagStart, ref int depth)
 	{
 		string suffix;
-		TextTag tag;
-		TextIter insertAt, applyStart, applyEnd;
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextIter applyStart, applyEnd;
 		
 		#if DEBUG
 		Console.WriteLine ("Element: {0}, End: {1}", tagStart.Tag.Name, offset);
@@ -322,34 +309,35 @@ public class DocumentBufferArchiver {
 			applyEnd = buffer.GetIterAtOffset (offset);
 		} else {
 			// Padding to conserve empty element
-			insertAt = buffer.GetIterAtOffset (offset);
-			
 			suffix = '#' + depth.ToString ();
-			tag = tagTable.Lookup ("padding-invisible" + suffix);
-			if (tag == null)
-				tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
+			offset = AddPadding (buffer, offset, suffix);
 			
-			buffer.InsertWithTags (ref insertAt, " ", tag);
-			offset += 1;
-					
 			applyStart = buffer.GetIterAtOffset (tagStart.Start);
 			applyEnd = buffer.GetIterAtOffset (offset); 
 		}
 		
 		buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+		depth--;
 		
 		#if DEBUG
 		Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
 		#endif
 		
 		// Padding between tag regions
-		insertAt = buffer.GetIterAtOffset (offset);
+		suffix = '#' + depth.ToString ();
+		offset = AddPadding (buffer, offset , suffix);
 		
-		suffix = '#' + (depth - 1).ToString ();
-		tag = tagTable.Lookup ("padding-invisible" + suffix);
+		return offset;
+	}
+	
+	private static int AddPadding (TextBuffer buffer, int offset, string suffix)
+	{
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextTag tag = tagTable.Lookup ("padding-invisible" + suffix);
+		
 		if (tag == null)
 			tag = tagTable.CreateDynamicTag ("padding-invisible" + suffix);
-		
 		buffer.InsertWithTags (ref insertAt, " ", tag);
 		offset += 1;
 		
@@ -359,19 +347,18 @@ public class DocumentBufferArchiver {
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
 	{
 		int result = offset;
-		string element = xmlReader.Name;
-		string tagName = xmlReader.Name;
+		string elementName, tagName;
+		elementName = tagName = xmlReader.Name;
 		TextIter applyStart, applyEnd;
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		TextTag tagAttributes;
 		
 		tagName += ":Attributes" + tagSuffix;
 		tagAttributes = tagTable.Lookup (tagName);
-		
 		if (tagAttributes == null)
 			tagAttributes = tagTable.CreateDynamicTag (tagName);
 		
-		switch (element) {
+		switch (elementName) {
 //		case "Type":
 //		case "TypeSignature":
 //		case "Member":
