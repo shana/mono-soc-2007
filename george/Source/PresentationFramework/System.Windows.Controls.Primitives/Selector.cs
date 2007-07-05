@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 namespace Mono.System.Windows.Controls.Primitives {
@@ -49,6 +50,9 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Protected Constructors
 		protected Selector() {
+			ItemContainerGenerator.StatusChanged += delegate(object sender, EventArgs e) {
+				//WDTDH
+			};
 		}
 		#endregion
 
