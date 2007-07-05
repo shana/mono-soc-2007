@@ -15,7 +15,7 @@ exceptions_rules_build_sources = $(addprefix $(srcdir)/, $(exceptions_rules_sour
 exceptions_rules_build_sources += $(exceptions_rules_generated_sources)
 
 Gendarme.Rules.Smells.dll: $(exceptions_rules_build_sources)
-	$(MCS) -target:library -pkg:mono-cecil -r:../lib/Gendarme.Framework.dll -r:../lib/Cecil.FlowAnalysis.dll -out:$@ $(exceptions_rules_build_sources)
+	$(MCS) -target:library -pkg:mono-cecil -r:../lib/Gendarme.Framework.dll -out:$@ $(exceptions_rules_build_sources)
 
 # Install Unstable Mono Libraries (see configure.ac)
 
@@ -36,7 +36,7 @@ exceptions_test_build_sources = $(addprefix $(srcdir)/Test/, $(exceptions_test_s
 
 Test.Rules.Smells.dll: $(exceptions_rules_build_sources)
 	$(MCS) -target:library -pkg:mono-cecil -pkg:mono-nunit -r:../lib/Gendarme.Framework.dll \
-		-r:Gendarme.Rules.Smells.dll -r:../lib/Cecil.FlowAnalysis.dll -out:$@ $(exceptions_test_build_sources)
+		-r:Gendarme.Rules.Smells.dll -out:$@ $(exceptions_test_build_sources)
 
 test: Gendarme.Rules.Smells.dll Test.Rules.Smells.dll
 
