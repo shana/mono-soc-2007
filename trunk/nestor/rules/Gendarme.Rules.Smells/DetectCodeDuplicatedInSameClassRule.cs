@@ -233,7 +233,7 @@ namespace Gendarme.Rules.Smells {
 				foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
 					if (ContainsDuplicatedCode (currentMethodDefinition, targetMethodDefinition)) {
 						Location location = new Location (typeDefinition.Name, currentMethodDefinition.Name, 0);
-						Message message = new Message (String.Format ("Exists code duplicated in: {0}.{1} and in {0}.{2}", typeDefinition.Name, currentMethodDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
+						Message message = new Message (String.Format ("Exists code duplicated with {0}.{1}", typeDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
 						messageCollection.Add (message);
 					}
 				}
