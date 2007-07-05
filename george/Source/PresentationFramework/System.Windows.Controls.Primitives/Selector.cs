@@ -26,7 +26,10 @@ namespace System.Windows.Controls.Primitives {
 				added_items = new object[] { };
 			i.OnSelectionChanged(new SelectionChangedEventArgs(SelectionChangedEvent, removed_item, added_items));
 		}));
-		public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(Selector), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(Selector), new FrameworkPropertyMetadata(delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			Selector i = (Selector)d;
+			i.SelectedIndex = i.Items.IndexOf(e.NewValue);
+		}));
 		public static readonly DependencyProperty SelectedValuePathProperty = DependencyProperty.Register("SelectedValuePath", typeof(string), typeof(Selector), new FrameworkPropertyMetadata(string.Empty));
 		public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(object), typeof(Selector), new FrameworkPropertyMetadata());
 
