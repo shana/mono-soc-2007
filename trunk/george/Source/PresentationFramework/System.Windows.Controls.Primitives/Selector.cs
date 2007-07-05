@@ -19,7 +19,7 @@ namespace System.Windows.Controls.Primitives {
 			object[] removed_item = currently_selected_item == null ? new object[] { } : new object[] { currently_selected_item };
 			int new_selected_index = (int)e.NewValue;
 			object[] added_items;
-			if (new_selected_index > 0 && new_selected_index < i.Items.Count) {
+			if (new_selected_index > -1 && new_selected_index < i.Items.Count) {
 				i.SelectedItem = i.Items[new_selected_index];
 				added_items = new object[] { i.SelectedItem };
 			} else
