@@ -74,7 +74,7 @@ public class TestDocumentBufferArchiver {
 			DateTime stopTime = DateTime.Now;
 			TimeSpan duration = stopTime - startTime;
 			
-			Assert.Less (duration.TotalMilliseconds, 500, "SP:" + filename);
+			Assert.Less (duration.TotalMilliseconds, 3000, "SP:" + filename);
 		}
 	}
 	
@@ -96,7 +96,7 @@ public class TestDocumentBufferArchiver {
 			DateTime stopTime = DateTime.Now;
 			TimeSpan duration = stopTime - startTime;
 			
-			Assert.Less (duration.TotalMilliseconds, 100, "SP:" + filename);
+			Assert.Less (duration.TotalMilliseconds, 1000, "SP:" + filename);
 		}
 	}
 }

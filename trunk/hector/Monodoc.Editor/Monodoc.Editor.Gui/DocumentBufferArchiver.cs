@@ -234,6 +234,8 @@ public class DocumentBufferArchiver {
 		}
 		#endif
 		
+		offset = FormatStart (buffer, offset, suffix, elementName);
+		
 		// If element has attributes we have to get them and deserialize them.
 		if (xmlReader.HasAttributes)
 			offset = DeserializeAttributes (buffer, offset, xmlReader, suffix);
@@ -313,8 +315,9 @@ public class DocumentBufferArchiver {
 			applyStart = buffer.GetIterAtOffset (tagStart.Start);
 			applyEnd = buffer.GetIterAtOffset (offset);
 			buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+			offset = FormatEnd (buffer, offset, suffix, tagStart.Name);
 		} else {
-			// Padding to conserve empty elemen
+			// Padding to conserve empty element
 			offset = AddPadding (buffer, offset, suffix);
 			
 			applyStart = buffer.GetIterAtOffset (tagStart.Start);
@@ -332,6 +335,82 @@ public class DocumentBufferArchiver {
 		offset = AddPadding (buffer, offset, suffix);
 		
 		return offset;
+	}
+	
+	private static int FormatStart (TextBuffer buffer, int offset, string suffix, string elementName)
+	{
+		switch (elementName) {
+//		case "AssemblyInfo":
+//			offset = AddString (buffer, offset, "About Assembly:", suffix);
+//			offset = AddNewLine (buffer, offset, suffix);
+//			break;
+		case "AssemblyName":
+			offset = AddString (buffer, offset, "Name: ", suffix);
+			break;
+		case "AssemblyVersion":
+			offset = AddString (buffer, offset, "Version: ", suffix);
+			break;
+		case "ThreadSafetyStatement":
+			offset = AddString (buffer, offset, "Thread Safety: ", suffix);
+			break;
+		case "summary":
+			offset = AddString (buffer, offset, "Summary:", suffix);
+			offset = AddNewLine (buffer, offset, suffix);
+			break;
+		case "remarks":
+			offset = AddString (buffer, offset, "Remarks:", suffix);
+			offset = AddNewLine (buffer, offset, suffix);
+			break;
+		default:
+			break;
+		}
+		
+		return offset;
+	}
+	
+	private static int FormatEnd (TextBuffer buffer, int offset, string suffix, string elementName)
+	{
+		switch (elementName) {
+		case "para":
+		case "remarks":
+		case "Docs":
+		case "Base":
+		case "BaseTypeName":
+		case "Attribute":
+		case "AttributeName":
+		case "Members":
+		case "Member":
+		case "since":
+		case "Type":
+		case "link":
+			break;
+		default:
+			offset = AddNewLine (buffer, offset, suffix);
+			break;
+		}
+		
+		return offset;
+	}
+	
+	private static int AddString (TextBuffer buffer, int offset, string data, string suffix)
+	{
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextTag tag = tagTable.Lookup ("format" + suffix);
+		
+		if (tag == null)
+			tag = tagTable.CreateDynamicTag ("format" + suffix);
+		buffer.InsertWithTags (ref insertAt, data, tag);
+		
+		return insertAt.Offset;
+	}
+	
+	private static int AddNewLine (TextBuffer buffer, int offset, string suffix)
+	{
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		AddNewLine (buffer, ref insertAt, suffix);
+		
+		return insertAt.Offset;
 	}
 	
 	private static void AddNewLine (TextBuffer buffer, ref TextIter insertAt, string suffix)
@@ -353,9 +432,8 @@ public class DocumentBufferArchiver {
 		if (tag == null)
 			tag = tagTable.CreateDynamicTag ("padding" + suffix);
 		buffer.InsertWithTags (ref insertAt, " ", tag);
-		offset += 1;
 		
-		return offset;
+		return insertAt.Offset;
 	}
 	
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
@@ -428,7 +506,13 @@ public class DocumentBufferArchiver {
 			#endif
 		}
 		
-		return insertAt.Offset;
+		AddNewLine (buffer, ref insertAt, tagSuffix);
+		
+		if (tagPrefix != "Type:")
+			offset = AddPadding (buffer, insertAt.Offset, tagSuffix);
+		else
+			offset = insertAt.Offset;
+		return offset;
 	}
 	
 	private static int DeserializeAttributesNewline (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)

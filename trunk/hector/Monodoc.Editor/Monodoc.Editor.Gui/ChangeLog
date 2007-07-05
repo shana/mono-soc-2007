@@ -1,5 +1,17 @@
 2007-07-05  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Test/TestDocumentBufferArchiver.cs: New time constrains for Serialize
+	  and Deserialize.
+	* DocumentBufferArchiver.cs: Added FormatStart and FormatEnd methods
+	  that adds any needed strings to help visualize the values of the
+	  documentation. They use a new method named AddString that adds to
+	  the buffer a string with the tag format making it text that is
+	  non-serializable and visible to the user.
+	* DocumentTagTable.cs: Changed some tag properties to help visualize
+	  the documentation.
+
+2007-07-05  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBufferArchiver.cs, DocumentTagTable.cs: Changed names of some
 	  tags. Changed from padding-invisible to only padding because we
 	  don't want to user see this spaces that are used to get around some
