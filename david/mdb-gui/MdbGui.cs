@@ -196,6 +196,8 @@ namespace Mono.Debugger.Frontend
 		
 		public void UpdateGUI()
 		{
+			Console.WriteLine("Updating GUI...");
+			
 			// Update pads - roughly the fastest ones first
 			threadPad.UpdateDisplay();
 			callstackPad.UpdateDisplay();

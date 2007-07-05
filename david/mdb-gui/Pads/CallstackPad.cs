@@ -4,7 +4,6 @@ using GtkSharp;
 using System;
 using System.IO;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Mono.Debugger;
