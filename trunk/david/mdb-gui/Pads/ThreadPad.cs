@@ -88,10 +88,15 @@ namespace Mono.Debugger.Frontend
 				bool current = interpreter.HasCurrentThread && interpreter.CurrentThread.ID == thread.ID;
 				
 				string location;
-				if (thread.IsStopped)
-					location = thread.GetBacktrace().Frames[0].SourceAddress.Name;
-				else
+				if (thread.IsStopped) {
+					try {
+						location = thread.GetBacktrace().Frames[0].SourceAddress.Name;
+					} catch {
+						location = "";
+					}
+				} else {
 					location = "";
+				}
 				
 				store.SetValue (it, 0, current ? "*" : " ");
 				store.SetValue (it, 1, thread.ID);
