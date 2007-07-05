@@ -1,14 +1,1 @@
-<CombineEntry name="Packages" fileversion="2.0" ctype="PackagingProject">
-  <Packages>
-    <Package name="monodoc-editor">
-      <Builder rootEntry="./Monodoc.Editor.mds" TargetDirectory="/home/hector/Projects/mono-soc-2007/hector/Monodoc.Editor" DefaultConfiguration="Release" ctype="TarballDeployTarget">
-        <ChildEntries>
-          <Entry>./Monodoc.Editor/Monodoc.Editor.mdp</Entry>
-          <Entry>./Packages.mdse</Entry>
-          <Entry>./Monodoc.Editor.Utils/Monodoc.Editor.Utils.mdp</Entry>
-          <Entry>./Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp</Entry>
-        </ChildEntries>
-      </Builder>
-    </Package>
-  </Packages>
-</CombineEntry>
+<CombineEntry name="Packages" fileversion="2.0" ctype="PackagingProject" />
