@@ -118,6 +118,9 @@ namespace Mono.Debugger.Frontend
 		
 		protected void OnMainWindow_delete_event(object o, DeleteEventArgs e) 
 		{
+			if (interpreter.HasCurrentProcess) {
+				new KillCommand().Execute(engine);
+			}
 			Application.Quit();
 			e.RetVal = true;
 		}
