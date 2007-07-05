@@ -26,14 +26,31 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class DeleteStatement : IStatement
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected FromClause from;
+		protected WhereClause where;
+		
+		public DeleteStatement (FromClause from)
+		{
+			From = from;
+		}
+
+		public FromClause From {
+			get { return from; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("from");
+				this.from = value;
+			}
+		}
+
+		public WhereClause Where {
+			get { return where; }
+			set { where = value; }
 		}
 	}
 }

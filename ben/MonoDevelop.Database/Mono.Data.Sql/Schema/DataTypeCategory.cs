@@ -87,6 +87,10 @@ namespace Mono.Data.Sql
 		/// </summary>
 		DateTime,
 		/// <summary>
+		/// Special text containing XML chunks
+		/// </summary>
+		Xml,
+		/// <summary>
 		/// Undefined data type
 		/// </summary>
 		Other

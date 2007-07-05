@@ -1,9 +1,7 @@
 //
 // Authors:
-//	Christian Hergert  <chris@mosaix.net>
 //	Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,46 +24,42 @@
 //
 
 using System;
-using System.Data;
 using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public delegate void SqlResultCallback<T> (object sender, T Results);
-	
-	public interface IConnectionProvider
+	public class ConnectionContext
 	{
-		IDbFactory DbFactory { get; }
-		
-		IDbConnection Connection { get; }
-		
-		ConnectionSettings Settings { get; }
-		
-		bool IsOpen { get; }
-		
-		bool SupportsPooling { get; }
-		
-		bool SupportsAutomaticConnectionString { get; }
+		private ConnectionSettings settings;
+		private IConnectionProvider connProvider;
+		private ISchemaProvider schemaProvider;
 
-		bool Open (out string errorMessage);
-
-		void Close ();
+		public ConnectionContext (ConnectionSettings settings)
+		{
+			this.settings = settings;
+		}
 		
-		IDbCommand CreateCommand (string sql);
+		public ConnectionSettings ConnectionSettings {
+			get { return settings; }
+		}
 		
-		void ExecuteQuery (IStatement statement);
-		void ExecuteQuery (string sql);
+		public IConnectionProvider ConnectionProvider {
+			get {
+				if (connProvider == null)
+					connProvider = DbFactoryService.CreateConnectionProvider (settings);
+				return connProvider;
+			}
+		}
 		
-		DataSet ExecuteQueryAsDataSet (IStatement statement);
-		DataSet ExecuteQueryAsDataSet (string sql);
-		
-		DataTable ExecuteQueryAsDataTable (IStatement statement);
-		DataTable ExecuteQueryAsDataTable (string sql);
-		
-		void ExecuteQueryAsDataSetAsync (IStatement statement, SqlResultCallback<DataSet> callback);
-		void ExecuteQueryAsDataSetAsync (string sql, SqlResultCallback<DataSet> callback);
-		
-		void ExecuteQueryAsDataTableAsync (IStatement statement, SqlResultCallback<DataTable> callback);
-		void ExecuteQueryAsDataTableAsync (string sql, SqlResultCallback<DataTable> callback);
+		public ISchemaProvider SchemaProvider {
+			get {
+				if (ConnectionProvider != null) {
+					if (schemaProvider == null)
+						schemaProvider = DbFactoryService.CreateSchemaProvider (settings, connProvider);
+					return schemaProvider;
+				}
+				return null;
+			}
+		}
 	}
 }

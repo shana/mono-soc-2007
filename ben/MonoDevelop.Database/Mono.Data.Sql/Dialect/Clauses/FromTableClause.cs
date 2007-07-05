@@ -26,14 +26,25 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class FromTableClause : FromClause
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected AliasedIdentifierExpression source;
+		
+		public FromTableClause (AliasedIdentifierExpression source)
+		{
+			Source = source;
+		}
+		
+		public AliasedIdentifierExpression Source {
+			get { return source; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("source");
+				source = value;
+			}
 		}
 	}
 }

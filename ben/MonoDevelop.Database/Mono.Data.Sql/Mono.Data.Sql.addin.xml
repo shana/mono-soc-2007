@@ -1,5 +1,5 @@
 <Addin	id		= "Mono.Data.Sql"
-	namespace	= "Mono"
+	namespace	= "MonoDevelop"
 	name		= "Mono Data Sql"
 	author		= "Christian Hergert, Ben Motmans"
 	copyright	= "MIT X11"
@@ -13,10 +13,6 @@
 	
 	<ExtensionPoint path = "/Mono/Data/Sql" name = "Mono database providers">
 		<Description>MonoDevelop database factory addins.</Description>
-		<ExtensionNode name="DbFactory" type="Mono.Data.Sql.DbFactoryCodon"/>
+		<ExtensionNode name="Class" type="Mono.Data.Sql.DbFactoryCodon" />
 	</ExtensionPoint>
-	
-	<Extension path = "/Workspace/Services">
-		<Class id = "DbFactoryService" class = "Mono.Data.Sql.DbFactoryService"/>
-	</Extension>
 </Addin>

@@ -26,14 +26,15 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public enum JoinClauseType
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
-		}
+		Inner,
+		OuterLeft,
+		OuterRight,
+		OuterFull,
+		Cross
 	}
 }

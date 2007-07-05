@@ -26,14 +26,26 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class Sql99Dialect : AbstractSqlDialect
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected string quoteChar;
+		protected string parameterChar;
+		
+		public Sql99Dialect (string quoteChar, string parameterChar)
+		{
+			this.quoteChar = quoteChar == null ? "" : quoteChar;
+			this.parameterChar = parameterChar == null ? "" : parameterChar;
+		}
+		
+		public override string QuoteChar {
+			get { return quoteChar; }
+		}
+		
+		public override string ParameterChar {
+			get { return parameterChar; }
 		}
 	}
 }

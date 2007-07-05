@@ -26,14 +26,30 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public class IdentifierExpression : IExpression
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+		protected string name;
+		
+		public IdentifierExpression ()
+			: this ("*")
+		{
+		}
+		
+		public IdentifierExpression (string name)
+		{
+			Name = name;
+		}
+		
+		public string Name {
+			get { return name; }
+			set {
+				if (value == null)
+					throw new ArgumentNullException ("name");
+				name = value;
+			}
 		}
 	}
 }

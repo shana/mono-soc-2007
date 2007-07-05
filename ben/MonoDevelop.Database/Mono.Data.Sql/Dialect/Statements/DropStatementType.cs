@@ -29,16 +29,10 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public interface IDbFactory
+	public enum DropStatementType
 	{
-		string Identifier { get; }
-		
-		string Name { get; }
-		
-		ConnectionSettings GetDefaultConnectionSettings ();
-		
-		IConnectionProvider CreateConnectionProvider (ConnectionSettings settings);
-		
-		ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider);
+		Database,
+		Table,
+		Index
 	}
 }

@@ -26,14 +26,26 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Addins;
 
 namespace Mono.Data.Sql
 {
-	public class DbFactoryCodon : TypeExtensionNode
+	public interface IDbFactory
 	{
-		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
-		}
+		string Identifier { get; }
+		
+		string Name { get; }
+		
+		ISqlDialect Dialect { get; }
+		
+		/// <summary>
+		/// This method is used to get the default connection settings and also
+		/// to determine which fields should be editable in the Add Connection Dialog.
+		/// To ignore a property, use 'null' or -1, all other values are considered default values.
+		/// </summary>
+		ConnectionSettings GetDefaultConnectionSettings ();
+
+		IConnectionProvider CreateConnectionProvider (ConnectionSettings settings);
+		
+		ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider);
 	}
 }
