@@ -50,7 +50,8 @@ namespace Gendarme.Rules.Smells {
                         currentExpression = null;
 		}
 		
-                private bool IsAcceptable (Instruction instruction) {
+                private bool IsAcceptable (Instruction instruction) 
+                {
                         return instruction.OpCode.FlowControl == FlowControl.Call | 
                                 instruction.OpCode.FlowControl == FlowControl.Branch | 
                                 instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
@@ -120,15 +121,19 @@ namespace Gendarme.Rules.Smells {
                         
                         Expression targetExpression = (Expression) value;
                         
-                        if (Count != targetExpression.Count) {
-                                return false;
-                        }
-                        else {
+                        if (HasSameSize (targetExpression)) 
                                 return CompareInstructionsInOrder (targetExpression);
-                        }
+                        
+                        return false;
                 }
 
-                private bool CompareInstructionsInOrder (Expression targetExpression) {
+                private bool HasSameSize (Expression expression) 
+                {
+                        return Count == expression.Count;
+                }
+
+                private bool CompareInstructionsInOrder (Expression targetExpression) 
+                {
                         bool equality = true;
                         for (int index = 0; index < Count; index++) {
                                 Instruction instruction = this[index];
@@ -181,10 +186,10 @@ namespace Gendarme.Rules.Smells {
 	
 	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
 		private StringCollection checkedMethods;
+                private MessageCollection messageCollection;
 
-
-                //TODO: 2 Equals -> error !
-                private bool ExistsExpressionsReplied (ICollection currentExpressions, ICollection targetExpressions) {
+                private bool ExistsExpressionsReplied (ICollection currentExpressions, ICollection targetExpressions)
+                {
                         IEnumerator currentEnumerator = currentExpressions.GetEnumerator ();
                         IEnumerator targetEnumerator = targetExpressions.GetEnumerator ();
                         bool equality = false;
@@ -226,20 +231,25 @@ namespace Gendarme.Rules.Smells {
 			}
 			return false;
 		}
-	
+
+                private void CompareMethodAgainstTypeMethods (MethodDefinition currentMethod, TypeDefinition targetTypeDefinition) 
+                {
+                        foreach (MethodDefinition targetMethod in targetTypeDefinition.Methods) {
+				if (ContainsDuplicatedCode (currentMethod, targetMethod)) {
+					Location location = new Location (currentMethod.DeclaringType.Name, currentMethod.Name, 0);
+					Message message = new Message (String.Format ("Exists code duplicated with {0}.{1}", targetTypeDefinition.Name, targetMethod.Name), location, MessageType.Error);
+					messageCollection.Add (message);
+				}
+			}
+                }
+
 		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner) 
 		{
 			checkedMethods = new StringCollection ();
-			MessageCollection messageCollection = new MessageCollection ();
-			foreach (MethodDefinition currentMethodDefinition in typeDefinition.Methods) {
-				foreach (MethodDefinition targetMethodDefinition in typeDefinition.Methods) {
-					if (ContainsDuplicatedCode (currentMethodDefinition, targetMethodDefinition)) {
-						Location location = new Location (typeDefinition.Name, currentMethodDefinition.Name, 0);
-						Message message = new Message (String.Format ("Exists code duplicated with {0}.{1}", typeDefinition.Name, targetMethodDefinition.Name), location, MessageType.Error);
-						messageCollection.Add (message);
-					}
-				}
-				checkedMethods.Add (currentMethodDefinition.Name);
+			messageCollection = new MessageCollection ();
+			foreach (MethodDefinition currentMethod in typeDefinition.Methods) {
+                                CompareMethodAgainstTypeMethods (currentMethod, typeDefinition);
+				checkedMethods.Add (currentMethod.Name);
 			}
 			
 			if (messageCollection.Count == 0)
