@@ -40,13 +40,6 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
-		#region Private Fields
-		#region Routed Events
-		static readonly RoutedEvent SelectedEvent = EventManager.RegisterRoutedEvent("Selected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TabItem));
-		static readonly RoutedEvent UnselectedEvent = EventManager.RegisterRoutedEvent("Unselected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TabItem));
-		#endregion
-		#endregion
-
 		#region Public Constructors
 		public TabItem() {
 			//TabControl.AddSelectedHandler(this, delegate(object sender, RoutedEventArgs e) {
