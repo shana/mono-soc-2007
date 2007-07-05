@@ -3,6 +3,10 @@
   <configuration>
     <images-root-path>../</images-root-path>
   </configuration>
+  <import>
+    <widget-library name="../../MonoDevelop.Database.Query/bin/Debug/MonoDevelop.Database.Query.dll" />
+    <widget-library name="../../MonoDevelop.Database.Visualization/bin/Debug/MonoDevelop.Database.Visualization.dll" />
+  </import>
   <widget class="Gtk.Dialog" id="MonoDevelop.Database.ConnectionManager.NewConnectionDialog" design-size="427 556">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Add Connection</property>
@@ -24,6 +28,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Label" translatable="yes">Use generated connection string</property>
+                <property name="Active">True</property>
                 <property name="DrawIndicator">True</property>
                 <property name="HasLabel">True</property>
                 <property name="UseUnderline">True</property>
@@ -79,6 +84,7 @@
                         <property name="MemberName" />
                         <property name="IsTextCombo">False</property>
                         <property name="Items" translatable="yes" />
+                        <signal name="Changed" handler="DatabaseChanged" />
                       </widget>
                       <packing>
                         <property name="TopAttach">4</property>
@@ -122,6 +128,7 @@
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
+                        <signal name="Changed" handler="NameChanged" />
                       </widget>
                       <packing>
                         <property name="TopAttach">1</property>
@@ -145,33 +152,11 @@
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
+                        <signal name="Changed" handler="PasswordChanged" />
                       </widget>
                       <packing>
                         <property name="TopAttach">6</property>
                         <property name="BottomAttach">7</property>
-                        <property name="LeftAttach">1</property>
-                        <property name="RightAttach">2</property>
-                        <property name="AutoSize">True</property>
-                        <property name="XOptions">Fill</property>
-                        <property name="YOptions">Fill</property>
-                        <property name="XExpand">False</property>
-                        <property name="XFill">True</property>
-                        <property name="XShrink">False</property>
-                        <property name="YExpand">False</property>
-                        <property name="YFill">True</property>
-                        <property name="YShrink">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="Gtk.Entry" id="entryPort">
-                        <property name="MemberName" />
-                        <property name="CanFocus">True</property>
-                        <property name="IsEditable">True</property>
-                        <property name="InvisibleChar">●</property>
-                      </widget>
-                      <packing>
-                        <property name="TopAttach">3</property>
-                        <property name="BottomAttach">4</property>
                         <property name="LeftAttach">1</property>
                         <property name="RightAttach">2</property>
                         <property name="AutoSize">True</property>
@@ -191,6 +176,7 @@
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
+                        <signal name="Changed" handler="ServerChanged" />
                       </widget>
                       <packing>
                         <property name="TopAttach">2</property>
@@ -214,6 +200,7 @@
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
+                        <signal name="Changed" handler="UsernameChanged" />
                       </widget>
                       <packing>
                         <property name="TopAttach">5</property>
@@ -463,6 +450,35 @@
                         <property name="YShrink">False</property>
                       </packing>
                     </child>
+                    <child>
+                      <widget class="Gtk.SpinButton" id="spinPort">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="Lower">1</property>
+                        <property name="Upper">65535</property>
+                        <property name="PageIncrement">10</property>
+                        <property name="StepIncrement">1</property>
+                        <property name="ClimbRate">1</property>
+                        <property name="Numeric">True</property>
+                        <property name="Value">1</property>
+                        <signal name="Changed" handler="PortChanged" />
+                      </widget>
+                      <packing>
+                        <property name="TopAttach">3</property>
+                        <property name="BottomAttach">4</property>
+                        <property name="LeftAttach">1</property>
+                        <property name="RightAttach">2</property>
+                        <property name="AutoSize">True</property>
+                        <property name="XOptions">Fill</property>
+                        <property name="YOptions">Fill</property>
+                        <property name="XExpand">False</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">False</property>
+                        <property name="YFill">True</property>
+                        <property name="YShrink">False</property>
+                      </packing>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -541,6 +557,7 @@
             <property name="StockId">gtk-cancel</property>
             <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
+            <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
           </widget>
           <packing>
@@ -551,6 +568,7 @@
         <child>
           <widget class="Gtk.Button" id="buttonOk">
             <property name="MemberName" />
+            <property name="Sensitive">False</property>
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
             <property name="UseStock">True</property>
@@ -558,6 +576,7 @@
             <property name="StockId">gtk-ok</property>
             <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
+            <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
           </widget>
           <packing>

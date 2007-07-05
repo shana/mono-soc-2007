@@ -1,3 +1,13 @@
+2007-07-05  Ben Motmans <ben.motmans@gmail.com>
+
+	* NewConnectionDialog.cs: small bugfixes
+	* FakeNodes.cs: dummy nodes to use in the TreeBuilder
+	* Commands.cs: list of commends and AddConnection implementation
+	* ConnectionManagerService.cs: service to load/save connection settings
+	* ConnectionManagerPad.cs, NodeBuilders/*.cs: update of the old code,
+	make use of ThreadPool instead of always creating new threads + use
+	the updated Mono.Data.Sql API
+
 2007-07-02  Ben Motmans <ben.motmans@gmail.com>
 
 	* NewConnectionDialog.cs: Remake of the old dialog using the integrated MD designer,
