@@ -38,217 +38,216 @@ using Gendarme.Framework;
 namespace Gendarme.Rules.Smells {
 	
 	class ExpressionFiller : BaseCodeVisitor {
-                private IList expressionContainer;
-                private Expression currentExpression;
-                
-	
+		private IList expressionContainer;
+		private Expression currentExpression;
+
 		public ExpressionFiller () : base () {}
 	
 		public override void VisitMethodBody (MethodBody methodBody) 
 		{
-                        expressionContainer = new ArrayList ();
-                        currentExpression = null;
+			expressionContainer = new ArrayList ();
+			currentExpression = null;
 		}
 		
-                private bool IsAcceptable (Instruction instruction) 
-                {
-                        return instruction.OpCode.FlowControl == FlowControl.Call || 
-                                instruction.OpCode.FlowControl == FlowControl.Branch || 
-                                instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
-                }
+		private bool IsAcceptable (Instruction instruction) 
+		{
+			return instruction.OpCode.FlowControl == FlowControl.Call || 
+				instruction.OpCode.FlowControl == FlowControl.Branch || 
+				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
+		}
 
-                private void CreateExpressionAndAddToExpressionContainer () 
-                {
-                        currentExpression = new Expression ();
-                        expressionContainer.Add (currentExpression);
-                }
+		private void CreateExpressionAndAddToExpressionContainer () 
+		{
+			currentExpression = new Expression ();
+			expressionContainer.Add (currentExpression);
+		}
 
-                private bool IsDelimiter (Instruction instruction) 
-                {
-                        return instruction.OpCode.Name == "ldarg.0" ||
-                                instruction.OpCode.FlowControl == FlowControl.Branch;
-                }
+		private bool IsDelimiter (Instruction instruction) 
+		{
+			return instruction.OpCode.Name == "ldarg.0" ||
+				instruction.OpCode.FlowControl == FlowControl.Branch;
+		}
 
-                private void AddToExpression (Instruction instruction) 
-                {
-                        if (currentExpression == null)
-                                CreateExpressionAndAddToExpressionContainer ();
-                        currentExpression.Add (instruction);
-                }
+		private void AddToExpression (Instruction instruction) 
+		{
+			if (currentExpression == null)
+				CreateExpressionAndAddToExpressionContainer ();
+			currentExpression.Add (instruction);
+		}
 
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
-                {
-                        foreach (Instruction instruction in instructionCollection) {
-                                if (IsDelimiter (instruction)) 
-                                        CreateExpressionAndAddToExpressionContainer ();
-                                if (IsAcceptable (instruction)) 
-                                        AddToExpression (instruction);
-                        }
-                }
+		{
+			foreach (Instruction instruction in instructionCollection) {
+				if (IsDelimiter (instruction)) 
+					CreateExpressionAndAddToExpressionContainer ();
+				if (IsAcceptable (instruction)) 
+					AddToExpression (instruction);
+			}
+		}
 
-                public ICollection Expressions {
-                        get {
-                                return expressionContainer;
-                        }
-                }
+		public ICollection Expressions {
+			get {
+				return expressionContainer;
+			}
+		}
 	}
 
-        class Expression : CollectionBase {
+	class Expression : CollectionBase {
 
-                public Expression () : base () {}
+		public Expression () : base () {}
 
-                public void Add (Instruction instruction) 
-                {
-                        InnerList.Add (instruction);
-                }
+		public void Add (Instruction instruction) 
+		{
+			InnerList.Add (instruction);
+		}
 
-                public Instruction this[int index] {
-                        get {
-                                return (Instruction) InnerList[index];
-                        }
-                }
-                
-                protected override void OnValidate (object value) 
-                {
-                        if (!(value is Instruction))
-                                throw new ArgumentException ("You should use this class with Mono.Cecil.Cil.Instruction", "value");
-                }
+		public Instruction this[int index] {
+			get {
+				return (Instruction) InnerList[index];
+			}
+		}
+				
+		protected override void OnValidate (object value) 
+		{
+			if (!(value is Instruction))
+				throw new ArgumentException ("You should use this class with Mono.Cecil.Cil.Instruction", "value");
+		}
 
-                public override bool Equals (object value) 
-                {
-                        if (!(value is Expression))
-                                throw new ArgumentException ("The value argument should be an Expression", "value");
-                        
-                        Expression targetExpression = (Expression) value;
-                        
-                        if (HasSameSize (targetExpression)) 
-                                return CompareInstructionsInOrder (targetExpression);
-                        
-                        return false;
-                }
+		public override bool Equals (object value) 
+		{
+			if (!(value is Expression))
+				throw new ArgumentException ("The value argument should be an Expression", "value");
+						
+			Expression targetExpression = (Expression) value;
+						
+			if (HasSameSize (targetExpression)) 
+				return CompareInstructionsInOrder (targetExpression);
+						
+			return false;
+		}
 
-                private bool HasSameSize (Expression expression) 
-                {
-                        return Count == expression.Count;
-                }
+		private bool HasSameSize (Expression expression) 
+		{
+			return Count == expression.Count;
+		}
 
-                private bool CompareInstructionsInOrder (Expression targetExpression) 
-                {
-                        bool equality = true;
-                        for (int index = 0; index < Count; index++) {
-                                Instruction instruction = this[index];
-                                Instruction targetInstruction = targetExpression[index];
-                                        
-                                if (CheckEqualityForOpCodes (instruction, targetInstruction)) {
-                                        if (instruction.OpCode.FlowControl == FlowControl.Call) {
-                                                equality = equality & (instruction.Operand == targetInstruction.Operand);
-                                        }
-                                }
-                                else
-                                        return false;;
-                        }
-                        return equality;
-                }
-                
-                private bool CheckEqualityForOpCodes (Instruction currentInstruction, Instruction targetInstruction) 
-                {
-                        if (currentInstruction.OpCode.Name == targetInstruction.OpCode.Name)
-                                return true;
-                        else {
-                                if (currentInstruction.OpCode.Name == "call" && targetInstruction.OpCode.Name == "callvirt")
-                                        return true;
-                                else if (currentInstruction.OpCode.Name == "callvirt" && targetInstruction.OpCode.Name == "call")
-                                        return true;
-                                else
-                                        return false;
-                        }
-                }
+		private bool CompareInstructionsInOrder (Expression targetExpression) 
+		{
+			bool equality = true;
+			for (int index = 0; index < Count; index++) {
+				Instruction instruction = this[index];
+				Instruction targetInstruction = targetExpression[index];
+										
+				if (CheckEqualityForOpCodes (instruction, targetInstruction)) {
+					if (instruction.OpCode.FlowControl == FlowControl.Call) {
+						equality = equality & (instruction.Operand == targetInstruction.Operand);
+					}
+				}
+				else
+					return false;;
+			}
+			return equality;
+		}
+				
+		private bool CheckEqualityForOpCodes (Instruction currentInstruction, Instruction targetInstruction) 
+		{
+			if (currentInstruction.OpCode.Name == targetInstruction.OpCode.Name)
+				return true;
+			else {
+				if (currentInstruction.OpCode.Name == "call" && targetInstruction.OpCode.Name == "callvirt")
+					return true;
+				else if (currentInstruction.OpCode.Name == "callvirt" && targetInstruction.OpCode.Name == "call")
+					return true;
+				else
+					return false;
+			}
+		}
 
-                public override int GetHashCode () 
-                {
-                        return base.GetHashCode ();
-                }
+		public override int GetHashCode () 
+		{
+			return base.GetHashCode ();
+		}
 
-                public override string ToString () 
-                {
-                        StringBuilder stringBuilder = new StringBuilder ();
-                        stringBuilder.Append ("\tFor the expression:");
-                        stringBuilder.Append (Environment.NewLine);
-                        foreach (Instruction instruction in InnerList) {
-                                stringBuilder.Append (String.Format ("\t\tInstruction: {0} {1}", instruction.OpCode.Name, instruction.Operand));
-                                stringBuilder.Append (Environment.NewLine);
-                        }
-                        return stringBuilder.ToString ();
-                }
+		public override string ToString () 
+		{
+			StringBuilder stringBuilder = new StringBuilder ();
+			stringBuilder.Append ("\tFor the expression:");
+			stringBuilder.Append (Environment.NewLine);
+			foreach (Instruction instruction in InnerList) {
+				stringBuilder.Append (String.Format ("\t\tInstruction: {0} {1}", instruction.OpCode.Name, instruction.Operand));
+				stringBuilder.Append (Environment.NewLine);
+			}
+			return stringBuilder.ToString ();
+			}
 
-        }
+		}
 	
 	
 	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
 		private StringCollection checkedMethods;
-                private MessageCollection messageCollection;
+		private MessageCollection messageCollection;
 
-                private bool ExistsExpressionsReplied (ICollection currentExpressions, ICollection targetExpressions)
-                {
-                        IEnumerator currentEnumerator = currentExpressions.GetEnumerator ();
-                        IEnumerator targetEnumerator = targetExpressions.GetEnumerator ();
-                        bool equality = false;
-
-                        while (currentEnumerator.MoveNext () & targetEnumerator.MoveNext ()) {
-                                Expression currentExpression = (Expression) currentEnumerator.Current;
-                                Expression targetExpression = (Expression) targetEnumerator.Current;
-
-                                if (equality && currentExpression.Equals (targetExpression))
-                                        return true;
-                                else {
-                                        equality = currentExpression.Equals (targetExpression);
-                                }
-                        }
-                        return false;
-                }
-
-                private ICollection GetExpressionsFrom (MethodBody methodBody) 
-                {
-                        ExpressionFiller expressionFiller = new ExpressionFiller ();
-			methodBody.Accept (expressionFiller);
-                        return expressionFiller.Expressions;
-                }
-
-                private bool CanCompareMethods (MethodDefinition currentMethod, MethodDefinition targetMethod) 
-                {
-                        return currentMethod.HasBody && targetMethod.HasBody &&
-                                !checkedMethods.Contains (targetMethod.Name) && 
-                                currentMethod != targetMethod;
-                }
-
-		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) 
+		private bool ExistsExpressionsReplied (ICollection currentExpressions, ICollection targetExpressions)
 		{
-			if (CanCompareMethods (currentMethod, targetMethod)) {
-                                ICollection currentExpressions = GetExpressionsFrom (currentMethod.Body);
-                                ICollection targetExpressions = GetExpressionsFrom (targetMethod.Body);
-                                        
-                                return ExistsExpressionsReplied (currentExpressions, targetExpressions);
+			IEnumerator currentEnumerator = currentExpressions.GetEnumerator ();
+			IEnumerator targetEnumerator = targetExpressions.GetEnumerator ();
+			bool equality = false;
+
+			while (currentEnumerator.MoveNext () & targetEnumerator.MoveNext ()) {
+				Expression currentExpression = (Expression) currentEnumerator.Current;
+				Expression targetExpression = (Expression) targetEnumerator.Current;
+
+				if (equality && currentExpression.Equals (targetExpression))
+					return true;
+				else {
+					equality = currentExpression.Equals (targetExpression);
+				}
 			}
 			return false;
 		}
 
-                private void CompareMethodAgainstTypeMethods (MethodDefinition currentMethod, TypeDefinition targetTypeDefinition) 
-                {
-                        foreach (MethodDefinition targetMethod in targetTypeDefinition.Methods) {
+		private ICollection GetExpressionsFrom (MethodBody methodBody) 
+		{
+			ExpressionFiller expressionFiller = new ExpressionFiller ();
+			methodBody.Accept (expressionFiller);
+			return expressionFiller.Expressions;
+		}
+
+		private bool CanCompareMethods (MethodDefinition currentMethod, MethodDefinition targetMethod) 
+		{
+			return currentMethod.HasBody && targetMethod.HasBody &&
+				!checkedMethods.Contains (targetMethod.Name) && 
+				currentMethod != targetMethod;
+		}
+
+		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) 
+		{
+			if (CanCompareMethods (currentMethod, targetMethod)) {
+								ICollection currentExpressions = GetExpressionsFrom (currentMethod.Body);
+								ICollection targetExpressions = GetExpressionsFrom (targetMethod.Body);
+										
+								return ExistsExpressionsReplied (currentExpressions, targetExpressions);
+			}
+			return false;
+		}
+
+		private void CompareMethodAgainstTypeMethods (MethodDefinition currentMethod, TypeDefinition targetTypeDefinition) 
+		{
+			foreach (MethodDefinition targetMethod in targetTypeDefinition.Methods) {
 				if (ContainsDuplicatedCode (currentMethod, targetMethod)) {
 					Location location = new Location (currentMethod.DeclaringType.Name, currentMethod.Name, 0);
 					Message message = new Message (String.Format ("Exists code duplicated with {0}.{1}", targetTypeDefinition.Name, targetMethod.Name), location, MessageType.Error);
 					messageCollection.Add (message);
 				}
 			}
-                }
+		}
 
 		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner) 
 		{
 			checkedMethods = new StringCollection ();
 			messageCollection = new MessageCollection ();
 			foreach (MethodDefinition currentMethod in typeDefinition.Methods) {
-                                CompareMethodAgainstTypeMethods (currentMethod, typeDefinition);
+				CompareMethodAgainstTypeMethods (currentMethod, typeDefinition);
 				checkedMethods.Add (currentMethod.Name);
 			}
 			
