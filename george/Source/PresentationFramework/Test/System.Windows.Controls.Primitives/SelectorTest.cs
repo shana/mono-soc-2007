@@ -1,5 +1,7 @@
 using NUnit.Framework;
+using System.Reflection;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -70,6 +72,27 @@ namespace System.Windows.Controls.Primitives {
 			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
 				calls++;
 				base.OnSelectionChanged(e);
+			}
+		}
+		#endregion
+
+		#region ItemContainerGeneratorStatusChanged
+		[Test]
+		public void ItemContainerGeneratorStatusChanged() {
+			ItemContainerGeneratorStatusChangedSelector t = new ItemContainerGeneratorStatusChangedSelector();
+			Assert.AreEqual(t.GetHandlerCount(), 1, "1");
+			Window w = new Window();
+			w.Content = t;
+			w.Show();
+			Assert.AreEqual(t.GetHandlerCount(), 1, "2");
+		}
+
+		class ItemContainerGeneratorStatusChangedSelector : Selector {
+			public int GetHandlerCount() {
+				EventHandler handler = (EventHandler)typeof(ItemContainerGenerator).GetField("StatusChanged", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(ItemContainerGenerator);
+				if (handler == null)
+					return 0;
+				return handler.GetInvocationList().GetLength(0);
 			}
 		}
 		#endregion
