@@ -94,40 +94,50 @@ namespace Mono.Debugger.Frontend
 			TargetVariable[] localVars = currentFrame.Locals;
 			foreach (TargetVariable var in localVars) {
 				TargetObject obj = var.GetObject(currentFrame);
+				
 				string val;
-				// TODO: If obj is null
-				// TODO: obj.IsNull
-				switch (obj.Kind) {
-					case TargetObjectKind.Array:
-						val = "<Array>";
-						break;
-					case TargetObjectKind.Pointer:
-						val = "<Pointer>";
-						break;
-					case TargetObjectKind.Object:
-						val = "<Object>";
-						break;
-					case TargetObjectKind.Class:
-						val = "<Class>";
-						break;
-					case TargetObjectKind.Struct:
-						val = "<Struct>";
-						break;
-					case TargetObjectKind.Fundamental:
-						val = ((TargetFundamentalObject)obj).GetObject(currentThread).ToString();
-						break;
-					case TargetObjectKind.Enum:
-						val = "<Enum>";
-						break;
-					default:
-						val = "<Unknown type>";
-						break;
+				if (obj == null || obj.IsNull) {
+					val = "<null>";
+				} else {
+					switch (obj.Kind) {
+						case TargetObjectKind.Array:
+							val = "<Array>";
+							break;
+						case TargetObjectKind.Pointer:
+							val = "<Pointer>";
+							break;
+						case TargetObjectKind.Object:
+							val = "<Object>";
+							break;
+						case TargetObjectKind.Class:
+							val = "<Class>";
+							break;
+						case TargetObjectKind.Struct:
+							val = "<Struct>";
+							break;
+						case TargetObjectKind.Fundamental:
+							val = ((TargetFundamentalObject)obj).GetObject(currentThread).ToString();
+							break;
+						case TargetObjectKind.Enum:
+							val = "<Enum>";
+							break;
+						default:
+							val = "<Unknown type>";
+							break;
+					}
+				}
+				
+				string type;
+				if (obj != null) {
+					type = obj.TypeName;
+				} else {
+					type = string.Empty;
 				}
 				
 				store.AppendValues(
 					var.Name,      // Name
 					val,           // Value
-					obj.TypeName,  // Type
+					type,          // Type
 					false,         // Raw-view
 					null           // Pixbuf
 				);
