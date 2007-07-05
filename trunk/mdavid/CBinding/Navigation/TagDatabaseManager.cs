@@ -32,6 +32,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 using MonoDevelop.Projects;
 using MonoDevelop.Core;
@@ -153,14 +154,11 @@ namespace CBinding.Navigation
 			return new Tag (name, file, pattern, kind, access, _class, _namespace, _struct, _union, _enum);
 		}
 		
-		public void FillProjectNavigationInformation (Project project)
+		private void ParseTagsFile (object o)
 		{
+			Project project = o as Project;
 			string tagsDir = Path.Combine (project.BaseDirectory, ".tags");
 			string tagsFile = Path.Combine (tagsDir, "tags");
-			
-			if (!File.Exists (tagsFile))
-				throw new IOException ("Tags file does not exist for project: " + project.Name);
-			
 			string tagEntry;
 			
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (project);
@@ -176,49 +174,64 @@ namespace CBinding.Navigation
 					switch (tag.Kind)
 					{
 					case TagKind.Class:
-						info.Classes.Add (new Class (tag, project));
+//						info.Classes.Add (new Class (tag, project));
 						break;
 					case TagKind.Enumeration:
-						info.Enumerations.Add (new Enumeration (tag, project));
+//						info.Enumerations.Add (new Enumeration (tag, project));
 						break;
 					case TagKind.Enumerator:
-						info.Enumerators.Add (new Enumerator (tag, project));
+//						info.Enumerators.Add (new Enumerator (tag, project));
 						break;
 					case TagKind.ExternalVariable:
 						break;
 					case TagKind.Function:
-						info.Functions.Add (new Function (tag, project));
+						//info.Functions.Add (new Function (tag, project));
+						info.AddFunction (new Function (tag, project));
 						break;
 					case TagKind.Local:
 						break;
 					case TagKind.Macro:
-						info.Macros.Add (new Macro (tag, project));
+//						info.Macros.Add (new Macro (tag, project));
 						break;
 					case TagKind.Member:
-						info.Members.Add (new Member (tag, project));
+//						info.Members.Add (new Member (tag, project));
 						break;
 					case TagKind.Namespace:
-						info.Namespaces.Add (new Namespace (tag, project));
+//						info.Namespaces.Add (new Namespace (tag, project));
 						break;
 					case TagKind.Prototype:
 						break;
 					case TagKind.Structure:
-						info.Structures.Add (new Structure (tag, project));
+//						info.Structures.Add (new Structure (tag, project));
 						break;
 					case TagKind.Typedef:
-						info.Typedefs.Add (new Typedef (tag, project));
+//						info.Typedefs.Add (new Typedef (tag, project));
 						break;
 					case TagKind.Union:
-						info.Unions.Add (new Union (tag, project));
+//						info.Unions.Add (new Union (tag, project));
 						break;
 					case TagKind.Variable:
-						info.Variables.Add (new Variable (tag, project));
+//						info.Variables.Add (new Variable (tag, project));
 						break;
 					default:
 						break;
 					}
+					
+					// Don't hog the processor
 				}
 			}
+		}
+		
+		public void FillProjectNavigationInformation (Project project)
+		{
+			string tagsDir = Path.Combine (project.BaseDirectory, ".tags");
+			string tagsFile = Path.Combine (tagsDir, "tags");
+			
+			if (!File.Exists (tagsFile))
+				throw new IOException ("Tags file does not exist for project: " + project.Name);
+			
+			Thread t = new Thread (new ParameterizedThreadStart (ParseTagsFile));
+			t.Start (project);
 		}
 		
 		public Tag FindTag (string name, TagKind kind, Project project)

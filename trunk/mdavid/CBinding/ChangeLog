@@ -1,3 +1,15 @@
+2007-07-05  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/ProjectNodeBuilderExtension.cs,
+	  Navigation/LanguageItemEventArgs.cs,
+	  Navigation/TagDatabaseManager.cs,
+	  Navigation/ProjectNavigationInformation.cs,
+	  Navigation/GlobalsNodeBuilder.cs,
+	  Navigation/LanguageItemCommandHandler.cs,
+	  Project/ProjectPackageEventArgs.cs, Makefile.am, CBinding.mdp:
+	  Started work on making the class pad tree get created in the
+	  background in a seperate thread.
+
 2007-07-03  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/TypedefNodeBuilder.cs, Navigation/StructureNodeBuilder.cs,

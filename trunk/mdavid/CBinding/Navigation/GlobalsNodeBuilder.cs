@@ -60,8 +60,37 @@ namespace CBinding.Navigation
 	
 	public class GlobalsNodeBuilder : TypeNodeBuilder
 	{
+		private LanguageItemEventHandler functionAdded;
+		
 		public override Type NodeDataType {
 			get { return typeof(Globals); }
+		}
+		
+		protected override void Initialize ()
+		{
+			functionAdded = (LanguageItemEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new LanguageItemEventHandler (OnFunctionAdded));
+		}
+		
+		public override void OnNodeAdded (object dataObject)
+		{
+			CProject p = Context.GetTreeBuilder (Globals.Instance).GetParentDataItem (typeof(CProject), false) as CProject;
+			
+			if (p == null) return;
+			
+			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
+			
+			info.FunctionAdded += functionAdded;
+		}
+		
+		public override void OnNodeRemoved (object dataObject)
+		{
+			CProject p = Context.GetTreeBuilder (Globals.Instance).GetParentDataItem (typeof(CProject), false) as CProject;
+			
+			if (p == null) return;
+			
+			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
+			
+			info.FunctionAdded -= functionAdded;
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -113,9 +142,9 @@ namespace CBinding.Navigation
 					treeBuilder.AddChild (t);
 			
 			// Functions
-			foreach (Function f in info.Functions)
-				if (f.Parent == null)
-					treeBuilder.AddChild (f);
+//			foreach (Function f in info.Functions)
+//				if (f.Parent == null)
+//					treeBuilder.AddChild (f);
 			
 			// Variables
 			foreach (Variable v in info.Variables)
@@ -133,6 +162,16 @@ namespace CBinding.Navigation
 				return 1;
 			else
 				return -1;
+		}
+		
+		private void OnFunctionAdded (object sender, LanguageItemEventArgs e)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (Globals.Instance);
+			
+			if (builder != null) {
+				if (e.Item.Parent == null)
+					builder.AddChild (e.Item);
+			}
 		}
 	}
 }

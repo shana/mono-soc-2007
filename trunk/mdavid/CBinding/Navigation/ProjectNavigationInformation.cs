@@ -35,7 +35,7 @@ using System.Collections.Generic;
 using MonoDevelop.Projects;
 
 namespace CBinding.Navigation
-{
+{	
 	public class ProjectNavigationInformation
 	{
 		private Project project;
@@ -50,6 +50,8 @@ namespace CBinding.Navigation
 		private List<Enumerator> enumerators = new List<Enumerator> ();
 		private List<Union> unions = new List<Union> ();
 		private List<Typedef> typedefs = new List<Typedef> ();
+		
+		public event LanguageItemEventHandler FunctionAdded;
 		
 		public ProjectNavigationInformation (Project project)
 		{
@@ -69,6 +71,12 @@ namespace CBinding.Navigation
 			enumerators.Clear ();
 			unions.Clear ();
 			typedefs.Clear ();
+		}
+		
+		public void AddFunction (Function function)
+		{
+			functions.Add (function);
+			FunctionAdded (this, new LanguageItemEventArgs (function));
 		}
 		
 		public Project Project {
