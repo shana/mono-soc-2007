@@ -3,13 +3,14 @@ using System.Windows.Automation.Peers;
 #if Implementation
 using System.Windows;
 using System.Windows.Controls;
+using Mono.System.Windows.Controls.Primitives;
 namespace Mono.System.Windows.Controls {
 #else
 namespace System.Windows.Controls {
 #endif
 	[StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(TabItem))]
 	[TemplatePart(Name = "PART_SelectedContentHost", Type = typeof(ContentPresenter))]
-	public partial class TabControl : global::System.Windows.Controls.Primitives.Selector {
+	public partial class TabControl : Selector {
 		#region Static Constructor
 		static TabControl() {
 #if Implementation
