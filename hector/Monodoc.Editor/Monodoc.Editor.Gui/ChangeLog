@@ -1,3 +1,15 @@
+2007-07-05  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs, DocumentTagTable.cs: Changed names of some
+	  tags. Changed from padding-invisible to only padding because we
+	  don't want to user see this spaces that are used to get around some
+	  TextTag behavior (ie empty elements). The tag padding-visible was
+	  changed to a temporary name of "newline" because that was the only
+	  character we are using right now to give format to the
+	  documentation. A new tag was named format that represents added
+	  text to the document to help the visualization of the
+	  documentation.
+
 2007-07-04  Hector E. Gomez Morales. <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs: Minor changes.
