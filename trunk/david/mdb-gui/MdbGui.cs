@@ -56,27 +56,30 @@ namespace Mono.Debugger.Frontend
 			interpreter = new Interpreter (is_interactive, config, options);
 			engine = interpreter.DebuggerEngine;
 			parser = new LineParser (engine);
+			
+			if (interpreter.Options.StartTarget) {
+				interpreter.Start ();
+			}
 		}
 		
-		public MdbGui(string[] args) 
+		public void GuiInit()
 		{
-			Application.Init();
-			
 			// Redirect output to the TextView
 			Console.SetOut(consoleOutWriter);
 			Console.SetError(consoleOutWriter);
 			GLib.Timeout.Add(100, UpdateConsoleOut);
 			
-			DebuggerInit(args);
-			
+			// Load XML file
 			Glade.XML gxml = new Glade.XML("gui.glade", "mainWindow", null);
 			gxml.Autoconnect(this);
 			
+			// Default source view
 			TextTag  tag   = new TextTag("currentLine");
 			tag.Background = "yellow";
 			sourceView.Buffer.TagTable.Add(tag);
 			sourceView.Buffer.Text = "No source file";
 			
+			// Load pads
 			callstackPad = new CallstackPad(interpreter);
 			viewportCallstack.Add(callstackPad);
 			threadPad = new ThreadPad(interpreter);
@@ -85,6 +88,14 @@ namespace Mono.Debugger.Frontend
 			viewportLocalVariables.Add(localsPad);
 			
 			consoleIn.GrabFocus();
+		}
+		
+		public MdbGui(string[] args) 
+		{
+			Application.Init();
+			
+			DebuggerInit(args);
+			GuiInit();
 			
 			Application.Run();
 		}
@@ -164,33 +175,7 @@ namespace Mono.Debugger.Frontend
 		protected void OnConsoleIn_activate(object o, EventArgs e) 
 		{
 			if (consoleIn.Text == "g") {
-				// Roughly the fastest ones first
-				threadPad.UpdateDisplay();
-				callstackPad.UpdateDisplay();
-				localsPad.UpdateDisplay();
-				
-				StackFrame currentFrame = null;
-				if (interpreter.HasCurrentThread) {
-					currentFrame = interpreter.CurrentThread.CurrentFrame;
-				}
-				if (currentFrame != null &&
-				    currentFrame.SourceAddress != null &&
-				    currentFrame.SourceAddress.Location != null &&
-				    currentFrame.SourceAddress.Location.FileName != null) {
-					
-					SourceBuffer buffer = interpreter.ReadFile(currentFrame.SourceAddress.Location.FileName);
-					string[] sourceCode = buffer.Contents;
-					sourceView.Buffer.Text = string.Join("\n", sourceCode);
-					
-					int line = currentFrame.SourceAddress.Location.Line;
-					TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
-					TextIter end   = sourceView.Buffer.GetIterAtLine(line);
-					sourceView.Buffer.ApplyTag("currentLine", begin, end);
-					
-					sourceView.ScrollToIter(end, 0, false, 0, 0);
-				} else {
-					sourceView.Buffer.Text = "No source code";
-				}
+				UpdateGUI();
 			} else {
 				parser.Append (consoleIn.Text);
 				if (parser.IsComplete ()){
@@ -200,6 +185,38 @@ namespace Mono.Debugger.Frontend
 			}
 			
 			consoleIn.Text = String.Empty;
+		}
+		
+		public void UpdateGUI()
+		{
+			// Update pads - roughly the fastest ones first
+			threadPad.UpdateDisplay();
+			callstackPad.UpdateDisplay();
+			localsPad.UpdateDisplay();
+			
+			// Update the source view
+			StackFrame currentFrame = null;
+			if (interpreter.HasCurrentThread) {
+				currentFrame = interpreter.CurrentThread.CurrentFrame;
+			}
+			if (currentFrame != null &&
+			    currentFrame.SourceAddress != null &&
+			    currentFrame.SourceAddress.Location != null &&
+			    currentFrame.SourceAddress.Location.FileName != null) {
+				
+				SourceBuffer buffer = interpreter.ReadFile(currentFrame.SourceAddress.Location.FileName);
+				string[] sourceCode = buffer.Contents;
+				sourceView.Buffer.Text = string.Join("\n", sourceCode);
+				
+				int line = currentFrame.SourceAddress.Location.Line;
+				TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
+				TextIter end   = sourceView.Buffer.GetIterAtLine(line);
+				sourceView.Buffer.ApplyTag("currentLine", begin, end);
+				
+				sourceView.ScrollToIter(end, 0, false, 0, 0);
+			} else {
+				sourceView.Buffer.Text = "No source code";
+			}
 		}
 	}
 }
