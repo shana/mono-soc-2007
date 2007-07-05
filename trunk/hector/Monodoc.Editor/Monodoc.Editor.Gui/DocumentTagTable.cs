@@ -46,15 +46,15 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("Type");
 		tag.IsElement = true;
-		tag.Foreground = "blue";
 		Add (tag);
 		
 		tag = new DocumentTag ("Type:Attributes");
-		tag.Foreground = "green";
+		tag.Foreground = "#204a87";
 		Add (tag);
 		
 		tag = new DocumentTag ("Type:Name");
 		tag.IsAttribute = true;
+		tag.Invisible = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Type:FullName");
@@ -73,6 +73,9 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("TypeSignature");
 		tag.IsElement = true;
+		tag.Scale = Pango.Scale.Large;
+		tag.PixelsBelowLines = 10;
+		tag.LeftMargin = 50;
 		Add (tag);
 		
 		tag = new DocumentTag ("TypeSignature:Attributes");
@@ -100,6 +103,8 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("AssemblyInfo");
 		tag.IsElement = true;
+		tag.Scale = Pango.Scale.Large;
+		tag.LeftMargin = 50;
 		Add (tag);
 		
 		tag = new DocumentTag ("AssemblyName");
@@ -520,7 +525,9 @@ public class DocumentTagTable : TextTagTable {
 		dynamic_tags ["term"] = true;
 		dynamic_tags ["typeparamref"] = true;
 		dynamic_tags ["ul"] = true;
-		dynamic_tags ["padding-invisible"] = true;
+		dynamic_tags ["padding"] = true;
+		dynamic_tags ["newline"] = true;
+		dynamic_tags ["format"] = true;
 	}
 	
 	private void InitializeTag (DocumentTag tag)
@@ -689,10 +696,19 @@ public class DocumentTagTable : TextTagTable {
 		case "ul":
 			tag.IsElement = true;
 			break;
-		case "padding-invisible":
+		case "padding":
 			tag.IsText = true;
 			tag.IsSerializable = false;
 			tag.Invisible = true;
+			break;
+		case "newline":
+			tag.IsText = true;
+			tag.IsSerializable = false;
+			tag.Invisible = false;
+			break;
+		case "format":
+			tag.IsText = true;
+			tag.IsSerializable = false;
 			break;
 		default:
 			break;
