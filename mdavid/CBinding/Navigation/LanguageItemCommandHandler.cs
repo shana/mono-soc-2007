@@ -51,12 +51,13 @@ namespace CBinding.Navigation
 			
 			int lineNum = 0;
 			string line;
+			bool isMacro = item is Macro;
 			StringReader reader = new StringReader (doc.TextEditor.Text);
 			
 			while ((line = reader.ReadLine ()) != null) {
 				lineNum++;
 				
-				if (line.Contains (item.Pattern)) {
+				if (line.Equals (item.Pattern) || (isMacro && line.StartsWith (item.Pattern))) {
 					doc.TextEditor.JumpTo (lineNum, line.Length + 1);
 					break;
 				}

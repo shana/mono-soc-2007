@@ -1,5 +1,5 @@
 //
-// ProjectPackageEventArgs.cs
+// LanguageItemEventArgs.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -31,27 +31,21 @@
 
 using System;
 
-namespace CBinding
+namespace CBinding.Navigation
 {
-	public delegate void ProjectPackageEventHandler (object sender, ProjectPackageEventArgs e);
+	public delegate void LanguageItemEventHandler (object sender, LanguageItemEventArgs e);
 	
-	public class ProjectPackageEventArgs
+	public class LanguageItemEventArgs
 	{
-		CProject project;
-		ProjectPackage package;
+		LanguageItem item;
 		
-		public ProjectPackageEventArgs(CProject project, ProjectPackage package)
+		public LanguageItemEventArgs (LanguageItem item)
 		{
-			this.project = project;
-			this.package = package;
+			this.item = item;
 		}
 		
-		public CProject Project {
-			get { return project; }
-		}
-		
-		public ProjectPackage Package {
-			get { return package; }
+		public LanguageItem Item {
+			get { return item; }
 		}
 	}
 }

@@ -37,31 +37,39 @@ using Mono.Addins;
 using MonoDevelop.Projects;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Core.Gui;
 
 using CBinding;
 
 namespace CBinding.Navigation
 {
 	public class ProjectNodeBuilderExtension : NodeBuilderExtension
-	{
+	{		
 		public override bool CanBuildNode (Type dataType)
 		{
 			return typeof(CProject).IsAssignableFrom (dataType);
 		}
+		
+		public override void OnNodeAdded (object dataObject)
+		{
+			CProject project = dataObject as CProject;
+			if (project == null) return;
+			
+			// Move this
+			try {
+				TagDatabaseManager.Instance.WriteTags (project);
+				TagDatabaseManager.Instance.FillProjectNavigationInformation (project);
+			} catch (IOException ex) {
+				IdeApp.Services.MessageService.ShowError (ex);
+				return;
+			}
+		}	                                       
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			CProject p = dataObject as CProject;
 			
 			if (p == null) return;
-			
-			try {
-				TagDatabaseManager.Instance.WriteTags (p);
-				TagDatabaseManager.Instance.FillProjectNavigationInformation (p);
-			} catch (IOException ex) {
-				IdeApp.Services.MessageService.ShowError (ex);
-				return;
-			}
 			
 			bool nestedNamespaces = builder.Options["NestedNamespaces"];
 			

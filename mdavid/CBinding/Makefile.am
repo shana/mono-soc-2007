@@ -47,6 +47,7 @@ FILES =  \
 	Navigation/GlobalsNodeBuilder.cs \
 	Navigation/LanguageItem.cs \
 	Navigation/LanguageItemCommandHandler.cs \
+	Navigation/LanguageItemEventArgs.cs \
 	Navigation/Macro.cs \
 	Navigation/MacroDefinitionsNodeBuilder.cs \
 	Navigation/MacroNodeBuilder.cs \
