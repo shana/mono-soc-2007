@@ -63,20 +63,22 @@ public partial class EditorWindow : Gtk.Window {
 			
 		dialog.Destroy ();
 		
-		try {
-			MonoDocument doc = new MonoDocument (filename);
-			
-			if (!current_tab.Title.Equals ("Untitled"))
-				AddTab ();
+		if (filename != String.Empty) {
+			try {
+				MonoDocument doc = new MonoDocument (filename);
 				
-			current_tab.Title = doc.Name;
-			DocumentBuffer newBuffer = new DocumentBuffer ();
-			DocumentBufferArchiver.Deserialize (newBuffer, doc.Text);
-			current_tab.Buffer = newBuffer;
-			SaveAs.Sensitive = Save.Sensitive = true;
-		} catch (ArgumentException emsg) {
-			// TODO: Add message dialog about error.
-			Console.WriteLine (emsg.Message);
+				if (!current_tab.Title.Equals ("Untitled"))
+					AddTab ();
+				
+				current_tab.Title = doc.Name;
+				DocumentBuffer newBuffer = new DocumentBuffer ();
+				DocumentBufferArchiver.Deserialize (newBuffer, doc.Text);
+				current_tab.Buffer = newBuffer;
+				SaveAs.Sensitive = Save.Sensitive = true;
+			} catch (ArgumentException emsg) {
+				// TODO: Add message dialog about error.
+				Console.WriteLine (emsg.Message);
+			}
 		}
 	}
 

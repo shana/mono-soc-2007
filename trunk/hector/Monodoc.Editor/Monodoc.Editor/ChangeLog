@@ -1,3 +1,8 @@
+2007-07-05  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* EditorWindow.cs: Added a check in Open event to see if filename is
+	  empty before we do anything.
+
 2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* EditorWindow.cs: Rearrange OnOpenActivated handler to prevent GUI
