@@ -22,6 +22,9 @@ namespace Mono.Debugger.Frontend
 		internal const int RAW_VIEW_COL = 3;
 		internal const int PIXBUF_COL = 4;
 		
+		const string imageBase = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.";
+		Gdk.Pixbuf imageField = Gdk.Pixbuf.LoadFromResource(imageBase + "PublicField");
+		
 		public LocalsPad(Interpreter interpreter)
 		{
 			this.interpreter = interpreter;
@@ -139,7 +142,7 @@ namespace Mono.Debugger.Frontend
 					val,           // Value
 					type,          // Type
 					false,         // Raw-view
-					null           // Pixbuf
+					imageField     // Pixbuf
 				);
 			}
 		}
