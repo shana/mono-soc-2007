@@ -13,7 +13,19 @@ namespace System.Windows.Controls.Primitives {
 		#region Public Fields
 		#region Dependency Properties
 		public static readonly DependencyProperty IsSynchronizedWithCurrentItemProperty = DependencyProperty.Register("IsSynchronizedWithCurrentItem", typeof(bool?), typeof(Selector), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", typeof(int), typeof(Selector), new FrameworkPropertyMetadata(-1));
+		public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", typeof(int), typeof(Selector), new FrameworkPropertyMetadata(-1, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+			Selector i = (Selector)d;
+			object currently_selected_item = i.SelectedItem;
+			object[] removed_item = currently_selected_item == null ? new object[] { } : new object[] { currently_selected_item };
+			int new_selected_index = (int)e.NewValue;
+			object[] added_items;
+			if (new_selected_index > 0 && new_selected_index < i.Items.Count) {
+				i.SelectedItem = i.Items[new_selected_index];
+				added_items = new object[] { i.SelectedItem };
+			} else
+				added_items = new object[] { };
+			i.OnSelectionChanged(new SelectionChangedEventArgs(SelectionChangedEvent, removed_item, added_items));
+		}));
 		public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(object), typeof(Selector), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty SelectedValuePathProperty = DependencyProperty.Register("SelectedValuePath", typeof(string), typeof(Selector), new FrameworkPropertyMetadata(string.Empty));
 		public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(object), typeof(Selector), new FrameworkPropertyMetadata());
