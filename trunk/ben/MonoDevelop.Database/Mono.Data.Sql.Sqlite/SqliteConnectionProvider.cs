@@ -35,13 +35,51 @@ namespace Mono.Data.Sql
 {
 	public class SqliteConnectionProvider : AbstractConnectionProvider
 	{
-		public SqliteConnectionProvider (ConnectionSettings settings)
-			: base (settings)
+		public SqliteConnectionProvider (IDbFactory factory, ConnectionSettings settings)
+			: base (factory, settings)
 		{
 		}
 
 		public override bool SupportsPooling {
 			get { return false; }
+		}
+		
+		public override DataSet ExecuteQueryAsDataSet (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataSet set = new DataSet ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (SqliteDataAdapter adapter = new SqliteDataAdapter (command as SqliteCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return set;
+		}
+
+		public override DataTable ExecuteQueryAsDataTable (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataTable table = new DataTable ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (SqliteDataAdapter adapter = new SqliteDataAdapter (command as SqliteCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return table;
 		}
 
 		public override bool Open (out string errorMessage)

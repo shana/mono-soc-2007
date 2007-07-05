@@ -2,7 +2,7 @@
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Mono.Data.Sql" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.Tests" configuration="Debug" />
+      <Entry build="False" name="Mono.Data.Sql.Tests" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Designer" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Visualization" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Debug" />
@@ -10,11 +10,12 @@
       <Entry build="True" name="Mono.Data.Sql.Sybase" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.MySql" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Firebird" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.MsSql" configuration="Debug" />
+      <Entry build="True" name="Mono.Data.Sql.SqlServer" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Sqlite" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Oracle" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Npgsql" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Odbc" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Mono.Data.Sql" configuration="Release" />
@@ -26,14 +27,15 @@
       <Entry build="True" name="Mono.Data.Sql.Sybase" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.MySql" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.Firebird" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.MsSql" configuration="Release" />
+      <Entry build="True" name="Mono.Data.Sql.SqlServer" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.Sqlite" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.Oracle" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.Npgsql" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.Odbc" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Release" />
     </Configuration>
   </Configurations>
-  <StartMode startupentry="Mono.Data.Sql" single="True">
+  <StartMode startupentry="Mono.Data.Sql.Tests" single="True">
     <Execute type="None" entry="Mono.Data.Sql" />
     <Execute type="None" entry="Mono.Data.Sql.Tests" />
     <Execute type="None" entry="MonoDevelop.Database.Designer" />
@@ -43,11 +45,12 @@
     <Execute type="None" entry="Mono.Data.Sql.Sybase" />
     <Execute type="None" entry="Mono.Data.Sql.MySql" />
     <Execute type="None" entry="Mono.Data.Sql.Firebird" />
-    <Execute type="None" entry="Mono.Data.Sql.MsSql" />
+    <Execute type="None" entry="Mono.Data.Sql.SqlServer" />
     <Execute type="None" entry="Mono.Data.Sql.Sqlite" />
     <Execute type="None" entry="Mono.Data.Sql.Oracle" />
     <Execute type="None" entry="Mono.Data.Sql.Npgsql" />
     <Execute type="None" entry="Mono.Data.Sql.Odbc" />
+    <Execute type="None" entry="MonoDevelop.Database.ConnectionManager" />
   </StartMode>
   <Entries>
     <Entry filename="./Mono.Data.Sql/Mono.Data.Sql.mdp" />
@@ -64,5 +67,6 @@
     <Entry filename="./Mono.Data.Sql.Oracle/Mono.Data.Sql.Oracle.mdp" />
     <Entry filename="./Mono.Data.Sql.Npgsql/Mono.Data.Sql.Npgsql.mdp" />
     <Entry filename="./Mono.Data.Sql.Odbc/Mono.Data.Sql.Odbc.mdp" />
+    <Entry filename="./MonoDevelop.Database.ConnectionManager/MonoDevelop.Database.ConnectionManager.mdp" />
   </Entries>
 </Combine>

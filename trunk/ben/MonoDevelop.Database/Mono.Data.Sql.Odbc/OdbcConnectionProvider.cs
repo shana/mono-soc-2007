@@ -36,17 +36,55 @@ namespace Mono.Data.Sql
 {
 	public class OdbcConnectionProvider : AbstractConnectionProvider
 	{
-		public OdbcConnectionProvider (ConnectionSettings settings)
-			: base (settings)
+		public OdbcConnectionProvider (IDbFactory factory, ConnectionSettings settings)
+			: base (factory, settings)
 		{
 		}
-		
+
 		public override bool SupportsPooling {
 			get { return false; }
 		}
 
 		public override bool SupportsAutomaticConnectionString {
 			get { return false; }
+		}
+		
+		public override DataSet ExecuteQueryAsDataSet (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataSet set = new DataSet ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (OdbcDataAdapter adapter = new OdbcDataAdapter (command as OdbcCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return set;
+		}
+
+		public override DataTable ExecuteQueryAsDataTable (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataTable table = new DataTable ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (OdbcDataAdapter adapter = new OdbcDataAdapter (command as OdbcCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return table;
 		}
 
 		public override bool Open (out string errorMessage)

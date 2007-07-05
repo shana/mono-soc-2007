@@ -31,6 +31,8 @@ namespace Mono.Data.Sql
 {
 	public class SqliteDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "Mono.Data.SqliteClient"; }
 		}
@@ -39,9 +41,17 @@ namespace Mono.Data.Sql
 			get { return "SQLite database"; }
 		}
 		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", ":");
+				return dialect;
+			}
+		}
+		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new SqliteConnectionProvider (settings);
+			return new SqliteConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
@@ -53,6 +63,8 @@ namespace Mono.Data.Sql
 		{
 			ConnectionSettings settings = new ConnectionSettings ();
 			settings.ProviderIdentifier = Identifier;
+			settings.Port = -1;
+			settings.Database = String.Empty;
 			return settings;
 		}
 	}

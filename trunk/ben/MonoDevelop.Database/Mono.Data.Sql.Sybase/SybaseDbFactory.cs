@@ -31,17 +31,27 @@ namespace Mono.Data.Sql
 {
 	public class SybaseDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "Mono.Data.SybaseClient"; }
 		}
 		
 		public string Name {
-			get { return "Sybase database"; }
+			get { return "Sybase database (Incomplete)"; }
+		}
+		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", "@");
+				return dialect;
+			}
 		}
 		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new SybaseConnectionProvider (settings);
+			return new SybaseConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
@@ -56,6 +66,8 @@ namespace Mono.Data.Sql
 			settings.Server = "localhost";
 			settings.Port = 4100;
 			settings.Username = "sa";
+			settings.Password = String.Empty;
+			settings.Database = String.Empty;
 			return settings;
 		}
 	}

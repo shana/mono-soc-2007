@@ -32,11 +32,49 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public class MsSqlConnectionProvider : AbstractConnectionProvider
+	public class SqlServerConnectionProvider : AbstractConnectionProvider
 	{
-		public MsSqlConnectionProvider (ConnectionSettings settings)
-			: base (settings)
+		public SqlServerConnectionProvider (IDbFactory factory, ConnectionSettings settings)
+			: base (factory, settings)
 		{
+		}
+		
+		public override DataSet ExecuteQueryAsDataSet (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataSet set = new DataSet ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (SqlDataAdapter adapter = new SqlDataAdapter (command as SqlCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return set;
+		}
+
+		public override DataTable ExecuteQueryAsDataTable (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataTable table = new DataTable ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (SqlDataAdapter adapter = new SqlDataAdapter (command as SqlCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return table;
 		}
 
 		public override bool Open (out string errorMessage)

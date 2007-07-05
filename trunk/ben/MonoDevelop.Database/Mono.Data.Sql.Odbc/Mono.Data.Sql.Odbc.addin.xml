@@ -1,5 +1,5 @@
 <Addin	id		= "Mono.Data.Sql.Odbc"
-	namespace	= "Mono"
+	namespace	= "MonoDevelop"
 	name		= "Odbc provider for Mono Data Sql"
 	author		= "Christian Hergert, Daniel Morgan, Ben Motmans"
 	copyright	= "MIT X11"
@@ -15,7 +15,7 @@
 		<Addin id="Mono.Data.Sql" version="0.14.0"/>
 	</Dependencies>
 
-	<ExtensionPoint path = "/Mono/Data/Sql">
-		<DbFactory id = "Odbc" class = "Mono.Data.Sql.OdbcDbFactory"/>
-	</ExtensionPoint>
+	<Extension path = "/Mono/Data/Sql">
+		<Class id = "Odbc" class = "Mono.Data.Sql.OdbcDbFactory"/>
+	</Extension>
 </Addin>

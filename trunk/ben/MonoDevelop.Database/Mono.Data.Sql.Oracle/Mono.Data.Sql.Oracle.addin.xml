@@ -1,5 +1,5 @@
 <Addin	id		= "Mono.Data.Sql.Oracle"
-	namespace	= "Mono"
+	namespace	= "MonoDevelop"
 	name		= "Oracle provider for Mono Data Sql"
 	author		= "Christian Hergert, Daniel Morgan, Ben Motmans"
 	copyright	= "MIT X11"
@@ -15,7 +15,7 @@
 		<Addin id="Mono.Data.Sql" version="0.14.0"/>
 	</Dependencies>
 
-	<ExtensionPoint path = "/Mono/Data/Sql">
-		<DbFactory id = "Oracle" class = "Mono.Data.Sql.OracleDbFactory"/>
-	</ExtensionPoint>
+	<Extension path = "/Mono/Data/Sql">
+		<Class id = "Oracle" class = "Mono.Data.Sql.OracleDbFactory"/>
+	</Extension>
 </Addin>

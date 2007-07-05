@@ -36,9 +36,47 @@ namespace Mono.Data.Sql
 {
 	public class FirebirdConnectionProvider : AbstractConnectionProvider
 	{
-		public FirebirdConnectionProvider (ConnectionSettings settings)
-			: base (settings)
+		public FirebirdConnectionProvider (IDbFactory factory, ConnectionSettings settings)
+			: base (factory, settings)
 		{
+		}
+		
+		public override DataSet ExecuteQueryAsDataSet (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataSet set = new DataSet ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (FbDataAdapter adapter = new FbDataAdapter (command as FbCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return set;
+		}
+
+		public override DataTable ExecuteQueryAsDataTable (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataTable table = new DataTable ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (FbDataAdapter adapter = new FbDataAdapter (command as FbCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return table;
 		}
 
 		public override bool Open (out string errorMessage)

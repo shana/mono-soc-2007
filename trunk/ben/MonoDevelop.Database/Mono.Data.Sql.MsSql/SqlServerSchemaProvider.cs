@@ -37,9 +37,9 @@ namespace Mono.Data.Sql
 {
 	// see:
 	// http://www.alberton.info/sql_server_meta_info.html
-	public class MsSqlSchemaProvider : AbstractSchemaProvider
+	public class SqlServerSchemaProvider : AbstractSchemaProvider
 	{
-		public MsSqlSchemaProvider (IConnectionProvider connectionProvider)
+		public SqlServerSchemaProvider (IConnectionProvider connectionProvider)
 			: base (connectionProvider)
 		{
 		}

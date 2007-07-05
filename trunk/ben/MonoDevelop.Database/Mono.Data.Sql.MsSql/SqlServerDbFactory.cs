@@ -29,8 +29,10 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public class MsSqlDbFactory : IDbFactory
+	public class SqlServerDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "System.Data.SqlClient"; }
 		}
@@ -39,14 +41,22 @@ namespace Mono.Data.Sql
 			get { return "SQL Server database"; }
 		}
 		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", "@");
+				return dialect;
+			}
+		}
+		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new MsSqlConnectionProvider (settings);
+			return new SqlServerConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
 		{
-			return new MsSqlSchemaProvider (connectionProvider);
+			return new SqlServerSchemaProvider (connectionProvider);
 		}
 		
 		public ConnectionSettings GetDefaultConnectionSettings ()
@@ -56,6 +66,8 @@ namespace Mono.Data.Sql
 			settings.Server = "localhost";
 			settings.Port = 1433;
 			settings.Username = "sa";
+			settings.Password = String.Empty;
+			settings.Database = String.Empty;
 			return settings;
 		}
 	}

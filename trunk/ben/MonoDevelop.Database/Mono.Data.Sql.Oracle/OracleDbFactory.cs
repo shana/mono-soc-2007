@@ -31,17 +31,27 @@ namespace Mono.Data.Sql
 {
 	public class OracleDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "System.Data.OracleClient"; }
 		}
 		
 		public string Name {
-			get { return "Oracle database"; }
+			get { return "Oracle database (Incomplete)"; }
+		}
+		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", ":");
+				return dialect;
+			}
 		}
 		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new OracleConnectionProvider (settings);
+			return new OracleConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
@@ -54,6 +64,10 @@ namespace Mono.Data.Sql
 			ConnectionSettings settings = new ConnectionSettings ();
 			settings.ProviderIdentifier = Identifier;
 			settings.Port = 1521;
+			settings.Password = String.Empty;
+			settings.Database = String.Empty;
+			settings.Username = String.Empty;
+			//TODO: .Server property, not yet supported in the connection provider
 			return settings;
 		}
 	}

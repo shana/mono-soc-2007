@@ -1,5 +1,5 @@
 <Addin	id		= "Mono.Data.Sql.MySql"
-	namespace	= "Mono"
+	namespace	= "MonoDevelop"
 	name		= "MySql provider for Mono Data Sql"
 	author		= "Christian Hergert, Ben Motmans"
 	copyright	= "MIT X11"
@@ -15,7 +15,7 @@
 		<Addin id="Mono.Data.Sql" version="0.14.0"/>
 	</Dependencies>
 
-	<ExtensionPoint path = "/Mono/Data/Sql">
-		<DbFactory id = "MySql" class = "Mono.Data.Sql.MySqlDbFactory"/>
-	</ExtensionPoint>
+	<Extension path = "/Mono/Data/Sql">
+		<Class id = "MySql" class = "Mono.Data.Sql.MySqlDbFactory"/>
+	</Extension>
 </Addin>

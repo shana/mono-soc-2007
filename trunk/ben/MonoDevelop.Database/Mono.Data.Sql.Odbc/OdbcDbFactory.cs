@@ -31,17 +31,27 @@ namespace Mono.Data.Sql
 {
 	public class OdbcDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "System.Data.Odbc"; }
 		}
 		
 		public string Name {
-			get { return "ODBC data sources"; }
+			get { return "ODBC data sources (Incomplete)"; }
+		}
+		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", "@");
+				return dialect;
+			}
 		}
 		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new OdbcConnectionProvider (settings);
+			return new OdbcConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
@@ -53,6 +63,11 @@ namespace Mono.Data.Sql
 		{
 			ConnectionSettings settings = new ConnectionSettings ();
 			settings.ProviderIdentifier = Identifier;
+			settings.Password = String.Empty;
+			settings.Database = String.Empty;
+			settings.Username = String.Empty;
+			settings.Server = String.Empty;
+			settings.Port = 0;
 			return settings;
 		}
 	}

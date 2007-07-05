@@ -1,5 +1,5 @@
 <Addin	id		= "Mono.Data.Sql.Sybase"
-	namespace	= "Mono"
+	namespace	= "MonoDevelop"
 	name		= "Sybase provider for Mono Data Sql"
 	author		= "Christian Hergert, Daniel Morgan, Ben Motmans"
 	copyright	= "MIT X11"
@@ -15,7 +15,7 @@
 		<Addin id="Mono.Data.Sql" version="0.14.0"/>
 	</Dependencies>
 
-	<ExtensionPoint path = "/Mono/Data/Sql">
-		<DbFactory id = "Sybase" class = "Mono.Data.Sql.SybaseDbFactory"/>
-	</ExtensionPoint>
+	<Extension path = "/Mono/Data/Sql">
+		<Class id = "Sybase" class = "Mono.Data.Sql.SybaseDbFactory"/>
+	</Extension>
 </Addin>
