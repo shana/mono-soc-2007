@@ -1,6 +1,10 @@
 2007-07-05  George Giolfan  <georgegiolfan@yahoo.com>
 
-	* TabItem.cs: Fixed prevoius change.
+	* TabControl trivial things.cs: Switched to implemented Selector.
+
+2007-07-05  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* TabItem.cs: Fixed previous change.
 
 2007-07-05  George Giolfan  <georgegiolfan@yahoo.com>
 
