@@ -51,24 +51,37 @@ namespace Gendarme.Rules.Smells {
 		}
 		
                 private bool IsAcceptable (Instruction instruction) {
-                        return instruction.OpCode.FlowControl == FlowControl.Call | instruction.OpCode.FlowControl == FlowControl.Branch | instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
+                        return instruction.OpCode.FlowControl == FlowControl.Call | 
+                                instruction.OpCode.FlowControl == FlowControl.Branch | 
+                                instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
+                }
+
+                private void CreateExpressionAndAddToExpressionContainer () 
+                {
+                        currentExpression = new Expression ();
+                        expressionContainer.Add (currentExpression);
+                }
+
+                private bool IsDelimiter (Instruction instruction) 
+                {
+                        return instruction.OpCode.Name == "ldarg.0" |
+                                instruction.OpCode.FlowControl == FlowControl.Branch;
+                }
+
+                private void AddToExpression (Instruction instruction) 
+                {
+                        if (currentExpression == null)
+                                CreateExpressionAndAddToExpressionContainer ();
+                        currentExpression.Add (instruction);
                 }
 
 		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
                 {
                         foreach (Instruction instruction in instructionCollection) {
-                                if (instruction.OpCode.Name == "ldarg.0" | instruction.OpCode.FlowControl == FlowControl.Branch) {
-                                        currentExpression = new Expression ();
-                                        expressionContainer.Add (currentExpression);
-                                }
-
-                                if (IsAcceptable (instruction)) {
-                                        if (currentExpression == null) {
-                                                currentExpression = new Expression ();
-                                                expressionContainer.Add (currentExpression);
-                                        }
-                                        currentExpression.Add (instruction);
-                                }
+                                if (IsDelimiter (instruction)) 
+                                        CreateExpressionAndAddToExpressionContainer ();
+                                if (IsAcceptable (instruction)) 
+                                        AddToExpression (instruction);
                         }
                 }
 
@@ -111,24 +124,27 @@ namespace Gendarme.Rules.Smells {
                                 return false;
                         }
                         else {
-                                bool equality = true;
-                                 for (int index = 0; index < Count; index++) {
-                                        Instruction instruction = this[index];
-                                        Instruction targetInstruction = targetExpression[index];
-                                        
-                                        if (CheckEqualityForOpCodes (instruction, targetInstruction)) {
-                                                if (instruction.OpCode.FlowControl == FlowControl.Call) {
-                                                        equality = equality & (instruction.Operand == targetInstruction.Operand);
-                                                }
-                                        }
-                                        else
-                                                return false;;
-                                                
-                                }
-                                return equality;
+                                return CompareInstructionsInOrder (targetExpression);
                         }
                 }
 
+                private bool CompareInstructionsInOrder (Expression targetExpression) {
+                        bool equality = true;
+                        for (int index = 0; index < Count; index++) {
+                                Instruction instruction = this[index];
+                                Instruction targetInstruction = targetExpression[index];
+                                        
+                                if (CheckEqualityForOpCodes (instruction, targetInstruction)) {
+                                        if (instruction.OpCode.FlowControl == FlowControl.Call) {
+                                                equality = equality & (instruction.Operand == targetInstruction.Operand);
+                                        }
+                                }
+                                else
+                                        return false;;
+                        }
+                        return equality;
+                }
+                
                 private bool CheckEqualityForOpCodes (Instruction currentInstruction, Instruction targetInstruction) 
                 {
                         if (currentInstruction.OpCode.Name == targetInstruction.OpCode.Name)
@@ -184,23 +200,26 @@ namespace Gendarme.Rules.Smells {
                         return false;
                 }
 
+                private ICollection GetExpressionsFrom (MethodBody methodBody) 
+                {
+                        ExpressionFiller expressionFiller = new ExpressionFiller ();
+			methodBody.Accept (expressionFiller);
+                        return expressionFiller.Expressions;
+                }
+
+                private bool CanCompareMethods (MethodDefinition currentMethod, MethodDefinition targetMethod) 
+                {
+                        return currentMethod.HasBody && targetMethod.HasBody &&
+                                !checkedMethods.Contains (targetMethod.Name) && 
+                                currentMethod != targetMethod;
+                }
+
 		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) 
 		{
-			// When check a method, it should have body.  Also I don't check 
-			// a method with itself.
-			if (currentMethod.HasBody & targetMethod.HasBody & !checkedMethods.Contains (targetMethod.Name) & currentMethod != targetMethod) {
-                                ExpressionFiller expressionFiller = new ExpressionFiller ();
-				currentMethod.Body.Accept (expressionFiller);
-                                ICollection currentExpressions = expressionFiller.Expressions;
-
-                                targetMethod.Body.Accept (expressionFiller);
-                                ICollection targetExpressions = expressionFiller.Expressions;
+			if (CanCompareMethods (currentMethod, targetMethod)) {
+                                ICollection currentExpressions = GetExpressionsFrom (currentMethod.Body);
+                                ICollection targetExpressions = GetExpressionsFrom (targetMethod.Body);
                                         
-                                Console.WriteLine ("Method: {0}", currentMethod.Name);
-                                foreach (Expression expression in currentExpressions) {
-                                        Console.WriteLine (expression);
-                                }
-                                
                                 return ExistsExpressionsReplied (currentExpressions, targetExpressions);
 			}
 			return false;
