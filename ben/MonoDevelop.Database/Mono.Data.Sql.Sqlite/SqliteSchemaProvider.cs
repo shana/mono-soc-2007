@@ -33,6 +33,8 @@ using Mono.Data.SqliteClient;
 
 namespace Mono.Data.Sql
 {
+	// see: http://www.sqlite.org/faq.html
+	// http://www.sqlite.org/google-talk-slides/page-021.html
 	public class SqliteSchemaProvider : AbstractSchemaProvider
 	{
 		public SqliteSchemaProvider (IConnectionProvider connectionProvider)
@@ -58,14 +60,16 @@ namespace Mono.Data.Sql
 			List<TableSchema> tables = new List<TableSchema> ();
 			
 			IDbCommand command = connectionProvider.CreateCommand (
-				"select * from sqlite_master where type = 'table'"
+				"SELECT name, sql FROM sqlite_master WHERE type = 'table'"
 			);
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read ()) {
 						TableSchema table = new TableSchema (this);
 	
-						table.Name = r.GetString (1);
+						table.Name = r.GetString (0);
+						table.IsSystemTable = table.Name.StartsWith ("sqlite_");
+						table.Definition = r.GetString (1);
 						
 						tables.Add (table);
 					}
@@ -102,6 +106,61 @@ namespace Mono.Data.Sql
 			}
 
 			return columns;
+		}
+		
+		public override ICollection<ViewSchema> GetViews ()
+		{
+			CheckConnectionState ();
+			List<ViewSchema> views = new List<ViewSchema> ();
+			
+			IDbCommand command = connectionProvider.CreateCommand (
+				"SELECT name, sql FROM sqlite_master WHERE type = 'views'"
+			);
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ()) {
+						ViewSchema view = new ViewSchema (this);
+	
+						view.Name = r.GetString (0);
+						view.Definition = r.GetString (1);
+						
+						views.Add (view);
+					}
+					r.Close ();
+				}
+			}
+
+			return views;
+		}
+		
+		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
+		{
+			CheckConnectionState ();
+			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
+			
+			IDbCommand command = connectionProvider.CreateCommand ("SELECT name, tbl_name FROM sqlite_master WHERE sql IS NULL AND type = 'index'");
+			using (command) {
+				using (IDataReader r = command.ExecuteReader()) {
+					while (r.Read ()) {
+						ConstraintSchema constraint = null;
+						
+						if (r.IsDBNull (1) || r.GetString (1) == null) {
+							constraint = new UniqueConstraintSchema (this);
+						} else {
+							ForeignKeyConstraintSchema fkc = new ForeignKeyConstraintSchema (this);
+							fkc.ReferenceTableName = r.GetString (1);
+							
+							constraint = fkc;
+						}
+						constraint.Name = r.GetString (0);
+
+						constraints.Add (constraint);
+					}
+					r.Close ();
+				}
+			}
+
+			return constraints;
 		}
 
 		public override DataTypeSchema GetDataType (string name)

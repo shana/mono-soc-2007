@@ -31,7 +31,7 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Data;
-using ByteFX.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 
 namespace Mono.Data.Sql

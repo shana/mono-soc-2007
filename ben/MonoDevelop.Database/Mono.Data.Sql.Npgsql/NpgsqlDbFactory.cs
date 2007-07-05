@@ -31,6 +31,8 @@ namespace Mono.Data.Sql
 {
 	public class NpgsqlDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "Npgsql"; }
 		}
@@ -39,9 +41,17 @@ namespace Mono.Data.Sql
 			get { return "PostgreSQL database"; }
 		}
 		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", ":");
+				return dialect;
+			}
+		}
+		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new NpgsqlConnectionProvider (settings);
+			return new NpgsqlConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
@@ -56,6 +66,8 @@ namespace Mono.Data.Sql
 			settings.Server = "localhost";
 			settings.Port = 5432;
 			settings.Username = "SYSDBA";
+			settings.Password = String.Empty;
+			settings.Database = String.Empty;
 			return settings;
 		}
 	}

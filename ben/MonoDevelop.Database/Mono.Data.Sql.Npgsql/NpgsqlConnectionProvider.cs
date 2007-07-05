@@ -34,9 +34,47 @@ namespace Mono.Data.Sql
 {
 	public class NpgsqlConnectionProvider : AbstractConnectionProvider
 	{
-		public NpgsqlConnectionProvider (ConnectionSettings settings)
-			: base (settings)
+		public NpgsqlConnectionProvider (IDbFactory factory, ConnectionSettings settings)
+			: base (factory, settings)
 		{
+		}
+		
+		public override DataSet ExecuteQueryAsDataSet (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataSet set = new DataSet ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter (command as NpgsqlCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return set;
+		}
+
+		public override DataTable ExecuteQueryAsDataTable (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataTable table = new DataTable ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter (command as NpgsqlCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return table;
 		}
 
 		public override bool Open (out string errorMessage)

@@ -1,4 +1,4 @@
-<Addin	id		= "MonoDevelop.Database.Project"
+<Addin	id		= "Database.Project"
 	namespace	= "MonoDevelop"
 	name		= "MonoDevelop Database Project"
 	author		= "Ben Motmans"

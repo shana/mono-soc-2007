@@ -31,17 +31,27 @@ namespace Mono.Data.Sql
 {
 	public class FirebirdDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "FirebirdSql.Data.Firebird"; }
 		}
 		
 		public string Name {
-			get { return "Firebird database"; }
+			get { return "Firebird database (Incomplete)"; }
+		}
+		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", "@");
+				return dialect;
+			}
 		}
 		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new FirebirdConnectionProvider (settings);
+			return new FirebirdConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
@@ -55,6 +65,9 @@ namespace Mono.Data.Sql
 			settings.ProviderIdentifier = Identifier;
 			settings.Server = "localhost";
 			settings.Username = "firebird";
+			settings.Password = String.Empty;
+			settings.Database = String.Empty;
+			settings.Port = 0; //FIXME: what is the default firebird port?
 			return settings;
 		}
 	}

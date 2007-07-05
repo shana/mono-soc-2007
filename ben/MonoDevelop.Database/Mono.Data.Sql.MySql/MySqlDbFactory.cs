@@ -31,17 +31,27 @@ namespace Mono.Data.Sql
 {
 	public class MySqlDbFactory : IDbFactory
 	{
+		private ISqlDialect dialect;
+		
 		public string Identifier {
 			get { return "ByteFX.Data.MySqlClient"; }
 		}
 		
 		public string Name {
-			get { return "MySql database"; }
+			get { return "MySql database (Incomplete)"; }
+		}
+		
+		public ISqlDialect Dialect {
+			get {
+				if (dialect == null)
+					dialect = new Sql99Dialect ("\"", "?");
+				return dialect;
+			}
 		}
 		
 		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
 		{
-			return new MySqlConnectionProvider (settings);
+			return new MySqlConnectionProvider (this, settings);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
@@ -56,6 +66,8 @@ namespace Mono.Data.Sql
 			settings.Server = "localhost";
 			settings.Port = 3306;
 			settings.Username = "root";
+			settings.Password = String.Empty;
+			settings.Database = String.Empty;
 			return settings;
 		}
 	}

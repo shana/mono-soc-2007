@@ -29,16 +29,54 @@
 
 using System;
 using System.Data;
-using ByteFX.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
 	public class MySqlConnectionProvider : AbstractConnectionProvider
 	{
-		public MySqlConnectionProvider (ConnectionSettings settings)
-			: base (settings)
+		public MySqlConnectionProvider (IDbFactory factory, ConnectionSettings settings)
+			: base (factory, settings)
 		{
+		}
+		
+		public override DataSet ExecuteQueryAsDataSet (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataSet set = new DataSet ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (MySqlDataAdapter adapter = new MySqlDataAdapter (command as MySqlCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return set;
+		}
+
+		public override DataTable ExecuteQueryAsDataTable (string sql)
+		{
+			if (String.IsNullOrEmpty ("sql"))
+				throw new ArgumentException ("sql");
+
+			DataTable table = new DataTable ();
+			using (IDbCommand command = CreateCommand (sql)) {
+				using (MySqlDataAdapter adapter = new MySqlDataAdapter (command as MySqlCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch {
+					} finally {
+						command.Connection.Close ();
+					}
+				}
+			}
+			return table;
 		}
 
 		public override bool Open (out string errorMessage)
