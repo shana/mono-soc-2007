@@ -1,13 +1,3 @@
-2007-07-06  Hector E. Gomez Morales <hectoregm@gmail.com> 
-
-	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Added FormatEmpty that
-	  does decides the format of empty elements, (< />), some changes in
-	  FormatEnd that handles non-empty elements. Added
-	  DeserializeAttributesType that handles the deserialization of the
-	  attributes of the "Type"element.
-	* Monodoc.Editor.Gui/DocumentTagTable.cs: More changes to properties of
-	  tags.
-
 2007-07-04  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MIT.X11, AUTHORS, NEWS, README: Adding and moving basic files.
