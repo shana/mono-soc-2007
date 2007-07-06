@@ -2,7 +2,7 @@
 
 	* Navigation/ProjectNodeBuilderExtension.cs,
 	  Navigation/TagDatabaseManager.cs, Navigation/GlobalsNodeBuilder.cs:
-	  Indid the work I had started on getting the tree built in the
+	  Undid the work I had started on getting the tree built in the
 	  background because I have to think more about how I'm going to
 	  implement that.
 
