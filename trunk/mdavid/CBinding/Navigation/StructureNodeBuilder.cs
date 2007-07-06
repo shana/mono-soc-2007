@@ -86,43 +86,44 @@ namespace CBinding.Navigation
 			
 			if (p == null) return;
 			
+			bool publicOnly = treeBuilder.Options["PublicApiOnly"];
 			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
 			
 			Structure thisStruct = (Structure)dataObject;
 			
 			// Classes
 			foreach (Class c in info.Classes)
-				if (c.Parent != null && c.Parent.Equals (thisStruct))
+				if (c.Parent != null && c.Parent.Equals (thisStruct) && (!publicOnly || c.Access == AccessModifier.Public))
 					treeBuilder.AddChild (c);
 			
 			// Structures
 			foreach (Structure s in info.Structures)
-				if (s.Parent != null && s.Parent.Equals (thisStruct))
+				if (s.Parent != null && s.Parent.Equals (thisStruct) && (!publicOnly || s.Access == AccessModifier.Public))
 					treeBuilder.AddChild (s);
 			
 			// Unions
 			foreach (Union u in info.Unions)
-				if (u.Parent != null && u.Parent.Equals (thisStruct))
+				if (u.Parent != null && u.Parent.Equals (thisStruct) && (!publicOnly || u.Access == AccessModifier.Public))
 					treeBuilder.AddChild (u);
 			
 			// Enumerations
 			foreach (Enumeration e in info.Enumerations)
-				if (e.Parent != null && e.Parent.Equals (thisStruct))
+				if (e.Parent != null && e.Parent.Equals (thisStruct) && (!publicOnly || e.Access == AccessModifier.Public))
 					treeBuilder.AddChild (e);
 			
 			// Typedefs
 			foreach (Typedef t in info.Typedefs)
-				if (t.Parent != null && t.Parent.Equals (thisStruct))
+				if (t.Parent != null && t.Parent.Equals (thisStruct) && (!publicOnly || t.Access == AccessModifier.Public))
 					treeBuilder.AddChild (t);
 			
 			// Functions
 			foreach (Function f in info.Functions)
-				if (f.Parent != null && f.Parent.Equals (thisStruct))
+				if (f.Parent != null && f.Parent.Equals (thisStruct) && (!publicOnly || f.Access == AccessModifier.Public))
 					treeBuilder.AddChild (f);
 			
 			// Members
 			foreach (Member m in info.Members)
-				if (m.Parent != null && m.Parent.Equals (thisStruct))
+				if (m.Parent != null && m.Parent.Equals (thisStruct) && (!publicOnly || m.Access == AccessModifier.Public))
 					treeBuilder.AddChild (m);
 		}
 		

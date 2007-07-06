@@ -1,5 +1,10 @@
 2007-07-06  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* Navigation/StructureNodeBuilder.cs, Navigation/ClassNodeBuilder.cs:
+	  The "Show Public Api Only" class pad option is now considered.
+
+2007-07-06  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Navigation/ProjectNodeBuilderExtension.cs,
 	  Navigation/TagDatabaseManager.cs, Navigation/GlobalsNodeBuilder.cs:
 	  Undid the work I had started on getting the tree built in the
