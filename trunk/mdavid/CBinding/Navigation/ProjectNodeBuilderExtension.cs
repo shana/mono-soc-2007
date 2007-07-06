@@ -48,21 +48,6 @@ namespace CBinding.Navigation
 		public override bool CanBuildNode (Type dataType)
 		{
 			return typeof(CProject).IsAssignableFrom (dataType);
-		}
-		
-		public override void OnNodeAdded (object dataObject)
-		{
-			CProject project = dataObject as CProject;
-			if (project == null) return;
-			
-			// Move this
-			try {
-				TagDatabaseManager.Instance.WriteTags (project);
-				TagDatabaseManager.Instance.FillProjectNavigationInformation (project);
-			} catch (IOException ex) {
-				IdeApp.Services.MessageService.ShowError (ex);
-				return;
-			}
 		}	                                       
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
@@ -70,6 +55,14 @@ namespace CBinding.Navigation
 			CProject p = dataObject as CProject;
 			
 			if (p == null) return;
+			
+			try {
+				TagDatabaseManager.Instance.WriteTags (p);
+				TagDatabaseManager.Instance.FillProjectNavigationInformation (p);
+			} catch (IOException ex) {
+				IdeApp.Services.MessageService.ShowError (ex);
+				return;
+			}
 			
 			bool nestedNamespaces = builder.Options["NestedNamespaces"];
 			
