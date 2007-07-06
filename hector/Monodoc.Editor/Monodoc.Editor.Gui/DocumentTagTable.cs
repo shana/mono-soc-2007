@@ -52,6 +52,7 @@ public class DocumentTagTable : TextTagTable {
 		tag.Foreground = "#204a87";
 		Add (tag);
 		
+		// Type Element Attributes: Name and FullName are required.
 		tag = new DocumentTag ("Type:Name");
 		tag.IsAttribute = true;
 		tag.Invisible = true;
@@ -64,18 +65,20 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("Type:FullNameSP");
 		tag.IsAttribute = true;
+		tag.Invisible = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("Type:Maintainer");
 		tag.IsAttribute = true;
+		tag.Invisible = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("TypeSignature");
 		tag.IsElement = true;
 		tag.Scale = Pango.Scale.Large;
-		tag.LeftMargin = 20;
 		Add (tag);
 		
+		// TypeSignature Element Attributes: Language and Value are required.
 		tag = new DocumentTag ("TypeSignature:Attributes");
 		Add (tag);
 		
@@ -102,7 +105,6 @@ public class DocumentTagTable : TextTagTable {
 		tag = new DocumentTag ("AssemblyInfo");
 		tag.IsElement = true;
 		tag.Scale = Pango.Scale.Medium;
-		tag.LeftMargin = 20;
 		Add (tag);
 		
 		tag = new DocumentTag ("AssemblyName");
@@ -159,9 +161,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("ThreadSafetyStatement");
 		tag.IsElement = true;
-		tag.Scale = Pango.Scale.Small;
-		tag.PixelsAboveLines = 10;
-		tag.PixelsBelowLines = 10;
 		Add (tag);
 		
 		tag = new DocumentTag ("ThreadSafetyStatement:Text");
@@ -371,7 +370,6 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("summary");
 		tag.IsElement = true;
-		tag.PixelsBelowLines = 10;
 		Add (tag);
 		
 		tag = new DocumentTag ("summary:Text");
