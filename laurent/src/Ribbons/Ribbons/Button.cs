@@ -10,8 +10,19 @@ namespace Ribbons
 		private GroupStyle groupStyle;
 		private Theme.ButtonState state = Theme.ButtonState.Default;
 		private Widget oldChild;
+		private double padding;
 		
 		protected double lineWidth = 1.0;
+		
+		public double Padding
+		{
+			set
+			{
+				padding = value;
+				QueueDraw ();
+			}
+			get { return padding; }
+		}
 		
 		public GroupStyle GroupStyle
 		{
@@ -34,6 +45,8 @@ namespace Ribbons
 			this.SetFlag (WidgetFlags.NoWindow);
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
+			this.Padding = 0;
 		}
 		
 		public Button (string Label) : this()
@@ -41,12 +54,12 @@ namespace Ribbons
 			this.Label = Label;
 		}
 		
-		private void Child_ButtonPressEvent(object sender, ButtonPressEventArgs evnt)
+		private void Child_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)
 		{
 			ProcessEvent (evnt.Event);
 		}
 		
-		private void Child_ButtonReleaseEvent(object sender, ButtonReleaseEventArgs evnt)
+		private void Child_ButtonReleaseEvent (object sender, ButtonReleaseEventArgs evnt)
 		{
 			ProcessEvent (evnt.Event);
 		}
@@ -79,18 +92,18 @@ namespace Ribbons
 				childRequisition = Child.SizeRequest ();
 			}
 			
-			requisition.Height = childRequisition.Height + (int)(lineWidth * 4);
-			requisition.Width = childRequisition.Width + (int)(lineWidth * 4);
+			requisition.Height = childRequisition.Height + (int)(lineWidth * 4 + padding * 2);
+			requisition.Width = childRequisition.Width + (int)(lineWidth * 4 + padding * 2);
 		}
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
 			
-			allocation.X += (int)(lineWidth * 2);
-			allocation.Y += (int)(lineWidth * 2);
-			allocation.Height -= (int)(lineWidth * 4);
-			allocation.Width -= (int)(lineWidth * 4);
+			allocation.X += (int)(lineWidth * 2 + padding);
+			allocation.Y += (int)(lineWidth * 2 + padding);
+			allocation.Height -= (int)(lineWidth * 4 - padding * 2);
+			allocation.Width -= (int)(lineWidth * 4 - padding * 2);
 			
 			if(Child != null && Child.Visible)
 			{

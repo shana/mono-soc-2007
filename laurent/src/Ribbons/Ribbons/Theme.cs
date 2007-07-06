@@ -12,7 +12,7 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
-		public void DrawGroup (Context cr, Rectangle r, double roundSize, double lineWidth, double space, Pango.Layout l, RibbonGroup w)
+		public void DrawGroup (Context cr, Rectangle r, double roundSize, double lineWidth, double space, Pango.Layout l, Gtk.Widget expandButton, RibbonGroup w)
 		{
 			double lineWidth05 = lineWidth/2, lineWidth15 = 3*lineWidth05;
 			LinearGradient linGrad;
@@ -50,9 +50,13 @@ namespace Ribbons
 				cr.Rectangle (r.X + 2*lineWidth, bandY, r.Width - 4*lineWidth, bandHeight);
 				cr.Clip ();
 				
+				double frameSize = 2*lineWidth + space;
+				double availableHorizontalSpace = r.Width - 2 * frameSize;
+				if(expandButton.Visible) availableHorizontalSpace -= expandButton.WidthRequest + space;
+				
 				cr.Color = new Color(1, 1, 1);
 				Pango.CairoHelper.UpdateLayout (cr, l);
-				cr.MoveTo (r.X + Math.Max(2*lineWidth, (r.Width - lblWidth) / 2), bandY + space);
+				cr.MoveTo (r.X + frameSize + Math.Max(0, (availableHorizontalSpace - lblWidth) / 2), bandY + space);
 				Pango.CairoHelper.ShowLayout (cr, l);
 				
 				cr.Restore();
