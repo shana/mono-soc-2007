@@ -9,7 +9,8 @@ namespace Ribbons
 		protected Theme theme = new Theme ();
 		protected string lbl;
 		protected Pango.Layout lbl_layout;
-		protected Gtk.Button expand;
+		protected Button expandButton;
+		protected EventHandler expandHandler;
 		
 		private double barHeight;
 		
@@ -33,6 +34,20 @@ namespace Ribbons
 			get { return lbl; }
 		}
 		
+		public event EventHandler Expand
+		{
+			add
+			{
+				expandHandler += value;
+				expandButton.Visible = expandHandler != null;
+			}
+			remove
+			{
+				expandHandler -= value;
+				expandButton.Visible = expandHandler != null;
+			}
+		}
+		
 		public RibbonGroup ()
 		{
 			// This is a No Window widget => it does not have its own Gdk Window => it can be transparent
@@ -43,14 +58,15 @@ namespace Ribbons
 			Label = null;
 			HeightRequest = 90;
 			
-			expand = new Gtk.Button ("+");
-			expand.Parent = this;
+			expandButton = new Button ("+");
+			expandButton.Visible = false;
+			expandButton.Parent = this;
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
 			base.ForAll (include_internals, callback);
-			callback (expand);
+			if(expandButton != null) callback (expandButton);
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
@@ -67,10 +83,10 @@ namespace Ribbons
 			}
 			
 			barHeight = lh + 2 * space;
-			if(expand != null && expand.Visible)
+			if(expandButton != null && expandButton.Visible)
 			{
-				expand.SetSizeRequest (lh, lh);
-				expand.SizeRequest ();
+				expandButton.SetSizeRequest (lh, lh);
+				expandButton.SizeRequest ();
 			}
 			
 			if(WidthRequest == -1)
@@ -82,9 +98,9 @@ namespace Ribbons
 				else
 				{
 					requisition.Width = lw + (int)(2 * (lineWidth+space));
-					if(expand != null && expand.Visible)
+					if(expandButton != null && expandButton.Visible)
 					{
-						requisition.Width += expand.WidthRequest + (int)space;
+						requisition.Width += expandButton.WidthRequest + (int)space;
 					}
 				}
 			}
@@ -103,15 +119,15 @@ namespace Ribbons
 		{
 			base.OnSizeAllocated (allocation);
 			
-			if(expand != null && expand.Visible)
+			if(expandButton != null && expandButton.Visible)
 			{
 				double frameSize = 2*lineWidth + space;
 				Gdk.Rectangle r;
-				r.Height = expand.HeightRequest;
-				r.Width = expand.WidthRequest;
+				r.Height = expandButton.HeightRequest;
+				r.Width = expandButton.WidthRequest;
 				r.X = allocation.X + allocation.Width - r.Width - (int)frameSize;
 				r.Y = allocation.Y + allocation.Height - r.Height - (int)frameSize;
-				expand.SizeAllocate (r);
+				expandButton.SizeAllocate (r);
 			}
 			
 			if(Child != null && Child.Visible)
@@ -127,7 +143,7 @@ namespace Ribbons
 		protected void Draw (Context cr)
 		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
-			theme.DrawGroup (cr, rect, 4.0, lineWidth, space, lbl_layout, this);
+			theme.DrawGroup (cr, rect, 4.0, lineWidth, space, lbl_layout, expandButton, this);
 		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
