@@ -63,6 +63,11 @@ namespace Ribbons
 			expandButton.Parent = this;
 		}
 		
+		protected virtual void OnExpand (EventArgs e)
+		{
+			if(expandHandler != null) expandHandler (this, e);
+		}
+		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
 			base.ForAll (include_internals, callback);
@@ -97,7 +102,7 @@ namespace Ribbons
 				}
 				else
 				{
-					requisition.Width = lw + (int)(2 * (lineWidth+space));
+					requisition.Width = lw + (int)(2 * (2*lineWidth + space));
 					if(expandButton != null && expandButton.Visible)
 					{
 						requisition.Width += expandButton.WidthRequest + (int)space;

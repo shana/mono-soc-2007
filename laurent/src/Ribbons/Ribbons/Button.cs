@@ -9,7 +9,9 @@ namespace Ribbons
 		protected Theme theme = new Theme ();
 		private GroupStyle groupStyle;
 		private Theme.ButtonState state = Theme.ButtonState.Default;
-		private Widget oldChild;
+		private PositionType imgPos;
+		private Widget img;
+		private Label lbl;
 		private double padding;
 		
 		protected double lineWidth = 1.0;
@@ -30,12 +32,39 @@ namespace Ribbons
 			get { return groupStyle; }
 		}
 		
+		public Widget Image
+		{
+			set
+			{
+				if(img != null) UnbindWidget (img);
+				img = value;
+				if(img != null) BindWidget (img);
+				UpdateImageLabel ();
+			}
+			get { return img; }
+		}
+		
+		public PositionType ImagePosition
+		{
+			set
+			{
+				imgPos = value;
+				UpdateImageLabel ();
+			}
+			get { return imgPos; }
+		}
+		
 		public string Label
 		{
-			set { Child = new Gtk.Label (value); }
+			set
+			{
+				if(lbl != null) UnbindWidget (lbl);
+				lbl = new Gtk.Label (value);
+				if(lbl != null) BindWidget (lbl);
+				UpdateImageLabel ();
+			}
 			get
 			{
-				Label lbl = Child as Gtk.Label;
 				return lbl == null ? null : lbl.Text;
 			}
 		}
@@ -47,38 +76,93 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			this.Padding = 0;
+			this.ImagePosition = PositionType.Top;
 		}
 		
-		public Button (string Label) : this()
+		public Button (string Label) : this ()
 		{
 			this.Label = Label;
 		}
 		
-		private void Child_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)
+		public void Click ()
+		{
+			
+		}
+		
+		private void BindWidget (Widget w)
+		{
+			w.ButtonPressEvent += BindedWidget_ButtonPressEvent;
+			w.ButtonReleaseEvent += BindedWidget_ButtonReleaseEvent;
+		}
+		
+		private void UnbindWidget (Widget w)
+		{
+			w.ButtonPressEvent -= BindedWidget_ButtonPressEvent;
+			w.ButtonReleaseEvent -= BindedWidget_ButtonReleaseEvent;
+		}
+		
+		private void BindedWidget_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)
 		{
 			ProcessEvent (evnt.Event);
 		}
 		
-		private void Child_ButtonReleaseEvent (object sender, ButtonReleaseEventArgs evnt)
+		private void BindedWidget_ButtonReleaseEvent (object sender, ButtonReleaseEventArgs evnt)
 		{
 			ProcessEvent (evnt.Event);
+			Click ();
 		}
 		
-		protected override void OnHierarchyChanged (Widget previous_toplevel)
+		private void UpdateImageLabel ()
 		{
-			if(oldChild != Child)
+			if(lbl != null && img != null)
 			{
-				if(oldChild != null)
+				switch(imgPos)
 				{
-					oldChild.ButtonPressEvent -= Child_ButtonPressEvent;
-					oldChild.ButtonReleaseEvent -= Child_ButtonReleaseEvent;
+					case PositionType.Top:
+					{
+						VBox box = new VBox (false, 0);
+						box.Add (img);
+						box.Add (lbl);
+						Child = box;
+						break;
+					}
+					case PositionType.Bottom:
+					{
+						VBox box = new VBox (false, 0);
+						box.Add (lbl);
+						box.Add (img);
+						Child = box;
+						break;
+					}
+					case PositionType.Left:
+					{
+						HBox box = new HBox (false, 0);
+						box.Add (img);
+						box.Add (lbl);
+						Child = box;
+						break;
+					}
+					case PositionType.Right:
+					{
+						HBox box = new HBox (false, 0);
+						box.Add (lbl);
+						box.Add (img);
+						Child = box;
+						break;
+					}
 				}
-				if(Child != null)
-				{
-					Child.ButtonPressEvent += Child_ButtonPressEvent;
-					Child.ButtonReleaseEvent += Child_ButtonReleaseEvent;
-				}
-				oldChild = Child;
+			}
+			else if(lbl != null)
+			{
+				Child = lbl;
+			}
+			else if(img != null)
+			{
+				Child = img;
+			}
+			else
+			{
+				if(Child != null) Remove (Child);
 			}
 		}
 		
@@ -92,8 +176,14 @@ namespace Ribbons
 				childRequisition = Child.SizeRequest ();
 			}
 			
-			requisition.Height = childRequisition.Height + (int)(lineWidth * 4 + padding * 2);
-			requisition.Width = childRequisition.Width + (int)(lineWidth * 4 + padding * 2);
+			if(HeightRequest == -1)
+			{
+				requisition.Height = childRequisition.Height + (int)(lineWidth * 4 + padding * 2);
+			}
+			if(WidthRequest == -1)
+			{
+				requisition.Width = childRequisition.Width + (int)(lineWidth * 4 + padding * 2);
+			}
 		}
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
@@ -104,6 +194,9 @@ namespace Ribbons
 			allocation.Y += (int)(lineWidth * 2 + padding);
 			allocation.Height -= (int)(lineWidth * 4 - padding * 2);
 			allocation.Width -= (int)(lineWidth * 4 - padding * 2);
+			
+			if(allocation.Height < 0) allocation.Height = 0;
+			if(allocation.Width < 0) allocation.Width = 0;
 			
 			if(Child != null && Child.Visible)
 			{
