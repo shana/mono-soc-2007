@@ -29,10 +29,8 @@ public class EcmaReader {
 			document.Load (GetValidatingReader (textReader));
 			textReader.Close ();
 			
-			#if DEBUG
-			Console.WriteLine ("DEBUG: Validando estilo. La validacion fue {0}", 
-			(val_success == true ? "exitosa!" : "no exitosa."));
-			#endif
+			Console.WriteLine ("DEBUG: Validating Document... La validacion fue {0}", 
+				(val_success == true ? "exitosa!" : "no exitosa."));
 			
 		} catch (FileNotFoundException e) {
 			Console.WriteLine ("Error: {0} not found.", e.FileName);
