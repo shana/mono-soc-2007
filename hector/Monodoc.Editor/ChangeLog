@@ -1,5 +1,10 @@
 2007-07-06  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Added more comments to
+	  code, and added more cases to format some elements.
+
+2007-07-06  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Added two new methods
 	  to handle the deserialization of the attributes of the elements
 	  "Member" and "MemberSignature".
