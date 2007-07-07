@@ -509,7 +509,7 @@ public class DocumentBufferArchiver {
 		elementName = tagName = xmlReader.Name;
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		TextIter insertAt, applyStart, applyEnd;
-		insertAt = applyStart = buffer.GetIterAtOffset (offset);
+		insertAt = buffer.GetIterAtOffset (offset);
 		TextTag tagAttributes;
 		
 		// Lookup Attributes tag in table, if it is not present we create one.
@@ -536,7 +536,8 @@ public class DocumentBufferArchiver {
 			break;
 		}
 		
-		applyEnd = insertAt;
+		applyStart = buffer.GetIterAtOffset (offset);
+		applyEnd = buffer.GetIterAtOffset (insertAt.Offset);
 		buffer.ApplyTag (tagAttributes, applyStart, applyEnd);
 		
 		#if DEBUG
@@ -562,7 +563,7 @@ public class DocumentBufferArchiver {
 			buffer.InsertWithTags (ref insertAt, xmlReader.Value, tag);
 			
 			#if DEBUG
-			Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
+			Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);
 			#endif
 		}
 		
@@ -599,7 +600,7 @@ public class DocumentBufferArchiver {
 			AddNewLine (buffer, ref insertAt, tagSuffix);
 			
 			#if DEBUG
-			Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
+			Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);
 			#endif
 		}
 	}
@@ -628,7 +629,7 @@ public class DocumentBufferArchiver {
 			AddNewLine (buffer, ref insertAt, tagSuffix);
 			
 			#if DEBUG
-			Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
+			Console.WriteLine ("Attribute: {0} End: {2}", tagName, insertAt.Offset);
 			#endif
 		}
 	}
@@ -660,7 +661,7 @@ public class DocumentBufferArchiver {
 			AddNewLine (buffer, ref insertAt, tagSuffix);
 			
 			#if DEBUG
-			Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
+			Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);
 			#endif
 		}
 	}
@@ -682,7 +683,7 @@ public class DocumentBufferArchiver {
 		}
 		
 		#if DEBUG
-		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
+		Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);
 		#endif
 	}
 	
