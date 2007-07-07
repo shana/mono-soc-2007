@@ -206,6 +206,7 @@ public class DocumentBufferArchiver {
 		depth++;
 		
 		// We define a suffix so each dynamic tag has an unique name.
+		// Suffix has format: #{depth level}
 		if (isDynamic)
 			suffix = '#' + depth.ToString ();
 		
@@ -213,7 +214,7 @@ public class DocumentBufferArchiver {
 		// have three scenarios.
 		// 1) The tag is not in the table: So we create it in the spot.
 		// 2) Tag is in table but it priority is wrong: We created a new
-		// dynamic tag with an extra suffix.
+		// dynamic tag with an extra suffix. Format #{depth level}.{count}
 		// 3) Tag is in table with right priority: We reuse it and we don't
 		// create a new dymamic tag.
 		tagStart.Tag = tagTable.Lookup (elementName + suffix);
@@ -234,6 +235,7 @@ public class DocumentBufferArchiver {
 		}
 		#endif
 		
+		// We add any needed string to give format to the document.
 		offset = FormatStart (buffer, offset, suffix, elementName);
 		
 		// If element has attributes we have to get them and deserialize them.
@@ -260,7 +262,7 @@ public class DocumentBufferArchiver {
 			if (suffix == String.Empty)
 				suffix = "#0";
 			
-			// Padding between tag regions
+			// End string added for empty elements.
 			offset = FormatEmpty (buffer, offset, suffix, elementName);
 			depth--;
 			
@@ -344,11 +346,20 @@ public class DocumentBufferArchiver {
 		case "AssemblyName":
 			offset = AddString (buffer, offset, "Assembly Name: ", suffix);
 			break;
+		case "AssemblyPublicKey":
+			offset = AddString (buffer, offset, "Assembly PublicKey: ", suffix);
+			break;
 		case "AssemblyVersion":
 			offset = AddString (buffer, offset, "Assembly Version: ", suffix);
 			break;
+		case "MemberOfLibrary":
+			offset = AddString (buffer, offset, "From Library: ", suffix);
+			break;
 		case "ThreadSafetyStatement":
-			offset = AddString (buffer, offset, "Thread Safety: ", suffix);
+			offset = AddString (buffer, offset, "Threading Safety: ", suffix);
+			break;
+		case "ThreadingSafetyStatement":
+			offset = AddString (buffer, offset, "Theading Safety: ", suffix);
 			break;
 		case "summary":
 			offset = AddString (buffer, offset, "Summary:", suffix);
@@ -356,11 +367,21 @@ public class DocumentBufferArchiver {
 			break;
 		case "remarks":
 			offset = AddString (buffer, offset, "Remarks:", suffix);
+			offset = AddNewLine (buffer, offset, suffix);
 			break;
 		case "Members":
 			offset = AddString (buffer, offset, "Members:", suffix);
 			offset = AddNewLine (buffer, offset, suffix);
 			offset = AddNewLine (buffer, offset, suffix);
+			break;
+		case "MemberType":
+			offset = AddString (buffer, offset, "Member Type: ", suffix);
+			break;
+		case "ReturnType":
+			offset = AddString (buffer, offset, "Member Return Type: ", suffix);
+			break;
+		case "since":
+			offset = AddString (buffer, offset, "Since version: ", suffix);
 			break;
 		default:
 			break;
@@ -372,11 +393,11 @@ public class DocumentBufferArchiver {
 	private static int FormatEmpty (TextBuffer buffer, int offset, string suffix, string elementName)
 	{
 		switch (elementName) {
-		case "AssemblyPublicKey":
 		case "see":
 		case "since":
 		case "Parameters":
 		case "remarks":
+		case "MemberSignature":
 			offset = AddPadding (buffer, offset, suffix);
 			break;
 		default:
@@ -390,7 +411,6 @@ public class DocumentBufferArchiver {
 	private static int FormatEnd (TextBuffer buffer, int offset, string suffix, string elementName)
 	{
 		switch (elementName) {
-		case "remarks":
 		case "para":
 		case "Docs":
 		case "Base":
@@ -404,6 +424,7 @@ public class DocumentBufferArchiver {
 			break;
 		case "summary":
 		case "ThreadSafetyStatement":
+		case "ThreadingSafetyStatement":
 			offset = AddNewLine (buffer, offset, suffix);
 			offset = AddNewLine (buffer, offset, suffix);
 			break;
