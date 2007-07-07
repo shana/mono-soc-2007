@@ -42,19 +42,15 @@ namespace CBinding.Navigation
 {
 	public class Globals
 	{
-		private static Globals instance;
+		private Project project;
 		
-		private Globals ()
+		public Globals (Project project)
 		{
+			this.project = project;
 		}
 		
-		public static Globals Instance {
-			get {
-				if (instance == null)
-					instance = new Globals ();
-				
-				return instance;
-			}
+		public Project Project {
+			get { return project; }
 		}
 	}
 	
@@ -76,7 +72,8 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf closedIcon)
 		{
 			label = "Globals";
-			icon = Context.GetIcon (Stock.Method);
+			icon = Context.GetIcon (Stock.OpenFolder);
+			closedIcon = Context.GetIcon (Stock.ClosedFolder);
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)

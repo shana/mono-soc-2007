@@ -42,19 +42,15 @@ namespace CBinding.Navigation
 {
 	public class MacroDefinitions
 	{
-		private static MacroDefinitions instance;
+		private Project project;
 		
-		private MacroDefinitions ()
+		public MacroDefinitions (Project project)
 		{
+			this.project = project;
 		}
 		
-		public static MacroDefinitions Instance {
-			get {
-				if (instance == null)
-					instance = new MacroDefinitions ();
-				
-				return instance;
-			}
+		public Project Project {
+			get { return project; }
 		}
 	}
 	
@@ -76,7 +72,8 @@ namespace CBinding.Navigation
 		                                ref Gdk.Pixbuf closedIcon)
 		{
 			label = "Macro Definitions";
-			icon = Context.GetIcon (Stock.Literal);
+			icon = Context.GetIcon (Stock.OpenFolder);
+			closedIcon = Context.GetIcon (Stock.ClosedFolder);
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
