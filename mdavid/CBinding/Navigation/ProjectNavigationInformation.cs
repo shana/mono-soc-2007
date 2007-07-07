@@ -39,6 +39,8 @@ namespace CBinding.Navigation
 	public class ProjectNavigationInformation
 	{
 		private Project project;
+		private Globals globals;
+		private MacroDefinitions macroDefs;
 		private List<Namespace> namespaces = new List<Namespace> ();
 		private List<Function> functions = new List<Function> ();
 		private List<Class> classes = new List<Class> ();
@@ -51,11 +53,13 @@ namespace CBinding.Navigation
 		private List<Union> unions = new List<Union> ();
 		private List<Typedef> typedefs = new List<Typedef> ();
 		
-		public event LanguageItemEventHandler FunctionAdded;
+//		public event LanguageItemEventHandler FunctionAdded;
 		
 		public ProjectNavigationInformation (Project project)
 		{
 			this.project = project;
+			globals = new Globals (project);
+			macroDefs = new MacroDefinitions (project);
 		}
 		
 		public void Clear ()
@@ -73,14 +77,22 @@ namespace CBinding.Navigation
 			typedefs.Clear ();
 		}
 		
-		public void AddFunction (Function function)
-		{
-			functions.Add (function);
-			FunctionAdded (this, new LanguageItemEventArgs (function));
-		}
+//		public void AddFunction (Function function)
+//		{
+//			functions.Add (function);
+//			FunctionAdded (this, new LanguageItemEventArgs (function));
+//		}
 		
 		public Project Project {
 			get { return project; }
+		}
+		
+		public Globals Globals {
+			get { return globals; }
+		}
+		
+		public MacroDefinitions MacroDefinitions {
+			get { return macroDefs; }
 		}
 		
 		public List<Namespace> Namespaces {

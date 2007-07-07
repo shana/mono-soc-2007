@@ -1,3 +1,8 @@
+2007-07-07  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/GlobalsNodeBuilder.cs: Fixes class pad bug when there are
+	  multiple C projects open.
+
 2007-07-06  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/StructureNodeBuilder.cs, Navigation/ClassNodeBuilder.cs:

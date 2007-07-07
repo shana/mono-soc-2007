@@ -80,10 +80,10 @@ namespace CBinding.Navigation
 			}
 			
 			// Globals
-			builder.AddChild (Globals.Instance);
+			builder.AddChild (info.Globals);
 			
 			// Macro Definitions
-			builder.AddChild (MacroDefinitions.Instance);
+			builder.AddChild (info.MacroDefinitions);
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
