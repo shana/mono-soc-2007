@@ -7,8 +7,8 @@
 // (C) 2007 Hector E. Gomez M
 //
 
-using System;
 using Gtk;
+using System;
 using System.IO;
 using System.Xml;
 using System.Collections;
@@ -162,7 +162,6 @@ public class DocumentBufferArchiver {
 		int depth, count;
 		count = depth = 0;
 		Stack stack = new Stack ();
-		TagStart tagStart;
 		
 		while (xmlReader.Read ()) {
 			switch (xmlReader.NodeType) {
@@ -170,13 +169,10 @@ public class DocumentBufferArchiver {
 				offset = InsertStartElement (buffer, offset, xmlReader, stack, ref depth, ref count);
 				break;
 			case XmlNodeType.Text:
-				tagStart = (TagStart) stack.Peek ();
-				DocumentTag docTag = (DocumentTag) tagStart.Tag;
-				offset = InsertText (buffer, offset, xmlReader.Value, docTag);
+				offset = InsertText (buffer, offset, xmlReader.Value, stack);
 				break;
 			case XmlNodeType.EndElement:
-				tagStart = (TagStart) stack.Pop ();
-				offset = InsertEndElement (buffer, offset, tagStart, ref depth); 
+				offset = InsertEndElement (buffer, offset, stack, ref depth); 
 				break;
 			case XmlNodeType.Whitespace:
 				break;
@@ -275,19 +271,22 @@ public class DocumentBufferArchiver {
 		return offset;
 	}
 	
-	private static int InsertText (TextBuffer buffer, int offset, string data, DocumentTag elementTag)
+	private static int InsertText (TextBuffer buffer, int offset, string data, Stack stack)
 	{
 		string tagName;
 		TextTag textTag;
+		TagStart tagStart = (TagStart) stack.Peek ();
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		DocumentTag elementTag = (DocumentTag) tagStart.Tag;
+		string elementName = elementTag.Name;
 		
 		// Check if element is dynamic:
 		// True: We create a tagname with suffix :Text#[0-9]* so its unique.
 		// False: We create a tagname with a standard suffix :Text
 		if (elementTag.IsDynamic)
-			tagName = elementTag.Name.Split ('#')[0] + ":Text" + '#' + elementTag.Name.Split ('#')[1];
+			tagName = elementName.Split ('#')[0] + ":Text" + '#' + elementName.Split ('#')[1];
 		else
-			tagName = elementTag.Name + ":Text";
+			tagName = elementName + ":Text";
 		
 		textTag = tagTable.Lookup (tagName);
 		if (textTag == null)
@@ -304,10 +303,11 @@ public class DocumentBufferArchiver {
 		return offset;
 	}
 	
-	private static int InsertEndElement (TextBuffer buffer, int offset, TagStart tagStart, ref int depth)
+	private static int InsertEndElement (TextBuffer buffer, int offset, Stack stack, ref int depth)
 	{
-		string suffix =  '#' + depth.ToString ();
 		TextIter applyStart, applyEnd;
+		TagStart tagStart = (TagStart) stack.Pop ();
+		string suffix =  '#' + depth.ToString ();
 		
 		#if DEBUG
 		Console.WriteLine ("Element: {0}, End: {1}", tagStart.Tag.Name, offset);
@@ -342,74 +342,77 @@ public class DocumentBufferArchiver {
 	
 	private static int FormatStart (TextBuffer buffer, int offset, string suffix, string elementName)
 	{
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		switch (elementName) {
 		case "AssemblyName":
-			offset = AddString (buffer, offset, "Assembly Name: ", suffix);
+			AddString (buffer, ref insertAt, "Assembly Name: ", suffix);
 			break;
 		case "AssemblyPublicKey":
-			offset = AddString (buffer, offset, "Assembly PublicKey: ", suffix);
+			AddString (buffer, ref insertAt, "Assembly PublicKey: ", suffix);
 			break;
 		case "AssemblyVersion":
-			offset = AddString (buffer, offset, "Assembly Version: ", suffix);
+			AddString (buffer, ref insertAt, "Assembly Version: ", suffix);
 			break;
 		case "MemberOfLibrary":
-			offset = AddString (buffer, offset, "From Library: ", suffix);
+			AddString (buffer, ref insertAt, "From Library: ", suffix);
 			break;
 		case "ThreadSafetyStatement":
-			offset = AddString (buffer, offset, "Threading Safety: ", suffix);
+			AddString (buffer, ref insertAt, "Threading Safety: ", suffix);
 			break;
 		case "ThreadingSafetyStatement":
-			offset = AddString (buffer, offset, "Theading Safety: ", suffix);
+			AddString (buffer, ref insertAt, "Threading Safety: ", suffix);
 			break;
 		case "summary":
-			offset = AddString (buffer, offset, "Summary:", suffix);
-			offset = AddNewLine (buffer, offset, suffix);
+			AddString (buffer, ref insertAt, "Summary:", suffix);
+		        AddNewLine (buffer, ref insertAt, suffix);
 			break;
 		case "remarks":
-			offset = AddString (buffer, offset, "Remarks:", suffix);
-			offset = AddNewLine (buffer, offset, suffix);
+			AddString (buffer, ref insertAt, "Remarks:", suffix);
+			AddNewLine (buffer, ref insertAt, suffix);
 			break;
 		case "Members":
-			offset = AddString (buffer, offset, "Members:", suffix);
-			offset = AddNewLine (buffer, offset, suffix);
-			offset = AddNewLine (buffer, offset, suffix);
+			AddString (buffer, ref insertAt, "Members:", suffix);
+			AddNewLine (buffer, ref insertAt, suffix);
+			AddNewLine (buffer, ref insertAt, suffix);
 			break;
 		case "MemberType":
-			offset = AddString (buffer, offset, "Member Type: ", suffix);
+			AddString (buffer, ref insertAt, "Member Type: ", suffix);
 			break;
 		case "ReturnType":
-			offset = AddString (buffer, offset, "Member Return Type: ", suffix);
+			AddString (buffer, ref insertAt, "Member Return Type: ", suffix);
 			break;
 		case "since":
-			offset = AddString (buffer, offset, "Since version: ", suffix);
+			AddString (buffer, ref insertAt, "Since version: ", suffix);
 			break;
 		default:
 			break;
 		}
 		
-		return offset;
+		return insertAt.Offset;
 	}
 	
 	private static int FormatEmpty (TextBuffer buffer, int offset, string suffix, string elementName)
 	{
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		switch (elementName) {
 		case "see":
 		case "since":
 		case "Parameters":
 		case "remarks":
 		case "MemberSignature":
-			offset = AddPadding (buffer, offset, suffix);
+			AddPadding (buffer, ref insertAt, suffix);
 			break;
 		default:
-			offset = AddNewLine (buffer, offset, suffix);
+			AddNewLine (buffer, ref insertAt, suffix);
 			break;
 		}
 		
-		return offset;
+		return insertAt.Offset;
 	}
 	
 	private static int FormatEnd (TextBuffer buffer, int offset, string suffix, string elementName)
 	{
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		switch (elementName) {
 		case "para":
 		case "Docs":
@@ -425,15 +428,15 @@ public class DocumentBufferArchiver {
 		case "summary":
 		case "ThreadSafetyStatement":
 		case "ThreadingSafetyStatement":
-			offset = AddNewLine (buffer, offset, suffix);
-			offset = AddNewLine (buffer, offset, suffix);
+			AddNewLine (buffer, ref insertAt, suffix);
+			AddNewLine (buffer, ref insertAt, suffix);
 			break;
 		default:
-			offset = AddNewLine (buffer, offset, suffix);
+			AddNewLine (buffer, ref insertAt, suffix);
 			break;
 		}
 		
-		return offset;
+		return insertAt.Offset;
 	}
 	
 	private static int AddString (TextBuffer buffer, int offset, string data, string suffix)
@@ -447,6 +450,16 @@ public class DocumentBufferArchiver {
 		buffer.InsertWithTags (ref insertAt, data, tag);
 		
 		return insertAt.Offset;
+	}
+
+	private static void AddString (TextBuffer buffer, ref TextIter insertAt, string data, string suffix)
+	{
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextTag tag = tagTable.Lookup ("format" + suffix);
+		
+		if (tag == null)
+			tag = tagTable.CreateDynamicTag ("format" + suffix);
+		buffer.InsertWithTags (ref insertAt, data, tag);
 	}
 	
 	private static int AddNewLine (TextBuffer buffer, int offset, string suffix)
@@ -479,16 +492,25 @@ public class DocumentBufferArchiver {
 		
 		return insertAt.Offset;
 	}
+
+	private static void AddPadding (TextBuffer buffer, ref TextIter insertAt, string suffix)
+	{
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextTag tag = tagTable.Lookup ("padding" + suffix);
+		
+		if (tag == null)
+			tag = tagTable.CreateDynamicTag ("padding" + suffix);
+		buffer.InsertWithTags (ref insertAt, " ", tag);
+	}
 	
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
 	{
-		int result = offset;
 		string elementName, tagName;
 		elementName = tagName = xmlReader.Name;
-		TextIter applyStart, applyEnd;
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		TextIter insertAt, applyStart, applyEnd;
+		insertAt = applyStart = buffer.GetIterAtOffset (offset);
 		TextTag tagAttributes;
-		
 		
 		// Lookup Attributes tag in table, if it is not present we create one.
 		tagName += ":Attributes" + tagSuffix;
@@ -498,39 +520,37 @@ public class DocumentBufferArchiver {
 		
 		switch (elementName) {
 		case "Type":
-			result = DeserializeAttributesType (buffer, offset, xmlReader, tagSuffix);
+			DeserializeAttributesType (buffer, ref insertAt, xmlReader, tagSuffix);
 			break;
 		case "TypeSignature":
-			result = DeserializeAttributesTypeSignature (buffer, offset, xmlReader, tagSuffix);
+			DeserializeAttributesTypeSignature (buffer, ref insertAt, xmlReader, tagSuffix);
 			break;
 		case "Member":
-			result = DeserializeAttributesMember (buffer, offset, xmlReader, tagSuffix);
+			DeserializeAttributesMember (buffer, ref insertAt, xmlReader, tagSuffix);
 			break;
 		case "MemberSignature":
-			result = DeserializeAttributesMemberSignature (buffer, offset, xmlReader, tagSuffix);
+			DeserializeAttributesMemberSignature (buffer, ref insertAt, xmlReader, tagSuffix);
 			break;
 		default:
-			result = DeserializeAttributesNone (buffer, offset, xmlReader, tagSuffix);
+			DeserializeAttributesNone (buffer, ref insertAt, xmlReader, tagSuffix);
 			break;
 		}
 		
-		applyStart = buffer.GetIterAtOffset (offset);
-		applyEnd = buffer.GetIterAtOffset (result);
+		applyEnd = insertAt;
 		buffer.ApplyTag (tagAttributes, applyStart, applyEnd);
 		
 		#if DEBUG
-		Console.WriteLine ("Attributes: {0} Start: {1} End: {2}", tagName, offset, result);
+		Console.WriteLine ("Attributes: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
 		#endif
 		
-		return result;
+		return insertAt.Offset;
 	}
 	
-	private static int DeserializeAttributesType (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
+	private static void DeserializeAttributesType (TextBuffer buffer, ref TextIter insertAt, XmlTextReader xmlReader, string tagSuffix)
 	{
 		string tagName = String.Empty;
 		string tagPrefix = xmlReader.Name + ":";
 		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		while (xmlReader.MoveToNextAttribute ()) {
 			tagName = tagPrefix + xmlReader.Name + tagSuffix;
@@ -547,16 +567,13 @@ public class DocumentBufferArchiver {
 		}
 		
 		AddNewLine (buffer, ref insertAt, tagSuffix);
-		
-		return insertAt.Offset;
 	}
 	
-	private static int DeserializeAttributesTypeSignature (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
+	private static void DeserializeAttributesTypeSignature (TextBuffer buffer, ref TextIter insertAt, XmlTextReader xmlReader, string tagSuffix)
 	{
 		string tagName = String.Empty;
 		string tagPrefix = xmlReader.Name + ":";
 		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		while (xmlReader.MoveToNextAttribute ()) {
 			tagName = tagPrefix + xmlReader.Name + tagSuffix;
@@ -585,16 +602,13 @@ public class DocumentBufferArchiver {
 			Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
 			#endif
 		}
-		
-		return insertAt.Offset;
 	}
 	
-	private static int DeserializeAttributesMember (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
+	private static void DeserializeAttributesMember (TextBuffer buffer, ref TextIter insertAt, XmlTextReader xmlReader, string tagSuffix)
 	{
 		string tagName = String.Empty;
 		string tagPrefix = xmlReader.Name + ":";
 		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		while (xmlReader.MoveToNextAttribute ()) {
 			tagName = tagPrefix + xmlReader.Name + tagSuffix;
@@ -617,16 +631,13 @@ public class DocumentBufferArchiver {
 			Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
 			#endif
 		}
-		
-		return insertAt.Offset;
 	}
 	
-	private static int DeserializeAttributesMemberSignature (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
+	private static void DeserializeAttributesMemberSignature (TextBuffer buffer, ref TextIter insertAt, XmlTextReader xmlReader, string tagSuffix)
 	{
 		string tagName = String.Empty;
 		string tagPrefix = xmlReader.Name + ":";
 		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		while (xmlReader.MoveToNextAttribute ()) {
 			tagName = tagPrefix + xmlReader.Name + tagSuffix;
@@ -652,16 +663,13 @@ public class DocumentBufferArchiver {
 			Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
 			#endif
 		}
-		
-		return insertAt.Offset;
 	}
 	
-	private static int DeserializeAttributesNone (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
+	private static void DeserializeAttributesNone (TextBuffer buffer, ref TextIter insertAt, XmlTextReader xmlReader, string tagSuffix)
 	{
 		string tagName = String.Empty;
 		string tagPrefix = xmlReader.Name + ":";
 		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		while (xmlReader.MoveToNextAttribute ()) {
 			tagName = tagPrefix + xmlReader.Name + tagSuffix;
@@ -676,8 +684,6 @@ public class DocumentBufferArchiver {
 		#if DEBUG
 		Console.WriteLine ("Attribute: {0} Start: {1} End: {2}", tagName, offset, insertAt.Offset);
 		#endif
-		
-		return insertAt.Offset;
 	}
 	
 	private static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)

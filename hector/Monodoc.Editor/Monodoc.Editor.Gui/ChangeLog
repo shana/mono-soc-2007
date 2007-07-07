@@ -1,3 +1,10 @@
+2007-07-07  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Refactoring of several methods so that
+	  they take a reference to a TextIter that indicates the position of
+	  insertion instead of an int that indicates the offseat of
+	  insertion.
+
 2007-07-06  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Added FormatEmpty that
