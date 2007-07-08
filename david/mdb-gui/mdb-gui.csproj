@@ -88,6 +88,8 @@
     <Compile Include="Pads\LocalsPad.cs" />
     <Compile Include="Pads\ThreadPad.cs" />
     <Compile Include="TreeModel\AbstractNode.cs" />
+    <Compile Include="TreeModel\ArrayNode.cs" />
+    <Compile Include="TreeModel\ArraySubsetNode.cs" />
     <Compile Include="TreeModel\ErrorNode.cs" />
     <Compile Include="TreeModel\FundamentalNode.cs" />
     <Compile Include="TreeModel\NodeFactory.cs" />

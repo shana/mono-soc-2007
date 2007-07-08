@@ -7,8 +7,10 @@ namespace Mono.Debugger.Frontend.TreeModel
 {
 	public class FundamentalNode: AbstractNode
 	{
-		TargetFundamentalObject obj;
 		string name;
+		StackFrame stackFrame;
+		TargetFundamentalObject obj;
+		
 		string value;
 		
 		public override string Name {
@@ -22,7 +24,9 @@ namespace Mono.Debugger.Frontend.TreeModel
 		public FundamentalNode(string name, StackFrame stackFrame, TargetFundamentalObject obj)
 		{
 			this.name = name;
+			this.stackFrame = stackFrame;
 			this.obj = obj;
+			
 			this.value = obj.GetObject(stackFrame.Thread).ToString();
 		}
 	}

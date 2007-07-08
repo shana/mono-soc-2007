@@ -17,35 +17,40 @@ namespace Mono.Debugger.Frontend.TreeModel
 				return new ErrorNode(variable.Name, "Can not get object");
 			}
 			
+			return Create(variable.Name, obj, stackFrame);
+		}
+		
+		public static AbstractNode Create(string name, TargetObject obj, StackFrame stackFrame)
+		{
 			if (obj == null) {
-				return new ErrorNode(variable.Name, "Object is null");
+				return new ErrorNode(name, "Object is null");
 			}
 			
 			if (obj.IsNull) {
-				return new NullNode(variable.Name);
+				return new NullNode(name);
 			}
 			
 			try {
 				switch (obj.Kind) {
 					case TargetObjectKind.Array:
-						return new ErrorNode(variable.Name, "Unimplemented - Array");
+						return new ArrayNode(name, stackFrame, (TargetArrayObject)obj);
 					case TargetObjectKind.Pointer:
-						return new ErrorNode(variable.Name, "Unimplemented - Pointer");
+						return new ErrorNode(name, "Unimplemented - Pointer");
 					case TargetObjectKind.Object:
-						return new ErrorNode(variable.Name, "Unimplemented - Object");
+						return new ErrorNode(name, "Unimplemented - Object");
 					case TargetObjectKind.Class:
-						return new ErrorNode(variable.Name, "Unimplemented - Class");
+						return new ErrorNode(name, "Unimplemented - Class");
 					case TargetObjectKind.Struct:
-						return new ErrorNode(variable.Name, "Unimplemented - Struct");
+						return new ErrorNode(name, "Unimplemented - Struct");
 					case TargetObjectKind.Fundamental:
-						return new FundamentalNode(variable.Name, stackFrame, (TargetFundamentalObject)obj);
+						return new FundamentalNode(name, stackFrame, (TargetFundamentalObject)obj);
 					case TargetObjectKind.Enum:
-						return new ErrorNode(variable.Name, "Unimplemented - Enum");
+						return new ErrorNode(name, "Unimplemented - Enum");
 					default:
-						return new ErrorNode(variable.Name, "Unknown kind of object");
+						return new ErrorNode(name, "Unknown kind of object");
 				}
 			} catch (Exception e) {
-				return new ErrorNode(variable.Name, e.Message);
+				return new ErrorNode(name, e.Message);
 			}
 		}
 	}
