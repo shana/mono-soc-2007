@@ -16,6 +16,7 @@
       <Entry build="True" name="Mono.Data.Sql.Npgsql" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Odbc" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Components" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Mono.Data.Sql" configuration="Release" />
@@ -33,6 +34,7 @@
       <Entry build="True" name="Mono.Data.Sql.Npgsql" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.Odbc" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Components" configuration="Release" />
     </Configuration>
   </Configurations>
   <StartMode startupentry="Mono.Data.Sql.Tests" single="True">
@@ -51,6 +53,7 @@
     <Execute type="None" entry="Mono.Data.Sql.Npgsql" />
     <Execute type="None" entry="Mono.Data.Sql.Odbc" />
     <Execute type="None" entry="MonoDevelop.Database.ConnectionManager" />
+    <Execute type="None" entry="MonoDevelop.Database.Components" />
   </StartMode>
   <Entries>
     <Entry filename="./Mono.Data.Sql/Mono.Data.Sql.mdp" />
@@ -68,5 +71,6 @@
     <Entry filename="./Mono.Data.Sql.Npgsql/Mono.Data.Sql.Npgsql.mdp" />
     <Entry filename="./Mono.Data.Sql.Odbc/Mono.Data.Sql.Odbc.mdp" />
     <Entry filename="./MonoDevelop.Database.ConnectionManager/MonoDevelop.Database.ConnectionManager.mdp" />
+    <Entry filename="./MonoDevelop.Database.Components/MonoDevelop.Database.Components.mdp" />
   </Entries>
 </Combine>
