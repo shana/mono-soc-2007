@@ -27,12 +27,14 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
 	public class ViewSchema : AbstractSchema
 	{
 		protected bool isSystemView = false;
+		protected ICollection<ColumnSchema> columns;
 		
 		public ViewSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
@@ -46,6 +48,17 @@ namespace Mono.Data.Sql
 			set {
 				isSystemView = value;
 				OnChanged();
+			}
+		}
+		
+		/// <summary>
+		/// Collection of columns associated with this table.
+		/// </summary>
+		public ICollection<ColumnSchema> Columns {
+			get {
+				if (columns == null)
+					columns = provider.GetViewColumns(this);
+				return columns;
 			}
 		}
 		
