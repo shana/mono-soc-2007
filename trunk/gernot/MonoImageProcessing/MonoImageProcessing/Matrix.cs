@@ -160,7 +160,7 @@ namespace Mono.ImageProcessing
 
                         Matrix m = new Matrix(bmp.Height, bmp.Width);
 
-                        Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                        /*Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
 
                         BitmapData src_data = bmp.LockBits(rect, ImageLockMode.ReadOnly, bmp.PixelFormat);
                         IntPtr src_ptr = src_data.Scan0;
@@ -184,6 +184,17 @@ namespace Mono.ImageProcessing
                         }
 
                         bmp.UnlockBits(src_data);
+                        return m;*/
+
+                        for (int r = 0; r < bmp.Height; r++)
+                        {
+                                for (int c = 0; c < bmp.Width; c++)
+                                {
+                                		System.Drawing.Color col = bmp.GetPixel(c,r);                                		
+                                        m.matrix [c, r] = col.R;
+                                }
+                        }
+                        
                         return m;
                 }
 

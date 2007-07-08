@@ -77,9 +77,9 @@ namespace Mono.ImageProcessing.Morphology
                         int seHeight = se.Neighborhood.Height;
 
                         int seXBegin = this.se.Neighborhood.Width / 2;
-                        int seXEnd = src.Width - seXBegin;
+                        //int seXEnd = src.Width - seXBegin;
                         int seYBegin = this.se.Neighborhood.Height / 2;
-                        int seYEnd = src.Height - seYBegin;
+                        //int seYEnd = src.Height - seYBegin;
 
                         Matrix dest = new Matrix (height, width);
                         dest.setLogical ();
@@ -149,9 +149,7 @@ namespace Mono.ImageProcessing.Morphology
                         int seHeight = se.Neighborhood.Height;
 
                         int seXBegin = this.se.Neighborhood.Width / 2;
-                        int seXEnd = src.Width - seXBegin;
                         int seYBegin = this.se.Neighborhood.Height / 2;
-                        int seYEnd = src.Height - seYBegin;
 
                         Matrix dest = new Matrix (height, width);
                         Matrix sem = this.se.Neighborhood;

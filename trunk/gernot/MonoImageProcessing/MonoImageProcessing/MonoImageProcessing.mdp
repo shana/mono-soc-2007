@@ -16,11 +16,18 @@
   <DeployTargets />
   <Contents>
     <File name="./AssemblyInfo.cs" subtype="Code" buildaction="Compile" />
-    <File name="./ImageMatrix.cs" subtype="Code" buildaction="Compile" />
     <File name="./Matrix.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dilation.cs" subtype="Code" buildaction="Compile" />
     <File name="./IOperation.cs" subtype="Code" buildaction="Compile" />
     <File name="./StructuringElement.cs" subtype="Code" buildaction="Compile" />
+    <File name="./BinaryHitMiss.cs" subtype="Code" buildaction="Compile" />
+    <File name="./BottomHat.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Closing.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Erosion.cs" subtype="Code" buildaction="Compile" />
+    <File name="./GrayscalePixel.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Opening.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Reconstruction.cs" subtype="Code" buildaction="Compile" />
+    <File name="./TopHat.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
