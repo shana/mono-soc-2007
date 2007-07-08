@@ -3,12 +3,7 @@ class TestApp
 {
 	public static void Main(string[] args)
 	{
-		int _int = 123;
-		//string _string = "text";
-		bool _bool = true;
-		double _double = 3.14;
-		int[] _array = {1, 2, 3};
-		TestClass testObject = new TestClass();
+		int[,] array = new int[32,4];
 		Fun1();
 	}
 	
@@ -22,6 +17,17 @@ class TestApp
 	{
 		string msg = "Hello world";
 		Console.WriteLine(msg);
+	}
+	
+	public static void Arrays()
+	{
+		int[] empty = {};
+		int[] oneDim = {1, 2, 3};
+		int[,] twoDim = {{1,2},{3,4}};
+		int[,,] threeDim = {{{1},{2}},{{3},{4}}};
+		int[] oneDimBig = new int[20];
+		int[,] twoDimBig = new int[20,20];
+		int[][] jagged = {new int[2], new int[3]};
 	}
 }
 
