@@ -696,7 +696,7 @@ namespace System.Windows.Controls {
 			}
 
 			void OnGeneratorStatusChanged(object sender, EventArgs e) {
-				if (ItemContainerGenerator.Status == global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated && Items.Count == 1) {
+				if (ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated && Items.Count == 1) {
 					Assert.AreEqual(order, 0, "1");
 					order++;
 				}

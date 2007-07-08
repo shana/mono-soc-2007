@@ -640,6 +640,24 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
     </Style>
 
 	<!-- Skipped. -->
+    <Style x:Key="{x:Type mono_system_windows_controls:ItemsControl}"
+           TargetType="{x:Type mono_system_windows_controls:ItemsControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls:ItemsControl}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 	<Style x:Key="{x:Type mono_system_windows_controls:Label}"
            TargetType="{x:Type mono_system_windows_controls:Label}">
 		<Setter Property="Foreground"
