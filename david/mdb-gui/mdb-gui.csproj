@@ -87,10 +87,16 @@
     <Compile Include="Pads\CallstackPad.cs" />
     <Compile Include="Pads\LocalsPad.cs" />
     <Compile Include="Pads\ThreadPad.cs" />
+    <Compile Include="TreeModel\AbstractNode.cs" />
+    <Compile Include="TreeModel\ErrorNode.cs" />
+    <Compile Include="TreeModel\FundamentalNode.cs" />
+    <Compile Include="TreeModel\NodeFactory.cs" />
+    <Compile Include="TreeModel\NullNode.cs" />
     <EmbeddedResource Include="pixmaps\*" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pads" />
     <Folder Include="pixmaps" />
+    <Folder Include="TreeModel" />
   </ItemGroup>
 </Project>
