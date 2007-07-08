@@ -1,0 +1,10 @@
+2007-07-09  Ben Motmans <ben.motmans@gmail.com>
+
+	* Project: re-usable gtk# data controls
+	* Containers/*.cs: Data objects for use inside custom widgets
+	* Dialogs/SelectColumnDialog.cs: Dialog to select columns
+	* Widgets/CellRendererTypeCombo.cs: CellRendererCombo with a list of all standard .NET data types
+	* Widgets/ColumnMappingWidget.cs: ListView used to map ColumnSchema objects to .NET objects
+	* Widgets/ProjectDirectoryComboBox.cs: Combo used to select a target project or directory
+	* Widgets/SelectColumnWidget.cs: ListView to select ColumnSchema objects
+	* Widgets/SelectSchemaWidget.cs: ListView to select Table, View or Procedure schemas
