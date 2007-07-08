@@ -143,7 +143,7 @@ namespace System.Windows.Controls {
 
 		#region Private Methods
 		void OnGeneratorStatusChanged(object sender, EventArgs e) {
-			if (ItemContainerGenerator.Status != global::System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated)
+			if (ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
 				return;
 			if (Items.Count != 0) {
 				bool has_selected_items = false;
