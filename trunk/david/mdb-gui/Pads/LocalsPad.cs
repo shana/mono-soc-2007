@@ -102,13 +102,7 @@ namespace Mono.Debugger.Frontend
 			TargetVariable[] localVars = currentFrame.Locals;
 			foreach (TargetVariable variable in localVars) {
 				AbstractNode node = NodeFactory.Create(variable, currentFrame);
-				
-				TreeIter iterNewRow = AppendNode(node);
-				
-				// Placeholder so that the item is expandable
-				if (node.HasChildNodes) {
-					AppendNode(iterNewRow, new ErrorNode("placeholder","placeholder"));
-				}
+				AppendNode(null, node);
 			}
 		}
 		
@@ -133,35 +127,37 @@ namespace Mono.Debugger.Frontend
 			try {
 				childs = node.ChildNodes;
 			} catch {
-				AppendNode(it, new ErrorNode("-","Can not get child nodes"));
+				AppendNode(args.Path, new ErrorNode("-","Can not get child nodes"));
 				return;
 			}
 			foreach(AbstractNode child in node.ChildNodes) {
-				AppendNode(it, child);
+				AppendNode(args.Path, child);
 			}
 		}
 		
-		TreeIter AppendNode(AbstractNode node)
+		void AppendNode(TreePath path, AbstractNode node)
 		{
-			return store.AppendValues(
+			object[] values = new object[] {
 				node,
 				node.Image,
 				node.Name,
 				node.Value,
 				node.Type
-			);
-		}
-		
-		TreeIter AppendNode(TreeIter iter, AbstractNode node)
-		{
-			return store.AppendValues(
-				iter,
-				node,
-				node.Image,
-				node.Name,
-				node.Value,
-				node.Type
-			);
+			};
+			
+			TreeIter iterNewRow;
+			if (path == null) {
+				iterNewRow = store.AppendValues(values);
+			} else {
+				TreeIter it;
+				store.GetIter(out it, path);
+				iterNewRow = store.AppendValues(it, values);
+			}
+			
+			// Placeholder so that the item is expandable
+			if (node.HasChildNodes) {
+				store.AppendNode(iterNewRow);
+			}
 		}
 		
 		public Gtk.Widget Control {
