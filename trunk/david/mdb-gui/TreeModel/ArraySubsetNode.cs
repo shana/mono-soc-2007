@@ -21,8 +21,8 @@ namespace Mono.Debugger.Frontend.TreeModel
 		// The current dimension
 		int dimension;
 		// The bounds of current dimension
-		int lowerBound;
-		int upperBound;
+		int lowerBound; // the first valid index
+		int upperBound; // the last valid index  (!)
 		// The start and end of the subset
 		int startIndex;
 		int endIndex;
@@ -71,7 +71,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 			
 			dimension = indicesPefix.Length;
 			lowerBound = obj.GetLowerBound(stackFrame.Thread, dimension);
-			upperBound = obj.GetUpperBound(stackFrame.Thread, dimension);
+			upperBound = obj.GetUpperBound(stackFrame.Thread, dimension) - 1;
 		}
 		
 		public ArraySubsetNode(StackFrame stackFrame, TargetArrayObject obj, int[] indicesPefix)
@@ -89,7 +89,12 @@ namespace Mono.Debugger.Frontend.TreeModel
 			
 			if (newIndices.Length == obj.Type.Rank) {
 				// We have reached the last dimension - create the element
-				TargetObject element = obj.GetElement(stackFrame.Thread, newIndices);
+				TargetObject element;
+				try {
+					element = obj.GetElement(stackFrame.Thread, newIndices);
+				} catch {
+					return new ErrorNode(IndicesToString(newIndices), "Can not get array element");
+				}
 				return NodeFactory.Create(IndicesToString(newIndices), element, stackFrame);
 			} else {
 				// Create a subset for the next dimension
