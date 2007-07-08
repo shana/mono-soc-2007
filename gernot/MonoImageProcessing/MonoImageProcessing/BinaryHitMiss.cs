@@ -61,7 +61,6 @@ namespace Mono.ImageProcessing.Morphology
                 {
                         Erosion erosion1 = new Erosion (this.se1);
                         Erosion erosion2 = new Erosion (this.se2);
-                        Matrix inv = !src;
                         Matrix bw1 = erosion1.Execute (src);
                         Matrix bw2 = erosion2.Execute (!src);
 

@@ -72,7 +72,7 @@ namespace Mono.ImageProcessing.Morphology
                         for (int r = 0; r < height; r++) {
                                 for (int c = 0; c < width; c++) {
                                         byte max = 0;
-                                        int y = r - 1;
+                                        //int y = r - 1;
                                         
                                         //8 connectivity
                                         int q_y = r - 1;
@@ -108,7 +108,6 @@ namespace Mono.ImageProcessing.Morphology
                         for (int r = height - 1; r >= 0; r--) {
                                 for (int c = 0; c < width; c++) {
                                         byte max = 0;
-                                        int y = r + 1;
 
                                         //8 connectivity
                                         int q_y = r + 1;
