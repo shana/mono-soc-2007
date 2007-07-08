@@ -11,8 +11,8 @@ namespace Mono.Debugger.Frontend.TreeModel
 	/// </summary>
 	public class ArraySubsetNode: AbstractNode
 	{
-		const int SubsetOptimalSize = 5;
-		const int SubsetMaximalSize = 7;
+		const int SubsetOptimalSize = 20;
+		const int SubsetMaximalSize = 32;
 		
 		StackFrame stackFrame;
 		TargetArrayObject obj;
@@ -41,9 +41,13 @@ namespace Mono.Debugger.Frontend.TreeModel
 					name.Append(startIndex);
 					name.Append("..");
 					name.Append(endIndex);
+				} else {
+					name.Append("*");
 				}
 				// Comas for remaining dimensions
-				name.Append(',', obj.Type.Rank - dimension - 1);
+				for(int i = 0; i < obj.Type.Rank - dimension - 1; i++) {
+					name.Append(",*");
+				}
 				name.Append("]");
 				return name.ToString();
 			}
