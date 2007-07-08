@@ -17,11 +17,11 @@ namespace Mono.Debugger.Frontend
 		Gtk.TreeView tree;
 		Gtk.TreeStore store;
 		
-		internal const int NAME_COL = 0;
-		internal const int VALUE_COL = 1;
-		internal const int TYPE_COL = 2;
-		internal const int RAW_VIEW_COL = 3;
-		internal const int PIXBUF_COL = 4;
+		internal const int ColumnNode     = 0;
+		internal const int ColumnImage    = 1;
+		internal const int ColumnName     = 2;
+		internal const int ColumnValue    = 3;
+		internal const int ColumnType     = 4;
 		
 		const string imageBase = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.";
 		Gdk.Pixbuf imageField = Gdk.Pixbuf.LoadFromResource(imageBase + "PublicField");
@@ -32,11 +32,13 @@ namespace Mono.Debugger.Frontend
 			
 			this.ShadowType = ShadowType.In;
 			
-			store = new TreeStore (typeof (string),
-						    typeof (string),
-						    typeof (string),
-						    typeof (bool),
-						    typeof (Gdk.Pixbuf));
+			store = new TreeStore (
+				typeof(AbstractNode),
+				typeof(Gdk.Pixbuf),
+				typeof(string),
+				typeof(string),
+				typeof(string)
+			);
 			
 			tree = new TreeView (store);
 			tree.RulesHint = true;
@@ -48,8 +50,8 @@ namespace Mono.Debugger.Frontend
 			nameCol.Title = "Name";
 			nameCol.PackStart (iconRenderer, false);
 			nameCol.PackStart (nameRenderer, true);
-			nameCol.AddAttribute (iconRenderer, "pixbuf", PIXBUF_COL);
-			nameCol.AddAttribute (nameRenderer, "text", NAME_COL);
+			nameCol.AddAttribute (iconRenderer, "pixbuf", ColumnImage);
+			nameCol.AddAttribute (nameRenderer, "text", ColumnName);
 			nameCol.Resizable = true;
 			nameCol.Alignment = 0.0f;
 			tree.AppendColumn (nameCol);
@@ -58,7 +60,7 @@ namespace Mono.Debugger.Frontend
 			CellRenderer valueRenderer = new CellRendererText ();
 			valueCol.Title = "Value";
 			valueCol.PackStart (valueRenderer, true);
-			valueCol.AddAttribute (valueRenderer, "text", VALUE_COL);
+			valueCol.AddAttribute (valueRenderer, "text", ColumnValue);
 			valueCol.Resizable = true;
 			nameCol.Alignment = 0.0f;
 			tree.AppendColumn (valueCol);
@@ -67,10 +69,12 @@ namespace Mono.Debugger.Frontend
 			CellRenderer typeRenderer = new CellRendererText ();
 			typeCol.Title = "Type";
 			typeCol.PackStart (typeRenderer, true);
-			typeCol.AddAttribute (typeRenderer, "text", TYPE_COL);
+			typeCol.AddAttribute (typeRenderer, "text", ColumnType);
 			typeCol.Resizable = true;
 			nameCol.Alignment = 0.0f;
 			tree.AppendColumn (typeCol);
+			
+			tree.TestExpandRow += new TestExpandRowHandler(TestExpandRow);
 			
 			Add (tree);
 			ShowAll ();
@@ -99,14 +103,65 @@ namespace Mono.Debugger.Frontend
 			foreach (TargetVariable variable in localVars) {
 				AbstractNode node = NodeFactory.Create(variable, currentFrame);
 				
-				store.AppendValues(
-					node.Name,      // Name
-					node.Value,     // Value
-					node.Type,      // Type
-					false,          // Raw-view
-					node.Image      // Pixbuf
-				);
+				TreeIter iterNewRow = AppendNode(node);
+				
+				// Placeholder so that the item is expandable
+				if (node.HasChildNodes) {
+					AppendNode(iterNewRow, new ErrorNode("placeholder","placeholder"));
+				}
 			}
+		}
+		
+		protected void TestExpandRow(object o, TestExpandRowArgs args)
+		{
+			TreeIter it;
+			
+			// Remove all current children
+			while(true) {
+				store.GetIter(out it, args.Path);
+				if (store.IterChildren(out it, it)) {
+					store.Remove(ref it);
+				} else {
+					break;
+				}
+			}
+			
+			// Add childs
+			store.GetIter(out it, args.Path);
+			AbstractNode node = (AbstractNode)store.GetValue(it, ColumnNode);
+			AbstractNode[] childs;
+			try {
+				childs = node.ChildNodes;
+			} catch {
+				AppendNode(it, new ErrorNode("-","Can not get child nodes"));
+				return;
+			}
+			foreach(AbstractNode child in node.ChildNodes) {
+				AppendNode(it, child);
+			}
+		}
+		
+		TreeIter AppendNode(AbstractNode node)
+		{
+			return store.AppendValues(
+				node,
+				node.Image,
+				node.Name,
+				node.Value,
+				node.Type
+			);
+		}
+		
+		TreeIter AppendNode(TreeIter iter, AbstractNode node)
+		{
+			return store.AppendValues(
+				iter,
+				node,
+				node.Image,
+				node.Name,
+				node.Value,
+				node.Type
+			);
 		}
 		
 		public Gtk.Widget Control {
