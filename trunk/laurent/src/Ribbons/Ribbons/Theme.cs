@@ -233,7 +233,7 @@ namespace Ribbons
 				
 				borderColor = new Color (0.671, 0.631, 0.549);
 			}
-			else
+			else if(state == ButtonState.Hover)
 			{
 				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
 				bodyPattern.AddColorStopRgb (0.0, new Color (1, 0.996, 0.890));
@@ -247,6 +247,21 @@ namespace Ribbons
 				
 				borderColor = new Color (0.824, 0.753, 0.553);
 			}
+			else if(widget.DrawBackground)
+			{
+				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
+				bodyPattern.AddColorStopRgb (0.0, new Color (1, 1, 1, 0.6));
+				bodyPattern.AddColorStopRgb (0.37, new Color (1, 1, 1, 0.1));
+				bodyPattern.AddColorStopRgb (0.43, new Color (1, 1, 1, 0.1));
+				bodyPattern.AddColorStopRgb (1.0, new Color (1, 1, 1, 0.6));
+				
+				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
+				innerBorderPattern.AddColorStop (0.0, new Color (1, 1, 0.969, 1));
+				innerBorderPattern.AddColorStop (1.0, new Color (1, 1, 0.969, 0));
+				
+				borderColor = new Color (0.824, 0.753, 0.553);
+			}
+			else return;
 			
 			cr.LineWidth = lineWidth;
 			

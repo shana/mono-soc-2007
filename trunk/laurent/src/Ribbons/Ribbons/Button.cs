@@ -10,16 +10,20 @@ namespace Ribbons
 		private GroupStyle groupStyle;
 		private Theme.ButtonState state = Theme.ButtonState.Default;
 		private PositionType imgPos;
+		private bool drawBg;
 		private Widget img;
 		private Label lbl;
 		private double padding;
 		
 		protected double lineWidth = 1.0;
 		
+		public event EventHandler Clicked;
+		
 		public double Padding
 		{
 			set
 			{
+				if(padding == value) return;
 				padding = value;
 				QueueDraw ();
 			}
@@ -32,10 +36,22 @@ namespace Ribbons
 			get { return groupStyle; }
 		}
 		
+		public bool DrawBackground
+		{
+			set
+			{
+				if(drawBg == value) return;
+				drawBg = value;
+				QueueDraw ();
+			}
+			get { return drawBg; }
+		}
+		
 		public Widget Image
 		{
 			set
 			{
+				if(img == value) return;
 				if(img != null) UnbindWidget (img);
 				img = value;
 				if(img != null) BindWidget (img);
@@ -48,6 +64,7 @@ namespace Ribbons
 		{
 			set
 			{
+				if(imgPos == value) return;
 				imgPos = value;
 				UpdateImageLabel ();
 			}
@@ -84,9 +101,32 @@ namespace Ribbons
 			this.Label = Label;
 		}
 		
+		public Button (Image Image) : this ()
+		{
+			this.Image = Image;
+		}
+		
+		public Button (Image Image, string Label) : this ()
+		{
+			this.Image = Image;
+			this.Label = Label;
+		}
+		
+		public static Button FromStockIcon (string Name, bool Large)
+		{
+			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
+			return new Button (img);
+		}
+		
+		public static Button FromStockIcon (string Name, string Label, bool Large)
+		{
+			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
+			return new Button (img, Label);
+		}
+		
 		public void Click ()
 		{
-			
+			if(Clicked != null) Clicked (this, EventArgs.Empty);
 		}
 		
 		private void BindWidget (Widget w)
@@ -114,6 +154,9 @@ namespace Ribbons
 		
 		private void UpdateImageLabel ()
 		{
+			if(lbl != null && lbl.Parent != null) lbl.Unparent ();
+			if(img != null && img.Parent != null) img.Unparent ();
+			
 			if(lbl != null && img != null)
 			{
 				switch(imgPos)
