@@ -203,6 +203,8 @@ namespace System.Windows.Data {
 				return -1;
 			int current_collection_item_index = 0;
 			foreach (object collection_item in source_collection) {
+				if (!PassesFilter(collection_item))
+					continue;
 				if (item.Equals(collection_item))
 					return current_collection_item_index;
 				current_collection_item_index++;
