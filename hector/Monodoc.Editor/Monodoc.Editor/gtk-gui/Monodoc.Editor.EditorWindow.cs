@@ -25,6 +25,18 @@ namespace Monodoc.Editor {
         
         private Gtk.Action CloseFile;
         
+        private Gtk.Action Edit;
+        
+        private Gtk.Action Cut;
+        
+        private Gtk.Action Copy;
+        
+        private Gtk.Action Paste;
+        
+        private Gtk.Action Help;
+        
+        private Gtk.Action About;
+        
         private Gtk.VBox vbox1;
         
         private Gtk.MenuBar menubar1;
@@ -62,6 +74,27 @@ namespace Monodoc.Editor {
             this.CloseFile = new Gtk.Action("CloseFile", Mono.Unix.Catalog.GetString("_Close File"), null, "gtk-close");
             this.CloseFile.ShortLabel = Mono.Unix.Catalog.GetString("_Close File");
             w2.Add(this.CloseFile, null);
+            this.Edit = new Gtk.Action("Edit", Mono.Unix.Catalog.GetString("_Edit"), null, null);
+            this.Edit.ShortLabel = Mono.Unix.Catalog.GetString("_Edit");
+            w2.Add(this.Edit, null);
+            this.Cut = new Gtk.Action("Cut", Mono.Unix.Catalog.GetString("Cu_t"), null, "gtk-cut");
+            this.Cut.Sensitive = false;
+            this.Cut.ShortLabel = Mono.Unix.Catalog.GetString("Cu_t");
+            w2.Add(this.Cut, null);
+            this.Copy = new Gtk.Action("Copy", Mono.Unix.Catalog.GetString("_Copy"), null, "gtk-copy");
+            this.Copy.Sensitive = false;
+            this.Copy.ShortLabel = Mono.Unix.Catalog.GetString("_Copy");
+            w2.Add(this.Copy, null);
+            this.Paste = new Gtk.Action("Paste", Mono.Unix.Catalog.GetString("_Paste"), null, "gtk-paste");
+            this.Paste.Sensitive = false;
+            this.Paste.ShortLabel = Mono.Unix.Catalog.GetString("_Paste");
+            w2.Add(this.Paste, null);
+            this.Help = new Gtk.Action("Help", Mono.Unix.Catalog.GetString("_Help"), null, null);
+            this.Help.ShortLabel = Mono.Unix.Catalog.GetString("_Help");
+            w2.Add(this.Help, null);
+            this.About = new Gtk.Action("About", Mono.Unix.Catalog.GetString("_About"), null, "gtk-about");
+            this.About.ShortLabel = Mono.Unix.Catalog.GetString("_About");
+            w2.Add(this.About, null);
             w1.InsertActionGroup(w2, 0);
             this.AddAccelGroup(w1.AccelGroup);
             this.Name = "Monodoc.Editor.EditorWindow";
@@ -73,7 +106,7 @@ namespace Monodoc.Editor {
             this.vbox1.Name = "vbox1";
             this.vbox1.Spacing = 3;
             // Container child vbox1.Gtk.Box+BoxChild
-            w1.AddUiFromString("<ui><menubar name='menubar1'><menu action='File'><menuitem action='Open'/><separator/><menuitem action='Save'/><menuitem action='SaveAs'/><separator/><menuitem action='CloseFile'/><separator/><menuitem action='Quit'/></menu></menubar></ui>");
+            w1.AddUiFromString("<ui><menubar name='menubar1'><menu action='File'><menuitem action='Open'/><separator/><menuitem action='Save'/><menuitem action='SaveAs'/><separator/><menuitem action='CloseFile'/><separator/><menuitem action='Quit'/></menu><menu action='Edit'><menuitem action='Cut'/><menuitem action='Copy'/><menuitem action='Paste'/></menu><menu action='Help'><menuitem action='About'/></menu></menubar></ui>");
             this.menubar1 = ((Gtk.MenuBar)(w1.GetWidget("/menubar1")));
             this.menubar1.Name = "menubar1";
             this.vbox1.Add(this.menubar1);
@@ -129,6 +162,7 @@ namespace Monodoc.Editor {
             this.Save.Activated += new System.EventHandler(this.OnSaveActivated);
             this.SaveAs.Activated += new System.EventHandler(this.OnSaveAsActivated);
             this.CloseFile.Activated += new System.EventHandler(this.OnCloseFileActivated);
+            this.About.Activated += new System.EventHandler(this.OnAboutActivated);
         }
     }
 }

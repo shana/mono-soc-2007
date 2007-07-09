@@ -50,6 +50,44 @@
         <property name="StockId">gtk-close</property>
         <signal name="Activated" handler="OnCloseFileActivated" />
       </action>
+      <action id="Edit">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Edit</property>
+        <property name="ShortLabel" translatable="yes">_Edit</property>
+      </action>
+      <action id="Cut">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Cu_t</property>
+        <property name="Sensitive">False</property>
+        <property name="ShortLabel" translatable="yes">Cu_t</property>
+        <property name="StockId">gtk-cut</property>
+      </action>
+      <action id="Copy">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Copy</property>
+        <property name="Sensitive">False</property>
+        <property name="ShortLabel" translatable="yes">_Copy</property>
+        <property name="StockId">gtk-copy</property>
+      </action>
+      <action id="Paste">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Paste</property>
+        <property name="Sensitive">False</property>
+        <property name="ShortLabel" translatable="yes">_Paste</property>
+        <property name="StockId">gtk-paste</property>
+      </action>
+      <action id="Help">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Help</property>
+        <property name="ShortLabel" translatable="yes">_Help</property>
+      </action>
+      <action id="About">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_About</property>
+        <property name="ShortLabel" translatable="yes">_About</property>
+        <property name="StockId">gtk-about</property>
+        <signal name="Activated" handler="OnAboutActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">Monodoc Documentation Editor</property>
@@ -73,6 +111,14 @@
                 <node type="Menuitem" action="CloseFile" />
                 <node type="Separator" />
                 <node type="Menuitem" action="Quit" />
+              </node>
+              <node type="Menu" action="Edit">
+                <node type="Menuitem" action="Cut" />
+                <node type="Menuitem" action="Copy" />
+                <node type="Menuitem" action="Paste" />
+              </node>
+              <node type="Menu" action="Help">
+                <node type="Menuitem" action="About" />
               </node>
             </node>
           </widget>

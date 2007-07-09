@@ -118,5 +118,14 @@ public partial class EditorWindow : Gtk.Window {
 		nb_tabs.RemovePage (nb_tabs.PageNum (current_tab));
 		nb_tabs.ShowTabs = (nb_tabs.NPages > 1);
 	}
+
+	private void OnAboutActivated (object sender, System.EventArgs e)
+	{
+		AboutEditorDialog dialog = new AboutEditorDialog ();
+		
+		dialog.Run ();
+		
+		dialog.Destroy ();
+	}
 }
 }
