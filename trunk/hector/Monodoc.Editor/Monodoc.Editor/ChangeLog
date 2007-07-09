@@ -1,3 +1,9 @@
+2007-07-09  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* EditorWindow.cs, Monodoc.Editor.mdp, AboutEditorDialog.cs,
+	  gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Added a
+	  AboutDialog to the application.
+
 2007-07-05  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* EditorWindow.cs: Added a check in Open event to see if filename is
