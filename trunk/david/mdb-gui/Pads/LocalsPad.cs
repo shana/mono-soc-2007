@@ -12,6 +12,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class LocalsPad : Gtk.ScrolledWindow
 	{
+		MdbGui mdbGui;
 		Interpreter interpreter;
 		
 		Gtk.TreeView tree;
@@ -26,9 +27,10 @@ namespace Mono.Debugger.Frontend
 		internal const int ColumnValue    = 4;
 		internal const int ColumnType     = 5;
 		
-		public LocalsPad(Interpreter interpreter)
+		public LocalsPad(MdbGui mdbGui)
 		{
-			this.interpreter = interpreter;
+			this.mdbGui = mdbGui;
+			this.interpreter = mdbGui.Interpreter;
 			
 			this.ShadowType = ShadowType.In;
 			

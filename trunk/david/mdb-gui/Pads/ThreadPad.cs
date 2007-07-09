@@ -13,6 +13,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class ThreadPad : Gtk.ScrolledWindow
 	{
+		MdbGui mdbGui;
 		Interpreter interpreter;
 		
 		Gtk.TreeView tree;
@@ -39,9 +40,10 @@ namespace Mono.Debugger.Frontend
 			typeof (string)
 		};
 		
-		public ThreadPad (Interpreter interpreter)
+		public ThreadPad(MdbGui mdbGui)
 		{
-			this.interpreter = interpreter;
+			this.mdbGui = mdbGui;
+			this.interpreter = mdbGui.Interpreter;
 			
 			threadRows = new Hashtable ();
 			
