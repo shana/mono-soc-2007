@@ -629,7 +629,7 @@ public class DocumentBufferArchiver {
 			AddNewLine (buffer, ref insertAt, tagSuffix);
 			
 			#if DEBUG
-			Console.WriteLine ("Attribute: {0} End: {2}", tagName, insertAt.Offset);
+			Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);
 			#endif
 		}
 	}

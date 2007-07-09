@@ -1,3 +1,7 @@
+2007-07-09  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Stupid typo damn.
+
 2007-07-07  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Utils/EcmaReader.cs: Minor changes to deal with
