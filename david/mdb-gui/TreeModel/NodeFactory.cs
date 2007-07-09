@@ -35,7 +35,16 @@ namespace Mono.Debugger.Frontend.TreeModel
 					case TargetObjectKind.Array:
 						return new ArrayNode(name, stackFrame, (TargetArrayObject)obj);
 					case TargetObjectKind.Pointer:
-						return new ErrorNode(name, "Unimplemented - Pointer");
+						TargetPointerObject pobj = (TargetPointerObject)obj;
+						if (!pobj.Type.IsTypesafe) {
+							return new ErrorNode(name, "Pointer is not typesafe");
+						}
+						try {
+							TargetObject deref = pobj.GetDereferencedObject(stackFrame.Thread);
+							return NodeFactory.Create(name, deref, stackFrame);
+						} catch {
+							return new ErrorNode(name, "Can not dereference object");
+						}
 					case TargetObjectKind.Object:
 						try {
 							TargetObject deref = ((TargetObjectObject)obj).GetDereferencedObject(stackFrame.Thread);
