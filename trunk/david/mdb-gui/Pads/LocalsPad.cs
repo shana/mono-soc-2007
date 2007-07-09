@@ -17,6 +17,8 @@ namespace Mono.Debugger.Frontend
 		Gtk.TreeView tree;
 		Gtk.TreeStore store;
 		
+		Hashtable expandedNodes = new Hashtable();
+		
 		internal const int ColumnNode     = 0;
 		internal const int ColumnID       = 1;
 		internal const int ColumnImage    = 2;
@@ -73,6 +75,8 @@ namespace Mono.Debugger.Frontend
 			nameCol.Alignment = 0.0f;
 			tree.AppendColumn (typeCol);
 			
+			tree.RowExpanded += new RowExpandedHandler(RowExpanded);
+			tree.TestCollapseRow += new TestCollapseRowHandler(TestCollapseRow);
 			tree.TestExpandRow += new TestExpandRowHandler(TestExpandRow);
 			
 			Add (tree);
@@ -115,9 +119,43 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
+		protected void TestCollapseRow(object o, TestCollapseRowArgs args)
+		{
+			string id = (string)store.GetValue(args.Iter, ColumnID);
+			if (expandedNodes.ContainsKey(id)) {
+				expandedNodes.Remove(id);
+			}
+			//Console.WriteLine("TestCollapseRow " + id);
+		}
+		
 		protected void TestExpandRow(object o, TestExpandRowArgs args)
 		{
+			string id = (string)store.GetValue(args.Iter, ColumnID);
+			expandedNodes[id] = null; // No value, just insert the key
+			//Console.WriteLine("TestExpandRow " + id);
 			ExpandNode(args.Path);
+		}
+		
+		protected void RowExpanded(object o, RowExpandedArgs args)
+		{
+			string id = (string)store.GetValue(args.Iter, ColumnID);
+			expandedNodes[id] = null; // No value, just insert the key
+			//Console.WriteLine("RowExpanded " + id);
+			
+			int childCount = store.IterNChildren(args.Iter);
+			for(int i = 0; i < childCount; i++) {
+				TreePath childPath = args.Path.Copy();
+				childPath.AppendIndex(i);
+				
+				TreeIter childIter;
+				store.GetIter(out childIter, childPath);
+				string childId = (string)store.GetValue(childIter, ColumnID);
+				// This node was expanded in the past - expand it
+				if (expandedNodes.ContainsKey(childId)) {
+					//Console.WriteLine("Should be expanded: " + childId);
+					tree.ExpandRow(childPath, false);
+				}
+			}
 		}
 		
 		void ExpandNode(TreePath path)
@@ -176,10 +214,17 @@ namespace Mono.Debugger.Frontend
 				store.GetIter(out it, path);
 				iterNewRow = store.AppendValues(it, values);
 			}
+			TreePath pathNewRow = store.GetPath(iterNewRow);
 			
 			// Placeholder so that the item is expandable
 			if (node.HasChildNodes) {
 				store.AppendNode(iterNewRow);
+			}
+			
+			// This node was expanded in the past - expand it
+			if (expandedNodes.ContainsKey(id)) {
+				//Console.WriteLine("Should be expanded: " + id);
+				tree.ExpandRow(pathNewRow, false);
 			}
 		}
 		

@@ -4,7 +4,7 @@ class TestApp
 	public static void Main(string[] args)
 	{
 		object box = 12;
-		int[,] array = new int[32,4];
+		int[,,] array = new int[2,2,2];
 		Colours myColour = Colours.Green | Colours.Blue;
 		TestClass testClass = new TestClass();
 		testClass.TestFun(543, "asdf");
