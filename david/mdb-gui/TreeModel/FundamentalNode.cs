@@ -11,14 +11,20 @@ namespace Mono.Debugger.Frontend.TreeModel
 		StackFrame stackFrame;
 		TargetFundamentalObject obj;
 		
-		string value;
-		
 		public override string Name {
 			get { return name; }
 		}
 		
 		public override string Value {
-			get { return value; }
+			get {
+				return obj.GetObject(stackFrame.Thread).ToString();
+			}
+		}
+		
+		public override string Type {
+			get {
+				return obj.TypeName;
+			}
 		}
 		
 		public FundamentalNode(string name, StackFrame stackFrame, TargetFundamentalObject obj)
@@ -26,8 +32,6 @@ namespace Mono.Debugger.Frontend.TreeModel
 			this.name = name;
 			this.stackFrame = stackFrame;
 			this.obj = obj;
-			
-			this.value = obj.GetObject(stackFrame.Thread).ToString();
 		}
 	}
 }
