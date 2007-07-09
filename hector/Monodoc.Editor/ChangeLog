@@ -1,5 +1,13 @@
 2007-07-09  Hector E. Gomez M. <hectoregm@gmail.com> 
 
+	* Monodoc.Editor/EditorWindow.cs: Added event to close a document file.
+	* Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/gui.stetic: Minor changes
+	* Monodoc.Editor.Gui/DocumentTab.cs: Added a close button to the label
+	  of each DocumentTab.
+
+2007-07-09  Hector E. Gomez M. <hectoregm@gmail.com> 
+
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Stupid typo damn.
 
 2007-07-07  Hector E. Gomez M. <hectoregm@gmail.com> 

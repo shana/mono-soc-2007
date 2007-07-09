@@ -43,6 +43,13 @@
         <property name="StockId">gtk-save-as</property>
         <signal name="Activated" handler="OnSaveAsActivated" />
       </action>
+      <action id="CloseFile">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">_Close File</property>
+        <property name="ShortLabel" translatable="yes">_Close File</property>
+        <property name="StockId">gtk-close</property>
+        <signal name="Activated" handler="OnCloseFileActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">Monodoc Documentation Editor</property>
@@ -62,6 +69,8 @@
                 <node type="Separator" />
                 <node type="Menuitem" action="Save" />
                 <node type="Menuitem" action="SaveAs" />
+                <node type="Separator" />
+                <node type="Menuitem" action="CloseFile" />
                 <node type="Separator" />
                 <node type="Menuitem" action="Quit" />
               </node>
