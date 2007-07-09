@@ -5,6 +5,7 @@ class TestApp
 	{
 		int[,] array = new int[32,4];
 		Colours myColour = Colours.Green | Colours.Blue;
+		TestClass testClass = new TestClass();
 		Fun1();
 	}
 	

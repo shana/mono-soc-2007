@@ -90,6 +90,7 @@
     <Compile Include="TreeModel\AbstractNode.cs" />
     <Compile Include="TreeModel\ArrayNode.cs" />
     <Compile Include="TreeModel\ArraySubsetNode.cs" />
+    <Compile Include="TreeModel\ClassNode.cs" />
     <Compile Include="TreeModel\EnumNode.cs" />
     <Compile Include="TreeModel\ErrorNode.cs" />
     <Compile Include="TreeModel\FundamentalNode.cs" />

@@ -38,14 +38,13 @@ namespace Mono.Debugger.Frontend.TreeModel
 						return new ErrorNode(name, "Unimplemented - Pointer");
 					case TargetObjectKind.Object:
 						return new ErrorNode(name, "Unimplemented - Object");
-					case TargetObjectKind.Class:
-						return new ErrorNode(name, "Unimplemented - Class");
 					case TargetObjectKind.Struct:
-						return new ErrorNode(name, "Unimplemented - Struct");
+					case TargetObjectKind.Class:
+						return new ClassNode(name, stackFrame, (TargetClassObject)obj);
 					case TargetObjectKind.Fundamental:
 						return new FundamentalNode(name, stackFrame, (TargetFundamentalObject)obj);
 					case TargetObjectKind.Enum:
-						return new EnumNode(name, stackFrame, (TargetEnumObject) obj);
+						return new EnumNode(name, stackFrame, (TargetEnumObject)obj);
 					default:
 						return new ErrorNode(name, "Unknown kind of object");
 				}
