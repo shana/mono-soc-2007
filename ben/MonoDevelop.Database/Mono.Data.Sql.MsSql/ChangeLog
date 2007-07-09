@@ -1,0 +1,23 @@
+2007-07-05  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlServerConnectionProvider.cs: ExecuteQueryAsDataSet and ExecuteQueryAsDataTable implementation
+	* SqlServerDbFactory.cs: specified the ISqlDialect and added default connection settings
+	* Renamed MsSql* to SqlServer*
+
+2007-07-02  Ben Motmans <ben.motmans@gmail.com>
+
+	* MsSqlConnectionProvider.cs: 
+	* MsSqlSchemaProvider.cs: 
+	Fixed several compilation issues
+	Added Close () statements when the IDataReader is no longer needed
+
+2007-07-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* MsSqlSchemaProvider.cs: 
+	* MsSqlDbFactory.cs: 
+	* MsSqlConnectionProvider.cs: 
+	Imported original code and splitted in 3 classes
+	use IsDbNull instead of try-catch
+	fixed sql bug in GetTableColumns method
+	implemented GetDataType, GetDatabases, GetConstraints method
+	updated sql statements to allow lazy loading
