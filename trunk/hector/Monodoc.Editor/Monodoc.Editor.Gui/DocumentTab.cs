@@ -12,19 +12,37 @@ using Gtk;
 
 namespace Monodoc.Editor.Gui {
 public class DocumentTab : Gtk.ScrolledWindow {
+	private Notebook doc_tabs;
 	private DocumentEditor editor;
+	private HBox tab_label;
 	private Label title_label;
 	string title;
 	
-	public DocumentTab () : base ()
+	public DocumentTab (Notebook docTabs) : base ()
 	{
+		doc_tabs = docTabs;
 		InitializeProperties ();
 		
 		editor = new DocumentEditor ();
 		this.Add (editor);
 		
 		title = "Untitled";
+		
+		tab_label = new HBox (false, 2);
 		title_label = new Label (title);
+		
+		// Close tab buttonany
+		Button tabClose = new Button ();
+		Image img = new Image (Stock.Close, IconSize.SmallToolbar);
+		tabClose.Add (img);
+		tabClose.Relief = ReliefStyle.None;
+		tabClose.SetSizeRequest (23, 23);
+		tabClose.Clicked += new EventHandler (OnTabClose);
+		
+		tab_label.PackStart (title_label, true, true, 0);
+		tab_label.PackStart (tabClose, false, false, 2);
+		
+		tab_label.ShowAll ();
 	}
 	
 	private void InitializeProperties ()
@@ -35,9 +53,9 @@ public class DocumentTab : Gtk.ScrolledWindow {
 		this.ShadowType = ((ShadowType) 1);
 	}
 	
-	public Label TitleLabel {
+	public HBox TabLabel {
 		get {
-			return title_label;
+			return tab_label;
 		}
 	}
 	
@@ -59,6 +77,12 @@ public class DocumentTab : Gtk.ScrolledWindow {
 		set {
 			editor.Buffer = value;
 		}
+	}
+	
+	private void OnTabClose (object sender, EventArgs args)
+	{
+		doc_tabs.RemovePage (doc_tabs.PageNum (this));
+		doc_tabs.ShowTabs = (doc_tabs.NPages > 1);
 	}
 }
 }

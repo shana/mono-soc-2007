@@ -35,8 +35,8 @@ public partial class EditorWindow : Gtk.Window {
 	
 	private void AddTab ()
 	{
-		current_tab = new DocumentTab ();
-		nb_tabs.AppendPage (current_tab, current_tab.TitleLabel);
+		current_tab = new DocumentTab (nb_tabs);
+		nb_tabs.AppendPage (current_tab, current_tab.TabLabel);
 		nb_tabs.ShowTabs = (nb_tabs.NPages > 1);
 		nb_tabs.ShowAll ();
 		nb_tabs.CurrentPage = nb_tabs.PageNum (current_tab);
@@ -111,6 +111,12 @@ public partial class EditorWindow : Gtk.Window {
 	private void OnChangeTab (object sender, SwitchPageArgs args)
 	{
 		current_tab = (DocumentTab) nb_tabs.GetNthPage((int) args.PageNum);
+	}
+
+	private void OnCloseFileActivated (object sender, System.EventArgs e)
+	{
+		nb_tabs.RemovePage (nb_tabs.PageNum (current_tab));
+		nb_tabs.ShowTabs = (nb_tabs.NPages > 1);
 	}
 }
 }
