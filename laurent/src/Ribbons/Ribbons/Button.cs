@@ -108,8 +108,11 @@ namespace Ribbons
 		
 		public Button (Image Image, string Label) : this ()
 		{
-			this.Image = Image;
-			this.Label = Label;
+			this.img = Image;
+			this.lbl = new Gtk.Label (Label);
+			if(img != null) BindWidget (img);
+			BindWidget (lbl);
+			UpdateImageLabel ();
 		}
 		
 		public static Button FromStockIcon (string Name, bool Large)

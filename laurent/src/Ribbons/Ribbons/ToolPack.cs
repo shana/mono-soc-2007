@@ -146,9 +146,11 @@ namespace Ribbons
 				Gdk.Rectangle r;
 				r.X = x;
 				r.Y = allocation.Y;
-				r.Width = widths[i++];
+				r.Width = widths[i];
 				r.Height = allocation.Height;
 				b.SizeAllocate (r);
+				x += r.Width;
+				++i;
 			}
 		}
 	}
