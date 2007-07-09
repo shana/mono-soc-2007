@@ -58,14 +58,14 @@
   <Entries>
     <Entry filename="./Mono.Data.Sql/Mono.Data.Sql.mdp" />
     <Entry filename="./Mono.Data.Sql.Tests/Mono.Data.Sql.Tests.mdp" />
-    <Entry filename="./MonoDevelop.Database.Designer/MonoDevelop.Database.Designer.mdp" />
+    <Entry filename="./MonoDevelop.Database.GlueGenerator/MonoDevelop.Database.GlueGenerator.mdp" />
     <Entry filename="./MonoDevelop.Database.Visualization/MonoDevelop.Database.Visualization.mdp" />
     <Entry filename="./MonoDevelop.Database.Query/MonoDevelop.Database.Query.mdp" />
     <Entry filename="./MonoDevelop.Database.Project/MonoDevelop.Database.Project.mdp" />
     <Entry filename="./Mono.Data.Sql.Sybase/Mono.Data.Sql.Sybase.mdp" />
     <Entry filename="./Mono.Data.Sql.MySql/Mono.Data.Sql.MySql.mdp" />
     <Entry filename="./Mono.Data.Sql.Firebird/Mono.Data.Sql.Firebird.mdp" />
-    <Entry filename="./Mono.Data.Sql.MsSql/Mono.Data.Sql.MsSql.mdp" />
+    <Entry filename="./Mono.Data.Sql.SqlServer/Mono.Data.Sql.SqlServer.mdp" />
     <Entry filename="./Mono.Data.Sql.Sqlite/Mono.Data.Sql.Sqlite.mdp" />
     <Entry filename="./Mono.Data.Sql.Oracle/Mono.Data.Sql.Oracle.mdp" />
     <Entry filename="./Mono.Data.Sql.Npgsql/Mono.Data.Sql.Npgsql.mdp" />
