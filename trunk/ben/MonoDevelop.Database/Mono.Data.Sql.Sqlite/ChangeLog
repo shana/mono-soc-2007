@@ -1,0 +1,16 @@
+2007-07-05  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqliteConnectionProvider.cs: ExecuteQueryAsDataSet and ExecuteQueryAsDataTable implementation
+	* SqliteDbFactory.cs: specified the ISqlDialect and added default connection settings
+
+2007-07-02  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqliteSchemaProvider.cs: 
+	Imported the old DbProvider and updated all to code to use the new API
+
+2007-07-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqliteSchemaProvider.cs: 
+	* SqliteDbFactory.cs: 
+	* SqliteConnectionProvider.cs: 
+	Imported original code and splitted in 3 classes

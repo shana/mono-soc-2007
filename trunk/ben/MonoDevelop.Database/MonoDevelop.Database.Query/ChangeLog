@@ -1,0 +1,5 @@
+2007-07-05  Ben Motmans <ben.motmans@gmail.com>
+
+	* DataGrid/*: new DataGrid implementation based on Gtk.TreeView, support for record navigation,
+	data visualizers and different column types
+	* QueryResultView.cs: View to visualize the result of a query, based on the new DataGrid

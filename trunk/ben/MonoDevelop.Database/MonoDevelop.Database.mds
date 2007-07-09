@@ -3,7 +3,7 @@
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Mono.Data.Sql" configuration="Debug" />
       <Entry build="False" name="Mono.Data.Sql.Tests" configuration="Debug" />
-      <Entry build="True" name="MonoDevelop.Database.Designer" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.GlueGenerator" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Visualization" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Project" configuration="Debug" />
@@ -21,7 +21,7 @@
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="Mono.Data.Sql" configuration="Release" />
       <Entry build="True" name="Mono.Data.Sql.Tests" configuration="Release" />
-      <Entry build="True" name="MonoDevelop.Database.Designer" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.GlueGenerator" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Visualization" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Project" configuration="Release" />
