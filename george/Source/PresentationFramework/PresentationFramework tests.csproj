@@ -105,4 +105,7 @@
   <ItemGroup>
     <None Include="Test\ChangeLog" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Test\System.Windows.Data\ChangeLog" />
+  </ItemGroup>
 </Project>
