@@ -37,7 +37,12 @@ namespace Mono.Debugger.Frontend.TreeModel
 					case TargetObjectKind.Pointer:
 						return new ErrorNode(name, "Unimplemented - Pointer");
 					case TargetObjectKind.Object:
-						return new ErrorNode(name, "Unimplemented - Object");
+						try {
+							TargetObject deref = ((TargetObjectObject)obj).GetDereferencedObject(stackFrame.Thread);
+							return NodeFactory.Create(name, deref, stackFrame);
+						} catch {
+							return new ErrorNode(name, "Can not dereference object");
+						}
 					case TargetObjectKind.Struct:
 					case TargetObjectKind.Class:
 						return new ClassNode(name, stackFrame, (TargetClassObject)obj);
