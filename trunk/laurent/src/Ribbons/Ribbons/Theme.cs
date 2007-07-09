@@ -211,8 +211,6 @@ namespace Ribbons
 		
 		internal void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, Button widget)
 		{
-			if(state == ButtonState.Default) return;
-			
 			double lineWidth05 = lineWidth / 2;
 			double lineWidth15 = lineWidth05 * 3;
 			
@@ -250,16 +248,16 @@ namespace Ribbons
 			else if(widget.DrawBackground)
 			{
 				bodyPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
-				bodyPattern.AddColorStopRgb (0.0, new Color (1, 1, 1, 0.6));
-				bodyPattern.AddColorStopRgb (0.37, new Color (1, 1, 1, 0.1));
-				bodyPattern.AddColorStopRgb (0.43, new Color (1, 1, 1, 0.1));
-				bodyPattern.AddColorStopRgb (1.0, new Color (1, 1, 1, 0.6));
+				bodyPattern.AddColorStop (0.0, new Color (1, 1, 1, 0.7));
+				bodyPattern.AddColorStop (0.37, new Color (1, 1, 1, 0.2));
+				bodyPattern.AddColorStop (0.43, new Color (1, 1, 1, 0.2));
+				bodyPattern.AddColorStop (1.0, new Color (1, 1, 1, 0.7));
 				
 				innerBorderPattern = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X + bodyAllocation.Width, bodyAllocation.Y + bodyAllocation.Height);
-				innerBorderPattern.AddColorStop (0.0, new Color (1, 1, 0.969, 1));
-				innerBorderPattern.AddColorStop (1.0, new Color (1, 1, 0.969, 0));
+				innerBorderPattern.AddColorStop (0.0, new Color (1, 1, 1, 1));
+				innerBorderPattern.AddColorStop (1.0, new Color (1, 1, 1, 0));
 				
-				borderColor = new Color (0.824, 0.753, 0.553);
+				borderColor = new Color (0, 0, 0, 0.2);
 			}
 			else return;
 			
