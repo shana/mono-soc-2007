@@ -108,6 +108,7 @@
     <None Include="Properties\ChangeLog" />
     <None Include="System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="System.Windows.Controls\ChangeLog" />
+    <None Include="System.Windows.Data\ChangeLog" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="themes\generic.xaml" />
