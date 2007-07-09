@@ -29,6 +29,14 @@ namespace Mono.Debugger.Frontend
 			"Method name",
 			"Source file"
 		};
+		
+		Type[] columnTypes = new Type[] {
+			typeof (Gdk.Pixbuf),
+			typeof (string),
+			typeof (string),
+			typeof (string),
+			typeof (string)
+		};
 
 		Gtk.TreeView tree;
 		Gtk.TreeStore store;
@@ -39,19 +47,24 @@ namespace Mono.Debugger.Frontend
 			
 			this.ShadowType = ShadowType.In;
 			
-			store = new TreeStore (
-				typeof (string),
-				typeof (string),
-				typeof (string),
-				typeof (string),
-				typeof (string)
-			);
+			store = new TreeStore(columnTypes);
 			
 			tree = new TreeView (store);
 			tree.RulesHint = true;
 			tree.HeadersVisible = true;
 			
-			for(int i = 0; i < columnHeaders.Length; i++) {
+			{
+				TreeViewColumn column = new TreeViewColumn ();
+				CellRenderer iconRenderer = new CellRendererPixbuf ();
+				column.Title = columnHeaders[0];
+				column.PackStart (iconRenderer, false);
+				column.AddAttribute (iconRenderer, "pixbuf", 0);
+				column.Resizable = true;
+				column.Alignment = 0.0f;
+				tree.AppendColumn (column);
+			}
+			
+			for(int i = 1; i < columnHeaders.Length; i++) {
 				TreeViewColumn column = new TreeViewColumn ();
 				CellRenderer renderer = new CellRendererText ();
 				column.Title = columnHeaders[i];
@@ -133,7 +146,7 @@ namespace Mono.Debugger.Frontend
 				
 				TreeIter it;
 				store.IterNthChild(out it, i);
-				store.SetValue(it, ColumnSelected, i == currentFrameIndex ? "*" : " ");
+				store.SetValue(it, ColumnSelected, i == currentFrameIndex ? Pixmaps.Arrow : Pixmaps.Empty);
 				store.SetValue(it, ColumnLevel, "#" + frame.Level);
 				store.SetValue(it, ColumnAddress, frame.TargetAddress.ToString());
 				store.SetValue(it, ColumnName, name);
