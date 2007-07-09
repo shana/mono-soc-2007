@@ -4,6 +4,7 @@ class TestApp
 	public static void Main(string[] args)
 	{
 		int[,] array = new int[32,4];
+		Colours myColour = Colours.Green | Colours.Blue;
 		Fun1();
 	}
 	
@@ -30,6 +31,9 @@ class TestApp
 		int[][] jagged = {new int[2], new int[3]};
 	}
 }
+
+[Flags]
+enum Colours { Red = 1, Green = 2, Blue = 4 };
 
 public class TestClass
 {

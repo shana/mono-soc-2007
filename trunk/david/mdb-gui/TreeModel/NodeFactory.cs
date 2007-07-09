@@ -45,7 +45,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 					case TargetObjectKind.Fundamental:
 						return new FundamentalNode(name, stackFrame, (TargetFundamentalObject)obj);
 					case TargetObjectKind.Enum:
-						return new ErrorNode(name, "Unimplemented - Enum");
+						return new EnumNode(name, stackFrame, (TargetEnumObject) obj);
 					default:
 						return new ErrorNode(name, "Unknown kind of object");
 				}
