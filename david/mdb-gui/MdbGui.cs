@@ -226,29 +226,48 @@ namespace Mono.Debugger.Frontend
 			localsPad.UpdateDisplay();
 			
 			// Update the source view
+			UpdateSourceView();
+		}
+		
+		string currentlyLoadedSourceFile;
+		
+		public void UpdateSourceView()
+		{
+			// Try to get the filename for current location
 			StackFrame currentFrame = null;
-			if (interpreter.HasCurrentThread) {
-				currentFrame = interpreter.CurrentThread.CurrentFrame;
+			string filename = null;
+			try {
+				currentFrame = interpreter.CurrentThread.GetBacktrace().CurrentFrame;
+				filename = currentFrame.SourceAddress.Location.FileName;
+			} catch {
 			}
-			if (currentFrame != null &&
-			    currentFrame.SourceAddress != null &&
-			    currentFrame.SourceAddress.Location != null &&
-			    currentFrame.SourceAddress.Location.FileName != null) {
-				
+			if (filename == null) {
+				sourceView.Buffer.Text = "No source code";
+				return;
+			}
+			
+			// Load the source file if neccessary
+			if (currentlyLoadedSourceFile != filename) {
 				SourceBuffer buffer = interpreter.ReadFile(currentFrame.SourceAddress.Location.FileName);
 				string[] sourceCode = buffer.Contents;
 				sourceView.Buffer.Text = string.Join("\n", sourceCode);
-				
-				int line = currentFrame.SourceAddress.Location.Line;
-				TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
-				TextIter end   = sourceView.Buffer.GetIterAtLine(line);
-				sourceView.Buffer.ApplyTag("currentLine", begin, end);
-				
-				TextMark mark = sourceView.Buffer.CreateMark(null, end, false);
-				sourceView.ScrollToMark(mark, 0, false, 0, 0);
-			} else {
-				sourceView.Buffer.Text = "No source code";
+				currentlyLoadedSourceFile = filename;
 			}
+			
+			// Remove all current tags
+			TextIter bufferBegin, bufferEnd;
+			sourceView.Buffer.GetBounds(out bufferBegin, out bufferEnd);
+			sourceView.Buffer.RemoveAllTags(bufferBegin, bufferEnd);
+			
+			// Add tag to show current line
+			int line = currentFrame.SourceAddress.Location.Line;
+			TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
+			TextIter end   = sourceView.Buffer.GetIterAtLine(line);
+			sourceView.Buffer.ApplyTag("currentLine", begin, end);
+			
+			// Scroll to current line
+			TextMark mark = sourceView.Buffer.CreateMark(null, end, false);
+			sourceView.ScrollToMark(mark, 0, false, 0, 0);
 		}
 	}
 }
