@@ -18,10 +18,11 @@ namespace Mono.Debugger.Frontend
 		Gtk.TreeStore store;
 		
 		internal const int ColumnNode     = 0;
-		internal const int ColumnImage    = 1;
-		internal const int ColumnName     = 2;
-		internal const int ColumnValue    = 3;
-		internal const int ColumnType     = 4;
+		internal const int ColumnID       = 1;
+		internal const int ColumnImage    = 2;
+		internal const int ColumnName     = 3;
+		internal const int ColumnValue    = 4;
+		internal const int ColumnType     = 5;
 		
 		public LocalsPad(Interpreter interpreter)
 		{
@@ -31,6 +32,7 @@ namespace Mono.Debugger.Frontend
 			
 			store = new TreeStore (
 				typeof(AbstractNode),
+				typeof(string),
 				typeof(Gdk.Pixbuf),
 				typeof(string),
 				typeof(string),
@@ -115,11 +117,16 @@ namespace Mono.Debugger.Frontend
 		
 		protected void TestExpandRow(object o, TestExpandRowArgs args)
 		{
+			ExpandNode(args.Path);
+		}
+		
+		void ExpandNode(TreePath path)
+		{
 			TreeIter it;
 			
 			// Remove all current children
 			while(true) {
-				store.GetIter(out it, args.Path);
+				store.GetIter(out it, path);
 				if (store.IterChildren(out it, it)) {
 					store.Remove(ref it);
 				} else {
@@ -128,24 +135,33 @@ namespace Mono.Debugger.Frontend
 			}
 			
 			// Add childs
-			store.GetIter(out it, args.Path);
+			store.GetIter(out it, path);
 			AbstractNode node = (AbstractNode)store.GetValue(it, ColumnNode);
 			AbstractNode[] childs;
 			try {
 				childs = node.ChildNodes;
 			} catch {
-				AppendNode(args.Path, new ErrorNode("-","Can not get child nodes"));
+				AppendNode(path, new ErrorNode(String.Empty, "Can not get child nodes"));
 				return;
 			}
 			foreach(AbstractNode child in node.ChildNodes) {
-				AppendNode(args.Path, child);
+				AppendNode(path, child);
 			}
 		}
 		
 		void AppendNode(TreePath path, AbstractNode node)
 		{
+			string idPrefix = String.Empty;
+			if (path != null) {
+				TreeIter it;
+				store.GetIter(out it, path);
+				idPrefix = (string)store.GetValue(it, ColumnID) + ".";
+			}
+			string id = idPrefix + node.Name;
+			
 			object[] values = new object[] {
 				node,
+				id,
 				node.Image,
 				node.Name,
 				node.Value,
