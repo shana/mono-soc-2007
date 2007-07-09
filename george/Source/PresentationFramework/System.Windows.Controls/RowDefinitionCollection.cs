@@ -146,10 +146,6 @@ namespace System.Windows.Controls {
 			return AddAndReturnInt(CheckType(value));
 		}
 
-		void IList.Clear() {
-			Clear();
-		}
-
 		bool IList.Contains(object value) {
 			return Contains(CheckType(value));
 		}
@@ -167,17 +163,9 @@ namespace System.Windows.Controls {
 			get { return data.IsFixedSize; }
 		}
 
-		bool IList.IsReadOnly {
-			get { return IsReadOnly; }
-		}
-
 		void IList.Remove(object value) {
 			CheckNull(value);
 			Remove(CheckType(value));
-		}
-
-		void IList.RemoveAt(int index) {
-			RemoveAt(index);
 		}
 
 		object IList.this[int index] {
@@ -193,72 +181,11 @@ namespace System.Windows.Controls {
 		void ICollection.CopyTo(Array array, int index) {
 			data.CopyTo(array, index);
 		}
-
-		int ICollection.Count {
-			get { return Count; }
-		}
-
-		bool ICollection.IsSynchronized {
-			get { return IsSynchronized; }
-		}
-
-		object ICollection.SyncRoot {
-			get { return SyncRoot; }
-		}
 		#endregion
 
 		#region IEnumerable
 		IEnumerator IEnumerable.GetEnumerator() {
 			return data.GetEnumerator();
-		}
-		#endregion
-
-		#region IList<RowDefinition>
-		int IList<RowDefinition>.IndexOf(RowDefinition item) {
-			return IndexOf(item);
-		}
-
-		void IList<RowDefinition>.Insert(int index, RowDefinition item) {
-			Insert(index, item);
-		}
-
-		void IList<RowDefinition>.RemoveAt(int index) {
-			RemoveAt(index);
-		}
-
-		RowDefinition IList<RowDefinition>.this[int index] {
-			get { return this[index]; }
-			set { this[index] = value; }
-		}
-		#endregion
-
-		#region ICollection<RowDefinition>
-		void ICollection<RowDefinition>.Add(RowDefinition item) {
-			Add(item);
-		}
-
-		void ICollection<RowDefinition>.Clear() {
-			Clear();
-		}
-
-		bool ICollection<RowDefinition>.Contains(RowDefinition item) {
-			return Contains(item);
-		}
-
-		void ICollection<RowDefinition>.CopyTo(RowDefinition[] array, int arrayIndex) {
-			CopyTo(array, arrayIndex);
-		}
-
-		int ICollection<RowDefinition>.Count {
-			get { return Count; }
-		}
-
-		bool ICollection<RowDefinition>.IsReadOnly {
-			get { return IsReadOnly; }
-		}
-
-		bool ICollection<RowDefinition>.Remove(RowDefinition item) {
-			return Remove(item);
 		}
 		#endregion
 

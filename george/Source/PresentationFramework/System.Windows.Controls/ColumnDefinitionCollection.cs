@@ -1,4 +1,3 @@
-//TODO: Cleanup unneeded explicit interface implementations.
 using System.Collections;
 using System.Collections.Generic;
 #if Implementation
@@ -147,10 +146,6 @@ namespace System.Windows.Controls {
 			return AddAndReturnInt(CheckType(value));
 		}
 
-		void IList.Clear() {
-			Clear();
-		}
-
 		bool IList.Contains(object value) {
 			return Contains(CheckType(value));
 		}
@@ -168,17 +163,9 @@ namespace System.Windows.Controls {
 			get { return data.IsFixedSize; }
 		}
 
-		bool IList.IsReadOnly {
-			get { return IsReadOnly; }
-		}
-
 		void IList.Remove(object value) {
 			CheckNull(value);
 			Remove(CheckType(value));
-		}
-
-		void IList.RemoveAt(int index) {
-			RemoveAt(index);
 		}
 
 		object IList.this[int index] {
@@ -194,72 +181,11 @@ namespace System.Windows.Controls {
 		void ICollection.CopyTo(Array array, int index) {
 			data.CopyTo(array, index);
 		}
-
-		int ICollection.Count {
-			get { return Count; }
-		}
-
-		bool ICollection.IsSynchronized {
-			get { return IsSynchronized; }
-		}
-
-		object ICollection.SyncRoot {
-			get { return SyncRoot; }
-		}
 		#endregion
 
 		#region IEnumerable
 		IEnumerator IEnumerable.GetEnumerator() {
 			return data.GetEnumerator();
-		}
-		#endregion
-
-		#region IList<ColumnDefinition>
-		int IList<ColumnDefinition>.IndexOf(ColumnDefinition item) {
-			return IndexOf(item);
-		}
-
-		void IList<ColumnDefinition>.Insert(int index, ColumnDefinition item) {
-			Insert(index, item);
-		}
-
-		void IList<ColumnDefinition>.RemoveAt(int index) {
-			RemoveAt(index);
-		}
-
-		ColumnDefinition IList<ColumnDefinition>.this[int index] {
-			get { return this[index]; }
-			set { this[index] = value; }
-		}
-		#endregion
-
-		#region ICollection<ColumnDefinition>
-		void ICollection<ColumnDefinition>.Add(ColumnDefinition item) {
-			Add(item);
-		}
-
-		void ICollection<ColumnDefinition>.Clear() {
-			Clear();
-		}
-
-		bool ICollection<ColumnDefinition>.Contains(ColumnDefinition item) {
-			return Contains(item);
-		}
-
-		void ICollection<ColumnDefinition>.CopyTo(ColumnDefinition[] array, int arrayIndex) {
-			CopyTo(array, arrayIndex);
-		}
-
-		int ICollection<ColumnDefinition>.Count {
-			get { return Count; }
-		}
-
-		bool ICollection<ColumnDefinition>.IsReadOnly {
-			get { return IsReadOnly; }
-		}
-
-		bool ICollection<ColumnDefinition>.Remove(ColumnDefinition item) {
-			return Remove(item);
 		}
 		#endregion
 
