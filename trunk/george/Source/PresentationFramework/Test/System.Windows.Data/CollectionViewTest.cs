@@ -502,6 +502,20 @@ namespace System.Windows.Data {
 			Assert.AreEqual(c.IndexOf(1), 0, "3");
 			Assert.AreEqual(c.IndexOf(2), 1, "4");
 		}
+
+		#region IndexOfFilter
+		[Test]
+		public void IndexOfFilter() {
+			CollectionView c = new CollectionView(new object[] { -1, 1 });
+			c.Filter = IndexOfFilterFilter;
+			Assert.AreEqual(c.IndexOf(-1), -1, "1");
+			Assert.AreEqual(c.IndexOf(1), 0, "2");
+		}
+
+		bool IndexOfFilterFilter(object item) {
+			return (int)item > 0;
+		}
+		#endregion
 		#endregion
 
 		#region PassesFilter
