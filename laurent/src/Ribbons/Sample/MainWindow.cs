@@ -5,30 +5,39 @@ using Ribbons;
 
 namespace Sample
 {
-	public class MainWindow : Window
+	public class MainWindow : SyntheticWindow
 	{
 		protected bool composeAvailable = false;
 		
-		protected Button button0;
 		protected Ribbon ribbon;
 		protected RibbonGroup group0, group1;
 		
+		protected Label pageLabel1;
+		
 		public MainWindow() : base (WindowType.Toplevel)
 		{
+			AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
 			VBox master = new VBox ();
+			master.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			Title = "Ribbons Sample";
 			AppPaintable = true;
 			
-			button0 = new Button ();
-			button0.Label = "Hello World";
+			Ribbons.Button button0 = new Ribbons.Button ("Hello World");
 			
 			group0 = new RibbonGroup ();
 			group0.Label = "Summer of Code";
 			group0.Child = button0;
 			
+			Ribbons.ToolPack toolPack = new Ribbons.ToolPack ();
+			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
+			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Open, "Open", false));
+			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, "Save", false));
+			
 			group1 = new RibbonGroup ();
 			group1.Label = "I will be back";
+			group1.Child = toolPack;
 			
 			HBox page0 = new HBox (false, 2);
 			page0.PackStart (group0, false, false, 0);
@@ -39,13 +48,30 @@ namespace Sample
 			HBox page2 = new HBox (false, 2);
 			
 			Label pageLabel0 = new Label ("Page 1");
-			Label pageLabel1 = new Label ("Page 2");
+			pageLabel1 = new Label ("Page 2");
 			Label pageLabel2 = new Label ("Page 3");
 			
+			Ribbons.Button shortcuts = new Ribbons.Button ("Menu");
+			shortcuts.Child.ModifyFg (Gtk.StateType.Normal, new Gdk.Color(255, 255, 255));
+			
 			ribbon = new Ribbon ();
+			ribbon.Shortcuts = shortcuts;
 			ribbon.AppendPage (page0, pageLabel0);
 			ribbon.AppendPage (page1, pageLabel1);
 			ribbon.AppendPage (page2, pageLabel2);
+			pageLabel1.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			pageLabel1.ButtonPressEvent += delegate(object sender, ButtonPressEventArgs e)
+			{
+				Console.WriteLine("label1 press");
+			};
+			pageLabel1.EnterNotifyEvent += delegate(object sender, EnterNotifyEventArgs e)
+			{
+				Console.WriteLine("label1 enter");
+			};
+			pageLabel1.LeaveNotifyEvent += delegate(object sender, LeaveNotifyEventArgs e)
+			{
+				Console.WriteLine("label1 leave");
+			};
 			
 			TextView txt = new TextView ();
 			
@@ -62,6 +88,7 @@ namespace Sample
 			this.Resize (200, 200);
 			this.ShowAll ();
 		}
+
 		
 		[GLib.ConnectBefore]
 		private void Window_OnExpose(object sender, ExposeEventArgs args)
@@ -70,9 +97,9 @@ namespace Sample
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
 			
 			if(composeAvailable)
-				cr.SetSourceRGBA (1, 1, 1, 0.3);
+				cr.SetSourceRGBA (0, 0, 0, 0.3);
 			else
-				cr.SetSourceRGB (0, 0, 0);
+				cr.SetSourceRGB (0.3, 0.3, 0.3);
 			
 			cr.Operator = Operator.Source;
 			cr.Paint ();
