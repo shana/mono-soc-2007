@@ -23,9 +23,6 @@ namespace Mono.Debugger.Frontend
 		internal const int ColumnValue    = 3;
 		internal const int ColumnType     = 4;
 		
-		const string imageBase = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.";
-		Gdk.Pixbuf imageField = Gdk.Pixbuf.LoadFromResource(imageBase + "PublicField");
-		
 		public LocalsPad(Interpreter interpreter)
 		{
 			this.interpreter = interpreter;

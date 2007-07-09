@@ -12,6 +12,10 @@ namespace Mono.Debugger.Frontend.TreeModel
 		StackFrame stackFrame;
 		TargetClassObject obj;
 		
+		public override Gdk.Pixbuf Image {
+			get { return Pixmaps.PublicClass; }
+		}
+		
 		public override string Name {
 			get { return name; }
 		}

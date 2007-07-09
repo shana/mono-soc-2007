@@ -81,16 +81,15 @@ namespace Mono.Debugger.Frontend
 			gxml.Autoconnect(this);
 			
 			// Load icons
-			string imageBase = "Mono.Debugger.Frontend.pixmaps.";
-			toolbuttonRun.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.Start.png");
+			toolbuttonRun.IconWidget = new Image(Pixmaps.DebugStart);
 			toolbuttonRun.IconWidget.Show();
-			toolbuttonStop.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StopProcess.png");
+			toolbuttonStop.IconWidget = new Image(Pixmaps.DebugStopProcess);
 			toolbuttonStop.IconWidget.Show();
-			toolbuttonStepIn.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StepInto.png");
+			toolbuttonStepIn.IconWidget = new Image(Pixmaps.DebugStepInto);
 			toolbuttonStepIn.IconWidget.Show();
-			toolbuttonStepOver.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StepOver.png");
+			toolbuttonStepOver.IconWidget = new Image(Pixmaps.DebugStepOver);
 			toolbuttonStepOver.IconWidget.Show();
-			toolbuttonStepOut.IconWidget = Image.LoadFromResource(imageBase + "Icons.16x16.Debug.StepOut.png");
+			toolbuttonStepOut.IconWidget = new Image(Pixmaps.DebugStepOut);
 			toolbuttonStepOut.IconWidget.Show();
 			
 			// Default source view
