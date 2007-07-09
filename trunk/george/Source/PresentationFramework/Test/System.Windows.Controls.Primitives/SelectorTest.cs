@@ -61,9 +61,10 @@ namespace System.Windows.Controls.Primitives {
 		
 		class OnSelectionChangedSelector : Selector {
 			int calls;
+			object o = new object();
 
 			public OnSelectionChangedSelector() {
-				Items.Add(new object());
+				Items.Add(o);
 				Assert.AreEqual(calls, 0, "1");
 				SelectedIndex = 0;
 				Assert.AreEqual(calls, 1, "2");
@@ -72,6 +73,9 @@ namespace System.Windows.Controls.Primitives {
 			protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
 				calls++;
 				base.OnSelectionChanged(e);
+				Assert.AreEqual(e.AddedItems.Count, 1, "3");
+				Assert.AreEqual(e.AddedItems[0], o, "4");
+				Assert.AreEqual(e.RemovedItems.Count, 0, "5");
 			}
 		}
 		#endregion
