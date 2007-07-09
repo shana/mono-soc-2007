@@ -4,7 +4,6 @@
     <images-root-path>../</images-root-path>
   </configuration>
   <import>
-    <widget-library name="../../MonoDevelop.Database.Query/bin/Debug/MonoDevelop.Database.Query.dll" />
     <widget-library name="../../MonoDevelop.Database.Visualization/bin/Debug/MonoDevelop.Database.Visualization.dll" />
   </import>
   <widget class="Gtk.Dialog" id="MonoDevelop.Database.ConnectionManager.NewConnectionDialog" design-size="427 556">

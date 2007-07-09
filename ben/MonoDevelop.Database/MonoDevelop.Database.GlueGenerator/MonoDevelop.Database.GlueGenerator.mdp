@@ -1,20 +1,20 @@
 <Project name="MonoDevelop.Database.GlueGenerator" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" signAssembly="False" assembly="MonoDevelop.Database.Designer" />
+      <Output directory="./bin/Debug" signAssembly="False" assembly="MonoDevelop.Database.GlueGenerator" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" signAssembly="False" assembly="MonoDevelop.Database.Designer" />
+      <Output directory="./bin/Release" signAssembly="False" assembly="MonoDevelop.Database.GlueGenerator" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
   </Configurations>
   <Contents>
-    <File name="./MonoDevelop.Database.Designer.addin.xml" subtype="Code" buildaction="FileCopy" />
+    <File name="./MonoDevelop.Database.GlueGenerator.addin.xml" subtype="Code" buildaction="FileCopy" />
     <File name="./MyClass.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
