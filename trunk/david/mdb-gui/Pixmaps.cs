@@ -15,6 +15,8 @@ namespace Mono.Debugger.Frontend
 		public static Gdk.Pixbuf DebugStepOver    = Load("Debug.StepOver.png");
 		public static Gdk.Pixbuf DebugStopProcess = Load("Debug.StopProcess.png");
 		
+		public static Gdk.Pixbuf Empty = Load("Empty.png");
+		public static Gdk.Pixbuf Arrow = Load("Arrow.png");
 		public static Gdk.Pixbuf Error = Load("Error.png");
 		
 		public static Gdk.Pixbuf PublicClass     = Load("PublicClass");

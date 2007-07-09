@@ -20,7 +20,7 @@ namespace Mono.Debugger.Frontend
 		Hashtable threadRows;
 		
 		string[] columnHeaders = new string[] {
-			" ",
+			"",
 			"ID",
 			"PID",
 			"TID",
@@ -28,7 +28,17 @@ namespace Mono.Debugger.Frontend
 			"State",
 			"Current Location"
 		};
-
+		
+		Type[] columnTypes = new Type[] {
+			typeof (Gdk.Pixbuf),
+			typeof (int),
+			typeof (int),
+			typeof (string),
+			typeof (string),
+			typeof (string),
+			typeof (string)
+		};
+		
 		public ThreadPad (Interpreter interpreter)
 		{
 			this.interpreter = interpreter;
@@ -37,21 +47,24 @@ namespace Mono.Debugger.Frontend
 			
 			this.ShadowType = ShadowType.In;
 			
-			store = new TreeStore (
-				typeof (string),
-				typeof (int),
-				typeof (int),
-				typeof (string),
-				typeof (string),
-				typeof (string),
-				typeof (string)
-			);
+			store = new TreeStore(columnTypes);
 			
 			tree = new TreeView (store);
 			tree.RulesHint = true;
 			tree.HeadersVisible = true;
 			
-			for(int i = 0; i < columnHeaders.Length; i++) {
+			{
+				TreeViewColumn column = new TreeViewColumn ();
+				CellRenderer iconRenderer = new CellRendererPixbuf ();
+				column.Title = columnHeaders[0];
+				column.PackStart (iconRenderer, false);
+				column.AddAttribute (iconRenderer, "pixbuf", 0);
+				column.Resizable = true;
+				column.Alignment = 0.0f;
+				tree.AppendColumn (column);
+			}
+			
+			for(int i = 1; i < columnHeaders.Length; i++) {
 				TreeViewColumn column = new TreeViewColumn ();
 				CellRenderer renderer = new CellRendererText ();
 				column.Title = columnHeaders[i];
@@ -98,7 +111,7 @@ namespace Mono.Debugger.Frontend
 					location = "";
 				}
 				
-				store.SetValue (it, 0, current ? "*" : " ");
+				store.SetValue (it, 0, current ? Pixmaps.Arrow : Pixmaps.Empty);
 				store.SetValue (it, 1, thread.ID);
 				store.SetValue (it, 2, thread.PID);
 				store.SetValue (it, 3, String.Format("{0:x}", thread.TID));
