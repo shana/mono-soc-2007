@@ -7,6 +7,7 @@ class TestApp
 		int[,] array = new int[32,4];
 		Colours myColour = Colours.Green | Colours.Blue;
 		TestClass testClass = new TestClass();
+		testClass.TestFun(543, "asdf");
 		Fun1();
 	}
 	
@@ -44,4 +45,9 @@ public class TestClass
 	public bool _bool = true;
 	public double _double = 3.14;
 	public int[] _array = {1, 2, 3};
+	
+	public void TestFun(int i, string s)
+	{
+		Console.WriteLine(i + s);
+	}
 }

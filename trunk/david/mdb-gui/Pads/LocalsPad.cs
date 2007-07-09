@@ -96,9 +96,19 @@ namespace Mono.Debugger.Frontend
 			StackFrame currentFrame = currentThread.CurrentFrame;
 			
 			store.Clear();
-			TargetVariable[] localVars = currentFrame.Locals;
-			foreach (TargetVariable variable in localVars) {
+			
+			foreach (TargetVariable variable in currentFrame.Method.Parameters) {
 				AbstractNode node = NodeFactory.Create(variable, currentFrame);
+				AppendNode(null, node);
+			}
+				
+			foreach (TargetVariable variable in currentFrame.Locals) {
+				AbstractNode node = NodeFactory.Create(variable, currentFrame);
+				AppendNode(null, node);
+			}
+			
+			if (currentFrame.Method.HasThis) {
+				AbstractNode node = NodeFactory.Create(currentFrame.Method.This, currentFrame);
 				AppendNode(null, node);
 			}
 		}
