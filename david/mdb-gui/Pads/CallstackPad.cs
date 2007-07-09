@@ -14,6 +14,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class CallstackPad : Gtk.ScrolledWindow
 	{
+		MdbGui mdbGui;
 		Interpreter interpreter;
 		
 		const int ColumnSelected = 0;
@@ -41,9 +42,10 @@ namespace Mono.Debugger.Frontend
 		Gtk.TreeView tree;
 		Gtk.TreeStore store;
 
-		public CallstackPad (Interpreter interpreter)
+		public CallstackPad(MdbGui mdbGui)
 		{
-			this.interpreter = interpreter;
+			this.mdbGui = mdbGui;
+			this.interpreter = mdbGui.Interpreter;
 			
 			this.ShadowType = ShadowType.In;
 			
@@ -77,7 +79,8 @@ namespace Mono.Debugger.Frontend
 			
 			Add (tree);
 			ShowAll ();
-
+			
+			tree.RowActivated += new RowActivatedHandler(RowActivated);
 //			Services.DebuggingService.PausedEvent += (EventHandler) Services.DispatchService.GuiDispatch (new EventHandler (OnPausedEvent));
 //			Services.DebuggingService.ResumedEvent += (EventHandler) Services.DispatchService.GuiDispatch (new EventHandler (OnResumedEvent));
 //			Services.DebuggingService.StoppedEvent += (EventHandler) Services.DispatchService.GuiDispatch (new EventHandler (OnStoppedEvent));
@@ -88,7 +91,18 @@ namespace Mono.Debugger.Frontend
 //			window.Title = "Call Stack";
 //			window.Icon = Stock.OutputIcon;
 //		}
-
+		
+		void RowActivated(object sender, RowActivatedArgs args)
+		{
+			if (interpreter.HasCurrentThread &&
+			    interpreter.CurrentThread.GetBacktrace() != null) {
+				
+				int newIndex = args.Path.Indices[0];
+				interpreter.CurrentThread.GetBacktrace().CurrentFrameIndex = newIndex;
+				mdbGui.UpdateGUI();
+			}
+		}
+		
 		public void UpdateDisplay ()
 		{
 			if (!interpreter.HasCurrentThread ||

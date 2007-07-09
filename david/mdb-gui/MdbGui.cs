@@ -40,6 +40,10 @@ namespace Mono.Debugger.Frontend
 		CallstackPad callstackPad;
 		ThreadPad threadPad;
 		
+		public Interpreter Interpreter {
+			get { return interpreter; }
+		}
+		
 		public static void Main(string[] args)
 		{
 			new MdbGui(args);
@@ -99,11 +103,11 @@ namespace Mono.Debugger.Frontend
 			sourceView.Buffer.Text = "No source file";
 			
 			// Load pads
-			callstackPad = new CallstackPad(interpreter);
+			callstackPad = new CallstackPad(this);
 			viewportCallstack.Add(callstackPad);
-			threadPad = new ThreadPad(interpreter);
+			threadPad = new ThreadPad(this);
 			viewportThreads.Add(threadPad);
-			localsPad = new LocalsPad(interpreter);
+			localsPad = new LocalsPad(this);
 			viewportLocalVariables.Add(localsPad);
 			
 			consoleIn.GrabFocus();
