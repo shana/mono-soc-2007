@@ -33,145 +33,262 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public abstract class BaseNode
 	{
-		protected ConnectionContext context;
+		public event EventHandler RefreshEvent;
+		protected ConnectionSettings settings;
 		
-		public BaseNode (ConnectionContext context)
+		public BaseNode (ConnectionSettings settings)
 		{
-			if (context == null)
-				throw new ArgumentNullException ("context");
+			if (settings == null)
+				throw new ArgumentNullException ("settings");
 			
-			this.context = context;
+			this.settings = settings;
 		}
 		
-		public ConnectionContext Context {
-			get { return context; }
+		public ConnectionSettings Settings {
+			get { return settings; }
+		}
+		
+		public void Refresh ()
+		{
+			if (RefreshEvent != null)
+				RefreshEvent (this, EventArgs.Empty);
+		}
+	}
+	
+	public class TableNode : BaseNode
+	{
+		protected TableSchema table;
+		
+		public TableNode (ConnectionSettings settings, TableSchema table)
+			: base (settings)
+		{
+			if (table == null)
+				throw new ArgumentNullException ("table");
+			
+			this.table = table;
+		}
+		
+		public TableSchema Table {
+			get { return table; }
 		}
 	}
 	
 	public class TablesNode : BaseNode
 	{
-		public TablesNode (ConnectionContext context)
-			: base (context)
+		public TablesNode (ConnectionSettings settings)
+			: base (settings)
 		{
+		}
+	}
+	
+	public class ViewNode : BaseNode
+	{
+		protected ViewSchema view;
+		
+		public ViewNode (ConnectionSettings settings, ViewSchema view)
+			: base (settings)
+		{
+			if (view == null)
+				throw new ArgumentNullException ("view");
+			
+			this.view = view;
+		}
+		
+		public ViewSchema View {
+			get { return view; }
 		}
 	}
 	
 	public class ViewsNode : BaseNode
 	{
-		public ViewsNode (ConnectionContext context)
-			: base (context)
+		public ViewsNode (ConnectionSettings settings)
+			: base (settings)
 		{
+		}
+	}
+	
+	public class ProcedureNode : BaseNode
+	{
+		protected ProcedureSchema procedure;
+		
+		public ProcedureNode (ConnectionSettings settings, ProcedureSchema procedure)
+			: base (settings)
+		{
+			if (procedure == null)
+				throw new ArgumentNullException ("procedure");
+			
+			this.procedure = procedure;
+		}
+		
+		public ProcedureSchema Procedure {
+			get { return procedure; }
 		}
 	}
 	
 	public class ProceduresNode : BaseNode
 	{
-		public ProceduresNode (ConnectionContext context)
-			: base (context)
+		public ProceduresNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 	
 	public class AggregatesNode : BaseNode
 	{
-		public AggregatesNode (ConnectionContext context)
-			: base (context)
+		public AggregatesNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 	
 	public class GroupsNode : BaseNode
 	{
-		public GroupsNode (ConnectionContext context)
-			: base (context)
+		public GroupsNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 	
 	public class LanguagesNode : BaseNode
 	{
-		public LanguagesNode (ConnectionContext context)
-			: base (context)
+		public LanguagesNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 	
 	public class OperatorsNode : BaseNode
 	{
-		public OperatorsNode (ConnectionContext context)
-			: base (context)
+		public OperatorsNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 	
 	public class RulesNode : BaseNode
 	{
-		public RulesNode (ConnectionContext context)
-			: base (context)
+		public RulesNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 
 	public class RolesNode : BaseNode
 	{
-		public RolesNode (ConnectionContext context)
-			: base (context)
+		public RolesNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 	
 	public class SequencesNode : BaseNode
 	{
-		public SequencesNode (ConnectionContext context)
-			: base (context)
+		public SequencesNode (ConnectionSettings settings)
+			: base (settings)
 		{
+		}
+	}
+	
+	public class UserNode : BaseNode
+	{
+		protected UserSchema user;
+		
+		public UserNode (ConnectionSettings settings, UserSchema user)
+			: base (settings)
+		{
+			if (user == null)
+				throw new ArgumentNullException ("user");
+			
+			this.user = user;
+		}
+		
+		public UserSchema User {
+			get { return user; }
 		}
 	}
 	
 	public class UsersNode : BaseNode
 	{
-		public UsersNode (ConnectionContext context)
-			: base (context)
+		public UsersNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 
 	public class TypesNode : BaseNode
 	{
-		public TypesNode (ConnectionContext context)
-			: base (context)
+		public TypesNode (ConnectionSettings settings)
+			: base (settings)
 		{
+		}
+	}
+	
+	public class ColumnNode : BaseNode
+	{
+		protected ColumnSchema column;
+		
+		public ColumnNode (ConnectionSettings settings, ColumnSchema column)
+			: base (settings)
+		{
+			if (column == null)
+				throw new ArgumentNullException ("column");
+			
+			this.column = column;
+		}
+		
+		public ColumnSchema Column {
+			get { return column; }
 		}
 	}
 
 	public class ColumnsNode : BaseNode
 	{
-		public ColumnsNode (ConnectionContext context)
-			: base (context)
+		protected TableSchema table;
+		
+		public ColumnsNode (ConnectionSettings settings, TableSchema table)
+			: base (settings)
 		{
+			if (table == null)
+				throw new ArgumentNullException ("table");
+			
+			this.table = table;
+		}
+		
+		public TableSchema Table {
+			get { return table; }
 		}
 	}
 	
 	public class ConstraintsNode : BaseNode
 	{
-		public ConstraintsNode (ConnectionContext context)
-			: base (context)
+		protected TableSchema table;
+		
+		public ConstraintsNode (ConnectionSettings settings, TableSchema table)
+			: base (settings)
 		{
+			if (table == null)
+				throw new ArgumentNullException ("table");
+			
+			this.table = table;
+		}
+		
+		public TableSchema Table {
+			get { return table; }
 		}
 	}
 	
 	public class TriggersNode : BaseNode
 	{
-		public TriggersNode (ConnectionContext context)
-			: base (context)
+		public TriggersNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}
 	
 	public class ParametersNode : BaseNode
 	{
-		public ParametersNode (ConnectionContext context)
-			: base (context)
+		public ParametersNode (ConnectionSettings settings)
+			: base (settings)
 		{
 		}
 	}

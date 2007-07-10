@@ -1,3 +1,9 @@
+2007-07-10  Ben Motmans <ben.motmans@gmail.com>
+
+	* NewConnectionDialog.cs: moved to Components project
+	* NodeBuilders/*.cs: bugfixes + command implementations
+	* FakeNodes.cs: Refresh event + additional properties in some fake nodes
+
 2007-07-05  Ben Motmans <ben.motmans@gmail.com>
 
 	* NewConnectionDialog.cs: small bugfixes

@@ -19,20 +19,20 @@
 		<Addin id="Database.Query" version="0.14.0"/>
 		<Addin id="Database.Visualization" version="0.14.0"/>
 	</Dependencies>
-
-	<Extension path = "/Workspace/Services">
-		<Class id = "ConnectionManagerService" class = "MonoDevelop.Database.ConnectionManager.ConnectionManagerService"/>
-	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads">
 		<SolutionPad id = "ConnectionManagerPad" class = "MonoDevelop.Database.ConnectionManager.ConnectionManagerPad" defaultPlacement = "Left" _label = "Database Browser" icon = "md-db-database">
-			<PadOption id = "ShowSystemObjects" _label = "Show System Objects" defaultValue = "False"/>
+			<PadOption id = "ShowSystemObjects" _label = "Show System Objects" defaultValue = "True"/>
 			<NodeBuilder id = "ConnectionCollectionNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionCollectionNodeBuilder"/>
-			<NodeBuilder id = "ConnectionContextNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionContextNodeBuilder"/>
+			<NodeBuilder id = "ConnectionSettingsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionSettingsNodeBuilder"/>
 			<NodeBuilder id = "TablesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TablesNodeBuilder"/>
 			<NodeBuilder id = "ViewsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ViewsNodeBuilder"/>
 			<NodeBuilder id = "UsersNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.UsersNodeBuilder"/>
 			<NodeBuilder id = "ProceduresNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ProceduresNodeBuilder"/>
+			<NodeBuilder id = "TableNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TableNodeBuilder"/>
+			<NodeBuilder id = "ViewNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ViewNodeBuilder"/>
+			<NodeBuilder id = "UserNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.UserNodeBuilder"/>
+			<NodeBuilder id = "ProcedureNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ProcedureNodeBuilder"/>
 		</SolutionPad>
 	</Extension>
 
@@ -64,14 +64,113 @@
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TableNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProcedureNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UserNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ColumnsNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ColumnNode">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
 	<Extension path = "/SharpDevelop/Commands">
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AddConnection"
 			defaultHandler = "MonoDevelop.Database.ConnectionManager.AddConnectionHandler"
 			_label = "Add connection"
-			icon = "md-db-connection-add"/>
+			icon = "gtk-add"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EditConnection"
+			_label = "Edit connection"
+			icon = "gtk-edit"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RemoveConnection"
+			_label = "Remove"
+			icon = "gtk-remove"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RefreshConnection"
+			_label = "Refresh"
+			icon = "gtk-refresh"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"
+			_label = "Refresh"
+			icon = "gtk-refresh"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DisconnectConnection"
+			_label = "Disconnect"
+			icon = "gtk-disconnect"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectAll"
+			_label = "Select *"
+			icon = "md-db-execute"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectColumns"
+			_label = "Select x,y,..."
+			icon = "md-db-execute"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EmptyTable"
+			_label = "Empty table"
+			icon = "gtk-clear"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropTable"
+			_label = "Drop table"
+			icon = "gtk-remove"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Query"
+			_label = "Query"
+			icon = "md-db-execute"/>
 	</Extension>
-	
+
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AddConnection"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RefreshConnection"/>
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DisconnectConnection"/>
+		<SeparatorItem />
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EditConnection"/>
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RemoveConnection"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TablesNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewsNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProceduresNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UsersNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TableNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectAll"/>
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectColumns"/>
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
+		<SeparatorItem />
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EmptyTable"/>
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropTable"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectAll"/>
 	</Extension>
 </Addin>
