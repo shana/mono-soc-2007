@@ -150,7 +150,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 				AbstractNode[] childs = new AbstractNode[groupCount];
 				for(int i = 0; i < groupCount; i++) {
 					int start = startIndex + i * groupSize;
-					int end = Math.Min(upperBound, start + groupSize - 1);
+					int end = System.Math.Min(upperBound, start + groupSize - 1);
 					childs[i] = new ArraySubsetNode(stackFrame, obj, indicesPefix, start, end);
 				}
 				return childs;

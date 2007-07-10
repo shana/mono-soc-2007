@@ -3,8 +3,6 @@ class TestApp
 {
 	public static void Main(string[] args)
 	{
-		object box = 12;
-		int[,,] array = new int[2,2,2];
 		Colours myColour = Colours.Green | Colours.Blue;
 		TestClass testClass = new TestClass();
 		testClass.TestFun(543, "asdf");
@@ -50,7 +48,7 @@ public class TestClass: MyClass
 	//public string _string = "text";
 	public bool _bool = true;
 	public double _double = 3.14;
-	public int[] _array = {1, 2, 3};
+	public int[,] _array = {{1,2}, {3,4}, {5,6}};
 	
 	public void TestFun(int i, string s)
 	{
