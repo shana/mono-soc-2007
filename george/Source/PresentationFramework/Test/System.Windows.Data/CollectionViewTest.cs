@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Reflection;
 #if Implementation
 namespace Mono.System.Windows.Data {
 #else
@@ -501,6 +502,8 @@ namespace System.Windows.Data {
 			Assert.AreEqual(c.IndexOf(0), -1, "2");
 			Assert.AreEqual(c.IndexOf(1), 0, "3");
 			Assert.AreEqual(c.IndexOf(2), 1, "4");
+			c = new CollectionView(new object[] { null });
+			Assert.AreEqual(c.IndexOf(null), 0, "5");
 		}
 
 		#region IndexOfFilter
@@ -516,6 +519,144 @@ namespace System.Windows.Data {
 			return (int)item > 0;
 		}
 		#endregion
+		#endregion
+
+		#region MoveCurrentTo
+		[Test]
+		public void MoveCurrentTo() {
+			CollectionView c = new CollectionView(new object[] { 1, 2 });
+			Assert.IsTrue(c.MoveCurrentTo(2), "1");
+			Assert.AreEqual(c.CurrentItem, 2, "2");
+			Assert.AreEqual(c.CurrentPosition, 1, "3");
+			Assert.IsFalse(c.MoveCurrentTo(null), "4");
+			Assert.IsNull(c.CurrentItem, "5");
+			Assert.AreEqual(c.CurrentPosition, -1, "6");
+			Assert.IsFalse(c.MoveCurrentTo(3), "7");
+			Assert.IsNull(c.CurrentItem, "8");
+			Assert.AreEqual(c.CurrentPosition, -1, "9");
+			c = new CollectionView(new object[] { null, 1 });
+			Assert.IsNull(c.CurrentItem, "10");
+			Assert.AreEqual(c.CurrentPosition, 0, "11");
+			Assert.IsTrue(c.MoveCurrentTo(1), "12");
+			Assert.AreEqual(c.CurrentItem, 1, "13");
+			Assert.AreEqual(c.CurrentPosition, 1, "14");
+			Assert.IsTrue(c.MoveCurrentTo(null), "15");
+			Assert.IsNull(c.CurrentItem, "16");
+			Assert.AreEqual(c.CurrentPosition, 0, "17");
+			c = new CollectionView(new object[] { -1, 1 });
+			c.Filter = MoveCurrentToFilter;
+			Assert.AreEqual(c.CurrentItem, -1, "18");
+			Assert.AreEqual(c.CurrentPosition, 0, "19");
+			Assert.IsTrue(c.MoveCurrentTo(-1), "20");
+			Assert.AreEqual(c.CurrentItem, -1, "21");
+			Assert.AreEqual(c.CurrentPosition, 0, "22");
+		}
+
+		bool MoveCurrentToFilter(object item) {
+			return (int)item > 0;
+		}
+		#endregion
+
+		#region MoveCurrentToFirst
+		[Test]
+		public void MoveCurrentToFirst() {
+			CollectionView c = new CollectionView(new object[] { 1, 2 });
+			c.MoveCurrentTo(2);
+			Assert.IsTrue(c.MoveCurrentToFirst(), "1");
+			Assert.AreEqual(c.CurrentItem, 1, "2");
+			Assert.AreEqual(c.CurrentPosition, 0, "3");
+			c = new CollectionView(new object[] { });
+			Assert.AreEqual(c.CurrentPosition, -1, "4");
+			Assert.IsFalse(c.MoveCurrentToFirst(), "5");
+			Assert.IsNull(c.CurrentItem, "6");
+			// Why?
+			Assert.AreEqual(c.CurrentPosition, 0, "7");
+		}
+
+		[Test]
+		public void MoveCurrentToFirstFilter() {
+			CollectionView c = new CollectionView(new object[] { -1, 1 });
+			c.Filter = MoveCurrentToFirstFilterFilter;
+			Assert.IsTrue(c.MoveCurrentToFirst(), "1");
+			Assert.AreEqual(c.CurrentItem, -1, "2");
+			Assert.AreEqual(c.CurrentPosition, 0, "3");
+		}
+
+		bool MoveCurrentToFirstFilterFilter(object item) {
+			return (int)item > 0;
+		}
+		#endregion
+
+		#region MoveCurrentToLast
+		[Test]
+		public void MoveCurrentToLast() {
+			CollectionView c = new CollectionView(new object[] { 1, 2 });
+			Assert.IsTrue(c.MoveCurrentToLast(), "1");
+			Assert.AreEqual(c.CurrentItem, 2, "2");
+			Assert.AreEqual(c.CurrentPosition, 1, "3");
+			c = new CollectionView(new object[] { });
+			Assert.IsFalse(c.MoveCurrentToLast(), "4");
+			Assert.IsNull(c.CurrentItem, "5");
+			Assert.AreEqual(c.CurrentPosition, -1, "6");
+		}
+		#endregion
+
+		#region MoveCurrentToNext
+		[Test]
+		public void MoveCurrentToNext() {
+			CollectionView c = new CollectionView(new object[] { 1, 2 });
+			Assert.IsTrue(c.MoveCurrentToNext(), "1");
+			Assert.AreEqual(c.CurrentItem, 2, "2");
+			Assert.AreEqual(c.CurrentPosition, 1, "3");
+			Assert.IsFalse(c.MoveCurrentToNext(), "4");
+			Assert.IsNull(c.CurrentItem, "5");
+			// Why?
+			Assert.AreEqual(c.CurrentPosition, 2, "6");
+		}
+		#endregion
+
+		#region MoveCurrentToPosition
+		[Test]
+		public void MoveCurrentToPosition() {
+			CollectionView c = new CollectionView(new object[] { 1, 2 });
+			Assert.IsTrue(c.MoveCurrentToPosition(1), "1");
+			Assert.AreEqual(c.CurrentItem, 2, "2");
+			Assert.AreEqual(c.CurrentPosition, 1, "3");
+			Assert.IsFalse(c.MoveCurrentToPosition(2), "4");
+			Assert.AreEqual(c.CurrentItem, null, "5");
+			Assert.AreEqual(c.CurrentPosition, 2, "6");
+			try {
+				c.MoveCurrentToPosition(3);
+				Assert.Fail("7");
+			} catch (ArgumentOutOfRangeException ex) {
+				Assert.AreEqual(ex.ParamName, "position", "8");
+			}
+			Assert.AreEqual(c.CurrentItem, null, "9");
+			Assert.AreEqual(c.CurrentPosition, 2, "10");
+		}
+		#endregion
+
+		#region MoveCurrentToPrevious
+		[Test]
+		public void MoveCurrentToPrevious() {
+			CollectionView c = new CollectionView(new object[] { 1, 2 });
+			Assert.IsFalse(c.MoveCurrentToPrevious(), "1");
+			Assert.IsNull(c.CurrentItem, "2");
+			Assert.AreEqual(c.CurrentPosition, -1, "3");
+			Assert.IsFalse(c.MoveCurrentToPrevious(), "4");
+			Assert.IsNull(c.CurrentItem, "5");
+			Assert.AreEqual(c.CurrentPosition, -1, "6");
+			c = new CollectionView(new object[] { 1, 2 });
+			c.MoveCurrentTo(2);
+			Assert.AreEqual(c.CurrentItem, 2, "8");
+			Assert.AreEqual(c.CurrentPosition, 1, "9");
+			Assert.IsTrue(c.MoveCurrentToPrevious(), "10");
+			Assert.AreEqual(c.CurrentItem, 1, "11");
+			Assert.AreEqual(c.CurrentPosition, 0, "12");
+			Assert.IsFalse(c.MoveCurrentToPrevious(), "13");
+			Assert.IsNull(c.CurrentItem, "14");
+			Assert.AreEqual(c.CurrentPosition, -1, "15");
+		}
 		#endregion
 
 		#region PassesFilter
@@ -552,6 +693,151 @@ namespace System.Windows.Data {
 			return false;
 		}
 		#endregion
+		#endregion
+
+		#region GetEnumerator
+		[Test]
+		public void GetEnumerator() {
+			new GetEnumeratorCollectionView();
+		}
+
+		class GetEnumeratorCollectionView : CollectionView {
+			static int calls;
+			static int source_collection_calls;
+
+			public GetEnumeratorCollectionView()
+				: base(new TestEnumerable()) {
+				Assert.AreEqual(calls, 1, "1");
+				Assert.AreEqual(source_collection_calls, 0, "2");
+				GetEnumerator();
+				Assert.AreEqual(calls, 2, "4");
+				Assert.AreEqual(source_collection_calls, 1, "4");
+			}
+
+			public override IEnumerable SourceCollection {
+				get {
+					source_collection_calls++;
+					return base.SourceCollection;
+				}
+			}
+
+			class TestEnumerable : IEnumerable {
+				public IEnumerator GetEnumerator() {
+					calls++;
+					return new object[] { }.GetEnumerator();
+				}
+			}
+		}
+		#endregion
+
+		#region OKToChangeCurrent
+		[Test]
+		public void OKToChangeCurrent() {
+			new OKToChangeCurrentCollectionView();
+		}
+
+		class OKToChangeCurrentCollectionView : CollectionView {
+			public OKToChangeCurrentCollectionView()
+				: base(new object[] { 1, 2 }) {
+				Assert.IsTrue(OKToChangeCurrent(), "1");
+			}
+		}
+		#endregion
+
+		#region OnCollectionChanged
+		[Test]
+		public void OnCollectionChanged() {
+			new OnCollectionChagedCollectionView();
+		}
+
+		class OnCollectionChagedCollectionView : CollectionView {
+			public OnCollectionChagedCollectionView()
+				: base(new object[] { 1, 2 }) {
+				Assert.AreEqual(GetHandlerCount(), 0);
+			}
+
+			public int GetHandlerCount() {
+				EventHandler handler = (EventHandler)typeof(CollectionView).GetField("CollectionChanged", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(this);
+				if (handler == null)
+					return 0;
+				return handler.GetInvocationList().GetLength(0);
+			}
+		}
+		#endregion
+
+		#region OnCurrentChanged
+		class OnCurrentChangedCollectionView : CollectionView {
+			int calls;
+
+			public OnCurrentChangedCollectionView()
+				: base(new object[] { 1, 2 }) {
+				CurrentChanged += OnCurrentChanged;
+				OnCurrentChanged();
+				Assert.AreEqual(calls, 1);
+			}
+
+			void OnCurrentChanged(object sender, EventArgs e) {
+				calls++;
+			}
+		}
+		#endregion
+
+		#region OnCurrentChanging
+		[Test]
+		public void OnCurrentChanging() {
+			new OnCurrentChangingCollectionView();
+		}
+
+		class OnCurrentChangingCollectionView : CollectionView {
+			int calls;
+			int on_calls;
+
+			public OnCurrentChangingCollectionView()
+				: base(new object[] { 1, 2 }) {
+				CurrentChanging += OnCurrentChanging;
+				OnCurrentChanging();
+				Assert.AreEqual(CurrentPosition, -1, "1");
+				Assert.AreEqual(calls, 1, "2");
+				Assert.AreEqual(on_calls, 1, "3");
+			}
+
+			void OnCurrentChanging(object sender, CurrentChangingEventArgs e) {
+				Assert.AreEqual(CurrentPosition, -1, "3");
+				Assert.IsFalse(e.IsCancelable, "4");
+				calls++;
+			}
+
+			protected override void OnCurrentChanging(CurrentChangingEventArgs args) {
+				base.OnCurrentChanging(args);
+				on_calls++;
+			}
+
+		}
+		#endregion
+
+		#region SetCurrent
+		[Test]
+		public void SetCurrent() {
+			new SetCurrentCollectionView();
+		}
+
+		class SetCurrentCollectionView : CollectionView {
+			public SetCurrentCollectionView()
+				: base(new object[] { 1, 2 }) {
+				SetCurrent(1, 0);
+				Assert.AreEqual(CurrentItem, 1, "1");
+				Assert.AreEqual(CurrentPosition, 0, "2");
+				SetCurrent(2, 1);
+				Assert.AreEqual(CurrentItem, 2, "3");
+				Assert.AreEqual(CurrentPosition, 1, "4");
+				SetCurrent(null, -1);
+				Assert.AreEqual(CurrentItem, null, "5");
+				Assert.AreEqual(CurrentPosition, -1, "6");
+				SetCurrent(3, 2);
+				Assert.AreEqual(CurrentItem, 3, "6");
+				Assert.AreEqual(CurrentPosition, 2, "7");
+			}
+		}
 		#endregion
 	}
 }
