@@ -150,7 +150,6 @@ namespace Mono.Debugger.Frontend
 		
 		protected void OnToolbuttonRun_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("OnToolbuttonRun_clicked");
 			if (interpreter.HasTarget) {
 				Console.WriteLine("Error - alredy running");
 			} else {
@@ -161,7 +160,6 @@ namespace Mono.Debugger.Frontend
 		
 		protected void OnToolbuttonStop_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("OnToolbuttonStop_clicked");
 			if (interpreter.HasCurrentProcess) {
 				new KillCommand().Execute(engine);
 				UpdateGUI();
@@ -172,7 +170,6 @@ namespace Mono.Debugger.Frontend
 		
 		protected void OnToolbuttonStepIn_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("OnToolbuttonStepIn_clicked");
 			if (interpreter.HasCurrentThread) {
 				new StepCommand().Execute(engine);
 				UpdateGUI();
@@ -183,7 +180,6 @@ namespace Mono.Debugger.Frontend
 		
 		public void OnToolbuttonStepOver_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("OnToolbuttonStepOver_clicked");
 			if (interpreter.HasCurrentThread) {
 				new NextCommand().Execute(engine);
 				UpdateGUI();
@@ -194,7 +190,6 @@ namespace Mono.Debugger.Frontend
 		
 		protected void OnToolbuttonStepOut_clicked(object o, EventArgs e) 
 		{
-			Console.WriteLine("OnToolbuttonStepOut_clicked");
 			if (interpreter.HasCurrentThread) {
 				new FinishCommand().Execute(engine);
 				UpdateGUI();
@@ -222,8 +217,6 @@ namespace Mono.Debugger.Frontend
 		
 		public void UpdateGUI()
 		{
-			Console.WriteLine("Updating GUI...");
-			
 			// Update pads - roughly the fastest ones first
 			threadPad.UpdateDisplay();
 			callstackPad.UpdateDisplay();
