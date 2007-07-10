@@ -374,6 +374,7 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("summary:Text");
 		tag.IsText = true;
+		tag.Background =  "#A5C0E6";
 		Add (tag);
 		
 		tag = new DocumentTag ("param");
