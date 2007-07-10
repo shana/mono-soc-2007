@@ -38,8 +38,14 @@ class TestApp
 [Flags]
 enum Colours { Red = 1, Green = 2, Blue = 4 };
 
-public class TestClass
+public class MyClass
 {
+	public int _int = 456;
+}
+
+public class TestClass: MyClass
+{
+	public static int staticInt = 31415;
 	public int _int = 123;
 	//public string _string = "text";
 	public bool _bool = true;
