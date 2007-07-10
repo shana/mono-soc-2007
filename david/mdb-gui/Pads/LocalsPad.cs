@@ -126,14 +126,12 @@ namespace Mono.Debugger.Frontend
 			if (expandedNodes.ContainsKey(id)) {
 				expandedNodes.Remove(id);
 			}
-			//Console.WriteLine("TestCollapseRow " + id);
 		}
 		
 		protected void TestExpandRow(object o, TestExpandRowArgs args)
 		{
 			string id = (string)store.GetValue(args.Iter, ColumnID);
 			expandedNodes[id] = null; // No value, just insert the key
-			//Console.WriteLine("TestExpandRow " + id);
 			int childCount = ExpandNode(args.Path);
 			if (childCount == 0) {
 				args.RetVal = true;  // Cancel expanding
@@ -146,7 +144,6 @@ namespace Mono.Debugger.Frontend
 		{
 			string id = (string)store.GetValue(args.Iter, ColumnID);
 			expandedNodes[id] = null; // No value, just insert the key
-			//Console.WriteLine("RowExpanded " + id);
 			
 			int childCount = store.IterNChildren(args.Iter);
 			for(int i = 0; i < childCount; i++) {
@@ -158,7 +155,6 @@ namespace Mono.Debugger.Frontend
 				string childId = (string)store.GetValue(childIter, ColumnID);
 				// This node was expanded in the past - expand it
 				if (expandedNodes.ContainsKey(childId)) {
-					//Console.WriteLine("Should be expanded: " + childId);
 					tree.ExpandRow(childPath, false);
 				}
 			}
@@ -231,7 +227,6 @@ namespace Mono.Debugger.Frontend
 			
 			// This node was expanded in the past - expand it
 			if (expandedNodes.ContainsKey(id)) {
-				//Console.WriteLine("Should be expanded: " + id);
 				tree.ExpandRow(pathNewRow, false);
 			}
 		}
