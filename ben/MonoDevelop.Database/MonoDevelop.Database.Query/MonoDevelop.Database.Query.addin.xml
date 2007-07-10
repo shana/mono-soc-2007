@@ -18,6 +18,35 @@
 		<Addin id="Mono.Data.Sql" version="0.14.0"/>
 	</Dependencies>
 	
+	<ExtensionPoint path = "/SharpDevelop/Views/SqlQueryView/ToolBar">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
+	<Extension path = "/SharpDevelop/Commands">
+		<Command id = "MonoDevelop.Database.Query.ToolCommands.Query"
+			defaultHandler = "MonoDevelop.Database.Query.QueryHandler"
+			_label = "Query Database"
+			icon = "md-db-execute"/>
+		<Command id = "MonoDevelop.Database.Query.ToolCommands.GenerateDatabaseLayer"
+			defaultHandler = "MonoDevelop.Database.Query.GenerateDatabaseLayerHandler"
+			_label = "Generate Database Layer"
+			icon = "md-db-database"/>
+		<Command id = "MonoDevelop.Database.Query.ToolCommands.GenerateObjectLayer"
+			defaultHandler = "MonoDevelop.Database.Query.GenerateObjectLayerHandler"
+			_label = "Generate Object Layer"
+			icon = "md-db-database"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Workbench/MainMenu/Tools">
+		<SeparatorItem id = "DatabaseSeparator" />
+		<ItemSet id = "Database" _label = "_Database">
+			<CommandItem id = "MonoDevelop.Database.Query.ToolCommands.GenerateDatabaseLayer" />
+			<CommandItem id = "MonoDevelop.Database.Query.ToolCommands.GenerateObjectLayer" />
+			<SeparatorItem id = "QuerySeparator" />
+			<CommandItem id = "MonoDevelop.Database.Query.ToolCommands.Query" />
+		</ItemSet>
+	</Extension>
+	
 	<Extension path = "/SharpDevelop/Workbench/StockIcons">
 		<StockIcon stockid = "md-db-column-add" resource = "Icons.16x16.Database.Column.Add.png" />
 		<StockIcon stockid = "md-db-column-key" resource = "Icons.16x16.Database.Column.Key.png" />

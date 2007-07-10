@@ -15,21 +15,7 @@
   </Configurations>
   <Contents>
     <File name="./MonoDevelop.Database.Query.addin.xml" subtype="Code" buildaction="FileCopy" />
-    <File name="./DataGrid" subtype="Directory" buildaction="Compile" />
-    <File name="./gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
-    <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="./DataGrid/DataGrid.cs" subtype="Code" buildaction="Compile" />
-    <File name="./DataGrid/DataGridColumn.cs" subtype="Code" buildaction="Compile" />
-    <File name="./DataGrid/DataGridColumnType.cs" subtype="Code" buildaction="Compile" />
-    <File name="./DataGrid/Renderers" subtype="Directory" buildaction="Compile" />
-    <File name="./DataGrid/Visualizers" subtype="Directory" buildaction="Compile" />
     <File name="./Codons" subtype="Directory" buildaction="Compile" />
-    <File name="./DataGrid/Renderers/StringCellRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="./DataGrid/Renderers/BaseCellRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="./DataGrid/Renderers/BinaryCellRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="./DataGrid/Visualizers/IDataVisualizer.cs" subtype="Code" buildaction="Compile" />
-    <File name="./gtk-gui/MonoDevelop.Database.Query.DataGrid.cs" subtype="Code" buildaction="Compile" />
     <File name="./QueryResultView.cs" subtype="Code" buildaction="Compile" />
     <File name="./SqlQueryView.cs" subtype="Code" buildaction="Compile" />
     <File name="./icons/Icons.16x16.Database.Column.Add.png" subtype="Code" buildaction="EmbedAsResource" />
@@ -73,6 +59,9 @@
     <File name="./icons/Icons.16x16.Database.View.Remove.png" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./icons/Icons.16x16.Database.View.Source.png" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./icons/Icons.16x16.Database.Views.png" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./Commands" subtype="Directory" buildaction="Compile" />
+    <File name="./Commands/ToolCommands.cs" subtype="Code" buildaction="Compile" />
+    <File name="./QueryService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -89,11 +78,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
+    <ProjectReference type="Gac" localcopy="True" refto="gtksourceview-sharp, Version=1.0.0.2, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
   </References>
-  <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
-    <ExportedWidgets>
-      <Widget>MonoDevelop.Database.Query.DataGrid</Widget>
-      <Widget>MonoDevelop.Database.Query.SqlQueryControl</Widget>
-    </ExportedWidgets>
-  </GtkDesignInfo>
 </Project>

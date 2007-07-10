@@ -1,3 +1,9 @@
+2007-07-10  Ben Motmans <ben.motmans@gmail.com>
+
+	* DataGrid/*: moved DataGrid control to Components project
+	* QueryService.cs: helper service for easy database access
+	* SqlQueryView.cs: View to execute SQL queries
+
 2007-07-05  Ben Motmans <ben.motmans@gmail.com>
 
 	* DataGrid/*: new DataGrid implementation based on Gtk.TreeView, support for record navigation,
