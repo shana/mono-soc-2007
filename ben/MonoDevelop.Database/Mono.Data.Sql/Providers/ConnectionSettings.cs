@@ -48,6 +48,11 @@ namespace Mono.Data.Sql
 		private string connectionString;
 		private bool useConnectionString;
 		
+		[NonSerialized]
+		private IConnectionProvider connProvider;
+		[NonSerialized]
+		private ISchemaProvider schemaProvider;
+		
 		public string Name {
 			get { return name; }
 			set { name = value; }
@@ -111,6 +116,33 @@ namespace Mono.Data.Sql
 		public bool UseConnectionString {
 			get { return useConnectionString; }
 			set { useConnectionString = value; }
+		}
+
+		public IConnectionProvider ConnectionProvider {
+			get {
+				if (connProvider == null)
+					connProvider = DbFactoryService.CreateConnectionProvider (this);
+				return connProvider;
+			}
+		}
+		
+		public bool HasConnectionProvider {
+			get { return connProvider != null; }
+		}
+
+		public ISchemaProvider SchemaProvider {
+			get {
+				if (ConnectionProvider != null) {
+					if (schemaProvider == null)
+						schemaProvider = DbFactoryService.CreateSchemaProvider (this, connProvider);
+					return schemaProvider;
+				}
+				return null;
+			}
+		}
+		
+		public bool HasSchemaProvider {
+			get { return schemaProvider != null; }
 		}
 	}
 }
