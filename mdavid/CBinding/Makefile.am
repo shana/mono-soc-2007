@@ -38,6 +38,7 @@ FILES =  \
 	Gui/OutputOptionsPanel.cs \
 	Navigation/Class.cs \
 	Navigation/ClassNodeBuilder.cs \
+	Navigation/ClassPadEventArgs.cs \
 	Navigation/Enumeration.cs \
 	Navigation/EnumerationNodeBuilder.cs \
 	Navigation/Enumerator.cs \
@@ -90,6 +91,7 @@ RES =  \
 	icons/Icons.16x16.PrivateUnion \
 	icons/Icons.16x16.ProtectedUnion \
 	icons/Icons.16x16.Union \
+	icons/update \
 	templates/EmptyCFile.xft.xml \
 	templates/EmptyCppProject.xpt.xml \
 	templates/EmptyCProject.xpt.xml

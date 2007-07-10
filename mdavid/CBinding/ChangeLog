@@ -1,3 +1,12 @@
+2007-07-10  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/ProjectNodeBuilderExtension.cs,
+	  Navigation/ClassPadEventArgs.cs, Project/CProject.cs, Makefile.am,
+	  CBinding.addin.xml, icons/update,
+	  ProjectPad/ProjectPackagesFolderNodeBuilder.cs, CBinding.mdp: The
+	  class pad tree is now built in a seperate thread so it does not
+	  block the UI while it is being built.
+
 2007-07-07  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/GlobalsNodeBuilder.cs: Fixes class pad bug when there are

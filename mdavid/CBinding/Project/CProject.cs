@@ -50,7 +50,12 @@ namespace CBinding
 	public enum Language {
 		C,
 		CPP
-	};
+	}
+	
+	public enum CProjectCommands {
+		AddPackage,
+		UpdateClassPad
+	}
 	
 	[DataInclude(typeof(CProjectConfiguration))]
 	public class CProject : Project

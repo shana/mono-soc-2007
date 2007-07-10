@@ -31,6 +31,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 
 using Mono.Addins;
 
@@ -38,23 +39,41 @@ using MonoDevelop.Projects;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Core.Gui;
+using MonoDevelop.Components.Commands;
 
 using CBinding;
 
 namespace CBinding.Navigation
 {
 	public class ProjectNodeBuilderExtension : NodeBuilderExtension
-	{		
+	{
+		public static event ClassPadEventHandler FinishedBuildingTree;
+		public ClassPadEventHandler finishedBuildingTreeHandler;
+		
 		public override bool CanBuildNode (Type dataType)
 		{
 			return typeof(CProject).IsAssignableFrom (dataType);
-		}	                                       
+		}
 		
-		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
+		public override Type CommandHandlerType {
+			get { return typeof(ProjectNodeBuilderExtensionHandler); }
+		}
+		
+		protected override void Initialize ()
 		{
-			CProject p = dataObject as CProject;
-			
-			if (p == null) return;
+			finishedBuildingTreeHandler = (ClassPadEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ClassPadEventHandler (OnFinishedBuildingTree));
+			FinishedBuildingTree += finishedBuildingTreeHandler;
+		}
+		
+		public override void Dispose ()
+		{
+			FinishedBuildingTree -= finishedBuildingTreeHandler;
+		}
+		
+		public static void CreatePadTree (object o)
+		{
+			CProject p = o as CProject;
+			if (o == null) return;
 			
 			try {
 				TagDatabaseManager.Instance.WriteTags (p);
@@ -63,6 +82,15 @@ namespace CBinding.Navigation
 				IdeApp.Services.MessageService.ShowError (ex);
 				return;
 			}
+			
+			FinishedBuildingTree (new ClassPadEventArgs (p));
+		}
+		
+		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
+		{			
+			CProject p = dataObject as CProject;
+			
+			if (p == null) return;
 			
 			bool nestedNamespaces = builder.Options["NestedNamespaces"];
 			
@@ -89,6 +117,40 @@ namespace CBinding.Navigation
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			return true;
+		}
+		
+		private void OnFinishedBuildingTree (ClassPadEventArgs e)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (e.Project);
+			builder.UpdateChildren ();
+		}
+	}
+	
+	public class ProjectNodeBuilderExtensionHandler : NodeCommandHandler
+	{
+//		public override void ActivateItem ()
+//		{
+//			CProject p = CurrentNode.DataItem as CProject;
+//			
+//			if (p == null) return;
+//			
+//			Thread builderThread = new Thread (new ParameterizedThreadStart (ProjectNodeBuilderExtension.CreatePadTree));
+//			builderThread.Name = "PadBuilder";
+//			builderThread.IsBackground = true;
+//			builderThread.Start (p);
+//		}
+		
+		[CommandHandler (CProjectCommands.UpdateClassPad)]
+		public void UpdateClassPad ()
+		{
+			CProject p = CurrentNode.DataItem as CProject;
+			
+			if (p == null) return;
+			
+			Thread builderThread = new Thread (new ParameterizedThreadStart (ProjectNodeBuilderExtension.CreatePadTree));
+			builderThread.Name = "PadBuilder";
+			builderThread.IsBackground = true;
+			builderThread.Start (p);
 		}
 	}
 }

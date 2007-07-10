@@ -41,11 +41,7 @@ using MonoDevelop.Ide.Gui.Pads.ProjectPad;
 using MonoDevelop.Ide.Gui;
 
 namespace CBinding.ProjectPad
-{
-	public enum CProjectCommands {
-		AddPackage
-	}
-	
+{	
 	public class ProjectPackagesFolderNodeBuilder : TypeNodeBuilder
 	{
 		ProjectPackageEventHandler addedHandler;
@@ -132,7 +128,7 @@ namespace CBinding.ProjectPad
 	
 	public class ProjectPackagesFolderNodeCommandHandler : NodeCommandHandler
 	{
-		[CommandHandler (CProjectCommands.AddPackage)]
+		[CommandHandler (CBinding.CProjectCommands.AddPackage)]
 		public void AddPackageToProject ()
 		{
 			CProject project = (CProject)CurrentNode.GetParentDataItem (
