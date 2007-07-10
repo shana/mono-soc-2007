@@ -99,8 +99,10 @@ namespace Mono.Data.Sql
 				connection.Open ();
 				
 				errorMessage = String.Empty;
+				isConnectionError = false;
 				return true;
 			} catch {
+				isConnectionError = true;
 				errorMessage = String.Format ("Unable to connect. (CS={0})", builder == null ? "NULL" : builder.ToString ());
 				return false;
 			}

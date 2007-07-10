@@ -34,7 +34,7 @@ namespace Mono.Data.Sql
 		private ISqlDialect dialect;
 		
 		public string Identifier {
-			get { return "ByteFX.Data.MySqlClient"; }
+			get { return "MySql.Data.MySqlClient"; }
 		}
 		
 		public string Name {
