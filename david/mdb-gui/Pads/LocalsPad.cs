@@ -134,7 +134,12 @@ namespace Mono.Debugger.Frontend
 			string id = (string)store.GetValue(args.Iter, ColumnID);
 			expandedNodes[id] = null; // No value, just insert the key
 			//Console.WriteLine("TestExpandRow " + id);
-			ExpandNode(args.Path);
+			int childCount = ExpandNode(args.Path);
+			if (childCount == 0) {
+				args.RetVal = true;  // Cancel expanding
+			} else {
+				args.RetVal = false;
+			}
 		}
 		
 		protected void RowExpanded(object o, RowExpandedArgs args)
@@ -159,7 +164,8 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		void ExpandNode(TreePath path)
+		// Returns number of child nodes
+		int ExpandNode(TreePath path)
 		{
 			TreeIter it;
 			
@@ -181,11 +187,12 @@ namespace Mono.Debugger.Frontend
 				childs = node.ChildNodes;
 			} catch {
 				AppendNode(path, new ErrorNode(String.Empty, "Can not get child nodes"));
-				return;
+				return 1;
 			}
-			foreach(AbstractNode child in node.ChildNodes) {
+			foreach(AbstractNode child in childs) {
 				AppendNode(path, child);
 			}
+			return childs.Length;
 		}
 		
 		void AppendNode(TreePath path, AbstractNode node)
