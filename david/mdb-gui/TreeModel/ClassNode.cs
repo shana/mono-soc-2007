@@ -52,7 +52,19 @@ namespace Mono.Debugger.Frontend.TreeModel
 				nodes.Add(new ClassNode("<Base class>", stackFrame, parent));
 			}
 			
-			TargetFieldInfo[] fields = obj.Type.Fields;
+			if (obj.Type.StaticFields.Length > 0) {
+				nodes.Add(new StaticMembers(this));
+			}
+			
+			nodes.AddRange(FieldsToNodes(obj.Type.Fields));
+			
+			return (AbstractNode[])nodes.ToArray(typeof(AbstractNode));
+		}
+		
+		AbstractNode[] FieldsToNodes(TargetFieldInfo[] fields)
+		{
+			ArrayList nodes = new ArrayList();
+			
 			foreach(TargetFieldInfo field in fields) {
 				AbstractNode node;
 				try {
@@ -65,6 +77,30 @@ namespace Mono.Debugger.Frontend.TreeModel
 			}
 			
 			return (AbstractNode[])nodes.ToArray(typeof(AbstractNode));
+		}
+		
+		class StaticMembers: AbstractNode
+		{
+			ClassNode parentNode;
+			
+			public override string Name {
+				get { return "<Static members>"; }
+			}
+			
+			public override bool HasChildNodes {
+				get { return true; }
+			}
+			
+			public override AbstractNode[] ChildNodes {
+				get {
+					return parentNode.FieldsToNodes(parentNode.obj.Type.StaticFields);
+				}
+			}
+			
+			public StaticMembers(ClassNode parentNode)
+			{
+				this.parentNode = parentNode;
+			}
 		}
 	}
 }
