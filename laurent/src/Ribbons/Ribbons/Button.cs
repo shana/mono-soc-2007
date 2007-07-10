@@ -4,6 +4,7 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>Button to be used in Ribbons.</summary>
 	public class Button : Bin
 	{
 		protected Theme theme = new Theme ();
@@ -19,6 +20,7 @@ namespace Ribbons
 		
 		public event EventHandler Clicked;
 		
+		/// <summary>Spacing between the content and the widget.</summary>
 		public double Padding
 		{
 			set
@@ -30,12 +32,14 @@ namespace Ribbons
 			get { return padding; }
 		}
 		
+		/// <summary>Shape of the widget.</summary>
 		public GroupStyle GroupStyle
 		{
 			set { groupStyle = value; }
 			get { return groupStyle; }
 		}
 		
+		/// <summary><b>true</b> if the widget should paint a background, <b>false</B> otherwise.</summary>
 		public bool DrawBackground
 		{
 			set
@@ -47,6 +51,7 @@ namespace Ribbons
 			get { return drawBg; }
 		}
 		
+		/// <summary>Image to display.</summary>
 		public Widget Image
 		{
 			set
@@ -60,6 +65,7 @@ namespace Ribbons
 			get { return img; }
 		}
 		
+		/// <summary>Position of the image relative to the label.</summary>
 		public PositionType ImagePosition
 		{
 			set
@@ -71,6 +77,7 @@ namespace Ribbons
 			get { return imgPos; }
 		}
 		
+		/// <summary>Label to display.</summary>
 		public string Label
 		{
 			set
@@ -86,6 +93,7 @@ namespace Ribbons
 			}
 		}
 		
+		/// <summary>Default constructor.</summary>
 		public Button ()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
@@ -96,16 +104,23 @@ namespace Ribbons
 			this.ImagePosition = PositionType.Top;
 		}
 		
+		/// <summary>Constructor given a label to display.</summary>
+		/// <param name="Label">Label to display.</param>
 		public Button (string Label) : this ()
 		{
 			this.Label = Label;
 		}
 		
+		/// <summary>Constructor given an image to display.</summary>
+		/// <param name="Image">Image to display</param>
 		public Button (Image Image) : this ()
 		{
 			this.Image = Image;
 		}
 		
+		/// <summary>Constructor given a label and an image to display.</summary>
+		/// <param name="Image">Image to display.</param>
+		/// <param name="Label">Label to display.</param>
 		public Button (Image Image, string Label) : this ()
 		{
 			this.img = Image;
@@ -115,18 +130,26 @@ namespace Ribbons
 			UpdateImageLabel ();
 		}
 		
+		/// <summary>Constructs a Button from a stock.</summary>
+		/// <param name="Name">Name of the stock.</param>
+		/// <param name="Large"><b>true</b> if the image should be large, <b>false</b> otherwise.</param>
 		public static Button FromStockIcon (string Name, bool Large)
 		{
 			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
 			return new Button (img);
 		}
 		
+		/// <summary>Constructs a Button from a stock.</summary>
+		/// <param name="Name">Name of the stock.</param>
+		/// <param name="Label">Label to display.</param>
+		/// <param name="Large"><b>true</b> if the image should be large, <b>false</b> otherwise.</param>
 		public static Button FromStockIcon (string Name, string Label, bool Large)
 		{
 			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
 			return new Button (img, Label);
 		}
 		
+		/// <summary>Fires the Click event.</summary>
 		public void Click ()
 		{
 			if(Clicked != null) Clicked (this, EventArgs.Empty);
