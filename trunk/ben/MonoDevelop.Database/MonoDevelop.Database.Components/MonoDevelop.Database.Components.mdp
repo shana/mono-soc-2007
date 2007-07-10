@@ -21,6 +21,7 @@
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialogs/SelectColumnDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Components.SelectColumnDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Components.ConnectionDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./Widgets/ProjectDirectoryComboBox.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/SelectColumnWidget.cs" subtype="Code" buildaction="Compile" />
@@ -33,6 +34,20 @@
     <File name="./Widgets/ColumnMappingWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/SchemaMappingWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/CellRendererTypeCombo.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/ConnectionComboBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/PasswordDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Components.PasswordDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/ConnectionDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/DataGridColumn.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/DataGridColumnType.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers" subtype="Directory" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Visualizers" subtype="Directory" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/StringCellRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/BaseCellRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/BinaryCellRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Visualizers/IDataVisualizer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/DataGrid.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Components.DataGrid.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -53,7 +68,8 @@
   </References>
   <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
     <ExportedWidgets>
-      <Widget>MonoDevelop.Database.Components.SelectColumnWidget</Widget>
+      <Widget>MonoDevelop.Database.Components.ProjectDirectoryComboBox</Widget>
+      <Widget>MonoDevelop.Database.Components.ColumnMappingWidget</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
 </Project>

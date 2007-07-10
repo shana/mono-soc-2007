@@ -1,3 +1,11 @@
+2007-07-10  Ben Motmans <ben.motmans@gmail.com>
+
+	* Dialogs/ConnectionDialog.cs: imported from ConnectionManager project, added CheckBox
+	to set the ConnectionSettings SavePassword property, various other bugfixes
+	* Dialogs/PasswordDialog.cs: password dialog
+	* Widgets/DataGrid/*: imported from Query project
+	* Widgets/ConnectionComboBox.cs: ComboBox that lists all ConnectionSettings
+
 2007-07-09  Ben Motmans <ben.motmans@gmail.com>
 
 	* Project: re-usable gtk# data controls
