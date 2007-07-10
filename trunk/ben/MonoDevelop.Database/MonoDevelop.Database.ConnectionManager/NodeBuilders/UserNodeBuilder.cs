@@ -26,44 +26,47 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using Gtk;
 using System;
+using System.Threading;
+using System.Collections.Generic;
 using Mono.Data.Sql;
-using MonoDevelop.Core.Gui;
-using MonoDevelop.Ide.Gui;
-using MonoDevelop.Ide.Gui.Pads;
-using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
+using MonoDevelop.Core.Gui;
+using MonoDevelop.Ide.Gui.Pads;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public enum ConnectionManagerCommands
+	public class UserNodeBuilder : TypeNodeBuilder
 	{
-		AddConnection,
-		RemoveConnection,
-		DisconnectConnection,
-		RefreshConnectionList,
-		RefreshConnection,
-		Query,
-		EmptyTable,
-		DropTable,
-		Refresh
-	}
-	
-	public class AddConnectionHandler : CommandHandler
-	{
-		protected override void Run ()
+		public UserNodeBuilder ()
+			: base ()
 		{
-			ConnectionManagerService service = ServiceManager.GetService (typeof (ConnectionManagerService)) as ConnectionManagerService;
-			NewConnectionDialog dlg = new NewConnectionDialog ();
-			try {
-				if (dlg.Run () == (int)ResponseType.Ok) {
-					ConnectionSettings settings = dlg.ConnectionSettings;
-					service.AddConnection (settings);
-				}
-			} finally {
-				dlg.Destroy ();
-			}
+		}
+		
+		public override Type NodeDataType {
+			get { return typeof (UserNode); }
+		}
+		
+		public override string ContextMenuAddinPath {
+			get { return "/SharpDevelop/Users/ConnectionManagerPad/ContextMenu/UserNode"; }
+		}
+		
+		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
+		{
+			return GettextCatalog.GetString ("User");
+		}
+		
+		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
+		{
+			UserNode node = dataObject as UserNode;
+
+			label = node.User.Name;
+			icon = Context.GetIcon ("md-db-user");
+		}
+		
+		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
+		{
+			return false;
 		}
 	}
 }

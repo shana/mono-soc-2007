@@ -33,18 +33,22 @@ using Mono.Data.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
 	public class TablesNodeBuilder : TypeNodeBuilder
 	{
 		private object threadSync = new object ();
-		private ITreeBuilder treeBuilder;
-		private ConnectionContext context;
+		private ITreeBuilder builder;
+		private ConnectionSettings settings;
+		
+		private EventHandler RefreshHandler;
 		
 		public TablesNodeBuilder ()
 			: base ()
 		{
+			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
@@ -53,6 +57,10 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override string ContextMenuAddinPath {
 			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TablesNode"; }
+		}
+		
+		public override Type CommandHandlerType {
+			get { return typeof (TablesNodeCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -64,37 +72,40 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			label = GettextCatalog.GetString ("Tables");
 			icon = Context.GetIcon ("md-db-tables");
+			
+			BaseNode node = (BaseNode) dataObject;
+			node.RefreshEvent += RefreshHandler;
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			lock (threadSync) {
-				treeBuilder = builder;
-				context = (ConnectionContext) dataObject;
-				
-				ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+				this.builder = builder;
+				settings = (dataObject as BaseNode).Settings;
 			}
+			
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder treeBuilder = null;
-			ConnectionContext context = null;
+			ITreeBuilder builder = null;
+			ConnectionSettings settings = null;
 			
 			lock (threadSync) {
-				treeBuilder = this.treeBuilder;
-				context = this.context;
+				builder = this.builder;
+				settings = this.settings;
 			}
 			
-			bool showSystemObjects = (bool)treeBuilder.Options["ShowSystemObjects"];
-			ICollection<TableSchema> tables = context.SchemaProvider.GetTables ();
+			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
+			ICollection<TableSchema> tables = settings.SchemaProvider.GetTables ();
 			foreach (TableSchema table in tables) {
 				if (table.IsSystemTable && !showSystemObjects)
 					continue;
 				
 				Services.DispatchService.GuiDispatch (delegate {
-					treeBuilder.AddChild (table);
-					treeBuilder.Expanded = true;
+					builder.AddChild (new TableNode (settings, table));
+					builder.Expanded = true;
 				});
 			}
 		}
@@ -102,6 +113,31 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			return true;
+		}
+		
+		private void OnRefreshEvent (object sender, EventArgs args)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder ();
+			
+			if (builder != null)
+				builder.UpdateChildren ();
+			
+			builder.ExpandToNode ();
+		}
+	}
+	
+	public class TablesNodeCommandHandler : NodeCommandHandler
+	{
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.None;
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.Refresh)]
+		protected void OnRefresh ()
+		{
+			TablesNode node = (TablesNode)CurrentNode.DataItem;
+			node.Refresh ();
 		}
 	}
 }

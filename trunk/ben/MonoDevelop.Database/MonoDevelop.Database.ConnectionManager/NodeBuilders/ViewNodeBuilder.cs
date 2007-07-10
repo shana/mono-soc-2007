@@ -33,55 +33,48 @@ using Mono.Data.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
-using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ViewsNodeBuilder : TypeNodeBuilder
+	public class ViewNodeBuilder : TypeNodeBuilder
 	{
 		private object threadSync = new object ();
-		private ITreeBuilder treeBuilder;
-		private ConnectionSettings settings;
+		private ITreeBuilder builder;
+		private ViewNode node;
 		
-		private EventHandler RefreshHandler;
-		
-		public ViewsNodeBuilder ()
+		public ViewNodeBuilder ()
 			: base ()
 		{
-			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
-			get { return typeof (ViewsNode); }
+			get { return typeof (ViewNode); }
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewsNode"; }
-		}
-		
-		public override Type CommandHandlerType {
-			get { return typeof (ViewsNodeCommandHandler); }
+			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewNode"; }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("Views");
+			return GettextCatalog.GetString ("View");
 		}
 		
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
+		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			label = GettextCatalog.GetString ("Views");
-			icon = Context.GetIcon ("md-db-views");
-			
-			BaseNode node = (BaseNode) dataObject;
-			node.RefreshEvent += RefreshHandler;
+			ViewNode node = dataObject as ViewNode;
+
+			label = node.View.Name;
+			icon = Context.GetIcon ("md-db-view");
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
+			ViewNode node = dataObject as ViewNode;
+			
 			lock (threadSync) {
-				treeBuilder = builder;
-				settings = (dataObject as BaseNode).Settings;
+				this.builder = builder;
+				this.node = node;
 			}
 			
 			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
@@ -89,55 +82,22 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder treeBuilder = null;
-			ConnectionSettings settings = null;
+			ITreeBuilder builder = null;
+			ViewNode node = null;
 			
 			lock (threadSync) {
-				treeBuilder = this.treeBuilder;
-				settings = this.settings;
+				builder = this.builder;
+				node = this.node;
 			}
 			
-			bool showSystemObjects = (bool)treeBuilder.Options["ShowSystemObjects"];
-			ICollection<ViewSchema> views = settings.SchemaProvider.GetViews ();
-			foreach (ViewSchema view in views) {
-				if (view.IsSystemView && !showSystemObjects)
-					continue;
-				
-				Services.DispatchService.GuiDispatch (delegate {
-					treeBuilder.AddChild (new ViewNode (settings, view));
-					treeBuilder.Expanded = true;
-				});
-			}
+			ISchemaProvider provider = node.Settings.SchemaProvider;
+			
+			//TODO: build columns
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			return true;
-		}
-		
-		private void OnRefreshEvent (object sender, EventArgs args)
-		{
-			ITreeBuilder builder = Context.GetTreeBuilder ();
-			
-			if (builder != null)
-				builder.UpdateChildren ();
-			
-			builder.ExpandToNode ();
-		}
-	}
-	
-	public class ViewsNodeCommandHandler : NodeCommandHandler
-	{
-		public override DragOperation CanDragNode ()
-		{
-			return DragOperation.None;
-		}
-		
-		[CommandHandler (ConnectionManagerCommands.Refresh)]
-		protected void OnRefresh ()
-		{
-			TablesNode node = (TablesNode)CurrentNode.DataItem;
-			node.Refresh ();
 		}
 	}
 }

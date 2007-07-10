@@ -33,6 +33,7 @@ using Mono.Data.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
@@ -40,11 +41,14 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		private object threadSync = new object ();
 		private ITreeBuilder treeBuilder;
-		private ConnectionContext context;
+		private ConnectionSettings settings;
+		
+		private EventHandler RefreshHandler;
 		
 		public UsersNodeBuilder ()
 			: base ()
 		{
+			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
@@ -53,6 +57,10 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override string ContextMenuAddinPath {
 			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UsersNode"; }
+		}
+		
+		public override Type CommandHandlerType {
+			get { return typeof (UsersNodeCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -64,32 +72,35 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			label = GettextCatalog.GetString ("Users");
 			icon = Context.GetIcon ("md-db-users");
+			
+			BaseNode node = (BaseNode) dataObject;
+			node.RefreshEvent += RefreshHandler;
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			lock (threadSync) {
 				treeBuilder = builder;
-				context = (ConnectionContext) dataObject;
-				
-				ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+				settings = (dataObject as BaseNode).Settings;
 			}
+			
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
 			ITreeBuilder treeBuilder = null;
-			ConnectionContext context = null;
+			ConnectionSettings settings = null;
 			
 			lock (threadSync) {
 				treeBuilder = this.treeBuilder;
-				context = this.context;
+				settings = this.settings;
 			}
 
-			ICollection<UserSchema> users = context.SchemaProvider.GetUsers ();
+			ICollection<UserSchema> users = settings.SchemaProvider.GetUsers ();
 			foreach (UserSchema user in users) {
 				Services.DispatchService.GuiDispatch (delegate {
-					treeBuilder.AddChild (user);
+					treeBuilder.AddChild (new UserNode (settings, user));
 					treeBuilder.Expanded = true;
 				});
 			}
@@ -98,6 +109,31 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			return true;
+		}
+		
+		private void OnRefreshEvent (object sender, EventArgs args)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder ();
+			
+			if (builder != null)
+				builder.UpdateChildren ();
+			
+			builder.ExpandToNode ();
+		}
+	}
+	
+	public class UsersNodeCommandHandler : NodeCommandHandler
+	{
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.None;
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.Refresh)]
+		protected void OnRefresh ()
+		{
+			TablesNode node = (TablesNode)CurrentNode.DataItem;
+			node.Refresh ();
 		}
 	}
 }

@@ -37,16 +37,13 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ConnectionCollectionNodeBuilder : TypeNodeBuilder
 	{
-		private ConnectionManagerService service;
-
-		private ITreeBuilder treeBuilder;
+		private ITreeBuilder builder;
 		
 		public ConnectionCollectionNodeBuilder ()
 			: base ()
 		{
-			service = ServiceManager.GetService (typeof (ConnectionManagerService)) as ConnectionManagerService;
-			service.ConnectionAdded += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionAdded));
-			service.ConnectionRemoved += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionRemoved));
+			ConnectionSettingsService.ConnectionAdded += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionAdded));
+			ConnectionSettingsService.ConnectionRemoved += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionRemoved));
 		}
 		
 		public override Type NodeDataType {
@@ -62,19 +59,19 @@ namespace MonoDevelop.Database.ConnectionManager
 			return GettextCatalog.GetString ("Database Connections");
 		}
 		
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
+		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			label = GettextCatalog.GetString ("Database Connections");
 			icon = Context.GetIcon ("md-db-connection");
+			this.builder = builder;
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			ConnectionSettingsCollection collection = (ConnectionSettingsCollection) dataObject;
-			treeBuilder = builder;
 				
 			foreach (ConnectionSettings settings in collection)
-				builder.AddChild (new ConnectionContext (settings));
+				builder.AddChild (settings);
 			builder.Expanded = true;
 		}
 
@@ -86,12 +83,15 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void OnConnectionAdded (object sender, ConnectionSettingsEventArgs args)
 		{
-			treeBuilder.AddChild (new ConnectionContext (args.ConnectionSettings));
+			builder.AddChild (args.ConnectionSettings);
 		}
 		
 		private void OnConnectionRemoved (object sender, ConnectionSettingsEventArgs args)
 		{
-			//TODO: iterate through child nodes to removed the connection?
+			if (builder.MoveToObject (args.ConnectionSettings)) {
+				builder.Remove ();
+				builder.MoveToParent ();
+			}
 		}
 	}
 }

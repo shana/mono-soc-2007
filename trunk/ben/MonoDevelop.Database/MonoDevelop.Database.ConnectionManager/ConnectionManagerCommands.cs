@@ -26,33 +26,49 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Gtk;
 using System;
-using System.IO;
+using Mono.Data.Sql;
 using MonoDevelop.Core;
-using MonoDevelop.Core.Properties;
+using MonoDevelop.Core.Gui;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Components.Commands;
-
-using Mono.Data.Sql;
+using MonoDevelop.Database.Components;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ConnectionManagerPad : TreeViewPad
+	public enum ConnectionManagerCommands
 	{
-		public ConnectionManagerPad ()
+		AddConnection,
+		EditConnection,
+		RemoveConnection,
+		DisconnectConnection,
+		RefreshConnection,
+		Query,
+		EmptyTable,
+		DropTable,
+		Refresh,
+		SelectAll,
+		SelectColumns
+	}
+	
+	public class AddConnectionHandler : CommandHandler
+	{
+		protected override void Run ()
 		{
-			if (!ConnectionSettingsService.IsInitialized) {
-				string configFile = Path.Combine (Path.Combine (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config"), "MonoDevelop"), "MonoDevelop.Database.ConnectionManager.xml");
-				ConnectionSettingsService.Initialize (configFile);
+			ConnectionDialog dlg = new ConnectionDialog ();
+			try {
+				if (dlg.Run () == (int)ResponseType.Ok) {
+					ConnectionSettings settings = dlg.ConnectionSettings;
+					ConnectionSettingsService.AddConnection (settings);
+				}
+			} catch (Exception e) {
+				Runtime.LoggingService.Error (e, e);
+				Runtime.LoggingService.Debug (e.StackTrace);
+			} finally {
+				dlg.Destroy ();
 			}
-		}
-		
-		public override void Initialize (NodeBuilder[] builders, TreePadOption[] options)
-		{
-			base.Initialize (builders, options);
-
-			Clear ();
-			LoadTree (ConnectionSettingsService.Connections);
 		}
 	}
 }
