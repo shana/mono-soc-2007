@@ -22,6 +22,7 @@ namespace MonoDevelop.Database.Components {
             // Widget MonoDevelop.Database.Components.SelectColumnDialog
             this.Name = "MonoDevelop.Database.Components.SelectColumnDialog";
             this.Title = Mono.Unix.Catalog.GetString("Select Column");
+            this.TypeHint = ((Gdk.WindowTypeHint)(1));
             this.WindowPosition = ((Gtk.WindowPosition)(1));
             this.DestroyWithParent = true;
             this.SkipTaskbarHint = true;

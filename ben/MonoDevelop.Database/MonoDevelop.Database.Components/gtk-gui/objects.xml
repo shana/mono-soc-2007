@@ -1,5 +1,9 @@
 <objects>
-  <object type="MonoDevelop.Database.Components.SelectColumnWidget" palette-category="widget" allow-children="false" base-type="Gtk.ScrolledWindow">
+  <object type="MonoDevelop.Database.Components.ProjectDirectoryComboBox" palette-category="widget" allow-children="false" base-type="Gtk.ComboBox">
+    <itemgroups />
+    <signals />
+  </object>
+  <object type="MonoDevelop.Database.Components.ColumnMappingWidget" palette-category="widget" allow-children="false" base-type="Gtk.ScrolledWindow">
     <itemgroups />
     <signals />
   </object>
