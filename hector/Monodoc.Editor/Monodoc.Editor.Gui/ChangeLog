@@ -1,3 +1,11 @@
+2007-07-10  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Adding delimiters that with the background
+	  color indicate that certain block is editable. Right now the
+	  delimiters are "[" and "]".
+	* DocumentTagTable.cs: Added a background color to indicate certain
+	  block is editable. Light blue is now my color of choice.
+
 2007-07-07  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs: Did some minor changes to not cause many

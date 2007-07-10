@@ -195,7 +195,7 @@ public class DocumentBufferArchiver {
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		bool emptyElement = xmlReader.IsEmptyElement;
 		bool isDynamic = tagTable.IsDynamic (elementName);
-		TextIter applyStart, applyEnd;
+		TextIter insertAt, applyStart, applyEnd;
 		TagStart tagStart = new TagStart ();
 		tagStart.Start = offset;
 		tagStart.Name = elementName;
@@ -265,8 +265,15 @@ public class DocumentBufferArchiver {
 			#if DEBUG
 			Console.WriteLine ("Empty Element: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
 			#endif
-		} else
+		} else {
 			stack.Push (tagStart);
+			
+			if (elementName.Equals ("summary")) {
+				insertAt = buffer.GetIterAtOffset (offset);
+				buffer.Insert (insertAt, "[");
+				offset += 1;
+			}
+		}
 		
 		return offset;
 	}
@@ -305,7 +312,7 @@ public class DocumentBufferArchiver {
 	
 	private static int InsertEndElement (TextBuffer buffer, int offset, Stack stack, ref int depth)
 	{
-		TextIter applyStart, applyEnd;
+		TextIter insertAt, applyStart, applyEnd;
 		TagStart tagStart = (TagStart) stack.Pop ();
 		string suffix =  '#' + depth.ToString ();
 		
@@ -314,6 +321,13 @@ public class DocumentBufferArchiver {
 		#endif
 		
 		if (tagStart.Start != offset) {
+			
+			if (tagStart.Name.Equals ("summary")) {
+				insertAt = buffer.GetIterAtOffset (offset);
+				buffer.Insert (insertAt, "]");
+				offset += 1;
+			}
+			
 			applyStart = buffer.GetIterAtOffset (tagStart.Start);
 			applyEnd = buffer.GetIterAtOffset (offset);
 			buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
