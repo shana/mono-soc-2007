@@ -93,15 +93,14 @@ namespace Mono.Debugger.Frontend
 		
 		public void UpdateDisplay ()
 		{
-			if (!interpreter.HasCurrentThread ||
-			    interpreter.CurrentThread.CurrentFrame == null) {
-				
+			StackFrame currentFrame;
+			
+			try {
+				currentFrame = interpreter.CurrentThread.GetBacktrace().CurrentFrame;
+			} catch {
 				store.Clear();
 				return;
 			}
-			
-			Mono.Debugger.Thread currentThread = interpreter.CurrentThread;
-			StackFrame currentFrame = currentThread.CurrentFrame;
 			
 			store.Clear();
 			
