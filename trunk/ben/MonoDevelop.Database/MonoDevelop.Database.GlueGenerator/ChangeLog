@@ -1,0 +1,3 @@
+2007-07-10  Ben Motmans <ben.motmans@gmail.com>
+
+	* GlueGeneratorDialog.cs: Start of glue generator wizard (extremely unfinished)
