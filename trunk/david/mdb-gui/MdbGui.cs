@@ -247,6 +247,7 @@ namespace Mono.Debugger.Frontend
 			}
 			if (filename == null) {
 				sourceView.Buffer.Text = "No source code";
+				currentlyLoadedSourceFile = null;
 				return;
 			}
 			

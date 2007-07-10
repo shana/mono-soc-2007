@@ -105,17 +105,16 @@ namespace Mono.Debugger.Frontend
 		
 		public void UpdateDisplay ()
 		{
-			if (!interpreter.HasCurrentThread ||
-			    interpreter.CurrentThread.GetBacktrace() == null ||
-			    interpreter.CurrentThread.GetBacktrace().Frames == null) {
-				
+			StackFrame[] callstack;
+			int currentFrameIndex;
+			
+			try {
+				callstack = interpreter.CurrentThread.GetBacktrace().Frames;
+				currentFrameIndex = interpreter.CurrentThread.GetBacktrace().CurrentFrameIndex;
+			} catch {
 				store.Clear();
 				return;
 			}
-			
-			int currentFrameIndex = interpreter.CurrentThread.GetBacktrace().CurrentFrameIndex;
-			StackFrame[] callstack = interpreter.CurrentThread.GetBacktrace().Frames;
-			
 			
 			// Adjust the number of rows to match the callstack length
 			while (store.IterNChildren() > callstack.Length) {
