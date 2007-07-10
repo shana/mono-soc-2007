@@ -31,14 +31,14 @@ namespace Mono.Data.Sql
 {
 	public class FromTableClause : FromClause
 	{
-		protected AliasedIdentifierExpression source;
+		protected IdentifierExpression source;
 		
-		public FromTableClause (AliasedIdentifierExpression source)
+		public FromTableClause (IdentifierExpression source)
 		{
 			Source = source;
 		}
 		
-		public AliasedIdentifierExpression Source {
+		public IdentifierExpression Source {
 			get { return source; }
 			set {
 				if (value == null)

@@ -37,8 +37,10 @@ namespace Mono.Data.Sql
 		static DbFactoryService ()
 		{
 			factories = new Dictionary<string, IDbFactory> ();
-			foreach (DbFactoryCodon codon in AddinManager.GetExtensionNodes ("/Mono/Data/Sql"))
-				factories.Add (codon.Id, codon.DbFactory);
+			foreach (DbFactoryCodon codon in AddinManager.GetExtensionNodes ("/Mono/Data/Sql")) {
+				IDbFactory fac = codon.DbFactory;
+				factories.Add (fac.Identifier, fac);
+			}
 		}
 
 		public static IEnumerable<IDbFactory> DbFactories {

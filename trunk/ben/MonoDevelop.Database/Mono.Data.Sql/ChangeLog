@@ -1,3 +1,13 @@
+2007-07-10  Ben Motmans <ben.motmans@gmail.com>
+
+	* Providers/IConnectionProvider.cs, Providers/AbstractConnectionProvider.cs:
+	added IsConnectionError property + Async query methods now have a state parameter
+	* Providers/ConnectionContext.cs, Providers/ConnectionSettings.cs: merged the
+	ConnectionContext properties inside the ConnectionSettings class
+	* ConnectionSettingsService.cs: Service to store all ConnectionSettings data
+	* DbFactoryService.cs: small fix, use the factory identifier instead of the codon identifier
+	* Dialect/Clauses/FromTableClause.cs: IdentifierExpression can be Aliased but doesn't have to
+
 2007-07-09  Ben Motmans <ben.motmans@gmail.com>
 
 	* Schema/ViewSchema.cs: Added Columns property

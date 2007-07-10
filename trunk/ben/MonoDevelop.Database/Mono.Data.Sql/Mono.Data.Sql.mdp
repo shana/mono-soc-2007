@@ -53,7 +53,6 @@
     <File name="./Schema/DataTypeCategory.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/Range.cs" subtype="Code" buildaction="Compile" />
     <File name="./Providers/ConnectionSettingsCollection.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Providers/ConnectionContext.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect" subtype="Directory" buildaction="Compile" />
     <File name="./Dialect/Statements" subtype="Directory" buildaction="Compile" />
     <File name="./Dialect/Clauses" subtype="Directory" buildaction="Compile" />
@@ -102,6 +101,7 @@
     <File name="./Dialect/Literals/BooleanLiteral.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect/Sql99Dialect.cs" subtype="Code" buildaction="Compile" />
     <File name="./Providers/ConnectionSettingsEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionSettingsService.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
