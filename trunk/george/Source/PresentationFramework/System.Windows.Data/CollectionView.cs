@@ -199,13 +199,11 @@ namespace System.Windows.Data {
 		}
 
 		public virtual int IndexOf(object item) {
-			if (item == null)
-				return -1;
 			int current_collection_item_index = 0;
 			foreach (object collection_item in source_collection) {
 				if (!PassesFilter(collection_item))
 					continue;
-				if (item.Equals(collection_item))
+				if (object.Equals(item, collection_item))
 					return current_collection_item_index;
 				current_collection_item_index++;
 			}
@@ -213,32 +211,84 @@ namespace System.Windows.Data {
 		}
 
 		public virtual bool MoveCurrentTo(object item) {
-			//WDTDH
+			int current_collection_item_index = 0;
+			foreach (object collection_item in source_collection) {
+				if (object.Equals(item, collection_item)) {
+					current_item = item;
+					current_position = current_collection_item_index;
+					return true;
+				}
+				current_collection_item_index++;
+			}
+			current_item = null;
+			current_position = -1;
 			return false;
 		}
 
 		public virtual bool MoveCurrentToFirst() {
-			//WDTDH
-			return false;
+			current_position = 0;
+			IEnumerator enumerator = source_collection.GetEnumerator();
+			if (enumerator.MoveNext()) {
+				current_item = enumerator.Current;
+				return true;
+			} else {
+				current_item = null;
+				return false;
+			}
 		}
 
 		public virtual bool MoveCurrentToLast() {
-			//WDTDH
-			return false;
+			current_item = null;
+			current_position = -1;
+			foreach(object item in source_collection) {
+				current_item = item;
+				current_position++;
+			}
+			return current_position != -1;
 		}
 
 		public virtual bool MoveCurrentToNext() {
-			//WDTDH
+			bool passed_current_item = false;
+			current_position = 0;
+			foreach (object item in source_collection) {
+				if (passed_current_item) {
+					current_item = item;
+					return true;
+				}
+				passed_current_item = object.Equals(current_item, item);
+				current_position++;
+			}
+			current_item = null;
 			return false;
 		}
 
 		public virtual bool MoveCurrentToPosition(int position) {
-			//WDTDH
+			current_position = 0;
+			foreach (object item in source_collection) {
+				if (current_position == position) {
+					current_item = item;
+					return true;
+				}
+				current_position++;
+			}
+			current_item = null;
+			if (position > current_position)
+				throw new ArgumentOutOfRangeException("position");
 			return false;
 		}
 
 		public virtual bool MoveCurrentToPrevious() {
-			//WDTDH
+			object previous_item = null;
+			int previous_position = -1;
+			foreach (object item in source_collection) {
+				if (object.Equals(item, current_item)) {
+					current_item = previous_item;
+					current_position = previous_position;
+					return current_position != -1;
+				}
+				previous_item = item;
+				previous_position++;
+			}
 			return false;
 		}
 
@@ -257,13 +307,12 @@ namespace System.Windows.Data {
 		}
 
 		protected virtual IEnumerator GetEnumerator() {
-			//WDTDH
-			return null;
+			return SourceCollection.GetEnumerator();
 		}
 
 		protected bool OKToChangeCurrent() {
 			//WDTDH
-			return false;
+			return true;
 		}
 
 		protected virtual void OnBeginChangeLogging(NotifyCollectionChangedEventArgs args) {
@@ -271,7 +320,8 @@ namespace System.Windows.Data {
 		}
 
 		protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args) {
-			//WDTDH
+			if (CollectionChanged != null)
+				CollectionChanged(this, args);
 		}
 
 		protected void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args) {
@@ -279,19 +329,23 @@ namespace System.Windows.Data {
 		}
 
 		protected virtual void OnCurrentChanged() {
-			//WDTDH
+			if (CurrentChanged != null)
+				CurrentChanged(this, EventArgs.Empty);
 		}
 
 		protected void OnCurrentChanging() {
-			//WDTDH
+			current_position = -1;
+			OnCurrentChanging(new CurrentChangingEventArgs(false));
 		}
 
 		protected virtual void OnCurrentChanging(CurrentChangingEventArgs args) {
-			//WDTDH
+			if (CurrentChanging != null)
+				CurrentChanging(this, args);
 		}
 
 		protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) {
-			//WDTDH
+			if (PropertyChanged != null)
+				PropertyChanged(this, e);
 		}
 
 		protected virtual void ProcessCollectionChanged(NotifyCollectionChangedEventArgs args) {
@@ -307,7 +361,8 @@ namespace System.Windows.Data {
 		}
 
 		protected void SetCurrent (object newItem, int newPosition) {
-			//WDTDH
+			current_item = newItem;
+			current_position = newPosition;
 		}
 		#endregion
 
