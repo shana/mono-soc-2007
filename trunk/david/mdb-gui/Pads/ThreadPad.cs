@@ -20,6 +20,8 @@ namespace Mono.Debugger.Frontend
 		Gtk.TreeStore store;
 		Hashtable threadRows;
 		
+		const int ColumnID = 1;
+		
 		string[] columnHeaders = new string[] {
 			"",
 			"ID",
@@ -79,6 +81,17 @@ namespace Mono.Debugger.Frontend
 			
 			Add (tree);
 			ShowAll ();
+			
+			tree.RowActivated += new RowActivatedHandler(RowActivated);
+		}
+		
+		void RowActivated(object sender, RowActivatedArgs args)
+		{
+			TreeIter it;
+			store.GetIter(out it, args.Path);
+			int id = (int)store.GetValue(it, ColumnID);
+			interpreter.CurrentThread = interpreter.GetThread(id);
+			mdbGui.UpdateGUI();
 		}
 		
 //		void IPadContent.Initialize (IPadWindow window)
