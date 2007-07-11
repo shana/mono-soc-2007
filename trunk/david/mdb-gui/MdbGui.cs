@@ -99,9 +99,12 @@ namespace Mono.Debugger.Frontend
 			toolbuttonStepOut.IconWidget.Show();
 			
 			// Default source view
-			TextTag  tag   = new TextTag("currentLine");
-			tag.Background = "yellow";
-			sourceView.Buffer.TagTable.Add(tag);
+			TextTag currentLineTag = new TextTag("currentLine");
+			currentLineTag.Background = "yellow";
+			sourceView.Buffer.TagTable.Add(currentLineTag);
+			TextTag breakpointTag = new TextTag("breakpoint");
+			breakpointTag.Background = "red";
+			sourceView.Buffer.TagTable.Add(breakpointTag);
 			sourceView.Buffer.Text = "No source file";
 			
 			// Load pads
@@ -263,14 +266,29 @@ namespace Mono.Debugger.Frontend
 			sourceView.Buffer.RemoveAllTags(bufferBegin, bufferEnd);
 			
 			// Add tag to show current line
-			int line = currentFrame.SourceAddress.Location.Line;
-			TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
-			TextIter end   = sourceView.Buffer.GetIterAtLine(line);
-			sourceView.Buffer.ApplyTag("currentLine", begin, end);
+			TextIter currLine = AddSourceViewTag("currentLine", currentFrame.SourceAddress.Location.Line);
+			
+			// Add tags for breakpoints
+			foreach (Event handle in interpreter.Session.Events) {
+				if (handle is SourceBreakpoint) {
+					SourceLocation location = ((SourceBreakpoint)handle).Location;
+					if (location != null) {
+						AddSourceViewTag("breakpoint", location.Line);
+					}
+				}
+			}
 			
 			// Scroll to current line
-			TextMark mark = sourceView.Buffer.CreateMark(null, end, false);
+			TextMark mark = sourceView.Buffer.CreateMark(null, currLine, false);
 			sourceView.ScrollToMark(mark, 0, false, 0, 0);
+		}
+		
+		TextIter AddSourceViewTag(string tag, int line)
+		{
+			TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
+			TextIter end   = sourceView.Buffer.GetIterAtLine(line);
+			sourceView.Buffer.ApplyTag(tag, begin, end);
+			return begin;
 		}
 	}
 }
