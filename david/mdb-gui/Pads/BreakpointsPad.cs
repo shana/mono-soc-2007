@@ -22,13 +22,15 @@ namespace Mono.Debugger.Frontend
 		const int ColumnImage       = 0;
 		const int ColumnID          = 1;
 		const int ColumnEnabled     = 2;
-		const int ColumnThreadGroup = 3;
-		const int ColumnLocation    = 4;
+		const int ColumnActivated   = 3;
+		const int ColumnThreadGroup = 4;
+		const int ColumnLocation    = 5;
 		
 		string[] columnHeaders = new string[] {
 			"",
 			"ID",
 			"Enabled",
+			"Activated",
 			"Thread group",
 			"Location"
 		};
@@ -36,6 +38,7 @@ namespace Mono.Debugger.Frontend
 		Type[] columnTypes = new Type[] {
 			typeof (Gdk.Pixbuf),
 			typeof (int),
+			typeof (string),
 			typeof (string),
 			typeof (string),
 			typeof (string)
@@ -101,7 +104,8 @@ namespace Mono.Debugger.Frontend
 					
 					store.SetValue(it, ColumnImage, Pixmaps.Empty);
 					store.SetValue(it, ColumnID, handle.Index);
-					store.SetValue(it, ColumnEnabled, handle.IsEnabled ? "Enabled" : "Disabled");
+					store.SetValue(it, ColumnEnabled, handle.IsEnabled ? "Yes" : "No");
+					store.SetValue(it, ColumnActivated, handle.IsActivated ? "Yes" : "No");
 					store.SetValue(it, ColumnThreadGroup, handle.ThreadGroup != null ? handle.ThreadGroup.Name : "global");
 					store.SetValue(it, ColumnLocation, handle.Name);
 				}
