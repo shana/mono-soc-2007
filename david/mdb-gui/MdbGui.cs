@@ -30,6 +30,7 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected Viewport viewportLocalVariables;
 		[Widget] protected Viewport viewportCallstack;
 		[Widget] protected Viewport viewportThreads;
+		[Widget] protected Viewport viewportBreakpoints;
 		
 		[Widget] protected TextView sourceView;
 		[Widget] protected Entry consoleIn;
@@ -39,6 +40,7 @@ namespace Mono.Debugger.Frontend
 		LocalsPad localsPad;
 		CallstackPad callstackPad;
 		ThreadPad threadPad;
+		BreakpointsPad breakpointsPad;
 		
 		public Interpreter Interpreter {
 			get { return interpreter; }
@@ -109,6 +111,8 @@ namespace Mono.Debugger.Frontend
 			viewportThreads.Add(threadPad);
 			localsPad = new LocalsPad(this);
 			viewportLocalVariables.Add(localsPad);
+			breakpointsPad = new BreakpointsPad(this);
+			viewportBreakpoints.Add(breakpointsPad);
 			
 			consoleIn.GrabFocus();
 		}
