@@ -270,7 +270,7 @@ public class DocumentBufferArchiver {
 			
 			if (elementName.Equals ("summary")) {
 				insertAt = buffer.GetIterAtOffset (offset);
-				buffer.Insert (insertAt, "[");
+				buffer.Insert (ref insertAt, "[");
 				offset += 1;
 			}
 		}
@@ -324,7 +324,7 @@ public class DocumentBufferArchiver {
 			
 			if (tagStart.Name.Equals ("summary")) {
 				insertAt = buffer.GetIterAtOffset (offset);
-				buffer.Insert (insertAt, "]");
+				buffer.Insert (ref insertAt, "]");
 				offset += 1;
 			}
 			
@@ -411,6 +411,7 @@ public class DocumentBufferArchiver {
 		switch (elementName) {
 		case "see":
 		case "since":
+		case "paramref":
 		case "Parameters":
 		case "remarks":
 		case "MemberSignature":
