@@ -3,6 +3,7 @@ using System;
 
 namespace Ribbons
 {
+	/// <summary>Color scheme.</summary>
 	public class ColorScheme
 	{
 		private Color prettyDark, dark, lightDark, normal, lightBright, bright, prettyBright;
@@ -68,12 +69,12 @@ namespace Ribbons
 			prettyBright = GetColorRelative (Normal, 0.15);
 		}
 		
-		public static Color SetAlphaChannel(Color C, double Alpha)
+		internal static Color SetAlphaChannel(Color C, double Alpha)
 		{
 			return new Color (C.R, C.G, C.B, Alpha);
 		}
 		
-		public static Color GetColorAbsolute(Color C, double luminance)
+		internal static Color GetColorAbsolute(Color C, double luminance)
 		{
 			/*double h, s, v;
 			RGB2HSV(C, out h, out s, out v);
@@ -91,7 +92,7 @@ namespace Ribbons
 			return HSL2RGB(h, s, l);
 		}
 
-		public static Color GetColorRelative(Color C, double luminance)
+		internal static Color GetColorRelative(Color C, double luminance)
 		{
 			double h, s, l;
 			RGB2HSL(C, out h, out s, out l);
