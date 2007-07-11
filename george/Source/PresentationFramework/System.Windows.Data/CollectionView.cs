@@ -269,9 +269,14 @@ namespace System.Windows.Data {
 		}
 
 		public virtual bool MoveCurrentToPosition(int position) {
+			CurrentChangingEventArgs e;
 			is_current_after_last = false;
 			is_current_before_first = false;
 			if (position < 0) {
+				e = new CurrentChangingEventArgs();
+				OnCurrentChanging(e);
+				if (e.Cancel)
+					return true;
 				current_position = -1;
 				current_item = null;
 				is_current_before_first = true;
@@ -281,11 +286,21 @@ namespace System.Windows.Data {
 			current_position = 0;
 			foreach (object item in source_collection) {
 				if (current_position == position) {
+					e = new CurrentChangingEventArgs();
+					OnCurrentChanging(e);
+					if (e.Cancel)
+						return true;
 					current_item = item;
 					OnCurrentChanged();
 					return true;
 				}
 				current_position++;
+			}
+			if (position <= current_position) {
+				e = new CurrentChangingEventArgs();
+				OnCurrentChanging(e);
+				if (e.Cancel)
+					return true;
 			}
 			current_item = null;
 			is_current_after_last = true;
