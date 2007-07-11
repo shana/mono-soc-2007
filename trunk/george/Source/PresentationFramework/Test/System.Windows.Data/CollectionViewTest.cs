@@ -1105,6 +1105,66 @@ namespace System.Windows.Data {
 		}
 		#endregion
 
+		#region CurrentChanging
+		#region CurrentChanging
+		[Test]
+		public void CurrentChanging() {
+			new CurrentChangingCollectionView();
+		}
+
+		class CurrentChangingCollectionView : CollectionView {
+			int calls;
+
+			public CurrentChangingCollectionView()
+				: base(new object[] { 1, 2 }) {
+				CurrentChanging += OnCurrentChanging;
+				Assert.IsTrue(MoveCurrentToNext(), "0");
+				Assert.AreEqual(calls, 1, "1");
+				Assert.AreEqual(CurrentItem, 1, "3");
+			}
+
+			void OnCurrentChanging(object sender, CurrentChangingEventArgs e) {
+				calls++;
+				Assert.IsTrue(e.IsCancelable, "2");
+				e.Cancel = true;
+			}
+		}
+		#endregion
+
+		#region CurrentChangingCancellingEffectOnSomeProperties
+		[Test]
+		public void CurrentChangingCancellingEffectOnSomeProperties() {
+			new CurrentChangingCancellingEffectOnSomePropertiesCollectionView();
+		}
+
+		class CurrentChangingCancellingEffectOnSomePropertiesCollectionView : CollectionView {
+			int calls;
+
+			public CurrentChangingCancellingEffectOnSomePropertiesCollectionView()
+				: base(new object[] { 1, 2 }) {
+				CurrentChanging += OnCurrentChanging;
+				Assert.IsTrue(MoveCurrentToPrevious(), "1");
+				Assert.IsFalse(IsCurrentAfterLast, "2");
+				Assert.IsFalse(IsCurrentBeforeFirst, "3");
+				Assert.AreEqual(CurrentItem, 1, "4");
+				Assert.AreEqual(CurrentPosition, 0, "5");
+				CurrentChanging -= OnCurrentChanging;
+				MoveCurrentToPrevious();
+				CurrentChanging += OnCurrentChanging;
+				Assert.IsFalse(MoveCurrentToPrevious(), "6");
+				Assert.IsFalse(IsCurrentAfterLast, "7");
+				Assert.IsTrue(IsCurrentBeforeFirst, "8");
+				Assert.IsNull(CurrentItem, "9");
+				Assert.AreEqual(CurrentPosition, -1, "10");
+			}
+
+			void OnCurrentChanging(object sender, CurrentChangingEventArgs e) {
+				e.Cancel = true;
+			}
+		}
+		#endregion
+		#endregion
+
 		#region IEnumerable.GetEnumerator
 		[Test]
 		public void IEnumerableGetEnumerator() {
