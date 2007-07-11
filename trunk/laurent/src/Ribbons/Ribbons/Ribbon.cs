@@ -5,6 +5,7 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>Ribbon widget.</summary>
 	public class Ribbon : Container
 	{
 		private static double borderWidth = 2.0;
@@ -32,6 +33,8 @@ namespace Ribbons
 		public event PageMovedHandler PageMoved;
 		public event PageRemovedHandler PageRemoved;
 		
+		/// <summary>Indix of the currently selected page.</summary>
+		/// <remakrs>Returns -1 if no page is selected.</remarks>
 		public int CurrentPageIndex
 		{
 			set
@@ -56,6 +59,7 @@ namespace Ribbons
 			}
 		}
 		
+		/// <summary>Currently selected page.</summary>
 		public RibbonPage CurrentPage
 		{
 			get
@@ -65,11 +69,14 @@ namespace Ribbons
 			}
 		}
 		
+		/// <summary>Number of pages.</summary>
 		public int NPages
 		{
 			get { return pages.Count; }
 		}
 		
+		/// <summary>Shortcuts widget.</summary>
+		/// <remarks>The shortcuts widget is displayed next to the tabs.</remarks>
 		public Widget Shortcuts
 		{
 			set
@@ -82,6 +89,7 @@ namespace Ribbons
 			get { return shortcuts; }
 		}
 		
+		/// <summary>Default constructor.</summary>
 		public Ribbon()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
@@ -92,16 +100,26 @@ namespace Ribbons
 			this.curPageIndex = -1;
 		}
 		
+		/// <summary>Adds a new page after all existing pages.</summary>
+		/// <param name="Child">The widget to use as the content of the page.</param>
+		/// <param name="Label">The widget to use as the tab.</param>
 		public void AppendPage (Widget Child, Widget Label)
 		{
 			InsertPage (Child, Label, -1);
 		}
 		
+		/// <summary>Adds a new page before all existing pages.</summary>
+		/// <param name="Child">The widget to use as the content of the page.</param>
+		/// <param name="Label">The widget to use as the tab.</param>
 		public void PrependPage (Widget Child, Widget Label)
 		{
 			InsertPage (Child, Label, 0);
 		}
 		
+		/// <summary>Adds a new page at the specified position.</summary>
+		/// <param name="Child">The widget to use as the content of the page.</param>
+		/// <param name="Label">The widget to use as the tab.</param>
+		/// <param name="Position">The index (starting at 0) at which the page must be inserted, or -1 to insert the page after all existing pages.</param>
 		public void InsertPage (Widget Child, Widget Label, int Position)
 		{
 			RibbonPage p = new RibbonPage (this, Child, Label);
@@ -152,6 +170,8 @@ namespace Ribbons
 			}
 		}
 		
+		/// <summary>Removes the specified page.</summary>
+		/// <param name="PageNumber">Index of the page to remove.</param>
 		public void RemovePage (int PageNumber)
 		{
 			if(curPageIndex != -1)
@@ -172,6 +192,9 @@ namespace Ribbons
 			OnPageRemoved (new PageEventArgs (p));
 		}
 		
+		/// <summary>Returns the index of the specified page given its content widget.</summary>
+		/// <param name="Child">The content of the page whose index must be returned.</param>
+		/// <returns>The index.</returns>
 		public int PageNum (Widget Child)
 		{
 			// Since it is unlikely that the widget will containe more than
@@ -182,6 +205,9 @@ namespace Ribbons
 			return -1;
 		}
 		
+		/// <summary>Returns the index of the specified page.</summary>
+		/// <param name="Page">The page whose index must be returned.</param>
+		/// <returns>The RibbonPage.</returns>
 		public int RibbonPageNum (RibbonPage Page)
 		{
 			// Since it is unlikely that the widget will containe more than
@@ -192,26 +218,39 @@ namespace Ribbons
 			return -1;
 		}
 		
+		/// <summary>Sets the label widget of the specified page.</summary>
+		/// <param name="Page">The content of the page whose label must be modified.</param>
+		/// <param name="Label">The new label widget.</param>
 		public void SetPageLabel (Widget Child, Widget Label)
 		{
 			pages[PageNum (Child)].Label = Label;
 		}
 		
+		/// <summary>Gets the label widget of the specified page.</summary>
+		/// <param name="Child">The content of the page whose label must be returned.</param>
+		/// <returns>The label widget.</returns>
 		public Widget GetPageLabel (Widget Child)
 		{
 			return pages[PageNum (Child)].Label;
 		}
 		
+		/// <summary>Returns the content widget of the n-th page.</summary>
+		/// <param name="Position">Index of the page whose content has to be returned.</param>
+		/// <returns>The n-th page.</returns>
 		public Widget GetNthPage (int Position)
 		{
 			return pages[Position].Page;
 		}
 		
+		/// <summary>Returns the n-th page.</summary>
+		/// <param name="Position">Index of the page to return.</param>
 		public RibbonPage GetNthRibbonPage (int Position)
 		{
 			return pages[Position];
 		}
 		
+		/// <summary>Selects the specified page.</summary>
+		/// <param name="Page">The page to select.</param>
 		public void SelectRibbonPage (RibbonPage page)
 		{
 			int idx = RibbonPageNum (page);
@@ -219,12 +258,14 @@ namespace Ribbons
 			OnPageSelected (new PageEventArgs (page));
 		}
 		
+		/// <summary>Selects the previous page.</summary>
 		public void PrevPage ()
 		{
 			int i = CurrentPageIndex;
 			if(i > 0) CurrentPageIndex = i - 1;
 		}
 		
+		/// <summary>Selects the next page.</summary>
 		public void NextPage ()
 		{
 			int i = CurrentPageIndex;
@@ -385,6 +426,7 @@ namespace Ribbons
 			if(PageRemoved != null) PageRemoved (this, args);
 		}
 		
+		/// <summary>Ribbon page.</summary>
 		public class RibbonPage
 		{
 			private Ribbon parent;
@@ -392,6 +434,7 @@ namespace Ribbons
 			private Requisition labelReq;
 			private Gdk.Rectangle labelAlloc;
 			
+			/// <summary>Label widget of the page.</summary>
 			public Widget Label
 			{
 				set
@@ -403,6 +446,7 @@ namespace Ribbons
 				get { return label; }
 			}
 			
+			/// <summary>Widget used as the content of the page.</summary>
 			public Widget Page
 			{
 				set { page = value; }
