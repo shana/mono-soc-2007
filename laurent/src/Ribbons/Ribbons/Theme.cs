@@ -3,6 +3,8 @@ using System;
 
 namespace Ribbons
 {
+	/// <summary>Ribbon theme.</summary>
+	/// <remarks>Used to draw ribbon widgets.</remarks>
 	public class Theme
 	{
 		internal enum ButtonState
@@ -12,7 +14,8 @@ namespace Ribbons
 		
 		protected ColorScheme colorScheme = new ColorScheme ();
 		
-		public void DrawGroup (Context cr, Rectangle r, double roundSize, double lineWidth, double space, Pango.Layout l, Gtk.Widget expandButton, RibbonGroup w)
+		/// <summary>Draws a group.</summary>
+		internal void DrawGroup (Context cr, Rectangle r, double roundSize, double lineWidth, double space, Pango.Layout l, Gtk.Widget expandButton, RibbonGroup w)
 		{
 			double lineWidth05 = lineWidth/2, lineWidth15 = 3*lineWidth05;
 			LinearGradient linGrad;
@@ -84,6 +87,7 @@ namespace Ribbons
 				return new Gdk.Color (255, 255, 255);
 		}
 		
+		/// <summary>Draws a ribbon.</summary>
 		public void DrawRibbon (Context cr, Gdk.Rectangle bodyAllocation, double roundSize, double lineWidth, Ribbon widget)
 		{
 			double lineWidth05 = lineWidth / 2;
@@ -209,7 +213,8 @@ namespace Ribbons
 			}
 		}
 		
-		internal void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, Button widget)
+		/// <summary>Draws a button.</summary>
+		public void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, Button widget)
 		{
 			double lineWidth05 = lineWidth / 2;
 			double lineWidth15 = lineWidth05 * 3;

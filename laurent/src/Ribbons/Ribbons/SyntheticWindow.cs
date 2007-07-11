@@ -5,6 +5,7 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>Window generating synthetic events to window-less widgets.</summary>
 	public class SyntheticWindow : Gtk.Window
 	{
 		private List<Widget> lastHoveredWidgets;
