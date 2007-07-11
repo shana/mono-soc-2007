@@ -91,6 +91,21 @@ namespace Mono.Debugger.Frontend
 		
 		public void UpdateDisplay ()
 		{
+			Event[] events = interpreter.Session.Events;
+			
+			store.Clear();
+			
+			foreach (Event handle in events) {
+				if (handle is SourceBreakpoint) {
+					TreeIter it = store.AppendNode();
+					
+					store.SetValue(it, ColumnImage, Pixmaps.Empty);
+					store.SetValue(it, ColumnID, handle.Index);
+					store.SetValue(it, ColumnEnabled, handle.IsEnabled ? "Enabled" : "Disabled");
+					store.SetValue(it, ColumnThreadGroup, handle.ThreadGroup != null ? handle.ThreadGroup.Name : "global");
+					store.SetValue(it, ColumnLocation, handle.Name);
+				}
+			}
 		}
 	}
 }
