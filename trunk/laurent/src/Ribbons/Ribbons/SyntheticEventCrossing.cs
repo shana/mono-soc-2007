@@ -4,8 +4,9 @@ using Gdk;
 
 namespace Ribbons
 {
+	/// <summary>Managed EventCrossing implementation.</summary>
 	[StructLayout(LayoutKind.Sequential)]
-	public struct SyntheticEventCrossing
+	internal struct SyntheticEventCrossing
 	{
 		[MarshalAs(UnmanagedType.SysInt)]
 		private int type;	// GdkEventType

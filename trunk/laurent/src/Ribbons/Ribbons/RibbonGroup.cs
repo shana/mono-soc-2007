@@ -4,6 +4,7 @@ using System;
 
 namespace Ribbons
 {
+	/// <summary>Ribbon group.</summary>
 	public class RibbonGroup : Bin
 	{
 		protected Theme theme = new Theme ();
@@ -18,6 +19,7 @@ namespace Ribbons
 		protected double lineWidth = 1.0;
 		protected double space = 2.0;
 		
+		/// <summary>Displayed label.</summary>
 		public string Label
 		{
 			set
@@ -34,6 +36,8 @@ namespace Ribbons
 			get { return lbl; }
 		}
 		
+		/// <summary>Expand event.</summary>
+		/// <remarks>Fired whenever the expand button is clicked.</remarks>
 		public event EventHandler Expand
 		{
 			add
@@ -48,6 +52,7 @@ namespace Ribbons
 			}
 		}
 		
+		/// <summary>Default constructor.</summary>
 		public RibbonGroup ()
 		{
 			// This is a No Window widget => it does not have its own Gdk Window => it can be transparent

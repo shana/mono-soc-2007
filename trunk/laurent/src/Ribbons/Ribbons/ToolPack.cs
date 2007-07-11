@@ -5,11 +5,13 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>Set of ribbon buttons packed together.</summary>
 	public class ToolPack : Container
 	{
 		private List<Button> buttons;
 		private int[] widths;
 		
+		/// <summary>Default constructor.</summary>
 		public ToolPack ()
 		{
 			this.buttons = new List<Ribbons.Button> ();
@@ -19,16 +21,23 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 		}
 		
+		/// <summary>Adds a button before all existing buttons.</summary>
+		/// <param name="Widget">The button to add.</param>
 		public void PrependButton (Button Widget)
 		{
 			InsertButton (Widget, 0);
 		}
 		
+		/// <summary>Adds a button after all existing buttons.</summary>
+		/// <param name="Widget">The button to add.</param>
 		public void AppendButton (Button Widget)
 		{
 			InsertButton (Widget, -1);
 		}
 		
+		/// <summary>Inserts a button at the specified location.</summary>
+		/// <param name="Widget">The button to add.</param>
+		/// <param name="ButtonIndex">The index (starting at 0) at which the button must be inserted, or -1 to insert the page after all existing buttons.</param>
 		public void InsertButton (Button Widget, int ButtonIndex)
 		{
 			Widget.Parent = this;
@@ -74,6 +83,8 @@ namespace Ribbons
 			}
 		}
 		
+		/// <summary>Removes the button at the specified index.</summary>
+		/// <param name="ButtonIndex">Index of the button to remove.</param>
 		public void RemoveButton (int ButtonIndex)
 		{
 			buttons[ButtonIndex].Parent = null;
