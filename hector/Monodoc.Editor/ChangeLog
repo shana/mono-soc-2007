@@ -1,3 +1,9 @@
+2007-07-10  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Minor modifications
+	* Monodoc.Editor.Gui/DocumentTagTable.cs: Made the "summary" tag
+	  editable.
+
 2007-07-09  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* Monodoc.Editor/EditorWindow.cs: Added event to close a document file.
