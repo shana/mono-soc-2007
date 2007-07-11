@@ -7,7 +7,7 @@ namespace Ribbons
 	/// <remarks>Used to draw ribbon widgets.</remarks>
 	public class Theme
 	{
-		internal enum ButtonState
+		public enum ButtonState
 		{
 			Default, Hover, Pressed
 		}
@@ -49,13 +49,13 @@ namespace Ribbons
 				cr.Pattern = linGrad;
 				cr.Fill ();
 				
-				cr.Save ();
-				cr.Rectangle (r.X + 2*lineWidth, bandY, r.Width - 4*lineWidth, bandHeight);
-				cr.Clip ();
-				
 				double frameSize = 2*lineWidth + space;
 				double availableHorizontalSpace = r.Width - 2 * frameSize;
 				if(expandButton.Visible) availableHorizontalSpace -= expandButton.WidthRequest + space;
+				
+				cr.Save ();
+				cr.Rectangle (r.X + frameSize, bandY, availableHorizontalSpace, bandHeight);
+				cr.Clip ();
 				
 				cr.Color = new Color(1, 1, 1);
 				Pango.CairoHelper.UpdateLayout (cr, l);
