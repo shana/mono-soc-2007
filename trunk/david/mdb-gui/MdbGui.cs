@@ -225,6 +225,7 @@ namespace Mono.Debugger.Frontend
 			threadPad.UpdateDisplay();
 			callstackPad.UpdateDisplay();
 			localsPad.UpdateDisplay();
+			breakpointsPad.UpdateDisplay();
 			
 			// Update the source view
 			UpdateSourceView();
