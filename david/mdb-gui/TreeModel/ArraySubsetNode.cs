@@ -76,6 +76,10 @@ namespace Mono.Debugger.Frontend.TreeModel
 			dimension = indicesPefix.Length;
 			lowerBound = obj.GetLowerBound(stackFrame.Thread, dimension);
 			upperBound = obj.GetUpperBound(stackFrame.Thread, dimension) - 1;
+
+			// Uncoment to test that the whole int range can be handled
+			//lowerBound = int.MinValue;
+			//upperBound = int.MaxValue;
 		}
 		
 		public ArraySubsetNode(StackFrame stackFrame, TargetArrayObject obj, int[] indicesPefix)
@@ -122,7 +126,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 		
 		AbstractNode[] GetChildNodes()
 		{
-			int childCount = endIndex - startIndex + 1;
+			long childCount = (long)endIndex - (long)startIndex + 1;
 			if (childCount <= SubsetMaximalSize) {
 				// Return array of all childs
 				AbstractNode[] childs = new AbstractNode[childCount];
@@ -132,26 +136,26 @@ namespace Mono.Debugger.Frontend.TreeModel
 				return childs;
 			} else {
 				// Subdivide to smaller groups
-				int groupSize = SubsetOptimalSize;
+				long groupSize = SubsetOptimalSize;
 				
 				// The number of groups must not be too big either
 				// Increase groupSize if necessary
-				int groupCount;
+				long groupCount;
 				while(true) {
 					groupCount = ((childCount - 1) / groupSize) + 1; // Round up
 					if (groupCount <= SubsetMaximalSize) {
 						break;
 					} else {
-						groupSize = groupSize * groupSize;
+						groupSize *= SubsetOptimalSize;
 					}
 				}
 				
 				// Return the smaller groups
 				AbstractNode[] childs = new AbstractNode[groupCount];
 				for(int i = 0; i < groupCount; i++) {
-					int start = startIndex + i * groupSize;
-					int end = System.Math.Min(upperBound, start + groupSize - 1);
-					childs[i] = new ArraySubsetNode(stackFrame, obj, indicesPefix, start, end);
+					long start = startIndex + i * groupSize;
+					long end = System.Math.Min(upperBound, start + groupSize - 1);
+					childs[i] = new ArraySubsetNode(stackFrame, obj, indicesPefix, (int)start, (int)end);
 				}
 				return childs;
 			}
