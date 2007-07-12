@@ -41,6 +41,7 @@ namespace Ribbons
 		public void InsertButton (Button Widget, int ButtonIndex)
 		{
 			Widget.Parent = this;
+			Widget.Visible = true;
 			
 			Widget.DrawBackground = true;
 			
@@ -122,7 +123,10 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
-			foreach(Button b in buttons) callback (b);
+			foreach(Button b in buttons)
+			{
+				if(b.Visible) callback (b);
+			}
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
