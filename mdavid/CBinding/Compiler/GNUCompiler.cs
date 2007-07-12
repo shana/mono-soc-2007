@@ -179,6 +179,7 @@ namespace CBinding
 			
 			ProcessWrapper p = Runtime.ProcessService.StartProcess (compilerCommand, completeArgs, null, null);
 			p.WaitForExit ();
+			p.Close ();
 		}
 		
 		private void MakeBin(ProjectFileCollection projectFiles,
@@ -231,6 +232,7 @@ namespace CBinding
 			ParseCompilerOutput (error.ToString (), cr);
 			
 			error.Close ();
+			p.Close ();
 			
 			ParseLinkerOutput (error.ToString (), cr);
 		}
@@ -249,6 +251,7 @@ namespace CBinding
 				"ar", "rcs " + outputName + " " + objectFiles,
 				null, null);
 			p.WaitForExit ();
+			p.Close ();
 		}
 		
 		private void MakeSharedLibrary(ProjectFileCollection projectFiles,
@@ -301,6 +304,7 @@ namespace CBinding
 			ParseCompilerOutput (error.ToString (), cr);
 			
 			error.Close ();
+			p.Close ();
 			
 			ParseLinkerOutput (error.ToString (), cr);
 		}
@@ -359,7 +363,10 @@ namespace CBinding
 			
 			error.Close ();
 			
-			return p.ExitCode == 0;
+			bool result = p.ExitCode == 0;
+			p.Close ();
+			
+			return result;
 		}
 		
 		private string[] ObjectFiles (ProjectFileCollection projectFiles)
@@ -393,8 +400,7 @@ namespace CBinding
 				return true;
 			
 			foreach (string obj in ObjectFiles (projectFiles))
-				if (File.Exists (obj) &&
-				    File.GetLastWriteTime (obj) > File.GetLastWriteTime (target))
+				if (File.GetLastWriteTime (obj) > File.GetLastWriteTime (target))
 					return true;
 			
 			return false;
