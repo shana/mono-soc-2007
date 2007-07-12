@@ -1,3 +1,10 @@
+2007-07-12  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProjectConfiguration.cs, Project/CProject.cs,
+	  Compiler/GNUCompiler.cs: Inplemented support for precompiled header
+	  files in gcc and g++.
+	* CBinding.addin.xml: Fixed something I had broken.
+
 2007-07-10  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/ProjectNodeBuilderExtension.cs,
