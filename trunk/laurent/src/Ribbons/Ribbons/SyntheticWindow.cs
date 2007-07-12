@@ -19,35 +19,37 @@ namespace Ribbons
 		{
 			// This method is hooked to block the event as soon as possible if required
 			
-			switch(evnt.Type)
+			if(evnt.Window.Equals(this.GdkWindow))
 			{
-				case Gdk.EventType.ButtonPress:
-				case Gdk.EventType.ButtonRelease:
-				case Gdk.EventType.ThreeButtonPress:
-				case Gdk.EventType.TwoButtonPress:
-					Gdk.EventButton eb = new Gdk.EventButton (evnt.Handle);
-					return PropagateEventGivenCoordinate (evnt, eb.X, eb.XRoot, eb.Y, eb.YRoot);
-				
-				case Gdk.EventType.MotionNotify:
-					Gdk.EventMotion em = new Gdk.EventMotion (evnt.Handle);
-					return PropagateEventGivenCoordinate (evnt, em.X, em.XRoot, em.Y, em.YRoot);
-				
-				case Gdk.EventType.LeaveNotify:
-					foreach(Widget w in lastHoveredWidgets)
-					{
-						w.ProcessEvent (evnt);
-					}
-					lastHoveredWidgets.Clear();
-					return base.OnWidgetEvent (evnt);
-				
-				default:
-					return base.OnWidgetEvent (evnt);
+				switch(evnt.Type)
+				{
+					case Gdk.EventType.ButtonPress:
+					case Gdk.EventType.ButtonRelease:
+					case Gdk.EventType.ThreeButtonPress:
+					case Gdk.EventType.TwoButtonPress:
+						Gdk.EventButton eb = new Gdk.EventButton (evnt.Handle);
+						return PropagateEventGivenCoordinate (evnt, eb.X, eb.XRoot, eb.Y, eb.YRoot);
+					
+					case Gdk.EventType.MotionNotify:
+						Gdk.EventMotion em = new Gdk.EventMotion (evnt.Handle);
+						return PropagateEventGivenCoordinate (evnt, em.X, em.XRoot, em.Y, em.YRoot);
+					
+					case Gdk.EventType.LeaveNotify:
+						foreach(Widget w in lastHoveredWidgets)
+						{
+							w.ProcessEvent (evnt);
+						}
+						lastHoveredWidgets.Clear();
+						return base.OnWidgetEvent (evnt);
+				}
 			}
+			return base.OnWidgetEvent (evnt);
 		}
 		
 		private bool PropagateEventGivenCoordinate (Gdk.Event evnt, double X, double XRoot, double Y, double YRoot)
 		{
 			int x = (int)X, y = (int)Y;
+			
 			Container current = this;	// Current container containing the coordinate
 			Widget match = this;	// Current match for the position
 			int matchedPos = 0;	// Current position in lastHoveredWidgets
