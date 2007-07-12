@@ -10,7 +10,7 @@ namespace Mono.System.Windows.Controls {
 namespace System.Windows.Controls {
 #endif
 	[Localizability(LocalizationCategory.Ignore)]
-	public sealed class ItemCollection : CollectionView, IList, ICollection, IEnumerable, IWeakEventListener {
+	public sealed class ItemCollection : Mono.System.Windows.Data.CollectionView, IList, ICollection, IEnumerable, IWeakEventListener {
 		#region Internal Fields
 		internal IEnumerable source_collection;
 		#endregion
@@ -257,6 +257,12 @@ namespace System.Windows.Controls {
 				foreach (object item in source_collection)
 					writeable_data.Add(item);
 				data = ArrayList.FixedSize(ArrayList.ReadOnly(writeable_data));
+			}
+		}
+
+		internal IEnumerator LogicalChildren {
+			get {
+				return data.GetEnumerator();
 			}
 		}
 		#endregion

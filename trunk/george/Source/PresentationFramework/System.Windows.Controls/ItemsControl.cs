@@ -40,6 +40,7 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Private Fields
+		ObservableCollection<GroupStyle> group_style = new ObservableCollection<GroupStyle>();
 		ItemContainerGenerator item_container_generator = new ItemContainerGenerator();
 		ItemCollection items;
 		#endregion
@@ -126,11 +127,9 @@ namespace System.Windows.Controls {
 			set { SetValue(ItemTemplateSelectorProperty, value); }
 		}
 		#endregion
-		public ObservableCollection<GroupStyle> GroupStyle { 
-			get {
-				//WDTDH
-				return null;
-			}
+		
+		public ObservableCollection<GroupStyle> GroupStyle {
+			get { return group_style; }
 		}
 
 		[Bindable(false)]
@@ -147,8 +146,7 @@ namespace System.Windows.Controls {
 		#region Protected Properties
 		protected override IEnumerator LogicalChildren {
 			get {
-				//WDTDH
-				return base.LogicalChildren;
+				return items.LogicalChildren;
 			}
 		}
 		#endregion
@@ -184,42 +182,36 @@ namespace System.Windows.Controls {
 		}
 
 		public bool ShouldSerializeGroupStyle() {
-			//WDTDH
-			return false;
+			return group_style.Count != 0;
 		}
 
 		public bool ShouldSerializeItems() {
-			//WDTDH
-			return false;
+			return items.Count != 0;
 		}
 
 		public override string ToString() {
-			//WDTDH
-			return base.ToString();
+			return "System.Windows.Controls.ItemsControl Items.Count:" + items.Count;
 		}
 		#endregion
 
 		#region Protected Methods
 		protected virtual void AddChild(object value) {
-			//WDTDH
+			items.Add(value);
 		}
 
 		protected virtual void AddText(string text) {
-			//WDTDH
+			items.Add(text);
 		}
 
 		protected virtual void ClearContainerForItemOverride(DependencyObject element, object item) {
-			//WDTDH
 		}
 
 		protected virtual DependencyObject GetContainerForItemOverride() {
-			//WDTDH
-			return null;
+			return new ContentPresenter();
 		}
 
 		protected virtual bool IsItemItsOwnContainerOverride(object item) {
-			//WDTDH
-			return false;
+			return item is UIElement;
 		}
 
 		protected virtual void OnDisplayMemberPathChanged(string oldDisplayMemberPath, string newDisplayMemberPath) {
@@ -269,12 +261,18 @@ namespace System.Windows.Controls {
 		}
 
 		protected virtual void PrepareContainerForItemOverride(DependencyObject element, object item) {
-			//WDTDH
+			ContentPresenter content_presenter = element as ContentPresenter;
+			if (content_presenter != null) {
+				content_presenter.Content = item;
+				return;
+			}
+			ContentControl content_control = element as ContentControl;
+			if (content_control != null)
+				content_control.Content = item;
 		}
 
 		protected virtual bool ShouldApplyItemContainerStyle(DependencyObject container, object item) {
-			//WDTDH
-			return false;
+			return true;
 		}
 		#endregion
 

@@ -1,3 +1,10 @@
+2007-07-12  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ItemCollection.cs: Switched to implemented CollectionView.
+	* ItemContainerGenerator.cs: Moved from System.Windows.Controls.Primitives.
+	* ItemsControl.cs: More work.
+	* ItemsPanelTemplate.cs, ItemsPresenter.cs: Added.
+
 2007-07-09  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ColumnDefinitionCollection.cs, RowDefinitionCollection.cs: Removed unneeded explicit interface implementations.
@@ -36,7 +43,7 @@
 
 2007-07-01  George Giolfan  <georgegiolfan@yahoo.com>
 
-	* Expanded.cs: Added.
+	* Expander.cs: Added.
 	
 2007-07-01  George Giolfan  <georgegiolfan@yahoo.com>
 
