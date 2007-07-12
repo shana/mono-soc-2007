@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionWindow.cs" />
     <Compile Include="MdbGui.cs" />
     <Compile Include="Pads\BreakpointsPad.cs" />
     <Compile Include="Pads\CallstackPad.cs" />
