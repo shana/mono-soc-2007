@@ -83,7 +83,11 @@ namespace Ribbons
 			{
 				if(shortcuts != null) shortcuts.Unparent ();
 				shortcuts = value;
-				if(shortcuts != null) shortcuts.Parent = this;
+				if(shortcuts != null)
+				{
+					shortcuts.Visible = true;
+					shortcuts.Parent = this;
+				}
 				QueueDraw ();
 			}
 			get { return shortcuts; }
@@ -274,9 +278,17 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
-			if(Shortcuts != null) callback (Shortcuts);
+			if(Shortcuts != null && Shortcuts.Visible)
+			{
+				callback (Shortcuts);
+			}
+			
 			foreach(RibbonPage p in pages) callback (p.Label);
-			if(CurrentPage != null) callback (CurrentPage.Page);
+			
+			if(CurrentPage != null)
+			{
+				callback (CurrentPage.Page);
+			}
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
