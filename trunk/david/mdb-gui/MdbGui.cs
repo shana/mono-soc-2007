@@ -105,6 +105,9 @@ namespace Mono.Debugger.Frontend
 			TextTag breakpointTag = new TextTag("breakpoint");
 			breakpointTag.Background = "red";
 			sourceView.Buffer.TagTable.Add(breakpointTag);
+			TextTag disabledBreakpointTag = new TextTag("disabledBreakpoint");
+			disabledBreakpointTag.Background = "gray";
+			sourceView.Buffer.TagTable.Add(disabledBreakpointTag);
 			sourceView.Buffer.Text = "No source file";
 			
 			// Load pads
@@ -273,7 +276,7 @@ namespace Mono.Debugger.Frontend
 				if (handle is SourceBreakpoint) {
 					SourceLocation location = ((SourceBreakpoint)handle).Location;
 					if (location != null) {
-						AddSourceViewTag("breakpoint", location.Line);
+						AddSourceViewTag(handle.IsEnabled && handle.IsActivated ? "breakpoint" : "disabledBreakpoint", location.Line);
 					}
 				}
 			}
