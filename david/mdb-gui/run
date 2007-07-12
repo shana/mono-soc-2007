@@ -1,3 +1,4 @@
+#!/bin/sh
 export MONODIR=`echo \`which mono\` | sed 's|bin/mono||'`
 export MONO_PATH=.:${MONODIR}/lib/mono/1.0/:${MONODIR}/lib/mono/mono-debugger/:${MONO_PATH}
 
