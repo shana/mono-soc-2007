@@ -4,7 +4,7 @@ namespace Mono.Debugger.Frontend
 {
 	public static class Pixmaps
 	{
-		const string imageBase = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.";
+		const string imageBase = "Mono.Debugger.Frontend.pixmaps.Icons.";
 		
 		public static Gdk.Pixbuf DebugBreak       = Load("Debug.Break.png");
 		public static Gdk.Pixbuf DebugContinue    = Load("Debug.Continue.png");
@@ -20,6 +20,7 @@ namespace Mono.Debugger.Frontend
 		public static Gdk.Pixbuf Error = Load("Error.png");
 		public static Gdk.Pixbuf Breakpoint         = Load("Breakpoint.png");
 		public static Gdk.Pixbuf BreakpointDisabled = Load("BreakpointDisabled.png");
+		public static Gdk.Pixbuf Exception = Load("48x48", "Exception.png");
 		
 		public static Gdk.Pixbuf PublicClass     = Load("PublicClass");
 		public static Gdk.Pixbuf PublicDelegate  = Load("PublicDelegate");
@@ -33,7 +34,12 @@ namespace Mono.Debugger.Frontend
 		
 		static Gdk.Pixbuf Load(string name)
 		{
-			return Gdk.Pixbuf.LoadFromResource(imageBase + name);
+			return Load("16x16", name);
+		}
+		
+		static Gdk.Pixbuf Load(string size, string name)
+		{
+			return Gdk.Pixbuf.LoadFromResource(imageBase + size + "." + name);
 		}
 	}
 }

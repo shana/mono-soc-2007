@@ -16,7 +16,7 @@ namespace Mono.Debugger.Frontend
 			Glade.XML gxml = new Glade.XML("gui.glade", "exceptionWindow", null);
 			gxml.Autoconnect(this);
 			
-			image.Pixbuf = Pixmaps.Error;
+			image.Pixbuf = Pixmaps.Exception;
 		}
 		
 		public static void Show()
