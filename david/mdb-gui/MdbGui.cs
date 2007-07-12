@@ -322,20 +322,22 @@ namespace Mono.Debugger.Frontend
 			sourceView.Buffer.RemoveAllTags(bufferBegin, bufferEnd);
 			
 			// Add tag to show current line
-			TextIter currLine = AddSourceViewTag("currentLine", currentFrame.SourceAddress.Location.Line);
+			int currentLine = currentFrame.SourceAddress.Location.Line;
+			TextIter currentLineIter = AddSourceViewTag("currentLine", currentLine);
 			
 			// Add tags for breakpoints
 			foreach (Event handle in interpreter.Session.Events) {
 				if (handle is SourceBreakpoint) {
 					SourceLocation location = ((SourceBreakpoint)handle).Location;
-					if (location != null) {
+					// If it is current line, do not retag it
+					if (location != null && location.Line != currentLine) {
 						AddSourceViewTag(handle.IsEnabled && handle.IsActivated ? "breakpoint" : "disabledBreakpoint", location.Line);
 					}
 				}
 			}
 			
 			// Scroll to current line
-			TextMark mark = sourceView.Buffer.CreateMark(null, currLine, false);
+			TextMark mark = sourceView.Buffer.CreateMark(null, currentLineIter, false);
 			sourceView.ScrollToMark(mark, 0, false, 0, 0);
 		}
 		
