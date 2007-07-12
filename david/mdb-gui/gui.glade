@@ -128,6 +128,35 @@
 	      <property name="homogeneous">True</property>
 	    </packing>
 	  </child>
+	  
+	  <child>
+	    <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+	      <property name="visible">True</property>
+	      <property name="draw">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">False</property>
+	    </packing>
+	  </child>
+	  
+	  <child>
+	    <widget class="GtkToolButton" id="toolbuttonBreakpoint">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Breakpoint</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="OnToolbuttonBreakpoint_clicked" last_modification_time="Sat, 23 Jun 2007 21:27:40 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>

@@ -26,6 +26,7 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected ToolButton toolbuttonStepIn;
 		[Widget] protected ToolButton toolbuttonStepOver;
 		[Widget] protected ToolButton toolbuttonStepOut;
+		[Widget] protected ToolButton toolbuttonBreakpoint;
 		
 		[Widget] protected Viewport viewportLocalVariables;
 		[Widget] protected Viewport viewportCallstack;
@@ -97,6 +98,8 @@ namespace Mono.Debugger.Frontend
 			toolbuttonStepOver.IconWidget.Show();
 			toolbuttonStepOut.IconWidget = new Image(Pixmaps.DebugStepOut);
 			toolbuttonStepOut.IconWidget.Show();
+			toolbuttonBreakpoint.IconWidget = new Image(Pixmaps.Breakpoint);
+			toolbuttonBreakpoint.IconWidget.Show();
 			
 			// Default source view
 			TextTag currentLineTag = new TextTag("currentLine");
@@ -205,6 +208,43 @@ namespace Mono.Debugger.Frontend
 				UpdateGUI();
 			} else {
 				Console.WriteLine("Error - no current thread");
+			}
+		}
+		
+		protected void OnToolbuttonBreakpoint_clicked(object o, EventArgs e) 
+		{
+			// Toggle breakpoint at current location
+			if (currentlyLoadedSourceFile != null) {
+				int line = sourceView.Buffer.GetIterAtMark(sourceView.Buffer.InsertMark).Line + 1;
+				
+				// Try to find a breakpoint at current location
+				foreach (Event breakpoint in interpreter.Session.Events) {
+					if (breakpoint is SourceBreakpoint) {
+						SourceLocation location = ((SourceBreakpoint)breakpoint).Location;
+						if (location != null &&
+						    location.FileName == currentlyLoadedSourceFile &&
+						    location.Line == line) {
+							
+							interpreter.Session.DeleteEvent(breakpoint);
+							UpdateGUI();
+							return;
+						}
+					}
+				}
+				
+				// Add breakpoint at current location
+				if (interpreter.HasTarget && interpreter.HasCurrentThread) {
+					try {
+						SourceLocation newLocation;
+						ExpressionParser.ParseLocation(interpreter.CurrentThread, line.ToString(), out newLocation);
+						Event newBreakpoint = interpreter.Session.InsertBreakpoint(ThreadGroup.Global, newLocation);
+						newBreakpoint.Activate(interpreter.CurrentThread);
+					} catch {
+					}
+				}
+				UpdateGUI();
+			} else {
+				Console.WriteLine("Error - no source file loaded");
 			}
 		}
 		
