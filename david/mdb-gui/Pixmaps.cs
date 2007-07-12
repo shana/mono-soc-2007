@@ -18,6 +18,8 @@ namespace Mono.Debugger.Frontend
 		public static Gdk.Pixbuf Empty = Load("Empty.png");
 		public static Gdk.Pixbuf Arrow = Load("Arrow.png");
 		public static Gdk.Pixbuf Error = Load("Error.png");
+		public static Gdk.Pixbuf Breakpoint         = Load("Breakpoint.png");
+		public static Gdk.Pixbuf BreakpointDisabled = Load("BreakpointDisabled.png");
 		
 		public static Gdk.Pixbuf PublicClass     = Load("PublicClass");
 		public static Gdk.Pixbuf PublicDelegate  = Load("PublicDelegate");
