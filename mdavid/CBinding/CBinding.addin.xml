@@ -126,7 +126,7 @@
 	</Extension>
 	
 	<Extension path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode">
-		<CommandItem id = "CBinding.ProjectPad.CProjectCommands.AddPackage"/>
+		<CommandItem id = "CBinding.CProjectCommands.AddPackage"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ClassBrowser/ContextMenu/ProjectBrowserNode">

@@ -60,9 +60,8 @@ namespace CBinding
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());
 			bool res = true;
 			
-			string outputName = string.Format ("{0}/{1}",
-			    configuration.OutputDirectory,
-			    configuration.CompiledOutputName);
+			string outputName = Path.Combine (configuration.OutputDirectory,
+			                                  configuration.CompiledOutputName);
 			
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
@@ -94,6 +93,18 @@ namespace CBinding
 			if (configuration.Includes != null)
 				foreach (string inc in configuration.Includes)
 					args.Append ("-I" + inc + " ");
+			
+			// Precompile header files and place them in .prec/<config_name>/
+			string precdir = Path.Combine (configuration.SourceDirectory, ".prec");
+			if (!Directory.Exists (precdir))
+				Directory.CreateDirectory (precdir);
+			precdir = Path.Combine (precdir, configuration.Name);
+			if (!Directory.Exists (precdir))
+				Directory.CreateDirectory (precdir);
+			
+			args.Append ("-I" + precdir);
+			
+			PrecompileHeaders (projectFiles, configuration, args.ToString ());
 			
 			foreach (ProjectFile f in projectFiles) {
 				if (f.Subtype == Subtype.Directory) continue;
@@ -135,6 +146,39 @@ namespace CBinding
 			}
 			
 			return new DefaultCompilerResult (cr, "");
+		}
+		
+		private void PrecompileHeaders (ProjectFileCollection projectFiles,
+		                                CProjectConfiguration configuration,
+		                                string args)
+		{
+			foreach (ProjectFile file in projectFiles) {
+				if (file.Subtype == Subtype.Code && CProject.IsHeaderFile (file.Name)) {
+					string precomp = Path.Combine (configuration.SourceDirectory, ".prec");
+					precomp = Path.Combine (precomp, configuration.Name);
+					precomp = Path.Combine (precomp, Path.GetFileName (file.Name) + ".ghc");
+					
+					if (!File.Exists (precomp)) {
+						DoPrecompileHeader (file, precomp, args);
+						continue;
+					}
+					
+					if (File.GetLastWriteTime (file.Name) > File.GetLastWriteTime (precomp)) {
+						DoPrecompileHeader (file, precomp, args);
+					}
+				}
+			}
+		}
+		
+		private void DoPrecompileHeader (ProjectFile file, string output, string args)
+		{
+			string completeArgs = String.Format("{0} {1} -o {2}",
+						                        file.Name,
+						                        args,
+						                        output);
+			
+			ProcessWrapper p = Runtime.ProcessService.StartProcess (compilerCommand, completeArgs, null, null);
+			p.WaitForExit ();
 		}
 		
 		private void MakeBin(ProjectFileCollection projectFiles,

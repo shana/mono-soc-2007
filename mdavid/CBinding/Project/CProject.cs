@@ -163,9 +163,16 @@ namespace CBinding
 			}
 		}
 		
+		public static bool IsHeaderFile (string filename)
+		{
+			return (Path.GetExtension (filename.ToUpper ()) == ".H" ||
+			        Path.GetExtension (filename.ToUpper ()) == ".HPP");
+		}
+		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)
 		{
 			CProjectConfiguration pc = (CProjectConfiguration)ActiveConfiguration;
+			pc.SourceDirectory = BaseDirectory; // hack, this should not be necessary
 			foreach (ProjectFile f in ProjectFiles) {
 				if (f.BuildAction == BuildAction.FileCopy)
 					Runtime.FileService.CopyFile (

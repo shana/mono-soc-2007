@@ -65,10 +65,11 @@ namespace CBinding
 		[ItemProperty ("Lib", Scope = 1, ValueType = typeof(string))]
     	private ArrayList libs = new ArrayList ();
 		
-		[ItemProperty("CodeGeneration",
+		[ItemProperty ("CodeGeneration",
 		              FallbackType = typeof(UnknownCompilationParameters))]
 		ICloneable compilationParameters;
 		
+		[ItemProperty ("SourceDirectory")]
 		private string source_directory_path;
 		
 		public string Output {
