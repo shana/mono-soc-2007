@@ -102,7 +102,7 @@ namespace Mono.Debugger.Frontend
 				if (handle is SourceBreakpoint) {
 					TreeIter it = store.AppendNode();
 					
-					store.SetValue(it, ColumnImage, Pixmaps.Empty);
+					store.SetValue(it, ColumnImage, handle.IsEnabled && handle.IsActivated ? Pixmaps.Breakpoint : Pixmaps.BreakpointDisabled);
 					store.SetValue(it, ColumnID, handle.Index);
 					store.SetValue(it, ColumnEnabled, handle.IsEnabled ? "Yes" : "No");
 					store.SetValue(it, ColumnActivated, handle.IsActivated ? "Yes" : "No");
