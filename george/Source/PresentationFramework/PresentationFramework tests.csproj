@@ -54,6 +54,7 @@
     <Compile Include="Test\System.Windows.Controls.Primitives\ButtonBaseTest.cs" />
     <None Include="Test\System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="Test\System.Windows.Controls\ChangeLog" />
+    <Compile Include="Test\System.Windows.Controls\ItemContainerGeneratorTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\GeneratorPositionTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\SelectorTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\TabPanelTest.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Test\System.Windows.Controls\ColumnDefinitionTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ItemCollectionTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ItemsControlTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\ItemsPanelTemplateTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ListBoxItemTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ListBoxTest.cs" />
     <Compile Include="Test\System.Windows.Controls\RowDefinitionTest.cs" />

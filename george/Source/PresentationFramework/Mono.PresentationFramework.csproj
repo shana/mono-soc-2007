@@ -72,10 +72,12 @@
     <Compile Include="System.Windows.Controls\ContextMenuEventHandler.cs" />
     <Compile Include="System.Windows.Controls\ContextMenuEventArgs.cs" />
     <Compile Include="System.Windows.Controls\ColumnDefinitionCollection.cs" />
+    <Compile Include="System.Windows.Controls\ItemsPanelTemplate.cs" />
     <Compile Include="System.Windows.Controls\Expander.cs" />
     <Compile Include="System.Windows.Controls\ItemCollection.cs" />
-    <Compile Include="System.Windows.Controls.Primitives\ItemContainerGenerator.cs" />
+    <Compile Include="System.Windows.Controls\ItemContainerGenerator.cs" />
     <Compile Include="System.Windows.Controls\ItemsControl.cs" />
+    <Compile Include="System.Windows.Controls\ItemsPresenter.cs" />
     <Compile Include="System.Windows.Controls\ListBox.cs" />
     <Compile Include="System.Windows.Controls\ListBoxItem.cs" />
     <Compile Include="System.Windows.Controls\RowDefinition.cs" />

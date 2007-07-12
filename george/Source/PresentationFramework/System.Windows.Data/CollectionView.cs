@@ -222,50 +222,38 @@ namespace System.Windows.Data {
 				current_collection_item_index++;
 			}
 			return MoveCurrentToPosition(-1);
-			//int current_collection_item_index = 0;
-			//foreach (object collection_item in source_collection) {
-			//    if (object.Equals(item, collection_item)) {
-			//        current_item = item;
-			//        current_position = current_collection_item_index;
-			//        is_current_after_last = false;
-			//        is_current_before_first = false;
-			//        OnCurrentChanged();
-			//        return true;
-			//    }
-			//    current_collection_item_index++;
-			//}
-			//current_item = null;
-			//current_position = -1;
-			//is_current_before_first = true;
-			//OnCurrentChanged();
-			//return false;
 		}
 
 		public virtual bool MoveCurrentToFirst() {
-			return MoveCurrentToFirstInternal();
+			current_position = 0;
+			IEnumerator enumerator = source_collection.GetEnumerator();
+			if (enumerator.MoveNext()) {
+				current_item = enumerator.Current;
+				is_current_after_last = false;
+				is_current_before_first = false;
+				return true;
+			} else {
+				current_item = null;
+				is_current_after_last = true;
+				is_current_before_first = true;
+				return false;
+			}
 		}
 
 		public virtual bool MoveCurrentToLast() {
-			return MoveCurrentToLastInternal();
+			current_item = null;
+			current_position = -1;
+			foreach (object item in source_collection) {
+				current_item = item;
+				current_position++;
+			}
+			is_current_after_last = current_position == -1;
+			is_current_before_first = is_current_after_last;
+			return !is_current_after_last;
 		}
 
 		public virtual bool MoveCurrentToNext() {
 			return is_current_after_last ? false : MoveCurrentToPosition(current_position + 1);
-			//if (is_current_before_first)
-			//    return MoveCurrentToFirstInternal();
-			//bool passed_current_item = false;
-			//current_position = 0;
-			//foreach (object item in source_collection) {
-			//    if (passed_current_item) {
-			//        current_item = item;
-			//        return true;
-			//    }
-			//    passed_current_item = object.Equals(current_item, item);
-			//    current_position++;
-			//}
-			//current_item = null;
-			//is_current_after_last = true;
-			//return false;
 		}
 
 		public virtual bool MoveCurrentToPosition(int position) {
@@ -312,21 +300,6 @@ namespace System.Windows.Data {
 
 		public virtual bool MoveCurrentToPrevious() {
 			return is_current_before_first ? false : MoveCurrentToPosition(current_position - 1);
-			//if (is_current_after_last)
-			//    return MoveCurrentToLastInternal();
-			//object previous_item = null;
-			//int previous_position = -1;
-			//foreach (object item in source_collection) {
-			//    if (object.Equals(item, current_item)) {
-			//        current_item = previous_item;
-			//        current_position = previous_position;
-			//        is_current_before_first = current_position == -1;
-			//        return !is_current_before_first;
-			//    }
-			//    previous_item = item;
-			//    previous_position++;
-			//}
-			//return false;
 		}
 
 		public virtual bool PassesFilter(object item) {
@@ -438,37 +411,6 @@ namespace System.Windows.Data {
 			remove { PropertyChanged -= value; }
 		}
 		#endregion
-		#endregion
-
-		#region Private Methods
-		//TODO: Clean these in the end.
-		bool MoveCurrentToFirstInternal() {
-			current_position = 0;
-			IEnumerator enumerator = source_collection.GetEnumerator();
-			if (enumerator.MoveNext()) {
-				current_item = enumerator.Current;
-				is_current_after_last = false;
-				is_current_before_first = false;
-				return true;
-			} else {
-				current_item = null;
-				is_current_after_last = true;
-				is_current_before_first = true;
-				return false;
-			}
-		}
-
-		bool MoveCurrentToLastInternal() {
-			current_item = null;
-			current_position = -1;
-			foreach (object item in source_collection) {
-				current_item = item;
-				current_position++;
-			}
-			is_current_after_last = current_position == -1;
-			is_current_before_first = is_current_after_last;
-			return !is_current_after_last;
-		}
 		#endregion
 	}
 }

@@ -8,12 +8,18 @@ using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	public sealed class ItemContainerGenerator : IItemContainerGenerator, IWeakEventListener {
+		#region Private Fields
+		GeneratorStatus status;
+		#endregion
+
+		#region Internal Constructor
+		internal ItemContainerGenerator() {
+		}
+		#endregion
+
 		#region Public Properties
 		public GeneratorStatus Status {
-			get {
-				//WDTDH
-				return GeneratorStatus.Error;
-			}
+			get { return status; }
 		}
 		#endregion
 
