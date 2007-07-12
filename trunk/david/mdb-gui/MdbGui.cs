@@ -68,7 +68,7 @@ namespace Mono.Debugger.Frontend
 			else
 				Report.Initialize ();
 			
-			interpreter = new GuiInterpreter(is_interactive, config, options);
+			interpreter = new GuiInterpreter(this, is_interactive, config, options);
 			engine = interpreter.DebuggerEngine;
 			parser = new LineParser (engine);
 			
@@ -164,7 +164,7 @@ namespace Mono.Debugger.Frontend
 			e.RetVal = true;
 		}
 		
-		protected void OnToolbuttonRun_clicked(object o, EventArgs e) 
+		public void OnToolbuttonRun_clicked(object o, EventArgs e) 
 		{
 			if (interpreter.HasTarget) {
 				Console.WriteLine("Error - alredy running");
@@ -174,7 +174,7 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		protected void OnToolbuttonStop_clicked(object o, EventArgs e) 
+		public void OnToolbuttonStop_clicked(object o, EventArgs e) 
 		{
 			if (interpreter.HasCurrentProcess) {
 				new KillCommand().Execute(engine);
@@ -184,7 +184,7 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		protected void OnToolbuttonContinue_clicked(object o, EventArgs e) 
+		public void OnToolbuttonContinue_clicked(object o, EventArgs e) 
 		{
 			if (interpreter.HasCurrentThread) {
 				new ContinueCommand().Execute(engine);
@@ -194,7 +194,7 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		protected void OnToolbuttonStepIn_clicked(object o, EventArgs e) 
+		public void OnToolbuttonStepIn_clicked(object o, EventArgs e) 
 		{
 			if (interpreter.HasCurrentThread) {
 				new StepCommand().Execute(engine);
@@ -214,7 +214,7 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		protected void OnToolbuttonStepOut_clicked(object o, EventArgs e) 
+		public void OnToolbuttonStepOut_clicked(object o, EventArgs e) 
 		{
 			if (interpreter.HasCurrentThread) {
 				new FinishCommand().Execute(engine);
@@ -224,7 +224,7 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		protected void OnToolbuttonBreakpoint_clicked(object o, EventArgs e) 
+		public void OnToolbuttonBreakpoint_clicked(object o, EventArgs e) 
 		{
 			// Toggle breakpoint at current location
 			if (currentlyLoadedSourceFile != null) {
@@ -352,17 +352,19 @@ namespace Mono.Debugger.Frontend
 	
 	public class GuiInterpreter: Interpreter
 	{
-		public GuiInterpreter(bool is_interactive, DebuggerConfiguration config, DebuggerOptions options)
+		MdbGui mdbGui;
+		
+		public GuiInterpreter(MdbGui mdbGui, bool is_interactive, DebuggerConfiguration config, DebuggerOptions options)
 			:base(is_interactive, config, options)
 		{
-			
+			this.mdbGui = mdbGui;
 		}
 		
 		protected override void OnTargetEvent(Thread thread, TargetEventArgs args)
 		{
 			base.OnTargetEvent(thread, args);
 			if (args.Type == TargetEventType.Exception || args.Type == TargetEventType.UnhandledException) {
-				ExceptionWindow.Show();
+				new ExceptionWindow(mdbGui, thread, args).Show();
 			}
 		}
 	}
