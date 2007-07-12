@@ -68,7 +68,7 @@ namespace Mono.Debugger.Frontend
 			else
 				Report.Initialize ();
 			
-			interpreter = new Interpreter (is_interactive, config, options);
+			interpreter = new GuiInterpreter(is_interactive, config, options);
 			engine = interpreter.DebuggerEngine;
 			parser = new LineParser (engine);
 			
@@ -347,6 +347,23 @@ namespace Mono.Debugger.Frontend
 			TextIter end   = sourceView.Buffer.GetIterAtLine(line);
 			sourceView.Buffer.ApplyTag(tag, begin, end);
 			return begin;
+		}
+	}
+	
+	public class GuiInterpreter: Interpreter
+	{
+		public GuiInterpreter(bool is_interactive, DebuggerConfiguration config, DebuggerOptions options)
+			:base(is_interactive, config, options)
+		{
+			
+		}
+		
+		protected override void OnTargetEvent(Thread thread, TargetEventArgs args)
+		{
+			base.OnTargetEvent(thread, args);
+			if (args.Type == TargetEventType.Exception || args.Type == TargetEventType.UnhandledException) {
+				ExceptionWindow.Show();
+			}
 		}
 	}
 }

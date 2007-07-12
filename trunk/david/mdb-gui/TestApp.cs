@@ -19,6 +19,11 @@ class TestApp
 	{
 		string msg = "Hello world";
 		Console.WriteLine(msg);
+		throw new Exception("Test unhandled exception");
+		try {
+			throw new Exception("Test handled exception");	
+		} catch {
+		}
 	}
 	
 	public static void Arrays()
