@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 
 using Glade;
 using Gtk;
@@ -37,7 +39,9 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected TextView sourceView;
 		[Widget] protected Entry consoleIn;
 		[Widget] protected TextView consoleOut;
-		StringWriter consoleOutWriter = new StringWriter();
+		
+		MemoryStream reporterOutput;
+		int reporterOutputReadLength = 0;
 		
 		LocalsPad localsPad;
 		CallstackPad callstackPad;
@@ -68,6 +72,16 @@ namespace Mono.Debugger.Frontend
 			else
 				Report.Initialize ();
 			
+			// Redirect the Reporter output stream   HACK: Using reflection
+			reporterOutput = new MemoryStream();
+			FieldInfo writerField = typeof(ReportWriter).GetField("writer", BindingFlags.NonPublic | BindingFlags.Instance);
+			StreamWriter writer = new StreamWriter(reporterOutput);
+			writer.AutoFlush = true;
+			writerField.SetValue(Report.ReportWriter, writer);
+			// Redirect the console
+			Console.SetOut(writer);
+			Console.SetError(writer);
+			
 			interpreter = new GuiInterpreter(this, is_interactive, config, options);
 			engine = interpreter.DebuggerEngine;
 			parser = new LineParser (engine);
@@ -79,9 +93,7 @@ namespace Mono.Debugger.Frontend
 		
 		public void GuiInit()
 		{
-			// Redirect output to the TextView
-			Console.SetOut(consoleOutWriter);
-			Console.SetError(consoleOutWriter);
+			// Redirected output to TextView
 			GLib.Timeout.Add(100, UpdateConsoleOut);
 			
 			// Load XML file
@@ -143,11 +155,20 @@ namespace Mono.Debugger.Frontend
 		/// <summary> Add any new output to the TextView </summary>
 		bool UpdateConsoleOut()
 		{
-			if (consoleOutWriter.ToString().Length > 0) {
-				consoleOut.Buffer.Text += consoleOutWriter.ToString();
-				consoleOutWriter = new StringWriter();
-				Console.SetOut(consoleOutWriter);
-				Console.SetError(consoleOutWriter);
+			int unreadLength = (int)reporterOutput.Position - reporterOutputReadLength;
+			if (unreadLength > 0) {
+				// Read the new data from stream
+				byte[] newBytes = new byte[unreadLength];
+				Array.Copy(
+					reporterOutput.GetBuffer(), reporterOutputReadLength, // Source
+					newBytes, 0, // Destination
+					unreadLength // Length
+				);
+				reporterOutputReadLength += unreadLength;
+				
+				// Append new text
+				consoleOut.Buffer.Text += new UTF8Encoding().GetString(newBytes);
+				
 				// Scroll the window to the end
 				TextMark endMark = consoleOut.Buffer.CreateMark(null, consoleOut.Buffer.EndIter, false);
 				consoleOut.ScrollToMark(endMark, 0, false, 0, 0);
