@@ -30,6 +30,7 @@
 //
 
 using System;
+using System.IO;
 using System.Text;
 
 using Mono.Addins;
@@ -50,13 +51,14 @@ namespace CBinding
 			
 			if (project == null) return;
 			
-			string command = string.Format ("rm {0}/*.o", project.BaseDirectory);
+			StringBuilder objectFiles = new StringBuilder ();
+			foreach (ProjectFile file in project.ProjectFiles) {
+				if (file.BuildAction == BuildAction.Compile) {
+					objectFiles.Append (Path.ChangeExtension (file.Name, ".o") + " ");
+				}
+			}
 			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-			    "bash", null, null, (ProcessEventHandler)null, null, null, true);
-			
-			p.StandardInput.WriteLine (command);
-			p.StandardInput.Close ();
+			ProcessWrapper p = Runtime.ProcessService.StartProcess ("rm", objectFiles.ToString (), null, null);
 			p.WaitForExit ();
 			p.Close ();
 		}

@@ -1,5 +1,11 @@
 2007-07-12  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
+	* Project/CProjectServiceExtension.cs: Removed the need to invoke bash
+	  when removing object code files.
+	* Compiler/GNUCompiler.cs: Small fixes.
+
+2007-07-12  Marcos David Marin Amador <MarcosMarin@gmail.com> 
+
 	* Project/CProjectConfiguration.cs, Project/CProject.cs,
 	  Compiler/GNUCompiler.cs: Inplemented support for precompiled header
 	  files in gcc and g++.
