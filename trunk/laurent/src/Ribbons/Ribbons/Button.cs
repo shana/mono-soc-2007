@@ -100,7 +100,7 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
-			this.Padding = 0;
+			this.Padding = 2;
 			this.ImagePosition = PositionType.Top;
 		}
 		
@@ -257,8 +257,8 @@ namespace Ribbons
 			
 			allocation.X += (int)(lineWidth * 2 + padding);
 			allocation.Y += (int)(lineWidth * 2 + padding);
-			allocation.Height -= (int)(lineWidth * 4 - padding * 2);
-			allocation.Width -= (int)(lineWidth * 4 - padding * 2);
+			allocation.Height -= (int)(lineWidth * 4 + padding * 2);
+			allocation.Width -= (int)(lineWidth * 4 + padding * 2);
 			
 			if(allocation.Height < 0) allocation.Height = 0;
 			if(allocation.Width < 0) allocation.Width = 0;
