@@ -23,6 +23,7 @@ namespace Mono.Debugger.Frontend
 		
 		[Widget] protected ToolButton toolbuttonRun;
 		[Widget] protected ToolButton toolbuttonStop;
+		[Widget] protected ToolButton toolbuttonContinue;
 		[Widget] protected ToolButton toolbuttonStepIn;
 		[Widget] protected ToolButton toolbuttonStepOver;
 		[Widget] protected ToolButton toolbuttonStepOut;
@@ -92,6 +93,8 @@ namespace Mono.Debugger.Frontend
 			toolbuttonRun.IconWidget.Show();
 			toolbuttonStop.IconWidget = new Image(Pixmaps.DebugStopProcess);
 			toolbuttonStop.IconWidget.Show();
+			toolbuttonContinue.IconWidget = new Image(Pixmaps.DebugContinue);
+			toolbuttonContinue.IconWidget.Show();
 			toolbuttonStepIn.IconWidget = new Image(Pixmaps.DebugStepInto);
 			toolbuttonStepIn.IconWidget.Show();
 			toolbuttonStepOver.IconWidget = new Image(Pixmaps.DebugStepOver);
@@ -178,6 +181,16 @@ namespace Mono.Debugger.Frontend
 				UpdateGUI();
 			} else {
 				Console.WriteLine("Error - nothing to stop");
+			}
+		}
+		
+		protected void OnToolbuttonContinue_clicked(object o, EventArgs e) 
+		{
+			if (interpreter.HasCurrentThread) {
+				new ContinueCommand().Execute(engine);
+				UpdateGUI();
+			} else {
+				Console.WriteLine("Error - no current thread");
 			}
 		}
 		
