@@ -80,7 +80,23 @@
 	      <property name="homogeneous">False</property>
 	    </packing>
 	  </child>
-
+	  
+	  <child>
+	    <widget class="GtkToolButton" id="toolbuttonContinue">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Continue</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="OnToolbuttonContinue_clicked" last_modification_time="Sat, 23 Jun 2007 21:27:31 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+	
 	  <child>
 	    <widget class="GtkToolButton" id="toolbuttonStepIn">
 	      <property name="visible">True</property>
