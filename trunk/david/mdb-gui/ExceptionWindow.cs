@@ -13,7 +13,7 @@ namespace Mono.Debugger.Frontend
 		
 		[Widget] protected Window exceptionWindow;
 		[Widget] protected Image image;
-		[Widget] protected Entry entryException;
+		[Widget] protected Label labelExceptionCaught;
 		[Widget] protected TextView textviewCallstack;
 		[Widget] protected Button buttonBreak;
 		[Widget] protected Button buttonContinue;
@@ -32,7 +32,7 @@ namespace Mono.Debugger.Frontend
 				buttonContinue.Visible = false;
 			}
 			
-			entryException.Text = args.Type == TargetEventType.Exception ? "Exception" : "Unandled exception" + " has been caugth";
+			labelExceptionCaught.Text = (args.Type == TargetEventType.Exception ? "Exception" : "Unandled exception") + " has been caugth:";
 			
 			StringBuilder sb = new StringBuilder();
 			StackFrame[] callstack;
