@@ -123,11 +123,8 @@ namespace Ribbons
 		/// <param name="Label">Label to display.</param>
 		public Button (Image Image, string Label) : this ()
 		{
-			this.img = Image;
-			this.lbl = new Gtk.Label (Label);
-			if(img != null) BindWidget (img);
-			BindWidget (lbl);
-			UpdateImageLabel ();
+			this.Image = Image;
+			this.Label = Label;
 		}
 		
 		/// <summary>Constructs a Button from a stock.</summary>
@@ -180,8 +177,7 @@ namespace Ribbons
 		
 		private void UpdateImageLabel ()
 		{
-			if(lbl != null && lbl.Parent != null) lbl.Unparent ();
-			if(img != null && img.Parent != null) img.Unparent ();
+			if(Child != null) Remove (Child);
 			
 			if(lbl != null && img != null)
 			{
