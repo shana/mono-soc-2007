@@ -183,9 +183,13 @@ namespace Ribbons
 		{
 			if(Child != null)
 			{
+				Container con = Child as Container;
+				if(con != null)
+				{
+					con.Remove (img);
+					con.Remove (lbl);
+				}
 				Remove (Child);
-				if(img != null && img.Parent != null) img.Unparent ();
-				if(lbl != null && lbl.Parent != null) lbl.Unparent ();
 			}
 			
 			if(lbl != null && img != null)
@@ -233,10 +237,6 @@ namespace Ribbons
 			else if(img != null)
 			{
 				Child = img;
-			}
-			else
-			{
-				if(Child != null) Remove (Child);
 			}
 		}
 		
