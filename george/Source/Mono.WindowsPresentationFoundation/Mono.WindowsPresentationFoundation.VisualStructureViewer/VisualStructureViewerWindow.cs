@@ -11,7 +11,7 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			Title = "Visual structure viewer";
 
 			TextBox xaml_text_box = new TextBox();
-			xaml_text_box.Text = @"<Page xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml""></Page>";
+			xaml_text_box.Text = @"<theme:ScrollChrome xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:theme=""clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna""/>";
 			xaml_text_box.TextWrapping = TextWrapping.Wrap;
 			Label xaml_label = new Label("_XAML", xaml_text_box);
 			DockPanel xaml_panel = new DockPanel();
@@ -19,9 +19,9 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			xaml_panel.Children.Add(xaml_label);
 			xaml_panel.Children.Add(xaml_text_box);
 
-			System.Windows.Forms.Integration.WindowsFormsHost.EnableWindowsFormsInterop();
-
+			//TODO: Make a WPF control for this (System.Windows.Forms.PropertyGrid is slow and limited.)
 			System.Windows.Forms.PropertyGrid structure_viewer_property_grid = new System.Windows.Forms.PropertyGrid();
+			structure_viewer_property_grid.Dock = System.Windows.Forms.DockStyle.Fill;
 			System.Windows.Forms.Integration.WindowsFormsHost structure_viewer_host = new System.Windows.Forms.Integration.WindowsFormsHost();
 			structure_viewer_host.Child = structure_viewer_property_grid;
 			Label structure_viewer_label = new Label("_Structure", structure_viewer_host);
@@ -33,8 +33,12 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			view_button.Content = "_View";
 			view_button.Click += delegate(object sender, RoutedEventArgs e) {
 				try {
-					Page page = (Page)XamlReader.Load(new MemoryStream(Encoding.UTF8.GetBytes(xaml_text_box.Text)));
-					structure_viewer_property_grid.SelectedObject = VisualTreeHelper.GetDrawing(page);
+					Visual content = (Visual)XamlReader.Load(new MemoryStream(Encoding.UTF8.GetBytes(xaml_text_box.Text)));
+					Window window = new Window();
+					window.Content = content;
+					window.Title = "Content";
+					window.Show();
+					structure_viewer_property_grid.SelectedObject = VisualTreeHelper.GetDrawing(content);
 				} catch (Exception ex) {
 					MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
 				}
@@ -42,13 +46,14 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 
 			Grid contents = new Grid();
 			contents.RowDefinitions.Add(new RowDefinition());
-			RowDefinition row2 = new RowDefinition();
-			row2.Height = GridLength.Auto;
-			contents.RowDefinitions.Add(row2);
+			RowDefinition view_row = new RowDefinition();
+			view_row.Height = GridLength.Auto;
+			contents.RowDefinitions.Add(view_row);
 			contents.ColumnDefinitions.Add(new ColumnDefinition());
 			contents.ColumnDefinitions.Add(new ColumnDefinition());
 			contents.Children.Add(xaml_panel);
 			Grid.SetColumn(structure_viewer_panel, 1);
+			Grid.SetRowSpan(structure_viewer_panel, 2);
 			contents.Children.Add(structure_viewer_panel);
 			Grid.SetRow(view_button, 1);
 			contents.Children.Add(view_button);
