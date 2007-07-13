@@ -1,4 +1,5 @@
 #if Implementation
+using System;
 using System.Windows;
 namespace Mono.System.Windows.Controls {
 #else
@@ -14,6 +15,8 @@ namespace System.Windows.Controls {
 		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
+			GetVisualChild(0);
+			throw new InvalidOperationException("VisualTree of ItemsPanelTemplate must be a single element.");
 			//WDTDH
 		}
 		#endregion
