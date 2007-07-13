@@ -35,6 +35,7 @@ using System.Collections;
 using Mono.Addins;
 
 using MonoDevelop.Components.Commands;
+using MonoDevelop.Projects;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Ide.Gui.Pads.ProjectPad;
@@ -73,8 +74,8 @@ namespace CBinding.ProjectPad
 		
 		protected override void Initialize ()
 		{
-			addedHandler = (ProjectPackageEventHandler)Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnAddPackage));
-			removedHandler = (ProjectPackageEventHandler)Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnRemovePackage));
+			addedHandler = (ProjectPackageEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnAddPackage));
+			removedHandler = (ProjectPackageEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnRemovePackage));
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -139,6 +140,35 @@ namespace CBinding.ProjectPad
 			
 			IdeApp.ProjectOperations.SaveProject (project);
 			CurrentNode.Expanded = true;
+		}
+		
+		public override bool CanDropNode (object dataObject, DragOperation operation)
+		{
+			return dataObject is ProjectPackage;
+		}
+		
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.Copy | DragOperation.Move;
+		}
+		
+		public override void OnNodeDrop (object dataObject, DragOperation operation)
+		{
+			// For now it can only receive packages
+			ProjectPackage package = (ProjectPackage)dataObject;
+			ITreeNavigator nav = CurrentNode;
+			
+			CProject dest = nav.GetParentDataItem (typeof(CProject), true) as CProject;
+			nav.MoveToObject (dataObject);
+			CProject source = nav.GetParentDataItem (typeof(CProject), true) as CProject;
+			
+			dest.Packages.Add (package);
+			IdeApp.ProjectOperations.SaveProject (dest);
+			
+			if (operation == DragOperation.Move) {
+				source.Packages.Remove (package);
+				IdeApp.ProjectOperations.SaveProject (source);
+			}
 		}
 	}
 }
