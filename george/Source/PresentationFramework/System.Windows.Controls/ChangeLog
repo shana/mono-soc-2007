@@ -1,3 +1,7 @@
+2007-07-13  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ItemsControl.cs, ItemsPresenter: Some changes. I am stuck because ItemsPanelTemplate inherits FrameworkTemplate which contains abstract internal members. This probably means ItemsControl will not work until the base classes are implemented.
+
 2007-07-12  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ItemCollection.cs: Switched to implemented CollectionView.
