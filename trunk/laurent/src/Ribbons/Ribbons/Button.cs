@@ -133,7 +133,9 @@ namespace Ribbons
 		public static Button FromStockIcon (string Name, bool Large)
 		{
 			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
-			return new Button (img);
+			Button btn = new Button (img);
+			if(!Large) btn.ImagePosition = PositionType.Left;
+			return btn;
 		}
 		
 		/// <summary>Constructs a Button from a stock.</summary>
@@ -143,7 +145,9 @@ namespace Ribbons
 		public static Button FromStockIcon (string Name, string Label, bool Large)
 		{
 			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
-			return new Button (img, Label);
+			Button btn = new Button (img, Label);
+			if(!Large) btn.ImagePosition = PositionType.Left;
+			return btn;
 		}
 		
 		/// <summary>Fires the Click event.</summary>
@@ -177,7 +181,12 @@ namespace Ribbons
 		
 		private void UpdateImageLabel ()
 		{
-			if(Child != null) Remove (Child);
+			if(Child != null)
+			{
+				Remove (Child);
+				if(img != null && img.Parent != null) img.Unparent ();
+				if(lbl != null && lbl.Parent != null) lbl.Unparent ();
+			}
 			
 			if(lbl != null && img != null)
 			{
