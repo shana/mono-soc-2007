@@ -1,3 +1,7 @@
+2007-07-13  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ScrollChromeTest.cs: Added rendering tests.
+
 2007-07-09  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ScrollChromeTest.cs: Expanded Drawing test.
