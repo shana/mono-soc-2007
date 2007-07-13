@@ -38,7 +38,9 @@ using MonoDevelop.Core;
 using MonoDevelop.Core.Execution;
 using MonoDevelop.Ide.Gui;
 
-namespace CBinding.Navigation
+using CBinding.Navigation;
+
+namespace CBinding.Parser
 {
 	/// <summary>
 	/// Singleton class to manage tag databases
@@ -153,7 +155,7 @@ namespace CBinding.Navigation
 			return new Tag (name, file, pattern, kind, access, _class, _namespace, _struct, _union, _enum);
 		}
 		
-		public void FillProjectNavigationInformation (Project project)
+		public void FillProjectInformation (Project project)
 		{
 			string tagsDir = Path.Combine (project.BaseDirectory, ".tags");
 			string tagsFile = Path.Combine (tagsDir, "tags");
@@ -163,7 +165,7 @@ namespace CBinding.Navigation
 			
 			string tagEntry;
 			
-			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (project);
+			ProjectInformation info = ProjectInformationManager.Instance.Get (project);
 			
 			info.Clear ();
 			

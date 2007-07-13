@@ -1,5 +1,5 @@
 //
-// ProjectNavigationInformationManager.cs
+// ProjectInformationManager.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -34,38 +34,40 @@ using System.Collections.Generic;
 
 using MonoDevelop.Projects;
 
-namespace CBinding.Navigation
+using CBinding.Navigation;
+
+namespace CBinding.Parser
 {
 	/// <summary>
 	/// Singleton class to manage the navigation information of each project
 	/// </summary>
-	public class ProjectNavigationInformationManager
+	public class ProjectInformationManager
 	{
-		private static ProjectNavigationInformationManager instance;
-		private List<ProjectNavigationInformation> projects = new List<ProjectNavigationInformation> ();
+		private static ProjectInformationManager instance;
+		private List<ProjectInformation> projects = new List<ProjectInformation> ();
 		
-		private ProjectNavigationInformationManager ()
+		private ProjectInformationManager ()
 		{
 		}
 		
-		public ProjectNavigationInformation Get (Project project)
+		public ProjectInformation Get (Project project)
 		{
-			foreach (ProjectNavigationInformation p in projects) {
+			foreach (ProjectInformation p in projects) {
 				if (project.Equals (p.Project)) {
 					return p;
 				}
 			}
 			
-			ProjectNavigationInformation newinfo = new ProjectNavigationInformation (project);
+			ProjectInformation newinfo = new ProjectInformation (project);
 			projects.Add (newinfo);
 			
 			return newinfo;
 		}
 		
-		public static ProjectNavigationInformationManager Instance {
+		public static ProjectInformationManager Instance {
 			get {
 				if (instance == null)
-					instance = new ProjectNavigationInformationManager ();
+					instance = new ProjectInformationManager ();
 				
 				return instance;
 			}

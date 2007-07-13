@@ -1,5 +1,25 @@
 2007-07-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Navigation/StructureNodeBuilder.cs,
+	  Navigation/ProjectNodeBuilderExtension.cs,
+	  Navigation/MemberNodeBuilder.cs, Navigation/Function.cs,
+	  Navigation/Enumeration.cs, Navigation/GlobalsNodeBuilder.cs,
+	  Navigation/VariableNodeBuilder.cs,
+	  Navigation/EnumerationNodeBuilder.cs, Navigation/Member.cs,
+	  Navigation/MacroDefinitionsNodeBuilder.cs,
+	  Navigation/Enumerator.cs, Navigation/ClassNodeBuilder.cs,
+	  Navigation/Variable.cs, Navigation/Union.cs,
+	  Navigation/Namespace.cs, Navigation/Typedef.cs,
+	  Navigation/Structure.cs, Navigation/Macro.cs,
+	  Navigation/LanguageItem.cs, Navigation/FunctionNodeBuilder.cs,
+	  Navigation/UnionNodeBuilder.cs, Navigation/Class.cs,
+	  Navigation/NamespaceNodeBuilder.cs, Makefile.am, CBinding.mdp,
+	  Parser/TagDatabaseManager.cs, Parser/Tag.cs,
+	  Parser/ProjectInformation.cs, Parser/ProjectInformationManager.cs:
+	  Seperated the navigation stuff from the parsing stuff.
+
+2007-07-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* ProjectPad/ProjectPackageNodeBuilder.cs: Implemented dragging and
 	  dropping of packages.
 

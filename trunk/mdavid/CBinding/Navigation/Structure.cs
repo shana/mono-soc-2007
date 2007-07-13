@@ -30,10 +30,10 @@
 //
 
 using System;
-using System.IO;
 
 using MonoDevelop.Projects;
-using MonoDevelop.Ide.Gui;
+
+using CBinding.Parser;
 
 namespace CBinding.Navigation
 {

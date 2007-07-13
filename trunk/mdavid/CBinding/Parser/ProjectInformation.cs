@@ -1,5 +1,5 @@
 //
-// ProjectNavigationInformation.cs
+// ProjectInformation.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -34,9 +34,11 @@ using System.Collections.Generic;
 
 using MonoDevelop.Projects;
 
-namespace CBinding.Navigation
+using CBinding.Navigation;
+
+namespace CBinding.Parser
 {	
-	public class ProjectNavigationInformation
+	public class ProjectInformation
 	{
 		private Project project;
 		private Globals globals;
@@ -55,7 +57,7 @@ namespace CBinding.Navigation
 		
 //		public event LanguageItemEventHandler FunctionAdded;
 		
-		public ProjectNavigationInformation (Project project)
+		public ProjectInformation (Project project)
 		{
 			this.project = project;
 			globals = new Globals (project);

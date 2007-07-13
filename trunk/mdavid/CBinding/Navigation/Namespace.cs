@@ -33,6 +33,8 @@ using System;
 
 using MonoDevelop.Projects;
 
+using CBinding.Parser;
+
 namespace CBinding.Navigation
 {
 	public class Namespace : LanguageItem
