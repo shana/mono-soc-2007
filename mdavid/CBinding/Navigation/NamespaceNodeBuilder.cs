@@ -38,6 +38,8 @@ using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Projects;
 
+using CBinding.Parser;
+
 namespace CBinding.Navigation
 {
 	public class NamespaceNodeBuilder : TypeNodeBuilder
@@ -78,7 +80,7 @@ namespace CBinding.Navigation
 			
 			if (p == null) return;
 			
-			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
+			ProjectInformation info = ProjectInformationManager.Instance.Get (p);
 			
 			Namespace thisNamespace = ((Namespace)dataObject);
 			

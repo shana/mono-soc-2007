@@ -39,6 +39,8 @@ using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Projects;
 
+using CBinding.Parser;
+
 namespace CBinding.Navigation
 {
 	public class StructureNodeBuilder : TypeNodeBuilder
@@ -87,7 +89,7 @@ namespace CBinding.Navigation
 			if (p == null) return;
 			
 			bool publicOnly = treeBuilder.Options["PublicApiOnly"];
-			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
+			ProjectInformation info = ProjectInformationManager.Instance.Get (p);
 			
 			Structure thisStruct = (Structure)dataObject;
 			

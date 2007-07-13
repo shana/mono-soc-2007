@@ -32,22 +32,22 @@
 using System;
 using System.IO;
 
-namespace CBinding.Navigation
+namespace CBinding.Parser
 {
 	public enum TagKind {
-		Class = 'c', // Done
-		Macro = 'd', // Done
-		Enumerator = 'e', // Done
-		Function = 'f', // Done
-		Enumeration = 'g', // Done
+		Class = 'c',
+		Macro = 'd',
+		Enumerator = 'e',
+		Function = 'f',
+		Enumeration = 'g',
 		Local = 'l',
-		Member = 'm', // Done
-		Namespace = 'n', // Done
+		Member = 'm',
+		Namespace = 'n',
 		Prototype = 'p',
-		Structure = 's', // Done
+		Structure = 's',
 		Typedef = 't',
-		Union = 'u', // Done
-		Variable = 'v', // Done
+		Union = 'u',
+		Variable = 'v',
 		ExternalVariable = 'x',
 		Unknown = ' '
 	}

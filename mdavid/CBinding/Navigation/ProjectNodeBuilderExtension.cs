@@ -42,6 +42,7 @@ using MonoDevelop.Core.Gui;
 using MonoDevelop.Components.Commands;
 
 using CBinding;
+using CBinding.Parser;
 
 namespace CBinding.Navigation
 {
@@ -77,7 +78,7 @@ namespace CBinding.Navigation
 			
 			try {
 				TagDatabaseManager.Instance.WriteTags (p);
-				TagDatabaseManager.Instance.FillProjectNavigationInformation (p);
+				TagDatabaseManager.Instance.FillProjectInformation (p);
 			} catch (IOException ex) {
 				IdeApp.Services.MessageService.ShowError (ex);
 				return;
@@ -94,7 +95,7 @@ namespace CBinding.Navigation
 			
 			bool nestedNamespaces = builder.Options["NestedNamespaces"];
 			
-			ProjectNavigationInformation info = ProjectNavigationInformationManager.Instance.Get (p);
+			ProjectInformation info = ProjectInformationManager.Instance.Get (p);
 			
 			// Namespaces
 			foreach (Namespace n in info.Namespaces) {
