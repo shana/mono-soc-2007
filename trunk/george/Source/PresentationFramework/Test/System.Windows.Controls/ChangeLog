@@ -1,3 +1,8 @@
+2007-07-13  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ItemsControlTest.cs: Added some tests.
+	* TemsPresenterTest.cs: Added.
+
 2007-07-12  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ItemContainerGeneratorTest.cs, ItemsPanelTemplateTest: Added.
