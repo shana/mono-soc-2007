@@ -1,3 +1,11 @@
+2007-07-13  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Some code refactoring
+	  around the Serialize method. Added two new methods to handle the
+	  initialization of the two ArrayList: one list has all the tags that
+	  begin in a given iterator and the second list has all the tags that
+	  end in a given iterator.
+
 2007-07-10  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/DocumentBufferArchiver.cs: Minor modifications
