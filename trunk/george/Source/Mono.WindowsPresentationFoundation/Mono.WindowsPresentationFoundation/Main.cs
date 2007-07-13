@@ -4,7 +4,7 @@ namespace Mono.WindowsPresentationFoundation {
 	static class WindowsPresentationFoundationApplication {
 		[STAThread]
 		static void Main() {
-			new Application().Run(new ColorFinder.ColorFinderWindow());
+			new Application().Run(new MainWindow());
 		}
 	}
 }

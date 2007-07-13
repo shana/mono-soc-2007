@@ -40,12 +40,18 @@
   -->
   <ItemGroup>
     <Compile Include="Mono.WindowsPresentationFoundation.ColorFinder\ColorFinderWindow.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation.VisualStructureViewer\VisualStructureViewerWindow.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation\Label.cs" />
     <Compile Include="Mono.WindowsPresentationFoundation\Main.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation\MainWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
 </Project>
