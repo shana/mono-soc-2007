@@ -1,3 +1,7 @@
+2007-07-13  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ScrollChrome.cs: Started proper implementation of rendering.
+
 2007-07-03  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* SystemDropShadowChrome.cs: Improved a call.
