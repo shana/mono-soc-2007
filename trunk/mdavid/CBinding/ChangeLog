@@ -1,3 +1,8 @@
+2007-07-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* ProjectPad/ProjectPackageNodeBuilder.cs: Implemented dragging and
+	  dropping of packages.
+
 2007-07-12  Marcos David Marin Amador <MarcosMarin@gmail.com> 
 
 	* Project/CProjectConfiguration.cs: Fixed a bug which was causing the

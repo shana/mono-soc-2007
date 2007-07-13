@@ -84,5 +84,10 @@ namespace CBinding.ProjectPad
 			
 			IdeApp.ProjectOperations.SaveProject (project);
 		}
+		
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.Copy;
+		}
 	}
 }
