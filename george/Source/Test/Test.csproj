@@ -38,6 +38,7 @@
     <Reference Include="PresentationFramework.Luna" />
     <Reference Include="PresentationFramework.Luna" />
     <Reference Include="System" />
+    <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
