@@ -33,6 +33,20 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region ItemsPanel
+		[Test]
+		public void ItemsPanelDefaultValue() {
+			object default_value = ItemsControl.ItemsPanelProperty.GetMetadata(typeof(ItemsControl)).DefaultValue;
+			Assert.IsNotNull(default_value, "1");
+			Assert.AreEqual(default_value.GetType(), typeof(ItemsPanelTemplate), "2");
+			ItemsPanelTemplate items_panel_template_default_value = (ItemsPanelTemplate)default_value;
+			Assert.AreEqual(items_panel_template_default_value.VisualTree.Type, typeof(StackPanel), "3");
+
+			ItemsPanelTemplate i = new ItemsControl().ItemsPanel;
+			Assert.AreEqual(i, items_panel_template_default_value, "4");
+		}
+		#endregion
+
 		#region LogicalChildren
 		[Test]
 		public void LogicalChildren() {
