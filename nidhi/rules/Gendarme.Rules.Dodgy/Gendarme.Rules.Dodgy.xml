@@ -1,0 +1,8 @@
+<rules>
+	<rule	Name="DontDeclareProtectedFieldsInSealedClassRule" 
+		Type="Gendarme.Rules.Dodgy.DontDeclareProtectedFieldsInSealedClassRule, Gendarme.Rules.Dodgy, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#DontDeclareProtectedFieldsInSealedClassRule" >
+		<problem>The sealed class '{0}' contains protected field(s).</problem>
+		<solution>Change the access specifier to public or private to represent the true use for the field.</solution>
+	</rule>
+</rules>
