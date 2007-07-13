@@ -73,30 +73,28 @@ public class DocumentBufferArchiver {
 				Console.WriteLine ("Begin Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
 				#endif
 				
-				if (currentIter.BeginsTag (tag)) {
-					docTag = tag as DocumentTag;
+				docTag = tag as DocumentTag;
 					
-					if (docTag.IsElement) {
-						string elementName = docTag.Name.Split ('#')[0];
-						xmlWriter.WriteStartElement (null, elementName, null);
+				if (docTag.IsElement) {
+					string elementName = docTag.Name.Split ('#')[0];
+					xmlWriter.WriteStartElement (null, elementName, null);
+					
+					#if DEBUG
+					Console.WriteLine ("Wrote Start Element: " + elementName);
+					#endif
+				} else if (docTag.IsAttribute) {
+					attributeName = docTag.Name.Split (':')[1].Split ('#')[0];
+					xmlWriter.WriteStartAttribute (null, attributeName, null);
+					
+					#if DEBUG
+					Console.WriteLine ("Wrote Start Attribute: {0}", attributeName);
+					#endif
 						
-						#if DEBUG
-						Console.WriteLine ("Wrote Start Element: " + elementName);
-						#endif
-					} else if (docTag.IsAttribute) {
-						attributeName = docTag.Name.Split (':')[1].Split ('#')[0];
-						xmlWriter.WriteStartAttribute (null, attributeName, null);
-						
-						#if DEBUG
-						Console.WriteLine ("Wrote Start Attribute: {0}", attributeName);
-						#endif
-						
-						readingValue = true;
-						attributeValue = currentIter.Char;
-					} else if (docTag.IsSerializableText) {
-						readingText = true;
-						elementText = currentIter.Char;
-					}
+					readingValue = true;
+					attributeValue = currentIter.Char;
+				} else if (docTag.IsSerializableText) {
+					readingText = true;
+					elementText = currentIter.Char;
 				}
 			}
 			
@@ -105,29 +103,27 @@ public class DocumentBufferArchiver {
 				Console.WriteLine ("End Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
 				#endif
 				
-				if (TagEndsHere (tag, currentIter, nextIter)) {
-					docTag = tag as DocumentTag;
-					if (docTag.IsElement) {
-						xmlWriter.WriteEndElement ();
-						
-						#if DEBUG
-						Console.WriteLine ("Wrote End Element: " + docTag.Name);
-						#endif
-					} else if (docTag.IsAttribute) {
-						xmlWriter.WriteString (attributeValue);
-						xmlWriter.WriteEndAttribute ();
-						
-						#if DEBUG
-						Console.WriteLine ("Wrote End Attribute: {0} Value: {1}", attributeName, attributeValue);
-						#endif
-						
-						readingValue = false;
-						attributeValue = attributeName = String.Empty;
-					} else if (docTag.IsSerializableText) {
-						xmlWriter.WriteString (elementText);
-						elementText = String.Empty;
-						readingText = false;
-					}
+				docTag = tag as DocumentTag;
+				if (docTag.IsElement) {
+					xmlWriter.WriteEndElement ();
+					
+					#if DEBUG
+					Console.WriteLine ("Wrote End Element: " + docTag.Name);
+					#endif
+				} else if (docTag.IsAttribute) {
+					xmlWriter.WriteString (attributeValue);
+					xmlWriter.WriteEndAttribute ();
+					
+					#if DEBUG
+					Console.WriteLine ("Wrote End Attribute: {0} Value: {1}", attributeName, attributeValue);
+					#endif
+					
+					readingValue = false;
+					attributeValue = attributeName = String.Empty;
+				} else if (docTag.IsSerializableText) {
+					xmlWriter.WriteString (elementText);
+					elementText = String.Empty;
+					readingText = false;
 				}
 			}
 			
@@ -713,18 +709,31 @@ public class DocumentBufferArchiver {
 		int last_index = tags.Length  - 1;
 		TextTag last = tags [last_index];
 		
-		if (currentIter.BeginsTag (last)) {
-			beginTags.InsertRange (0, tags);
+		if (currentIter.BeginsTag (last))
+			GetBeginTags (currentIter, tags, beginTags);
 			
-			if (TagEndsHere (last,currentIter, nextIter)) {
-				Array.Reverse (tags);
-				endTags.InsertRange (0, tags);
-			} else
-				endTags = null;
-		} else if (TagEndsHere (last, currentIter, nextIter)) {
-			beginTags = null;
-			Array.Reverse (tags);
-			endTags.InsertRange (0, tags);
+		if (TagEndsHere (last, currentIter, nextIter))
+			GetEndTags (currentIter, nextIter, tags, endTags);
+	}
+
+	private static void GetBeginTags (TextIter currentIter, TextTag [] tagArray, ArrayList beginTags)
+	{
+		foreach (TextTag tag in tagArray) {
+			if (!currentIter.BeginsTag (tag))
+				continue;
+
+			beginTags.Add (tag);
+		}
+	}
+
+	private static void GetEndTags (TextIter currentIter, TextIter nextIter, TextTag [] tagArray, ArrayList endTags)
+	{
+		Array.Reverse (tagArray);
+		foreach (TextTag tag in tagArray) {
+			if (!TagEndsHere (tag, currentIter, nextIter))
+				continue;
+
+			endTags.Add (tag);
 		}
 	}
 }
