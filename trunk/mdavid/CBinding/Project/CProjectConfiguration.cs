@@ -148,17 +148,20 @@ namespace CBinding
 		
 		public override void CopyFrom (IConfiguration configuration)
 		{
-			base.CopyFrom(configuration);
+			base.CopyFrom (configuration);
 			CProjectConfiguration conf = (CProjectConfiguration)configuration;
 			
 			output = conf.output;
 			target = conf.target;
+			includes = conf.includes;
+			libpaths = conf.libpaths;
+			libs = conf.libs;
 			source_directory_path = conf.source_directory_path;
 			
 			if (conf.CompilationParameters == null) {
 				compilationParameters = null;
 			} else {
-				compilationParameters = (ICloneable)conf.Clone ();
+				compilationParameters = (ICloneable)compilationParameters.Clone ();
 			}
 		}
 	}
