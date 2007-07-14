@@ -1,3 +1,9 @@
+2007-07-14  Ben Motmans <ben.motmans@gmail.com>
+
+	* NpgsqlConnectionProvider.cs, NpgsqlDbFactory.cs, NpgsqlSchemaProvider.cs: small changes
+	to reflect API changes
+	* NpgsqlPooledDbConnection.cs: implementation of ConnectionPool aware connection
+
 2007-07-10  Ben Motmans <ben.motmans@gmail.com>
 
 	* NpgsqlConnectionProvider.cs: set IsConnectionError property

@@ -36,8 +36,8 @@ namespace Mono.Data.Sql
 {
 	public class NpgsqlSchemaProvider : AbstractSchemaProvider
 	{
-		public NpgsqlSchemaProvider (IConnectionProvider connectionProvider)
-			: base (connectionProvider)
+		public NpgsqlSchemaProvider (IConnectionPool connectionPool)
+			: base (connectionPool)
 		{
 		}
 		
@@ -79,10 +79,10 @@ namespace Mono.Data.Sql
 
 		public override ICollection<TableSchema> GetTables ()
 		{
-			CheckConnectionState ();
 			List<TableSchema> tables = new List<TableSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT c.relname, n.nspname, u.usename, d.description "
 				+ "FROM pg_class c "
 				+ " LEFT JOIN pg_description d ON c.oid = d.objoid, "
@@ -135,16 +135,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return tables;
 		}
 		
 		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT a.attname, a.attnotnull, a.attlen, "
 				+ "typ.typname, adef.adsrc "
 				+ "FROM "
@@ -187,16 +188,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				};
 			}
+			conn.Release ();
 
 			return columns;
 		}
 
 		public override ICollection<ViewSchema> GetViews ()
 		{
-			CheckConnectionState ();
 			List<ViewSchema> views = new List<ViewSchema> ();
 
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT v.schemaname, v.viewname, v.viewowner, v.definition,"
 				+ " (c.oid <= " + LastSystemOID + "), "
 				+ "(SELECT description from pg_description pd, "
@@ -230,15 +232,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
+			
 			return views;
 		}
 
 		public override ICollection<ColumnSchema> GetViewColumns (ViewSchema view)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT attname, typname, attlen, attnotnull "
 				+ "FROM "
 				+ "  pg_catalog.pg_attribute a LEFT JOIN pg_catalog.pg_attrdef adef "
@@ -267,16 +271,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				};
 			}
+			conn.Release ();
 
 			return columns;
 		}
 
 		public override ICollection<ProcedureSchema> GetProcedures ()
 		{
-			CheckConnectionState ();
 			List<ProcedureSchema> procedures = new List<ProcedureSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT pc.proname, pc.oid::integer, pl.lanname, pc.prosrc "
 				+ "FROM "
 				+ " pg_proc pc, "
@@ -315,19 +320,20 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return procedures;
 		}
 
 		public override ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
 			// FIXME: Won't work properly with overload functions.
 			// Maybe check the number of columns in the parameters for
 			// proper match.
-			IDbCommand command = connectionProvider.CreateCommand (String.Format (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (String.Format (
 				"SELECT format_type (prorettype, NULL) "
 				+ "FROM pg_proc pc, pg_language pl "
 				+ "WHERE pc.prolang = pl.oid "
@@ -345,22 +351,22 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return columns;
 		}
 		
 		public override ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure)
 		{
-			CheckConnectionState ();
 			throw new NotImplementedException ();
 		}
 
 		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (String.Format (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (String.Format (
 				"SELECT "
 				+ "pc.conname, "
 				+ "pg_catalog.pg_get_constraintdef(pc.oid, true) AS consrc, "
@@ -420,16 +426,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return constraints;
 		}
 
 		public override ICollection<UserSchema> GetUsers ()
 		{
-			CheckConnectionState ();
 			List<UserSchema> users = new List<UserSchema> ();
 
-			IDbCommand command = connectionProvider.CreateCommand ("SELECT * FROM pg_user;");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("SELECT * FROM pg_user;");
 			using (command) {
 				using (IDataReader r = command.ExecuteReader ()) {
 					while (r.Read ()) {
@@ -463,6 +470,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return users;
 		}
@@ -493,9 +501,11 @@ namespace Mono.Data.Sql
 		/// </summary>
 		protected int LastSystemOID {
 			get {
-				NpgsqlConnection conn = connectionProvider.Connection as NpgsqlConnection;
-				int major = conn.ServerVersion.Major;
-				int minor = conn.ServerVersion.Minor;
+				IPooledDbConnection conn = connectionPool.Request ();
+				NpgsqlConnection internalConn = conn.DbConnection as NpgsqlConnection;
+				int major = internalConn.ServerVersion.Major;
+				int minor = internalConn.ServerVersion.Minor;
+				conn.Release ();
 				
 				if (major == 8)
 					return 17137;

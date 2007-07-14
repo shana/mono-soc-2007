@@ -32,6 +32,7 @@ namespace Mono.Data.Sql
 	public class NpgsqlDbFactory : IDbFactory
 	{
 		private ISqlDialect dialect;
+		private IConnectionProvider connectionProvider;
 		
 		public string Identifier {
 			get { return "Npgsql"; }
@@ -49,14 +50,22 @@ namespace Mono.Data.Sql
 			}
 		}
 		
-		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
-		{
-			return new NpgsqlConnectionProvider (this, settings);
+		public IConnectionProvider ConnectionProvider {
+			get {
+				if (connectionProvider == null)
+					connectionProvider = new NpgsqlConnectionProvider ();
+				return connectionProvider;
+			}
 		}
 		
-		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
+		public IConnectionPool CreateConnectionPool (ConnectionSettings settings)
 		{
-			return new NpgsqlSchemaProvider (connectionProvider);
+			return new DefaultConnectionPool (this, ConnectionProvider, settings);
+		}
+		
+		public ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool)
+		{
+			return new NpgsqlSchemaProvider (connectionPool);
 		}
 		
 		public ConnectionSettings GetDefaultConnectionSettings ()
