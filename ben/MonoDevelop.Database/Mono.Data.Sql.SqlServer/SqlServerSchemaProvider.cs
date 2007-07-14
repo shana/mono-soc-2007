@@ -39,8 +39,8 @@ namespace Mono.Data.Sql
 	// http://www.alberton.info/sql_server_meta_info.html
 	public class SqlServerSchemaProvider : AbstractSchemaProvider
 	{
-		public SqlServerSchemaProvider (IConnectionProvider connectionProvider)
-			: base (connectionProvider)
+		public SqlServerSchemaProvider (IConnectionPool connectionPool)
+			: base (connectionPool)
 		{
 		}
 
@@ -70,11 +70,11 @@ namespace Mono.Data.Sql
 		
 		public override ICollection<DatabaseSchema> GetDatabases ()
 		{
-			CheckConnectionState ();
 			List<DatabaseSchema> databases = new List<DatabaseSchema> ();
 			
 			//TODO: check if the current database is "master", the drawback is that this only works if you have sysadmin privileges
-			IDbCommand command = connectionProvider.CreateCommand ("select name from sysdatabases");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("select name from sysdatabases");
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read()) {
@@ -85,16 +85,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return databases;
 		}
 
 		public override ICollection<TableSchema> GetTables ()
 		{
-			CheckConnectionState ();
 			List<TableSchema> tables = new List<TableSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT su.name AS owner, so.name as table_name, so.id as table_id, " +
 				" so.crdate as created_date, so.xtype as table_type " +
 				" FROM dbo.sysobjects so, dbo.sysusers su " +
@@ -119,16 +120,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return tables;
 		}
 		
 		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT su.name as owner, so.name as table_name, " +
 				"   sc.name as column_name, " +
 				"   st.name as date_type, sc.length as column_length,  " +
@@ -169,16 +171,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return columns;
 		}
 
 		public override ICollection<ViewSchema> GetViews ()
 		{
-			CheckConnectionState ();
 			List<ViewSchema> views = new List<ViewSchema> ();
 
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT su.name AS owner, so.name as table_name, so.id as table_id, " +
 				" so.crdate as created_date, so.xtype as table_type " +
 				"FROM dbo.sysobjects so, dbo.sysusers su " +
@@ -206,16 +209,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return views;
 		}
 
 		public override ICollection<ColumnSchema> GetViewColumns (ViewSchema view)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT * FROM \"" + view.Name +
 				"\" WHERE 1 = 0"
 			);
@@ -236,16 +240,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return columns;
 		}
 
 		public override ICollection<ProcedureSchema> GetProcedures ()
 		{
-			CheckConnectionState ();
 			List<ProcedureSchema> procedures = new List<ProcedureSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT su.name AS owner, so.name as proc_name, so.id as proc_id, " +
 				" so.crdate as created_date, so.xtype as proc_type " +
 				"FROM dbo.sysobjects so, dbo.sysusers su " +
@@ -272,22 +277,23 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return procedures; 
 		}
 
 		public override ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			SqlCommand command = connectionProvider.CreateCommand ("sp_sproc_columns") as SqlCommand;
+			IPooledDbConnection conn = connectionPool.Request ();
+			SqlCommand command = conn.CreateCommand ("sp_sproc_columns") as SqlCommand;
 			command.CommandType = CommandType.StoredProcedure;
 			SqlParameter owner = command.Parameters.Add ("@procedure_owner", SqlDbType.VarChar);
 			SqlParameter name = command.Parameters.Add ("@procedure_name", SqlDbType.VarChar);
 			owner.Value = procedure.OwnerName;
 			name.Value = procedure.Name;
-				
+
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read ()) {
@@ -300,22 +306,22 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 		      
 			return columns;
 		}
 		
 		public override ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure)
 		{
-			CheckConnectionState ();
 			throw new NotImplementedException ();
 		}
 
 		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand ("select name, xtype from sysobjects where xtype = 'F'");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("select name, xtype from sysobjects where xtype = 'F'");
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read ()) {
@@ -331,6 +337,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return constraints;
 		}
@@ -516,8 +523,8 @@ namespace Mono.Data.Sql
 
 		private string GetSource (string objectName) 
 		{
-			CheckConnectionState ();
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				String.Format ("EXEC [master].[dbo].[sp_helptext] '{0}', null", objectName)
 			);
 			StringBuilder sb = new StringBuilder ();
@@ -528,6 +535,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return sb.ToString ();
 		}

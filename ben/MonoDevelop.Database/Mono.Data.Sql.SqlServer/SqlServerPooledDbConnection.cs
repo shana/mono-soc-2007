@@ -1,9 +1,7 @@
-﻿//
+//
 // Authors:
-//	Christian Hergert  <chris@mosaix.net>
 //	Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,30 +30,47 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public class SqlServerConnectionProvider : AbstractConnectionProvider
+	public class SqlServerPooledDbConnection : AbstractPooledDbConnection
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings)
+		public SqlServerPooledDbConnection (IConnectionPool connectionPool, IDbConnection connection)
+			: base (connectionPool, connection)
 		{
-			SqlConnectionStringBuilder builder = null;
-			try {	
-				if (settings.UseConnectionString) {
-					builder = new SqlConnectionStringBuilder (settings.ConnectionString);
-				} else {
-					builder = new SqlConnectionStringBuilder ();
-					builder.InitialCatalog = settings.Database;
-					builder.UserID = settings.Username;
-					builder.Password = settings.Password;
-					builder.DataSource = String.Concat (settings.Server, ",", settings.Port);
-					builder.NetworkLibrary = "DBMSSOCN";
+		}
+		
+		public override DataSet ExecuteSet (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
+
+			DataSet set = new DataSet ();
+			using (command) {
+				using (SqlDataAdapter adapter = new SqlDataAdapter (command as SqlCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
 				}
-				builder.Pooling = false;
-				SqlConnection connection = new SqlConnection (builder.ToString ());
-				connection.Open ();
-				
-				return new SqlServerPooledDbConnection (pool, connection);
-			} catch {
-				return null;
 			}
+			return set;
+		}
+
+		public override DataTable ExecuteTable (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
+
+			DataTable table = new DataTable ();
+			using (command) {
+				using (SqlDataAdapter adapter = new SqlDataAdapter (command as SqlCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
+				}
+			}
+			return table;
 		}
 	}
 }

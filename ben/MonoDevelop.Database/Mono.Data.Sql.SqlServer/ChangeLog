@@ -1,3 +1,9 @@
+2007-07-14  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlServerConnectionProvider.cs, SqlServerDbFactory.cs, SqlServerSchemaProvider.cs: small changes
+	to reflect API changes
+	* SqlServerPooledDbConnection.cs: implementation of ConnectionPool aware connection
+
 2007-07-10  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqlServerConnectionProvider.cs: set IsConnectionError property
