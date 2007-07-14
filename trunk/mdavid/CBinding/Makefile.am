@@ -18,7 +18,6 @@ REFS = \
 	
 
 FILES =  \
-	CFormattingStrategy.cs \
 	CLanguageBinding.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GccCompiler.cs \

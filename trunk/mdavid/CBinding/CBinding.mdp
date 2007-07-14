@@ -94,7 +94,6 @@
     <File name="./Parser/TagDatabaseManager.cs" subtype="Code" buildaction="Compile" />
     <File name="./Parser/Tag.cs" subtype="Code" buildaction="Compile" />
     <File name="./Gui/CTextEditorExtension.cs" subtype="Code" buildaction="Compile" />
-    <File name="./CFormattingStrategy.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

@@ -31,6 +31,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Content;
@@ -46,6 +47,53 @@ namespace CBinding
 			        Path.GetExtension (doc.Title).ToUpper () == ".CXX" ||
 			        Path.GetExtension (doc.Title).ToUpper () == ".H"   ||
 			        Path.GetExtension (doc.Title).ToUpper () == ".HPP");
+		}
+		
+		public override bool KeyPress (Gdk.Key key, Gdk.ModifierType modifier)
+		{
+			TextEditor editor = Document.TextEditor;
+			int line, column;
+			editor.GetLineColumnFromPosition (editor.CursorPosition, out line, out column);
+			string lineText = editor.GetLineText (line);
+			
+			// Formatting Strategy
+			if (key == Gdk.Key.Return) {
+				if (lineText.TrimEnd ().EndsWith ("{")) {
+					editor.InsertText (editor.CursorPosition, "\n\t" + GetIndent (editor, line));
+					return false;
+				}
+			} else if (key == Gdk.Key.braceright && AllWhiteSpace (lineText)) {
+				if (lineText.Length > 0)
+					lineText = lineText.Substring (1);
+				editor.ReplaceLine (line, lineText + "}");
+				return false;
+			}
+			
+			return base.KeyPress (key, modifier);
+		}
+		
+		private bool AllWhiteSpace (string lineText)
+		{
+			foreach (char c in lineText)
+				if (!char.IsWhiteSpace (c))
+					return false;
+			
+			return true;
+		}
+		
+		// Snatched from DefaultFormattingStrategy
+		private string GetIndent (TextEditor d, int lineNumber)
+		{
+			string lineText = d.GetLineText (lineNumber);
+			StringBuilder whitespaces = new StringBuilder ();
+			
+			foreach (char ch in lineText) {
+				if (!char.IsWhiteSpace (ch))
+					break;
+				whitespaces.Append (ch);
+			}
+			
+			return whitespaces.ToString ();
 		}
 	}
 }
