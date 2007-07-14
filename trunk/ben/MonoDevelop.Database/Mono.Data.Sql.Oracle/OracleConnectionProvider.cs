@@ -40,10 +40,6 @@ namespace Mono.Data.Sql
 			: base (factory, settings)
 		{
 		}
-
-		public override bool SupportsPooling {
-			get { return false; }
-		}
 		
 		public override DataSet ExecuteQueryAsDataSet (string sql)
 		{
@@ -83,7 +79,7 @@ namespace Mono.Data.Sql
 			return table;
 		}
 
-		public override bool Open (out string errorMessage)
+		public override IDbConnection Open (out string errorMessage)
 		{
 			string connStr = null;
 			try {	
@@ -94,16 +90,21 @@ namespace Mono.Data.Sql
 					connStr = String.Format ("Data Source={0};User Id={1};Password={2};Integrated Security=no;",
 						settings.Database, settings.Username, settings.Password);
 				}
+				SetConnectionStringParameter (connStr, String.Empty, "pooling", settings.EnablePooling.ToString ());
+				if (settings.EnablePooling) {
+					SetConnectionStringParameter (connStr, String.Empty, "Min Pool Size", settings.MinPoolSize.ToString ());
+					SetConnectionStringParameter (connStr, String.Empty, "Max Pool Size", settings.MaxPoolSize.ToString ());
+				}
 				connection = new OracleConnection (connStr);
 				connection.Open ();
 				
 				errorMessage = String.Empty;
 				isConnectionError = false;
-				return true;
+				return connection;
 			} catch {
 				isConnectionError = true;
 				errorMessage = String.Format ("Unable to connect. (CS={0})", connStr == null ? "NULL" : connStr);
-				return false;
+				return null;
 			}
 		}
 	}

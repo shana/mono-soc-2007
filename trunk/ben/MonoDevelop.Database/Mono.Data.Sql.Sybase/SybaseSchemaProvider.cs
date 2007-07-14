@@ -116,6 +116,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return tables;
@@ -167,7 +168,8 @@ namespace Mono.Data.Sql
 						columns.Add (column);
 					}
 					r.Close ();
-				};
+				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return columns;
@@ -208,6 +210,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			return views;
 		}
@@ -237,7 +240,8 @@ namespace Mono.Data.Sql
 						}
 					}
 					r.Close ();
-				};
+				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return columns;
@@ -276,6 +280,7 @@ namespace Mono.Data.Sql
 			    		}
 			    		r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			
 			return procedures;
@@ -305,6 +310,7 @@ namespace Mono.Data.Sql
 			    		}
 			    		r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			
 			return columns;
@@ -344,6 +350,7 @@ namespace Mono.Data.Sql
 						sb.Append (r.GetString (0));
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return sb.ToString ();
