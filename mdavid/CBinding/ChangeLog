@@ -1,3 +1,9 @@
+2007-07-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/CTextEditorExtension.cs, CBinding.addin.xml, CBinding.mdp,
+	  Makefile.am: Implemented a better formatting strategy (using a text
+	  editor extension). 
+
 2007-07-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/CTextEditorExtension.cs, CBinding.addin.xml, CBinding.mdp,
