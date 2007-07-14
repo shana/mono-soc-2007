@@ -145,7 +145,7 @@ namespace CBinding
 		}
 		
 		public override string ProjectType {
-			get { return "C/C++"; }
+			get { return "Native"; }
 		}
 		
 		public override string[] SupportedLanguages {

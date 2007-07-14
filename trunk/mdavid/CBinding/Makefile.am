@@ -11,12 +11,14 @@ REFS = \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Core.Gui.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.Gui.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.SourceEditor.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll \
 	$(GTK_SHARP_LIBS)
 	
 
 FILES =  \
+	CFormattingStrategy.cs \
 	CLanguageBinding.cs \
 	Compiler/CCompiler.cs \
 	Compiler/GccCompiler.cs \
@@ -34,6 +36,7 @@ FILES =  \
 	Gui/AddPathDialog.cs \
 	Gui/CodeGenerationPanel.cs \
 	Gui/CompilerPanel.cs \
+	Gui/CTextEditorExtension.cs \
 	Gui/EditPackagesDialog.cs \
 	Gui/OutputOptionsPanel.cs \
 	Navigation/Class.cs \
