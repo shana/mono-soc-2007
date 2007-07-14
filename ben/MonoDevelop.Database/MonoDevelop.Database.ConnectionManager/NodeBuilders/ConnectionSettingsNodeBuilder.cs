@@ -72,12 +72,12 @@ namespace MonoDevelop.Database.ConnectionManager
 			ConnectionSettings settings = dataObject as ConnectionSettings;
 			
 			label = settings.Name;
-			if (settings.HasConnectionProvider) {
-				IConnectionProvider provider = settings.ConnectionProvider;
-				if (provider.IsConnectionError)
-					icon = Context.GetIcon ("md-db-database-error");
-				else if (provider.IsOpen)
+			if (settings.HasConnectionPool) {
+				IConnectionPool pool = settings.ConnectionPool;
+				if (pool.IsInitialized)
 					icon = Context.GetIcon ("md-db-database-ok");
+//				else if (provider.IsError)
+//					icon = Context.GetIcon ("md-db-database-error");
 				else
 					icon = Context.GetIcon ("md-db-database");
 			} else {
@@ -199,8 +199,8 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnDisconnectConnection ()
 		{
 			ConnectionSettings settings = (ConnectionSettings) CurrentNode.DataItem;
-			if (settings.HasConnectionProvider)
-				settings.ConnectionProvider.Close ();
+			if (settings.HasConnectionPool)
+				settings.ConnectionPool.Close ();
 		}
 		
 		public override void ActivateItem ()
