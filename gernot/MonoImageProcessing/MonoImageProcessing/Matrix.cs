@@ -127,6 +127,42 @@ namespace Mono.ImageProcessing
                         return matrix_builder.ToString();
                 }
 
+                public Bitmap ToBitmap()
+                {
+                        return (type == MatrixType.Logical) ? ToBitmapBinary() : ToBitmapGrayscale();
+                }
+
+                private Bitmap ToBitmapBinary()
+                {
+                        Bitmap bmp = new Bitmap(this.num_cols, this.num_rows);
+                        byte r, g, b;
+
+                        for (int row_idx = 0; row_idx < this.num_rows; row_idx++)
+                        for (int col_idx = 0; col_idx < this.num_cols; col_idx++)
+                        {
+                                r = g = b = (this.matrix[col_idx, row_idx] > 0) ? byte.MaxValue : byte.MinValue;
+                                bmp.SetPixel(col_idx, row_idx, Color.FromArgb(r, g, b));
+                        }
+
+                        return bmp;
+                }
+
+                private Bitmap ToBitmapGrayscale()
+                {
+                        Bitmap bmp = new Bitmap(this.num_cols, this.num_rows);
+                        byte r, g, b;
+
+                        for (int row_idx = 0; row_idx < this.num_rows; row_idx++)
+                        for (int col_idx = 0; col_idx < this.num_cols; col_idx++)
+                        {
+                                r = g = b = this.matrix[col_idx, row_idx];
+                                bmp.SetPixel(col_idx, row_idx, Color.FromArgb(r, g, b));
+                        }
+
+                        return bmp;
+                }
+
+
                 public override bool Equals(object obj)
                 {
                         bool isMatrix = obj is Matrix;
