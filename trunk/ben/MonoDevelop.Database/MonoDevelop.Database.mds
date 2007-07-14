@@ -4,7 +4,7 @@
       <Entry build="True" name="Mono.Data.Sql" configuration="Debug" />
       <Entry build="False" name="Mono.Data.Sql.Tests" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.GlueGenerator" configuration="Debug" />
-      <Entry build="True" name="MonoDevelop.Database.Visualization" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Visualization" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Project" configuration="Debug" />
       <Entry build="False" name="Mono.Data.Sql.Sybase" configuration="Debug" />
