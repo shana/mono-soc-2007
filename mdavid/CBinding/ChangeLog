@@ -1,5 +1,13 @@
 2007-07-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Gui/CTextEditorExtension.cs, CBinding.addin.xml, CBinding.mdp,
+	  CFormattingStrategy.cs, Makefile.am: Implemented a very simple
+	  FormattingStrategy.
+	* Project/CProject.cs: Changed the project type from 'C/C++' to
+	  'Native'.
+
+2007-07-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Navigation/StructureNodeBuilder.cs,
 	  Navigation/ProjectNodeBuilderExtension.cs,
 	  Navigation/MemberNodeBuilder.cs, Navigation/Function.cs,
