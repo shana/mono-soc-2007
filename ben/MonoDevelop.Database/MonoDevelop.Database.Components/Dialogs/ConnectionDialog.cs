@@ -73,6 +73,9 @@ namespace MonoDevelop.Database.Components
 		public ConnectionDialog (ConnectionSettings settings)
 			: this (false)
 		{
+			if (settings == null)
+				throw new ArgumentNullException ("settings");
+			
 			this.settings = settings;
 			isDefaultSettings = false;
 			SetRequiredFields (settings);
@@ -145,7 +148,6 @@ namespace MonoDevelop.Database.Components
 			entryUsername.Text = String.IsNullOrEmpty (settings.Username) ? String.Empty : settings.Username;
 			textConnectionString.Buffer.Text = String.IsNullOrEmpty (settings.ConnectionString) ? String.Empty : settings.ConnectionString;
 			entryDatabase.Text = String.IsNullOrEmpty (settings.Database) ? String.Empty : settings.Database;
-			checkPooling.Active = settings.EnablePooling;
 			spinMinPool.Value = settings.MinPoolSize;
 			spinMaxPool.Value = settings.MaxPoolSize;
 			
@@ -153,7 +155,7 @@ namespace MonoDevelop.Database.Components
 				TreeIter iter;
 				if (store.GetIterFirst (out iter)) {
 					do {
-						IDbFactory fac = store.GetValue (iter, 1) as IDbFactory;
+						IDbFactory fac = store.GetValue (iter, 0) as IDbFactory;
 						if (settings.ProviderIdentifier == fac.Identifier) {
 							comboProvider.SetActiveIter (iter);
 							return;
@@ -181,7 +183,6 @@ namespace MonoDevelop.Database.Components
 			settings.Username = entryUsername.Text;
 			settings.Password = entryPassword.Text;
 			settings.SavePassword = checkSavePassword.Active;
-			settings.EnablePooling = checkPooling.Active;
 			settings.MaxPoolSize = (int)spinMaxPool.Value;
 			settings.MinPoolSize = (int)spinMinPool.Value;
 			settings.UseConnectionString = radioUseCustom.Active;

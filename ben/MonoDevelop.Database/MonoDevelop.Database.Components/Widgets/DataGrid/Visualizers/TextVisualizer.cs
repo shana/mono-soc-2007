@@ -31,10 +31,37 @@ using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Components
 {
-	public abstract class BaseCellRenderer : CellRendererText
+	public class TextVisualizer : IDataGridVisualizer
 	{
-		protected object val;
+		public virtual string Description {
+			get { return GettextCatalog.GetString ("Show as text"); }
+		}
 		
-		public abstract object Value { get; set; }
+		public virtual string IconString {
+			get { return "md-text-file-icon"; }
+		}
+		
+		public virtual bool CanVisualize (Type type)
+		{
+			return type == typeof (string) || type == typeof (byte[]);
+		}
+		
+		public virtual void ShowContent (object dataObject)
+		{
+			string txt = GetContent (dataObject);
+
+			using (ShowTextDialog dlg = new ShowTextDialog (txt, "text/plain"))
+				dlg.Run ();
+		}
+		
+		protected virtual string GetContent (object dataObject)
+		{
+			if (dataObject == null)
+				return null;
+			else if (dataObject is Byte[])
+				return System.Text.Encoding.UTF8.GetString (dataObject as byte[]);
+			else
+				return dataObject.ToString ();
+		}
 	}
 }

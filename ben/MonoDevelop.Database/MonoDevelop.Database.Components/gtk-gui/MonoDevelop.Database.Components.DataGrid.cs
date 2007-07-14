@@ -57,7 +57,7 @@ namespace MonoDevelop.Database.Components {
             this.grid.HasDefault = true;
             this.grid.CanFocus = true;
             this.grid.Name = "grid";
-            this.grid.FixedHeightMode = true;
+            this.grid.EnableSearch = false;
             this.scrolledwindow.Add(this.grid);
             this.vbox.Add(this.scrolledwindow);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vbox[this.scrolledwindow]));
@@ -96,6 +96,7 @@ namespace MonoDevelop.Database.Components {
             this.entryCurrent.Name = "entryCurrent";
             this.entryCurrent.IsEditable = true;
             this.entryCurrent.InvisibleChar = '●';
+            this.entryCurrent.Xalign = 0.5F;
             this.hbox.Add(this.entryCurrent);
             Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.hbox[this.entryCurrent]));
             w5.Position = 2;
@@ -115,6 +116,7 @@ namespace MonoDevelop.Database.Components {
             this.entryTotal.Name = "entryTotal";
             this.entryTotal.IsEditable = false;
             this.entryTotal.InvisibleChar = '●';
+            this.entryTotal.Xalign = 0.5F;
             this.hbox.Add(this.entryTotal);
             Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.hbox[this.entryTotal]));
             w7.Position = 4;

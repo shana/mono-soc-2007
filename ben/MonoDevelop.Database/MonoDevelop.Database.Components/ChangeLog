@@ -1,3 +1,12 @@
+2007-07-14  Ben Motmans <ben.motmans@gmail.com>
+
+	* Widgets/DataGrid/*: New DataGrid widget, with support for data visualizers and content based renderers
+	* Dialogs/ShowTextDialog.cs: Text visualization widget for the DataGrid control
+	* Dialogs/ShowImageDialog.cs: Image visualization widget for the DataGrid control
+	* Dialogs/ShowXmlTreeDialog.cs: XML visualization widget for the DataGrid control
+	* Codons/DataGridContentRendererCodon.cs: Codon to add content renderers to the datagrid control
+	* Codons/DataGridVisualizerCodon.cs: Codon to add visualizers to the datagrid control
+
 2007-07-10  Ben Motmans <ben.motmans@gmail.com>
 
 	* Dialogs/ConnectionDialog.cs: imported from ConnectionManager project, added CheckBox

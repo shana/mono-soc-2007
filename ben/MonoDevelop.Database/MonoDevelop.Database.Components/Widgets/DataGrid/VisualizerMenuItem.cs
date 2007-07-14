@@ -26,68 +26,37 @@
 using Gtk;
 using System;
 using System.Data;
-using System.Collections;
-using System.Collections.Generic;
 using Mono.Addins;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Components
 {
-	public class DataGridColumn : TreeViewColumn
+	internal class VisualizerMenuItem : ImageMenuItem
 	{
-		private DataGrid grid;
-		private DataColumn column;
 		private int columnIndex;
-		private IDataGridContentRenderer contentRenderer;
-		private static IDataGridContentRenderer nullRenderer;
+		private TreeIter iter;
+		private IDataGridVisualizer visualizer;
 		
-		static DataGridColumn ()
+		internal VisualizerMenuItem (IDataGridVisualizer visualizer, TreeIter iter, int columnIndex)
+			: base (visualizer.Description)
 		{
-			nullRenderer = new NullContentRenderer ();
-		}
-		
-		public DataGridColumn (DataGrid grid, DataColumn column, int columnIndex)
-		{
-			this.grid = grid;
-			this.column = column;
 			this.columnIndex = columnIndex;
+			this.iter = iter;
+			this.visualizer = visualizer;
 			
-			contentRenderer = grid.GetDataGridContentRenderer (column.DataType);
-
-			Title = column.ColumnName.Replace ("_", "__"); //underscores are normally used for underlining, so needs escape char
-			Clickable = true;
-			
-			CellRendererText textRenderer = new CellRendererText ();
-			PackStart (textRenderer, true);
-			SetCellDataFunc (textRenderer, new CellLayoutDataFunc (ContentDataFunc));
+			Image = MonoDevelop.Core.Gui.Services.Resources.GetImage (visualizer.IconString, IconSize.Menu);
 		}
 		
 		public int ColumnIndex {
 			get { return columnIndex; }
 		}
 		
-		public IComparer ContentComparer {
-			get { return contentRenderer; }
+		public TreeIter TreeIter {
+			get { return iter; }
 		}
 		
-		public Type DataType {
-			get { return column.DataType; }
+		public IDataGridVisualizer Visualizer {
+			get { return visualizer; }
 		}
-
-		private void ContentDataFunc (CellLayout layout, CellRenderer cell, TreeModel model, TreeIter iter)
-		{
-			object dataObject = model.GetValue (iter, columnIndex);
-			if (dataObject == null)
-				nullRenderer.SetContent (cell as CellRendererText, dataObject);
-			else
-				contentRenderer.SetContent (cell as CellRendererText, dataObject);
-		}
-		
-		protected override void OnClicked ()
-		{
-			base.OnClicked ();
-			grid.Sort (this);
-		}
-
 	}
 }
