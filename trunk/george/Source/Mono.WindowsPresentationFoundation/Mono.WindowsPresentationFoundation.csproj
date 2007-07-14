@@ -44,6 +44,7 @@
     <Compile Include="Mono.WindowsPresentationFoundation\Label.cs" />
     <Compile Include="Mono.WindowsPresentationFoundation\Main.cs" />
     <Compile Include="Mono.WindowsPresentationFoundation\MainWindow.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation\ObjectViewer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
