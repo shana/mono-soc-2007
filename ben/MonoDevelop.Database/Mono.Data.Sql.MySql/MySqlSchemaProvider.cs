@@ -38,8 +38,8 @@ namespace Mono.Data.Sql
 {
 	public class MySqlSchemaProvider : AbstractSchemaProvider
 	{
-		public MySqlSchemaProvider (IConnectionProvider connectionProvider)
-			: base (connectionProvider)
+		public MySqlSchemaProvider (IConnectionPool connectionPool)
+			: base (connectionPool)
 		{
 		}
 
@@ -65,10 +65,10 @@ namespace Mono.Data.Sql
 		
 		public override ICollection<DatabaseSchema> GetDatabases ()
 		{
-			CheckConnectionState ();
 			List<DatabaseSchema> databases = new List<DatabaseSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand ("SHOW DATABASES;");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("SHOW DATABASES;");
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read ()) {
@@ -80,6 +80,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 			
 			return databases;
 		}
@@ -88,14 +89,14 @@ namespace Mono.Data.Sql
 		// // see: http://dev.mysql.com/doc/refman/5.1/en/show-create-table.html
 		public override ICollection<TableSchema> GetTables ()
 		{
-			CheckConnectionState ();
 			List<TableSchema> tables = new List<TableSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand ("SHOW TABLES;");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("SHOW TABLES;");
 			using (command) {
 				if (GetMainVersion (command) >= 5) {
 					//in mysql 5.x we can use an sql query to provide the comment
-					command.CommandText = "SELECT TABLE_NAME, TABLE_SCHEMA, TABLE_TYPE, TABLE_COMMENT FROM `information_schema`.`TABLES`"
+					command.CommandText = "SELECT TABLE_NAME, TABLE_SCHEMA, TABLE_TYPE, TABLE_COMMENT FROM `information_schema`.`TABLES` "
 						+ "WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='"
 						+ command.Connection.Database
 						+ "' ORDER BY TABLE_NAME;";
@@ -107,9 +108,11 @@ namespace Mono.Data.Sql
 							//table.OwnerName = command.Connection.Database;
 							table.Comment = r.GetString (3);
 							
-							IDbCommand command2 = connectionProvider.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
+							IPooledDbConnection conn2 = connectionPool.Request ();
+							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
 							using (command2)
 								table.Definition = command2.ExecuteScalar () as string;
+							conn2.Release ();
 							
 							tables.Add (table);
 						}
@@ -124,26 +127,29 @@ namespace Mono.Data.Sql
 							table.Name = r.GetString (0);
 							//table.OwnerName = command.Connection.Database;
 							
-							IDbCommand command2 = connectionProvider.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
+							IPooledDbConnection conn2 = connectionPool.Request ();
+							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
 							using (command2)
 								table.Definition = command2.ExecuteScalar () as string;
-		
+							conn2.Release ();
+							
 							tables.Add (table);
 						}
 						r.Close ();
 					}
 				}
 			}
+			conn.Release ();
 
 			return tables;
 		}
 		
 		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (String.Format ("DESCRIBE {0}", table.Name));
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", table.Name));
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read ()) {
@@ -161,6 +167,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				};
 			}
+			conn.Release ();
 
 			return columns;
 		}
@@ -168,12 +175,12 @@ namespace Mono.Data.Sql
 		// see: http://dev.mysql.com/doc/refman/5.1/en/views-table.html
 		public override ICollection<ViewSchema> GetViews ()
 		{
-			CheckConnectionState ();
 			List<ViewSchema> views = new List<ViewSchema> ();
 
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT TABLE_NAME, TABLE_SCHEMA FROM information_schema.VIEWS where TABLE_SCHEMA = '"
-				+ connectionProvider.Connection.Database +
+				+ ConnectionPool.ConnectionSettings.Database +
 				"' ORDER BY TABLE_NAME"
 			);
 			using (command) {
@@ -185,9 +192,11 @@ namespace Mono.Data.Sql
 							view.Name = r.GetString (0);
 							view.OwnerName = r.GetString (1);
 							
-							IDbCommand command2 = connectionProvider.CreateCommand ("SHOW CREATE TABLE `" + view.Name + "`;");
+							IPooledDbConnection conn2 = connectionPool.Request ();
+							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + view.Name + "`;");
 							using (command2)
 								view.Definition = command2.ExecuteScalar () as string;
+							conn2.Release ();
 							
 							views.Add (view);
 						}
@@ -195,15 +204,17 @@ namespace Mono.Data.Sql
 					}
 				} //else: do nothing, since views are only supported since mysql 5.x
 			}
+			conn.Release ();
+
 			return views;
 		}
 
 		public override ICollection<ColumnSchema> GetViewColumns (ViewSchema view)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (String.Format ("DESCRIBE {0}", view.Name));
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", view.Name));
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read ()) {
@@ -221,6 +232,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				};
 			}
+			conn.Release ();
 
 			return columns;
 		}
@@ -228,12 +240,12 @@ namespace Mono.Data.Sql
 		// see: http://dev.mysql.com/doc/refman/5.1/en/routines-table.html
 		public override ICollection<ProcedureSchema> GetProcedures ()
 		{
-			CheckConnectionState ();
 			List<ProcedureSchema> procedures = new List<ProcedureSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT ROUTINE_NAME, ROUTINE_SCHEMA, ROUTINE_TYPE FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA ='"
-				+ connectionProvider.Connection.Database +
+				+ ConnectionPool.ConnectionSettings.Database +
 				"' ORDER BY ROUTINE_NAME"
 			);
 			
@@ -247,26 +259,29 @@ namespace Mono.Data.Sql
 				    			procedure.OwnerName = r.GetString (1);
 				    			procedure.IsSystemProcedure = r.GetString (2).ToLower ().Contains ("system");
 							
-							IDbCommand command2 = connectionProvider.CreateCommand ("SHOW CREATE PROCEDURE `" + procedure.Name + "`;");
+							IPooledDbConnection conn2 = connectionPool.Request ();
+							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE PROCEDURE `" + procedure.Name + "`;");
 							using (command2)
 								procedure.Definition = command2.ExecuteScalar () as string;
-				    			
+				    			conn2.Release ();
+							
 				    			procedures.Add (procedure);
 				    		}
 						r.Close ();
 					}
 				} //else: do nothing, since procedures are only supported since mysql 5.x
 			}
+			conn.Release ();
 			
 			return procedures;
 		}
 
 		public override ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT param_list FROM mysql.proc where name = '" + procedure.Name + "'"
 			);
 			
@@ -293,23 +308,23 @@ namespace Mono.Data.Sql
 					}
 				} //else: do nothing, since procedures are only supported since mysql 5.x
 			}
+			conn.Release ();
 			
 			return columns;
 		}
 		
 		public override ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure)
 		{
-			CheckConnectionState ();
 			throw new NotImplementedException ();
 		}
 
 		private static Regex constraintRegex = new Regex (@"`([\w ]+)`", RegexOptions.Compiled);
 		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand ("SHOW TABLE STATUS FROM `" + table.OwnerName + "`;");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("SHOW TABLE STATUS FROM `" + table.OwnerName + "`;");
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					string[] chunks = ((string)r["Comment"]).Split (';');
@@ -329,16 +344,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return constraints;
 		}
 
 		public override ICollection<UserSchema> GetUsers ()
 		{
-			CheckConnectionState ();
 			List<UserSchema> users = new List<UserSchema> ();
 
-			IDbCommand command = connectionProvider.CreateCommand ("SELECT DISTINCT user from mysql.user where user != '';");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("SELECT DISTINCT user from mysql.user where user != '';");
 			using (command) {
 				using (IDataReader r = command.ExecuteReader ()) {
 					while (r.Read ()) {
@@ -351,6 +367,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return users;
 		}
