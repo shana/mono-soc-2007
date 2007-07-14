@@ -1,0 +1,158 @@
+
+Thu Nov 30 17:36:43 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* gui/gtk/SourceWindow.cs: work around Gtk bug.
+	* coverage.c: disable domain unload for now and make sure
+	methods names are encoded correctly in the XML file.
+
+Thu Nov 30 12:15:03 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* Ship a Cecil binary in the source tarball. Added a
+	configure option to specify a Cecil binary.
+	* style.xsl: fixed mangling of hrefs.
+
+Mon Nov 27 13:47:24 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* UI updates. Removed unused dependency on gnome-sharp.
+	Upped version.
+
+Fri Nov 24 20:09:05 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* Fixes and manpage added.
+
+Fri Nov 24 19:41:04 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* XmlExporter.cs: deal with nested types by changing slashes
+	into dots in filenames.
+
+Fri Nov 24 17:01:27 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* Makefile, configure: added configure script and install/dist target.
+	* coverage.c: updated to not require access to mono internals.
+
+Fri Nov 24 16:25:51 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* CoverageModel.cs: updated to use Cecil to load assemblies
+	so the tool can be used with both 1.0 and 2.0 runtimes.
+	Made it handle the conversion between the different name
+	conventions for nested types.
+	* coverage.c: include the assembly filename in the output so
+	we don't have to try and emulate the runtime assembly load
+	process and we can find the used assembly right away.
+
+Fri Nov 24 16:23:38 CET 2006 Paolo Molaro <lupus@ximian.com>
+
+	* gui/gtk/*.cs: usability improvements and changes to make
+	it run with more recent versions of glade-sharp.
+
+2006-04-04  Jacob Ilsø Christensen  <jacobilsoe@gmail.com>
+
+	* CoverageModel.cs: Removed redundant for loops
+	in GetSourceRangeFor.
+
+	* Makefile: Use -debug instead of -g.
+
+2006-04-04  Jacob Ilsø Christensen  <jacobilsoe@gmail.com>
+
+	* Makefile: Fixed clean target.
+	* README: Updated.
+
+2006-04-04  Jacob Ilsø Christensen  <jacobilsoe@gmail.com>
+
+	* .: Added svn:ignore property values.
+
+2006-04-03  Jacob Ilsø Christensen  <jacobilsoe@gmail.com>
+
+	* Makefile: Use gmcs instead of mcs.
+	* symbols.cs: Updated after port to gmcs.
+	* CoverageModel.cs: Updated after port to gmcs.
+
+2006-04-02  Jacob Ilsø Christensen  <jacobilsoe@gmail.com>
+
+	* Makefile: Use gtk-sharp gnome-sharp and glade-sharp in 2.0 verions.
+
+2005-11-13  Zoltan Varga  <vargaz@gmail.com>
+
+	* Makefile gui/gtk/MonoCov.cs: Update to latest mono.
+
+2005-07-21  Zoltan Varga  <vargaz@freemail.hu>
+
+	* LICENSE: Change license to the class libs license.
+
+2005-03-29  Zoltan Varga  <vargaz@freemail.hu>
+
+	* gui/gtk/*.cs: Applied patch from Rafael Teixeira <monoman@gmail.com>.
+	Fix compilation problems on HEAD.
+
+	* symbols.cs: Update to latest Mono.CompilerServices.SymbolWriter.
+
+	* Makefile: Disable building of nunit-console.exe for now.
+
+2004-12-06  Zoltan Varga  <vargaz@freemail.hu>
+
+	* coverage.c *.cs Makefile: Applied patch from Mike Tindal (mtindal@paradoxpoint.com). Fix compilation problems on HEAD.
+
+2004-05-13  Zoltan Varga  <vargaz@freemail.hu>
+
+	* CoverageModel.cs: Invoke GetGuid dynamically since it is no longer
+	public.
+
+2004-04-15  Rafael Teixeira <rafaelteixeirabr@hotmail.com>
+
+	*: README - nowadays it's mono --profile=xxx and not --profile:xxx
+
+2004-04-15  Zoltan Varga  <vargaz@freemail.hu>
+
+	*: Update to latest mono + gtk#.
+
+2003-10-17  Zoltan Varga  <vargaz@freemail.hu>
+
+	* nunit-console.cs: Update to latest nunit.
+
+2003-07-05  Zoltan Varga  <vargaz@freemail.hu>
+
+	* style.xsl: Made the output valid HTML 4.0 Transitional.
+
+2003-07-03  Zoltan Varga  <vargaz@freemail.hu>
+
+	* coverage.c (mono_profiler_startup): Fix startup if no arguments
+	are provided.
+
+2003-07-02  Zoltan Varga  <vargaz@freemail.hu>
+
+	* Makefile: Updated to work in the mono CVS directory structure.
+
+	* MonoCovMain.cs gui/gtk/MonoCov.cs gui/qt/MonoCov.cs: Moved all
+	non-gui command line processing into a separate class.
+
+	* all: Initial import into CVS.
+
+2003-07-01  Zoltan Varga  <vargaz@freemail.hu>
+
+	* HtmlExporter.cs: Implemented HTML exporter.
+
+	* style.xsl: Small modifications needed by the HTML export method.
+
+2003-06-07  Zoltan Varga  <vargaz@freemail.hu>
+
+	* New version with many enchantments.
+
+2003-01-06  Zoltan Varga  <vargaz@freemail.hu>
+
+	* gui/qt/SourceView.cs: fixed viewing of source files which contain
+	tags recognized by QTextEdit.
+
+2003-01-05  Zoltan Varga  <vargaz@freemail.hu>
+
+	* coverage.c: Handle nested types correctly.
+
+2002-12-30  Zoltan Varga  <vargaz@freemail.hu>
+
+	* coverage.c README: Added filters to the back end. They can be used by
+	passing the '--coverage-args filterfile=<NAME>' argument on the command
+	line.
+
+2002-12-28  Zoltan Varga  <vargaz@freemail.hu>
+
+	* first public version.
+
