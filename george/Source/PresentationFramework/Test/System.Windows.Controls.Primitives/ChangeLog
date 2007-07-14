@@ -1,3 +1,7 @@
+2007-07-14  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Disabled ItemsControl-related tests.
+
 2007-07-09  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* SelectorTest.cs: Expanded a test.

@@ -8,6 +8,9 @@ namespace Mono.System.Windows.Controls {
 namespace System.Windows.Controls {
 #endif
 	[TestFixture]
+#if Implementation
+	[Ignore("Not implementable now")]
+#endif
 	public class ItemsPresenterTest {
 		#region OnApplyTemplate
 		#region OnApplyTemplateCallsGetVisualChild
