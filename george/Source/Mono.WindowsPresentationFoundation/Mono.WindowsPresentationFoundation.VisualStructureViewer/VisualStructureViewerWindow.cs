@@ -1,3 +1,4 @@
+//#define PropertyGrid
 using System;
 using System.IO;
 using System.Windows;
@@ -11,7 +12,7 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			Title = "Visual structure viewer";
 
 			TextBox xaml_text_box = new TextBox();
-			xaml_text_box.Text = @"<theme:ScrollChrome xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:theme=""clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna""/>";
+			xaml_text_box.Text = @"<theme:ScrollChrome xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:theme=""clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"" theme:ScrollGlyph=""DownArrow"" Width=""100"" Height=""100""/>";
 			xaml_text_box.TextWrapping = TextWrapping.Wrap;
 			Label xaml_label = new Label("_XAML", xaml_text_box);
 			DockPanel xaml_panel = new DockPanel();
@@ -19,7 +20,7 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			xaml_panel.Children.Add(xaml_label);
 			xaml_panel.Children.Add(xaml_text_box);
 
-			//TODO: Make a WPF control for this (System.Windows.Forms.PropertyGrid is slow and limited.)
+#if PropertyGrid
 			System.Windows.Forms.PropertyGrid structure_viewer_property_grid = new System.Windows.Forms.PropertyGrid();
 			structure_viewer_property_grid.Dock = System.Windows.Forms.DockStyle.Fill;
 			System.Windows.Forms.Integration.WindowsFormsHost structure_viewer_host = new System.Windows.Forms.Integration.WindowsFormsHost();
@@ -28,6 +29,14 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			StackPanel structure_viewer_panel = new StackPanel();
 			structure_viewer_panel.Children.Add(structure_viewer_label);
 			structure_viewer_panel.Children.Add(structure_viewer_host);
+#else
+			ObjectViewer structure_viewer = new ObjectViewer();
+			Label structure_viewer_label = new Label("_Structure", structure_viewer);
+			DockPanel structure_viewer_panel = new DockPanel();
+			DockPanel.SetDock(structure_viewer_label, Dock.Top);
+			structure_viewer_panel.Children.Add(structure_viewer_label);
+			structure_viewer_panel.Children.Add(structure_viewer);
+#endif
 
 			Button view_button = new Button();
 			view_button.Content = "_View";
@@ -38,7 +47,11 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 					window.Content = content;
 					window.Title = "Content";
 					window.Show();
+#if PropertyGrid
 					structure_viewer_property_grid.SelectedObject = VisualTreeHelper.GetDrawing(content);
+#else
+					structure_viewer.Object = VisualTreeHelper.GetDrawing(content);
+#endif
 				} catch (Exception ex) {
 					MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
 				}
