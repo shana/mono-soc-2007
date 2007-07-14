@@ -12,121 +12,97 @@ namespace MonoVision
 		{
 			Console.WriteLine("Mono.ImageProcessing");
 			Console.WriteLine("Please set desired method call...");
-			//TestDilation();
-			OutputGrayscaleImages();
+                        
+                        //this.DemoBottomHat();
+                        //this.DemoClosing();
+                        this.DemoDilation();
 		}
-		
-		public static void OutputGrayscaleImages()
-		{
-			// Create an instance of StreamReader to read from a file.
-            // The using statement also closes the StreamReader.
-            using (StreamReader sr = new StreamReader("/media/GERNOTHD2/projects/mono/img.txt"))
-            {
-                String line;
-                // Read and display lines from the file until the end of 
-                // the file is reached.
-                line = "100075";
-                //while ((line = sr.ReadLine()) != null)
+
+                private static void DemoBottomHat()
                 {
-                    string source = string.Format(@"/media/GERNOTHD2/projects/mono/bsds300/gray/{0}.jpg", line);
-                    Bitmap bmp1 = Bitmap.FromFile(source) as Bitmap;
+                        StructuringElement se = StructuringElement.CreateSquare(3);
+                        BottomHat bothat = new BottomHat(se);
 
-                    Matrix img_matrix = Matrix.FromBitmap (bmp1); //new Matrix(bmp1);
+                        using (StreamReader sr = new StreamReader("img.txt"))
+                        {
+                                String line;
 
-                    string dest = string.Format("monogray/{0}.txt", line);
-                    using (StreamWriter sw = new StreamWriter(dest, false))
-                    {
-                        sw.Write(img_matrix.ToString());
-                    }
+                                while ((line = sr.ReadLine()) != null)
+                                {
+                                        string source = string.Format("grayscale_img/{0}.jpg", line);
+                                        Bitmap bmp = Bitmap.FromFile(source) as Bitmap;
+
+                                        Matrix img_matrix = Matrix.FromBitmap(bmp);
+                                        //Matrix thres_matrix = img_matrix < 100;
+                                        Matrix result = bothat.Execute(img_matrix);
+
+                                        string dest = string.Format("bottomhat/{0}.txt", line);
+                                        using (StreamWriter sw = new StreamWriter(dest, false))
+                                        {
+                                                sw.Write(result.ToString());
+                                        }
+                                        result.ToBitmap().Save(string.Format("bottomhat/{0}.png", line));
+                                }
+                        }
+
                 }
-            }
-			
-		}
-		
-		public static void TestImageMatrix()
-		{
-			// Create an instance of StreamReader to read from a file.
-            // The using statement also closes the StreamReader.
-            using (StreamReader sr = new StreamReader("/media/GERNOTHD2/projects/mono/img.txt"))
-            {
-                String line;
-                // Read and display lines from the file until the end of 
-                // the file is reached.
-                while ((line = sr.ReadLine()) != null)
+
+                private static void DemoClosing()
                 {
-                    string source = string.Format(@"/media/GERNOTHD2/projects/mono/bsds300/gray/{0}.jpg", line);
-                    Bitmap bmp1 = Bitmap.FromFile(source) as Bitmap;
+                        StructuringElement se = StructuringElement.CreateLine(3);
+                        Closing closing = new Closing(se);
 
-                    Matrix img_matrix = Matrix.FromBitmap (bmp1); //new Matrix(bmp1);
+                        using (StreamReader sr = new StreamReader("img.txt"))
+                        {
+                                String line;
 
-                    string dest = string.Format("monogray/{0}.txt", line);
-                    using (StreamWriter sw = new StreamWriter(dest, false))
-                    {
-                        sw.Write(img_matrix.ToString());
-                    }
+                                while ((line = sr.ReadLine()) != null)
+                                {
+                                        string source = string.Format("grayscale_img/{0}.jpg", line);
+                                        Bitmap bmp = Bitmap.FromFile(source) as Bitmap;
+
+                                        Matrix img_matrix = Matrix.FromBitmap(bmp);
+                                        //Matrix thres_matrix = img_matrix < 100;
+                                        Matrix result = closing.Execute(img_matrix);
+
+                                        string dest = string.Format("closing/{0}.txt", line);
+                                        using (StreamWriter sw = new StreamWriter(dest, false))
+                                        {
+                                                sw.Write(result.ToString());
+                                        }
+                                        result.ToBitmap().Save(string.Format("closing/{0}.png", line));
+                                }
+                        }
+
                 }
-            }
-		}
-		
-		public static void ThresholdImageMatrix()
-		{
-			// Create an instance of StreamReader to read from a file.
-            // The using statement also closes the StreamReader.
-            using (StreamReader sr = new StreamReader("/media/GERNOTHD2/projects/mono/img.txt"))
-            {
-                String line;
-                
-                // Read and display lines from the file until the end of 
-                // the file is reached.
-                while ((line = sr.ReadLine()) != null)
+
+                private static void DemoDilation()
                 {
-                    Console.WriteLine(line);
-                
-                    string source = string.Format(@"/media/GERNOTHD2/projects/mono/bsds300/gray/{0}.jpg", line);
-                    Bitmap bmp1 = Bitmap.FromFile(source) as Bitmap;
+                        StructuringElement se = StructuringElement.CreateSquare(3);
+                        Dilation dil = new Dilation(se);
 
-                    Matrix img_matrix = Matrix.FromBitmap (bmp1);
-                    Matrix threshold_matrix = (img_matrix < 100);
-                    string dest = string.Format("monothres/{0}.txt", line);
-                    using (StreamWriter sw = new StreamWriter(dest, false))
-                    {
-                        sw.Write(threshold_matrix.ToString());
-                    }
-                }
-            }
-		}
-		
-		public static void TestDilation()
-		{
-              StructuringElement se = StructuringElement.CreateSquare(3);
-              Dilation dil = new Dilation(se);
-              
-			// Create an instance of StreamReader to read from a file.
-            // The using statement also closes the StreamReader.
-            using (StreamReader sr = new StreamReader("/media/GERNOTHD2/projects/mono/img.txt"))
-            {
-                String line;
-                
-                // Read and display lines from the file until the end of 
-                // the file is reached.
-                while ((line = sr.ReadLine()) != null)
-                {
-                    Console.WriteLine(line);
-                
-                    string source = string.Format(@"/media/GERNOTHD2/projects/mono/bsds300/gray/{0}.jpg", line);
-                    Bitmap bmp1 = Bitmap.FromFile(source) as Bitmap;
+                        using (StreamReader sr = new StreamReader("img.txt"))
+                        {
+                                String line;
 
-                    Matrix img_matrix = Matrix.FromBitmap(bmp1);
-                    Matrix thres_matrix = (img_matrix < 100);
-                    Matrix dil_result = dil.Execute(thres_matrix);
-                    
-                    string dest = string.Format("monodilation/{0}.txt", line);
-                    using (StreamWriter sw = new StreamWriter(dest, false))
-                    {
-                        sw.Write(dil_result.ToString());
-                    }
+                                while ((line = sr.ReadLine()) != null)
+                                {
+                                        string source = string.Format("grayscale_img/{0}.jpg", line);
+                                        Bitmap bmp = Bitmap.FromFile(source) as Bitmap;
+
+                                        Matrix img_matrix = Matrix.FromBitmap(bmp);
+                                        Matrix thres_matrix = img_matrix < 100;
+                                        Matrix result = dil.Execute(thres_matrix);
+
+                                        string dest = string.Format("dilation/{0}.txt", line);
+                                        using (StreamWriter sw = new StreamWriter(dest, false))
+                                        {
+                                                sw.Write(result.ToString());
+                                        }
+                                        result.ToBitmap().Save(string.Format("dilation/{0}.png", line));
+                                }
+                        }
+
                 }
-            }
-		}		
 	}
 }
