@@ -14,6 +14,9 @@ using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	[TestFixture]
+#if Implementation
+	[Ignore("Not implementable now")]
+#endif
 	public class TabControlTest {
 		#region SelectedContent
 		[Test]

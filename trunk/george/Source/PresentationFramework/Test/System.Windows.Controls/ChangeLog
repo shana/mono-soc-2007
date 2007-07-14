@@ -1,3 +1,7 @@
+2007-07-14  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Disabled ItemsControl-related tests.
+
 2007-07-13  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ItemsControlTest.cs: Added some tests.

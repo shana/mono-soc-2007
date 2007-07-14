@@ -10,6 +10,9 @@ namespace Mono.System.Windows.Controls.Primitives {
 namespace System.Windows.Controls.Primitives {
 #endif
 	[TestFixture]
+#if Implementation
+	[Ignore("Not implementable now")]
+#endif
 	public class SelectorTest {
 		[Test]
 		public void SelectedItemSetsSelectedIndex() {
