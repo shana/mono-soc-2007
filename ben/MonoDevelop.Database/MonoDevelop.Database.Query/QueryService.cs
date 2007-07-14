@@ -51,8 +51,8 @@ namespace MonoDevelop.Database.Query
 			if (callback == null)
 				throw new ArgumentNullException ("callback");
 			
-			IConnectionProvider provider = settings.ConnectionProvider;
-			if (provider.IsOpen) {
+			IConnectionPool pool = settings.ConnectionPool;
+			if (pool.IsInitialized) {
 				callback (settings, true);
 				return;
 			}
@@ -76,15 +76,16 @@ namespace MonoDevelop.Database.Query
 		private static void EnsureConnectionThreaded (object obj)
 		{
 			EnsureConnectionState state = obj as EnsureConnectionState;
-			IConnectionProvider provider = state.ConnectionSettings.ConnectionProvider;
+			IConnectionPool pool = state.ConnectionSettings.ConnectionPool;
 
-			string error = null;
-			if (provider.Open (out error)) {
+			try {
+				pool.Initialize ();
 				Services.DispatchService.GuiDispatch (delegate () {
 					state.Callback (state.ConnectionSettings, true);
 				});
-				return;
-			} else {
+			} catch (Exception e) {
+				Runtime.LoggingService.Debug (e);
+				
 				state.Attempt = state.Attempt + 1;
 				Services.DispatchService.GuiDispatch (delegate () {
 					EditConnectionGui (state);

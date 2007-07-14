@@ -50,6 +50,10 @@ namespace MonoDevelop.Database.Query
 		private ToolButton buttonExecute;
 		private ToolButton buttonStop;
 		private Menu menuConnections;
+		private Statusbar status;
+		private uint statusId;
+		private GLib.SList group;
+		private EventHandler connectionMenuActivatedHandler;
 		
 		private object currentQueryState;
 		private List<object> stoppedQueries;
@@ -78,6 +82,7 @@ namespace MonoDevelop.Database.Query
 			);
 			buttonStop = new ToolButton ("gtk-stop");
 			buttonStop.Sensitive = false;
+			buttonExecute.Sensitive = false;
 			
 			buttonExecute.Clicked += new EventHandler (ExecuteClicked);
 			buttonStop.Clicked += new EventHandler (StopClicked);
@@ -85,16 +90,12 @@ namespace MonoDevelop.Database.Query
 			MenuToolButton menuConnectionsButton = new MenuToolButton (Services.Resources.GetImage ("md-db-database", IconSize.SmallToolbar), GettextCatalog.GetString ("Select Connection"));
 			menuConnections = new Menu ();
 			menuConnectionsButton.Menu = menuConnections;
-			GLib.SList group = null;
-			foreach (ConnectionSettings settings in ConnectionSettingsService.Connections) {
-				ConnectionSettingsMenuItem item = new ConnectionSettingsMenuItem (settings);
-				if (group == null)
-					group = item.Group;
-				else
-					item.Group = group;
-				menuConnections.Append (item);
-			}
-			ConnectionSettings = null;
+
+			connectionMenuActivatedHandler = new EventHandler (ConnectionMenuActivated);
+			foreach (ConnectionSettings settings in ConnectionSettingsService.Connections)
+				AddConnectionSettingsMenu (settings);
+			menuConnections.Show ();
+			SelectFirstConnectionSettings ();
 
 			buttonExecute.IsImportant = true;
 			menuConnectionsButton.IsImportant = true;
@@ -104,8 +105,12 @@ namespace MonoDevelop.Database.Query
 			toolbar.Add (new SeparatorToolItem ());
 			toolbar.Add (menuConnectionsButton);
 			
+			status = new Statusbar ();
+			status.HasResizeGrip = false;
+			
 			vbox.PackStart (toolbar, false, true, 0);
-			vbox.PackEnd (sourceView, true, true, 0);
+			vbox.PackStart (sourceView, true, true, 0);
+			vbox.PackEnd (status, false, true, 0);
 			
 			sourceView.GrabFocus ();
 			
@@ -125,17 +130,12 @@ namespace MonoDevelop.Database.Query
 			get { return selectedConnection; }
 			set {
 				selectedConnection = value;
-				ConnectionSettingsMenuItem first = null;
+				buttonExecute.Sensitive = value != null;
 				foreach (ConnectionSettingsMenuItem item in menuConnections.Children) {
-					if (first == null) first = item;
 					if (item.ConnectionSettings == value) {
 						item.Active = true;
 						return;
 					}
-				}
-				if (first != null) {
-					selectedConnection = first.ConnectionSettings;
-					first.Active = true;
 				}
 			}
 		}
@@ -160,29 +160,42 @@ namespace MonoDevelop.Database.Query
 		
 		public void ExecuteQuery ()
 		{
-			string sql = Text;
-			if (sql.Length > 0) {
-				
-				IConnectionProvider provider = ConnectionSettings.ConnectionProvider;
-				string error = null;
-				if (!provider.IsOpen && provider.Open (out error)) {
-					Services.MessageService.ShowError (error);
-					IdeApp.Workbench.StatusBar.ShowErrorMessage (error);
-					return;
-				}
-				
-				currentQueryState = new object ();
-				provider.ExecuteQueryAsDataSetAsync (sql, new SqlResultCallback<DataSet> (ExecuteQueryThreaded), currentQueryState);
+			if (selectedConnection == null || Text.Length < 0) {
+				Runtime.LoggingService.Warn ("-- NO QRY.");
+				SetQueryState (false, "No connection selected.");
+				return;
 			}
+			
+			QueryService.EnsureConnection (selectedConnection, new ConnectionSettingsCallback (ExecuteQueryCallback));
 		}
 		
-		private void ExecuteQueryThreaded (object sender, DataSet result, object state)
+		private void ExecuteQueryCallback (ConnectionSettings settings, bool connected)
 		{
+			if (!connected) {
+				Services.MessageService.ShowErrorFormatted (
+					GettextCatalog.GetString ("Unable to connect to database '{0}'"), settings.Name);
+				return;
+			}
+			
+			currentQueryState = new object ();
+			IPooledDbConnection conn = settings.ConnectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (Text);
+			conn.ExecuteSetAsync (command, new ExecuteCallback<DataSet> (ExecuteQueryThreaded), currentQueryState);
+		}
+		
+		private void ExecuteQueryThreaded (IPooledDbConnection connection, DataSet result, object state)
+		{
+			connection.Release ();
+
+			Services.DispatchService.GuiDispatch (delegate () {
+				SetQueryState (false, "Query executed (" + result.Tables.Count + " result tables)");
+			});
+			
 			if (stoppedQueries.Contains (state)) {
 				stoppedQueries.Remove (state);
 				return;
 			}
-			
+
 			if (result != null) {
 				foreach (DataTable table in result.Tables) {
 					Services.DispatchService.GuiDispatch (delegate () {
@@ -191,48 +204,32 @@ namespace MonoDevelop.Database.Query
 					});
 				}
 			}
-			
-			Services.DispatchService.GuiDispatch (delegate () {
-				buttonExecute.Sensitive = true;
-				buttonStop.Sensitive = false;
-			});
-		}
-		
-		public void StopExecuteQuery ()
-		{
-			//since we can't abort a threadpool task, each task is assigned a unique state
-			//when stop is pressed, the state is added to the list of results that need
-			//to be discarded when they get in
-			if (!stoppedQueries.Contains (currentQueryState))
-				stoppedQueries.Add (currentQueryState);
-						
-			buttonExecute.Sensitive = true;
-			buttonStop.Sensitive = false;
 		}
 		
 		private void ExecuteClicked (object sender, EventArgs e)
 		{
-			buttonExecute.Sensitive = false;
+			SetQueryState (true, "Executing query");
 			ExecuteQuery ();
 		}
 		
 		private void StopClicked (object sender, EventArgs e)
 		{
-			buttonStop.Sensitive = false;
-			StopExecuteQuery ();
+			SetQueryState (false, "Query stopped");
+			
+			//since we can't abort a threadpool task, each task is assigned a unique state
+			//when stop is pressed, the state is added to the list of results that need
+			//to be discarded when they get in
+			if (!stoppedQueries.Contains (currentQueryState))
+				stoppedQueries.Add (currentQueryState);
 		}
 		
 		private void OnConnectionAdded (object sender, ConnectionSettingsEventArgs args)
 		{
-			ConnectionSettingsMenuItem item = new ConnectionSettingsMenuItem (settings);
-			menuConnections.Append (item);
+			AddConnectionSettingsMenu (args.ConnectionSettings);
 		}
 		
 		private void OnConnectionRemoved (object sender, ConnectionSettingsEventArgs args)
 		{
-			if (selectedConnection == args.ConnectionSettings)
-				SelectedConnectionSettings = null;
-			
 			ConnectionSettingsMenuItem removeItem = null;
 			foreach (ConnectionSettingsMenuItem item in menuConnections.Children) {
 				if (item.ConnectionSettings == args.ConnectionSettings) {
@@ -240,8 +237,12 @@ namespace MonoDevelop.Database.Query
 					break;
 				}
 			}
-			if (removeItem != null)
+			if (removeItem != null) {
+				removeItem.Activated -= connectionMenuActivatedHandler;
 				menuConnections.Remove (removeItem);
+			}
+			
+			SelectFirstConnectionSettings ();
 		}
 		
 		private void OnConnectionEdited (object sender, ConnectionSettingsEventArgs args)
@@ -253,6 +254,46 @@ namespace MonoDevelop.Database.Query
 				}
 			}
 		}
+		
+		private void AddConnectionSettingsMenu (ConnectionSettings settings)
+		{
+			ConnectionSettingsMenuItem item = new ConnectionSettingsMenuItem (settings);
+			item.Activated += connectionMenuActivatedHandler;
+			if (group == null)
+				group = item.Group;
+			else
+				item.Group = group;
+			item.ShowAll ();
+			menuConnections.Append (item);
+		}
+		
+		private void ConnectionMenuActivated (object sender, EventArgs args)
+		{
+			ConnectionSettingsMenuItem item = sender as ConnectionSettingsMenuItem;
+			SelectedConnectionSettings = item.ConnectionSettings;
+		}
+		
+		private void SetQueryState (bool exec, string msg)
+		{
+			buttonExecute.Sensitive = !exec;
+			buttonStop.Sensitive = exec;
+			sourceView.Editable = !exec;
+			
+			if (statusId > 0)
+				status.Pop (statusId);
+			else
+				statusId = status.Push (1, msg);
+		}
+		
+		private void SelectFirstConnectionSettings ()
+		{
+			foreach (ConnectionSettingsMenuItem item in menuConnections.Children) {
+				item.Active = true;
+				selectedConnection = item.ConnectionSettings;
+				buttonExecute.Sensitive = true;
+				return;
+			}
+		}
 	}
 	
 	internal class ConnectionSettingsMenuItem : RadioMenuItem
@@ -262,6 +303,7 @@ namespace MonoDevelop.Database.Query
 		public ConnectionSettingsMenuItem (ConnectionSettings settings)
 			: base (settings.Name)
 		{
+			this.settings = settings;
 		}
 		
 		public ConnectionSettings ConnectionSettings {
