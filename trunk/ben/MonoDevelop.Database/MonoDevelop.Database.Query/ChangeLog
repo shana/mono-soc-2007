@@ -1,3 +1,9 @@
+2007-07-14  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlQueryView.cs: use MenuToolButton to display a list of stored connections +
+	improved handling of query cancelling
+	* QueryService.cs: small changes due to Mono.Data.Sql API updates
+
 2007-07-10  Ben Motmans <ben.motmans@gmail.com>
 
 	* DataGrid/*: moved DataGrid control to Components project

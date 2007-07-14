@@ -32,8 +32,8 @@ using System.Collections.Generic;
 using Mono.Addins;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
-using MonoDevelop.Components;
 using MonoDevelop.Ide.Gui;
+using MonoDevelop.Database.Components;
 
 namespace MonoDevelop.Database.Query
 {
@@ -44,7 +44,8 @@ namespace MonoDevelop.Database.Query
 		public QueryResultView ()
 			: base ()
 		{
-			grid = new DataGrid ();
+			grid = new DataGrid ("/SharpDevelop/Views/SqlQueryView/DataGrid/ContentRenderers", "/SharpDevelop/Views/SqlQueryView/DataGrid/Visualizers");
+			grid.ShowAll ();
 		}
 		
 		public QueryResultView (DataTable table)
