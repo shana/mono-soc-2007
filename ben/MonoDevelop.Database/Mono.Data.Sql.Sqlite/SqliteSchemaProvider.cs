@@ -37,8 +37,8 @@ namespace Mono.Data.Sql
 	// http://www.sqlite.org/google-talk-slides/page-021.html
 	public class SqliteSchemaProvider : AbstractSchemaProvider
 	{
-		public SqliteSchemaProvider (IConnectionProvider connectionProvider)
-			: base (connectionProvider)
+		public SqliteSchemaProvider (IConnectionPool connectionPool)
+			: base (connectionPool)
 		{
 		}
 		
@@ -56,10 +56,10 @@ namespace Mono.Data.Sql
 
 		public override ICollection<TableSchema> GetTables ()
 		{
-			CheckConnectionState ();
 			List<TableSchema> tables = new List<TableSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT name, sql FROM sqlite_master WHERE type = 'table'"
 			);
 			using (command) {
@@ -76,16 +76,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return tables;
 		}
 		
 		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ColumnSchema> columns = new List<ColumnSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"PRAGMA table_info('" +  table.Name + "')"
 			);
 			using (command) {
@@ -104,16 +105,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				};
 			}
+			conn.Release ();
 
 			return columns;
 		}
 		
 		public override ICollection<ViewSchema> GetViews ()
 		{
-			CheckConnectionState ();
 			List<ViewSchema> views = new List<ViewSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand (
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
 				"SELECT name, sql FROM sqlite_master WHERE type = 'views'"
 			);
 			using (command) {
@@ -129,16 +131,17 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return views;
 		}
 		
 		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
 		{
-			CheckConnectionState ();
 			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
 			
-			IDbCommand command = connectionProvider.CreateCommand ("SELECT name, tbl_name FROM sqlite_master WHERE sql IS NULL AND type = 'index'");
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("SELECT name, tbl_name FROM sqlite_master WHERE sql IS NULL AND type = 'index'");
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read ()) {
@@ -159,6 +162,7 @@ namespace Mono.Data.Sql
 					r.Close ();
 				}
 			}
+			conn.Release ();
 
 			return constraints;
 		}

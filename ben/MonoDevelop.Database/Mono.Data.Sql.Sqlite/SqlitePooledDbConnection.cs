@@ -1,10 +1,7 @@
-﻿//
-// Authors:
-//   Christian Hergert	<chris@mosaix.net>
-//   Ankit Jain  <radical@corewars.org>
-//   Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
+// Authors:
+//	Ben Motmans  <ben.motmans@gmail.com>
+//
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,24 +30,47 @@ using Mono.Data.SqliteClient;
 
 namespace Mono.Data.Sql
 {
-	public class SqliteConnectionProvider : AbstractConnectionProvider
+	public class SqlitePooledDbConnection : AbstractPooledDbConnection
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings)
+		public SqlitePooledDbConnection (IConnectionPool connectionPool, IDbConnection connection)
+			: base (connectionPool, connection)
 		{
-			string connStr = null;
-			try {
-				if (settings.UseConnectionString) {
-					connStr = settings.ConnectionString;
-				} else {
-					connStr = String.Concat ("URI=file:", settings.Database);
+		}
+		
+		public override DataSet ExecuteSet (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
+
+			DataSet set = new DataSet ();
+			using (command) {
+				using (SqliteDataAdapter adapter = new SqliteDataAdapter (command as SqliteCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
 				}
-				SqliteConnection connection = new SqliteConnection (connStr);
-				connection.Open ();
-				
-				return new SqlitePooledDbConnection (pool, connection);
-			} catch {
-				return null;
 			}
+			return set;
+		}
+
+		public override DataTable ExecuteTable (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
+
+			DataTable table = new DataTable ();
+			using (command) {
+				using (SqliteDataAdapter adapter = new SqliteDataAdapter (command as SqliteCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
+				}
+			}
+			return table;
 		}
 	}
 }
