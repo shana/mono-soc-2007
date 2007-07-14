@@ -1,3 +1,7 @@
+2007-07-14  Ben Motmans <ben.motmans@gmail.com>
+
+	* NodeBuilders/*.cs: small changes due to updated Mono.Data.Sql API
+
 2007-07-10  Ben Motmans <ben.motmans@gmail.com>
 
 	* NewConnectionDialog.cs: moved to Components project

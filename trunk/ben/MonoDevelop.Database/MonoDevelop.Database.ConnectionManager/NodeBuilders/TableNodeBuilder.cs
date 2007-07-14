@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Data;
 using System.Threading;
 using System.Collections.Generic;
 using Mono.Data.Sql;
@@ -35,6 +36,7 @@ using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Database.Query;
+using MonoDevelop.Database.Components;
 using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
@@ -168,6 +170,25 @@ namespace MonoDevelop.Database.ConnectionManager
 			IdeApp.Workbench.OpenDocument (view, true);
 		}
 		
+		[CommandHandler (ConnectionManagerCommands.SelectColumns)]
+		protected void OnSelectColumnsCommand ()
+		{
+			SelectColumnDialog dlg = new SelectColumnDialog (true);
+			if (dlg.Run () == (int)Gtk.ResponseType.Ok) {
+				TableNode node = (TableNode)CurrentNode.DataItem;
+				IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
+				List<IdentifierExpression> cols = new List<IdentifierExpression> ();
+				foreach (ColumnSchema schema in dlg.CheckedColumns)
+					cols.Add (new IdentifierExpression (schema.Name));
+				
+				SelectStatement sel = new SelectStatement (new FromTableClause (tableId), cols);
+
+				IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+				IDbCommand command = conn.CreateCommand (sel);
+				conn.ExecuteTableAsync (command, new ExecuteCallback<DataTable> (OnSelectCommandThreaded), null);
+			}
+		}
+		
 		[CommandHandler (ConnectionManagerCommands.SelectAll)]
 		protected void OnSelectAllCommand ()
 		{
@@ -175,9 +196,20 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 			SelectStatement sel = new SelectStatement (new FromTableClause (tableId));
-			
-			//TODO: exec+show result view
-			//+take care of things like password dialog, ...
+
+			IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (sel);
+			conn.ExecuteTableAsync (command, new ExecuteCallback<DataTable> (OnSelectCommandThreaded), null);
+		}
+		
+		private void OnSelectCommandThreaded (IPooledDbConnection connection, DataTable table, object state)
+		{
+			connection.Release ();
+				
+			Services.DispatchService.GuiDispatch (delegate () {
+				QueryResultView view = new QueryResultView (table);
+				IdeApp.Workbench.OpenDocument (view, true);
+			});
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.EmptyTable)]
@@ -188,11 +220,15 @@ namespace MonoDevelop.Database.ConnectionManager
 			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 			DeleteStatement del = new DeleteStatement (new FromTableClause (tableId));
 			
-			node.Settings.ConnectionProvider.ExecuteQueryAsync (del, new SqlResultCallback (OnEmptyTableCallback), null);
+			IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (del);
+			conn.ExecuteNonQueryAsync (command, new ExecuteCallback<int> (OnEmptyTableCallback), null);
 		}
 		
-		private void OnEmptyTableCallback (object sender, object state)
+		private void OnEmptyTableCallback (IPooledDbConnection connection, int result, object state)
 		{
+			connection.Release ();
+
 			Services.DispatchService.GuiDispatch (delegate () {
 				IdeApp.Workbench.StatusBar.SetMessage (GettextCatalog.GetString ("Table emptied"));
 			});
@@ -206,10 +242,12 @@ namespace MonoDevelop.Database.ConnectionManager
 			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 			DropStatement drop = new DropStatement (tableId, DropStatementType.Table);
 			
-			node.Settings.ConnectionProvider.ExecuteQueryAsync (drop, new SqlResultCallback (OnDropTableCallback), null);
+			IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (drop);
+			conn.ExecuteNonQueryAsync (command, new ExecuteCallback<int> (OnDropTableCallback), null);
 		}
 		
-		private void OnDropTableCallback (object sender, object state)
+		private void OnDropTableCallback (IPooledDbConnection connection, int result, object state)
 		{
 			Services.DispatchService.GuiDispatch (delegate () {
 				IdeApp.Workbench.StatusBar.SetMessage (GettextCatalog.GetString ("Table dropped"));

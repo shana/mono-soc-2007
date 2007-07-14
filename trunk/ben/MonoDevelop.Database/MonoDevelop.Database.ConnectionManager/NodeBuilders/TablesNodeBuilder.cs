@@ -79,9 +79,10 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
+			Runtime.LoggingService.Debug ("BuildChildNodes");
 			lock (threadSync) {
 				this.builder = builder;
-				settings = (dataObject as BaseNode).Settings;
+				this.settings = (dataObject as BaseNode).Settings;
 			}
 			
 			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
@@ -89,6 +90,8 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void BuildChildNodesThreaded (object state)
 		{
+			Runtime.LoggingService.Debug ("BuildChildNodesThreaded");
+			
 			ITreeBuilder builder = null;
 			ConnectionSettings settings = null;
 			
@@ -96,10 +99,13 @@ namespace MonoDevelop.Database.ConnectionManager
 				builder = this.builder;
 				settings = this.settings;
 			}
-			
+			Runtime.LoggingService.Debug ("BuildChildNodesThreaded --> " + settings == null ? "null" : "notnull");
 			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
 			ICollection<TableSchema> tables = settings.SchemaProvider.GetTables ();
+			Runtime.LoggingService.Debug ("SHOW TABLES " + tables.Count);
 			foreach (TableSchema table in tables) {
+				Runtime.LoggingService.Debug (table.Name);
+				
 				if (table.IsSystemTable && !showSystemObjects)
 					continue;
 				
