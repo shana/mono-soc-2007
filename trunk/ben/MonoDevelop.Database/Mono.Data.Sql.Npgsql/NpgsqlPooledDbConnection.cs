@@ -1,9 +1,7 @@
-﻿//
+//
 // Authors:
-//	Christian Hergert  <chris@mosaix.net>
 //	Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,32 +25,52 @@
 
 using System;
 using System.Data;
-using Npgsql;
 using System.Collections.Generic;
+using Npgsql;
 
 namespace Mono.Data.Sql
 {
-	public class NpgsqlConnectionProvider : AbstractConnectionProvider
+	public class NpgsqlPooledDbConnection : AbstractPooledDbConnection
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings)
+		public NpgsqlPooledDbConnection (IConnectionPool connectionPool, IDbConnection connection)
+			: base (connectionPool, connection)
 		{
-			string connStr = null;
-			try {	
-				if (settings.UseConnectionString) {
-					connStr = settings.ConnectionString;
-				} else {
-					//User ID=root;Password=myPassword;Host=localhost;Port=5432;Database=myDataBase;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;
-					connStr = String.Format ("User ID={0};Password={1};Host={2};Port={3};Database={4};",
-						settings.Username, settings.Password, settings.Server, settings.Port, settings.Database);
-				}
-				connStr = SetConnectionStringParameter (connStr, String.Empty, "Pooling", "false");
-				NpgsqlConnection connection = new NpgsqlConnection (connStr);
-				connection.Open ();
+		}
+		
+		public override DataSet ExecuteSet (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
 
-				return new NpgsqlPooledDbConnection (pool, connection);
-			} catch {
-				return null;
+			DataSet set = new DataSet ();
+			using (command) {
+				using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter (command as NpgsqlCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
+				}
 			}
+			return set;
+		}
+
+		public override DataTable ExecuteTable (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
+
+			DataTable table = new DataTable ();
+			using (command) {
+				using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter (command as NpgsqlCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
+				}
+			}
+			return table;
 		}
 	}
 }
