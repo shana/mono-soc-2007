@@ -1,0 +1,2 @@
+#!/bin/sh
+exec mono /net/hc293/vector/local/lib/monocov/monocov.exe $@

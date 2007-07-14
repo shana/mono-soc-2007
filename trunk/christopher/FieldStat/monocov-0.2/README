@@ -1,0 +1,147 @@
+
+1. INTRODUCTION
+---------------
+
+MonoCov is a line coverage analysis program for mono. It can be used to 
+display coverage data collected while running a .NET program. There are two
+parts in the tool: a profiler module which is used during the execution of
+the program you want to gather coverage data from and a Gtk# user interface.
+
+1.5 REQUIREMENTS
+----------------
+
+Recent Mono and Gtk# releases. You also need Mono.Cecil installed
+or copied in the source dir and where the programs are run from.
+The source release contains Mono.Cecil.dll and make install takes
+care of installing it properly.
+
+2. USAGE
+--------
+
+2.1 COVERAGE DATA COLLECTION
+----------------------------
+
+To produce coverage info for an .NET program, compile it with the -debug
+switch to generate debug information. After this, run the program as follows:
+
+$ mono --debug --profile=monocov prog.exe
+
+This will produce a coverage data file called prog.exe.cov. You can run the
+analyser program as follows:
+
+$ mono monocov.exe prog.exe.cov
+
+This will display the class hierarchy of the program with the corresponding
+coverage information.
+
+It is also possible to filter the list of classes which need coverage data
+generated. Filters are string which are applied agains the fully qualified 
+names of classes, e.g. [assemblyname]classname. You can specify filters 
+directly on the command line:
+
+$ mono --debug --profile=monocov:-Security,-[System.Xml] prog.exe
+
+There are two types of filters: include filters, whose name begins with '+',
+and exclude filters, whose name begins with '-'. Include filters are checked
+before exclude filters.
+
+For example:
+
+$ mono --debug --profile=monocov:+[mscorlib],-Hashtable prog.exe
+
+This will collect coverage info for all classes in corlib, except the ones
+whose name contains 'Hashtable'.
+
+2.2 ANALYSIS
+------------
+
+  The collected coverage data can be browsed using the monocov program. 
+This program will read the data file produced by the profiler module, and 
+display its contents in a hierarchical fashion.
+  It is also possible to export the contents of a data file into XML, which
+can be viewed in an XSL capable browser like mozilla.
+To export the data as XML, run monocov like this:
+	monocov --export-xml=<DEST DIR> <DATA FILE NAME>
+  
+The generated XML files use a default stylesheet which is a bit ugly. It would
+be good if somebody could contribute a better one :)
+
+To export the data as HTML, run monocov like this:
+	monocov --export-html=<DEST DIR> <DATA FILE NAME>
+
+2.5 KNOWN BUGS
+--------------
+
+The --debug option to mono should not be required and it should be enabled
+by default.
+We disable mono's domain unload since we don't handle that case yet.
+
+3. UTILITY PROGRAMS
+-------------------
+
+There are two utility programs included with MonoCov:
+
+- symbols.exe: this program can be used to dump the line number information
+  contained in an mcs generated assembly.
+
+- nunit-console.exe: this is a rewritten version of the original nunit console
+  program. It has the following features:
+  - easier to invoke: no stupid /assembly and /fixture arguments
+  - ability to run test fixtures whose name matches a given pattern, like
+    all the System.IO tests.
+  - ability to exclude tests whose name matches a given pattern.
+  - display of more detailed progress information.
+
+4. TODO
+-------------
+
+- Add ability to run the program from inside the analyzer
+- Add filters (globals/per program)
+- Handle nested classes more intelligently
+
+5. LICENSE
+----------
+
+zlib/libpng.
+
+6. CONTACT
+----------
+
+Zoltan Varga (vargaz@freemail.hu)
+Jacob Ilsø Christensen (jacobilsoe@gmail.com)
+or preferably
+the mono devel list (mono-devel-list@ximian.com)
+
+RANDOM NOTES:
+-------------
+
+- Methods with strange debugging info:
+	- System.Collections.Hashtable..cctor()
+	- SortedList+SynchedSortedList::this [key]
+	- SortedList+SynchedSortedList::Clear ()
+	- System.Text.RegularExpressions.Capture
+
+- If trans.gif is missing from the export directory:
+    - when viewing HTML, it doesn't matter
+	- when viewing XML, it matters
+
+- How can a bar be created without using an image ?
+
+TODO:
+- Add private paths used during data collection to the paths used to search for
+  assemblies.
+- add 'include' and 'exclude' to filters
+- Implement merging of coverage results
+- put namespaces above classes in the hierarchy
+- handle missing source files
+- Scintilla
+- html output (with XSLT)
+- use Xml serialization in SyntaxHighlighter
+- speed up test suite generation in nunit (or in mono)
+- namespaces & filtering ???
+- fix StackTrace tests
+- add ability to exclude some appdomains (like the nunit main appdomain)
+  so the tests will run faster.
+- avoid instrumentation for instruction without side effects (like ldc.i4)
+- why does the RSA tests take so much time -> because of entropy generation
+
