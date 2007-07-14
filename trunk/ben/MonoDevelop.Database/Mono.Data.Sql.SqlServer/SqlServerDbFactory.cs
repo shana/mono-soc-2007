@@ -32,6 +32,7 @@ namespace Mono.Data.Sql
 	public class SqlServerDbFactory : IDbFactory
 	{
 		private ISqlDialect dialect;
+		private IConnectionProvider connectionProvider;
 		
 		public string Identifier {
 			get { return "System.Data.SqlClient"; }
@@ -49,14 +50,22 @@ namespace Mono.Data.Sql
 			}
 		}
 		
-		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
-		{
-			return new SqlServerConnectionProvider (this, settings);
+		public IConnectionProvider ConnectionProvider {
+			get {
+				if (connectionProvider == null)
+					connectionProvider = new SqlServerConnectionProvider ();
+				return connectionProvider;
+			}
 		}
 		
-		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
+		public IConnectionPool CreateConnectionPool (ConnectionSettings settings)
 		{
-			return new SqlServerSchemaProvider (connectionProvider);
+			return new DefaultConnectionPool (this, ConnectionProvider, settings);
+		}
+		
+		public ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool)
+		{
+			return new SqlServerSchemaProvider (connectionPool);
 		}
 		
 		public ConnectionSettings GetDefaultConnectionSettings ()
