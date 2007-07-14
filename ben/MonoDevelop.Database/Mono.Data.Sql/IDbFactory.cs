@@ -37,6 +37,8 @@ namespace Mono.Data.Sql
 		
 		ISqlDialect Dialect { get; }
 		
+		IConnectionProvider ConnectionProvider { get; }
+		
 		/// <summary>
 		/// This method is used to get the default connection settings and also
 		/// to determine which fields should be editable in the Add Connection Dialog.
@@ -44,8 +46,8 @@ namespace Mono.Data.Sql
 		/// </summary>
 		ConnectionSettings GetDefaultConnectionSettings ();
 
-		IConnectionProvider CreateConnectionProvider (ConnectionSettings settings);
+		IConnectionPool CreateConnectionPool (ConnectionSettings settings);
 		
-		ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider);
+		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
 	}
 }

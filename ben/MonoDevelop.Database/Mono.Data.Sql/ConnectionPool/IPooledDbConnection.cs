@@ -1,9 +1,7 @@
 //
 // Authors:
-//	Christian Hergert  <chris@mosaix.net>
 //	Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,36 +29,35 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public interface ISchemaProvider
+	public delegate void ExecuteCallback<T> (IPooledDbConnection connection, T result, object state);
+	
+	public interface IPooledDbConnection : IDisposable
 	{
 		IConnectionPool ConnectionPool { get; }
-
-		bool SupportsSchemaType (Type type);
 		
-		ICollection<DatabaseSchema> GetDatabases ();
-
-		ICollection<TableSchema> GetTables ();
+		IDbConnection DbConnection { get; }
 		
-		ICollection<ColumnSchema> GetTableColumns (TableSchema table);
-
-		ICollection<ViewSchema> GetViews ();
-
-		ICollection<ColumnSchema> GetViewColumns (ViewSchema view);
-
-		ICollection<ProcedureSchema> GetProcedures ();
-
-		ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure);
+		bool IsOpen { get; }
 		
-		ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure);
+		void Release ();
 
-		ICollection<ConstraintSchema> GetTableConstraints (TableSchema table);
-
-		ICollection<UserSchema> GetUsers ();
+		void Destroy ();
 		
-		ICollection<RoleSchema> GetRoles ();
+		IDbCommand CreateCommand (IStatement statement);
+		IDbCommand CreateCommand (string sql);
 		
-		ICollection<TriggerSchema> GetTriggers ();
+		IDbCommand CreateStoredProcedure (string sql);
 		
-		DataTypeSchema GetDataType (string name);
+		int ExecuteNonQuery (IDbCommand command);
+		object ExecuteScalar (IDbCommand command);
+		IDataReader ExecuteReader (IDbCommand command);
+		DataSet ExecuteSet (IDbCommand command);
+		DataTable ExecuteTable (IDbCommand command);
+		
+		void ExecuteNonQueryAsync (IDbCommand command, ExecuteCallback<int> callback, object state);
+		void ExecuteScalarAsync (IDbCommand command, ExecuteCallback<object> callback, object state);
+		void ExecuteReaderAsync (IDbCommand command, ExecuteCallback<IDataReader> callback, object state);
+		void ExecuteSetAsync (IDbCommand command, ExecuteCallback<DataSet> callback, object state);
+		void ExecuteTableAsync (IDbCommand command, ExecuteCallback<DataTable> callback, object state);
 	}
 }

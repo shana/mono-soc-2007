@@ -66,27 +66,27 @@ namespace Mono.Data.Sql
 			return GetDbFactory (settings.ProviderIdentifier);
 		}
 		
-		public static IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
+		public static IConnectionPool CreateConnectionPool (ConnectionSettings settings)
 		{
 			if (settings == null)
 				throw new ArgumentNullException ("settings");
 			
 			IDbFactory fac = GetDbFactory (settings);
 			if (fac != null)
-				return fac.CreateConnectionProvider (settings);
+				return fac.CreateConnectionPool (settings);
 			return null;
 		}
 		
-		public static ISchemaProvider CreateSchemaProvider (ConnectionSettings settings, IConnectionProvider connProvider)
+		public static ISchemaProvider CreateSchemaProvider (ConnectionSettings settings, IConnectionPool pool)
 		{
 			if (settings == null)
 				throw new ArgumentNullException ("settings");
-			if (connProvider == null)
-				throw new ArgumentNullException ("connProvider");
+			if (pool == null)
+				throw new ArgumentNullException ("pool");
 			
 			IDbFactory fac = GetDbFactory (settings);
 			if (fac != null)
-				return fac.CreateSchemaProvider (connProvider);
+				return fac.CreateSchemaProvider (pool);
 			return null;
 		}
 	}

@@ -1,3 +1,11 @@
+2007-07-14  Ben Motmans <ben.motmans@gmail.com>
+
+	* ConnectionPool/*.cs: connection pool implementation, this replaces the default ADO.net
+	Pooling=true parameter and allows more control over pooled connections
+	* Providers/IConnectionProvider.cs: splitted in IConnectionProvider and IPooledDbConnection
+	* IDbFactory.cs: updated to reflect the new API
+	
+
 2007-07-10  Ben Motmans <ben.motmans@gmail.com>
 
 	* Providers/IConnectionProvider.cs, Providers/AbstractConnectionProvider.cs:

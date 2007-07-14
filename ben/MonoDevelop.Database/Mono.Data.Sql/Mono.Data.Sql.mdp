@@ -18,7 +18,6 @@
     <File name="./Providers/ISchemaProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema" subtype="Directory" buildaction="Compile" />
     <File name="./Providers/IConnectionProvider.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Providers/ConnectionSettings.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ISchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/AbstractSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/AggregateSchema.cs" subtype="Code" buildaction="Compile" />
@@ -45,14 +44,12 @@
     <File name="./Schema/UserSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ViewSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/DatabaseSchema.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Providers/AbstractConnectionProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./Providers/AbstractSchemaProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./Codons" subtype="Directory" buildaction="Compile" />
     <File name="./Codons/DbFactoryCodon.cs" subtype="Code" buildaction="Compile" />
     <File name="./Mono.Data.Sql.addin.xml" subtype="Code" buildaction="FileCopy" />
     <File name="./Schema/DataTypeCategory.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/Range.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Providers/ConnectionSettingsCollection.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect" subtype="Directory" buildaction="Compile" />
     <File name="./Dialect/Statements" subtype="Directory" buildaction="Compile" />
     <File name="./Dialect/Clauses" subtype="Directory" buildaction="Compile" />
@@ -100,8 +97,18 @@
     <File name="./Dialect/Expressions/IConditionalExpression.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect/Literals/BooleanLiteral.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect/Sql99Dialect.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Providers/ConnectionSettingsEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionSettingsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool" subtype="Directory" buildaction="Compile" />
+    <File name="./ConnectionPool/IConnectionPool.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/IPooledDbConnection.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/DefaultConnectionPool.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/PooledDataReader.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/ConnectionSettings.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/AbstractPooledDbConnection.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/PooledCommand.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/ConnectionSettingsCollection.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/ConnectionSettingsEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Providers/AbstractConnectionProvider.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

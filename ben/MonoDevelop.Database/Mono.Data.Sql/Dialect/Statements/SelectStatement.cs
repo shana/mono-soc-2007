@@ -39,14 +39,20 @@ namespace Mono.Data.Sql
 		protected HavingClause having;
 		protected UnionClause union;
 		protected JoinClause join;
-		
+
 		public SelectStatement (FromClause from)
-			: this (from, new IdentifierExpression ())
 		{
+			if (from == null)
+				throw new ArgumentNullException ("from");
+			From = from;
+			this.columns = new List<IdentifierExpression> ();
+			this.columns.Add (new IdentifierExpression ());
 		}
-		
-		public SelectStatement (FromClause from, params IdentifierExpression[] columns)
+
+		public SelectStatement (FromClause from, IEnumerable<IdentifierExpression> columns)
 		{
+			if (from == null)
+				throw new ArgumentNullException ("from");
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
 			
