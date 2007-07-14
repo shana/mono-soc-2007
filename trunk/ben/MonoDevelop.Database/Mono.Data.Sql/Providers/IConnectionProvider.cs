@@ -31,47 +31,10 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public delegate void SqlResultCallback<T> (object sender, T Results, object state);
-	public delegate void SqlResultCallback (object sender, object state);
-	
 	public interface IConnectionProvider
 	{
-		IDbFactory DbFactory { get; }
+		IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings);
 		
-		IDbConnection Connection { get; }
-		
-		ConnectionSettings Settings { get; }
-		
-		bool IsOpen { get; }
-		
-		bool IsConnectionError { get; }
-		
-		bool SupportsPooling { get; }
-		
-		bool SupportsAutomaticConnectionString { get; }
-
-		bool Open (out string errorMessage);
-
-		void Close ();
-		
-		IDbCommand CreateCommand (string sql);
-		
-		void ExecuteQuery (IStatement statement);
-		void ExecuteQuery (string sql);
-
-		DataSet ExecuteQueryAsDataSet (IStatement statement);
-		DataSet ExecuteQueryAsDataSet (string sql);
-		
-		DataTable ExecuteQueryAsDataTable (IStatement statement);
-		DataTable ExecuteQueryAsDataTable (string sql);
-		
-		void ExecuteQueryAsync (IStatement statement, SqlResultCallback callback, object state);
-		void ExecuteQueryAsync (string sql, SqlResultCallback callback, object state);
-		
-		void ExecuteQueryAsDataSetAsync (IStatement statement, SqlResultCallback<DataSet> callback, object state);
-		void ExecuteQueryAsDataSetAsync (string sql, SqlResultCallback<DataSet> callback, object state);
-		
-		void ExecuteQueryAsDataTableAsync (IStatement statement, SqlResultCallback<DataTable> callback, object state);
-		void ExecuteQueryAsDataTableAsync (string sql, SqlResultCallback<DataTable> callback, object state);
+		bool CheckConnection (IPooledDbConnection connection, ConnectionSettings settings);
 	}
 }

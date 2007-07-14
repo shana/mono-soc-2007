@@ -33,18 +33,18 @@ namespace Mono.Data.Sql
 {
 	public abstract class AbstractSchemaProvider : ISchemaProvider
 	{
-		protected IConnectionProvider connectionProvider;
+		protected IConnectionPool connectionPool;
 		
-		protected AbstractSchemaProvider (IConnectionProvider connectionProvider)
+		protected AbstractSchemaProvider (IConnectionPool connectionPool)
 		{
-			if (connectionProvider == null)
-				throw new ArgumentNullException ("connectionProvider");
+			if (connectionPool == null)
+				throw new ArgumentNullException ("connectionPool");
 			
-			this.connectionProvider = connectionProvider;
+			this.connectionPool = connectionPool;
 		}
 		
-		public IConnectionProvider ConnectionProvider {
-			get { return connectionProvider; }
+		public IConnectionPool ConnectionPool {
+			get { return connectionPool; }
 		}
 		
 		public virtual bool SupportsSchemaType (Type type)
@@ -115,15 +115,6 @@ namespace Mono.Data.Sql
 		public virtual ICollection<TriggerSchema> GetTriggers ()
 		{
 			throw new NotImplementedException ();
-		}
-
-		protected virtual void CheckConnectionState ()
-		{
-			string error = null;
-			if (!connectionProvider.IsOpen && !connectionProvider.Open (out error))
-				throw new InvalidOperationException (String.Format ("Invalid Connection{0}", error == null ? "" : ": " + error));
-			
-			//TODO: if the connection is pooled, check if there is a connection available
 		}
 		
 		protected int GetCheckedInt32 (IDataReader reader, int field)

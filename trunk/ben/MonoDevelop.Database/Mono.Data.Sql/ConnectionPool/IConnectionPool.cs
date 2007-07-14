@@ -1,9 +1,7 @@
 //
 // Authors:
-//	Christian Hergert  <chris@mosaix.net>
 //	Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,36 +29,29 @@ using System.Collections.Generic;
 
 namespace Mono.Data.Sql
 {
-	public interface ISchemaProvider
+	public interface IConnectionPool
 	{
-		IConnectionPool ConnectionPool { get; }
-
-		bool SupportsSchemaType (Type type);
+		IDbFactory DbFactory { get; }
+		ConnectionSettings ConnectionSettings { get; }
+		IConnectionProvider ConnectionProvider { get; }
 		
-		ICollection<DatabaseSchema> GetDatabases ();
-
-		ICollection<TableSchema> GetTables ();
+		bool IsInitialized { get; }
 		
-		ICollection<ColumnSchema> GetTableColumns (TableSchema table);
-
-		ICollection<ViewSchema> GetViews ();
-
-		ICollection<ColumnSchema> GetViewColumns (ViewSchema view);
-
-		ICollection<ProcedureSchema> GetProcedures ();
-
-		ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure);
+		int MinSize { get; set; }
+		int MaxSize { get; set; }
 		
-		ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure);
-
-		ICollection<ConstraintSchema> GetTableConstraints (TableSchema table);
-
-		ICollection<UserSchema> GetUsers ();
+		int GrowSize { get; set; }
+		int ShrinkSize { get; set; }
 		
-		ICollection<RoleSchema> GetRoles ();
+		int ConnectionCount { get; }
+		int FreeConnectionCount { get; }
 		
-		ICollection<TriggerSchema> GetTriggers ();
+		bool HasFreeConnection { get; }
 		
-		DataTypeSchema GetDataType (string name);
+		IPooledDbConnection Request ();
+		void Release (IPooledDbConnection connection);
+		
+		bool Initialize ();
+		void Close ();
 	}
 }

@@ -40,8 +40,7 @@ namespace Mono.Data.Sql
 		private string username;
 		private string password;
 		private bool savePassword;
-		
-		private bool enablePooling;
+
 		private int minPoolSize;
 		private int maxPoolSize;
 		
@@ -49,7 +48,7 @@ namespace Mono.Data.Sql
 		private bool useConnectionString;
 		
 		[NonSerialized]
-		private IConnectionProvider connProvider;
+		private IConnectionPool connectionPool;
 		[NonSerialized]
 		private ISchemaProvider schemaProvider;
 		
@@ -93,11 +92,6 @@ namespace Mono.Data.Sql
 			set { savePassword = value; }
 		}
 		
-		public bool EnablePooling {
-			get { return enablePooling; }
-			set { enablePooling = value; }
-		}
-		
 		public int MinPoolSize {
 			get { return minPoolSize; }
 			set { minPoolSize = value; }
@@ -118,23 +112,23 @@ namespace Mono.Data.Sql
 			set { useConnectionString = value; }
 		}
 
-		public IConnectionProvider ConnectionProvider {
+		public IConnectionPool ConnectionPool {
 			get {
-				if (connProvider == null)
-					connProvider = DbFactoryService.CreateConnectionProvider (this);
-				return connProvider;
+				if (connectionPool == null)
+					connectionPool = DbFactoryService.CreateConnectionPool (this);
+				return connectionPool;
 			}
 		}
 		
-		public bool HasConnectionProvider {
-			get { return connProvider != null; }
+		public bool HasConnectionPool {
+			get { return connectionPool != null; }
 		}
 
 		public ISchemaProvider SchemaProvider {
 			get {
-				if (ConnectionProvider != null) {
+				if (ConnectionPool != null) {
 					if (schemaProvider == null)
-						schemaProvider = DbFactoryService.CreateSchemaProvider (this, connProvider);
+						schemaProvider = DbFactoryService.CreateSchemaProvider (this, connectionPool);
 					return schemaProvider;
 				}
 				return null;
