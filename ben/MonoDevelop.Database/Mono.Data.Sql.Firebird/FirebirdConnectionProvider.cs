@@ -79,7 +79,7 @@ namespace Mono.Data.Sql
 			return table;
 		}
 
-		public override bool Open (out string errorMessage)
+		public override IDbConnection Open (out string errorMessage)
 		{
 			FbConnectionStringBuilder builder = null;
 			try {	
@@ -100,11 +100,11 @@ namespace Mono.Data.Sql
 				
 				errorMessage = String.Empty;
 				isConnectionError = false;
-				return true;
+				return connection;
 			} catch {
 				isConnectionError = true;
 				errorMessage = String.Format ("Unable to connect. (CS={0})", builder == null ? "NULL" : builder.ToString ());
-				return false;
+				return null;
 			}
 		}
 	}

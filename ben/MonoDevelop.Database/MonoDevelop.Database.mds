@@ -7,14 +7,14 @@
       <Entry build="True" name="MonoDevelop.Database.Visualization" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Project" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.Sybase" configuration="Debug" />
+      <Entry build="False" name="Mono.Data.Sql.Sybase" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.MySql" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.Firebird" configuration="Debug" />
+      <Entry build="False" name="Mono.Data.Sql.Firebird" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.SqlServer" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Sqlite" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.Oracle" configuration="Debug" />
+      <Entry build="False" name="Mono.Data.Sql.Oracle" configuration="Debug" />
       <Entry build="True" name="Mono.Data.Sql.Npgsql" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.Odbc" configuration="Debug" />
+      <Entry build="False" name="Mono.Data.Sql.Odbc" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Components" configuration="Debug" />
     </Configuration>

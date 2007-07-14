@@ -111,6 +111,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return tables;
@@ -159,6 +160,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				};
+				connectionProvider.Close (command.Connection);
 			}
 
 			return columns;
@@ -189,6 +191,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			return views;
 		}
@@ -220,6 +223,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				};
+				connectionProvider.Close (command.Connection);
 			}
 
 			return columns;
@@ -257,6 +261,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return constraints;

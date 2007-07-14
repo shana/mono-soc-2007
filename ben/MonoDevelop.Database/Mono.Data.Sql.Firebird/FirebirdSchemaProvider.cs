@@ -104,6 +104,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return tables;
@@ -138,6 +139,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			return views;
 		}
@@ -171,6 +173,7 @@ namespace Mono.Data.Sql
 			    		}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			
 			return procedures;
@@ -203,6 +206,7 @@ namespace Mono.Data.Sql
 			    		}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			
 			return columns;
@@ -235,6 +239,7 @@ namespace Mono.Data.Sql
 			    		}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 			
 			return parameters;
@@ -256,6 +261,7 @@ namespace Mono.Data.Sql
 //					constraints.Add (constraint);
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return constraints;
@@ -276,6 +282,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return users;
@@ -297,6 +304,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				}
+				connectionProvider.Close (command.Connection);
 			}
 
 			return triggers;
@@ -363,6 +371,7 @@ namespace Mono.Data.Sql
 					}
 					r.Close ();
 				};
+				connectionProvider.Close (command.Connection);
 			}
 
 			return columns;

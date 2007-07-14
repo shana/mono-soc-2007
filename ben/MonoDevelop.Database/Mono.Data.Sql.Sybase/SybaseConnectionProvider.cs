@@ -83,7 +83,7 @@ namespace Mono.Data.Sql
 			return table;
 		}
 
-		public override bool Open (out string errorMessage)
+		public override IDbConnection Open (out string errorMessage)
 		{
 			string connStr = null;
 			try {	
@@ -104,11 +104,11 @@ namespace Mono.Data.Sql
 				
 				errorMessage = String.Empty;
 				isConnectionError = false;
-				return true;
+				return connection;
 			} catch {
 				isConnectionError = true;
 				errorMessage = String.Format ("Unable to connect. (CS={0})", connStr == null ? "NULL" : connStr);
-				return false;
+				return null;
 			}
 		}
 	}
