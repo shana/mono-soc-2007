@@ -24,19 +24,46 @@
 //
 
 using Gtk;
+using GtkSourceView;
 using System;
-using System.Data;
-using Mono.Addins;
-using MonoDevelop.Core;
+using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Components
 {
-	public enum DataGridColumnType
+	public partial class ShowTextDialog : Gtk.Dialog
 	{
-		Boolean,
-		Integer,
-		Double,
-		String,
-		Binary
+		private SourceView sourceView;
+		
+		public ShowTextDialog (string text, string mimeType)
+		{
+			this.Build();
+			
+			SourceLanguagesManager lm = new SourceLanguagesManager ();
+			SourceLanguage lang = null;
+			
+			if (String.IsNullOrEmpty (mimeType))
+				lang = lm.GetLanguageFromMimeType (mimeType);
+			
+			SourceBuffer buf = null;
+			if (lang == null) {
+				SourceTagTable table = new SourceTagTable ();
+				buf = new SourceBuffer (table);
+			} else {
+				buf = new SourceBuffer (lang);
+				buf.Highlight = true;
+			}
+			sourceView = new SourceView (buf);
+			sourceView.ShowLineNumbers = true;
+			sourceView.Editable = false;
+			
+			//FIXME: vbox.PackStart (sourceView, true, true, 0);
+			if (text != null)
+				sourceView.Buffer.Text = text;
+		}
+
+		protected virtual void CloseClicked (object sender, System.EventArgs e)
+		{
+			Destroy ();
+		}
 	}
 }

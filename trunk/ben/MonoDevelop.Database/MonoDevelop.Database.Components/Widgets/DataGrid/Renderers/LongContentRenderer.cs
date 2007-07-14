@@ -25,27 +25,32 @@
 
 using Gtk;
 using System;
+using System.Collections;
 using System.Data;
 using Mono.Addins;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Components
 {
-	public class BinaryCellRenderer : BaseCellRenderer
+	public class LongContentRenderer : IDataGridContentRenderer
 	{
-		public override object Value {
-			get { return val; }
-			set {
-				val = value;
-				
-				if (value == null || Convert.IsDBNull (value)) {
-					Text = "null";
-					Style = Pango.Style.Italic;
-				} else {
-					Text = "bin";
-					Underline = Pango.Underline.Single;
-				}
-			}
+		public Type[] DataTypes {
+			get { return new Type[]{ typeof(long), typeof(ulong) }; }
+		}
+
+		public void SetContent (CellRendererText cell, object dataObject)
+		{
+			cell.Text = dataObject.ToString ();
+		}
+
+		public int Compare (object x, object y)
+		{
+			if (x == null && y == null) return 0;
+			else if (x == null) return -1;
+			else if (y == null) return 1;
+			
+			long lx = (long)x;
+			return lx.CompareTo (y);
 		}
 	}
 }

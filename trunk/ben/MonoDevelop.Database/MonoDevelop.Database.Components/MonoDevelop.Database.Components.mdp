@@ -39,15 +39,37 @@
     <File name="./gtk-gui/MonoDevelop.Database.Components.PasswordDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialogs/ConnectionDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/DataGrid/DataGridColumn.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Widgets/DataGrid/DataGridColumnType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/DataGrid/Renderers" subtype="Directory" buildaction="Compile" />
     <File name="./Widgets/DataGrid/Visualizers" subtype="Directory" buildaction="Compile" />
-    <File name="./Widgets/DataGrid/Renderers/StringCellRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Widgets/DataGrid/Renderers/BaseCellRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Widgets/DataGrid/Renderers/BinaryCellRenderer.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Widgets/DataGrid/Visualizers/IDataVisualizer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Visualizers/IDataGridVisualizer.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/DataGrid/DataGrid.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Components.DataGrid.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/IDataGridContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/StringContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/ObjectContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/NullContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/BooleanContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/IntegerContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/LongContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/DecimalContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/FloatContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/DoubleContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/ByteContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Renderers/BlobContentRenderer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Codons" subtype="Directory" buildaction="Compile" />
+    <File name="./Codons/DataGridContentRendererCodon.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/ShowImageDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Components.ShowImageDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/ShowTextDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Components.ShowTextDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Visualizers/TextVisualizer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Visualizers/ImageVisualizer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Visualizers/XmlTextVisualizer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Codons/DataGridVisualizerCodon.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/VisualizerMenuItem.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/ShowXmlTreeDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Components.ShowXmlTreeDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/DataGrid/Visualizers/XmlTreeVisualizer.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -65,6 +87,8 @@
     <ProjectReference type="Gac" localcopy="True" refto="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
+    <ProjectReference type="Gac" localcopy="True" refto="gtksourceview-sharp, Version=1.0.0.2, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   </References>
   <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
     <ExportedWidgets>

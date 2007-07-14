@@ -31,11 +31,22 @@ using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Components
 {
-	//TODO: inherit from IView ?
-	public interface IDataVisualizer
+	public class XmlTreeVisualizer : TextVisualizer
 	{
-		string Name { get; }
+		public override string Description {
+			get { return GettextCatalog.GetString ("Show as xml tree"); }
+		}
 		
-		bool CanVisualize (Type type);
+		public override string IconString {
+			get { return "md-xml-file-icon"; }
+		}
+
+		public override void ShowContent (object dataObject)
+		{
+			string xml = GetContent (dataObject);
+
+			using (ShowXmlTreeDialog dlg = new ShowXmlTreeDialog (xml))
+				dlg.Run ();
+		}
 	}
 }

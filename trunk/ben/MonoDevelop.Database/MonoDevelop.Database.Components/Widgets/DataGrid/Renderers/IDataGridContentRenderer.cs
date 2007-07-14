@@ -25,27 +25,17 @@
 
 using Gtk;
 using System;
+using System.Collections;
 using System.Data;
 using Mono.Addins;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Components
 {
-	public class StringCellRenderer : BaseCellRenderer
+	public interface IDataGridContentRenderer : IComparer
 	{
-		public override object Value {
-			get { return val; }
-			set {
-				val = value;
-				
-				if (value == null || Convert.IsDBNull (value)) {
-					Style = Pango.Style.Italic;
-					Text = "null";
-					
-				} else {
-					Text = value.ToString ();
-				}
-			}
-		}
+		Type[] DataTypes { get; }
+		
+		void SetContent (CellRendererText cell, object dataObject);
 	}
 }
