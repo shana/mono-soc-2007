@@ -29,6 +29,7 @@ namespace Sample
 			group0 = new RibbonGroup ();
 			group0.Label = "Summer of Code";
 			group0.Child = button0;
+			group0.Expand += group0_Expand;
 			
 			Ribbons.ToolPack toolPack = new Ribbons.ToolPack ();
 			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
@@ -89,6 +90,14 @@ namespace Sample
 			this.ShowAll ();
 		}
 
+		private void group0_Expand(object Sender, EventArgs e)
+		{
+			Dialog d = new Dialog ("Test", this, DialogFlags.DestroyWithParent);
+			d.Modal = true;
+			d.AddButton ("Close", ResponseType.Close);
+			d.Run ();
+			d.Destroy ();
+		}
 		
 		[GLib.ConnectBefore]
 		private void Window_OnExpose(object sender, ExposeEventArgs args)
