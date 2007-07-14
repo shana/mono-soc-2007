@@ -43,18 +43,12 @@ namespace Ribbons
 			add
 			{
 				expandHandler += value;
-				if(expandHandler != null)
-					expandButton.Show ();
-				else
-					expandButton.Hide ();
+				expandButton.Visible = expandHandler != null;
 			}
 			remove
 			{
 				expandHandler -= value;
-				if(expandHandler != null)
-					expandButton.Show ();
-				else
-					expandButton.Hide ();
+				expandButton.Visible = expandHandler != null;
 			}
 		}
 		
@@ -70,8 +64,13 @@ namespace Ribbons
 			HeightRequest = 90;
 			
 			expandButton = new Button ("+");
-			expandButton.Hide ();
+			expandButton.Padding = 0;
+			expandButton.Visible = false;
 			expandButton.Parent = this;
+			expandButton.Clicked += delegate (object Sender, EventArgs e)
+			{
+				OnExpand (e);
+			};
 		}
 		
 		protected virtual void OnExpand (EventArgs e)
@@ -82,11 +81,7 @@ namespace Ribbons
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
 			base.ForAll (include_internals, callback);
-			
-			if(include_internals)
-			{
-				callback (expandButton);
-			}
+			if(expandButton.Visible) callback (expandButton);
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
