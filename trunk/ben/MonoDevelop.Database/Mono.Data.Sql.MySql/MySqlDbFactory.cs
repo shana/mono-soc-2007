@@ -32,13 +32,14 @@ namespace Mono.Data.Sql
 	public class MySqlDbFactory : IDbFactory
 	{
 		private ISqlDialect dialect;
+		private IConnectionProvider connectionProvider;
 		
 		public string Identifier {
 			get { return "MySql.Data.MySqlClient"; }
 		}
 		
 		public string Name {
-			get { return "MySql database (Incomplete)"; }
+			get { return "MySql database"; }
 		}
 		
 		public ISqlDialect Dialect {
@@ -49,14 +50,22 @@ namespace Mono.Data.Sql
 			}
 		}
 		
-		public IConnectionProvider CreateConnectionProvider (ConnectionSettings settings)
-		{
-			return new MySqlConnectionProvider (this, settings);
+		public IConnectionProvider ConnectionProvider {
+			get {
+				if (connectionProvider == null)
+					connectionProvider = new MySqlConnectionProvider ();
+				return connectionProvider;
+			}
 		}
 		
-		public ISchemaProvider CreateSchemaProvider (IConnectionProvider connectionProvider)
+		public IConnectionPool CreateConnectionPool (ConnectionSettings settings)
 		{
-			return new MySqlSchemaProvider (connectionProvider);
+			return new DefaultConnectionPool (this, ConnectionProvider, settings);
+		}
+		
+		public ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool)
+		{
+			return new MySqlSchemaProvider (connectionPool);
 		}
 		
 		public ConnectionSettings GetDefaultConnectionSettings ()

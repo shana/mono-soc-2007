@@ -1,11 +1,7 @@
-﻿//
+//
 // Authors:
-//	Christian Hergert  <chris@mosaix.net>
-//	Daniel Morgan <danielmorgan@verizon.net>
-//	Sureshkumar T <tsureshkumar@novell.com>
 //	Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,33 +25,52 @@
 
 using System;
 using System.Data;
-using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using MySql.Data.MySqlClient;
 
 namespace Mono.Data.Sql
 {
-	public class MySqlConnectionProvider : AbstractConnectionProvider
+	public class MySqlPooledDbConnection : AbstractPooledDbConnection
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings)
+		public MySqlPooledDbConnection (IConnectionPool connectionPool, IDbConnection connection)
+			: base (connectionPool, connection)
 		{
-			string connStr = null;
-			try {	
-				if (settings.UseConnectionString) {
-					connStr = settings.ConnectionString;
-				} else {
-					//"Server=Server;Port=1234;Database=Test;Uid=UserName;Pwd=asdasd;"
-					//Default port is 3306. Enter value -1 to use a named pipe connection. 
-					connStr = String.Format ("Server={0};Port={1};Database={2};Uid={3};Pwd={4};",
-						settings.Server, settings.Port, settings.Database, settings.Username, settings.Password);
-				}
-				connStr = SetConnectionStringParameter (connStr, String.Empty, "Pooling", "false");
-				MySqlConnection connection = new MySqlConnection (connStr);
-				connection.Open ();
+		}
+		
+		public override DataSet ExecuteSet (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
 
-				return new MySqlPooledDbConnection (pool, connection);
-			} catch {
-				return null;
+			DataSet set = new DataSet ();
+			using (command) {
+				using (MySqlDataAdapter adapter = new MySqlDataAdapter (command as MySqlCommand)) {
+					try {
+						adapter.Fill (set);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
+				}
 			}
+			return set;
+		}
+
+		public override DataTable ExecuteTable (IDbCommand command)
+		{
+			if (command == null)
+				throw new ArgumentException ("command");
+
+			DataTable table = new DataTable ();
+			using (command) {
+				using (MySqlDataAdapter adapter = new MySqlDataAdapter (command as MySqlCommand)) {
+					try {
+						adapter.Fill (table);
+					} catch (Exception e) {
+						//TODO: warn user
+					}
+				}
+			}
+			return table;
 		}
 	}
 }
