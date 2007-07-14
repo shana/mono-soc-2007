@@ -21,11 +21,6 @@ namespace Microsoft.Windows.Themes {
 		#endregion
 		#endregion
 
-		//#region Private Fields
-		//const double GripperLines = 4;
-		//const double GripperLenght = 5;
-		//#endregion
-
 		#region Public Constructors
 		public ScrollChrome() {
 		}
@@ -82,21 +77,23 @@ namespace Microsoft.Windows.Themes {
 		}
 
 		protected override void OnRender(DrawingContext drawingContext) {
+			//TODO: Lookup colors.
 			double actual_width_without_padding = ActualWidth - Padding.Left - Padding.Right;
-			if (actual_width_without_padding < 3)
-				return;
 			double actual_height_without_padding = ActualHeight - Padding.Top - Padding.Bottom;
 			ScrollGlyph glyph = GetScrollGlyph(this);
-			double glyph_one_pixel_horizontal_offset = glyph == ScrollGlyph.None ? 0 : 1;
+			double glyph_one_pixel_horizontal_padding = (glyph == ScrollGlyph.DownArrow || glyph == ScrollGlyph.UpArrow || glyph == ScrollGlyph.VerticalGripper) ? 1 : 0;
+			double glyph_one_pixel_vertical_padding = (glyph == ScrollGlyph.LeftArrow || glyph == ScrollGlyph.RightArrow || glyph == ScrollGlyph.HorizontalGripper) ? 1 : 0;
 			bool has_outer_border = HasOuterBorder;
 			if (has_outer_border) {
-				if (actual_height_without_padding < 3)
+				if (actual_width_without_padding - glyph_one_pixel_horizontal_padding < 3)
+					return;
+				if (actual_height_without_padding - glyph_one_pixel_vertical_padding < 3)
 					return;
 				drawingContext.DrawRoundedRectangle(null, new Pen(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] { 
-				new GradientStop(Color.FromArgb(0, 0xA0, 0xB5, 0xD3), 0), 
-				new GradientStop(Color.FromArgb(0xFF, 0xA0, 0xB5, 0xD3), 0.5), 
-				new GradientStop(Color.FromArgb(0xFF, 0X7C, 0x9F, 0xD3), 1) 
-			}), new Point(0, 0), new Point(0, 1)), 1), new Rect(0.5 + Padding.Left + glyph_one_pixel_horizontal_offset, 2.5 + Padding.Top, actual_width_without_padding - 1 - glyph_one_pixel_horizontal_offset, actual_height_without_padding - 3), 3, 3);
+					new GradientStop(Color.FromArgb(0, 0xA0, 0xB5, 0xD3), 0), 
+					new GradientStop(Color.FromArgb(0xFF, 0xA0, 0xB5, 0xD3), 0.5), 
+					new GradientStop(Color.FromArgb(0xFF, 0X7C, 0x9F, 0xD3), 1) 
+				}), new Point(0, 0), new Point(0, 1)), 1), new Rect(0.5 + Padding.Left + glyph_one_pixel_horizontal_padding, 2.5 + Padding.Top + glyph_one_pixel_vertical_padding, actual_width_without_padding - 1 - glyph_one_pixel_horizontal_padding, actual_height_without_padding - 3 - glyph_one_pixel_vertical_padding), 3, 3);
 			}
 			if (actual_width_without_padding < 4 || actual_height_without_padding < 4)
 				return;
@@ -104,7 +101,11 @@ namespace Microsoft.Windows.Themes {
 			double fill_radius = has_outer_border ? 2 : 1.5;
 			bool render_pressed = RenderPressed;
 			bool render_mouse_over = RenderMouseOver && !RenderPressed;
-			drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(render_mouse_over ? new GradientStop[] {
+			drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(glyph == ScrollGlyph.HorizontalGripper || glyph == ScrollGlyph.VerticalGripper ? new GradientStop[] {
+				new GradientStop(render_pressed ? Color.FromArgb(0xFF, 0xA8, 0xBE, 0xF5) : (render_mouse_over ? Color.FromArgb(0xFF, 0xDA, 0xE9, 0xFF) : Color.FromArgb(0xFF, 0xC9, 0xD8, 0xFC)), 0), 
+				new GradientStop(render_pressed ? Color.FromArgb(0xFF, 0xA1, 0xBD, 0xFA) : (render_mouse_over ? Color.FromArgb(0xFF, 0xD4, 0xE6, 0xFF) : Color.FromArgb(0xFF, 0xC2, 0xD3, 0xFC)), 0.65000000000000002), 
+				new GradientStop(render_pressed ? Color.FromArgb(0xFF, 0x98, 0xB0, 0xEE) : (render_mouse_over ? Color.FromArgb(0xFF, 0xCA, 0xE0, 0xFF) : Color.FromArgb(0xFF, 0xB6, 0xCD, 0xFB)), 1) 
+			} : (render_mouse_over ? new GradientStop[] {
 				new GradientStop(Color.FromArgb(0xFF, 0xFD, 0xFF, 0xFF), 0), 
 				new GradientStop(Color.FromArgb(0xFF, 0xE2, 0xF3, 0xFD), 0.25), 
 				new GradientStop(Color.FromArgb(0xFF, 0xB9, 0xDA, 0xFB), 1) 
@@ -113,171 +114,110 @@ namespace Microsoft.Windows.Themes {
 				new GradientStop(render_pressed ? Color.FromArgb(0xFF, 0x80, 0x9D, 0xF1) : Color.FromArgb(0xFF, 0xC3, 0xD3, 0xFD), 0.29999999999999999), 
 				new GradientStop(render_pressed ? Color.FromArgb(0xFF, 0xAF, 0xBF, 0xED) : Color.FromArgb(0xFF, 0xC3, 0xD3, 0xFD), render_pressed ? 0.69999999999999996 : 0.59999999999999998),
 				new GradientStop(render_pressed ? Color.FromArgb(0xFF, 0xD2, 0xDE, 0xEB) : Color.FromArgb(0xFF, 0xBB, 0xCD, 0xF9), 1)
-			}), new Point(0, 0), new Point(1, 1)), new Pen(has_outer_border ? Brushes.White : new SolidColorBrush(Color.FromArgb(0xFF, 0xB4, 0xC8, 0xF6)), 1), new Rect(0.5 + Padding.Left + glyph_one_pixel_horizontal_offset, 0.5 + Padding.Top, actual_width_without_padding - fill_extra_padding - glyph_one_pixel_horizontal_offset, actual_height_without_padding - fill_extra_padding), fill_radius, fill_radius);
+			})), new Point(0, 0), new Point(glyph == ScrollGlyph.HorizontalGripper ? 0 : 1, glyph == ScrollGlyph.VerticalGripper ? 0 : 1)), new Pen(has_outer_border ? Brushes.White : new SolidColorBrush(Color.FromArgb(0xFF, 0xB4, 0xC8, 0xF6)), 1), new Rect(0.5 + Padding.Left + glyph_one_pixel_horizontal_padding, 0.5 + Padding.Top + glyph_one_pixel_vertical_padding, actual_width_without_padding - fill_extra_padding - glyph_one_pixel_horizontal_padding, actual_height_without_padding - fill_extra_padding - glyph_one_pixel_vertical_padding), fill_radius, fill_radius);
 			if (has_outer_border) {
 				if (actual_width_without_padding < 6 || actual_height_without_padding < 6)
 					return;
-				drawingContext.DrawRoundedRectangle(null, new Pen(new SolidColorBrush(render_pressed ? Color.FromArgb(0xFF, 0x83, 0x8F, 0xDA) : (render_mouse_over ? Color.FromArgb(0xFF, 0x98, 0xB1, 0xE4) : Color.FromArgb(0xFF, 0xB4, 0xC8, 0xF6))), 1), new Rect(1.5 + Padding.Left + glyph_one_pixel_horizontal_offset, 1.5 + Padding.Top, actual_width_without_padding - 4 - glyph_one_pixel_horizontal_offset, actual_height_without_padding - 4), 1.5, 1.5);
+				Color color;
+				if ((glyph == ScrollGlyph.HorizontalGripper || glyph == ScrollGlyph.VerticalGripper) && render_mouse_over)
+					color = Color.FromArgb(0xFF, 0xAC, 0xCE, 0xFF);
+				else {
+					if (render_pressed)
+						color = Color.FromArgb(0xFF, 0x83, 0x8F, 0xDA);
+					else if (render_mouse_over)
+						color = Color.FromArgb(0xFF, 0x98, 0xB1, 0xE4);
+					else
+						color = Color.FromArgb(0xFF, 0xB4, 0xC8, 0xF6);
+				}
+				drawingContext.DrawRoundedRectangle(null, new Pen(new SolidColorBrush(color), 1), new Rect(1.5 + Padding.Left + glyph_one_pixel_horizontal_padding, 1.5 + Padding.Top + glyph_one_pixel_vertical_padding, actual_width_without_padding - 4 - glyph_one_pixel_horizontal_padding, actual_height_without_padding - 4 - glyph_one_pixel_vertical_padding), 1.5, 1.5);
 			}
-			if (glyph != ScrollGlyph.None)
-				drawingContext.DrawRectangle(Brushes.Red, null, new Rect(0, 0, 1, 1));
-			/*
-			bool padded;
-			if (Padding.Left != 0 || Padding.Top != 0) {
-				padded = true;
-				drawingContext.PushTransform(new TranslateTransform(Padding.Left, Padding.Top));
-			} else
-				padded = false;
-			double actual_width_without_padding = ActualWidth - Padding.Left - Padding.Right;
-			if (actual_width_without_padding <= 0)
-				return;
-			double actual_height_without_padding = ActualHeight - Padding.Top - Padding.Bottom;
-			ScrollGlyph glyph = GetScrollGlyph(this);
-			double glyph_one_pixel_horizontal_offset = glyph == ScrollGlyph.None ? 0 : 1;
-			if (actual_height_without_padding <= 0)
-				return;
-			if (HasOuterBorder) {
-				#region Shadow
-				double shadow_width = actual_width_without_padding - glyph_one_pixel_horizontal_offset;
-				if (shadow_width <= 0)
-					return;
-				Brush shadow_brush = new LinearGradientBrush(Colors.White, Colors.LightBlue, 45);
-				drawingContext.DrawRoundedRectangle(shadow_brush, null, new Rect(glyph_one_pixel_horizontal_offset, 0, shadow_width, actual_height_without_padding), 3, 3);
-				#endregion
-				#region White
-				double white_width = actual_width_without_padding - 1 - glyph_one_pixel_horizontal_offset;
-				if (white_width <= 0)
-					return;
-				double white_height = actual_height_without_padding - 1;
-				if (white_height <= 0)
-					return;
-				drawingContext.DrawRoundedRectangle(Brushes.White, null, new Rect(glyph_one_pixel_horizontal_offset, 0, white_width, white_height), 3, 3);
-				#endregion
-			}
-			#region Interior
-			Color interior_color;
-			if (RenderPressed)
-				interior_color = Colors.Blue;
-			else if (RenderMouseOver)
-				interior_color = Colors.Aqua;
-			else
-				interior_color = Colors.LightBlue;
-
-			Brush interior_brush = new LinearGradientBrush(Colors.White, interior_color, 45);
-			double interior_width = actual_width_without_padding - 1;
-			double interior_height = actual_height_without_padding - 1;
-			double outer_border_offset;
-			if (HasOuterBorder) {
-				interior_width -= 3;
-				interior_height -= 3;
-				outer_border_offset = 1;
-			} else
-				outer_border_offset = 0;
-			interior_width -= glyph_one_pixel_horizontal_offset;
-			if (interior_width <= 0 || interior_height <= 0)
-				return;
-			drawingContext.DrawRoundedRectangle(interior_brush, RenderPressed ? null : new Pen(Brushes.LightBlue, 1), new Rect(outer_border_offset + 0.5 + glyph_one_pixel_horizontal_offset, outer_border_offset + 0.5, interior_width, interior_height), 1, 1);
-			#endregion
-			#region Glyph
-			const double BorderSize = 4;
 			switch (glyph) {
-				case ScrollGlyph.UpArrow:
+			case ScrollGlyph.DownArrow:
+			case ScrollGlyph.LeftArrow:
+			case ScrollGlyph.RightArrow:
+			case ScrollGlyph.UpArrow:
+				Point start_point;
+				Point segment_point_1;
+				Point segment_point_2;
+				Point segment_point_3;
+				Point segment_point_4;
+				Point segment_point_5;
+				switch (glyph) {
 				case ScrollGlyph.DownArrow:
+					start_point = new Point(0, 3.5);
+					segment_point_1 = new Point(4.5, 8);
+					segment_point_2 = new Point(9, 3.5);
+					segment_point_3 = new Point(7.5, 2);
+					segment_point_4 = new Point(4.5, 5);
+					segment_point_5 = new Point(1.5, 2);
+					break;
 				case ScrollGlyph.LeftArrow:
+					start_point = new Point(4.5, 0);
+					segment_point_1 = new Point(0, 4.5);
+					segment_point_2 = new Point(4.5, 9);
+					segment_point_3 = new Point(6, 7.5);
+					segment_point_4 = new Point(3, 4.5);
+					segment_point_5 = new Point(6, 1.5);
+					break;
 				case ScrollGlyph.RightArrow:
-					const double ArrowWidth = 8;
-					const double ArrowLenght = 6;
-					double usable_width = actual_width_without_padding - BorderSize;
-					double usable_height = actual_height_without_padding - BorderSize;
-					double width;
-					double height;
-					switch (glyph) {
-						case ScrollGlyph.LeftArrow:
-						case ScrollGlyph.RightArrow:
-							width = Math.Min(usable_width, ArrowLenght);
-							height = Math.Min(usable_height, ArrowWidth);
-							break;
-						default:
-							width = Math.Min(usable_width, ArrowWidth);
-							height = Math.Min(usable_height, ArrowLenght);
-							break;
-					}
-					if (width > 1 && height > 1) {
-						width -= 1;
-						height -= 1;
-						DrawArrow(drawingContext, glyph, new Rect((actual_width_without_padding - width) / 2, (actual_height_without_padding - height) / 2, width, height));
-					}
+					start_point = new Point(3.5, 0);
+					segment_point_1 = new Point(8, 4.5);
+					segment_point_2 = new Point(3.5, 9);
+					segment_point_3 = new Point(2, 7.5);
+					segment_point_4 = new Point(5, 4.5);
+					segment_point_5 = new Point(2, 1.5);
 					break;
-				case ScrollGlyph.HorizontalGripper:
-				case ScrollGlyph.VerticalGripper:
-					bool horizontal = glyph == ScrollGlyph.HorizontalGripper;
-					if ((horizontal ? actual_width_without_padding : actual_height_without_padding) - 4 > 2 * GripperLines) {
-						double used_width, used_height;
-						if (horizontal) {
-							used_width = 2 * GripperLines;
-							used_height = GripperLenght;
-						} else {
-							used_width = GripperLenght;
-							used_height = 2 * GripperLines;
-						}
-						DrawGripper(drawingContext, horizontal, new Point((actual_width_without_padding - used_width) / 2, (actual_height_without_padding - used_height) / 2));
-					}
+				default:
+					start_point = new Point(0, 4.5);
+					segment_point_1 = new Point(4.5, 0);
+					segment_point_2 = new Point(9, 4.5);
+					segment_point_3 = new Point(7.5, 6);
+					segment_point_4 = new Point(4.5, 3);
+					segment_point_5 = new Point(1.5, 6);
 					break;
-			}
-			#endregion
-			if (padded)
+				}
+				drawingContext.PushTransform(new MatrixTransform(1, 0, 0, 1, (actual_width_without_padding - 9) / 2, (actual_height_without_padding - 9) / 2));
+				drawingContext.DrawGeometry(new SolidColorBrush(Color.FromArgb(0xFF, 0x4D, 0x61, 0x85)), null, new PathGeometry(new PathFigure[] { new PathFigure(start_point, new PathSegment[] {
+					new LineSegment(segment_point_1, true),
+					new LineSegment(segment_point_2, true),
+					new LineSegment(segment_point_3, true),
+					new LineSegment(segment_point_4, true),
+					new LineSegment(segment_point_5, true)
+				}, true) }, FillRule.EvenOdd, Transform.Identity));
 				drawingContext.Pop();
-			*/
+				break;
+			case ScrollGlyph.HorizontalGripper:
+			case ScrollGlyph.VerticalGripper:
+				const double MinimumSizeInScrollDirection = 14;
+				bool horizontal = glyph == ScrollGlyph.HorizontalGripper;
+				if ((horizontal ? actual_width_without_padding : actual_height_without_padding) <= MinimumSizeInScrollDirection)
+					return;
+				const double MinimumSizeInOtherDirection = 9;
+				if ((horizontal ? actual_height_without_padding : actual_width_without_padding) <= MinimumSizeInOtherDirection)
+					return;
+				Color gripper_color;
+				if (render_pressed)
+					gripper_color = Color.FromArgb(0xFF, 0xCF, 0xDD, 0xFD);
+				else if (render_mouse_over)
+					gripper_color = Color.FromArgb(0xFF, 0xFC, 0xFD, 0xFF);
+				else
+					gripper_color = Color.FromArgb(0xFF, 0xEE, 0xF4, 0xFE);
+				Brush gripper_brush = new SolidColorBrush(gripper_color);
+				Color gripper_shadow_color;
+				if (render_pressed)
+					gripper_shadow_color = Color.FromArgb(0xFF, 0x83, 0x9E, 0xD8);
+				else if (render_mouse_over)
+					gripper_shadow_color = Color.FromArgb(0xFF, 0x9C, 0xC5, 0xFF);
+				else
+					gripper_shadow_color = Color.FromArgb(0xFF, 0x8C, 0xB0, 0xF8);
+				Brush gripper_shadow_brush = new SolidColorBrush(gripper_shadow_color);
+				for (int gripper_line_index = 0; gripper_line_index < 4; gripper_line_index++) {
+					drawingContext.DrawRectangle(gripper_brush, null, horizontal ? new Rect((actual_width_without_padding - 9) / 2 + gripper_line_index * 2, (actual_height_without_padding - 6) / 2, 1, 5) : new Rect((actual_width_without_padding - 6) / 2, (actual_height_without_padding - 9) / 2 + gripper_line_index * 2, 5, 1));
+					drawingContext.DrawRectangle(gripper_shadow_brush, null, horizontal ? new Rect((actual_width_without_padding - 9) / 2 + gripper_line_index * 2 + 1, (actual_height_without_padding - 6) / 2 + 1, 1, 5) : new Rect((actual_width_without_padding - 6) / 2 + 1, (actual_height_without_padding - 9) / 2 + gripper_line_index * 2 + 1, 5, 1));
+				}
+				break;
+			}
 		}
 		#endregion
-
-		//#region Private Methods
-		//void DrawArrow(DrawingContext drawingContext, ScrollGlyph glyph, Rect rect) {
-		//    Pen pen = new Pen(Brushes.Black, 2);
-		//    Point start, middle, end;
-		//    switch (glyph) {
-		//        case ScrollGlyph.UpArrow:
-		//            start = rect.BottomRight;
-		//            middle = new Point((rect.Left + rect.Right) / 2, rect.Top);
-		//            end = rect.BottomLeft;
-		//            break;
-		//        default:
-		//            start = rect.TopRight;
-		//            middle = new Point((rect.Left + rect.Right) / 2, rect.Bottom);
-		//            end = rect.TopLeft;
-		//            break;
-		//        case ScrollGlyph.LeftArrow:
-		//            start = rect.TopRight;
-		//            middle = new Point(rect.Left, (rect.Top + rect.Bottom) / 2);
-		//            end = rect.BottomRight;
-		//            break;
-		//        case ScrollGlyph.RightArrow:
-		//            start = rect.TopLeft;
-		//            middle = new Point(rect.Right, (rect.Top + rect.Bottom) / 2);
-		//            end = rect.BottomLeft;
-		//            break;
-		//    }
-		//    drawingContext.DrawLine(pen, start, middle);
-		//    drawingContext.DrawLine(pen, middle, end);
-
-		//}
-
-		//void DrawGripper(DrawingContext drawingContext, bool horizontal, Point location) {
-		//    Pen pen = new Pen(Brushes.White, 1);
-		//    Pen shadow_pen = new Pen(Brushes.DarkBlue, 1);
-		//    Point shadow_location = new Point(location.X + 1, location.Y + 1);
-		//    for (int line = 0; line < GripperLines; line++) {
-		//        Utility.DrawLine(drawingContext, !horizontal, pen, location, GripperLenght);
-		//        Utility.DrawLine(drawingContext, !horizontal, shadow_pen, shadow_location, GripperLenght);
-		//        if (horizontal) {
-		//            location.X += 2;
-		//            shadow_location.X += 2;
-		//        } else {
-		//            location.Y += 2;
-		//            shadow_location.Y += 2;
-		//        }
-		//    }
-		//}
-		//#endregion
 	}
 }
