@@ -28,7 +28,7 @@ using System.Data;
 using System.Collections.Generic;
 using Npgsql;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class NpgsqlPooledDbConnection : AbstractPooledDbConnection
 	{

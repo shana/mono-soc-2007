@@ -32,7 +32,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Npgsql;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public class NpgsqlSchemaProvider : AbstractSchemaProvider
 	{

@@ -33,7 +33,7 @@ using System.Data;
 using System.Data.OracleClient;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public class OracleSchemaProvider : AbstractSchemaProvider
 	{

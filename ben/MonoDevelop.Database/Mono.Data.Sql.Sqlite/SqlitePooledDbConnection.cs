@@ -26,9 +26,9 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Data.SqliteClient;
+using MonoDevelop.Database.SqliteClient;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class SqlitePooledDbConnection : AbstractPooledDbConnection
 	{

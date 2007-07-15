@@ -29,10 +29,9 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using Mono.Data.Sql;
 using Mono.Addins;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public static class ConnectionSettingsService
 	{

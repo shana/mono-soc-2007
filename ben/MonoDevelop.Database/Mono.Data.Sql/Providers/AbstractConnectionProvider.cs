@@ -32,7 +32,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public abstract class AbstractConnectionProvider : IConnectionProvider
 	{

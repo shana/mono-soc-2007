@@ -33,7 +33,7 @@ using MonoDevelop.Core.Properties;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Components.Commands;
 
-using Mono.Data.Sql;
+using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.ConnectionManager
 {

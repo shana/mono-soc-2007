@@ -34,7 +34,7 @@ using System.Data;
 using System.Threading;
 using System.Collections.Generic;
 using Mono.Addins;
-using Mono.Data.Sql;
+usingMonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Components;

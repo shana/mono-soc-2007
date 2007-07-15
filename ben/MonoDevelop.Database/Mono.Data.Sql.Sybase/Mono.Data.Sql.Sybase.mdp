@@ -1,13 +1,13 @@
-<Project name="Mono.Data.Sql.Sybase" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+<Project name="MonoDevelop.Database.Sql.Sybase" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" signAssembly="False" assembly="Mono.Data.Sql.Sybase" />
+      <Output directory="./bin/Debug" assembly="MonoDevelop.Database.Sql.Sybase" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" signAssembly="False" assembly="Mono.Data.Sql.Sybase" />
+      <Output directory="./bin/Release" assembly="MonoDevelop.Database.Sql.Sybase" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -16,7 +16,7 @@
   <Contents>
     <File name="./SybaseSchemaProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./SybaseConnectionProvider.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Mono.Data.Sql.Sybase.addin.xml" subtype="Code" buildaction="FileCopy" />
+    <File name="./MonoDevelop.Database.Sql.Sybase.addin.xml" subtype="Code" buildaction="FileCopy" />
     <File name="./SybaseDbFactory.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema" subtype="Directory" buildaction="Compile" />
   </Contents>
@@ -25,6 +25,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Data.SybaseClient, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <ProjectReference type="Project" localcopy="True" refto="Mono.Data.Sql" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
   </References>
 </Project>

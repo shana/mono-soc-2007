@@ -27,7 +27,7 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public delegate void ExecuteCallback<T> (IPooledDbConnection connection, T result, object state);
 	

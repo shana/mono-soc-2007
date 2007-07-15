@@ -28,7 +28,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class SqlServerPooledDbConnection : AbstractPooledDbConnection
 	{

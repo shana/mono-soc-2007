@@ -15,7 +15,7 @@
 		<Addin id="Core" version="0.14.0"/>
 		<Addin id="Core.Gui" version="0.14.0"/>
 		<Addin id="Ide" version="0.14.0"/>
-		<Addin id="Mono.Data.Sql" version="0.14.0"/>
+		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
 		<Addin id="Database.Query" version="0.14.0"/>
 	</Dependencies>
 	

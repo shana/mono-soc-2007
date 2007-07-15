@@ -28,7 +28,7 @@ using System.Data;
 using System.Collections.Generic;
 using Mono.Addins;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class DbFactoryCodon : TypeExtensionNode
 	{

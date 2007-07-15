@@ -1,4 +1,4 @@
-<Addin	id		= "Mono.Data.Sql.Firebird"
+<Addin	id		= "MonoDevelop.Database.Sql.Firebird"
 	namespace	= "MonoDevelop"
 	name		= "Firebird provider for Mono Data Sql"
 	author		= "Christian Hergert, Daniel Morgan, Ben Motmans"
@@ -8,14 +8,14 @@
 	version		= "0.14.0">
     
 	<Runtime>
-		<Import assembly="Mono.Data.Sql.Firebird.dll"/>
+		<Import assembly="MonoDevelop.Database.Sql.Firebird.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Mono.Data.Sql" version="0.14.0"/>
+		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
 	</Dependencies>
 
 	<Extension path = "/Mono/Data/Sql">
-		<Class id = "Firebird" class = "Mono.Data.Sql.FirebirdDbFactory"/>
+		<Class id = "Firebird" class = "MonoDevelop.Database.Sql.FirebirdDbFactory"/>
 	</Extension>
 </Addin>

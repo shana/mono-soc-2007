@@ -32,7 +32,7 @@ using System.Data;
 using FirebirdSql.Data.Firebird;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public class FirebirdConnectionProvider : AbstractConnectionProvider
 	{

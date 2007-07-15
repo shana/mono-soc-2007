@@ -34,7 +34,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public class MySqlSchemaProvider : AbstractSchemaProvider
 	{

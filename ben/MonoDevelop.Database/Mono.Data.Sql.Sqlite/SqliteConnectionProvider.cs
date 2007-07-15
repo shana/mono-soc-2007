@@ -29,9 +29,9 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Data.SqliteClient;
+usingMonoDevelop.Database.SqliteClient;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class SqliteConnectionProvider : AbstractConnectionProvider
 	{

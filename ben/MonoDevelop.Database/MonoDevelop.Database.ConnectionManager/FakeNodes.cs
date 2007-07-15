@@ -27,7 +27,7 @@
 //
 
 using System;
-using Mono.Data.Sql;
+using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
