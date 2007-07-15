@@ -1,0 +1,53 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+	Version="10.0"
+	VendorName="SlickEdit"
+	WorkingDir=".">
+	<Config
+		Name="Release"
+		CompilerConfigName="gmcs"
+		OutputFile="">
+		<Menu>
+			<Target
+				Name="Build"
+				MenuCaption="&amp;Build"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw"
+				DependsRef="Release">
+				<Exec CmdLine="make"/>
+			</Target>
+			<Target
+				Name="Debug"
+				MenuCaption="&amp;Debug"
+				SaveOption="SaveNone"
+				RunFromDir="%rw">
+				<Exec CmdLine="make run"/>
+			</Target>
+			<Target
+				Name="Execute"
+				MenuCaption="E&amp;xecute"
+				SaveOption="SaveNone"
+				RunFromDir="%rw"
+				CaptureOutputWith="ProcessBuffer"
+				BuildFirst="1">
+				<Exec CmdLine="make run"/>
+			</Target>
+		</Menu>
+		<Includes>
+			<Include Dir="&lt;double click here to add another entry&gt;"/>
+		</Includes>
+		<Dependencies Name="Release">
+			<Dependency Project="../Mono.Design/Mono.Design.vpj"/>
+		</Dependencies>
+	</Config>
+	<CustomFolders>
+	</CustomFolders>
+	<Files AutoFolders="DirectoryView">
+		<F N="ChangeLog"/>
+		<F N="Controls.cs"/>
+		<F N="frmMain.cs"/>
+		<F N="Makefile"/>
+		<F N="ToolboxService.cs"/>
+	</Files>
+</Project>

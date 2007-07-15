@@ -1,0 +1,51 @@
+Index: mcs/class/System/System.ComponentModel.Design/DesignerTransactionCloseEventArgs.cs
+===================================================================
+--- mcs/class/System/System.ComponentModel.Design/DesignerTransactionCloseEventArgs.cs	(revision 72451)
++++ mcs/class/System/System.ComponentModel.Design/DesignerTransactionCloseEventArgs.cs	(working copy)
+@@ -2,6 +2,7 @@
+ //
+ // Author:
+ // 	Alejandro Sánchez Acosta  <raciel@es.gnu.org>
++//	Ivan N. Zlatev <contact i-nZ.net>
+ //
+ // (C) Alejandro Sánchez Acosta
+ // 
+@@ -35,15 +36,32 @@
+ 	public class DesignerTransactionCloseEventArgs : EventArgs
+ 	{
+ 		private bool commit;
+-		public DesignerTransactionCloseEventArgs (bool commit) {
+-			this.commit = commit;
++
++		public bool TransactionCommitted {
++			get { return commit; }
+ 		}
++		
++#if NET_2_0		
++		private bool last_transaction;
+ 
+-		public bool TransactionCommitted 
++		public bool LastTransaction {
++			get { return last_transaction; }
++		}
++
++		public DesignerTransactionCloseEventArgs (bool commit, bool lastTransaction)
+ 		{
+-			get {
+-				return commit;
+-			}
++			this.commit = commit;
++			last_transaction = lastTransaction;
+ 		}
++		
++		public DesignerTransactionCloseEventArgs (bool commit) : this (commit, false)
++		{
++		}
++#else
++		public DesignerTransactionCloseEventArgs (bool commit)
++		{
++			this.commit = commit;
++		}
++#endif
+ 	}
+ }

@@ -1,0 +1,165 @@
+Index: class/System/System.ComponentModel/MemberDescriptor.cs
+===================================================================
+--- class/System/System.ComponentModel/MemberDescriptor.cs	(revision 65139)
++++ class/System/System.ComponentModel/MemberDescriptor.cs	(working copy)
+@@ -34,6 +34,7 @@
+ using System.Collections;
+ using System.Reflection;
+ using System.Runtime.InteropServices;
++using System.ComponentModel.Design;
+ 
+ namespace System.ComponentModel
+ {
+@@ -212,15 +213,25 @@
+                 return null;
+         }
+ 
+-        [MonoTODO]
++	// Checks if a component is designed and returns a designer. If the member
++	// is "redirected" to the designer, then the componentClass will be the one
++	// of the designer. Else just returns the component.
++	//
+         protected static object GetInvokee(Type componentClass, object component)
+         {
+-            // FIXME WHAT should that do???
+-			
+-			// Lluis: Checked with VS.NET and it always return the component, even if
+-			// it has its own designer set with DesignerAttribute. So, no idea
+-			// what this should do.
+-            return component;
++             if (component is IComponent) {
++                 ISite site = ((IComponent) component).Site;
++                 if (site != null && site.DesignMode) {
++                     IDesignerHost host = site.GetService (typeof (IDesignerHost)) as IDesignerHost;
++                     if (host != null) {
++                         IDesigner designer = host.GetDesigner ((IComponent) component);
++                         if (designer != null && componentClass.IsInstanceOfType (designer)) {
++                             component = designer;
++                         }
++                     }
++                 }
++             }
++	     return component;
+         }
+ 
+         protected static MethodInfo FindMethod(Type componentClass, string name, 
+Index: class/System/System.ComponentModel/ReflectionPropertyDescriptor.cs
+===================================================================
+--- class/System/System.ComponentModel/ReflectionPropertyDescriptor.cs	(revision 65139)
++++ class/System/System.ComponentModel/ReflectionPropertyDescriptor.cs	(working copy)
+@@ -3,6 +3,7 @@
+ //
+ // Author:
+ //  Lluis Sanchez Gual (lluis@ximian.com)
++//  Ivan N. Zlatev (contact@i-nz.net)
+ //
+ // (C) Novell, Inc.  
+ //
+@@ -63,7 +64,8 @@
+ 		PropertyInfo GetPropertyInfo ()
+ 		{
+ 			if (_member == null) {
+-				_member = _componentType.GetProperty (Name);
++				_member = _componentType.GetProperty (Name, BindingFlags.GetProperty |  BindingFlags.NonPublic |
++								      BindingFlags.Public | BindingFlags.Instance);
+ 				if (_member == null)
+ 					throw new ArgumentException ("Accessor methods for the " + Name + " property are missing");
+ 			}
+@@ -93,6 +95,7 @@
+ 		
+ 		public override object GetValue (object component)
+ 		{
++			component = MemberDescriptor.GetInvokee (_componentType, component);
+ 			return GetPropertyInfo ().GetValue (component, null);
+ 		}
+ 		
+@@ -136,10 +139,11 @@
+ 		public override void SetValue (object component, object value)
+ 		{
+ 			DesignerTransaction tran = CreateTransaction (component);
+-			object old = GetValue (component);
+ 			
++			object propertyHolder = MemberDescriptor.GetInvokee (_componentType, component);
++			object old = GetValue (propertyHolder);
+ 			try {
+-				GetPropertyInfo ().SetValue (component, value, null);
++				GetPropertyInfo ().SetValue (propertyHolder, value, null);
+ 				EndTransaction (component, tran, old, value, true);
+ 			} catch {
+ 				EndTransaction (component, tran, old, value, false);
+@@ -147,28 +151,32 @@
+ 			}
+ 		}
+ 
+-		public override void ResetValue (object component)
+-		{
+-			DefaultValueAttribute attrib = ((DefaultValueAttribute) Attributes[typeof (DefaultValueAttribute)]);
+-			if (attrib != null) 
+-				SetValue (component, attrib.Value); 
+-			
+-			DesignerTransaction tran = CreateTransaction (component);
+-			object old = GetValue (component);
+-			
+-			try {
+-				MethodInfo mi = component.GetType().GetMethod ("Reset" + Name, Type.EmptyTypes);
+-				if (mi != null)
+-					mi.Invoke (component, null);
+-				EndTransaction (component, tran, old, GetValue (component), true);
+-			} catch {
+-				EndTransaction (component, tran, old, GetValue (component), false);
+-				throw;
+-			}
+-		}
++ 		public override void ResetValue (object component)
++ 		{
++			object propertyHolder = MemberDescriptor.GetInvokee (_componentType, component);
+ 
++ 			DefaultValueAttribute attrib = ((DefaultValueAttribute) Attributes[typeof (DefaultValueAttribute)]);
++			if (attrib != null)
++				SetValue (propertyHolder, attrib.Value);
++
++ 			DesignerTransaction tran = CreateTransaction (component);
++			object old = GetValue (propertyHolder);
++
++ 			try {
++				MethodInfo mi = propertyHolder.GetType().GetMethod ("Reset" + Name, Type.EmptyTypes);
++ 				if (mi != null)
++					mi.Invoke (propertyHolder, null);
++				EndTransaction (component, tran, old, GetValue (propertyHolder), true);
++ 			} catch {
++				EndTransaction (component, tran, old, GetValue (propertyHolder), false);
++ 				throw;
++ 			}
++ 		}
++
+ 		public override bool CanResetValue (object component)
+ 		{
++			component = MemberDescriptor.GetInvokee (_componentType, component);
++			
+ 			DefaultValueAttribute attrib = ((DefaultValueAttribute) Attributes[typeof (DefaultValueAttribute)]);
+ 			if (attrib != null) {
+ 				object current = GetValue (component);
+@@ -191,6 +199,8 @@
+ 
+ 		public override bool ShouldSerializeValue (object component)
+ 		{
++			component = MemberDescriptor.GetInvokee (_componentType, component);
++			
+ 			DefaultValueAttribute attrib = ((DefaultValueAttribute) Attributes[typeof (DefaultValueAttribute)]);
+ 			if (attrib != null) {
+ 				object current = GetValue (component);
+Index: class/System/System.ComponentModel/ChangeLog
+===================================================================
+--- class/System/System.ComponentModel/ChangeLog	(revision 65139)
++++ class/System/System.ComponentModel/ChangeLog	(working copy)
+@@ -1,3 +1,10 @@
++2006-09-12  Ivan N. Zlatev  <contact@i-nz.net>
++
++	* MemberDescriptor.cs: Fixed not to ignore NonPublic members.
++	Fixed GetInvokee to return the holder of the member.
++	* ReflectionPropertyDescriptor.cs: Fixed all *Value methods to
++	use GetInvokee.
++	
+ 2006-08-20  Gert Driesen  <drieseng@users.sourceforge.net>
+ 
+ 	* InvalidEnumArgumentException.cs: Beautify error message.

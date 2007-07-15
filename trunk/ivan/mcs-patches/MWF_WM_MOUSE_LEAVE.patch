@@ -1,0 +1,189 @@
+Index: mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/Common.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/Common.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/Common.cs	(working copy)
+@@ -244,7 +244,6 @@
+ 
+ 	     // Our "private" ones
+ 	     WM_MOUSE_ENTER            = 0x0401,
+-	     WM_MOUSE_LEAVE            = 0x0402,
+ 	     WM_ASYNC_MESSAGE          = 0x0403,
+ 	     WM_REFLECT                = WM_USER + 0x1c00
+    }
+Index: mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/ChangeLog
+===================================================================
+--- mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/ChangeLog	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/ChangeLog	(working copy)
+@@ -1,3 +1,8 @@
++2007-03-10  Ivan N. Zlatev <contact@i-nz.net>
++
++	* Common.cs, TestHelper.cs: Replaces all uses of the custom 
++	WM_MOUSE_LEAVE with the system WM_MOUSELEAVE message.
++
+ 2007-03-10  Gert Driesen  <drieseng@users.sourceforge.net>
+ 
+ 	* TextBoxTest.cs: Isolate BackColor tests.
+Index: mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/TestHelper.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/TestHelper.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/TestHelper.cs	(working copy)
+@@ -352,7 +352,6 @@
+ 
+ 		// Our "private" ones
+ 		WM_MOUSE_ENTER            = 0x0401,
+-		WM_MOUSE_LEAVE            = 0x0402,
+ 		WM_ASYNC_MESSAGE          = 0x0403,
+ 		WM_REFLECT                = WM_USER + 0x1c00,
+ 		WM_CLOSE_INTERNAL         = WM_USER + 0x1c01
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/ComboBox.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/ComboBox.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/ComboBox.cs	(working copy)
+@@ -1290,7 +1290,7 @@
+ 				if (textbox_ctrl != null)
+ 					XplatUI.SendMessage (textbox_ctrl.Handle, (Msg) m.Msg, m.WParam, m.LParam);
+ 				break;
+-			case Msg.WM_MOUSE_LEAVE:
++			case Msg.WM_MOUSELEAVE:
+ 				Point location = PointToClient (Control.MousePosition);
+ 				if (ClientRectangle.Contains (location))
+ 					return;
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/Control.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/Control.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/Control.cs	(working copy)
+@@ -4502,7 +4502,7 @@
+ 					return;
+ 				}
+ 
+-				case Msg.WM_MOUSE_LEAVE: {
++				case Msg.WM_MOUSELEAVE: {
+ 					WmMouseLeave (ref m);
+ 					return;
+ 				}
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIStructs.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIStructs.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIStructs.cs	(working copy)
+@@ -339,7 +339,6 @@
+ 
+ 		// Our "private" ones
+ 		WM_MOUSE_ENTER            = 0x0401,
+-		WM_MOUSE_LEAVE            = 0x0402,
+ 		WM_ASYNC_MESSAGE          = 0x0403,
+ 		WM_REFLECT                = WM_USER + 0x1c00,
+ 		WM_CLOSE_INTERNAL	  = WM_USER + 0x1c01
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/ChangeLog
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/ChangeLog	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/ChangeLog	(working copy)
+@@ -1,3 +1,10 @@
++2007-03-10  Ivan N. Zlatev <contact@i-nz.net>
++
++	* ComboBox.cs, Control.cs, XplatUIStructs.cs, XplatUIX11GTK.cs,
++	XplatUIX11.cs, XplatUIWin32.cs, InternalWindowManager.cs, 
++        XplatUIOSX.cs, TextControl.cs: Replaces all uses of the custom 
++	WM_MOUSE_LEAVE with the system WM_MOUSELEAVE message.
++
+ 2007-03-09  Chris Toshok  <toshok@ximian.com>
+ 
+ 	* Control.cs: really remove the call to XplatUI.SetVisible from
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11GTK.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11GTK.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11GTK.cs	(working copy)
+@@ -3038,7 +3038,7 @@
+ 					if (xevent.CrossingEvent.mode != NotifyMode.NotifyNormal) {
+ 						goto ProcessNextMessage;
+ 					}
+-					msg.message = Msg.WM_MOUSE_LEAVE;
++					msg.message = Msg.WM_MOUSELEAVE;
+ 					HoverState.Timer.Enabled = false;
+ 					HoverState.Window = IntPtr.Zero;
+ 					break;
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11.cs	(working copy)
+@@ -3625,7 +3625,7 @@
+ 					if ((xevent.CrossingEvent.mode != NotifyMode.NotifyNormal) || (xevent.CrossingEvent.window != hwnd.client_window)) {
+ 						goto ProcessNextMessage;
+ 					}
+-					msg.message=Msg.WM_MOUSE_LEAVE;
++					msg.message=Msg.WM_MOUSELEAVE;
+ 					HoverState.Timer.Enabled = false;
+ 					HoverState.Window = IntPtr.Zero;
+ 					break;
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIWin32.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIWin32.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIWin32.cs	(working copy)
+@@ -1634,7 +1634,7 @@
+ 				}
+ 			}
+ 
+-			// We need to fake WM_MOUSE_ENTER/WM_MOUSE_LEAVE
++			// We need to fake WM_MOUSE_ENTER
+ 			switch (msg.message) {
+ 				case Msg.WM_LBUTTONDOWN: {
+ 					mouse_state |= MouseButtons.Left;
+@@ -1713,7 +1713,6 @@
+ 
+ 				case Msg.WM_MOUSELEAVE: {
+ 					prev_mouse_hwnd = IntPtr.Zero;
+-					msg.message=Msg.WM_MOUSE_LEAVE;
+ 					break;
+ 				}
+ 
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/InternalWindowManager.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/InternalWindowManager.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/InternalWindowManager.cs	(working copy)
+@@ -225,7 +225,7 @@
+ 				HandleNCMouseLeave (ref m);
+ 				break;
+ 			
+-			case Msg.WM_MOUSE_LEAVE:
++			case Msg.WM_MOUSELEAVE:
+ 				HandleMouseLeave (ref m);
+ 				break;
+ 
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIOSX.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIOSX.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIOSX.cs	(working copy)
+@@ -1803,7 +1803,7 @@
+ 					} else {
+ 						if (MouseWindow != null) {
+ 							if (MouseWindow.Handle != hwnd.Handle) {
+-								PostMessage (MouseWindow.Handle, Msg.WM_MOUSE_LEAVE, IntPtr.Zero, IntPtr.Zero);
++								PostMessage (MouseWindow.Handle, Msg.WM_MOUSELEAVE, IntPtr.Zero, IntPtr.Zero);
+ 								PostMessage (hwnd.Handle, Msg.WM_MOUSE_ENTER, IntPtr.Zero, IntPtr.Zero);
+ 								MouseWindow = hwnd;
+ 							}
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms.X11Internal/X11Display.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms.X11Internal/X11Display.cs	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms.X11Internal/X11Display.cs	(working copy)
+@@ -2137,7 +2137,7 @@
+ 					    (xevent.CrossingEvent.window != hwnd.ClientWindow))
+ 						goto ProcessNextMessage;
+ 
+-					msg.message=Msg.WM_MOUSE_LEAVE;
++					msg.message=Msg.WM_MOUSELEAVE;
+ 					HoverState.Timer.Enabled = false;
+ 					HoverState.Window = IntPtr.Zero;
+ 
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms.X11Internal/ChangeLog
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms.X11Internal/ChangeLog	(revision 74050)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms.X11Internal/ChangeLog	(working copy)
+@@ -1,3 +1,8 @@
++2007-03-10  Ivan N. Zlatev <contact@i-nz.net>
++
++	* X11Display.cs: Replaces all uses of the custom 
++	WM_MOUSE_LEAVE with the system WM_MOUSELEAVE message.
++
+ 2007-03-02  Rolf Bjarne Kvinge <RKvinge@novell.com> 
+ 
+ 	* X11Hwnd.cs: Update to use ToolWindowManager.
