@@ -96,7 +96,6 @@
     <File name="./Dialect/AbstractSqlDialect.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect/Expressions/IConditionalExpression.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect/Literals/BooleanLiteral.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Dialect/Sql99Dialect.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionSettingsService.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionPool" subtype="Directory" buildaction="Compile" />
     <File name="./ConnectionPool/IConnectionPool.cs" subtype="Code" buildaction="Compile" />

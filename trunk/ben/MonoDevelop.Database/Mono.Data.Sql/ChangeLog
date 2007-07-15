@@ -1,3 +1,9 @@
+2007-07-15  Ben Motmans <ben.motmans@gmail.com>
+
+	* Dialect/ISqlDialect.cs, Dialect/AbstractSqlDialect.cs: replaced QuoteChar and ParameterChar
+	properties with methods to allow more complex behavior
+	* Dialect/Sql99Dialect.cs: removed, all providers should implement their own unique dialect
+
 2007-07-14  Ben Motmans <ben.motmans@gmail.com>
 
 	* ConnectionPool/*.cs: connection pool implementation, this replaces the default ADO.net
