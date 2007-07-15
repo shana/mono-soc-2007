@@ -1,3 +1,8 @@
+2007-07-15  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlServerDialect.cs: dialect implementation with keyword detection
+	* SqlServerDbFactory.cs: use SqlServerDialect instead of the obsolete Sql99Dialect
+
 2007-07-14  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqlServerConnectionProvider.cs, SqlServerDbFactory.cs, SqlServerSchemaProvider.cs: small changes
