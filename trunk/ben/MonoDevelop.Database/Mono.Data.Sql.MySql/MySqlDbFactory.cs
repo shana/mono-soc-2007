@@ -45,7 +45,7 @@ namespace Mono.Data.Sql
 		public ISqlDialect Dialect {
 			get {
 				if (dialect == null)
-					dialect = new Sql99Dialect ("\"", "?");
+					dialect = new MySqlDialect ();
 				return dialect;
 			}
 		}
