@@ -1,5 +1,10 @@
 2007-07-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Compiler/GNUCompiler.cs: Implemented dependency tracking. Dependency
+	  tracking is treated as a side effect of compiling.
+
+2007-07-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Gui/CTextEditorExtension.cs, CBinding.addin.xml, CBinding.mdp,
 	  Makefile.am: Implemented a better formatting strategy (using a text
 	  editor extension). 
