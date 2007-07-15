@@ -146,7 +146,7 @@ namespace System.Messaging
 
 		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
 		[Browsable (false)]
-		public object Body {
+		public virtual object Body {
 			[MonoTODO]
 			get {throw new NotImplementedException();}
 			[MonoTODO]
@@ -187,7 +187,7 @@ namespace System.Messaging
 		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
 		[ReadOnly (true)]
 		[MessagingDescription ("MsgCorrelationId")]
-		public string CorrelationId {
+		public virtual string CorrelationId {
 			[MonoTODO]
 			get {throw new NotImplementedException();}
 			[MonoTODO]
@@ -263,7 +263,7 @@ namespace System.Messaging
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		[ReadOnly(true)]
 		[MessagingDescription("MsgId")]
-		public string Id {
+		public virtual string Id {
 			[MonoTODO]
 			get {throw new NotImplementedException();}
 		}
@@ -285,7 +285,7 @@ namespace System.Messaging
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		[ReadOnly(true)]
 		[MessagingDescription("MsgLabel")]
-		public string Label {
+		public virtual string Label {
 			[MonoTODO]
 			get {throw new NotImplementedException();}
 			[MonoTODO]
@@ -357,7 +357,7 @@ namespace System.Messaging
 		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
 		[ReadOnly (true)]
 		[MessagingDescription ("MsgSentTime")]
-		public DateTime SentTime {
+		public virtual DateTime SentTime {
 			[MonoTODO]
 			get {throw new NotImplementedException();}
 		}
