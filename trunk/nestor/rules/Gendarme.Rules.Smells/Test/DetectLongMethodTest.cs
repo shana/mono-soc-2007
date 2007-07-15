@@ -36,13 +36,595 @@ using NUnit.Framework;
 using Gendarme.Framework;
 using Gendarme.Rules.Smells;
 
+using Gtk;
+using System.Windows.Forms;
+
 namespace Test.Rules.Smells {
+
+	public class MainWidget : Gtk.Bin {
+		protected virtual void Build () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+
+		public void InitializeComponent () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+	}
+
+	public class MainDialog : Gtk.Dialog {
+		protected virtual void Build () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+
+		public void InitializeComponent () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+	}
+
+	public class MainWindow : Gtk.Window {
+		public MainWindow () : base ("Test") {}
+
+		protected virtual void Build () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+
+		public void InitializeComponent () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+
+	}
+
+	public class MainForm : Form {
+		public void InitializeComponent () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+		
+		protected virtual void Build () 
+		{
+			Console.WriteLine ("I'm writting a test, and I will fill a screen with some useless code");
+			IList list = new ArrayList ();
+			list.Add ("Foo");
+			list.Add (4);
+			list.Add (6);
+
+			IEnumerator listEnumerator = list.GetEnumerator ();
+			while (listEnumerator.MoveNext ())
+				Console.WriteLine (listEnumerator.Current);
+
+			try {
+				list.Add ("Bar");
+				list.Add ('a');
+			}
+			catch (NotSupportedException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			foreach (object value in list) {
+				Console.Write (value);
+				Console.Write (Environment.NewLine);
+			}
+			
+			int x = 0;
+
+			for (int i = 0; i < 100; i++)
+				x++;
+			Console.WriteLine (x);
+	
+			string useless = "Useless String";
+
+			if (useless.Equals ("Other useless")) {
+				useless = String.Empty;
+				Console.WriteLine ("Other useless string");
+			}
+			
+			useless = String.Concat (useless," 1");
+			
+			for (int j = 0; j < useless.Length; j++) {
+				if (useless[j] == 'u')
+					Console.WriteLine ("I have detected an u char");
+				else
+					Console.WriteLine ("I have detected an useless char");
+			}
+			
+			try {
+				foreach (string environmentVariable in Environment.GetEnvironmentVariables ().Keys)
+					Console.WriteLine (environmentVariable);
+			}
+			catch (System.Security.SecurityException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+
+			Console.WriteLine ("I will add more useless code !!");
+			
+			try {
+				if (!(File.Exists ("foo.txt"))) {
+					File.Create ("foo.txt");	
+					File.Delete ("foo.txt");
+				}
+			}
+			catch (IOException exception) {
+				Console.WriteLine (exception.Message);
+				Console.WriteLine (exception);
+			}
+		}
+	}
+
 	[TestFixture]
 	public class DetectLongMethodTest {
 		private IMethodRule rule;
 		private AssemblyDefinition assembly;
 		private MethodDefinition method;
-		private TypeDefinition type;
 		private MessageCollection messageCollection;
 
 		[TestFixtureSetUp]
@@ -50,7 +632,6 @@ namespace Test.Rules.Smells {
 		{
 			string unit = Assembly.GetExecutingAssembly ().Location;
 			assembly = AssemblyFactory.GetAssembly (unit);
-			type = assembly.MainModule.Types["Test.Rules.Smells.DetectLongMethodTest"];
 			rule = new DetectLongMethodRule ();
 			messageCollection = null;
 		}
@@ -286,9 +867,17 @@ namespace Test.Rules.Smells {
 
 		private MethodDefinition GetMethodForTest (string methodName) 
 		{
-			foreach (MethodDefinition method in type.Methods) {
+			return GetMethodForTestFrom ("Test.Rules.Smells.DetectLongMethodTest", methodName);
+		}
+
+		private MethodDefinition GetMethodForTestFrom (string fullTypeName, string methodName) 
+		{
+			TypeDefinition type =  assembly.MainModule.Types[fullTypeName];
+			if (type != null) {
+				foreach (MethodDefinition method in type.Methods) {
 				if (method.Name == methodName)
 					return method;
+				}
 			}
 			return null;
 		}
@@ -319,19 +908,90 @@ namespace Test.Rules.Smells {
 		}
 
 		[Test]
-		public void BuildMethodTest ()
+		public void FalseBuildMethodTest ()
 		{
 			method = GetMethodForTest ("Build");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+		
+		[Test]
+		public void WidgetBuildMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainWidget", "Build");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
 
 		[Test]
-		public void InitializeComponentTest () 
+		public void WidgetInitializeComponentMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainWidget", "InitializeComponent");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+
+		[Test]
+		public void DialogBuildMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainDialog", "Build");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void DialogInitializeComponentMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainDialog", "InitializeComponent");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void WindowBuildMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainWindow", "Build");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void WindowInitializeComponentMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainWindow", "InitializeComponent");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+	
+		[Test]
+		public void FalseInitializeComponentTest () 
 		{
 			method = GetMethodForTest ("InitializeComponent");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void FormInitializeComponentTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainForm", "InitializeComponent");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void FormBuildMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Smells.MainForm", "Build");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
 		}
 	}
 }
