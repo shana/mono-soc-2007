@@ -35,8 +35,8 @@ exceptions_test_sources = *.cs
 exceptions_test_build_sources = $(addprefix $(srcdir)/Test/, $(exceptions_test_sources))
 
 Test.Rules.Smells.dll: $(exceptions_rules_build_sources)
-	$(MCS) -target:library -pkg:mono-cecil -pkg:mono-nunit -r:../lib/Gendarme.Framework.dll \
-		-r:Gendarme.Rules.Smells.dll -out:$@ $(exceptions_test_build_sources)
+	$(MCS) -target:library -pkg:mono-cecil -pkg:mono-nunit -pkg:gtk-sharp -r:../lib/Gendarme.Framework.dll \
+		-r:Gendarme.Rules.Smells.dll -r:System.Windows.Forms.dll -out:$@ $(exceptions_test_build_sources)
 
 test: Gendarme.Rules.Smells.dll Test.Rules.Smells.dll
 
