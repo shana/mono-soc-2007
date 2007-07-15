@@ -7,8 +7,4 @@
     <itemgroups />
     <signals />
   </object>
-  <object type="MonoDevelop.Database.Components.ConnectionComboBox" palette-category="widget" allow-children="false" base-type="Gtk.ComboBox">
-    <itemgroups />
-    <signals />
-  </object>
 </objects>

@@ -94,6 +94,7 @@
     <ExportedWidgets>
       <Widget>MonoDevelop.Database.Components.ProjectDirectoryComboBox</Widget>
       <Widget>MonoDevelop.Database.Components.ColumnMappingWidget</Widget>
+      <Widget>MonoDevelop.Database.Components.ConnectionComboBox</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
 </Project>

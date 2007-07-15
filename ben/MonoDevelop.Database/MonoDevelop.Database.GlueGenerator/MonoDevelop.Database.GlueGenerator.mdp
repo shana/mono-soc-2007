@@ -1,13 +1,13 @@
 <Project name="MonoDevelop.Database.GlueGenerator" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" signAssembly="False" assembly="MonoDevelop.Database.GlueGenerator" />
+      <Output directory="./bin/Debug" assembly="MonoDevelop.Database.GlueGenerator" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" signAssembly="False" assembly="MonoDevelop.Database.GlueGenerator" />
+      <Output directory="./bin/Release" assembly="MonoDevelop.Database.GlueGenerator" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -15,12 +15,15 @@
   </Configurations>
   <Contents>
     <File name="./MonoDevelop.Database.GlueGenerator.addin.xml" subtype="Code" buildaction="FileCopy" />
-    <File name="./MyClass.cs" subtype="Code" buildaction="Compile" />
-    <File name="./GenerateGlueDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="./gtk-gui/MonoDevelop.Database.GlueGenerator.GenerateGlueDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs" subtype="Directory" buildaction="Compile" />
+    <File name="./Dialogs/GenerateObjectsDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.GlueGenerator.GenerateObjectsDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Commands" subtype="Directory" buildaction="Compile" />
+    <File name="./Commands/ToolCommands.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Templates" subtype="Directory" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -39,6 +42,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Query" />
   </References>
   <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
     <ExportedWidgets>

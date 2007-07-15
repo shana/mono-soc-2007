@@ -27,22 +27,11 @@
 			defaultHandler = "MonoDevelop.Database.Query.QueryHandler"
 			_label = "Query Database"
 			icon = "md-db-execute"/>
-		<Command id = "MonoDevelop.Database.Query.ToolCommands.GenerateDatabaseLayer"
-			defaultHandler = "MonoDevelop.Database.Query.GenerateDatabaseLayerHandler"
-			_label = "Generate Database Layer"
-			icon = "md-db-database"/>
-		<Command id = "MonoDevelop.Database.Query.ToolCommands.GenerateObjectLayer"
-			defaultHandler = "MonoDevelop.Database.Query.GenerateObjectLayerHandler"
-			_label = "Generate Object Layer"
-			icon = "md-db-database"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/MainMenu/Tools">
 		<SeparatorItem id = "DatabaseSeparator" insertafter = "MonoDevelop.Ide.Commands.ToolCommands.AddinManager" />
 		<ItemSet id = "Database" _label = "_Database">
-			<CommandItem id = "MonoDevelop.Database.Query.ToolCommands.GenerateDatabaseLayer" />
-			<CommandItem id = "MonoDevelop.Database.Query.ToolCommands.GenerateObjectLayer" />
-			<SeparatorItem id = "QuerySeparator" />
 			<CommandItem id = "MonoDevelop.Database.Query.ToolCommands.Query" />
 		</ItemSet>
 	</Extension>
