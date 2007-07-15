@@ -110,15 +110,8 @@ namespace CBinding
 				if (f.Subtype == Subtype.Directory) continue;
 				
 				if (f.BuildAction == BuildAction.Compile) {
-					bool compile = false;
-					string objectFile = Path.ChangeExtension (f.Name, ".o");
 					
-					if (!File.Exists (objectFile))
-						compile = true;
-					else if (File.GetLastWriteTime (objectFile) < File.GetLastWriteTime (f.Name))
-					    compile = true;
-					
-					if (compile)
+					if (NeedsCompiling (f))
 						res = DoCompilation (f, args.ToString (), packages, monitor, cr);
 				}
 				else
@@ -146,6 +139,87 @@ namespace CBinding
 			}
 			
 			return new DefaultCompilerResult (cr, "");
+		}
+		
+		private bool NeedsCompiling (ProjectFile file)
+		{
+			string objectFile = Path.ChangeExtension (file.Name, ".o");
+					
+			if (!File.Exists (objectFile))
+				return true;
+			
+			string[] dependedOnFiles = DependedOnFiles (file);
+			
+			if (dependedOnFiles == null) {
+				return true;
+			}
+			
+			DateTime lastObjectTime = File.GetLastWriteTime (objectFile);
+			
+			try {
+				foreach (string depfile in dependedOnFiles) {
+					if (File.GetLastWriteTime (depfile) > lastObjectTime) {
+						return true;
+					}
+				}
+			} catch (IOException e) {
+				// This means the dependency file is telling us our source file
+				// depends on a file that no longer exists, all this means is that 
+				// the dependency file is outdated. We should just ignore this
+				// since the dependency file will be automatically updated when
+				// the source file is compiled.
+				e.ToString (); // suppress warning.
+			}
+			
+			return false;
+		}
+		
+		/// <summary>
+		/// Returns an array of depended on files or null if the
+		/// file containing the depended on files (.d) does does not exist.
+		/// </summary>
+		private string[] DependedOnFiles (ProjectFile file)
+		{
+			List<string> dependencies = new List<string> ();
+			string dependenciesFile = Path.ChangeExtension (file.Name, ".d");
+			
+			if (!File.Exists (dependenciesFile))
+				return null;
+			
+			string temp;
+			StringBuilder output = new StringBuilder ();
+			
+			using (StreamReader reader = new StreamReader (dependenciesFile)) {
+				int numlines = 0;
+				while ((temp = reader.ReadLine ()) != null) {
+					output.Append (temp);
+					numlines++;
+				}
+				
+				if (numlines == 0) {
+					// If the dependencies file is empty, something is up
+					// so we better make sure the compiler thinks at least
+					// the source file is depended on (which it always is).
+					return new string[] { file.Name };
+				}
+			}
+			
+			string[] lines = output.ToString ().Split ('\\');
+			
+			for (int i = 0; i < lines.Length; i++) {
+				string[] files = lines[i].Split (' ');
+				// first line contains the rule (eg. file.o: dep1.c dep2.h ...) and we must skip it
+				for (int j = 0; j < files.Length; j++) {
+					if (j == 0) continue;
+					
+					string depfile = files[j].Trim ();
+					
+					if (!string.IsNullOrEmpty (depfile))
+						dependencies.Add (depfile);
+				}
+			}
+			
+			return dependencies.ToArray ();
 		}
 		
 		private void PrecompileHeaders (ProjectFileCollection projectFiles,
@@ -330,6 +404,7 @@ namespace CBinding
 		
 		/// <summary>
 		/// Compiles a single source file into object code
+		/// and creates a file with it's dependencies.
 		/// </summary>
 		private bool DoCompilation (ProjectFile file, string args,
 		                            ProjectPackageCollection packages,
@@ -339,7 +414,7 @@ namespace CBinding
 			string outputName = Path.ChangeExtension (file.Name, ".o");
 			string pkgargs = GeneratePkgCompilerArgs (packages);
 			
-			string command = String.Format("{0} {1} {2} -c -o {3} {4}",
+			string command = String.Format("{0} -MMD {1} {2} -c -o {3} {4}",
 			    compilerCommand, file.Name, args,outputName, pkgargs);
 			
 			monitor.Log.WriteLine ("using: " + command);
