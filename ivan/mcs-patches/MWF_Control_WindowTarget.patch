@@ -1,0 +1,109 @@
+Index: mcs/class/Managed.Windows.Forms/ChangeLog
+===================================================================
+--- mcs/class/Managed.Windows.Forms/ChangeLog	(revision 74016)
++++ mcs/class/Managed.Windows.Forms/ChangeLog	(working copy)
+@@ -1,3 +1,7 @@
++2007-03-10  Ivan N. Zlatev <contact@i-nz.net>
++
++	* System.Windows.Forms/Controls.cs: Implement Control.WindowTarget.
++
+ 2007-03-09  Rolf Bjarne Kvinge <RKvinge@novell.com> 
+ 
+ 	* System.Windows.Forms_test.dll.sources: Added FormHandleTest and MdiFormHandleTest.
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/Control.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/Control.cs	(revision 74016)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/Control.cs	(working copy)
+@@ -69,6 +69,7 @@
+ 		Rectangle               explicit_bounds; // explicitly set bounds
+ 		internal object			creator_thread;		// thread that created the control
+ 		internal                ControlNativeWindow	window;			// object for native window handle
++		private                 IWindowTarget window_target;
+ 		string                  name; // for object naming
+ 
+ 		// State
+@@ -166,6 +167,11 @@
+ 				}
+ 			}
+ 
++			protected override void OnHandleChange()
++			{
++				this.owner.WindowTarget.OnHandleChange(this.owner.Handle);
++			}
++
+ 			static internal Control ControlFromHandle(IntPtr hWnd) {
+ 				ControlNativeWindow	window;
+ 
+@@ -193,7 +199,26 @@
+ 			}
+ 
+ 			protected override void WndProc(ref Message m) {
+-				owner.WndProc(ref m);
++				owner.WindowTarget.OnMessage(ref m);
++			}
++		}
++
++		private class ControlWindowTarget : IWindowTarget
++		{
++			private Control control;
++
++			public ControlWindowTarget(Control control)
++			{
++				this.control = control;
++			}
++
++			public void OnHandleChange(IntPtr newHandle) 
++			{
++			}
++
++			public void OnMessage(ref Message m) 
++			{
++				control.WndProc(ref m);
+ 			}
+ 		}
+ 		#endregion
+@@ -970,6 +995,7 @@
+ 			text = string.Empty;
+ 			name = string.Empty;
+ 
++			window_target = new ControlWindowTarget(this);
+ 			window = new ControlNativeWindow(this);
+ 			child_controls = CreateControlsInstance();
+ 			client_size = new Size(DefaultSize.Width, DefaultSize.Height);
+@@ -2981,12 +3007,11 @@
+ 		[Browsable(false)]
+ 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+ 		public IWindowTarget WindowTarget {
+-			get {
+-				return null;
+-			}
+-
++			get { return window_target; }
+ 			set {
+-				;	// MS Internal
++				if (value != null) {
++					window_target = value;
++				}
+ 			}
+ 		}
+ 		#endregion	// Public Instance Properties
+Index: mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/ControlTest.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/ControlTest.cs	(revision 74016)
++++ mcs/class/Managed.Windows.Forms/Test/System.Windows.Forms/ControlTest.cs	(working copy)
+@@ -1001,6 +1001,15 @@
+ 		}
+ 
+ 		[Test]
++		public void WindowTargetTest()
++		{
++			Control c = new Control ();
++			Assert.IsNotNull (c.WindowTarget, "WindowTarget1");
++			c.WindowTarget = null;
++			Assert.IsNotNull (c.WindowTarget, "WindowTarget2");
++		}
++
++		[Test]
+ 		public void TextTest()
+ 		{
+ 			Control r1 = new Control();

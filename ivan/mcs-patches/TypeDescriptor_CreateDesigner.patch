@@ -1,0 +1,29 @@
+Index: mcs/class/System/ChangeLog
+===================================================================
+--- mcs/class/System/ChangeLog	(revision 74031)
++++ mcs/class/System/ChangeLog	(working copy)
+@@ -1,3 +1,8 @@
++2007-03-09  Ivan N. Zlatev <contact@i-nz.net>
++
++	* System.ComponentModel/TypeDescriptor.cs: Fix CreateDesigner to
++	search for nonpublic ctor.
++
+ 2007-02-27  Rolf Bjarne Kvinge  <RKvinge@novell.com>
+ 
+ 	* System_test.dll.sources: Added MaskedTextProviderTest.cs
+Index: mcs/class/System/System.ComponentModel/TypeDescriptor.cs
+===================================================================
+--- mcs/class/System/System.ComponentModel/TypeDescriptor.cs	(revision 74016)
++++ mcs/class/System/System.ComponentModel/TypeDescriptor.cs	(working copy)
+@@ -65,7 +65,10 @@
+ 		foreach (Attribute at in col) {
+ 			DesignerAttribute dat = at as DesignerAttribute;
+ 			if (dat != null && tn == dat.DesignerBaseTypeName) {
+-				return (IDesigner) Activator.CreateInstance (GetTypeFromName (component, dat.DesignerTypeName));
++				return (IDesigner) Activator.CreateInstance (GetTypeFromName (component, dat.DesignerTypeName),
++										BindingFlags.Public | BindingFlags.NonPublic | 
++										BindingFlags.Instance | BindingFlags.CreateInstance,
++										null, new object [0], null);
+ 			}
+ 		}
+ 				

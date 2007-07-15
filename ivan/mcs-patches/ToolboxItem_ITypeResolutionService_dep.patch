@@ -1,0 +1,47 @@
+Index: mcs/class/System.Drawing/System.Drawing.Design/ChangeLog
+===================================================================
+--- mcs/class/System.Drawing/System.Drawing.Design/ChangeLog	(revision 74258)
++++ mcs/class/System.Drawing/System.Drawing.Design/ChangeLog	(working copy)
+@@ -1,3 +1,8 @@
++2007-03-14  Ivan N. Zlatev  <contact@i-nz.net>
++
++	* ToolboxItem.cs: Fixed GetType not to be
++	dependant on ITypeResolutionService.
++
+ 2007-03-14  Sebastien Pouliot  <sebastien@ximian.com>
+ 
+ 	* ToolboxItem.cs: Normalize line endings.
+Index: mcs/class/System.Drawing/System.Drawing.Design/ToolboxItem.cs
+===================================================================
+--- mcs/class/System.Drawing/System.Drawing.Design/ToolboxItem.cs	(revision 74258)
++++ mcs/class/System.Drawing/System.Drawing.Design/ToolboxItem.cs	(working copy)
+@@ -251,15 +251,20 @@
+ 				return null;
+ 
+ 			//get ITypeResolutionService from host, as we have no other IServiceProvider here
+-			ITypeResolutionService typeRes = host.GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
+-			if (typeRes == null)
+-				throw new Exception("Host does not provide an ITypeResolutionService");
+-
+-			//TODO: Using Assembly loader to throw errors. Silent fail and return null?
+-			typeRes.GetAssembly(assemblyName, true);
+-			if (reference)
+-				typeRes.ReferenceAssembly(assemblyName);
+-			return typeRes.GetType(typeName, true);
++			ITypeResolutionService typeRes = host.GetService (typeof (ITypeResolutionService)) as ITypeResolutionService;
++			Type type = null;
++			if (typeRes != null) {
++				//TODO: Using Assembly loader to throw errors. Silent fail and return null?
++				typeRes.GetAssembly (assemblyName, true);
++					if (reference)
++						typeRes.ReferenceAssembly (assemblyName);
++				type = typeRes.GetType (typeName, true);
++			} else {
++				Assembly assembly = Assembly.Load (assemblyName);
++				if (assembly != null)
++					type = assembly.GetType (typeName);
++			}
++			return type;
+ 		}
+ 
+ 		// FIXME - Should we be returning empty bitmap, or null?

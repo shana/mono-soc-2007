@@ -1,0 +1,1020 @@
+Index: class/System/System.dll.sources
+===================================================================
+--- class/System/System.dll.sources	(revision 64786)
++++ class/System/System.dll.sources	(working copy)
+@@ -182,6 +182,7 @@
+ System.ComponentModel/ComponentResourceManager.cs
+ System.ComponentModel/Container.cs
+ System.ComponentModel/CultureInfoConverter.cs
++System.ComponentModel/CustomTypeDescriptor.cs
+ System.ComponentModel/DateTimeConverter.cs
+ System.ComponentModel/DecimalConverter.cs
+ System.ComponentModel/DefaultEventAttribute.cs
+@@ -355,12 +356,16 @@
+ System.ComponentModel/ToolboxItemFilterType.cs
+ System.ComponentModel/TypeConverterAttribute.cs
+ System.ComponentModel/TypeConverter.cs
++System.ComponentModel/TypeDescriptionProvider.cs
++System.ComponentModel/TypeDescriptionProviderAttribute.cs
+ System.ComponentModel/TypeDescriptor.cs
+ System.ComponentModel/TypeListConverter.cs
+ System.ComponentModel/UInt16Converter.cs
+ System.ComponentModel/UInt32Converter.cs
+ System.ComponentModel/UInt64Converter.cs
+ System.ComponentModel/WarningException.cs
++System.ComponentModel/WeakReferenceArrayList.cs
++System.ComponentModel/WeakReferenceHashtable.cs
+ System.ComponentModel/Win32Exception.cs
+ System.Configuration/ApplicationScopedSettingAttribute.cs
+ System.Configuration/ApplicationSettingsBase.cs
+
+Index: class/System/Test/System.ComponentModel/TypeDescriptorTests.cs
+===================================================================
+--- class/System/Test/System.ComponentModel/TypeDescriptorTests.cs	(revision 64786)
++++ class/System/Test/System.ComponentModel/TypeDescriptorTests.cs	(working copy)
+@@ -3,9 +3,12 @@
+ //
+ // Authors:
+ // 	Lluis Sanchez Gual (lluis@ximian.com)
++//  Ivan N. Zlatev (contact i-nZ.net)
+ //
+ // (c) 2004 Novell, Inc. (http://www.ximian.com)
++// (c) 2006 Ivan N. Zlatev
+ //
++
+ using NUnit.Framework;
+ using System;
+ using System.Collections;
+@@ -517,6 +520,35 @@
+ 			AssertEquals ("#1", 1, pc.Count);
+ 			AssertEquals ("#2", "Length", pc [0].Name);
+ 		}
++
++#if NET_2_0
++		[Test]
++		public void TestAssociations ()
++		{
++			MyComponent x = new MyComponent ();
++			ArrayList y = new ArrayList ();
++			Hashtable z = new Hashtable ();
++
++			object association = null;
++			
++			association = TypeDescriptor.GetAssociation (y.GetType (), x);
++			AssertEquals ("#1", association, x);
++
++			TypeDescriptor.CreateAssociation (y, z);
++			TypeDescriptor.CreateAssociation (x, y);
++			TypeDescriptor.CreateAssociation (x, y);			
++			TypeDescriptor.CreateAssociation (x, z);
++			AssertEquals ("#2", TypeDescriptor.GetAssociation (y.GetType (), x), y);
++			AssertEquals ("#3", TypeDescriptor.GetAssociation (z.GetType (), x), z);
++			AssertEquals ("#4", TypeDescriptor.GetAssociation (z.GetType (), y), z);
++			TypeDescriptor.RemoveAssociations (y);
++			AssertEquals ("#5", TypeDescriptor.GetAssociation (z.GetType (), y), y);
++			TypeDescriptor.RemoveAssociation (x, z);
++			AssertEquals ("#6", TypeDescriptor.GetAssociation (z.GetType (), x), x);
++				
++		}
++#endif
++		
+ 	}
+ }
+ 
+Index: class/System/System.ComponentModel/CustomTypeDescriptor.cs
+===================================================================
+--- class/System/System.ComponentModel/CustomTypeDescriptor.cs	(revision 0)
++++ class/System/System.ComponentModel/CustomTypeDescriptor.cs	(revision 0)
+@@ -0,0 +1,176 @@
++//
++// System.ComponentModel.CustomTypeDescriptor
++//
++// Authors:		
++//		Ivan N. Zlatev (contact i-nZ.net)
++//
++// (C) 2006 Ivan N. Zlatev
++
++//
++// Permission is hereby granted, free of charge, to any person obtaining
++// a copy of this software and associated documentation files (the
++// "Software"), to deal in the Software without restriction, including
++// without limitation the rights to use, copy, modify, merge, publish,
++// distribute, sublicense, and/or sell copies of the Software, and to
++// permit persons to whom the Software is furnished to do so, subject to
++// the following conditions:
++// 
++// The above copyright notice and this permission notice shall be
++// included in all copies or substantial portions of the Software.
++// 
++// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++//
++
++#if NET_2_0
++
++using System;
++
++namespace System.ComponentModel
++{
++
++	public abstract class CustomTypeDescriptor : ICustomTypeDescriptor
++	{
++
++		private ICustomTypeDescriptor _parent;
++		
++		protected CustomTypeDescriptor ()
++		{
++		}
++
++		
++		protected CustomTypeDescriptor (ICustomTypeDescriptor parent)
++		{
++			_parent = parent;
++		}
++
++
++		public virtual AttributeCollection GetAttributes ()
++		{
++			if (_parent != null) {
++				return _parent.GetAttributes ();
++			}
++
++			return AttributeCollection.Empty;
++		}
++
++
++		public virtual string GetClassName ()
++		{
++			if (_parent != null) {
++				return _parent.GetClassName ();
++			}
++
++			return null;
++		}
++
++
++		public virtual string GetComponentName ()
++		{
++			if (_parent != null) {
++				return _parent.GetComponentName ();
++			}
++
++			return null;
++		}
++
++
++		public virtual TypeConverter GetConverter ()
++		{
++			if (_parent != null) {
++				return _parent.GetConverter ();
++			}
++
++			return new TypeConverter();
++		}
++
++
++		public virtual EventDescriptor GetDefaultEvent()
++		{
++			if (_parent != null) {
++					return _parent.GetDefaultEvent ();
++			}
++			
++			return null;
++		}
++
++
++		public virtual PropertyDescriptor GetDefaultProperty ()
++		{
++			if (_parent != null) {
++				return _parent.GetDefaultProperty ();
++			}
++			
++			return null;
++		}
++
++		
++		public virtual object GetEditor (Type editorBaseType)
++		{
++			if (_parent != null) {
++				return _parent.GetEditor (editorBaseType);
++			}
++
++			return null;
++		}
++
++
++		public virtual EventDescriptorCollection GetEvents ()
++		{
++			if (_parent != null) {
++				return _parent.GetEvents ();
++			}
++			
++			return EventDescriptorCollection.Empty;
++		}
++
++ 
++		public virtual EventDescriptorCollection GetEvents (Attribute[] attributes)
++		{
++			if (_parent != null) {
++				return _parent.GetEvents(attributes);
++			}
++			
++			return EventDescriptorCollection.Empty;
++		}
++
++ 
++		public virtual PropertyDescriptorCollection GetProperties ()
++		{
++			if (_parent != null) {
++				return _parent.GetProperties ();
++			}
++			
++			return PropertyDescriptorCollection.Empty;
++		}
++
++		
++		public virtual PropertyDescriptorCollection GetProperties (Attribute[] attributes)
++		{
++			if (_parent != null) {
++				return _parent.GetProperties (attributes);
++			}
++			
++			return PropertyDescriptorCollection.Empty;
++		}
++
++
++		public virtual object GetPropertyOwner (PropertyDescriptor pd)
++		{
++			if (_parent != null) {
++				return _parent.GetPropertyOwner (pd);
++			}
++			
++			return null;
++		}
++		
++	}
++	
++}
++
++#endif
+Index: class/System/System.ComponentModel/TypeDescriptionProvider.cs
+===================================================================
+--- class/System/System.ComponentModel/TypeDescriptionProvider.cs	(revision 0)
++++ class/System/System.ComponentModel/TypeDescriptionProvider.cs	(revision 0)
+@@ -0,0 +1,158 @@
++//
++// System.ComponentModel.TypeDescriptionProvider
++//
++// Authors:		
++//		Ivan N. Zlatev (contact i-nZ.net)
++//
++// (C) 2006 Ivan N. Zlatev
++
++//
++// Permission is hereby granted, free of charge, to any person obtaining
++// a copy of this software and associated documentation files (the
++// "Software"), to deal in the Software without restriction, including
++// without limitation the rights to use, copy, modify, merge, publish,
++// distribute, sublicense, and/or sell copies of the Software, and to
++// permit persons to whom the Software is furnished to do so, subject to
++// the following conditions:
++// 
++// The above copyright notice and this permission notice shall be
++// included in all copies or substantial portions of the Software.
++// 
++// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++//
++
++#if NET_2_0
++
++using System;
++using System.Collections;
++
++namespace System.ComponentModel
++{
++
++	public abstract class TypeDescriptionProvider
++	{
++
++		private sealed class EmptyCustomTypeDescriptor : CustomTypeDescriptor {}
++
++		private EmptyCustomTypeDescriptor _emptyCustomTypeDescriptor;
++		private TypeDescriptionProvider _parent;
++		
++		protected TypeDescriptionProvider ()
++		{
++		}
++		
++		protected TypeDescriptionProvider (TypeDescriptionProvider parent)
++		{
++			_parent = parent;
++		}
++
++		public virtual object CreateInstance (IServiceProvider provider, Type objectType, Type[] argTypes, object[] args)
++		{
++			if (_parent != null) {
++				return _parent.CreateInstance (provider, objectType, argTypes, args);
++			}
++			
++			return System.Activator.CreateInstance (objectType, args);
++		}
++
++
++		public virtual IDictionary GetCache (object instance)
++		{
++			if (_parent != null) {
++				return _parent.GetCache (instance);
++			}
++
++			return null;
++		}
++
++		
++		public virtual ICustomTypeDescriptor GetExtendedTypeDescriptor (object instance)
++		{
++			if (_parent != null) {
++				return _parent.GetExtendedTypeDescriptor (instance);
++			}
++
++			if (_emptyCustomTypeDescriptor == null) {
++				_emptyCustomTypeDescriptor = new EmptyCustomTypeDescriptor ();
++			}
++						
++			return _emptyCustomTypeDescriptor;
++		}
++
++		
++		public virtual string GetFullComponentName (object component)
++		{
++			if (_parent != null) {
++				return _parent.GetFullComponentName (component);
++			}
++
++			return GetTypeDescriptor (component).GetComponentName ();
++		}
++
++		
++		public Type GetReflectionType (object instance)
++		{
++			if (instance == null) {
++				throw new ArgumentNullException ("instance");
++			}
++
++			return GetReflectionType (instance.GetType (), instance);
++		}
++
++		
++		public Type GetReflectionType (Type objectType)
++		{
++			return GetReflectionType (objectType, null);
++		}
++
++
++		public virtual Type GetReflectionType (Type objectType, object instance)
++		{
++			if (_parent != null) {
++				return _parent.GetReflectionType (objectType, instance);
++			}
++
++			return objectType;
++		}
++
++		
++		public ICustomTypeDescriptor GetTypeDescriptor (object instance)
++		{
++			if (instance == null) {
++				throw new ArgumentNullException ("instance");
++			}
++
++			return GetTypeDescriptor (instance.GetType (), instance);
++		}
++
++		
++		public ICustomTypeDescriptor GetTypeDescriptor (Type objectType)
++		{
++			return GetTypeDescriptor (objectType, null);
++		}
++
++		
++		public virtual ICustomTypeDescriptor GetTypeDescriptor (Type objectType, object instance)
++		{
++			if (_parent != null) {
++				_parent.GetTypeDescriptor (objectType, instance);
++			}
++
++			if (_emptyCustomTypeDescriptor == null) {
++				_emptyCustomTypeDescriptor = new EmptyCustomTypeDescriptor ();
++			}
++			
++			return _emptyCustomTypeDescriptor;
++		}
++
++	}
++
++}
++
++#endif
+Index: class/System/System.ComponentModel/TypeDescriptionProviderAttribute.cs
+===================================================================
+--- class/System/System.ComponentModel/TypeDescriptionProviderAttribute.cs	(revision 0)
++++ class/System/System.ComponentModel/TypeDescriptionProviderAttribute.cs	(revision 0)
+@@ -0,0 +1,68 @@
++//
++// System.ComponentModel.TypeDescriptionProviderAttribute
++//
++// Authors:		
++//		Ivan N. Zlatev (contact i-nZ.net)
++//
++// (C) 2006 Ivan N. Zlatev
++
++//
++// Permission is hereby granted, free of charge, to any person obtaining
++// a copy of this software and associated documentation files (the
++// "Software"), to deal in the Software without restriction, including
++// without limitation the rights to use, copy, modify, merge, publish,
++// distribute, sublicense, and/or sell copies of the Software, and to
++// permit persons to whom the Software is furnished to do so, subject to
++// the following conditions:
++// 
++// The above copyright notice and this permission notice shall be
++// included in all copies or substantial portions of the Software.
++// 
++// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++//
++
++#if NET_2_0
++
++namespace System.ComponentModel
++{
++	
++	[AttributeUsage(AttributeTargets.Class, Inherited=true)]
++	public sealed class TypeDescriptionProviderAttribute : Attribute
++	{
++	
++		private string _typeName;
++
++		
++		public string TypeName
++		{
++			get { return _typeName; }
++		}
++
++		
++		public TypeDescriptionProviderAttribute(string typeName)
++		{
++			if (typeName == null) {
++				throw new System.ArgumentNullException ("typeName");
++			}
++			_typeName = typeName;
++		}
++		
++		
++		public TypeDescriptionProviderAttribute(Type type)
++		{
++			if (type == null) {
++				throw new System.ArgumentNullException ("type");
++			}
++			_typeName = type.AssemblyQualifiedName;
++		}
++		
++	}
++
++}
++#endif
+Index: class/System/System.ComponentModel/ChangeLog
+===================================================================
+--- class/System/System.ComponentModel/ChangeLog	(revision 64914)
++++ class/System/System.ComponentModel/ChangeLog	(working copy)
+@@ -1,3 +1,11 @@
++2006-09-05  Ivan N. Zlatev  <contact@i-nz.net>
++
++	* TypeDescriptor.cs: Implemented Associations.
++	* TypeDescriptor.cs: GetAttributes ignores overriden attributes.
++	* TypeDescriptionProvider.cs: Implemented.
++	* TypeDescriptionProviderAttribute: Implemented.
++	* CustomTypeDescriptor.cs: Implemented.
++	
+ 2006-08-20  Gert Driesen  <drieseng@users.sourceforge.net>
+ 
+ 	* InvalidEnumArgumentException.cs: Beautify error message.
+Index: class/System/System.ComponentModel/WeakReferenceHashtable.cs
+===================================================================
+--- class/System/System.ComponentModel/WeakReferenceHashtable.cs	(revision 0)
++++ class/System/System.ComponentModel/WeakReferenceHashtable.cs	(revision 0)
+@@ -0,0 +1,148 @@
++//
++// System.ComponentModel.WeakReferenceHashtable
++//
++// Authors:		
++//		Ivan N. Zlatev (contact i-nZ.net)
++//
++// (C) 2006 Ivan N. Zlatev
++
++//
++// Permission is hereby granted, free of charge, to any person obtaining
++// a copy of this software and associated documentation files (the
++// "Software"), to deal in the Software without restriction, including
++// without limitation the rights to use, copy, modify, merge, publish,
++// distribute, sublicense, and/or sell copies of the Software, and to
++// permit persons to whom the Software is furnished to do so, subject to
++// the following conditions:
++// 
++// The above copyright notice and this permission notice shall be
++// included in all copies or substantial portions of the Software.
++// 
++// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++//
++
++#if NET_2_0
++
++using System;
++using System.Collections;
++
++namespace System.ComponentModel
++{
++
++	// A hashtable, where the key is stored by weakreference
++	//
++	// FIXME: Since objects are added by weakreference, some of them will get
++	// collected. May be we should clean up all of the dead weakreference entries?
++	//
++	// The current implementation will overwrite dead weakreferenced keys when adding new.
++	//
++	internal sealed class WeakReferenceHashtable : Hashtable
++	{
++		
++#region HashableWeakReference
++		// A weakreference that stores the "real" object's hashcode at initialization
++		// Comparing the weakreference to the real object will return true*, but still
++		// object.ReferenceEquals will be false.
++		//
++		private class HashableWeakReference : WeakReference
++		{
++			
++			private int hash_code;
++
++			public HashableWeakReference (object obj) : base (obj)
++			{
++				if (obj == null) {
++					throw new ArgumentNullException ("obj");
++				}
++				
++				hash_code = obj.GetHashCode ();
++			}
++
++			public override int GetHashCode ()
++			{
++				return hash_code;
++			}
++		
++			public override bool Equals (object o)
++			{
++				if (o == null || !this.IsAlive) {
++					return false;
++				}
++
++				if (o is WeakReference) {
++					return ((WeakReference) o).Target == this.Target;
++				}
++				
++				return base.Equals (o);
++			}
++		}
++#endregion
++
++#region WeakRefEqualityComparer
++		private class WeakRefEqualityComparer : IEqualityComparer
++		{
++
++			bool IEqualityComparer.Equals (object a, object b)
++			{
++				if (a.GetHashCode () != b.GetHashCode ()) {
++					return false;
++				}
++
++				WeakReference x = a as WeakReference;
++				WeakReference y = b as WeakReference;
++
++				if (x != null && x.IsAlive) a = x.Target;						
++				if (y != null && y.IsAlive) b = y.Target;				
++				return (a == b);
++			}
++
++
++			int IEqualityComparer.GetHashCode (object obj)
++			{
++				return obj.GetHashCode();
++			}
++
++		}
++#endregion
++
++		
++		private static WeakRefEqualityComparer wref_eqcomparer = new WeakRefEqualityComparer ();
++		
++		public WeakReferenceHashtable () : base (wref_eqcomparer)
++		{
++		}
++		
++		public override void Add (object key, object value)
++		{
++			WeakReference wref = (WeakReference) this [key];
++			
++			// Check if the slot is occupied by a dead wref
++			// If it is replace it with the new key-value pair
++			//
++			if (wref != null && !wref.IsAlive) {
++				this [key] = value;
++			}
++			else {
++				base.Add (new HashableWeakReference (key), value);
++			}
++		}
++
++		public override object this[object key]
++		{
++			get {
++				return base [key];
++			}
++			set {
++				base [new HashableWeakReference (key)] = value;
++			}
++		}
++
++	}
++}
++#endif
+Index: class/System/System.ComponentModel/WeakReferenceArrayList.cs
+===================================================================
+--- class/System/System.ComponentModel/WeakReferenceArrayList.cs	(revision 0)
++++ class/System/System.ComponentModel/WeakReferenceArrayList.cs	(revision 0)
+@@ -0,0 +1,146 @@
++//
++// System.ComponentModel.WeakReferenceArrayList
++//
++// Authors:		
++//		Ivan N. Zlatev (contact i-nZ.net)
++//
++// (C) 2006 Ivan N. Zlatev
++
++//
++// Permission is hereby granted, free of charge, to any person obtaining
++// a copy of this software and associated documentation files (the
++// "Software"), to deal in the Software without restriction, including
++// without limitation the rights to use, copy, modify, merge, publish,
++// distribute, sublicense, and/or sell copies of the Software, and to
++// permit persons to whom the Software is furnished to do so, subject to
++// the following conditions:
++// 
++// The above copyright notice and this permission notice shall be
++// included in all copies or substantial portions of the Software.
++// 
++// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++//
++
++#if NET_2_0
++
++using System;
++using System.Collections;
++
++namespace System.ComponentModel
++{
++	// An array list, where the items are stored internally by weakreferences
++	//
++	// FIXME: Since objects are added by weakreference, some of them will get
++	// collected. May be we should clean up all of the dead weakreference entries?
++	//
++	internal sealed class WeakReferenceArrayList : ArrayList
++	{
++		
++#region HashableWeakReference
++		// A weakreference that stores the "real" object's hashcode at initialization
++		//
++		//
++		// A cleanup of the weakreferenced objects can be performed explictly by calling CleanUp.
++		// The current implementation will overwrite dead weakreferenced objects when adding new.
++		//
++		internal sealed class HashableWeakReference : WeakReference
++		{
++			
++			private int hash_code;
++
++			public HashableWeakReference (object obj) : base (obj)
++			{
++				if (obj == null) {
++					throw new ArgumentNullException ("obj");
++				}
++				
++				hash_code = obj.GetHashCode ();
++			}
++
++			public override int GetHashCode ()
++			{
++				return hash_code;
++			}
++		
++			public override bool Equals (object o)
++			{
++				if (o == null || !this.IsAlive) {
++					return false;
++				}
++
++				if (o is WeakReference) {
++					return ((WeakReference) o).Target == this.Target;
++				}
++				
++				return base.Equals (o);
++			}
++			
++		}
++#endregion
++	
++		public WeakReferenceArrayList ()
++		{
++		}
++		
++		public override int Add (object value)
++		{
++			return base.Add (new HashableWeakReference (value));
++		}
++
++		public override void AddRange (ICollection c)
++		{
++			foreach (object o in c) {
++				this.Add (o);
++			}
++		}
++		
++		public override void Insert (int index, object value)
++		{
++			base.Insert (index, new HashableWeakReference (value));
++		}
++				
++		public override object this[int index]
++		{
++			get {
++				return ((WeakReference) base[index]).Target;
++			}
++			set {
++				base [index] = new HashableWeakReference (value);
++			}
++		}
++
++		public override void Remove (object value)
++		{
++			int index = this.IndexOf (value);
++			
++			if (index != -1) {
++				RemoveAt (index);
++			}
++		}
++
++		public override bool Contains (object value)
++		{
++			return this.IndexOf (value) != -1;
++		}
++		
++		public override int IndexOf (object value)
++		{
++			int index = -1;
++			
++			for (int i = 0; i < this.Count; i++) {
++				if (this[i].Equals (value)) {
++					index = i;
++					break;
++				}
++			}
++			return index;
++		}		
++	}
++}
++#endif
+Index: class/System/System.ComponentModel/TypeDescriptor.cs
+===================================================================
+--- class/System/System.ComponentModel/TypeDescriptor.cs	(revision 65014)
++++ class/System/System.ComponentModel/TypeDescriptor.cs	(working copy)
+@@ -46,12 +46,178 @@
+ 	private static IComNativeDescriptorHandler descriptorHandler;
+ 	private static Hashtable componentTable = new Hashtable ();
+ 	private static Hashtable typeTable = new Hashtable ();
+-
++#if NET_2_0
++	private static WeakReferenceHashtable association_table;
++#endif
++	
+ 	private TypeDescriptor ()
+ 	{
+ 	}
+ 
++#if NET_2_0
++
++	static TypeDescriptor ()
++	{
++		association_table = new WeakReferenceHashtable ();
++	}
++
++	public static void AddProvider (TypeDescriptionProvider provider, Object instance)
++	{		
++		throw new NotImplementedException ();
++	}
++	
+ 	[MonoTODO]
++	public static void AddProvider (TypeDescriptionProvider provider, Type type)
++	{
++		throw new NotImplementedException ();
++	}
++	
++	[MonoTODO]
++	public static void RemoveProvider (TypeDescriptionProvider provider, Object instance)
++	{
++		throw new NotImplementedException ();
++	}
++	
++	[MonoTODO]
++	public static void RemoveProvider (TypeDescriptionProvider provider, Type type)
++	{
++		throw new NotImplementedException ();
++	}
++	
++	[MonoTODO]
++	public static string GetFullComponentName (Object component)
++	{
++		throw new NotImplementedException ();
++	}
++	
++	// MSDN2 says associations are kept as weakreferences,
++	// Take a look at WeakReferenceHashtable.cs
++	//
++	public static void CreateAssociation (object primary, object secondary)
++	{
++		if (primary == null) {
++			throw new ArgumentNullException ("primary");
++		}
++		if (secondary == null) {
++			throw new ArgumentNullException ("secondary");
++		}
++		if (primary == secondary) {
++			throw new ArgumentException ("primary == secondary");
++		}
++	
++		lock (association_table) {
++			ArrayList associations = association_table[primary] as ArrayList;
++			//	
++			// not associated yet? -> associate it
++			//
++			if (associations == null) {
++				associations = new WeakReferenceArrayList ();
++				association_table[primary] = associations;
++			}
++			associations.Add (secondary);
++		}
++	}
++	
++	// Tries to retrieve an association, if it can't tries to get a designer.
++	// If both fail then it just returns the primary object.
++	// Should never return null.
++	//
++	public static object GetAssociation (Type type, object primary)
++	{
++		if (type == null) {
++			throw new ArgumentNullException ("type");
++		}
++		if (primary == null) {
++			throw new ArgumentNullException ("primary");
++		}
++		
++		object result = primary;
++		lock (association_table) {
++			ArrayList associations = association_table[primary] as ArrayList;
++			if (associations != null) {
++				foreach (object o in associations) {
++					if (type.IsInstanceOfType (o)) {
++						result = o;
++					}
++				}
++			}
++		}
++	
++		// Try to get a designer:
++		// 1) Get the IDesignerHost service by using the Component.Site, which is an IServiceProvider
++		// 2) Use the IDesignerHost.GetDesigner to get the designer of the component
++		// 3) Check if it is of the desired association type
++		//
++		if (result == primary) {
++			IComponent component = primary as IComponent;
++			if (component != null && component.Site != null && component.Site.DesignMode) {
++				IDesignerHost host = component.Site.GetService (typeof (IDesignerHost)) as IDesignerHost;
++				if (host != null) {
++					object designer = host.GetDesigner (component);
++					if (designer != null && type.IsInstanceOfType (designer)) {
++						result = designer;
++					}
++				}
++			}
++		}
++	
++		return result;
++	}
++	
++	
++	public static void RemoveAssociations (object primary)
++	{
++		lock (association_table) {
++			association_table.Remove (primary);
++		}
++	}
++	
++	
++	public static void RemoveAssociation (object primary, object secondary)
++	{
++		lock (association_table) {
++			ArrayList associations = association_table[primary] as ArrayList;
++			if (associations != null) {
++				associations.Remove (secondary);
++			}			
++		}
++	}
++	
++	
++	
++	[MonoTODO]
++	public static object CreateInstance (IServiceProvider provider, Type objectType, Type[] argTypes, object[] args)
++	{
++		object result = null;
++	
++		if (objectType == null) {
++			throw new ArgumentNullException ("objectType");
++		}
++		if (args == null) {
++			throw new ArgumentNullException ("args");
++		}
++		if (argTypes.Length != args.Length) {
++			throw new ArgumentException ("argTypes.Length != args.Length");
++		}
++	
++		if (provider != null) {
++			TypeDescriptionProvider typeDProv = provider.GetService (typeof (TypeDescriptionProvider)) as TypeDescriptionProvider;
++			if (typeDProv != null) {
++				result = typeDProv.CreateInstance (provider, objectType, argTypes, args);
++			}
++		}
++		else {
++	
++			// TODO TODO TODO: Implement type providers
++			throw new System.NotImplementedException ();
++		}
++	
++		return result;
++	}
++#endif
++
++
++	[MonoTODO]
+ 	public static void AddEditorTable (Type editorBaseType, Hashtable table)
+ 	{
+ 		throw new NotImplementedException ();
+@@ -705,8 +871,13 @@
+ 			bool cache = true;
+ 			object[] ats = _infoType.GetCustomAttributes (true);
+ 			Hashtable t = new Hashtable ();
+-			foreach (Attribute at in ats)
+-				t [at.TypeId] = at;
++			
++			// Filter the custom attributes, so that only the top
++			// level of the same type are left.
++			//
++			for (int i = ats.Length -1; i >= 0; i--) {
++				t [((Attribute) ats[i]).TypeId] = ats[i];
++			}
+ 					
+ 			if (comp != null && comp.Site != null) 
+ 			{
