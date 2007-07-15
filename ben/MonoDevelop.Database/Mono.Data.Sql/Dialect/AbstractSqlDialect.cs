@@ -32,9 +32,9 @@ namespace Mono.Data.Sql
 {
 	public abstract class AbstractSqlDialect : ISqlDialect
 	{
-		public abstract string QuoteChar { get; }
+		public abstract string QuoteIdentifier (string identifier);
 		
-		public abstract string ParameterChar { get; }
+		public abstract string MarkAsParameter (string identifier);
 		
 		public virtual string GetSql (IStatement statement)
 		{
@@ -396,10 +396,7 @@ namespace Mono.Data.Sql
 		
 		protected virtual string GetIdentifierName (string identifier)
 		{
-			//TODO: other reasons to use quoted identifiers (keyword, ...)
-			if (identifier.Contains (" "))
-				return String.Concat (QuoteChar, identifier, QuoteChar);
-			return identifier;
+			return QuoteIdentifier (identifier);
 		}
 		
 		protected virtual string GetExpressionSql (BooleanExpression expr)
@@ -418,7 +415,7 @@ namespace Mono.Data.Sql
 		
 		protected virtual string GetExpressionSql (ParameterExpression expr)
 		{
-			return String.Concat (ParameterChar, expr.Name);
+			return MarkAsParameter (expr.Name);
 		}
 		
 		protected virtual string GetOperatorSql (Operator op)

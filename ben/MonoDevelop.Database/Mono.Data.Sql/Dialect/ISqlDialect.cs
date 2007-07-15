@@ -32,11 +32,9 @@ namespace Mono.Data.Sql
 	public interface ISqlDialect
 	{
 		//TODO: method for checking if the statement/clause/... is supported
-		//TODO: do we need support for a seperate prefix and postfix, like [xxx] for SqlServer ?
-		//or do all servers support '"'
-		string QuoteChar { get; }
+		string QuoteIdentifier (string identifier);
 		
-		string ParameterChar { get; }
+		string MarkAsParameter (string identifier);
 		
 		string GetSql (IStatement statement);
 		
