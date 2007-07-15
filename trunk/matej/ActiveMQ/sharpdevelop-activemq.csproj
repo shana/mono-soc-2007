@@ -1,0 +1,724 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{08321F42-4B3D-4815-B592-95962BAC3B9F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ActiveMQ</RootNamespace>
+    <AssemblyName>activemq</AssemblyName>
+    <WarningLevel>4</WarningLevel>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>activemq-dotnet.snk</AssemblyOriginatorKeyFile>
+    <RunCodeAnalysis>False</RunCodeAnalysis>
+    <DelaySign>False</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BrokerException.cs" />
+    <Compile Include="Commands\ActiveMQBytesMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQDestination.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQMapMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQObjectMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQQueue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQStreamMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQTempDestination.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQTempQueue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQTempTopic.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQTextMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ActiveMQTopic.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\BaseCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\BaseDataStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\BooleanExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\BrokerError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\BrokerId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\BrokerInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\Command.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ConnectionControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ConnectionError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ConnectionId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ConnectionInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ConsumerControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ConsumerId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ConsumerInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ControlCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\DataArrayResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\DataResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\DataStructure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\DataStructureSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\DestinationInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\DiscoveryEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ExceptionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\FlushCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\IntegerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\JournalQueueAck.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\JournalTopicAck.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\JournalTrace.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\JournalTransaction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\KeepAliveInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\LastPartialCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\LocalTransactionId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MarshallAware.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\Message.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MessageAck.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MessageDispatch.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MessageDispatchNotification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MessageId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MessagePull.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\MessageReference.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\NetworkBridgeFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\PartialCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ProducerId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ProducerInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RemoveInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RemoveSubscriptionInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ReplayCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\Response.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\SessionId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\SessionInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ShutdownInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\SubscriptionInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\TransactionId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\TransactionInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\WireFormatInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\XATransactionId.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\Xid.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Connection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionClosedException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConnectionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConsumerClosedException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DestinationFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dispatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DispatchingThread.cs" />
+    <Compile Include="ISynchronization.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITrace.cs" />
+    <Compile Include="MessageConsumer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageProducer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\BaseDataStreamMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\BooleanStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\EndianSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\IMarshallerFactory.cs" />
+    <Compile Include="OpenWire\MessagePropertyHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\OpenWireBinaryReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\OpenWireBinaryWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\OpenWireFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\PrimitiveMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQBytesMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQDestinationMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQMapMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQObjectMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQQueueMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQStreamMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQTempDestinationMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQTempQueueMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQTempTopicMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQTextMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ActiveMQTopicMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\BaseCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\BrokerIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\BrokerInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ConnectionControlMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ConnectionErrorMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ConnectionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ConnectionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ConsumerControlMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ConsumerIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ConsumerInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ControlCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\DataArrayResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\DataResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\DataStructureSupportMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\DestinationInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\DiscoveryEventMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ExceptionResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\FlushCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\IntegerResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\JournalQueueAckMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\JournalTopicAckMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\JournalTraceMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\JournalTransactionMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\KeepAliveInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\LastPartialCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\LocalTransactionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\MarshallerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\MessageAckMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\MessageDispatchMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\MessageDispatchNotificationMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\MessageIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\MessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\NetworkBridgeFilterMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\PartialCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ProducerIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ProducerInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\RemoveInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\RemoveSubscriptionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ReplayCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\SessionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\SessionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\ShutdownInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\SubscriptionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\TransactionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\TransactionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\WireFormatInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V1\XATransactionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQBytesMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQDestinationMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQMapMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQObjectMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQQueueMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQStreamMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQTempDestinationMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQTempQueueMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQTempTopicMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQTextMessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ActiveMQTopicMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\BaseCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\BrokerIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\BrokerInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ConnectionControlMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ConnectionErrorMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ConnectionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ConnectionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ConsumerControlMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ConsumerIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ConsumerInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ControlCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\DataArrayResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\DataResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\DestinationInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\DiscoveryEventMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ExceptionResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\FlushCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\IntegerResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\JournalQueueAckMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\JournalTopicAckMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\JournalTraceMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\JournalTransactionMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\KeepAliveInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\LastPartialCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\LocalTransactionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\MarshallerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\MessageAckMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\MessageDispatchMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\MessageDispatchNotificationMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\MessageIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\MessageMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\MessagePullMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\NetworkBridgeFilterMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\PartialCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ProducerIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ProducerInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\RemoveInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\RemoveSubscriptionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ReplayCommandMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ResponseMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\SessionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\SessionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\ShutdownInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\SubscriptionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\TransactionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\TransactionInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\WireFormatInfoMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OpenWire\V2\XATransactionIdMarshaller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Session.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tracer.cs" />
+    <Compile Include="TransactionContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\FutureResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\ITransport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\ITransportFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\IWireFormat.cs" />
+    <Compile Include="Transport\LoggingTransport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\MutexTransport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\ResponseCorrelator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\Tcp\TcpTransport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\Tcp\TcpTransportFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\Stomp\StompFrameStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\Stomp\StompHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\Stomp\StompWireFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\TransportFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transport\WireFormatNegotiator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\AtomicBoolean.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\CountDownLatch.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\DateUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\URISupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NMS\sharpdevelop-nms.csproj">
+      <Project>{300C1716-0674-4D01-8F5D-151E59A504FE}</Project>
+      <Name>sharpdevelop-nms</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+</Project>

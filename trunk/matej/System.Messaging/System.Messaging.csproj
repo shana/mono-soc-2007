@@ -1,0 +1,107 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{1DC087AF-F179-4805-A8A0-822E0D36B710}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>System.Messaging</RootNamespace>
+    <AssemblyName>System.Messaging</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccessControlEntry.cs" />
+    <Compile Include="AccessControlEntryType.cs" />
+    <Compile Include="AccessControlList.cs" />
+    <Compile Include="AcknowledgeTypes.cs" />
+    <Compile Include="Acknowledgment.cs" />
+    <Compile Include="ActiveXMessageFormatter.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BinaryMessageFormatter.cs" />
+    <Compile Include="Consts.cs" />
+    <Compile Include="CryptographicProviderType.cs" />
+    <Compile Include="DefaultPropertiesToSend.cs" />
+    <Compile Include="Design\AssemblyInfo.cs" />
+    <Compile Include="Design\MessageFormatterConverter.cs" />
+    <Compile Include="Design\MessageQueueConverter.cs" />
+    <Compile Include="Design\QueuePathDialog.cs" />
+    <Compile Include="Design\QueuePathEditor.cs" />
+    <Compile Include="Design\TimeoutConverter.cs" />
+    <Compile Include="EncryptionAlgorithm.cs" />
+    <Compile Include="EncryptionRequired.cs" />
+    <Compile Include="GenericAccessRights.cs" />
+    <Compile Include="HashAlgorithm.cs" />
+    <Compile Include="IMessageFormatter.cs" />
+    <Compile Include="Locale.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageEnumerator.cs" />
+    <Compile Include="MessagePriority.cs" />
+    <Compile Include="MessagePropertyFilter.cs" />
+    <Compile Include="MessageQueue.cs" />
+    <Compile Include="MessageQueueAccessControlEntry.cs" />
+    <Compile Include="MessageQueueAccessRights.cs" />
+    <Compile Include="MessageQueueCriteria.cs" />
+    <Compile Include="MessageQueueEnumerator.cs" />
+    <Compile Include="MessageQueueErrorCode.cs" />
+    <Compile Include="MessageQueueException.cs" />
+    <Compile Include="MessageQueueInstaller.cs" />
+    <Compile Include="MessageQueuePermission.cs" />
+    <Compile Include="MessageQueuePermissionAccess.cs" />
+    <Compile Include="MessageQueuePermissionAttribute.cs" />
+    <Compile Include="MessageQueuePermissionEntry.cs" />
+    <Compile Include="MessageQueuePermissionEntryCollection.cs" />
+    <Compile Include="MessageQueueTransaction.cs" />
+    <Compile Include="MessageQueueTransactionStatus.cs" />
+    <Compile Include="MessageQueueTransactionType.cs" />
+    <Compile Include="MessageType.cs" />
+    <Compile Include="MessagingDescriptionAttribute.cs" />
+    <Compile Include="MonoTODO.cs" />
+    <Compile Include="NMSMessage.cs" />
+    <Compile Include="PeekCompletedEventArgs.cs" />
+    <Compile Include="PeekCompletedEventHandler.cs" />
+    <Compile Include="ReceiveCompletedEventArgs.cs" />
+    <Compile Include="ReceiveCompletedEventHandler.cs" />
+    <Compile Include="StandardAccessRights.cs" />
+    <Compile Include="Trustee.cs" />
+    <Compile Include="TrusteeType.cs" />
+    <Compile Include="XmlMessageFormatter.cs" />
+    <EmbeddedResource Include="Message.resx">
+      <DependentUpon>Message.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageQueue.resx">
+      <DependentUpon>MessageQueue.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Design" />
+    <ProjectReference Include="..\ActiveMQ\sharpdevelop-activemq.csproj">
+      <Project>{08321F42-4B3D-4815-B592-95962BAC3B9F}</Project>
+      <Name>sharpdevelop-activemq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NMS\sharpdevelop-nms.csproj">
+      <Project>{300C1716-0674-4D01-8F5D-151E59A504FE}</Project>
+      <Name>sharpdevelop-nms</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

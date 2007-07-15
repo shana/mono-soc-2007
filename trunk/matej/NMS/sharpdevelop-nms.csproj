@@ -1,0 +1,63 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{300C1716-0674-4D01-8F5D-151E59A504FE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NMS</RootNamespace>
+    <AssemblyName>nms</AssemblyName>
+    <WarningLevel>4</WarningLevel>
+    <StartupObject>
+    </StartupObject>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>activemq-dotnet.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IBytesMessage.cs" />
+    <Compile Include="IConnection.cs" />
+    <Compile Include="IConnectionFactory.cs" />
+    <Compile Include="IDestination.cs" />
+    <Compile Include="IMapMessage.cs" />
+    <Compile Include="IMessage.cs" />
+    <Compile Include="IMessageConsumer.cs" />
+    <Compile Include="IMessageProducer.cs" />
+    <Compile Include="IObjectMessage.cs" />
+    <Compile Include="IPrimitiveMap.cs" />
+    <Compile Include="IQueue.cs" />
+    <Compile Include="ISession.cs" />
+    <Compile Include="IStartable.cs" />
+    <Compile Include="IStoppable.cs" />
+    <Compile Include="ITemporaryQueue.cs" />
+    <Compile Include="ITemporaryTopic.cs" />
+    <Compile Include="ITextMessage.cs" />
+    <Compile Include="ITopic.cs" />
+    <Compile Include="NMSConnectionException.cs" />
+    <Compile Include="NMSConstants.cs" />
+    <Compile Include="NMSException.cs" />
+    <Compile Include="NMSSecurityException.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+</Project>

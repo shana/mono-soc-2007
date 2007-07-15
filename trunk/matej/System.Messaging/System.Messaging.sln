@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+# SharpDevelop 3.0.0.2373
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Messaging", "System.Messaging.csproj", "{1DC087AF-F179-4805-A8A0-822E0D36B710}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DC087AF-F179-4805-A8A0-822E0D36B710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DC087AF-F179-4805-A8A0-822E0D36B710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DC087AF-F179-4805-A8A0-822E0D36B710}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DC087AF-F179-4805-A8A0-822E0D36B710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F57A83C2-939E-42A4-8E4B-4B09F5AAA2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F57A83C2-939E-42A4-8E4B-4B09F5AAA2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F57A83C2-939E-42A4-8E4B-4B09F5AAA2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F57A83C2-939E-42A4-8E4B-4B09F5AAA2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
