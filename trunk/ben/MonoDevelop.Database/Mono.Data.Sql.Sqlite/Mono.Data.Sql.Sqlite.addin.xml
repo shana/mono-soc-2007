@@ -1,4 +1,4 @@
-<Addin	id		= "Mono.Data.Sql.Sqlite"
+<Addin	id		= "MonoDevelop.Database.Sql.Sqlite"
 	namespace	= "MonoDevelop"
 	name		= "Sqlite provider for Mono Data Sql"
 	author		= "Christian Hergert, Ankit Jain, Ben Motmans"
@@ -8,14 +8,14 @@
 	version		= "0.14.0">
     
 	<Runtime>
-		<Import assembly="Mono.Data.Sql.Sqlite.dll"/>
+		<Import assembly="MonoDevelop.Database.Sql.Sqlite.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Mono.Data.Sql" version="0.14.0"/>
+		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
 	</Dependencies>
 
 	<Extension path = "/Mono/Data/Sql">
-		<Class id = "Sqlite" class = "Mono.Data.Sql.SqliteDbFactory"/>
+		<Class id = "Sqlite" class = "MonoDevelop.Database.Sql.SqliteDbFactory"/>
 	</Extension>
 </Addin>

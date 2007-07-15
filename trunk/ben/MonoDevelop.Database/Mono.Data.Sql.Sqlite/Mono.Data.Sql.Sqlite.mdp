@@ -1,13 +1,13 @@
-<Project name="Mono.Data.Sql.Sqlite" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
+<Project name="MonoDevelop.Database.Sql.Sqlite" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" signAssembly="False" assembly="Mono.Data.Sql.Sqlite" />
+      <Output directory="./bin/Debug" assembly="MonoDevelop.Database.Sql.Sqlite" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" signAssembly="False" assembly="Mono.Data.Sql.Sqlite" />
+      <Output directory="./bin/Release" assembly="MonoDevelop.Database.Sql.Sqlite" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -16,7 +16,7 @@
   <Contents>
     <File name="./SqliteConnectionProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./SqliteSchemaProvider.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Mono.Data.Sql.Sqlite.addin.xml" subtype="Code" buildaction="FileCopy" />
+    <File name="./MonoDevelop.Database.Sql.Sqlite.addin.xml" subtype="Code" buildaction="FileCopy" />
     <File name="./SqliteDbFactory.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema" subtype="Directory" buildaction="Compile" />
     <File name="./SqlitePooledDbConnection.cs" subtype="Code" buildaction="Compile" />
@@ -27,6 +27,6 @@
     <ProjectReference type="Gac" localcopy="True" refto="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Data.SqliteClient, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <ProjectReference type="Project" localcopy="True" refto="Mono.Data.Sql" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
   </References>
 </Project>

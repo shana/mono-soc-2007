@@ -1,4 +1,4 @@
-<Addin	id		= "Mono.Data.Sql.Npgsql"
+<Addin	id		= "MonoDevelop.Database.Sql.Npgsql"
 	namespace	= "MonoDevelop"
 	name		= "Npgsql provider for Mono Data Sql"
 	author		= "Christian Hergert, Ben Motmans"
@@ -8,14 +8,14 @@
 	version		= "0.14.0">
     
 	<Runtime>
-		<Import assembly="Mono.Data.Sql.Npgsql.dll"/>
+		<Import assembly="MonoDevelop.Database.Sql.Npgsql.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Mono.Data.Sql" version="0.14.0"/>
+		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
 	</Dependencies>
 
 	<Extension path = "/Mono/Data/Sql">
-		<Class id = "Npgsql" class = "Mono.Data.Sql.NpgsqlDbFactory"/>
+		<Class id = "Npgsql" class = "MonoDevelop.Database.Sql.NpgsqlDbFactory"/>
 	</Extension>
 </Addin>

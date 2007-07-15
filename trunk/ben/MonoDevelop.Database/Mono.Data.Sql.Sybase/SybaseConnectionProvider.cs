@@ -32,7 +32,7 @@ using System.Data;
 using System.Collections.Generic;
 using Mono.Data.SybaseClient;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public class SybaseConnectionProvider : AbstractConnectionProvider
 	{

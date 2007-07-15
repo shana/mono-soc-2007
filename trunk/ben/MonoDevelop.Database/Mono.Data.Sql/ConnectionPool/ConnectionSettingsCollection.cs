@@ -30,7 +30,7 @@ using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	[Serializable]
 	public class ConnectionSettingsCollection : CollectionBase, IEnumerable<ConnectionSettings>

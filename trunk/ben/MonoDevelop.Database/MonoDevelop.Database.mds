@@ -1,76 +1,80 @@
 <Combine name="MonoDevelop.Database" fileversion="2.0" outputpath="./build/bin/">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
-      <Entry build="True" name="Mono.Data.Sql" configuration="Debug" />
-      <Entry build="False" name="Mono.Data.Sql.Tests" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Sql" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Sql.Tests" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.GlueGenerator" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Visualization" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Project" configuration="Debug" />
-      <Entry build="False" name="Mono.Data.Sql.Sybase" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.MySql" configuration="Debug" />
-      <Entry build="False" name="Mono.Data.Sql.Firebird" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.SqlServer" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.Sqlite" configuration="Debug" />
-      <Entry build="False" name="Mono.Data.Sql.Oracle" configuration="Debug" />
-      <Entry build="True" name="Mono.Data.Sql.Npgsql" configuration="Debug" />
-      <Entry build="False" name="Mono.Data.Sql.Odbc" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Sql.Sybase" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.MySql" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Sql.Firebird" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.SqlServer" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Sqlite" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Sql.Oracle" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Npgsql" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Sql.Odbc" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Components" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Designer" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
-      <Entry build="True" name="Mono.Data.Sql" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.Tests" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Tests" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.GlueGenerator" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Visualization" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Project" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.Sybase" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.MySql" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.Firebird" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.SqlServer" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.Sqlite" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.Oracle" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.Npgsql" configuration="Release" />
-      <Entry build="True" name="Mono.Data.Sql.Odbc" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Sybase" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.MySql" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Firebird" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.SqlServer" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Sqlite" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Oracle" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Npgsql" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Sql.Odbc" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Components" configuration="Release" />
+      <Entry build="True" name="MonoDevelop.Database.Designer" configuration="Release" />
     </Configuration>
   </Configurations>
-  <StartMode startupentry="Mono.Data.Sql.Tests" single="True">
-    <Execute type="None" entry="Mono.Data.Sql" />
-    <Execute type="None" entry="Mono.Data.Sql.Tests" />
+  <StartMode startupentry="MonoDevelop.Database.Sql.Tests" single="True">
+    <Execute type="None" entry="MonoDevelop.Database.Sql" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.Tests" />
     <Execute type="None" entry="MonoDevelop.Database.Designer" />
     <Execute type="None" entry="MonoDevelop.Database.Visualization" />
     <Execute type="None" entry="MonoDevelop.Database.Query" />
     <Execute type="None" entry="MonoDevelop.Database.Project" />
-    <Execute type="None" entry="Mono.Data.Sql.Sybase" />
-    <Execute type="None" entry="Mono.Data.Sql.MySql" />
-    <Execute type="None" entry="Mono.Data.Sql.Firebird" />
-    <Execute type="None" entry="Mono.Data.Sql.SqlServer" />
-    <Execute type="None" entry="Mono.Data.Sql.Sqlite" />
-    <Execute type="None" entry="Mono.Data.Sql.Oracle" />
-    <Execute type="None" entry="Mono.Data.Sql.Npgsql" />
-    <Execute type="None" entry="Mono.Data.Sql.Odbc" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.Sybase" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.MySql" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.Firebird" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.SqlServer" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.Sqlite" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.Oracle" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.Npgsql" />
+    <Execute type="None" entry="MonoDevelop.Database.Sql.Odbc" />
     <Execute type="None" entry="MonoDevelop.Database.ConnectionManager" />
     <Execute type="None" entry="MonoDevelop.Database.Components" />
+    <Execute type="None" entry="MonoDevelop.Database.Designer" />
   </StartMode>
   <Entries>
-    <Entry filename="./Mono.Data.Sql/Mono.Data.Sql.mdp" />
-    <Entry filename="./Mono.Data.Sql.Tests/Mono.Data.Sql.Tests.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql/MonoDevelop.Database.Sql.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.Tests/MonoDevelop.Database.Sql.Tests.mdp" />
     <Entry filename="./MonoDevelop.Database.GlueGenerator/MonoDevelop.Database.GlueGenerator.mdp" />
     <Entry filename="./MonoDevelop.Database.Visualization/MonoDevelop.Database.Visualization.mdp" />
     <Entry filename="./MonoDevelop.Database.Query/MonoDevelop.Database.Query.mdp" />
     <Entry filename="./MonoDevelop.Database.Project/MonoDevelop.Database.Project.mdp" />
-    <Entry filename="./Mono.Data.Sql.Sybase/Mono.Data.Sql.Sybase.mdp" />
-    <Entry filename="./Mono.Data.Sql.MySql/Mono.Data.Sql.MySql.mdp" />
-    <Entry filename="./Mono.Data.Sql.Firebird/Mono.Data.Sql.Firebird.mdp" />
-    <Entry filename="./Mono.Data.Sql.SqlServer/Mono.Data.Sql.SqlServer.mdp" />
-    <Entry filename="./Mono.Data.Sql.Sqlite/Mono.Data.Sql.Sqlite.mdp" />
-    <Entry filename="./Mono.Data.Sql.Oracle/Mono.Data.Sql.Oracle.mdp" />
-    <Entry filename="./Mono.Data.Sql.Npgsql/Mono.Data.Sql.Npgsql.mdp" />
-    <Entry filename="./Mono.Data.Sql.Odbc/Mono.Data.Sql.Odbc.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.Sybase/MonoDevelop.Database.Sql.Sybase.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.MySql/MonoDevelop.Database.Sql.MySql.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.Firebird/MonoDevelop.Database.Sql.Firebird.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.SqlServer/MonoDevelop.Database.Sql.SqlServer.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.Sqlite/MonoDevelop.Database.Sql.Sqlite.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.Oracle/MonoDevelop.Database.Sql.Oracle.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.Npgsql/MonoDevelop.Database.Sql.Npgsql.mdp" />
+    <Entry filename="./MonoDevelop.Database.Sql.Odbc/MonoDevelop.Database.Sql.Odbc.mdp" />
     <Entry filename="./MonoDevelop.Database.ConnectionManager/MonoDevelop.Database.ConnectionManager.mdp" />
     <Entry filename="./MonoDevelop.Database.Components/MonoDevelop.Database.Components.mdp" />
+    <Entry filename="./MonoDevelop.Database.Designer/MonoDevelop.Database.Designer.mdp" />
   </Entries>
 </Combine>

@@ -30,7 +30,7 @@ using System.Data;
 using Npgsql;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public class NpgsqlConnectionProvider : AbstractConnectionProvider
 	{

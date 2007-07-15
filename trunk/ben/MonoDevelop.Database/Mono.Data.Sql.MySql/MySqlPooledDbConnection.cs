@@ -28,7 +28,7 @@ using System.Data;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class MySqlPooledDbConnection : AbstractPooledDbConnection
 	{

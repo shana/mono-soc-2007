@@ -27,7 +27,7 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	public class SqliteDbFactory : IDbFactory
 	{
@@ -35,7 +35,7 @@ namespace Mono.Data.Sql
 		private IConnectionProvider connectionProvider;
 		
 		public string Identifier {
-			get { return "Mono.Data.SqliteClient"; }
+			get { return "MonoDevelop.Database.SqliteClient"; }
 		}
 		
 		public string Name {

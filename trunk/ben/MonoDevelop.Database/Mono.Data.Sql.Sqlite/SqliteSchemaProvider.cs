@@ -29,9 +29,9 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Data.SqliteClient;
+usingMonoDevelop.Database.SqliteClient;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	// see: http://www.sqlite.org/faq.html
 	// http://www.sqlite.org/google-talk-slides/page-021.html

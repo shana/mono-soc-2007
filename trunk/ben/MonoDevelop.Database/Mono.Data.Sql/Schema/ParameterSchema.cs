@@ -28,7 +28,7 @@
 
 using System;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class ParameterSchema : AbstractSchema
 	{

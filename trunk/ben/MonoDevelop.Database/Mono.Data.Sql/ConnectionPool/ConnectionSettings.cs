@@ -26,7 +26,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	[Serializable]
 	public class ConnectionSettings

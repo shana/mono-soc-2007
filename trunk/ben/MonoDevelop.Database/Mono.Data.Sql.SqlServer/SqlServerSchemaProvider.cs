@@ -33,7 +33,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespaceMonoDevelop.Database.Sql
 {
 	// see:
 	// http://www.alberton.info/sql_server_meta_info.html

@@ -27,7 +27,7 @@
 using System;
 using System.Collections;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	/// <summary>
 	/// SQL schema object representing a database

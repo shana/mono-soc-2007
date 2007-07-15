@@ -29,7 +29,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mono.Data.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class ViewSchema : AbstractSchema
 	{

@@ -1,4 +1,4 @@
-<Addin	id		= "Mono.Data.Sql.Oracle"
+<Addin	id		= "MonoDevelop.Database.Sql.Oracle"
 	namespace	= "MonoDevelop"
 	name		= "Oracle provider for Mono Data Sql"
 	author		= "Christian Hergert, Daniel Morgan, Ben Motmans"
@@ -8,14 +8,14 @@
 	version		= "0.14.0">
     
 	<Runtime>
-		<Import assembly="Mono.Data.Sql.Oracle.dll"/>
+		<Import assembly="MonoDevelop.Database.Sql.Oracle.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Mono.Data.Sql" version="0.14.0"/>
+		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
 	</Dependencies>
 
 	<Extension path = "/Mono/Data/Sql">
-		<Class id = "Oracle" class = "Mono.Data.Sql.OracleDbFactory"/>
+		<Class id = "Oracle" class = "MonoDevelop.Database.Sql.OracleDbFactory"/>
 	</Extension>
 </Addin>
