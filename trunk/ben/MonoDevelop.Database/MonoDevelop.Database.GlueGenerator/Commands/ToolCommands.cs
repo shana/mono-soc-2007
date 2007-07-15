@@ -33,19 +33,38 @@ using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
 
-namespace MonoDevelop.Database.Query
+namespace MonoDevelop.Database.GlueGenerator
 {
 	public enum ToolCommands
 	{
-		Query
+		GenerateDatabaseLayer,
+		GenerateDataObjects
 	}
-	
-	public class QueryHandler : CommandHandler
+
+	public class GenerateDatabaseLayerHandler : CommandHandler
 	{
 		protected override void Run ()
 		{
-			SqlQueryView view = new SqlQueryView ();
-			IdeApp.Workbench.OpenDocument (view, true);
+			
+		}
+	}
+	
+	public class GenerateDataObjectsHandler : CommandHandler
+	{
+		protected override void Run ()
+		{
+			try {
+			GenerateObjectsDialog dlg = new GenerateObjectsDialog ();
+			if (dlg.Run () == (int)ResponseType.Ok) {
+				//TODO: generate object layer
+			}
+			} catch (Exception e) {
+				Runtime.LoggingService.Debug ("+++++++++++++++++++++++++++++++++++++++++");
+				Runtime.LoggingService.Error (e.Message);
+				Runtime.LoggingService.Error (e.Source);
+				Runtime.LoggingService.Error (e.ToString ());
+				Runtime.LoggingService.Error (e.StackTrace);
+			}
 		}
 	}
 }

@@ -28,9 +28,7 @@ using System;
 using System.Collections.Generic;
 using Mono.Data.Sql;
 using MonoDevelop.Core;
-using MonoDevelop.Ide.Gui;
-using MonoDevelop.Projects;
-using MonoDevelop.Projects.Gui;
+using MonoDevelop.Core.Gui;
 
 namespace MonoDevelop.Database.Components
 {
@@ -41,16 +39,25 @@ namespace MonoDevelop.Database.Components
 		//TODO: listen for .Add, .Remove, .Edit
 		public ConnectionComboBox ()
 		{
-			store = new ListStore (typeof (ConnectionSettings));
+			store = new ListStore (/*typeof (Gdk.Pixbuf), */typeof (string), typeof (object));
+			this.Model = store;
 
 			CellRendererText nameRenderer = new CellRendererText ();
-			this.PackStart (nameRenderer, true);
-			SetCellDataFunc (nameRenderer, new CellLayoutDataFunc (NameDataFunc));
+			//CellRendererPixbuf pixbufRenderer = new CellRendererPixbuf ();
 			
-			this.Model = store;
+			//AddAttribute (pixbufRenderer, "pixbuf", 0);
+			AddAttribute (nameRenderer, "text", 1);
 			
-			foreach (ConnectionSettings settings in ConnectionSettingsService.Connections)
-				store.AppendValues (settings);
+			//PackStart (pixbufRenderer, false);
+			PackEnd (nameRenderer, true);
+
+			foreach (ConnectionSettings settings in ConnectionSettingsService.Connections) {
+				string iconString = "md-db-database";
+				if (settings.HasConnectionPool && settings.ConnectionPool.IsInitialized) {
+					iconString = "md-db-database-ok";
+				}
+				store.AppendValues (/*Services.Resources.GetIcon (iconString),*/ settings.Name, settings);
+			}
 			if (this.Active < 0)
 				this.Active = 0;
 		}
@@ -59,14 +66,14 @@ namespace MonoDevelop.Database.Components
 			get {
 				TreeIter iter;
 				if (this.GetActiveIter (out iter))
-					return store.GetValue (iter, 0) as ConnectionSettings;
+					return store.GetValue (iter, 1) as ConnectionSettings;
 				return null;
 			}
 			set {
 				TreeIter iter;
 				if (store.GetIterFirst (out iter)) {
 					do {
-						ConnectionSettings settings = store.GetValue (iter, 0) as ConnectionSettings;
+						ConnectionSettings settings = store.GetValue (iter, 1) as ConnectionSettings;
 						if (settings == value) {
 							SetActiveIter (iter);
 							return;
@@ -74,13 +81,6 @@ namespace MonoDevelop.Database.Components
 					} while (store.IterNext (ref iter));
 				}
 			}
-		}
-		
-		private void NameDataFunc (CellLayout layout, CellRenderer cell, TreeModel model, TreeIter iter)
-		{
-			CellRendererText textRenderer = cell as CellRendererText;
-			ConnectionSettings settings = model.GetValue (iter, 0) as ConnectionSettings;
-			textRenderer.Text = settings.Name;
 		}
 	}
 }

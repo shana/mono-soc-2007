@@ -1,3 +1,8 @@
+2007-07-15  Ben Motmans <ben.motmans@gmail.com>
+
+	* Commands/ToolCommands.cs, MonoDevelop.Database.Query.addin.xml: moved generator commands
+	to GlueGenerator project
+
 2007-07-14  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqlQueryView.cs: use MenuToolButton to display a list of stored connections +
