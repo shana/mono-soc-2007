@@ -54,6 +54,7 @@
     <Compile Include="ITemporaryTopic.cs" />
     <Compile Include="ITextMessage.cs" />
     <Compile Include="ITopic.cs" />
+    <Compile Include="ITransactionContext.cs" />
     <Compile Include="NMSConnectionException.cs" />
     <Compile Include="NMSConstants.cs" />
     <Compile Include="NMSException.cs" />

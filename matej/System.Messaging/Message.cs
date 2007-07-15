@@ -38,6 +38,9 @@ namespace System.Messaging
 	[DesignerAttribute ("System.Messaging.Design.MessageDesigner, " + Consts.AssemblySystem_Design)]
 	public class Message: Component 
 	{
+		private object body = null;
+		private string label = null;
+		
 		#region Constructor
 		
 		[MonoTODO]
@@ -48,11 +51,13 @@ namespace System.Messaging
 		[MonoTODO]
 		public Message (object body)
 		{
+			this.body = body;	
 		}
 
-		[MonoTODO]
-		public Message (object body, IMessageFormatter formatter)
+		[MonoTODO("formater ignored")]
+		public Message (object body, IMessageFormatter formatter): this(body)
 		{
+			//ignore formater
 		}
 		
 		#endregion //Constructor
@@ -148,9 +153,13 @@ namespace System.Messaging
 		[Browsable (false)]
 		public virtual object Body {
 			[MonoTODO]
-			get {throw new NotImplementedException();}
+			get {
+				return this.body;
+			}
 			[MonoTODO]
-			set {throw new NotImplementedException();}
+			set {
+				this.body = value;
+			}
 		}
 
 		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
@@ -287,9 +296,13 @@ namespace System.Messaging
 		[MessagingDescription("MsgLabel")]
 		public virtual string Label {
 			[MonoTODO]
-			get {throw new NotImplementedException();}
+			get {
+				return this.label;
+			}
 			[MonoTODO]
-			set {throw new NotImplementedException();}
+			set {
+				this.label = value;
+			}
 		}
 
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

@@ -747,7 +747,17 @@ namespace System.Messaging
 		[MonoTODO]
 		public void Send (object obj)
 		{
-			throw new NotImplementedException ();
+			Message msg = (Message)obj;
+			
+            IMessageProducer producer = session.CreateProducer(destination);
+            producer.Persistent = true;
+                    
+            // lets send a message
+            IMessage request = session.CreateMessage();
+            request.Properties["Body"] = msg.Body;
+            if (msg.Label != null)
+            	request.Properties["Label"] = msg.Label;
+            producer.Send(request);
 		}
 		[MonoTODO]
 		public void Send (object obj, MessageQueueTransaction transaction)
@@ -762,7 +772,16 @@ namespace System.Messaging
 		[MonoTODO]
 		public void Send (object obj, string label)
 		{
-			throw new NotImplementedException ();
+			Message msg = (Message)obj;
+			
+            IMessageProducer producer = session.CreateProducer(destination);
+            producer.Persistent = true;
+                    
+            // lets send a message
+            IMessage request = session.CreateMessage();
+            request.Properties["Body"] = msg.Body;
+          	request.Properties["Label"] = label;
+            producer.Send(request);
 		}
 		[MonoTODO]
 		public void Send (object obj, string label, MessageQueueTransaction transaction)

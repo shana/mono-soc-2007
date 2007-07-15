@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sharpdevelop-activemq", "Ac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Messaging", "System.Messaging\System.Messaging.csproj", "{1DC087AF-F179-4805-A8A0-822E0D36B710}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.Test", "Test\Messaging.Test\Messaging.Test.csproj", "{E42FF3D9-7915-49A3-AD20-4260622F0692}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{1DC087AF-F179-4805-A8A0-822E0D36B710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1DC087AF-F179-4805-A8A0-822E0D36B710}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1DC087AF-F179-4805-A8A0-822E0D36B710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E42FF3D9-7915-49A3-AD20-4260622F0692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E42FF3D9-7915-49A3-AD20-4260622F0692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E42FF3D9-7915-49A3-AD20-4260622F0692}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E42FF3D9-7915-49A3-AD20-4260622F0692}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -17,6 +17,7 @@
 using ActiveMQ;
 using ActiveMQ.Commands;
 using System.Collections;
+using NMS;
 
 
 namespace ActiveMQ
@@ -29,7 +30,7 @@ namespace ActiveMQ
 
 namespace ActiveMQ
 {
-	public class TransactionContext
+	public class TransactionContext: ITransactionContext
     {
         private TransactionId transactionId;
         private Session session;
@@ -44,6 +45,11 @@ namespace ActiveMQ
         {
             get { return transactionId; }
         }
+
+        public string Id
+        {
+        	get { return transactionId.GetDataStructureType().ToString(); }
+        }        
         
         /// <summary>
         /// Method AddSynchronization
