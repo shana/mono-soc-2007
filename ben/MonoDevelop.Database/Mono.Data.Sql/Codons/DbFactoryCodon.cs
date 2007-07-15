@@ -33,7 +33,13 @@ namespace Mono.Data.Sql
 	public class DbFactoryCodon : TypeExtensionNode
 	{
 		public IDbFactory DbFactory {
-			get { return (IDbFactory)base.CreateInstance (); }
+			get {
+				try {
+					return (IDbFactory)base.CreateInstance ();
+				} catch {
+					return null;
+				}
+			}
 		}
 	}
 }

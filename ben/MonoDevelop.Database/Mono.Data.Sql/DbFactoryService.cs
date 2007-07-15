@@ -39,7 +39,8 @@ namespace Mono.Data.Sql
 			factories = new Dictionary<string, IDbFactory> ();
 			foreach (DbFactoryCodon codon in AddinManager.GetExtensionNodes ("/Mono/Data/Sql")) {
 				IDbFactory fac = codon.DbFactory;
-				factories.Add (fac.Identifier, fac);
+				if (fac != null)
+					factories.Add (fac.Identifier, fac);
 			}
 		}
 

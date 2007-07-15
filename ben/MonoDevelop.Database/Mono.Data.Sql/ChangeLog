@@ -3,6 +3,8 @@
 	* Dialect/ISqlDialect.cs, Dialect/AbstractSqlDialect.cs: replaced QuoteChar and ParameterChar
 	properties with methods to allow more complex behavior
 	* Dialect/Sql99Dialect.cs: removed, all providers should implement their own unique dialect
+	* Dialect/AbstractSqlDialect.cs: support FromSelectClause and FromTableClause in GetSql method
+	* DbFactoryService.cs, Codons/DbFactoryCodon.cs: added some error handling
 
 2007-07-14  Ben Motmans <ben.motmans@gmail.com>
 

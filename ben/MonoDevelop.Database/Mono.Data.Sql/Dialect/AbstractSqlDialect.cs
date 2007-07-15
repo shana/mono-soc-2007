@@ -64,10 +64,12 @@ namespace Mono.Data.Sql
 				throw new ArgumentNullException ("clause");
 			
 			Type type = clause.GetType ();
-			if (type == typeof (FromClause))
-				return GetClauseSql (clause as FromClause);
+			if (type == typeof (FromSelectClause))
+				return GetClauseSql (clause as FromSelectClause);
+			else if (type == typeof (FromTableClause))
+				return GetClauseSql (clause as FromTableClause);
 			else if (type == typeof (WhereClause))
-				return GetClauseSql (clause as WhereClause);	
+				return GetClauseSql (clause as WhereClause);
 			else if (type == typeof (HavingClause))
 				return GetClauseSql (clause as HavingClause);
 			else if (type == typeof (JoinClause))
@@ -294,20 +296,14 @@ namespace Mono.Data.Sql
 			return sb.ToString ();
 		}
 		
-		protected virtual string GetClauseSql (FromClause clause)
+		protected virtual string GetClauseSql (FromSelectClause clause)
 		{
-			Type t = clause.GetType ();
-			if (t == typeof (FromSelectClause)) {
-				return String.Concat ("FROM ",
-					GetStatementSql ((clause as FromSelectClause).Source)
-				);
-			} else if (t == typeof (FromTableClause)) {
-				return String.Concat ("FROM ",
-					GetExpressionSql ((clause as FromTableClause).Source)
-				);
-			} else {
-				throw new NotImplementedException ();
-			}
+			return String.Concat ("FROM ", GetStatementSql (clause.Source));
+		}
+		
+		protected virtual string GetClauseSql (FromTableClause clause)
+		{
+			return String.Concat ("FROM ", GetExpressionSql (clause.Source));
 		}
 		
 		protected virtual string GetClauseSql (WhereClause clause)
