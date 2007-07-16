@@ -110,12 +110,10 @@ namespace Microsoft.Windows.Themes {
 					new GradientStop(Color.FromArgb(0xFF, 0x97, 0x8B, 0x72), 1),
 					new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.6)
 				}), new Point(0.5, 1), new Point(0.5, 0)), null, new Rect(1.05, 1.05, width, 6), FillRadius, FillRadius);
-				if ((height = actual_height - 7.05) < 0)
-					return;
 				drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
 					new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.6),
 					new GradientStop(Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF), 1)
-				}), new Point(0.5, 0), new Point(0.5, 1)), null, new Rect(1.05, height, width, 6), FillRadius, FillRadius);
+				}), new Point(0.5, 0), new Point(0.5, 1)), null, new Rect(1.05, actual_height - 7.05, width, 6), FillRadius, FillRadius);
 				drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
 					new GradientStop(Color.FromArgb(0xFF, 0xAA, 0x9D, 0x87), 1),
 					new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.6)
@@ -165,7 +163,11 @@ namespace Microsoft.Windows.Themes {
 			if (border_brush != null) {
 				const double BorderPadding = 1.25;
 				const double BorderRadius = 3;
-				drawingContext.DrawRoundedRectangle(null, new Pen(border_brush, 1), new Rect(BorderPadding, BorderPadding, actual_width - 2 * BorderPadding, actual_height - 2 * BorderPadding), BorderRadius, BorderRadius);
+				if ((width = actual_width - 2 * BorderPadding) < 0)
+					return;
+				if ((height = actual_height - 2 * BorderPadding) < 0)
+					return;
+				drawingContext.DrawRoundedRectangle(null, new Pen(border_brush, 1), new Rect(BorderPadding, BorderPadding, width, height), BorderRadius, BorderRadius);
 			}
 			#endregion
 		}
