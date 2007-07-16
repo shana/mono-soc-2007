@@ -1,3 +1,9 @@
+2007-07-16  George Giolfan  <georgegiolfan@yahoo.com>
+	
+	* BulletChrome.cs: Removed useless using statement.
+	* ButtonChrome.cs: Removed useless using statement. Improved rendering.
+	* ScrollChrome.cs: Removed useless using statement.
+	
 2007-07-14  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ScrollChrome.cs: Finished (hopefully) proper implementation of rendering.

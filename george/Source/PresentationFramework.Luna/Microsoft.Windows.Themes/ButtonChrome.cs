@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 #if Implementation
-using Microsoft.Windows.Themes;
 namespace Mono.Microsoft.Windows.Themes {
 #else
 namespace Microsoft.Windows.Themes {
@@ -27,7 +26,6 @@ namespace Microsoft.Windows.Themes {
 
 		#region Public Constructors
 		public ButtonChrome() {
-			//WDTDH
 		}
 		#endregion
 
@@ -64,35 +62,112 @@ namespace Microsoft.Windows.Themes {
 		#endregion
 
 		#region Protected Methods
-		protected override void OnRender(DrawingContext drawingContext) {
-			base.OnRender(drawingContext);
-			const double BorderThickness = 1.1;
-			const double BorderPosition = 1.3;
-			const double BorderRoundCorderRadius = BorderThickness + BorderPosition;
-			const double VisualCueThickness = 2;
-			double width = ActualWidth - 2 * BorderPosition;
-			if (width < 0)
-				return;
-			double height = ActualHeight - 2 * BorderPosition;
-			if (height < 0)
-				return;
-			Rect border_rect = new Rect(BorderPosition, BorderPosition, width, height);
-			drawingContext.DrawRoundedRectangle(RenderPressed ? SystemColors.ControlLightBrush : Fill, null, border_rect, BorderRoundCorderRadius, BorderRoundCorderRadius);
-			if (!RenderPressed && (RenderDefaulted || RenderMouseOver)) {
-				width = border_rect.Width - 2 * BorderThickness;
-				if (width > 0) {
-					height = border_rect.Height - 2 * BorderThickness;
-					if (height > 0)
-						drawingContext.DrawRoundedRectangle(null, new Pen(RenderMouseOver ? Brushes.Orange : Brushes.LightBlue, VisualCueThickness), new Rect(border_rect.Left + BorderThickness, border_rect.Top + BorderThickness, width, height), BorderRoundCorderRadius, BorderRoundCorderRadius);
-				}
-			}
-			drawingContext.DrawRoundedRectangle(null, new Pen(BorderBrush, BorderThickness), border_rect, BorderRoundCorderRadius, BorderRoundCorderRadius);
-		}
-
 		protected override Size ArrangeOverride(Size arrangeSize) {
 			if (Child != null)
 				Child.Arrange(GetArrangedRect(arrangeSize, Child.DesiredSize, new Thickness(BorderSize), HorizontalAlignment, VerticalAlignment));
 			return arrangeSize;
+		}
+
+		protected override void OnRender(DrawingContext drawingContext) {
+			base.OnRender(drawingContext);
+			//FIXME? Is this correct?
+			double actual_width = double.IsNaN(Width) ? ActualWidth : Width;
+			double actual_height = double.IsNaN(Height) ? ActualHeight : Height;
+			#region Top left corner shadow
+			const double TopLeftCornerShadowPadding = 2D / 3;
+			const double TopLeftCornerShadowRadius = 3;
+			double width = actual_width - 2 * TopLeftCornerShadowPadding;
+			if (width < 0)
+				return;
+			double height = actual_height - 2 * TopLeftCornerShadowPadding;
+			if (height < 0)
+				return;
+			drawingContext.DrawRoundedRectangle(null, new Pen(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+				new GradientStop(Color.FromArgb(0x20, 0x00, 0x00, 0x00), 0),
+				new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.5),
+				new GradientStop(Color.FromArgb(0x80, 0xFF, 0xFF, 0xFF), 1)
+			}), new Point(0, 0), new Point(0.4, 1)), 1.3333333332999999), new Rect(TopLeftCornerShadowPadding, TopLeftCornerShadowPadding, width, height), TopLeftCornerShadowRadius, TopLeftCornerShadowRadius);
+			#endregion
+			const double FillRadius = 4;
+			const double FillPadding = 0.75;
+			#region Fill
+			Brush fill = Fill;
+			if (fill != null || RenderPressed) {
+				if ((width = actual_width - 2 * FillPadding) < 0)
+					return;
+				if ((height = actual_height - 2 * FillPadding) < 0)
+					return;
+				drawingContext.DrawRoundedRectangle(RenderPressed ? new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+					new GradientStop(Color.FromArgb(0xFF, 0xE6, 0xE6, 0xE0), 0),
+					new GradientStop(Color.FromArgb(0xFF, 0xE2, 0xE2, 0xDA), 1)
+				}), new Point(0.5, 1), new Point(0.5, 0)) : fill, null, new Rect(FillPadding, FillPadding, width, height), FillRadius, FillRadius);
+			}
+			#endregion
+			if (RenderPressed) {
+				if ((width = actual_width - 2.1) < 0)
+					return;
+				drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+					new GradientStop(Color.FromArgb(0xFF, 0x97, 0x8B, 0x72), 1),
+					new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.6)
+				}), new Point(0.5, 1), new Point(0.5, 0)), null, new Rect(1.05, 1.05, width, 6), FillRadius, FillRadius);
+				if ((height = actual_height - 7.05) < 0)
+					return;
+				drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+					new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.6),
+					new GradientStop(Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF), 1)
+				}), new Point(0.5, 0), new Point(0.5, 1)), null, new Rect(1.05, height, width, 6), FillRadius, FillRadius);
+				drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+					new GradientStop(Color.FromArgb(0xFF, 0xAA, 0x9D, 0x87), 1),
+					new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.6)
+				}), new Point(1, 0.5), new Point(0, 0.5)), null, new Rect(1.05, 1.05, 6, actual_height - 2.1), FillRadius, FillRadius);
+			} else {
+				#region Bottom right corner shadow
+				const double BottomRightCornerShadowRadius = 4;
+				if ((width = actual_width - 2.1) < 0)
+					return;
+				if ((height = actual_height - 7.05) < 0)
+					return;
+				drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+					new GradientStop(Color.FromArgb(0x00, 0xFF, 0xFF, 0xFF), 0.5),
+					new GradientStop(Color.FromArgb(0x35, 0x59, 0x2F, 0x00), 1)
+				}), new Point(0.5, 0), new Point(0.5, 1)), null, new Rect(1.05, height, width, 6), BottomRightCornerShadowRadius, BottomRightCornerShadowRadius);
+				if ((width = actual_width - 7.05) < 0)
+					return;
+				if ((height = actual_height - 2.1) < 0)
+					return;
+				drawingContext.DrawRoundedRectangle(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+					new GradientStop(Color.FromArgb(0x00, 0x59, 0x2F, 0x00), 0.5),
+					new GradientStop(Color.FromArgb(0x28, 0x59, 0x2F, 0x00), 1)
+				}), new Point(0, 0.5), new Point(1, 0.5)), null, new Rect(width, 1.05, 6, height), BottomRightCornerShadowRadius, BottomRightCornerShadowRadius);
+				#endregion
+				if (RenderMouseOver || RenderDefaulted) {
+					const double MouseOverDefaultedCornerRadius = 3;
+					const double MouseOverDefaultedPadding = 2.083333333333333;
+					if ((width = actual_width - 2 * MouseOverDefaultedPadding) < 0)
+						return;
+					if ((height = actual_height - 2 * MouseOverDefaultedPadding) < 0)
+						return;
+					drawingContext.DrawRoundedRectangle(null, new Pen(new LinearGradientBrush(new GradientStopCollection(RenderMouseOver ? new GradientStop[] {
+						new GradientStop(Color.FromArgb(0xFF, 0xFF, 0xF0, 0xCF), 0),
+						new GradientStop(Color.FromArgb(0xFF, 0xFC, 0xD2, 0x79), 0.03),
+						new GradientStop(Color.FromArgb(0xFF, 0xF8, 0xB7, 0x3B), 0.75),
+						new GradientStop(Color.FromArgb(0xFF, 0xE5, 0x97, 0x00), 1)
+					} : new GradientStop[] {
+						new GradientStop(Color.FromArgb(0xFF, 0xCE, 0xE7, 0xFF), 0),
+						new GradientStop(Color.FromArgb(0xFF, 0xBC, 0xD4, 0xF6), 0.3),
+						new GradientStop(Color.FromArgb(0xFF, 0x89, 0xAD, 0xE4), 0.97),
+						new GradientStop(Color.FromArgb(0xFF, 0x69, 0x82, 0xEE), 1)
+					}), new Point(0.5, 0), new Point(0.5, 1)), 2.6666666666999999), new Rect(MouseOverDefaultedPadding, MouseOverDefaultedPadding, width, height), MouseOverDefaultedCornerRadius, MouseOverDefaultedCornerRadius);
+				}
+			}
+			#region Border
+			Brush border_brush = BorderBrush;
+			if (border_brush != null) {
+				const double BorderPadding = 1.25;
+				const double BorderRadius = 3;
+				drawingContext.DrawRoundedRectangle(null, new Pen(border_brush, 1), new Rect(BorderPadding, BorderPadding, actual_width - 2 * BorderPadding, actual_height - 2 * BorderPadding), BorderRadius, BorderRadius);
+			}
+			#endregion
 		}
 
 		protected override Size MeasureOverride(Size constraint) {
