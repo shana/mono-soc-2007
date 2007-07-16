@@ -142,9 +142,20 @@ namespace CBinding.ProjectPad
 			CurrentNode.Expanded = true;
 		}
 		
+		// Currently only accepts packages and projects that compile into a static library
 		public override bool CanDropNode (object dataObject, DragOperation operation)
 		{
-			return dataObject is ProjectPackage;
+			if (dataObject is ProjectPackage)
+				return true;
+			
+			if (dataObject is CProject) {
+				CProjectConfiguration config = (CProjectConfiguration)((CProject)dataObject).ActiveConfiguration;
+				
+				if (config.CompileTarget == CBinding.CompileTarget.StaticLibrary)
+					return true;
+			}
+			
+			return false;
 		}
 		
 		public override DragOperation CanDragNode ()
@@ -154,20 +165,30 @@ namespace CBinding.ProjectPad
 		
 		public override void OnNodeDrop (object dataObject, DragOperation operation)
 		{
-			// For now it can only receive packages
-			ProjectPackage package = (ProjectPackage)dataObject;
-			ITreeNavigator nav = CurrentNode;
-			
-			CProject dest = nav.GetParentDataItem (typeof(CProject), true) as CProject;
-			nav.MoveToObject (dataObject);
-			CProject source = nav.GetParentDataItem (typeof(CProject), true) as CProject;
-			
-			dest.Packages.Add (package);
-			IdeApp.ProjectOperations.SaveProject (dest);
-			
-			if (operation == DragOperation.Move) {
-				source.Packages.Remove (package);
-				IdeApp.ProjectOperations.SaveProject (source);
+			if (dataObject is ProjectPackage) {
+				ProjectPackage package = (ProjectPackage)dataObject;
+				ITreeNavigator nav = CurrentNode;
+				
+				CProject dest = nav.GetParentDataItem (typeof(CProject), true) as CProject;
+				nav.MoveToObject (dataObject);
+				CProject source = nav.GetParentDataItem (typeof(CProject), true) as CProject;
+				
+				dest.Packages.Add (package);
+				IdeApp.ProjectOperations.SaveProject (dest);
+				
+				if (operation == DragOperation.Move) {
+					source.Packages.Remove (package);
+					IdeApp.ProjectOperations.SaveProject (source);
+				}
+			} else if (dataObject is CProject) {
+				CProject draggedProject = (CProject)dataObject;
+				CProject destProject = (CurrentNode.DataItem as ProjectPackageCollection).Project;
+				
+				draggedProject.WritePkgPackage ();
+				
+				ProjectPackage package = new ProjectPackage (draggedProject);
+				destProject.Packages.Add (package);
+				IdeApp.ProjectOperations.SaveProject (destProject);
 			}
 		}
 	}

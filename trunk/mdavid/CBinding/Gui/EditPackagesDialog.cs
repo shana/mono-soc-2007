@@ -83,12 +83,14 @@ namespace CBinding
 			selectedPackagesTreeView.AppendColumn ("Version", textRenderer, "text", 1);
 			
 			foreach (string dir in ScanDirs ()) {
-				if (Directory.Exists (dir)) {				
+				if (Directory.Exists (dir)) {	
 					DirectoryInfo di = new DirectoryInfo (dir);
 					FileInfo[] availablePackages = di.GetFiles ("*.pc");
 					
 					foreach (FileInfo f in availablePackages) {
-						if (!IsValidPackage (f.FullName)) continue;
+						if (!IsValidPackage (f.FullName)) { 
+							continue;
+						}
 						string name = f.Name.Substring (0, f.Name.LastIndexOf ('.'));
 						string version = GetPackageVersion (f.FullName);
 						bool inProject = IsInProject (name);
@@ -121,7 +123,7 @@ namespace CBinding
 			pkg_paths = pkg_var.Split (':');
 			
 			foreach (string dir in pkg_paths) {
-				if (!dirs.Contains (dir)) {
+				if (!dirs.Contains (dir) && !string.IsNullOrEmpty (dir)) {
 					dirs.Add (dir);
 				}
 			}
@@ -245,7 +247,7 @@ namespace CBinding
 			string line;
 			
 			while ((line = reader.ReadLine ()) != null) {
-				if (line.StartsWith ("Cflags:")) {
+				if (line.StartsWith ("Cflags:", true, null)) {
 					valid = true;
 					break;
 				}
@@ -260,7 +262,7 @@ namespace CBinding
 			bool exists = false;
 			
 			foreach (ProjectPackage p in project.Packages) {
-				if (package.Equals (p.Name)) {
+				if (package.Equals (p.File)) {
 					exists = true;
 					break;
 				}

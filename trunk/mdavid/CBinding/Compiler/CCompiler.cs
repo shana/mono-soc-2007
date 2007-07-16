@@ -70,7 +70,7 @@ namespace CBinding
 			StringBuilder libs = new StringBuilder ();
 			
 			foreach (ProjectPackage p in packages)
-				libs.Append (p.Name + " ");
+				libs.Append (p.File + " ");
 			
 			return string.Format ("`pkg-config --libs {0}`", libs.ToString ().Trim ());
 		}
@@ -83,7 +83,7 @@ namespace CBinding
 			StringBuilder libs = new StringBuilder ();
 			
 			foreach (ProjectPackage p in packages)
-				libs.Append (p.Name + " ");
+				libs.Append (p.File + " ");
 			
 			return string.Format ("`pkg-config --cflags {0}`", libs.ToString ().Trim ());
 		}
