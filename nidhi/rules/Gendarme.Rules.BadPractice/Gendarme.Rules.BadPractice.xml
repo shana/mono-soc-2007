@@ -5,4 +5,10 @@
 		<problem>Only one method of Object.Equals (Object) and Object.GetHashCode () is implemented in '{0}'.</problem>
 		<solution>Implement the other method also.</solution>
 	</rule>
+	<rule	Name="CloneMethodShouldNotReturnNullRule" 
+		Type="Gendarme.Rules.BadPractice.CloneMethodShouldNotReturnNullRule, Gendarme.Rules.BadPractice, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#CloneMethodShouldNotReturnNullRule" >
+		<problem>The ICloneable.Clone () method in '{0}' seems to return null in some circumstances.</problem>
+		<solution>Please return an appropriate object instead of returning null.</solution>
+	</rule>
 </rules>
