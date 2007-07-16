@@ -16,7 +16,6 @@ public class DocumentTab : Gtk.ScrolledWindow {
 	private DocumentEditor editor;
 	private HBox tab_label;
 	private Label title_label;
-	string title;
 	
 	public DocumentTab (Notebook docTabs) : base ()
 	{
@@ -26,12 +25,10 @@ public class DocumentTab : Gtk.ScrolledWindow {
 		editor = new DocumentEditor ();
 		this.Add (editor);
 		
-		title = "Untitled";
-		
 		tab_label = new HBox (false, 2);
-		title_label = new Label (title);
+		title_label = new Label ("Untitled");
 		
-		// Close tab buttonany
+		// Close tab button
 		Button tabClose = new Button ();
 		Image img = new Image (Stock.Close, IconSize.SmallToolbar);
 		tabClose.Add (img);
@@ -61,11 +58,11 @@ public class DocumentTab : Gtk.ScrolledWindow {
 	
 	public string Title {
 		get {
-			return title;
+			return title_label.Text;
 		}
 		
 		set {
-			title = title_label.Text = value;
+			title_label.Text = value;
 		}
 	}
 	

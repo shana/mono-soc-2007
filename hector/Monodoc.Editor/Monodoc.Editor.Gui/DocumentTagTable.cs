@@ -507,6 +507,8 @@ public class DocumentTagTable : TextTagTable {
 	
 	private void InitDynamicTags ()
 	{
+
+		// Schema defined elements.
 		dynamic_tags ["block"] = true;
 		dynamic_tags ["code"] = true;
 		dynamic_tags ["c"] = true;
@@ -528,6 +530,8 @@ public class DocumentTagTable : TextTagTable {
 		dynamic_tags ["term"] = true;
 		dynamic_tags ["typeparamref"] = true;
 		dynamic_tags ["ul"] = true;
+
+		// Editor defined tags to format the documentation
 		dynamic_tags ["padding"] = true;
 		dynamic_tags ["newline"] = true;
 		dynamic_tags ["format"] = true;
@@ -537,6 +541,7 @@ public class DocumentTagTable : TextTagTable {
 	{
 		string tagName = tag.Name.Split ('#')[0];
 		switch (tagName) {
+		// Schema defined elements.
 		case "block":
 			tag.IsElement = true;
 			break;
@@ -700,6 +705,7 @@ public class DocumentTagTable : TextTagTable {
 		case "ul":
 			tag.IsElement = true;
 			break;
+		// Editor defined tags.
 		case "padding":
 			tag.IsText = true;
 			tag.IsSerializable = false;
