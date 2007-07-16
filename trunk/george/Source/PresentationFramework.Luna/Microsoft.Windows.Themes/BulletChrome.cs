@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 #if Implementation
-using Microsoft.Windows.Themes;
 namespace Mono.Microsoft.Windows.Themes {
 #else
 namespace Microsoft.Windows.Themes {
