@@ -53,7 +53,7 @@ namespace CBinding.ProjectPad
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return ((ProjectPackage)dataObject).Name;
+			return ((ProjectPackage)dataObject).File;
 		}
 		
 		public override string ContextMenuAddinPath {

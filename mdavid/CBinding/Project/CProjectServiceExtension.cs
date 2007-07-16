@@ -43,6 +43,20 @@ namespace CBinding
 {
 	public class CProjectServiceExtension : ProjectServiceExtension
 	{
+		public override ICompilerResult Build (IProgressMonitor monitor, CombineEntry entry)
+		{
+			CProject project = entry as CProject;
+			
+			if (project == null)
+				return base.Build (monitor, entry);
+			
+			foreach (CProject p in project.DependedOnProjects ()) {
+				p.Build (monitor, true);
+			}
+			
+			return base.Build (monitor, entry);
+		}
+		
 		public override void Clean (IProgressMonitor monitor, CombineEntry entry)
 		{
 			base.Clean (monitor, entry);
@@ -51,14 +65,15 @@ namespace CBinding
 			
 			if (project == null) return;
 			
-			StringBuilder objectFiles = new StringBuilder ();
+			StringBuilder cleanFiles = new StringBuilder ();
 			foreach (ProjectFile file in project.ProjectFiles) {
 				if (file.BuildAction == BuildAction.Compile) {
-					objectFiles.Append (Path.ChangeExtension (file.Name, ".o") + " ");
+					cleanFiles.Append (Path.ChangeExtension (file.Name, ".o") + " ");
+					cleanFiles.Append (Path.ChangeExtension (file.Name, ".d") + " ");
 				}
 			}
 			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess ("rm", objectFiles.ToString (), null, null);
+			ProcessWrapper p = Runtime.ProcessService.StartProcess ("rm", cleanFiles.ToString (), null, null);
 			p.WaitForExit ();
 			p.Close ();
 		}

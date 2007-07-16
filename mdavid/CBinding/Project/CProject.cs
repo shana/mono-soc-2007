@@ -33,6 +33,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.CodeDom.Compiler;
 
@@ -71,15 +72,20 @@ namespace CBinding
 		public event ProjectPackageEventHandler PackageAddedToProject;
 		public event ProjectPackageEventHandler PackageRemovedFromProject;
 		
-		public CProject ()
+		private void Init ()
 		{
 			packages.Project = this;
+		}
+		
+		public CProject ()
+		{
+			Init ();
 		}
 		
 		public CProject (ProjectCreateInformation info,
 		                 XmlElement projectOptions, string language)
 		{
-			packages.Project = this;
+			Init ();
 			string binPath = ".";
 			
 			if (info != null) {
@@ -163,16 +169,51 @@ namespace CBinding
 			}
 		}
 		
+		public List<CProject> DependedOnProjects ()
+		{
+			List<string> project_names = new List<string> ();
+			List<CProject> projects = new List<CProject> ();
+			
+			foreach (ProjectPackage p in Packages) {
+				if (p.IsProject) {
+					project_names.Add (p.Name);
+				}
+			}
+			
+			foreach (CombineEntry e in ParentCombine.Entries) {
+				if (e is CProject && project_names.Contains (e.Name)) {
+					projects.Add ((CProject)e);
+				}
+			}
+			
+			return projects;
+		}
+		
 		public static bool IsHeaderFile (string filename)
 		{
 			return (Path.GetExtension (filename.ToUpper ()) == ".H" ||
 			        Path.GetExtension (filename.ToUpper ()) == ".HPP");
 		}
 		
+		public void WritePkgPackage ()
+		{
+			string pkgfile = Path.Combine (BaseDirectory, Name + ".pc");
+			
+			CProjectConfiguration config = (CProjectConfiguration)ActiveConfiguration;
+			
+			using (StreamWriter writer = new StreamWriter (pkgfile)) {
+				writer.WriteLine ("Name: {0}", Name);
+				writer.WriteLine ("Description: {0}", Description);
+				writer.WriteLine ("Version: {0}", Version);
+				writer.WriteLine ("Libs: -L{0} -l{1}", config.OutputDirectory, config.Output);
+				writer.WriteLine ("Cflags: -I{0}", BaseDirectory);
+			}
+		}
+		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)
 		{
 			CProjectConfiguration pc = (CProjectConfiguration)ActiveConfiguration;
-			pc.SourceDirectory = BaseDirectory; // hack, this should not be necessary
+			pc.SourceDirectory = BaseDirectory;
 			foreach (ProjectFile f in ProjectFiles) {
 				if (f.BuildAction == BuildAction.FileCopy)
 					Runtime.FileService.CopyFile (

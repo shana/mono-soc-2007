@@ -30,6 +30,7 @@
 //
 
 using System;
+using System.IO;
 
 using Mono.Addins;
 
@@ -39,21 +40,46 @@ namespace CBinding
 {
 	public class ProjectPackage
 	{
+		[ItemProperty ("file")]
+		private string file;
+		
 		[ItemProperty ("name")]
 		private string name;
 		
-		public ProjectPackage (string name)
+		[ItemProperty ("IsProject")]
+		private bool is_project;
+		
+		public ProjectPackage (string file)
 		{
-			this.name = name;
+			this.file = file;
+			this.name = file;
+			this.is_project = false;
+		}
+		
+		public ProjectPackage (CProject project)
+		{
+			name = project.Name;
+			file = Path.Combine (project.BaseDirectory, name + ".pc");
+			is_project = true;
 		}
 		
 		public ProjectPackage ()
 		{
 		}
 		
+		public string File {
+			get { return file; }
+			set { file = value; }
+		}
+		
 		public string Name {
 			get { return name; }
 			set { name = value; }
+		}
+		
+		public bool IsProject {
+			get { return is_project; }
+			set { is_project = value; }
 		}
 		
 		public override bool Equals (object o)
@@ -62,12 +88,12 @@ namespace CBinding
 			
 			if (other == null) return false;
 			
-			return other.Name.Equals (name);
+			return other.File.Equals (file);
 		}
 		
 		public override int GetHashCode ()
 		{
-			return base.GetHashCode ();
+			return (file + name).GetHashCode ();
 		}
 	}
 }

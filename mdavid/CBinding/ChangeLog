@@ -1,3 +1,13 @@
+2007-07-15  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/EditPackagesDialog.cs, Project/ProjectPackage.cs,
+	  Project/CProjectServiceExtension.cs, Project/CProject.cs,
+	  Compiler/CCompiler.cs,
+	  ProjectPad/ProjectPackagesFolderNodeBuilder.cs,
+	  ProjectPad/ProjectPackageNodeBuilder.cs: Projects can now depend on
+	  other projects in the solution (currently only projects that
+	  compile into a static library).
+
 2007-07-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Compiler/GNUCompiler.cs: Implemented dependency tracking. Dependency
