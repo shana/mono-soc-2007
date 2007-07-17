@@ -31,8 +31,7 @@ using System;
 using System.Data;
 using FirebirdSql.Data.Firebird;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	// see:
 	// http://firebird.sourceforge.net/index.php?op=devel&sub=netprovider&id=examples

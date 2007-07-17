@@ -32,8 +32,7 @@ using System.Text;
 using System.Data;
 using System.Collections.Generic;
 using Mono.Data.SybaseClient;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class SybaseSchemaProvider : AbstractSchemaProvider
 	{

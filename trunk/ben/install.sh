@@ -14,8 +14,18 @@ done
 
 
 # temp remove some addins
-rm $DIR/Mono.Data.Sql.Firebird.addin.xml
-rm $DIR/Mono.Data.Sql.Odbc.addin.xml
-rm $DIR/Mono.Data.Sql.Oracle.addin.xml
-rm $DIR/Mono.Data.Sql.Sybase.addin.xml
+rm $DIR/MonoDevelop.Database.Sql.Firebird.addin.xml
+rm $DIR/MonoDevelop.Database.Sql.Odbc.addin.xml
+rm $DIR/MonoDevelop.Database.Sql.Oracle.addin.xml
+rm $DIR/MonoDevelop.Database.Sql.Sybase.addin.xml
 rm $DIR/MonoDevelop.Database.Visualization.addin.xml
+rm $DIR/MonoDevelop.Database.Project.addin.xml
+rm $DIR/MonoDevelop.Database.GlueGenerator.addin.xml
+
+rm $DIR/MonoDevelop.Database.Sql.Firebird.dll
+rm $DIR/MonoDevelop.Database.Sql.Odbc.dll
+rm $DIR/MonoDevelop.Database.Sql.Oracle.dll
+rm $DIR/MonoDevelop.Database.Sql.Sybase.dll
+rm $DIR/MonoDevelop.Database.Visualization.dll
+rm $DIR/MonoDevelop.Database.Project.dll
+rm $DIR/MonoDevelop.Database.GlueGenerator.dll
