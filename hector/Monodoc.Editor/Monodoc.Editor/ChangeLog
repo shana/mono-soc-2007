@@ -1,5 +1,10 @@
 2007-07-17  Hector E. Gomez M. <hectoregm@gmail.com> 
 
+	* gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Changed
+	  Padding to 0 in EditorWindow
+
+2007-07-17  Hector E. Gomez M. <hectoregm@gmail.com> 
+
 	* EditorWindow.cs: Editing prototype code.
 
 2007-07-09  Hector E. Gomez M. <hectoregm@gmail.com> 
