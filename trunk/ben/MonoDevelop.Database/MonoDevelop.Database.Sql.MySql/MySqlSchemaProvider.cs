@@ -42,31 +42,57 @@ using System.Collections.Generic;
 		{
 		}
 
-		public override bool SupportsSchemaType (Type type)
+		public override bool SupportsSchemaOperation (SchemaOperation operation)
 		{
-			if (type == typeof(TableSchema))
-				return true;
-			else if (type == typeof(ColumnSchema))
-				return true;
-			else if (type == typeof(ViewSchema))
-				return true;
-			else if (type == typeof(ProcedureSchema))
-				return true;
-			else if (type == typeof(UserSchema))
-				return true;
-			else if (type == typeof(DatabaseSchema))
-				return true;
-			else if (type == typeof(ConstraintSchema))
-				return true;
-			else if (type == typeof(ParameterSchema))
-				return true;
-			else
+			switch (operation.Statement) {
+			case SqlStatementType.Select:
+				switch (operation.Schema) {
+				case SqlSchemaType.Table:
+				case SqlSchemaType.Column:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Procedure:
+				case SqlSchemaType.Database:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Parameter:
+				case SqlSchemaType.User:
+				case SqlSchemaType.Trigger:
+					return true;
+				default:
+					return false;
+				}
+			case SqlStatementType.Create:
+			case SqlStatementType.Drop:
+			case SqlStatementType.Rename:
+				switch (operation.Schema) {
+				case SqlSchemaType.Database:
+				case SqlSchemaType.Table:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Procedure:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Trigger:
+				case SqlSchemaType.User:
+					return true;
+				default:
+					return false;
+				}
+			case SqlStatementType.Alter:
+				switch (operation.Schema) {
+				case SqlSchemaType.Database:
+				case SqlSchemaType.Table:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Procedure:
+					return true;
+				default:
+					return false;
+				}
+			default:
 				return false;
+			}
 		}
 		
-		public override ICollection<DatabaseSchema> GetDatabases ()
+		public override DatabaseSchemaCollection GetDatabases ()
 		{
-			List<DatabaseSchema> databases = new List<DatabaseSchema> ();
+			DatabaseSchemaCollection databases = new DatabaseSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SHOW DATABASES;");
@@ -88,9 +114,9 @@ using System.Collections.Generic;
 
 		// see: http://dev.mysql.com/doc/refman/5.1/en/tables-table.html
 		// // see: http://dev.mysql.com/doc/refman/5.1/en/show-create-table.html
-		public override ICollection<TableSchema> GetTables ()
+		public override TableSchemaCollection GetTables ()
 		{
-			List<TableSchema> tables = new List<TableSchema> ();
+			TableSchemaCollection tables = new TableSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SHOW TABLES;");
@@ -145,9 +171,9 @@ using System.Collections.Generic;
 			return tables;
 		}
 		
-		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
+		public override ColumnSchemaCollection GetTableColumns (TableSchema table)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", table.Name));
@@ -174,9 +200,9 @@ using System.Collections.Generic;
 		}
 
 		// see: http://dev.mysql.com/doc/refman/5.1/en/views-table.html
-		public override ICollection<ViewSchema> GetViews ()
+		public override ViewSchemaCollection GetViews ()
 		{
-			List<ViewSchema> views = new List<ViewSchema> ();
+			ViewSchemaCollection views = new ViewSchemaCollection ();
 
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -210,9 +236,9 @@ using System.Collections.Generic;
 			return views;
 		}
 
-		public override ICollection<ColumnSchema> GetViewColumns (ViewSchema view)
+		public override ColumnSchemaCollection GetViewColumns (ViewSchema view)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", view.Name));
@@ -239,9 +265,9 @@ using System.Collections.Generic;
 		}
 
 		// see: http://dev.mysql.com/doc/refman/5.1/en/routines-table.html
-		public override ICollection<ProcedureSchema> GetProcedures ()
+		public override ProcedureSchemaCollection GetProcedures ()
 		{
-			List<ProcedureSchema> procedures = new List<ProcedureSchema> ();
+			ProcedureSchemaCollection procedures = new ProcedureSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -277,9 +303,9 @@ using System.Collections.Generic;
 			return procedures;
 		}
 
-		public override ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure)
+		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -314,15 +340,15 @@ using System.Collections.Generic;
 			return columns;
 		}
 		
-		public override ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure)
+		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
 			throw new NotImplementedException ();
 		}
 
 		private static Regex constraintRegex = new Regex (@"`([\w ]+)`", RegexOptions.Compiled);
-		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
+		public override ConstraintSchemaCollection GetTableConstraints (TableSchema table)
 		{
-			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
+			ConstraintSchemaCollection constraints = new ConstraintSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SHOW TABLE STATUS FROM `" + table.OwnerName + "`;");
@@ -350,9 +376,9 @@ using System.Collections.Generic;
 			return constraints;
 		}
 
-		public override ICollection<UserSchema> GetUsers ()
+		public override UserSchemaCollection GetUsers ()
 		{
-			List<UserSchema> users = new List<UserSchema> ();
+			UserSchemaCollection users = new UserSchemaCollection ();
 
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SELECT DISTINCT user from mysql.user where user != '';");
@@ -484,6 +510,216 @@ using System.Collections.Generic;
 			}
 			
 			return dts;
+		}
+		
+		//http://dev.mysql.com/doc/refman/5.1/en/create-database.html
+		public override void CreateDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/create-table.html
+		public override void CreateTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/create-view.html
+		public override void CreateView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/create-procedure.html
+		public override void CreateProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/create-index.html
+		public override void CreateConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://dev.mysql.com/doc/refman/5.1/en/create-trigger.html
+		public override void CreateTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/create-user.html
+		public override void CreateUser (UserSchema user)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://dev.mysql.com/doc/refman/5.1/en/alter-database.html
+		public override void AlterDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/alter-table.html
+		public override void AlterTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/alter-view.html
+		public override void AlterView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/alter-procedure.html
+		public override void AlterProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://dev.mysql.com/doc/refman/5.1/en/drop-database.html
+		public override void DropDatabase (DatabaseSchema database)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP DATABASE IF EXISTS " + database.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/drop-table.html
+		public override void DropTable (TableSchema table)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP TABLE IF EXISTS " + table.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/drop-view.html
+		public override void DropView (ViewSchema view)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP VIEW IF EXISTS " + view.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/drop-procedure.html
+		public override void DropProcedure (ProcedureSchema procedure)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP PROCEDURE IF EXISTS " + procedure.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/drop-index.html
+		public override void DropConstraint (ConstraintSchema constraint)
+		{
+			if (constraint is IndexConstraintSchema) {
+				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
+				
+				IPooledDbConnection conn = connectionPool.Request ();
+				IDbCommand command = conn.CreateCommand ("DROP INDEX " + constraint.Name + " ON " + indexConstraint.TableName + ";");
+				using (command)
+					command.ExecuteNonQuery ();
+				conn.Release ();
+			}
+		}
+		
+		//http://dev.mysql.com/doc/refman/5.1/en/drop-trigger.html
+		public override void DropTrigger (TriggerSchema trigger)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP TRIGGER IF EXISTS " + trigger.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/drop-user.html
+		public override void DropUser (UserSchema user)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP USER " + user.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+		
+		//http://dev.mysql.com/doc/refman/5.1/en/rename-database.html
+		public override void RenameDatabase (DatabaseSchema database, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("RENAME DATABASE " + database.Name + " TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			database.Name = name;
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/rename-table.html
+		public override void RenameTable (TableSchema table, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("RENAME TABLE " + table.Name + " TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			table.Name = name;
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/rename-table.html
+		public override void RenameView (ViewSchema view, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			//this is no copy paste error, it really is "RENAME TABLE"
+			IDbCommand command = conn.CreateCommand ("RENAME TABLE " + view.Name + " TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			view.Name = name;
+		}
+
+		public override void RenameProcedure (ProcedureSchema procedure, string name)
+		{
+			DropProcedure (procedure);
+			procedure.Name = name;
+			CreateProcedure (procedure);
+		}
+
+		public override void RenameConstraint (ConstraintSchema constraint, string name)
+		{
+			DropConstraint (constraint);
+			constraint.Name = name;
+			CreateConstraint (constraint);
+		}
+		
+		public override void RenameTrigger (TriggerSchema trigger, string name)
+		{
+			DropTrigger (trigger);
+			trigger.Name = name;
+			CreateTrigger (trigger);
+		}
+
+		//http://dev.mysql.com/doc/refman/5.1/en/rename-user.html
+		public override void RenameUser (UserSchema user, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("RENAME USER " + user.Name + " TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			user.Name = name;
 		}
 		
 		private int GetMainVersion (IDbCommand command)
