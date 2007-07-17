@@ -40,47 +40,56 @@ using Npgsql;
 		{
 		}
 		
-		public override bool SupportsSchemaType (Type type)
+		public override bool SupportsSchemaOperation (SchemaOperation operation)
 		{
-			if (type == typeof(TableSchema))
-				return true;
-			else if (type == typeof(ViewSchema))
-				return true;
-			else if (type == typeof(ProcedureSchema))
-				return true;
-			else if (type == typeof(AggregateSchema))
-				return true;
-			else if (type == typeof(GroupSchema))
-				return true;
-			else if (type == typeof(UserSchema))
-				return true;
-			else if (type == typeof(LanguageSchema))
-				return true;
-			else if (type == typeof(OperatorSchema))
-				return true;
-			else if (type == typeof(RoleSchema))
-				return true;
-			else if (type == typeof(SequenceSchema))
-				return true;
-			else if (type == typeof(DataTypeSchema))
-				return true;
-			else if (type == typeof(TriggerSchema))
-				return true;
-			else if (type == typeof(ColumnSchema))
-				return true;
-			else if (type == typeof(ConstraintSchema))
-				return true;
-			else if (type == typeof(RuleSchema))
-				return true;
-			else if (type == typeof(ParameterSchema))
-				return true;
-			else
+			switch (operation.Statement) {
+			case SqlStatementType.Select:
+				switch (operation.Schema) {
+				case SqlSchemaType.Table:
+				case SqlSchemaType.Column:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Procedure:
+				case SqlSchemaType.Database:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Parameter:
+				case SqlSchemaType.User:
+				case SqlSchemaType.Trigger:
+				case SqlSchemaType.Aggregate:
+				case SqlSchemaType.Group:
+				case SqlSchemaType.Language:
+				case SqlSchemaType.Operator:
+				case SqlSchemaType.Role:
+				case SqlSchemaType.Rule:
+				case SqlSchemaType.DataType:
+				case SqlSchemaType.Sequence:
+					return true;
+				default:
+					return false;
+				}
+			case SqlStatementType.Create:
+			case SqlStatementType.Drop:
+			case SqlStatementType.Rename:
+			case SqlStatementType.Alter:
+				switch (operation.Schema) {
+				case SqlSchemaType.Database:
+				case SqlSchemaType.Table:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Trigger:
+				case SqlSchemaType.User:
+					return true;
+				case SqlSchemaType.View:
+					return operation.Statement != SqlStatementType.Alter;
+				default:
+					return false;
+				}
+			default:
 				return false;
+			}
 		}
 
-		public override ICollection<TableSchema> GetTables ()
+		public override TableSchemaCollection GetTables ()
 		{
-			List<TableSchema> tables = new List<TableSchema> ();
+			TableSchemaCollection tables = new TableSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -111,14 +120,14 @@ using Npgsql;
 						sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
 						sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
 						
-						ICollection<ColumnSchema> columns = table.Columns;
+					ColumnSchemaCollection columns = table.Columns;
 						string[] parts = new string[columns.Count];
 						int i = 0;
 						foreach (ColumnSchema col in columns)
 							parts[i++] = col.Definition;
 						sb.Append (String.Join (",\n", parts));
 						
-						ICollection<ConstraintSchema> constraints = table.Constraints;
+					ConstraintSchemaCollection constraints = table.Constraints;
 						parts = new string[constraints.Count];
 						if (constraints.Count > 0)
 							sb.Append (",\n");
@@ -141,9 +150,9 @@ using Npgsql;
 			return tables;
 		}
 		
-		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
+		public override ColumnSchemaCollection GetTableColumns (TableSchema table)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+		ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -194,9 +203,9 @@ using Npgsql;
 			return columns;
 		}
 
-		public override ICollection<ViewSchema> GetViews ()
+		public override ViewSchemaCollection GetViews ()
 		{
-			List<ViewSchema> views = new List<ViewSchema> ();
+			ViewSchemaCollection views = new ViewSchemaCollection ();
 
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -238,9 +247,9 @@ using Npgsql;
 			return views;
 		}
 
-		public override ICollection<ColumnSchema> GetViewColumns (ViewSchema view)
+		public override ColumnSchemaCollection GetViewColumns (ViewSchema view)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -277,9 +286,9 @@ using Npgsql;
 			return columns;
 		}
 
-		public override ICollection<ProcedureSchema> GetProcedures ()
+		public override ProcedureSchemaCollection GetProcedures ()
 		{
-			List<ProcedureSchema> procedures = new List<ProcedureSchema> ();
+			ProcedureSchemaCollection procedures = new ProcedureSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -326,9 +335,9 @@ using Npgsql;
 			return procedures;
 		}
 
-		public override ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure)
+		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			// FIXME: Won't work properly with overload functions.
 			// Maybe check the number of columns in the parameters for
@@ -357,14 +366,14 @@ using Npgsql;
 			return columns;
 		}
 		
-		public override ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure)
+		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
+		public override ConstraintSchemaCollection GetTableConstraints (TableSchema table)
 		{
-			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
+			ConstraintSchemaCollection constraints = new ConstraintSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (String.Format (
@@ -432,9 +441,9 @@ using Npgsql;
 			return constraints;
 		}
 
-		public override ICollection<UserSchema> GetUsers ()
+		public override UserSchemaCollection GetUsers ()
 		{
-			List<UserSchema> users = new List<UserSchema> ();
+			UserSchemaCollection users = new UserSchemaCollection ();
 
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SELECT * FROM pg_user;");
@@ -494,6 +503,205 @@ using Npgsql;
 			}
 			
 			return dts;
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-createdatabase.html
+		public override void CreateDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-createtable.html
+		public override void CreateTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-createview.html
+		public override void CreateView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-createindex.html
+		//http://www.postgresql.org/docs/8.2/interactive/sql-createconstraint.html
+		public override void CreateConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-createtrigger.html
+		public override void CreateTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-createuser.html
+		public override void CreateUser (UserSchema user)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-alterdatabase.html
+		public override void AlterDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-altertable.html
+		public override void AlterTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-alterindex.html
+		public override void AlterConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-altertrigger.html
+		public override void AlterTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-alteruser.html
+		public override void AlterUser (UserSchema user)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-dropdatabase.html
+		public override void DropDatabase (DatabaseSchema database)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP DATABASE IF EXISTS " + database.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-droptable.html
+		public override void DropTable (TableSchema table)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP TABLE IF EXISTS " + table.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-dropview.html
+		public override void DropView (ViewSchema view)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP VIEW IF EXISTS " + view.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-dropindex.html
+		public override void DropConstraint (ConstraintSchema constraint)
+		{
+			if (constraint is IndexConstraintSchema) {
+				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
+				
+				IPooledDbConnection conn = connectionPool.Request ();
+				IDbCommand command = conn.CreateCommand ("DROP INDEX IF EXISTS " + constraint.Name + " ON " + indexConstraint.TableName + ";");
+				using (command)
+					command.ExecuteNonQuery ();
+				conn.Release ();
+			}
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-droptrigger.html
+		public override void DropTrigger (TriggerSchema trigger)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP TRIGGER IF EXISTS " + trigger.Name + " ON " + trigger.TableName + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-dropuser.html
+		public override void DropUser (UserSchema user)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP USER IF EXISTS " + user.Name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-alterdatabase.html
+		public override void RenameDatabase (DatabaseSchema database, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("ALTER DATABASE " + database.Name + " RENAME TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			database.Name = name;
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-altertable.html
+		public override void RenameTable (TableSchema table, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("ALTER TABLE " + table.Name + " RENAME TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			table.Name = name;
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-altertable.html
+		public override void RenameView (ViewSchema view, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			//this is no copy paste error, it really is "ALTER TABLE"
+			IDbCommand command = conn.CreateCommand ("ALTER TABLE " + view.Name + " RENAME TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			view.Name = name;
+		}
+
+		public override void RenameConstraint (ConstraintSchema constraint, string name)
+		{
+			DropConstraint (constraint);
+			constraint.Name = name;
+			CreateConstraint (constraint);
+		}
+		
+		//http://www.postgresql.org/docs/8.2/interactive/sql-altertrigger.html
+		public override void RenameTrigger (TriggerSchema trigger, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("ALTER TRIGGER " + trigger.Name + " ON " + trigger.TableName + " RENAME TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			trigger.Name = name;
+		}
+
+		//http://www.postgresql.org/docs/8.2/interactive/sql-alteruser.html
+		public override void RenameUser (UserSchema user, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("ALTER USER " + user.Name + " RENAME TO " + name + ";");
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			user.Name = name;
 		}
 						
 		/// <summary>
