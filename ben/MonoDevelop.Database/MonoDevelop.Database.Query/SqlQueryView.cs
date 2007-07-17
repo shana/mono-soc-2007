@@ -33,8 +33,7 @@ using System;
 using System.Data;
 using System.Threading;
 using System.Collections.Generic;
-using Mono.Addins;
-usingMonoDevelop.Database.Sql;
+using Mono.Addins;using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Components;
@@ -58,7 +57,7 @@ namespace MonoDevelop.Database.Query
 		private object currentQueryState;
 		private List<object> stoppedQueries;
 		
-		private ConnectionSettings selectedConnection;
+		private DatabaseConnectionContext selectedConnection;
 		
 		public SqlQueryView ()
 		{
@@ -92,9 +91,8 @@ namespace MonoDevelop.Database.Query
 			menuConnectionsButton.Menu = menuConnections;
 
 			connectionMenuActivatedHandler = new EventHandler (ConnectionMenuActivated);
-			foreach (ConnectionSettings settings in ConnectionSettingsService.Connections)
-				AddConnectionSettingsMenu (settings);
-			menuConnections.Show ();
+			foreach (DatabaseConnectionContext context in ConnectionContextService.DatabaseConnections)
+				AddConnectionSettingsMenu (context);
 			SelectFirstConnectionSettings ();
 
 			buttonExecute.IsImportant = true;
@@ -114,9 +112,9 @@ namespace MonoDevelop.Database.Query
 			
 			sourceView.GrabFocus ();
 			
-			ConnectionSettingsService.ConnectionAdded += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionAdded));
-			ConnectionSettingsService.ConnectionRemoved += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionRemoved));
-			ConnectionSettingsService.ConnectionEdited += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionEdited));
+			ConnectionContextService.ConnectionContextAdded += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionAdded));
+			ConnectionContextService.ConnectionContextRemoved += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionRemoved));
+			ConnectionContextService.ConnectionContextEdited += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionEdited));
 			
 			vbox.ShowAll ();
 		}
@@ -126,14 +124,15 @@ namespace MonoDevelop.Database.Query
 			set { sourceView.Buffer.Text = value; }
 		}
 		
-		public ConnectionSettings SelectedConnectionSettings {
+		public DatabaseConnectionContext SelectedConnectionContext {
 			get { return selectedConnection; }
 			set {
 				selectedConnection = value;
 				buttonExecute.Sensitive = value != null;
-				foreach (ConnectionSettingsMenuItem item in menuConnections.Children) {
-					if (item.ConnectionSettings == value) {
-						item.Active = true;
+				foreach (ConnectionContextMenuItem item in menuConnections.Children) {
+					if (item.ConnectionContext == value) {
+						if (!item.Active)
+							item.Active = true;
 						return;
 					}
 				}
@@ -161,24 +160,23 @@ namespace MonoDevelop.Database.Query
 		public void ExecuteQuery ()
 		{
 			if (selectedConnection == null || Text.Length < 0) {
-				Runtime.LoggingService.Warn ("-- NO QRY.");
 				SetQueryState (false, "No connection selected.");
 				return;
 			}
 			
-			QueryService.EnsureConnection (selectedConnection, new ConnectionSettingsCallback (ExecuteQueryCallback));
+			QueryService.EnsureConnection (selectedConnection, new DatabaseConnectionContextCallback (ExecuteQueryCallback), null);
 		}
 		
-		private void ExecuteQueryCallback (ConnectionSettings settings, bool connected)
+		private void ExecuteQueryCallback (DatabaseConnectionContext context, bool connected, object state)
 		{
 			if (!connected) {
 				Services.MessageService.ShowErrorFormatted (
-					GettextCatalog.GetString ("Unable to connect to database '{0}'"), settings.Name);
+					GettextCatalog.GetString ("Unable to connect to database '{0}'"), context.ConnectionSettings.Name);
 				return;
 			}
 			
 			currentQueryState = new object ();
-			IPooledDbConnection conn = settings.ConnectionPool.Request ();
+			IPooledDbConnection conn = context.ConnectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (Text);
 			conn.ExecuteSetAsync (command, new ExecuteCallback<DataSet> (ExecuteQueryThreaded), currentQueryState);
 		}
@@ -223,16 +221,16 @@ namespace MonoDevelop.Database.Query
 				stoppedQueries.Add (currentQueryState);
 		}
 		
-		private void OnConnectionAdded (object sender, ConnectionSettingsEventArgs args)
+		private void OnConnectionAdded (object sender, DatabaseConnectionContextEventArgs args)
 		{
-			AddConnectionSettingsMenu (args.ConnectionSettings);
+			AddConnectionSettingsMenu (args.ConnectionContext);
 		}
 		
-		private void OnConnectionRemoved (object sender, ConnectionSettingsEventArgs args)
+		private void OnConnectionRemoved (object sender, DatabaseConnectionContextEventArgs args)
 		{
-			ConnectionSettingsMenuItem removeItem = null;
-			foreach (ConnectionSettingsMenuItem item in menuConnections.Children) {
-				if (item.ConnectionSettings == args.ConnectionSettings) {
+			ConnectionContextMenuItem removeItem = null;
+			foreach (ConnectionContextMenuItem item in menuConnections.Children) {
+				if (item.ConnectionContext == args.ConnectionContext) {
 					removeItem = item;
 					break;
 				}
@@ -245,32 +243,34 @@ namespace MonoDevelop.Database.Query
 			SelectFirstConnectionSettings ();
 		}
 		
-		private void OnConnectionEdited (object sender, ConnectionSettingsEventArgs args)
+		private void OnConnectionEdited (object sender, DatabaseConnectionContextEventArgs args)
 		{
-			foreach (ConnectionSettingsMenuItem item in menuConnections.Children) {
-				if (item.ConnectionSettings == args.ConnectionSettings) {
+			foreach (ConnectionContextMenuItem item in menuConnections.Children) {
+				if (item.ConnectionContext == args.ConnectionContext) {
 					item.Update ();
 					return;
 				}
 			}
 		}
 		
-		private void AddConnectionSettingsMenu (ConnectionSettings settings)
+		private void AddConnectionSettingsMenu (DatabaseConnectionContext context)
 		{
-			ConnectionSettingsMenuItem item = new ConnectionSettingsMenuItem (settings);
-			item.Activated += connectionMenuActivatedHandler;
+			ConnectionContextMenuItem item = new ConnectionContextMenuItem (context);
 			if (group == null)
 				group = item.Group;
 			else
 				item.Group = group;
+			item.Active = false;
+			item.Activated += connectionMenuActivatedHandler;
 			item.ShowAll ();
 			menuConnections.Append (item);
 		}
 		
 		private void ConnectionMenuActivated (object sender, EventArgs args)
 		{
-			ConnectionSettingsMenuItem item = sender as ConnectionSettingsMenuItem;
-			SelectedConnectionSettings = item.ConnectionSettings;
+			ConnectionContextMenuItem item = sender as ConnectionContextMenuItem;
+			selectedConnection = item.ConnectionContext;
+			buttonExecute.Sensitive = true;
 		}
 		
 		private void SetQueryState (bool exec, string msg)
@@ -287,32 +287,32 @@ namespace MonoDevelop.Database.Query
 		
 		private void SelectFirstConnectionSettings ()
 		{
-			foreach (ConnectionSettingsMenuItem item in menuConnections.Children) {
+			foreach (ConnectionContextMenuItem item in menuConnections.Children) {
 				item.Active = true;
-				selectedConnection = item.ConnectionSettings;
+				selectedConnection = item.ConnectionContext;
 				buttonExecute.Sensitive = true;
 				return;
 			}
 		}
 	}
 	
-	internal class ConnectionSettingsMenuItem : RadioMenuItem
+	internal class ConnectionContextMenuItem : RadioMenuItem
 	{
-		private ConnectionSettings settings;
+		private DatabaseConnectionContext context;
 		
-		public ConnectionSettingsMenuItem (ConnectionSettings settings)
-			: base (settings.Name)
+		public ConnectionContextMenuItem (DatabaseConnectionContext context)
+			: base (context.ConnectionSettings.Name)
 		{
-			this.settings = settings;
+			this.context = context;
 		}
 		
-		public ConnectionSettings ConnectionSettings {
-			get { return settings; }
+		public DatabaseConnectionContext ConnectionContext {
+			get { return context; }
 		}
 		
 		public void Update ()
 		{
-			(Child as Label).Text = settings.Name;
+			(Child as Label).Text = context.ConnectionSettings.Name;
 		}
 	}
 }

@@ -26,8 +26,7 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class OracleDbFactory : IDbFactory
 	{

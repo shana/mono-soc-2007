@@ -31,8 +31,7 @@ using System;
 using System.Data;
 using System.Data.OracleClient;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class OracleConnectionProvider : AbstractConnectionProvider
 	{

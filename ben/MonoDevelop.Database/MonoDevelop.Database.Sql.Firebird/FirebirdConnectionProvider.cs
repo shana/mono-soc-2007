@@ -31,8 +31,7 @@ using System;
 using System.Data;
 using FirebirdSql.Data.Firebird;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class FirebirdConnectionProvider : AbstractConnectionProvider
 	{

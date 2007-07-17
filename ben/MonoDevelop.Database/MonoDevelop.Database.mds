@@ -3,10 +3,10 @@
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="MonoDevelop.Database.Sql" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Sql.Tests" configuration="Debug" />
-      <Entry build="True" name="MonoDevelop.Database.GlueGenerator" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.GlueGenerator" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Visualization" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Debug" />
-      <Entry build="True" name="MonoDevelop.Database.Project" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Project" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Sql.Sybase" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Sql.MySql" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Sql.Firebird" configuration="Debug" />
@@ -17,7 +17,7 @@
       <Entry build="False" name="MonoDevelop.Database.Sql.Odbc" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Components" configuration="Debug" />
-      <Entry build="True" name="MonoDevelop.Database.Designer" configuration="Debug" />
+      <Entry build="False" name="MonoDevelop.Database.Designer" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="MonoDevelop.Database.Sql" configuration="Release" />
