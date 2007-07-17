@@ -31,12 +31,11 @@ using System;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class MySqlConnectionProvider : AbstractConnectionProvider
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings)
+		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings)
 		{
 			string connStr = null;
 			try {	

@@ -33,8 +33,7 @@ using System.Text.RegularExpressions;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class MySqlSchemaProvider : AbstractSchemaProvider
 	{
@@ -58,6 +57,8 @@ namespaceMonoDevelop.Database.Sql
 			else if (type == typeof(DatabaseSchema))
 				return true;
 			else if (type == typeof(ConstraintSchema))
+				return true;
+			else if (type == typeof(ParameterSchema))
 				return true;
 			else
 				return false;
@@ -180,7 +181,7 @@ namespaceMonoDevelop.Database.Sql
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
 				"SELECT TABLE_NAME, TABLE_SCHEMA FROM information_schema.VIEWS where TABLE_SCHEMA = '"
-				+ ConnectionPool.ConnectionSettings.Database +
+				+ ConnectionPool.ConnectionContext.ConnectionSettings.Database +
 				"' ORDER BY TABLE_NAME"
 			);
 			using (command) {
@@ -245,7 +246,7 @@ namespaceMonoDevelop.Database.Sql
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
 				"SELECT ROUTINE_NAME, ROUTINE_SCHEMA, ROUTINE_TYPE FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA ='"
-				+ ConnectionPool.ConnectionSettings.Database +
+				+ ConnectionPool.ConnectionContext.ConnectionSettings.Database +
 				"' ORDER BY ROUTINE_NAME"
 			);
 			
@@ -375,18 +376,107 @@ namespaceMonoDevelop.Database.Sql
 		// see:
 		// http://www.htmlite.com/mysql003.php
 		// http://kimbriggs.com/computers/computer-notes/mysql-notes/mysql-data-types.file
-		// http://dev.mysql.com/doc/refman/5.1/en/numeric-type-overview.html
+		// http://dev.mysql.com/doc/refman/5.1/en/data-type-overview.html
 		public override DataTypeSchema GetDataType (string name)
 		{
 			if (name == null)
 				throw new ArgumentNullException ("name");
-			name = name.ToUpper ();
+
+			string type = null;
+			int length = 0;
+			int scale = 0;
+			ParseType (name, out type, out length, out scale);
 
 			DataTypeSchema dts = new DataTypeSchema (this);
-			dts.Name = name;
-			switch (name) {
-					//TODO: IMPLEMENT
-				case "":
+			dts.Name = type;
+			switch (type.ToLower ()) {
+				case "tinyint":
+				case "smallint":
+				case "mediumint":
+				case "int":
+				case "integer":
+				case "bigint":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.Integer;
+					break;
+				case "bit":
+					dts.LengthRange = new Range (length); //in bits
+					dts.DataTypeCategory = DataTypeCategory.Bit;
+					break;
+				case "bool":
+				case "boolean":
+					dts.LengthRange = new Range (1); //in bits
+					dts.DataTypeCategory = DataTypeCategory.Boolean;
+					break;
+				case "float":
+				case "double":
+				case "double precision":
+				case "decimal":
+				case "dec":
+					dts.LengthRange = new Range (length);
+					dts.ScaleRange = new Range (scale);
+					dts.DataTypeCategory = DataTypeCategory.Boolean;
+					break;
+				case "date":
+					dts.DataTypeCategory = DataTypeCategory.Date;
+					break;
+				case "datetime":
+					dts.DataTypeCategory = DataTypeCategory.DateTime;
+					break;
+				case "timestamp":
+					dts.DataTypeCategory = DataTypeCategory.TimeStamp;
+					break;
+				case "time":
+					dts.DataTypeCategory = DataTypeCategory.Time;
+					break;
+				case "year":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.Integer;
+					break;
+				case "binary":
+				case "char byte":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.Binary;
+					break;
+				case "varbinary":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.VarBinary;
+					break;
+				case "tinyblob":
+				case "mediumblob":
+				case "longblob":
+				case "blob":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.Binary;
+					break;
+				case "tinytext":
+				case "mediumtext":
+				case "longtext":
+				case "text":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.NChar;
+					break;
+				case "national char":
+				case "nchar":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.NChar;
+					break;
+				case "national varchar":
+				case "nvarchar":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.NVarChar;
+					break;
+				case "varchar":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.VarChar;
+					break;
+				case "char":
+					dts.LengthRange = new Range (length);
+					dts.DataTypeCategory = DataTypeCategory.Char;
+					break;
+				case "set":
+				case "enum":
+					dts.DataTypeCategory = DataTypeCategory.Integer;
 					break;
 				default:
 					dts = null;
@@ -403,6 +493,32 @@ namespaceMonoDevelop.Database.Sql
 			if (int.TryParse (str.Substring (0, str.IndexOf (".")), out version))
 				return version;
 			return -1;
+		}
+		
+		private void ParseType (string str, out string type, out int length, out int scale)
+		{
+			int parenOpen = str.IndexOf ('(');
+			int parenClose = str.IndexOf (')');
+			int commaPos = str.IndexOf (',', parenOpen);
+			
+			if (parenOpen > 0) {
+				type = str.Substring (0, parenOpen).Trim ();
+				
+				string lengthString = null;
+				if (commaPos > 0) {
+					lengthString = str.Substring (parenOpen + 1, commaPos - parenOpen);
+					string scaleString = str.Substring (commaPos + 1, parenClose - commaPos).Trim ();
+					int.TryParse (scaleString, out scale);
+				} else {
+					lengthString = str.Substring (parenOpen + 1, parenClose - parenOpen);
+					scale = 0;
+				}
+				int.TryParse (lengthString, out length);
+			} else {
+				type = str;
+				length = 1;
+				scale = 0;
+			}
 		}
 	}
 }

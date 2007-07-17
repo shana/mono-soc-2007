@@ -1,3 +1,9 @@
+2007-07-17  Ben Motmans <ben.motmans@gmail.com>
+
+	* Makefile.am: initial makefile
+	* MySqlDbFactory.cs: implemented methods required for the connection settings dialog
+	* MySqlSchemaProvider.cs: implemented GetDataType method
+
 2007-07-15  Ben Motmans <ben.motmans@gmail.com>
 
 	* MySqlDialect.cs: dialect implementation with keyword detection

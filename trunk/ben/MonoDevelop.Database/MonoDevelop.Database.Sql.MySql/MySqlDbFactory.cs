@@ -23,11 +23,15 @@
 // THE SOFTWARE.
 //
 
+using Gtk;
 using System;
 using System.Data;
 using System.Collections.Generic;
+using MonoDevelop.Core;
+using MonoDevelop.Core.Gui;
+using MonoDevelop.Database.Components;
 
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class MySqlDbFactory : IDbFactory
 	{
@@ -58,9 +62,9 @@ namespaceMonoDevelop.Database.Sql
 			}
 		}
 		
-		public IConnectionPool CreateConnectionPool (ConnectionSettings settings)
+		public IConnectionPool CreateConnectionPool (DatabaseConnectionContext context)
 		{
-			return new DefaultConnectionPool (this, ConnectionProvider, settings);
+			return new DefaultConnectionPool (this, ConnectionProvider, context);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool)
@@ -68,16 +72,51 @@ namespaceMonoDevelop.Database.Sql
 			return new MySqlSchemaProvider (connectionPool);
 		}
 		
-		public ConnectionSettings GetDefaultConnectionSettings ()
+		public object GetOption (string name)
 		{
-			ConnectionSettings settings = new ConnectionSettings ();
+			switch (name) {
+			case "settings.requires.server":
+			case "settings.requires.port":
+			case "settings.requires.username":
+			case "settings.requires.password":
+			case "settings.can_list_databases":
+				return true;
+			default:
+				return null;
+			}
+		}
+		
+		public DatabaseConnectionSettings GetDefaultConnectionSettings ()
+		{
+			DatabaseConnectionSettings settings = new DatabaseConnectionSettings ();
 			settings.ProviderIdentifier = Identifier;
 			settings.Server = "localhost";
 			settings.Port = 3306;
 			settings.Username = "root";
-			settings.Password = String.Empty;
-			settings.Database = String.Empty;
+			settings.MaxPoolSize = 5;
+			
 			return settings;
+		}
+		
+		public bool ShowOpenDatabaseDialog (out string database)
+		{
+			database = null;
+			return false;
+		}
+		
+		public bool ShowEditDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings)
+		{
+			DatabaseConnectionSettingsDialog dlg = new DatabaseConnectionSettingsDialog (connectionSettings);
+			int result = dlg.Run ();
+			dlg.Destroy ();
+			return result == (int)ResponseType.Ok;
+		}
+		
+		public bool ShowRemoveDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings)
+		{
+			return Services.MessageService.AskQuestionFormatted (
+				GettextCatalog.GetString ("Are you sure you want to remove connection '{0}'?"),
+				connectionSettings.Name); 
 		}
 	}
 }
