@@ -18,7 +18,6 @@
     <File name="./SqlServerSchemaProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./MonoDevelop.Database.Sql.SqlServer.addin.xml" subtype="Code" buildaction="Compile" />
     <File name="./SqlServerDbFactory.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Schema" subtype="Directory" buildaction="Compile" />
     <File name="./SqlServerPooledDbConnection.cs" subtype="Code" buildaction="Compile" />
     <File name="./SqlServerDialect.cs" subtype="Code" buildaction="Compile" />
   </Contents>
@@ -31,6 +30,13 @@
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Core, Version=0.14.0.0, Culture=neutral" />
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Core.Gui, Version=0.14.0.0, Culture=neutral" />
+    <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="atk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Projects, Version=0.14.0.0, Culture=neutral" />
+    <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Projects.Gui, Version=0.14.0.0, Culture=neutral" />
+    <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Ide, Version=0.14.0.0, Culture=neutral" />
+    <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Components, Version=0.14.0.0, Culture=neutral" />
+    <ProjectReference type="Gac" localcopy="True" refto="NRefactory, Version=0.0.0.0, Culture=neutral" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True">
     <BuildFilesVar Sync="True" Name="FILES" />
