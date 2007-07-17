@@ -66,9 +66,9 @@ public class DocumentTab : Gtk.ScrolledWindow {
 		}
 	}
 	
-	public TextBuffer Buffer {
+	public DocumentBuffer Buffer {
 		get {
-			return editor.Buffer;
+			return (DocumentBuffer) editor.Buffer;
 		}
 		
 		set {
