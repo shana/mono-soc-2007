@@ -59,4 +59,5 @@ rules/Gendarme.Rules.Smells/Makefile
 rules/Gendarme.Rules.Smells/Test/Makefile
 measurement/Makefile
 measurement/src/Makefile
+measurement/src/AssemblyInfo.cs
 ])

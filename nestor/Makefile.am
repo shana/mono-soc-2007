@@ -1,4 +1,4 @@
-SUBDIRS = . rules
+SUBDIRS = . rules measurement
 EXTRA_DIST = AssemblyInfo.cs.in MIT.X11 
 
 REWRITE = \
