@@ -203,7 +203,7 @@ namespace MonoDevelop.Database.Components
 				pool.Initialize ();
 				
 				ISchemaProvider prov = fac.CreateSchemaProvider (pool);
-				ICollection<DatabaseSchema> databases = prov.GetDatabases ();
+				DatabaseSchemaCollection databases = prov.GetDatabases ();
 				
 				foreach (DatabaseSchema db in databases) {
 					Services.DispatchService.GuiDispatch (delegate () {
@@ -258,9 +258,13 @@ namespace MonoDevelop.Database.Components
 		{
 			bool sens = !checkCustom.Active;
 			
-			tableGeneral.Sensitive = sens;
-			spinMinPoolSize.Sensitive = sens;
-			spinMaxPoolSize.Sensitive = sens;
+			entryPassword.Sensitive = sens && enablePasswordEntry;
+			entryUsername.Sensitive = sens && enableUsernameEntry;
+			entryServer.Sensitive = sens && enableServerEntry;
+			spinPort.Sensitive = sens && enablePortEntry;
+			comboDatabase.Sensitive = sens;
+			buttonOpen.Sensitive = sens && enableOpenButton;
+			buttonRefresh.Sensitive = sens && enableRefreshButton;
 			scrolledwindow.Sensitive = !sens;
 		}
 		

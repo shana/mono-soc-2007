@@ -33,9 +33,9 @@ namespace MonoDevelop.Database.Components
 	{
 		ISchema Schema { get; }
 		
-		ICollection<ColumnSchema> Columns { get; }
+		ColumnSchemaCollection Columns { get; }
 		
-		ICollection<ParameterSchema> Parameters { get; }
+			ParameterSchemaCollection Parameters { get; }
 		
 		SchemaContainerType SchemaContainerType { get; }
 	}
@@ -64,11 +64,11 @@ namespace MonoDevelop.Database.Components
 			get { return schema; }
 		}
 		
-		public ICollection<ColumnSchema> Columns {
+		public ColumnSchemaCollection Columns {
 			get { return schema.Columns; }
 		}
 		
-		public ICollection<ParameterSchema> Parameters {
+		public ParameterSchemaCollection Parameters {
 			get { return null; }
 		}
 		
@@ -93,11 +93,11 @@ namespace MonoDevelop.Database.Components
 			get { return schema; }
 		}
 		
-		public ICollection<ColumnSchema> Columns {
+		public ColumnSchemaCollection Columns {
 			get { return schema.Columns; }
 		}
 		
-		public ICollection<ParameterSchema> Parameters {
+		public ParameterSchemaCollection Parameters {
 			get { return null; }
 		}
 		
@@ -122,11 +122,11 @@ namespace MonoDevelop.Database.Components
 			get { return schema; }
 		}
 		
-		public ICollection<ColumnSchema> Columns {
+		public ColumnSchemaCollection Columns {
 			get { return schema.Columns; }
 		}
 		
-		public ICollection<ParameterSchema> Parameters {
+		public ParameterSchemaCollection Parameters {
 			get { return schema.Parameters; }
 		}
 		

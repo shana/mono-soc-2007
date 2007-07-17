@@ -1,3 +1,8 @@
+2007-07-18  Ben Motmans <ben.motmans@gmail.com>
+
+	* Dialogs/DatabaseConnectionSettingsDialog.cs: Do not make the name entry and provider combo
+	insensitive when the custom connection string checkbutton is activated
+
 2007-07-17  Ben Motmans <ben.motmans@gmail.com>
 
 	* Makefile.am: initial makefile
