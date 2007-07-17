@@ -1,3 +1,11 @@
+2007-07-17  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* Test/TestDocumentBufferArchiver.cs: Member name changes and changes
+	  in the unit tests.
+	* DocumentTab.cs: Changed return value of Buffer accesor to
+	  DocumentBuffer.
+	* DocumentBuffer.cs: Editing prototype code.
+
 2007-07-10  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs: Adding delimiters that with the background

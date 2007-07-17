@@ -36,44 +36,41 @@ public class TestDocumentBufferArchiver {
 	}
 	
 	[Test()]
-	public void Serialize()
+	public void Serialize ()
 	{
-		string originalText, newText, filename;
+		string originalXml, newXml, filename;
 		
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
-			TextBuffer buffer = editor.Buffer;
+		        TextBuffer buffer = editor.Buffer;
 			
 			MonoDocument document = new MonoDocument (file);
 			filename = Path.GetFileName (file);
-			originalText = document.Text;
+			originalXml= document.Xml;
 			
-			DocumentBufferArchiver.Deserialize (buffer, originalText);
-			newText = DocumentBufferArchiver.Serialize (buffer);
+			DocumentBufferArchiver.Deserialize (buffer, originalXml);
+			newXml = DocumentBufferArchiver.Serialize (buffer);
 			
-			Assert.AreEqual (originalText, newText, "SR:" + filename);
+			Assert.AreEqual (originalXml, newXml, "SR:" + filename);
 		}
 	}
 	
 	[Test()]
 	public void SerializePerformance ()
 	{
-		string originalText, filename;
-		
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
 			TextBuffer buffer = editor.Buffer;
 			
 			MonoDocument document = new MonoDocument (file);
-			filename = Path.GetFileName (file);
-			originalText = document.Text;
-			
-			DocumentBufferArchiver.Deserialize (buffer, originalText);
+			string filename = Path.GetFileName (file);
+
+			DocumentBufferArchiver.Deserialize (buffer, document.Xml);
 			DateTime startTime = DateTime.Now;
 			DocumentBufferArchiver.Serialize (buffer);
 			DateTime stopTime = DateTime.Now;
-			TimeSpan duration = stopTime - startTime;
-			
+
+			TimeSpan duration = stopTime - startTime;			
 			Assert.Less (duration.TotalMilliseconds, 3000, "SP:" + filename);
 		}
 	}
@@ -81,21 +78,18 @@ public class TestDocumentBufferArchiver {
 	[Test()]
 	public void DeserializePerformance ()
 	{
-		string originalText, filename;
-		
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
 			TextBuffer buffer = editor.Buffer;
 			
 			MonoDocument document = new MonoDocument (file);
-			filename = Path.GetFileName (file);
-			originalText = document.Text;
+			string filename = Path.GetFileName (file);
 			
 			DateTime startTime = DateTime.Now;
-			DocumentBufferArchiver.Deserialize (buffer, originalText);
+			DocumentBufferArchiver.Deserialize (buffer, document.Xml);
 			DateTime stopTime = DateTime.Now;
-			TimeSpan duration = stopTime - startTime;
-			
+
+			TimeSpan duration = stopTime - startTime;			
 			Assert.Less (duration.TotalMilliseconds, 1000, "SP:" + filename);
 		}
 	}
