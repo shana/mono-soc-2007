@@ -37,36 +37,36 @@ using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ConstraintsNodeBuilder : TypeNodeBuilder
+	public class ParametersNodeBuilder : TypeNodeBuilder
 	{
 		private EventHandler RefreshHandler;
 		
-		public ConstraintsNodeBuilder ()
+		public ParametersNodeBuilder ()
 			: base ()
 		{
 			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
-			get { return typeof (ConstraintsNode); }
+			get { return typeof (ParametersNode); }
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode"; }
+			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ParametersNode"; }
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof (ConstraintsNodeCommandHandler); }
+			get { return typeof (ParametersNodeCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("Constraints");
+			return GettextCatalog.GetString ("Parameters");
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			label = GettextCatalog.GetString ("Constraints");
+			label = GettextCatalog.GetString ("Parameters");
 			icon = Context.GetIcon ("md-db-tables");
 			
 			BaseNode node = (BaseNode) dataObject;
@@ -84,15 +84,15 @@ namespace MonoDevelop.Database.ConnectionManager
 		private void BuildChildNodesThreaded (object state)
 		{
 			NodeState nodeState = state as NodeState;
-			ConstraintsNode node = nodeState.DataObject as ConstraintsNode;
-			
-			ICollection<ConstraintSchema> constraints = nodeState.ConnectionContext.SchemaProvider.GetTableConstraints (node.Table);
-			if (constraints == null)
+			ParametersNode node = nodeState.DataObject as ParametersNode;
+
+			ICollection<ParameterSchema> parameters = nodeState.ConnectionContext.SchemaProvider.GetProcedureParameters (node.Procedure);
+			if (parameters == null)
 				return;
 			
-			foreach (ConstraintSchema constraint in constraints) {
+			foreach (ParameterSchema parameter in parameters) {
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (constraint);
+					nodeState.TreeBuilder.AddChild (parameter);
 					nodeState.TreeBuilder.Expanded = true;
 				});
 			}
@@ -114,7 +114,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		}
 	}
 	
-	public class ConstraintsNodeCommandHandler : NodeCommandHandler
+	public class ParametersNodeCommandHandler : NodeCommandHandler
 	{
 		public override DragOperation CanDragNode ()
 		{

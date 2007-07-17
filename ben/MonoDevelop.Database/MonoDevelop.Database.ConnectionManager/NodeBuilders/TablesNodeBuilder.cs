@@ -39,10 +39,6 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class TablesNodeBuilder : TypeNodeBuilder
 	{
-		private object threadSync = new object ();
-		private ITreeBuilder builder;
-		private ConnectionSettings settings;
-		
 		private EventHandler RefreshHandler;
 		
 		public TablesNodeBuilder ()
@@ -79,39 +75,25 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			Runtime.LoggingService.Debug ("BuildChildNodes");
-			lock (threadSync) {
-				this.builder = builder;
-				this.settings = (dataObject as BaseNode).Settings;
-			}
+			BaseNode node = dataObject as BaseNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
 			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			Runtime.LoggingService.Debug ("BuildChildNodesThreaded");
-			
-			ITreeBuilder builder = null;
-			ConnectionSettings settings = null;
-			
-			lock (threadSync) {
-				builder = this.builder;
-				settings = this.settings;
-			}
-			Runtime.LoggingService.Debug ("BuildChildNodesThreaded --> " + settings == null ? "null" : "notnull");
-			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
-			ICollection<TableSchema> tables = settings.SchemaProvider.GetTables ();
-			Runtime.LoggingService.Debug ("SHOW TABLES " + tables.Count);
+			NodeState nodeState = state as NodeState;
+			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
+			ICollection<TableSchema> tables = nodeState.ConnectionContext.SchemaProvider.GetTables ();
+		
 			foreach (TableSchema table in tables) {
-				Runtime.LoggingService.Debug (table.Name);
-				
 				if (table.IsSystemTable && !showSystemObjects)
 					continue;
 				
 				Services.DispatchService.GuiDispatch (delegate {
-					builder.AddChild (new TableNode (settings, table));
-					builder.Expanded = true;
+					nodeState.TreeBuilder.AddChild (new TableNode (nodeState.ConnectionContext, table));
+					nodeState.TreeBuilder.Expanded = true;
 				});
 			}
 		}
@@ -142,8 +124,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
-			TablesNode node = (TablesNode)CurrentNode.DataItem;
+			BaseNode node = CurrentNode.DataItem as BaseNode;
 			node.Refresh ();
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.CreateTable)]
+		protected void OnCreateTable ()
+		{
+			
 		}
 	}
 }

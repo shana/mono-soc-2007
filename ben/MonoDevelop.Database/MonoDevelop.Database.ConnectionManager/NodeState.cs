@@ -1,9 +1,7 @@
 //
 // Authors:
-//   Christian Hergert	<chris@mosaix.net>
 //   Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (C) 2005 Mosaix Communications, Inc.
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -27,52 +25,23 @@
 //
 
 using System;
-using System.Threading;
 using System.Collections.Generic;
 using MonoDevelop.Database.Sql;
-using MonoDevelop.Core;
-using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
-using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ColumnNodeBuilder : TypeNodeBuilder
+	internal class NodeState
 	{
-		public ColumnNodeBuilder ()
-			: base ()
+		public ITreeBuilder TreeBuilder;
+		public object DataObject;
+		public DatabaseConnectionContext ConnectionContext;
+		
+		public NodeState (ITreeBuilder treeBuilder, DatabaseConnectionContext context, object dataObject)
 		{
-		}
-		
-		public override Type NodeDataType {
-			get { return typeof (ColumnSchema); }
-		}
-		
-		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ColumnNode"; }
-		}
-		
-		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
-		{
-			return GettextCatalog.GetString ("Column");
-		}
-		
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
-		{
-			ColumnSchema column = dataObject as ColumnSchema;
-			
-			label = column.Name + " (" + column.DataType.Name + ")";
-			icon = Context.GetIcon ("md-db-column");
-			//TODO: icon based on column type
-		}
-		
-		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
-		{
-		}
-		
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
-		{
-			return false;
+			TreeBuilder = treeBuilder;
+			ConnectionContext = context;
+			DataObject = dataObject;
 		}
 	}
 }

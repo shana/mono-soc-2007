@@ -37,36 +37,36 @@ using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ConstraintsNodeBuilder : TypeNodeBuilder
+	public class TypesNodeBuilder : TypeNodeBuilder
 	{
 		private EventHandler RefreshHandler;
 		
-		public ConstraintsNodeBuilder ()
+		public TypesNodeBuilder ()
 			: base ()
 		{
 			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
-			get { return typeof (ConstraintsNode); }
+			get { return typeof (TypesNode); }
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode"; }
+			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TypesNode"; }
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof (ConstraintsNodeCommandHandler); }
+			get { return typeof (TypesNodeCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("Constraints");
+			return GettextCatalog.GetString ("Types");
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			label = GettextCatalog.GetString ("Constraints");
+			label = GettextCatalog.GetString ("Types");
 			icon = Context.GetIcon ("md-db-tables");
 			
 			BaseNode node = (BaseNode) dataObject;
@@ -83,24 +83,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			ConstraintsNode node = nodeState.DataObject as ConstraintsNode;
-			
-			ICollection<ConstraintSchema> constraints = nodeState.ConnectionContext.SchemaProvider.GetTableConstraints (node.Table);
-			if (constraints == null)
-				return;
-			
-			foreach (ConstraintSchema constraint in constraints) {
-				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (constraint);
-					nodeState.TreeBuilder.Expanded = true;
-				});
-			}
+			//TODO:
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return true;
+			return false;
 		}
 		
 		private void OnRefreshEvent (object sender, EventArgs args)
@@ -114,7 +102,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		}
 	}
 	
-	public class ConstraintsNodeCommandHandler : NodeCommandHandler
+	public class TypesNodeCommandHandler : NodeCommandHandler
 	{
 		public override DragOperation CanDragNode ()
 		{

@@ -33,15 +33,12 @@ using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ProcedureNodeBuilder : TypeNodeBuilder
 	{
-		private object threadSync = new object ();
-		private ITreeBuilder builder;
-		private ProcedureNode node;
-		
 		public ProcedureNodeBuilder ()
 			: base ()
 		{
@@ -53,6 +50,10 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override string ContextMenuAddinPath {
 			get { return "/SharpDevelop/Procedures/ConnectionManagerPad/ContextMenu/ProcedureNode"; }
+		}
+		
+		public override Type CommandHandlerType {
+			get { return typeof (ProcedureNodeCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -71,26 +72,16 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			ProcedureNode node = dataObject as ProcedureNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
 			
-			lock (threadSync) {
-				this.builder = builder;
-				this.node = node;
-			}
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder builder = null;
-			ProcedureNode node = null;
+			NodeState nodeState = state as NodeState;
 			
-			lock (threadSync) {
-				builder = this.builder;
-				node = this.node;
-			}
-			
-			ISchemaProvider provider = node.Settings.SchemaProvider;
+			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
 			
 			//TODO: build columns
 		}
@@ -98,6 +89,38 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			return true;
+		}
+	}
+	
+	public class ProcedureNodeCommandHandler : NodeCommandHandler
+	{
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.None;
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.Refresh)]
+		protected void OnRefresh ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.AlterProcedure)]
+		protected void OnAlterProcedure ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.DropProcedure)]
+		protected void OnDropProcedure ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.RenameProcedure)]
+		protected void OnRenameProcedure ()
+		{
+			
 		}
 	}
 }

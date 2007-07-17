@@ -1,3 +1,24 @@
+2007-07-17  Ben Motmans <ben.motmans@gmail.com>
+
+	* Makefile.am: initial makefile
+	* ConnectionManagerCommands.cs: added CreateXXX, DropXXX, AlterXXX, RenameXXX commands
+	* NodeBuilders/AggregatesNodeBuilder.cs, NodeBuilders/ColumnNodeBuilder.cs,
+	NodeBuilders/ColumnsNodeBuilder.cs, NodeBuilders/ConnectionContextCollectionNodeBuilder.cs,
+	NodeBuilders/ConnectionContextNodeBuilder.cs, NodeBuilders/ConstraintNodeBuilder.cs, 
+	NodeBuilders/ConstraintsNodeBuilder.cs, NodeBuilders/GroupsNodeBuilder.cs, 
+	NodeBuilders/LanguagesNodeBuilder.cs, NodeBuilders/OperatorsNodeBuilder.cs, 
+	NodeBuilders/ParameterNodeBuilder.cs, NodeBuilders/ParametersNodeBuilder.cs, 
+	NodeBuilders/RolesNodeBuilder.cs, NodeBuilders/RulesNodeBuilder.cs, 
+	NodeBuilders/SequencesNodeBuilder.cs, NodeBuilders/TriggersNodeBuilder.cs,
+	NodeBuilders/TypesNodeBuilder.cs: initial implementation
+	* NodeBuilders/ProcedureNodeBuilder.cs, NodeBuilders/ProceduresNodeBuilder.cs,
+	NodeBuilders/TableNodeBuilder.cs, NodeBuilders/TablesNodeBuilder.cs,
+	NodeBuilders/ViewNodeBuilder.cs, NodeBuilders/ViewsNodeBuilder.cs,
+	NodeBuilders/UserNodeBuilder.cs, NodeBuilders/UsersNodeBuilder.cs:
+	Updated to use the new NodeState object when doing Async method calls
+	* MonoDevelop.Database.ConnectionManager.addin.xml: added nodebuilder extension items
+	* NodeState.cs: internal class to store the state when doing async calls in the connection manager pad
+
 2007-07-14  Ben Motmans <ben.motmans@gmail.com>
 
 	* NodeBuilders/*.cs: small changes due to updated Mono.Data.Sql API

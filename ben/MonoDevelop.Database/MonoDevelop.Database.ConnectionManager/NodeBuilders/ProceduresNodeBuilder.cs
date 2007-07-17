@@ -39,10 +39,6 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ProceduresNodeBuilder : TypeNodeBuilder
 	{
-		private object threadSync = new object ();
-		private ITreeBuilder treeBuilder;
-		private ConnectionSettings settings;
-		
 		private EventHandler RefreshHandler;
 		
 		public ProceduresNodeBuilder ()
@@ -79,33 +75,25 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			lock (threadSync) {
-				treeBuilder = builder;
-				settings = (dataObject as BaseNode).Settings;
-			}
+			BaseNode node = dataObject as BaseNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
 			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder treeBuilder = null;
-			ConnectionSettings settings = null;
+			NodeState nodeState = state as NodeState;
 			
-			lock (threadSync) {
-				treeBuilder = this.treeBuilder;
-				settings = this.settings;
-			}
-			
-			bool showSystemObjects = (bool)treeBuilder.Options["ShowSystemObjects"];
-			ICollection<ProcedureSchema> procedures = settings.SchemaProvider.GetProcedures ();
+			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
+			ICollection<ProcedureSchema> procedures = nodeState.ConnectionContext.SchemaProvider.GetProcedures ();
 			foreach (ProcedureSchema procedure in procedures) {
 				if (procedure.IsSystemProcedure && !showSystemObjects)
 					continue;
 				
 				Services.DispatchService.GuiDispatch (delegate {
-					treeBuilder.AddChild (new ProcedureNode (settings, procedure));
-					treeBuilder.Expanded = true;
+					nodeState.TreeBuilder.AddChild (new ProcedureNode (nodeState.ConnectionContext, procedure));
+					nodeState.TreeBuilder.Expanded = true;
 				});
 			}
 		}
@@ -136,8 +124,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
-			TablesNode node = (TablesNode)CurrentNode.DataItem;
+			BaseNode node = CurrentNode.DataItem as BaseNode;
 			node.Refresh ();
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.CreateProcedure)]
+		protected void OnCreateProcedure ()
+		{
+			
 		}
 	}
 }

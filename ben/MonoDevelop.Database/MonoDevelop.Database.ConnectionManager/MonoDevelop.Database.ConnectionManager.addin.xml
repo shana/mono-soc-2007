@@ -23,16 +23,31 @@
 	<Extension path = "/SharpDevelop/Workbench/Pads">
 		<SolutionPad id = "ConnectionManagerPad" class = "MonoDevelop.Database.ConnectionManager.ConnectionManagerPad" defaultPlacement = "Left" _label = "Database Browser" icon = "md-db-database">
 			<PadOption id = "ShowSystemObjects" _label = "Show System Objects" defaultValue = "True"/>
-			<NodeBuilder id = "ConnectionCollectionNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionCollectionNodeBuilder"/>
-			<NodeBuilder id = "ConnectionSettingsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionSettingsNodeBuilder"/>
-			<NodeBuilder id = "TablesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TablesNodeBuilder"/>
-			<NodeBuilder id = "ViewsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ViewsNodeBuilder"/>
-			<NodeBuilder id = "UsersNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.UsersNodeBuilder"/>
-			<NodeBuilder id = "ProceduresNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ProceduresNodeBuilder"/>
-			<NodeBuilder id = "TableNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TableNodeBuilder"/>
-			<NodeBuilder id = "ViewNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ViewNodeBuilder"/>
-			<NodeBuilder id = "UserNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.UserNodeBuilder"/>
+			<NodeBuilder id = "AggregatesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.AggregatesNodeBuilder"/>
+			<NodeBuilder id = "ColumnNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ColumnNodeBuilder"/>
+			<NodeBuilder id = "ColumnsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ColumnsNodeBuilder"/>
+			<NodeBuilder id = "ConnectionContextCollectionNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionContextCollectionNodeBuilder"/>
+			<NodeBuilder id = "ConnectionContextNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConnectionContextNodeBuilder"/>
+			<NodeBuilder id = "ConstraintNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConstraintNodeBuilder"/>
+			<NodeBuilder id = "ConstraintsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ConstraintsNodeBuilder"/>
+			<NodeBuilder id = "GroupsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.GroupsNodeBuilder"/>
+			<NodeBuilder id = "LanguagesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.LanguagesNodeBuilder"/>
+			<NodeBuilder id = "OperatorsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.OperatorsNodeBuilder"/>
+			<NodeBuilder id = "ParameterNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ParameterNodeBuilder"/>
+			<NodeBuilder id = "ParametersNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ParametersNodeBuilder"/>
 			<NodeBuilder id = "ProcedureNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ProcedureNodeBuilder"/>
+			<NodeBuilder id = "ProceduresNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ProceduresNodeBuilder"/>
+			<NodeBuilder id = "RolesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.RolesNodeBuilder"/>
+			<NodeBuilder id = "RulesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.RulesNodeBuilder"/>
+			<NodeBuilder id = "SequencesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.SequencesNodeBuilder"/>
+			<NodeBuilder id = "TableNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TableNodeBuilder"/>
+			<NodeBuilder id = "TablesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TablesNodeBuilder"/>
+			<NodeBuilder id = "TriggersNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TriggersNodeBuilder"/>
+			<NodeBuilder id = "TypesNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.TypesNodeBuilder"/>
+			<NodeBuilder id = "ViewNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ViewNodeBuilder"/>
+			<NodeBuilder id = "ViewsNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.ViewsNodeBuilder"/>
+			<NodeBuilder id = "UserNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.UserNodeBuilder"/>
+			<NodeBuilder id = "UsersNodeBuilder" class = "MonoDevelop.Database.ConnectionManager.UsersNodeBuilder"/>
 		</SolutionPad>
 	</Extension>
 

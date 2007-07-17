@@ -27,71 +27,93 @@
 //
 
 using System;
-
+using System.Threading;
+using System.Collections.Generic;
 using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ConnectionCollectionNodeBuilder : TypeNodeBuilder
+	public class AggregatesNodeBuilder : TypeNodeBuilder
 	{
-		private ITreeBuilder builder;
+		private EventHandler RefreshHandler;
 		
-		public ConnectionCollectionNodeBuilder ()
+		public AggregatesNodeBuilder ()
 			: base ()
 		{
-			ConnectionSettingsService.ConnectionAdded += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionAdded));
-			ConnectionSettingsService.ConnectionRemoved += (ConnectionSettingsEventHandler)Services.DispatchService.GuiDispatch (new ConnectionSettingsEventHandler (OnConnectionRemoved));
+			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
-			get { return typeof (ConnectionSettingsCollection); }
+			get { return typeof (AggregatesNode); }
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode"; }
+			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/AggregatesNode"; }
+		}
+		
+		public override Type CommandHandlerType {
+			get { return typeof (AggregatesNodeCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("Database Connections");
+			return GettextCatalog.GetString ("Aggregates");
 		}
 		
-		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
+		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			label = GettextCatalog.GetString ("Database Connections");
-			icon = Context.GetIcon ("md-db-connection");
-			this.builder = builder;
+			label = GettextCatalog.GetString ("Aggregates");
+			icon = Context.GetIcon ("md-db-tables");
+			
+			BaseNode node = (BaseNode) dataObject;
+			node.RefreshEvent += RefreshHandler;
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			ConnectionSettingsCollection collection = (ConnectionSettingsCollection) dataObject;
-				
-			foreach (ConnectionSettings settings in collection)
-				builder.AddChild (settings);
-			builder.Expanded = true;
+			BaseNode node = dataObject as BaseNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
+			
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
-
+		
+		private void BuildChildNodesThreaded (object state)
+		{
+			//TODO:
+		}
+		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			ConnectionSettingsCollection collection = (ConnectionSettingsCollection) dataObject;
-			return collection.Count > 0;
+			return false;
 		}
 		
-		private void OnConnectionAdded (object sender, ConnectionSettingsEventArgs args)
+		private void OnRefreshEvent (object sender, EventArgs args)
 		{
-			builder.AddChild (args.ConnectionSettings);
+			ITreeBuilder builder = Context.GetTreeBuilder ();
+			
+			if (builder != null)
+				builder.UpdateChildren ();
+			
+			builder.ExpandToNode ();
+		}
+	}
+	
+	public class AggregatesNodeCommandHandler : NodeCommandHandler
+	{
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.None;
 		}
 		
-		private void OnConnectionRemoved (object sender, ConnectionSettingsEventArgs args)
+		[CommandHandler (ConnectionManagerCommands.Refresh)]
+		protected void OnRefresh ()
 		{
-			if (builder.MoveToObject (args.ConnectionSettings)) {
-				builder.Remove ();
-				builder.MoveToParent ();
-			}
+			BaseNode node = CurrentNode.DataItem as BaseNode;
+			node.Refresh ();
 		}
 	}
 }

@@ -33,6 +33,7 @@ using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
@@ -51,6 +52,10 @@ namespace MonoDevelop.Database.ConnectionManager
 			get { return "/SharpDevelop/Users/ConnectionManagerPad/ContextMenu/UserNode"; }
 		}
 		
+		public override Type CommandHandlerType {
+			get { return typeof (UserNodeCommandHandler); }
+		}
+		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			return GettextCatalog.GetString ("User");
@@ -67,6 +72,39 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			return false;
+		}
+	}
+	
+	public class UserNodeCommandHandler : NodeCommandHandler
+	{
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.None;
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.Refresh)]
+		protected void OnRefresh ()
+		{
+			BaseNode node = CurrentNode.DataItem as BaseNode;
+			node.Refresh ();
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.AlterUser)]
+		protected void OnAlterUser ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.DropUser)]
+		protected void OnDropUser ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.RenameUser)]
+		protected void OnRenameUser ()
+		{
+			
 		}
 	}
 }
