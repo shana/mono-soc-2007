@@ -29,12 +29,11 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class SqlServerConnectionProvider : AbstractConnectionProvider
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings)
+		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings)
 		{
 			SqlConnectionStringBuilder builder = null;
 			try {	
