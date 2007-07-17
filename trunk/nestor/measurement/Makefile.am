@@ -1,6 +1,7 @@
 SUBDIRS = src
 bin_SCRIPTS = measurement
 EXTRA_DIST = measurement.in
+DISTCLEANFILES = Makefile.in
 
 REWRITE = \
         sed -e "s|\@prefix\@|$(prefix)|g"               \
