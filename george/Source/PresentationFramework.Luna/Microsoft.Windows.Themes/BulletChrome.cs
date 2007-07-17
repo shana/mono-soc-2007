@@ -9,7 +9,8 @@ namespace Mono.Microsoft.Windows.Themes {
 namespace Microsoft.Windows.Themes {
 #endif
 	public sealed class BulletChrome : FrameworkElement {
-		#region Dependency Property Fields
+		#region Public Fields
+		#region Dependency Properties
 		static public readonly DependencyProperty BackgroundProperty = DependencyProperty.Register("Background", typeof(Brush), typeof(BulletChrome), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty BorderBrushProperty = DependencyProperty.Register("BorderBrush", typeof(Brush), typeof(BulletChrome), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty BorderThicknessProperty = DependencyProperty.Register("BorderThickness", typeof(Thickness), typeof(BulletChrome), new FrameworkPropertyMetadata(new Thickness(0), FrameworkPropertyMetadataOptions.AffectsRender), ValidateBorderThickness);
@@ -17,6 +18,7 @@ namespace Microsoft.Windows.Themes {
 		static public readonly DependencyProperty IsRoundProperty = DependencyProperty.Register("IsRound", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.Register("RenderMouseOver", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 		static public readonly DependencyProperty RenderPressedProperty = DependencyProperty.Register("RenderPressed", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
+		#endregion
 		#endregion
 
 		static Brush pressed_brush = new LinearGradientBrush(Colors.Gray, Colors.LightGray, 45);
@@ -26,10 +28,10 @@ namespace Microsoft.Windows.Themes {
 
 		#region Public Constructors
 		public BulletChrome() {
-			//WDTDH
 		}
 		#endregion
 
+		#region Public Properties
 		#region Dependency Properties
 		public Brush Background {
 			get { return (Brush)GetValue(BackgroundProperty); }
@@ -66,6 +68,7 @@ namespace Microsoft.Windows.Themes {
 			set { SetValue(RenderPressedProperty, value); }
 		}
 		#endregion
+		#endregion
 
 		#region Protected Methods
 		protected override Size MeasureOverride(Size availableSize) {
@@ -80,8 +83,8 @@ namespace Microsoft.Windows.Themes {
 
 		protected override void OnRender(DrawingContext drawingContext) {
 			base.OnRender(drawingContext);
-			//FIXME:
 			if (IsRound) {
+				//FIXME:
 				#region Render radio button bullet
 				double radius_x = ActualWidth / 2 - .5;
 				double radius_y = ActualHeight / 2 - .5;
@@ -99,28 +102,77 @@ namespace Microsoft.Windows.Themes {
 				#endregion
 			} else {
 				#region Render check box bullet
-				if (Background != null)
-					drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
-				if (RenderPressed)
-					drawingContext.DrawRectangle(pressed_brush, null, new Rect(0, 0, ActualWidth, ActualHeight));
-				if (BorderBrush != null)
-					Utility.DrawBox(drawingContext, ActualWidth, ActualHeight, BorderBrush, BorderThickness);
+				Thickness border_thickness = BorderThickness;
+				bool render_pressed = RenderPressed;
+				Brush background = Background;
+				double width;
+				double height;
+				bool fill_displayed;
+				if (render_pressed || background != null) {
+					if (fill_displayed = ((width = ActualWidth - border_thickness.Left - border_thickness.Right) >= 0 && (height = ActualHeight - border_thickness.Top - border_thickness.Bottom) >= 0)) {
+						Brush fill_brush;
+						if (render_pressed)
+							fill_brush = new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+								new GradientStop(Color.FromArgb(0xFF, 0xB2, 0xB2, 0xA9), 0),
+								new GradientStop(Color.FromArgb(0xFF, 0xEB, 0xEA, 0xDA), 1)
+							}), new Point(0, 0), new Point(1, 1));
+						else
+							fill_brush = background;
+						drawingContext.DrawRectangle(fill_brush, null, new Rect(border_thickness.Left, border_thickness.Top, width, height));
+					}
+				} else
+					fill_displayed = false;
+				if (fill_displayed)
+					if (RenderMouseOver && !render_pressed)
+						if ((width = ActualWidth - border_thickness.Left - border_thickness.Right - 2) >= 0 && (height = ActualHeight - border_thickness.Top - border_thickness.Bottom - 2) >= 0)
+							drawingContext.DrawRectangle(null, new Pen(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+								new GradientStop(Color.FromArgb(0xFF, 0xFF, 0xF0, 0xCF), 0),
+								new GradientStop(Color.FromArgb(0xFF, 0xF8, 0xB3, 0x30), 1)
+							}), new Point(0, 0), new Point(1, 1)), 2), new Rect(border_thickness.Left + 1, border_thickness.Top + 1, width, height));
+				bool has_uniform_border_thickness = border_thickness.Bottom == border_thickness.Left && border_thickness.Bottom == BorderThickness.Right && border_thickness.Bottom == BorderThickness.Top;
 				if (IsChecked.Value) {
-					drawingContext.PushTransform(new TranslateTransform(BorderThickness.Left, BorderThickness.Top));
-					drawingContext.PushClip(new RectangleGeometry(new Rect(2, 2, 8, 10)));
-					drawingContext.DrawLine(check_box_check_pen, new Point(2, 5), new Point(5, 8));
-					drawingContext.DrawLine(check_box_check_pen, new Point(5, 8), new Point(10, 3));
-					drawingContext.Pop();
-					drawingContext.Pop();
+					if (!has_uniform_border_thickness)
+						drawingContext.PushTransform(new TranslateTransform(border_thickness.Left - 1, border_thickness.Top - 1));
+					StreamGeometry stream_geometry = new StreamGeometry();
+					StreamGeometryContext context = stream_geometry.Open();
+					context.BeginFigure(new Point(3, 5), true, true);
+					context.LineTo(new Point(3, 7.8), false, false);
+					context.LineTo(new Point(5.5, 10.4), false, false);
+					context.LineTo(new Point(10.1, 5.8), false, false);
+					context.LineTo(new Point(10.1, 3), false, false);
+					context.LineTo(new Point(5.5, 7.6), false, false);
+					context.Close();
+					drawingContext.DrawGeometry(new SolidColorBrush(render_pressed ? Color.FromArgb(0xFF, 0x1A, 0x7E, 0x18) : Color.FromArgb(0xFF, 0x21, 0xA1, 0x21)), null, stream_geometry);
+					if (!has_uniform_border_thickness)
+						drawingContext.Pop();
 				}
-				if (RenderMouseOver && !RenderPressed)
-					drawingContext.DrawRectangle(null, new Pen(mouse_over_brush, 2), new Rect(1 + BorderThickness.Left, 1 + BorderThickness.Top, ActualWidth - 2 - BorderThickness.Left - BorderThickness.Right, ActualHeight - 2 - BorderThickness.Top - BorderThickness.Bottom));
+				if (fill_displayed)
+					if (BorderBrush != null) {
+						if (has_uniform_border_thickness) {
+							double border_thickness_size = border_thickness.Bottom;
+							if ((width = ActualWidth - 2 * border_thickness_size + 1) >= 0 && (height = ActualHeight - 2 * border_thickness_size + 1) >= 0)
+								drawingContext.DrawRectangle(null, new Pen(BorderBrush, border_thickness.Bottom), new Rect(border_thickness_size - 0.5, border_thickness_size - 0.5, width, height));
+						} else {
+							drawingContext.DrawGeometry(BorderBrush, null, new PathGeometry(new PathFigure[] {
+								new PathFigure(new Point(0, 0), new PathSegment[] {
+									new LineSegment(new Point(ActualWidth, 0), false),
+									new LineSegment(new Point(ActualWidth, ActualHeight), false),
+									new LineSegment(new Point(0, ActualHeight), false)
+								}, true),
+								new PathFigure(new Point(border_thickness.Left, border_thickness.Top), new PathSegment[] {
+									new LineSegment(new Point(ActualWidth - border_thickness.Right, border_thickness.Top), false),
+									new LineSegment(new Point(ActualWidth - border_thickness.Right, ActualHeight - border_thickness.Bottom), false),
+									new LineSegment(new Point(border_thickness.Left, ActualHeight-border_thickness.Bottom), false)
+								}, true)
+							}));
+						}
+					}
 				#endregion
 			}
 		}
 		#endregion
 
-		#region Static Private Methods
+		#region Private Methods
 		static bool ValidateBorderThickness(object value) {
 			Thickness thickness = (Thickness)value;
 			return thickness.Left >= 0 && thickness.Right >= 0 && thickness.Top >= 0 && thickness.Bottom >= 0;
