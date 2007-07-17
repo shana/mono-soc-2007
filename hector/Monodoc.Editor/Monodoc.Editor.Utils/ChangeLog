@@ -1,3 +1,7 @@
+2007-07-17  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* MonoDocument.cs: Member name changes and changes in the unit tests.
+
 2007-07-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* MonoDocument.cs: If the XML is not a Monodoc document a exception is

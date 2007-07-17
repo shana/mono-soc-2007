@@ -12,41 +12,41 @@ using System.IO;
 
 namespace Monodoc.Editor.Utils {
 public class MonoDocument {
-	private bool valid;
-	private string text;
-	private string name;
+	private bool valid_document;
+	private string xml_content;
+	private string filename;
 	
 	public MonoDocument (string filePath)
 	{
 		EcmaReader reader = new EcmaReader (filePath);
-		valid = reader.Valid;
+		valid_document = reader.Valid;
 		
-		if (!valid)
+		if (!valid_document)
 			throw new ArgumentException ("Error: Invalid XML document.", "filePath");
 			
-		name = Path.GetFileName (filePath);
+		filename = Path.GetFileName (filePath);
 		using (FileStream filestream= new FileStream (filePath, FileMode.Open)) {
 			using (StreamReader stream = new StreamReader (filestream)) {
-				text = stream.ReadToEnd ();
+				xml_content = stream.ReadToEnd ();
 			}
 		}
 	}
 	
-	public string Text {
+	public string Xml {
 		get {
-			return text;
+			return xml_content;
 		}
 	}
 		
-	public bool Valid {
+	public bool IsValid {
 		get {
-			return valid;
+			return valid_document;
 		}
 	}
 	
-	public string Name {
+	public string Filename {
 		get {
-			return name;
+			return filename;
 		}
 	}
 }
