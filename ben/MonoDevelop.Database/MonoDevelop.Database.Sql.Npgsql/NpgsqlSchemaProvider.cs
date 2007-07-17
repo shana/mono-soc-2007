@@ -31,8 +31,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Npgsql;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class NpgsqlSchemaProvider : AbstractSchemaProvider
 	{
@@ -72,6 +71,8 @@ namespaceMonoDevelop.Database.Sql
 			else if (type == typeof(ConstraintSchema))
 				return true;
 			else if (type == typeof(RuleSchema))
+				return true;
+			else if (type == typeof(ParameterSchema))
 				return true;
 			else
 				return false;
