@@ -13,6 +13,8 @@ namespace MonoDevelop.Database.Components {
     
     public partial class ShowTextDialog {
         
+        private Gtk.VBox vboxContent;
+        
         private Gtk.Button buttonClose;
         
         protected virtual void Build() {
@@ -26,14 +28,22 @@ namespace MonoDevelop.Database.Components {
             this.HasSeparator = false;
             // Internal child MonoDevelop.Database.Components.ShowTextDialog.VBox
             Gtk.VBox w1 = this.VBox;
-            w1.Name = "dialog1_VBox";
+            w1.Name = "vbox";
             w1.BorderWidth = ((uint)(2));
+            // Container child vbox.Gtk.Box+BoxChild
+            this.vboxContent = new Gtk.VBox();
+            this.vboxContent.Name = "vboxContent";
+            this.vboxContent.Spacing = 6;
+            this.vboxContent.BorderWidth = ((uint)(6));
+            w1.Add(this.vboxContent);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
+            w2.Position = 0;
             // Internal child MonoDevelop.Database.Components.ShowTextDialog.ActionArea
-            Gtk.HButtonBox w2 = this.ActionArea;
-            w2.Name = "dialog1_ActionArea";
-            w2.Spacing = 6;
-            w2.BorderWidth = ((uint)(5));
-            w2.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            Gtk.HButtonBox w3 = this.ActionArea;
+            w3.Name = "dialog1_ActionArea";
+            w3.Spacing = 6;
+            w3.BorderWidth = ((uint)(5));
+            w3.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonClose = new Gtk.Button();
             this.buttonClose.CanDefault = true;
@@ -43,9 +53,9 @@ namespace MonoDevelop.Database.Components {
             this.buttonClose.UseUnderline = true;
             this.buttonClose.Label = "gtk-close";
             this.AddActionWidget(this.buttonClose, -7);
-            Gtk.ButtonBox.ButtonBoxChild w3 = ((Gtk.ButtonBox.ButtonBoxChild)(w2[this.buttonClose]));
-            w3.Expand = false;
-            w3.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonClose]));
+            w4.Expand = false;
+            w4.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
