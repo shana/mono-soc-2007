@@ -119,7 +119,7 @@ namespace CBinding
 		
 		protected override void OnRemoveComplete (int index, object value)
 		{
-			if (project != null)
+			if (project != null) 
 				project.NotifyPackageRemovedFromProject ((ProjectPackage)value);
 		}
 		

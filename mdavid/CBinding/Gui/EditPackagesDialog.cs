@@ -35,13 +35,18 @@ using System.Collections.Generic;
 
 using Mono.Addins;
 
+using MonoDevelop.Projects;
+
 namespace CBinding
 {
 	public partial class EditPackagesDialog : Gtk.Dialog
 	{
-		private Gtk.ListStore packageListStore = new Gtk.ListStore (typeof(bool), typeof(string), typeof(string));
+		private Gtk.ListStore normalPackageListStore = new Gtk.ListStore (typeof(bool), typeof(string), typeof(string));
+		private Gtk.ListStore projectPackageListStore = new Gtk.ListStore (typeof(bool), typeof(string), typeof(string));
 		private Gtk.ListStore selectedPackagesListStore = new Gtk.ListStore (typeof(string), typeof(string));
 		private CProject project;
+		private ProjectPackageCollection selectedPackages = new ProjectPackageCollection ();
+		private ProjectPackageCollection projectPackages;
 		
 		public EditPackagesDialog(CProject project)
 		{
@@ -49,27 +54,53 @@ namespace CBinding
 			
 			this.project = project;
 			
-			Gtk.CellRendererToggle toggleRenderer = new Gtk.CellRendererToggle ();
-			toggleRenderer.Activatable = true;
-			toggleRenderer.Toggled += OnPackageToggled;
-			toggleRenderer.Xalign = 0;
+			selectedPackages.AddRange (project.Packages);
 			
 			Gtk.CellRendererText textRenderer = new Gtk.CellRendererText ();
 			
 			Gtk.CellRendererPixbuf pixbufRenderer = new Gtk.CellRendererPixbuf ();
 			pixbufRenderer.StockId = "md-package";
 			
-			Gtk.TreeViewColumn packagePackageColumn = new Gtk.TreeViewColumn ();
-			packagePackageColumn.Title = "Package";
-			packagePackageColumn.PackStart (pixbufRenderer, false);
-			packagePackageColumn.PackStart (textRenderer, true);
-			packagePackageColumn.AddAttribute (textRenderer, "text", 1);
+			// <!-- Normal packages -->
 			
-			packageTreeView.Model = packageListStore;
-			packageTreeView.HeadersVisible = true;
-			packageTreeView.AppendColumn ("", toggleRenderer, "active", 0);
-			packageTreeView.AppendColumn (packagePackageColumn);
-			packageTreeView.AppendColumn ("Version", textRenderer, "text", 2);
+			Gtk.CellRendererToggle normalPackageToggleRenderer = new Gtk.CellRendererToggle ();
+			normalPackageToggleRenderer.Activatable = true;
+			normalPackageToggleRenderer.Toggled += OnNormalPackageToggled;
+			normalPackageToggleRenderer.Xalign = 0;
+			
+			Gtk.TreeViewColumn normalPackageColumn = new Gtk.TreeViewColumn ();
+			normalPackageColumn.Title = "Package";
+			normalPackageColumn.PackStart (pixbufRenderer, false);
+			normalPackageColumn.PackStart (textRenderer, true);
+			normalPackageColumn.AddAttribute (textRenderer, "text", 1);
+			
+			normalPackageTreeView.Model = normalPackageListStore;
+			normalPackageTreeView.HeadersVisible = true;
+			normalPackageTreeView.AppendColumn ("", normalPackageToggleRenderer, "active", 0);
+			normalPackageTreeView.AppendColumn (normalPackageColumn);
+			normalPackageTreeView.AppendColumn ("Version", textRenderer, "text", 2);
+			
+			// <!-- Project packages -->
+			
+			Gtk.CellRendererToggle projectPackageToggleRenderer = new Gtk.CellRendererToggle ();
+			projectPackageToggleRenderer.Activatable = true;
+			projectPackageToggleRenderer.Toggled += OnProjectPackageToggled;
+			projectPackageToggleRenderer.Xalign = 0;
+			
+			Gtk.TreeViewColumn projectPackageColumn = new Gtk.TreeViewColumn ();
+			projectPackageColumn.Title = "Package";
+			projectPackageColumn.PackStart (pixbufRenderer, false);
+			projectPackageColumn.PackStart (textRenderer, true);
+			projectPackageColumn.AddAttribute (textRenderer, "text", 1);
+			
+			projectPackageTreeView.Model = projectPackageListStore;
+			projectPackageTreeView.HeadersVisible = true;
+			projectPackageTreeView.AppendColumn ("", projectPackageToggleRenderer, "active", 0);
+			projectPackageTreeView.AppendColumn (projectPackageColumn);
+			projectPackageTreeView.AppendColumn ("Version", textRenderer, "text", 2);
+			
+			
+			// <!-- Selected packages -->
 			
 			Gtk.TreeViewColumn selectedPackageColumn = new Gtk.TreeViewColumn ();
 			selectedPackageColumn.Title = "Package";
@@ -82,6 +113,19 @@ namespace CBinding
 			selectedPackagesTreeView.AppendColumn (selectedPackageColumn);
 			selectedPackagesTreeView.AppendColumn ("Version", textRenderer, "text", 1);
 			
+			// Fill up the project tree view
+			projectPackages = ProjectPackages (project);
+			
+			foreach (ProjectPackage p in projectPackages) {
+				string version = GetPackageVersion (p.File);
+				bool inProject = IsInProject (p.File);
+				projectPackageListStore.AppendValues (inProject, p.Name, version);
+				
+				if (inProject)
+					selectedPackagesListStore.AppendValues (p.Name, version);
+			}
+			
+			// Fill up the normal and selected tree views
 			foreach (string dir in ScanDirs ()) {
 				if (Directory.Exists (dir)) {	
 					DirectoryInfo di = new DirectoryInfo (dir);
@@ -94,7 +138,7 @@ namespace CBinding
 						string name = f.Name.Substring (0, f.Name.LastIndexOf ('.'));
 						string version = GetPackageVersion (f.FullName);
 						bool inProject = IsInProject (name);
-						packageListStore.AppendValues (inProject, name, version);
+						normalPackageListStore.AppendValues (inProject, name, version);
 						
 						if (inProject)
 							selectedPackagesListStore.AppendValues (name, version);
@@ -102,9 +146,35 @@ namespace CBinding
 				}
 			}
 			
+			// Packages of referenced projects
+//			foreach (ProjectPackage p in project.Packages) {
+//				if (p.IsProject) {
+//					string version = GetPackageVersion (p.File);
+//					selectedPackagesListStore.AppendValues (p.Name, version);
+//				}
+//			}
+			
 			buttonOk.Clicked += OnOkButtonClick;
 			buttonCancel.Clicked += OnCancelButtonClick;
 			removeButton.Clicked += OnRemoveButtonClick;
+		}
+		
+		private ProjectPackageCollection ProjectPackages (Project project)
+		{
+			ProjectPackageCollection packages = new ProjectPackageCollection ();
+			
+			foreach (CombineEntry c in project.ParentCombine.Entries) {
+				if (c is CProject) {
+					CProject cproj = (CProject)c;
+					CProjectConfiguration conf = (CProjectConfiguration)cproj.ActiveConfiguration;
+					if (conf.CompileTarget == CBinding.CompileTarget.StaticLibrary) {
+						cproj.WritePkgPackage ();
+						packages.Add (new ProjectPackage (cproj));
+					}
+				}
+			}
+			
+			return packages;
 		}
 		
 		private string[] ScanDirs ()
@@ -133,15 +203,21 @@ namespace CBinding
 		
 		private void OnOkButtonClick (object sender, EventArgs e)
 		{
+//			project.Packages.Clear ();
+//			
+//			Gtk.TreeIter iter;
+//			
+//			bool has_elem = selectedPackagesListStore.GetIterFirst (out iter);
+//			while (has_elem) {
+//				string package = (string)selectedPackagesListStore.GetValue (iter, 0);
+//				project.Packages.Add (new ProjectPackage(package));
+//				if (!selectedPackagesListStore.IterNext (ref iter)) break;
+//			}
+			
 			project.Packages.Clear ();
-			
-			Gtk.TreeIter iter;
-			
-			bool has_elem = selectedPackagesListStore.GetIterFirst (out iter);
-			while (has_elem) {
-				string package = (string)selectedPackagesListStore.GetValue (iter, 0);
-				project.Packages.Add (new ProjectPackage(package));
-				if (!selectedPackagesListStore.IterNext (ref iter)) break;
+			//project.Packages.AddRange (selectedPackages);
+			foreach (ProjectPackage p in selectedPackages) {
+				project.Packages.Add (p);
 			}
 			
 			Destroy ();
@@ -161,45 +237,58 @@ namespace CBinding
 			if (!selectedPackagesListStore.IterIsValid (iter)) return;
 			
 			string package = (string)selectedPackagesListStore.GetValue (iter, 0);
+			bool isProject = false;
+			
+			foreach (ProjectPackage p in selectedPackages) {
+				if (p.Name == package) {
+					isProject = p.IsProject;
+					selectedPackages.Remove (p);
+					break;
+				}
+			}
 			
 			selectedPackagesListStore.Remove (ref iter);
 			
-			Gtk.TreeIter search_iter;
-			bool has_elem = packageListStore.GetIterFirst (out search_iter);
-				
-			if (has_elem)
-			{
-				while (true) {
-					string current = (string)packageListStore.GetValue (search_iter, 1);
+			if (!isProject) {
+				Gtk.TreeIter search_iter;
+				bool has_elem = normalPackageListStore.GetIterFirst (out search_iter);
 					
-					if (current.Equals (package)) {
-						packageListStore.SetValue (search_iter, 0, false);
-						break;
+				if (has_elem) {
+					while (true) {
+						string current = (string)normalPackageListStore.GetValue (search_iter, 1);
+						
+						if (current.Equals (package)) {
+							normalPackageListStore.SetValue (search_iter, 0, false);
+							break;
+						}
+						
+						if (!normalPackageListStore.IterNext (ref search_iter))
+							break;
 					}
-					
-					if (!packageListStore.IterNext (ref search_iter))
-						break;
 				}
+			} else {
+				// Remove from project packages page
 			}
 		}
 		
-		private void OnPackageToggled (object sender, Gtk.ToggledArgs args)
+		private void OnNormalPackageToggled (object sender, Gtk.ToggledArgs args)
 		{
 			Gtk.TreeIter iter;
 			bool old = true;
 			string name;
 			string version;
 
-			if (packageListStore.GetIter (out iter, new Gtk.TreePath (args.Path))) {
-				old = (bool)packageListStore.GetValue (iter, 0);
-				packageListStore.SetValue (iter, 0, !old);
+			if (normalPackageListStore.GetIter (out iter, new Gtk.TreePath (args.Path))) {
+				old = (bool)normalPackageListStore.GetValue (iter, 0);
+				normalPackageListStore.SetValue (iter, 0, !old);
 			}
 			
-			name = (string)packageListStore.GetValue (iter, 1);
-			version = (string)packageListStore.GetValue(iter, 2);
+			name = (string)normalPackageListStore.GetValue (iter, 1);
+			version = (string)normalPackageListStore.GetValue(iter, 2);
 			
 			if (old == false) {
 				selectedPackagesListStore.AppendValues (name, version);
+				selectedPackages.Add (new ProjectPackage (name));
 			} else {
 				Gtk.TreeIter search_iter;
 				bool has_elem = selectedPackagesListStore.GetIterFirst (out search_iter);
@@ -211,6 +300,65 @@ namespace CBinding
 						
 						if (current.Equals (name)) {
 							selectedPackagesListStore.Remove (ref search_iter);
+							foreach (ProjectPackage p in selectedPackages) {
+								if (p.Name == name) {
+									selectedPackages.Remove (p);
+									break;
+								}
+							}
+							
+							break;
+						}
+						
+						if (!selectedPackagesListStore.IterNext (ref search_iter))
+							break;
+					}
+				}
+			}
+		}
+		
+		private void OnProjectPackageToggled (object sender, Gtk.ToggledArgs args)
+		{
+			Gtk.TreeIter iter;
+			bool old = true;
+			string name;
+			string version;
+
+			if (projectPackageListStore.GetIter (out iter, new Gtk.TreePath (args.Path))) {
+				old = (bool)projectPackageListStore.GetValue (iter, 0);
+				projectPackageListStore.SetValue (iter, 0, !old);
+			}
+			
+			name = (string)projectPackageListStore.GetValue (iter, 1);
+			version = (string)projectPackageListStore.GetValue(iter, 2);
+			
+			if (old == false) {
+				selectedPackagesListStore.AppendValues (name, version);
+//				selectedPackages.Add (new ProjectPackage (name));
+				foreach (ProjectPackage p in projectPackages) {
+					if (p.Name == name) {
+						selectedPackages.Add (p);
+						break;
+					}
+				}
+			} else {
+				Gtk.TreeIter search_iter;
+				bool has_elem = selectedPackagesListStore.GetIterFirst (out search_iter);
+				
+				if (has_elem)
+				{
+					while (true) {
+						string current = (string)selectedPackagesListStore.GetValue (search_iter, 0);
+						
+						if (current.Equals (name)) {
+							selectedPackagesListStore.Remove (ref search_iter);
+							foreach (ProjectPackage p in selectedPackages) {
+								if (p.Name == name) {
+									selectedPackages.Remove (p);
+									break;
+								}
+							}
+							
 							break;
 						}
 						
