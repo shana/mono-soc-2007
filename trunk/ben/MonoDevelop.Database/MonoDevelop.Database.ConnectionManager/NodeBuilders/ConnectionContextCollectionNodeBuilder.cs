@@ -27,8 +27,7 @@
 //
 
 using System;
-using System.Threading;
-using System.Collections.Generic;
+
 using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
@@ -36,65 +35,65 @@ using MonoDevelop.Ide.Gui.Pads;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ViewNodeBuilder : TypeNodeBuilder
+	public class ConnectionContextCollectionNodeBuilder : TypeNodeBuilder
 	{
-		public ViewNodeBuilder ()
+		private ITreeBuilder builder;
+		
+		public ConnectionContextCollectionNodeBuilder ()
 			: base ()
 		{
+			ConnectionContextService.ConnectionContextAdded += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionAdded));
+			ConnectionContextService.ConnectionContextRemoved += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionRemoved));
 		}
 		
 		public override Type NodeDataType {
-			get { return typeof (ViewNode); }
+			get { return typeof (DatabaseConnectionContextCollection); }
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewNode"; }
-		}
-		
-		public override Type CommandHandlerType {
-			get { return typeof (ViewNodeCommandHandler); }
+			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode"; }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("View");
+			return GettextCatalog.GetString ("Database Connections");
 		}
 		
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			ViewNode node = dataObject as ViewNode;
-
-			label = node.View.Name;
-			icon = Context.GetIcon ("md-db-view");
+			label = GettextCatalog.GetString ("Database Connections");
+			icon = Context.GetIcon ("md-db-connection");
+			this.builder = builder;
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			ViewNode node = dataObject as ViewNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			DatabaseConnectionContextCollection collection = (DatabaseConnectionContextCollection) dataObject;
+			Runtime.LoggingService.Debug ("BuildChildNodes CONTEXT  " + collection.Count);
+				
+			foreach (DatabaseConnectionContext context in collection)
+				builder.AddChild (context);
+			builder.Expanded = true;
 		}
-		
-		private void BuildChildNodesThreaded (object state)
-		{
-			NodeState nodeState = state as NodeState;
-			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
-			
-			//TODO: build columns
-		}
-		
+
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return true;
+			Runtime.LoggingService.Debug ("HasChildNodes CONTEXT");
+			DatabaseConnectionContextCollection collection = (DatabaseConnectionContextCollection) dataObject;
+			return collection.Count > 0;
 		}
-	}
-	
-	public class ViewNodeCommandHandler : NodeCommandHandler
-	{
-		public override DragOperation CanDragNode ()
+		
+		private void OnConnectionAdded (object sender, DatabaseConnectionContextEventArgs args)
 		{
-			return DragOperation.None;
+			builder.AddChild (args.ConnectionContext);
+		}
+		
+		private void OnConnectionRemoved (object sender, DatabaseConnectionContextEventArgs args)
+		{
+			if (builder.MoveToObject (args.ConnectionContext)) {
+				builder.Remove ();
+				builder.MoveToParent ();
+			}
 		}
 	}
 }

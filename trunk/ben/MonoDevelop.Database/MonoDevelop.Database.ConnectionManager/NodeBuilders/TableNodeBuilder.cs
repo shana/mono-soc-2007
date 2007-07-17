@@ -43,10 +43,6 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class TableNodeBuilder : TypeNodeBuilder
 	{
-		private object threadSync = new object ();
-		private ITreeBuilder builder;
-		private TableNode node;
-		
 		public TableNodeBuilder ()
 			: base ()
 		{
@@ -80,49 +76,40 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			TableNode node = dataObject as TableNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
 			
-			lock (threadSync) {
-				this.builder = builder;
-				this.node = node;
-			}
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder builder = null;
-			TableNode node = null;
-			
-			lock (threadSync) {
-				builder = this.builder;
-				node = this.node;
-			}
-			
-			ISchemaProvider provider = node.Settings.SchemaProvider;
+			NodeState nodeState = state as NodeState;
+			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
 			
 			if (provider.SupportsSchemaType (typeof (ColumnSchema)))
 				Services.DispatchService.GuiDispatch (delegate {
-					builder.AddChild (new ColumnsNode (node.Settings, node.Table));
+					TableSchema table = (nodeState.DataObject as TableNode).Table;
+					nodeState.TreeBuilder.AddChild (new ColumnsNode (nodeState.ConnectionContext, table));
 				});
 			
 			if (provider.SupportsSchemaType (typeof (RuleSchema)))
 				Services.DispatchService.GuiDispatch (delegate {
-					builder.AddChild (new RulesNode (node.Settings));
+					nodeState.TreeBuilder.AddChild (new RulesNode (nodeState.ConnectionContext));
 				});
 			
 			if (provider.SupportsSchemaType (typeof (ConstraintSchema)))
 				Services.DispatchService.GuiDispatch (delegate {
-					builder.AddChild (new ConstraintsNode (node.Settings, node.Table));
+					TableSchema table = (nodeState.DataObject as TableNode).Table;
+					nodeState.TreeBuilder.AddChild (new ConstraintsNode (nodeState.ConnectionContext, table));
 				});
 			
 			if (provider.SupportsSchemaType (typeof (TriggerSchema)))
 				Services.DispatchService.GuiDispatch (delegate {
-					builder.AddChild (new TriggersNode (node.Settings));
+					nodeState.TreeBuilder.AddChild (new TriggersNode (nodeState.ConnectionContext));
 				});
 			
 			Services.DispatchService.GuiDispatch (delegate {
-				builder.Expanded = true;
+				nodeState.TreeBuilder.Expanded = true;
 			});
 		}
 		
@@ -139,15 +126,6 @@ namespace MonoDevelop.Database.ConnectionManager
 			return DragOperation.None;
 		}
 		
-		public override void OnItemSelected ()
-		{
-//			TableSchema table = CurrentNode.DataItem as TableSchema;
-//			MonoQueryService service = (MonoQueryService) ServiceManager.GetService (typeof (MonoQueryService));
-//			
-//			if (service.SqlDefinitionPad != null)
-//				service.SqlDefinitionPad.SetText (table.Definition);
-		}
-		
 		public override void ActivateItem ()
 		{
 			OnQueryCommand ();
@@ -162,9 +140,9 @@ namespace MonoDevelop.Database.ConnectionManager
 			SelectStatement sel = new SelectStatement (new FromTableClause (tableId));
 			
 			SqlQueryView view = new SqlQueryView ();
-			view.SelectedConnectionSettings = node.Settings;
+			view.SelectedConnectionContext = node.ConnectionContext;
 			
-			IDbFactory fac = DbFactoryService.GetDbFactory (node.Settings);
+			IDbFactory fac = DbFactoryService.GetDbFactory (node.ConnectionContext.ConnectionSettings);
 			view.Text = fac.Dialect.GetSql (sel);
 
 			IdeApp.Workbench.OpenDocument (view, true);
@@ -183,7 +161,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				
 				SelectStatement sel = new SelectStatement (new FromTableClause (tableId), cols);
 
-				IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+				IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
 				IDbCommand command = conn.CreateCommand (sel);
 				conn.ExecuteTableAsync (command, new ExecuteCallback<DataTable> (OnSelectCommandThreaded), null);
 			}
@@ -197,7 +175,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 			SelectStatement sel = new SelectStatement (new FromTableClause (tableId));
 
-			IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+			IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (sel);
 			conn.ExecuteTableAsync (command, new ExecuteCallback<DataTable> (OnSelectCommandThreaded), null);
 		}
@@ -220,7 +198,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 			DeleteStatement del = new DeleteStatement (new FromTableClause (tableId));
 			
-			IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+			IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (del);
 			conn.ExecuteNonQueryAsync (command, new ExecuteCallback<int> (OnEmptyTableCallback), null);
 		}
@@ -242,7 +220,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 			DropStatement drop = new DropStatement (tableId, DropStatementType.Table);
 			
-			IPooledDbConnection conn = node.Settings.ConnectionPool.Request ();
+			IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (drop);
 			conn.ExecuteNonQueryAsync (command, new ExecuteCallback<int> (OnDropTableCallback), null);
 		}
@@ -263,6 +241,18 @@ namespace MonoDevelop.Database.ConnectionManager
 //				(CurrentNode.DataItem as TablesNode).Refresh ();
 //			
 //			CurrentNode.ExpandToNode ();
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.AlterTable)]
+		protected void OnAlterTable ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.RenameTable)]
+		protected void OnRenameTable ()
+		{
+			
 		}
 	}
 }

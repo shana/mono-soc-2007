@@ -37,95 +37,42 @@ using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ConstraintsNodeBuilder : TypeNodeBuilder
+	public class ParameterNodeBuilder : TypeNodeBuilder
 	{
-		private EventHandler RefreshHandler;
-		
-		public ConstraintsNodeBuilder ()
+		public ParameterNodeBuilder ()
 			: base ()
 		{
-			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
-			get { return typeof (ConstraintsNode); }
+			get { return typeof (ParameterSchema); }
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode"; }
-		}
-		
-		public override Type CommandHandlerType {
-			get { return typeof (ConstraintsNodeCommandHandler); }
+			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ParameterNode"; }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("Constraints");
+			return GettextCatalog.GetString ("Parameter");
 		}
 		
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			label = GettextCatalog.GetString ("Constraints");
-			icon = Context.GetIcon ("md-db-tables");
+			ParameterSchema parameter = dataObject as ParameterSchema;
 			
-			BaseNode node = (BaseNode) dataObject;
-			node.RefreshEvent += RefreshHandler;
+			label = parameter.Name;
+			icon = Context.GetIcon ("md-db-column");
+			//TODO: icon based on column type
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			BaseNode node = dataObject as BaseNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
-		}
-		
-		private void BuildChildNodesThreaded (object state)
-		{
-			NodeState nodeState = state as NodeState;
-			ConstraintsNode node = nodeState.DataObject as ConstraintsNode;
-			
-			ICollection<ConstraintSchema> constraints = nodeState.ConnectionContext.SchemaProvider.GetTableConstraints (node.Table);
-			if (constraints == null)
-				return;
-			
-			foreach (ConstraintSchema constraint in constraints) {
-				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (constraint);
-					nodeState.TreeBuilder.Expanded = true;
-				});
-			}
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return true;
-		}
-		
-		private void OnRefreshEvent (object sender, EventArgs args)
-		{
-			ITreeBuilder builder = Context.GetTreeBuilder ();
-			
-			if (builder != null)
-				builder.UpdateChildren ();
-			
-			builder.ExpandToNode ();
-		}
-	}
-	
-	public class ConstraintsNodeCommandHandler : NodeCommandHandler
-	{
-		public override DragOperation CanDragNode ()
-		{
-			return DragOperation.None;
-		}
-		
-		[CommandHandler (ConnectionManagerCommands.Refresh)]
-		protected void OnRefresh ()
-		{
-			BaseNode node = CurrentNode.DataItem as BaseNode;
-			node.Refresh ();
+			return false;
 		}
 	}
 }

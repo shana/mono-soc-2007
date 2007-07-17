@@ -39,10 +39,6 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class UsersNodeBuilder : TypeNodeBuilder
 	{
-		private object threadSync = new object ();
-		private ITreeBuilder treeBuilder;
-		private ConnectionSettings settings;
-		
 		private EventHandler RefreshHandler;
 		
 		public UsersNodeBuilder ()
@@ -79,29 +75,20 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			lock (threadSync) {
-				treeBuilder = builder;
-				settings = (dataObject as BaseNode).Settings;
-			}
+			BaseNode node = dataObject as BaseNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
 			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder treeBuilder = null;
-			ConnectionSettings settings = null;
-			
-			lock (threadSync) {
-				treeBuilder = this.treeBuilder;
-				settings = this.settings;
-			}
-
-			ICollection<UserSchema> users = settings.SchemaProvider.GetUsers ();
+			NodeState nodeState = state as NodeState;
+			ICollection<UserSchema> users = nodeState.ConnectionContext.SchemaProvider.GetUsers ();
 			foreach (UserSchema user in users) {
 				Services.DispatchService.GuiDispatch (delegate {
-					treeBuilder.AddChild (new UserNode (settings, user));
-					treeBuilder.Expanded = true;
+					nodeState.TreeBuilder.AddChild (new UserNode (nodeState.ConnectionContext, user));
+					nodeState.TreeBuilder.Expanded = true;
 				});
 			}
 		}
@@ -132,8 +119,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
-			TablesNode node = (TablesNode)CurrentNode.DataItem;
+			BaseNode node = CurrentNode.DataItem as BaseNode;
 			node.Refresh ();
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.CreateUser)]
+		protected void OnCreateUser ()
+		{
+			
 		}
 	}
 }

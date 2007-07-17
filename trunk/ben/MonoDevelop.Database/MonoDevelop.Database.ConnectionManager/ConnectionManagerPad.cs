@@ -41,9 +41,9 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		public ConnectionManagerPad ()
 		{
-			if (!ConnectionSettingsService.IsInitialized) {
+			if (!ConnectionContextService.IsInitialized) {
 				string configFile = Path.Combine (Path.Combine (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config"), "MonoDevelop"), "MonoDevelop.Database.ConnectionManager.xml");
-				ConnectionSettingsService.Initialize (configFile);
+				ConnectionContextService.Initialize (configFile);
 			}
 		}
 		
@@ -52,7 +52,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			base.Initialize (builders, options);
 
 			Clear ();
-			LoadTree (ConnectionSettingsService.Connections);
+			LoadTree (ConnectionContextService.DatabaseConnections);
 		}
 	}
 }

@@ -39,10 +39,6 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ViewsNodeBuilder : TypeNodeBuilder
 	{
-		private object threadSync = new object ();
-		private ITreeBuilder treeBuilder;
-		private ConnectionSettings settings;
-		
 		private EventHandler RefreshHandler;
 		
 		public ViewsNodeBuilder ()
@@ -79,33 +75,24 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			lock (threadSync) {
-				treeBuilder = builder;
-				settings = (dataObject as BaseNode).Settings;
-			}
+			BaseNode node = dataObject as BaseNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
 			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder treeBuilder = null;
-			ConnectionSettings settings = null;
-			
-			lock (threadSync) {
-				treeBuilder = this.treeBuilder;
-				settings = this.settings;
-			}
-			
-			bool showSystemObjects = (bool)treeBuilder.Options["ShowSystemObjects"];
-			ICollection<ViewSchema> views = settings.SchemaProvider.GetViews ();
+			NodeState nodeState = state as NodeState;
+			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
+			ICollection<ViewSchema> views = nodeState.ConnectionContext.SchemaProvider.GetViews ();
 			foreach (ViewSchema view in views) {
 				if (view.IsSystemView && !showSystemObjects)
 					continue;
 				
 				Services.DispatchService.GuiDispatch (delegate {
-					treeBuilder.AddChild (new ViewNode (settings, view));
-					treeBuilder.Expanded = true;
+					nodeState.TreeBuilder.AddChild (new ViewNode (nodeState.ConnectionContext, view));
+					nodeState.TreeBuilder.Expanded = true;
 				});
 			}
 		}
@@ -136,7 +123,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
-			TablesNode node = (TablesNode)CurrentNode.DataItem;
+			BaseNode node = CurrentNode.DataItem as BaseNode;
 			node.Refresh ();
 		}
 	}

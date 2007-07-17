@@ -39,19 +39,15 @@ using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
-	public class ConnectionSettingsNodeBuilder : TypeNodeBuilder
+	public class ConnectionContextNodeBuilder : TypeNodeBuilder
 	{
-		private object sync = new object ();
-		private ITreeBuilder builder;
-		private ConnectionSettings settings;
-		
-		public ConnectionSettingsNodeBuilder ()
+		public ConnectionContextNodeBuilder ()
 			: base ()
 		{
 		}
 		
 		public override Type NodeDataType {
-			get { return typeof (ConnectionSettings); }
+			get { return typeof (DatabaseConnectionContext); }
 		}
 		
 		public override string ContextMenuAddinPath {
@@ -69,11 +65,11 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
-			ConnectionSettings settings = dataObject as ConnectionSettings;
+			DatabaseConnectionContext context = dataObject as DatabaseConnectionContext;
 			
-			label = settings.Name;
-			if (settings.HasConnectionPool) {
-				IConnectionPool pool = settings.ConnectionPool;
+			label = context.ConnectionSettings.Name;
+			if (context.HasConnectionPool) {
+				IConnectionPool pool = context.ConnectionPool;
 				if (pool.IsInitialized)
 					icon = Context.GetIcon ("md-db-database-ok");
 //				else if (provider.IsError)
@@ -87,73 +83,60 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			ConnectionSettings settings = dataObject as ConnectionSettings;
-			lock (sync) {
-				this.builder = builder;
-				this.settings = settings;
-			}
+			DatabaseConnectionContext context = dataObject as DatabaseConnectionContext;
+			NodeState nodeState = new NodeState (builder, context, dataObject);
 			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded));
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			ITreeBuilder builder = null;
-			ConnectionSettings settings = null;
+			NodeState nodeState = state as NodeState;
 			
-			lock (sync) {
-				builder = this.builder;
-				settings = this.settings;
-			}
-			
-			QueryService.EnsureConnection (settings, new ConnectionSettingsCallback (BuildChildNodesGui));
+			QueryService.EnsureConnection (nodeState.ConnectionContext, new DatabaseConnectionContextCallback (BuildChildNodesGui), state);
 		}
 		
-		private void BuildChildNodesGui (ConnectionSettings settings, bool connected)
+		private void BuildChildNodesGui (DatabaseConnectionContext context, bool connected, object state)
 		{
-			ITreeBuilder builder = null;
+			NodeState nodeState = state as NodeState;
 			
-			lock (sync) {
-				builder = this.builder;
-			}
-			
-			builder.Update ();
+			nodeState.TreeBuilder.Update ();
 			if (connected) {
-				ISchemaProvider provider = settings.SchemaProvider;
+				ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
 				if (provider.SupportsSchemaType (typeof (TableSchema)))
-					builder.AddChild (new TablesNode (settings));
+					nodeState.TreeBuilder.AddChild (new TablesNode (nodeState.ConnectionContext));
 
 				if (provider.SupportsSchemaType (typeof (ViewSchema)))
-					builder.AddChild (new ViewsNode (settings));
+					nodeState.TreeBuilder.AddChild (new ViewsNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (ProcedureSchema)))
-					builder.AddChild (new ProceduresNode (settings));
+					nodeState.TreeBuilder.AddChild (new ProceduresNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (AggregateSchema)))
-					builder.AddChild (new AggregatesNode (settings));
+					nodeState.TreeBuilder.AddChild (new AggregatesNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (GroupSchema)))
-					builder.AddChild (new GroupsNode (settings));
+					nodeState.TreeBuilder.AddChild (new GroupsNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (LanguageSchema)))
-					builder.AddChild (new LanguagesNode (settings));
+					nodeState.TreeBuilder.AddChild (new LanguagesNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (OperatorSchema)))
-					builder.AddChild (new OperatorsNode (settings));
+					nodeState.TreeBuilder.AddChild (new OperatorsNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (RoleSchema)))
-					builder.AddChild (new RolesNode (settings));
+					nodeState.TreeBuilder.AddChild (new RolesNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (SequenceSchema)))
-					builder.AddChild (new SequencesNode (settings));
+					nodeState.TreeBuilder.AddChild (new SequencesNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (UserSchema)))
-					builder.AddChild (new UsersNode (settings));
+					nodeState.TreeBuilder.AddChild (new UsersNode (nodeState.ConnectionContext));
 				
 				if (provider.SupportsSchemaType (typeof (DataTypeSchema)))
-					builder.AddChild (new TypesNode (settings));
+					nodeState.TreeBuilder.AddChild (new TypesNode (nodeState.ConnectionContext));
 				
-				builder.Expanded = true;
+				nodeState.TreeBuilder.Expanded = true;
 			}
 		}
 		
@@ -169,38 +152,34 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnRemoveConnection ()
 		{
 			//TODO: dialog to confirm
-			ConnectionSettings settings = (ConnectionSettings) CurrentNode.DataItem;
-			ConnectionSettingsService.RemoveConnection (settings);
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			ConnectionContextService.RemoveDatabaseConnectionContext (context);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.EditConnection)]
 		protected void OnEditConnection ()
 		{
-			ConnectionSettings settings = (ConnectionSettings) CurrentNode.DataItem;
-			ConnectionDialog dlg = new ConnectionDialog (settings);
-			try {
-				if (dlg.Run () == (int)ResponseType.Ok) {
-					ConnectionSettingsService.EditConnection (settings);
-					OnRefreshConnection ();
-				}
-			} finally {
-				dlg.Destroy ();
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			IDbFactory fac = DbFactoryService.GetDbFactory (context.ConnectionSettings.ProviderIdentifier);
+			if (fac.ShowEditDatabaseConnectionDialog (context.ConnectionSettings)) {
+				ConnectionContextService.EditDatabaseConnectionContext (context);
+				OnRefreshConnection ();
 			}
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.RefreshConnection)]
 		protected void OnRefreshConnection ()
 		{
-			ConnectionSettings settings = (ConnectionSettings) CurrentNode.DataItem;
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
 			//TODO: refresh
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.DisconnectConnection)]
 		protected void OnDisconnectConnection ()
 		{
-			ConnectionSettings settings = (ConnectionSettings) CurrentNode.DataItem;
-			if (settings.HasConnectionPool)
-				settings.ConnectionPool.Close ();
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			if (context.HasConnectionPool)
+				context.ConnectionPool.Close ();
 		}
 		
 		public override void ActivateItem ()

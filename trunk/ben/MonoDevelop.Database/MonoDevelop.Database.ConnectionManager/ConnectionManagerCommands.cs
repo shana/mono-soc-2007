@@ -45,30 +45,47 @@ namespace MonoDevelop.Database.ConnectionManager
 		RemoveConnection,
 		DisconnectConnection,
 		RefreshConnection,
+
 		Query,
-		EmptyTable,
-		DropTable,
 		Refresh,
 		SelectAll,
-		SelectColumns
+		SelectColumns,
+		
+		CreateTable,
+		AlterTable,
+		DropTable,
+		EmptyTable,
+		RenameTable,
+		
+		CreateView,
+		AlterView,
+		DropView,
+		RenameView,
+		
+		CreateProcedure,
+		AlterProcedure,
+		DropProcedure,
+		RenameProcedure,
+		
+		CreateConstraint,
+		AlterConstraint,
+		DropConstraint,
+		RenameConstraint,
+		
+		CreateUser,
+		AlterUser,
+		DropUser,
+		RenameUser
 	}
 	
 	public class AddConnectionHandler : CommandHandler
 	{
 		protected override void Run ()
 		{
-			ConnectionDialog dlg = new ConnectionDialog ();
-			try {
-				if (dlg.Run () == (int)ResponseType.Ok) {
-					ConnectionSettings settings = dlg.ConnectionSettings;
-					ConnectionSettingsService.AddConnection (settings);
-				}
-			} catch (Exception e) {
-				Runtime.LoggingService.Error (e, e);
-				Runtime.LoggingService.Debug (e.StackTrace);
-			} finally {
-				dlg.Destroy ();
-			}
+			DatabaseConnectionSettingsDialog dlg = new DatabaseConnectionSettingsDialog ();
+			if (dlg.Run () == (int)ResponseType.Ok)
+				ConnectionContextService.AddDatabaseConnectionContext (dlg.ConnectionSettings);
+			dlg.Destroy ();
 		}
 	}
 }

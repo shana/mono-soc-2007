@@ -34,18 +34,18 @@ namespace MonoDevelop.Database.ConnectionManager
 	public abstract class BaseNode
 	{
 		public event EventHandler RefreshEvent;
-		protected ConnectionSettings settings;
+		protected DatabaseConnectionContext context;
 		
-		public BaseNode (ConnectionSettings settings)
+		public BaseNode (DatabaseConnectionContext context)
 		{
-			if (settings == null)
-				throw new ArgumentNullException ("settings");
+			if (context == null)
+				throw new ArgumentNullException ("context");
 			
-			this.settings = settings;
+			this.context = context;
 		}
 		
-		public ConnectionSettings Settings {
-			get { return settings; }
+		public DatabaseConnectionContext ConnectionContext {
+			get { return context; }
 		}
 		
 		public void Refresh ()
@@ -59,8 +59,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		protected TableSchema table;
 		
-		public TableNode (ConnectionSettings settings, TableSchema table)
-			: base (settings)
+		public TableNode (DatabaseConnectionContext context, TableSchema table)
+			: base (context)
 		{
 			if (table == null)
 				throw new ArgumentNullException ("table");
@@ -75,8 +75,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	
 	public class TablesNode : BaseNode
 	{
-		public TablesNode (ConnectionSettings settings)
-			: base (settings)
+		public TablesNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
@@ -85,8 +85,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		protected ViewSchema view;
 		
-		public ViewNode (ConnectionSettings settings, ViewSchema view)
-			: base (settings)
+		public ViewNode (DatabaseConnectionContext context, ViewSchema view)
+			: base (context)
 		{
 			if (view == null)
 				throw new ArgumentNullException ("view");
@@ -101,8 +101,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	
 	public class ViewsNode : BaseNode
 	{
-		public ViewsNode (ConnectionSettings settings)
-			: base (settings)
+		public ViewsNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
@@ -111,8 +111,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		protected ProcedureSchema procedure;
 		
-		public ProcedureNode (ConnectionSettings settings, ProcedureSchema procedure)
-			: base (settings)
+		public ProcedureNode (DatabaseConnectionContext context, ProcedureSchema procedure)
+			: base (context)
 		{
 			if (procedure == null)
 				throw new ArgumentNullException ("procedure");
@@ -127,64 +127,64 @@ namespace MonoDevelop.Database.ConnectionManager
 	
 	public class ProceduresNode : BaseNode
 	{
-		public ProceduresNode (ConnectionSettings settings)
-			: base (settings)
+		public ProceduresNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 	
 	public class AggregatesNode : BaseNode
 	{
-		public AggregatesNode (ConnectionSettings settings)
-			: base (settings)
+		public AggregatesNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 	
 	public class GroupsNode : BaseNode
 	{
-		public GroupsNode (ConnectionSettings settings)
-			: base (settings)
+		public GroupsNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 	
 	public class LanguagesNode : BaseNode
 	{
-		public LanguagesNode (ConnectionSettings settings)
-			: base (settings)
+		public LanguagesNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 	
 	public class OperatorsNode : BaseNode
 	{
-		public OperatorsNode (ConnectionSettings settings)
-			: base (settings)
+		public OperatorsNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 	
 	public class RulesNode : BaseNode
 	{
-		public RulesNode (ConnectionSettings settings)
-			: base (settings)
+		public RulesNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 
 	public class RolesNode : BaseNode
 	{
-		public RolesNode (ConnectionSettings settings)
-			: base (settings)
+		public RolesNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 	
 	public class SequencesNode : BaseNode
 	{
-		public SequencesNode (ConnectionSettings settings)
-			: base (settings)
+		public SequencesNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
@@ -193,8 +193,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		protected UserSchema user;
 		
-		public UserNode (ConnectionSettings settings, UserSchema user)
-			: base (settings)
+		public UserNode (DatabaseConnectionContext context, UserSchema user)
+			: base (context)
 		{
 			if (user == null)
 				throw new ArgumentNullException ("user");
@@ -209,16 +209,16 @@ namespace MonoDevelop.Database.ConnectionManager
 	
 	public class UsersNode : BaseNode
 	{
-		public UsersNode (ConnectionSettings settings)
-			: base (settings)
+		public UsersNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 
 	public class TypesNode : BaseNode
 	{
-		public TypesNode (ConnectionSettings settings)
-			: base (settings)
+		public TypesNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
@@ -227,8 +227,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		protected ColumnSchema column;
 		
-		public ColumnNode (ConnectionSettings settings, ColumnSchema column)
-			: base (settings)
+		public ColumnNode (DatabaseConnectionContext context, ColumnSchema column)
+			: base (context)
 		{
 			if (column == null)
 				throw new ArgumentNullException ("column");
@@ -243,19 +243,19 @@ namespace MonoDevelop.Database.ConnectionManager
 
 	public class ColumnsNode : BaseNode
 	{
-		protected TableSchema table;
+		protected ISchema schema;
 		
-		public ColumnsNode (ConnectionSettings settings, TableSchema table)
-			: base (settings)
+		public ColumnsNode (DatabaseConnectionContext context, ISchema schema)
+			: base (context)
 		{
-			if (table == null)
-				throw new ArgumentNullException ("table");
+			if (schema == null)
+				throw new ArgumentNullException ("schema");
 			
-			this.table = table;
+			this.schema = schema;
 		}
 		
-		public TableSchema Table {
-			get { return table; }
+		public ISchema Schema {
+			get { return schema; }
 		}
 	}
 	
@@ -263,8 +263,8 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		protected TableSchema table;
 		
-		public ConstraintsNode (ConnectionSettings settings, TableSchema table)
-			: base (settings)
+		public ConstraintsNode (DatabaseConnectionContext context, TableSchema table)
+			: base (context)
 		{
 			if (table == null)
 				throw new ArgumentNullException ("table");
@@ -279,17 +279,27 @@ namespace MonoDevelop.Database.ConnectionManager
 	
 	public class TriggersNode : BaseNode
 	{
-		public TriggersNode (ConnectionSettings settings)
-			: base (settings)
+		public TriggersNode (DatabaseConnectionContext context)
+			: base (context)
 		{
 		}
 	}
 	
 	public class ParametersNode : BaseNode
 	{
-		public ParametersNode (ConnectionSettings settings)
-			: base (settings)
+		private ProcedureSchema procedure;
+		
+		public ParametersNode (DatabaseConnectionContext context, ProcedureSchema procedure)
+			: base (context)
 		{
+			if (procedure == null)
+				throw new ArgumentNullException ("procedure");
+			
+			this.procedure = procedure;
+		}
+		
+		public ProcedureSchema Procedure {
+			get { return procedure; }
 		}
 	}
 }
