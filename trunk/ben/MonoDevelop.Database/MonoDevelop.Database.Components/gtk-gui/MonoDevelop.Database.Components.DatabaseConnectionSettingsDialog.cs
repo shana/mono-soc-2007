@@ -95,7 +95,7 @@ namespace MonoDevelop.Database.Components {
             this.notebook = new Gtk.Notebook();
             this.notebook.CanFocus = true;
             this.notebook.Name = "notebook";
-            this.notebook.CurrentPage = 1;
+            this.notebook.CurrentPage = 0;
             // Container child notebook.Gtk.Notebook+NotebookChild
             this.tableGeneral = new Gtk.Table(((uint)(7)), ((uint)(2)), false);
             this.tableGeneral.Name = "tableGeneral";
@@ -466,7 +466,7 @@ namespace MonoDevelop.Database.Components {
                 this.Child.ShowAll();
             }
             this.DefaultWidth = 606;
-            this.DefaultHeight = 358;
+            this.DefaultHeight = 351;
             this.Show();
             this.spinPort.Changed += new System.EventHandler(this.PortChanged);
             this.entryPassword.Changed += new System.EventHandler(this.PasswordChanged);
