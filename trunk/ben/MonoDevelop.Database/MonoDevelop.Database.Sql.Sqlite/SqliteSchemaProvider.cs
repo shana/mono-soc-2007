@@ -42,23 +42,43 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
-		public override bool SupportsSchemaType (Type type)
+		public override bool SupportsSchemaOperation (SchemaOperation operation)
 		{
-			if (type == typeof(TableSchema))
-				return true;
-			if (type == typeof(ColumnSchema))
-				return true;
-			if (type == typeof(ViewSchema))
-				return true;
-			if (type == typeof(ConstraintSchema))
-				return true;
-			else
+			switch (operation.Statement) {
+			case SqlStatementType.Select:
+				switch (operation.Schema) {
+				case SqlSchemaType.Table:
+				case SqlSchemaType.Column:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Trigger:
+					return true;
+				default:
+					return false;
+				}
+			case SqlStatementType.Create:
+			case SqlStatementType.Drop:
+			case SqlStatementType.Rename:
+				switch (operation.Schema) {
+				case SqlSchemaType.Table:
+				case SqlSchemaType.Column:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Trigger:
+					return true;
+				default:
+					return false;
+				}
+			case SqlStatementType.Alter:
+				return operation.Schema == SqlSchemaType.Table;
+			default:
 				return false;
+			}
 		}
 
-		public override ICollection<TableSchema> GetTables ()
+		public override TableSchemaCollection GetTables ()
 		{
-			List<TableSchema> tables = new List<TableSchema> ();
+			TableSchemaCollection tables = new TableSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -83,9 +103,9 @@ namespace MonoDevelop.Database.Sql
 			return tables;
 		}
 		
-		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
+		public override ColumnSchemaCollection GetTableColumns (TableSchema table)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -112,9 +132,9 @@ namespace MonoDevelop.Database.Sql
 			return columns;
 		}
 		
-		public override ICollection<ViewSchema> GetViews ()
+		public override ViewSchemaCollection GetViews ()
 		{
-			List<ViewSchema> views = new List<ViewSchema> ();
+			ViewSchemaCollection views = new ViewSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -138,9 +158,9 @@ namespace MonoDevelop.Database.Sql
 			return views;
 		}
 		
-		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
+		public override ConstraintSchemaCollection GetTableConstraints (TableSchema table)
 		{
-			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
+			ConstraintSchemaCollection constraints = new ConstraintSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SELECT name, tbl_name FROM sqlite_master WHERE sql IS NULL AND type = 'index'");
@@ -187,6 +207,112 @@ namespace MonoDevelop.Database.Sql
 			}
 			
 			return dts;
+		}
+
+		//http://www.sqlite.org/lang_createtable.html
+		public override void CreateTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.sqlite.org/lang_createview.html
+		public override void CreateView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.sqlite.org/lang_createindex.html
+		public override void CreateConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://www.sqlite.org/lang_createtrigger.html
+		public override void CreateTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.sqlite.org/lang_altertable.html
+		//http://www.sqlite.org/lang_vacuum.html
+		public override void AlterTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://www.sqlite.org/lang_droptable.html
+		public override void DropTable (TableSchema table)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP TABLE IF EXISTS " + table.Name);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://www.sqlite.org/lang_dropview.html
+		public override void DropView (ViewSchema view)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP VIEW IF EXISTS " + view.Name);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://www.sqlite.org/lang_dropindex.html
+		public override void DropConstraint (ConstraintSchema constraint)
+		{
+			if (constraint is IndexConstraintSchema) {
+				IPooledDbConnection conn = connectionPool.Request ();
+				IDbCommand command = conn.CreateCommand ("DROP INDEX IF EXISTS " + constraint.Name);
+				using (command)
+					command.ExecuteNonQuery ();
+				conn.Release ();
+			}
+		}
+		
+		//http://www.sqlite.org/lang_droptrigger.html
+		public override void DropTrigger (TriggerSchema trigger)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("DROP TRIGGER IF EXISTS " + trigger.Name);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+		}
+
+		//http://www.sqlite.org/lang_altertable.html
+		public override void RenameTable (TableSchema table, string name)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("ALTER TABLE " + table.Name + " RENAME TO " + name);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
+			
+			table.Name = name;
+		}
+
+		public override void RenameView (ViewSchema view, string name)
+		{
+			DropView (view);
+			view.Name = name;
+			CreateView (view);
+		}
+
+		public override void RenameConstraint (ConstraintSchema constraint, string name)
+		{
+			DropConstraint (constraint);
+			constraint.Name = name;
+			CreateConstraint (constraint);
+		}
+		
+		public override void RenameTrigger (TriggerSchema trigger, string name)
+		{
+			DropTrigger (trigger);
+			trigger.Name = name;
+			CreateTrigger (trigger);
 		}
 	}
 }
