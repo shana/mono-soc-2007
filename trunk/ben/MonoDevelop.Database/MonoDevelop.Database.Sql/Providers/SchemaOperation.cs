@@ -29,24 +29,27 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface IDbFactory
+	public class SchemaOperation
 	{
-		string Identifier { get; }
+		protected SqlStatementType statement;
+		protected SqlSchemaType schema;
 		
-		string Name { get; }
+		protected SchemaOperation ()
+		{
+		}
 		
-		ISqlDialect Dialect { get; }
+		public SchemaOperation (SqlStatementType statement, SqlSchemaType schema)
+		{
+			this.statement = statement;
+			this.schema = schema;
+		}
 		
-		IConnectionProvider ConnectionProvider { get; }
+		public SqlStatementType Statement {
+			get { return statement; }
+		}
 		
-		object GetOption (string name);
-
-		DatabaseConnectionSettings GetDefaultConnectionSettings ();
-
-		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
-		
-		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
-		
-		bool ShowOpenDatabaseDialog (out string database);
+		public SqlSchemaType Schema {
+			get { return schema; }
+		}
 	}
 }

@@ -34,7 +34,7 @@ namespace MonoDevelop.Database.Sql
 	public class ViewSchema : AbstractSchema
 	{
 		protected bool isSystemView = false;
-		protected ICollection<ColumnSchema> columns;
+		protected ColumnSchemaCollection columns;
 		
 		public ViewSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
@@ -54,7 +54,7 @@ namespace MonoDevelop.Database.Sql
 		/// <summary>
 		/// Collection of columns associated with this table.
 		/// </summary>
-		public ICollection<ColumnSchema> Columns {
+		public ColumnSchemaCollection Columns {
 			get {
 				if (columns == null)
 					columns = provider.GetViewColumns(this);

@@ -41,8 +41,8 @@ namespace MonoDevelop.Database.Sql
 		protected bool isSystemTable = false;
 		protected string tableSpaceName;
 		
-		protected ICollection<ColumnSchema> columns;
-		protected ICollection<ConstraintSchema> constraints;
+		protected ColumnSchemaCollection columns;
+		protected ConstraintSchemaCollection constraints;
 		
 		public TableSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
@@ -86,7 +86,7 @@ namespace MonoDevelop.Database.Sql
 		/// <summary>
 		/// Collection of columns associated with this table.
 		/// </summary>
-		public ICollection<ColumnSchema> Columns {
+		public ColumnSchemaCollection Columns {
 			get {
 				if (columns == null)
 					columns = provider.GetTableColumns(this);
@@ -97,7 +97,7 @@ namespace MonoDevelop.Database.Sql
 		/// <summary>
 		/// Collection of constraints associated with this table.
 		/// </summary>
-		public ICollection<ConstraintSchema> Constraints {
+		public ConstraintSchemaCollection Constraints {
 			get {
 				if (constraints == null)
 					constraints = provider.GetTableConstraints(this);

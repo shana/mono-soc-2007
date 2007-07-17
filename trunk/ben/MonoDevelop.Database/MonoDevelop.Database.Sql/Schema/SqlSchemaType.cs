@@ -29,24 +29,30 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface IDbFactory
+	public enum SqlSchemaType
 	{
-		string Identifier { get; }
-		
-		string Name { get; }
-		
-		ISqlDialect Dialect { get; }
-		
-		IConnectionProvider ConnectionProvider { get; }
-		
-		object GetOption (string name);
-
-		DatabaseConnectionSettings GetDefaultConnectionSettings ();
-
-		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
-		
-		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
-		
-		bool ShowOpenDatabaseDialog (out string database);
+		Aggregate,
+		CheckConstraint,
+		Column,
+		Constraint,
+		Database,
+		DataType,
+		ForeignKeyConstraint,
+		Group,
+		IndexConstraint,
+		Language,
+		Operator,
+		Parameter,
+		PrimaryKeyConstraint,
+		Privilege,
+		Procedure,
+		Role,
+		Rule,
+		Sequence,
+		Table,
+		Trigger,
+		UniqueConstraint,
+		User,
+		View
 	}
 }

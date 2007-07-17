@@ -1,3 +1,18 @@
+2007-07-18  Ben Motmans <ben.motmans@gmail.com>
+
+	* Providers/ISchemaProvider.cs, Providers/AbstractSchemaProvider.cs: Create, Alter, Drop
+	and Rename methods for schema objects
+	* Providers/SchemaOperation.cs, Schema/SqlSchemaType.cs, Dialect/Statements/SqlStatementType.cs: 
+	Improved method to determine if a schema operation is supported, no longer requires type checking
+	* Schema/CheckConstraintSchema.cs: Source property
+	* Schema/IndexConstraintSchema.cs, Schema/IndexConstraintSortType.cs: TableName and SortType properties
+	* Schema/TriggerSchema.cs, Schema/TriggerEvent.cs, Schema/TriggerType.cs: Extended the
+	TriggerSchema object to include the event, type and position of the trigger
+	* Collections/SortedCollectionBase.cs: Generic collection implementation with support
+	for sorted ISchema objects and a binary searche based on the ISchema name
+	* Collections/*SchemaCollection.cs: strong typed schema collections
+	* QueryService.cs: no longer shows the edit dialog after a failed attempt
+
 2007-07-17  Ben Motmans <ben.motmans@gmail.com>
 
 	* Makefile.am: initial makefile

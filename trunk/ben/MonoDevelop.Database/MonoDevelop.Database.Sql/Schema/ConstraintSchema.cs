@@ -33,13 +33,14 @@ namespace MonoDevelop.Database.Sql
 {
 	public class ConstraintSchema : AbstractSchema
 	{
-		private ICollection<ColumnSchema> columns;
+		protected ColumnSchemaCollection columns;
 		
 		public ConstraintSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+			columns = new ColumnSchemaCollection ();
 		}		
-		public ICollection<ColumnSchema> Columns {
+		public ColumnSchemaCollection Columns {
 			get { return columns; }
 		}
 	}

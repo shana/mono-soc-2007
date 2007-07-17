@@ -32,9 +32,32 @@ namespace MonoDevelop.Database.Sql
 {
 	public class IndexConstraintSchema : ConstraintSchema
 	{
+		protected string tableName;
+		protected IndexConstraintSortType sortType;
+
 		public IndexConstraintSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+		}
+		
+		public string TableName {
+			get { return tableName; }
+			set {
+				if (tableName != value) {
+					tableName = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public IndexConstraintSortType SortType {
+			get { return sortType; }
+			set {
+				if (sortType != value) {
+					sortType = value;
+					OnChanged ();
+				}
+			}
 		}
 	}
 }
