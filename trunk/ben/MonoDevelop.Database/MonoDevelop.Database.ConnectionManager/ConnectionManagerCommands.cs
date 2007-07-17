@@ -44,38 +44,37 @@ namespace MonoDevelop.Database.ConnectionManager
 		EditConnection,
 		RemoveConnection,
 		DisconnectConnection,
-		RefreshConnection,
 
 		Query,
 		Refresh,
 		SelectAll,
 		SelectColumns,
-		
-		CreateTable,
-		AlterTable,
-		DropTable,
 		EmptyTable,
-		RenameTable,
+		Rename,
 		
+		CreateDatabase,
+		CreateTable,
 		CreateView,
-		AlterView,
-		DropView,
-		RenameView,
-		
 		CreateProcedure,
-		AlterProcedure,
-		DropProcedure,
-		RenameProcedure,
-		
 		CreateConstraint,
-		AlterConstraint,
-		DropConstraint,
-		RenameConstraint,
-		
 		CreateUser,
+		CreateTrigger,
+		
+		AlterDatabase,
+		AlterTable,
+		AlterView,
+		AlterProcedure,
+		AlterConstraint,
 		AlterUser,
+		AlterTrigger,
+		
+		DropDatabase,
+		DropTable,
+		DropView,
+		DropProcedure,
+		DropConstraint,
 		DropUser,
-		RenameUser
+		DropTrigger
 	}
 	
 	public class AddConnectionHandler : CommandHandler

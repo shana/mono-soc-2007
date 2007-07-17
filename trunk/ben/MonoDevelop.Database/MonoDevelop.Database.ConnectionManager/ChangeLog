@@ -1,3 +1,17 @@
+2007-07-18  Ben Motmans <ben.motmans@gmail.com>
+
+	* NodeBuilders/ViewNodeBuilder.cs, NodeBuilders/UserNodeBuilder.cs,
+	NodeBuilders/TableNodeBuilder.cs, NodeBuilders/ProcedureNodeBuilder.cs,
+	NodeBuilders/ParametersNodeBuilder.cs: Added CommandHandlers and CommandUpdateHandlers
+	* NodeBuilders/ConnectionContextNodeBuilder.cs, NodeBuilders/ConstraintsNodeBuilder.cs
+	NodeBuilders/ProceduresNodeBuilder.cs, NodeBuilders/TablesNodeBuilder.cs,
+	NodeBuilders/UsersNodeBuilder.cs, NodeBuilders/ViewsNodeBuilder.cs,
+	NodeBuilders/TriggersNodeBuilder.cs: added CommandUpdateHandlers
+	* NodeBuilders/ConnectionContextCollectionNodeBuilder.cs: added a NodeCommandHandler
+	* ConnectionManagerCommands.cs: Create, Alter, Drop and Rename Schema commands
+	* MonoDevelop.Database.ConnectionManager.addin.xml: Added ExtensionPoints for all NodeBuilders
+	and added CommandItems for all ConnectionManagerCommands
+
 2007-07-17  Ben Motmans <ben.motmans@gmail.com>
 
 	* Makefile.am: initial makefile

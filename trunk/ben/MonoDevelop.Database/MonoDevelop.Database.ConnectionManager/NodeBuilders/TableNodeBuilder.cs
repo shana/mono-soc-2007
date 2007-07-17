@@ -86,24 +86,24 @@ namespace MonoDevelop.Database.ConnectionManager
 			NodeState nodeState = state as NodeState;
 			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
 			
-			if (provider.SupportsSchemaType (typeof (ColumnSchema)))
+			if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Column))
 				Services.DispatchService.GuiDispatch (delegate {
 					TableSchema table = (nodeState.DataObject as TableNode).Table;
 					nodeState.TreeBuilder.AddChild (new ColumnsNode (nodeState.ConnectionContext, table));
 				});
 			
-			if (provider.SupportsSchemaType (typeof (RuleSchema)))
+			if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Rule))
 				Services.DispatchService.GuiDispatch (delegate {
 					nodeState.TreeBuilder.AddChild (new RulesNode (nodeState.ConnectionContext));
 				});
 			
-			if (provider.SupportsSchemaType (typeof (ConstraintSchema)))
+			if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Constraint))
 				Services.DispatchService.GuiDispatch (delegate {
 					TableSchema table = (nodeState.DataObject as TableNode).Table;
 					nodeState.TreeBuilder.AddChild (new ConstraintsNode (nodeState.ConnectionContext, table));
 				});
 			
-			if (provider.SupportsSchemaType (typeof (TriggerSchema)))
+			if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Trigger))
 				Services.DispatchService.GuiDispatch (delegate {
 					nodeState.TreeBuilder.AddChild (new TriggersNode (nodeState.ConnectionContext));
 				});
@@ -216,7 +216,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnDropTable ()
 		{
 			TableNode node = (TableNode)CurrentNode.DataItem;
-			
+			//TODO: use schemaProbider.DropTable
 			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 			DropStatement drop = new DropStatement (tableId, DropStatementType.Table);
 			
@@ -249,10 +249,31 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 		}
 		
-		[CommandHandler (ConnectionManagerCommands.RenameTable)]
+		[CommandHandler (ConnectionManagerCommands.Rename)]
 		protected void OnRenameTable ()
 		{
-			
+			Tree.StartLabelEdit ();
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.DropTable)]
+		protected void OnUpdateDropTable (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.Table);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
+		protected void OnUpdateRenameTable (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.Table);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.AlterTable)]
+		protected void OnUpdateAlterTable (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.Table);
 		}
 	}
 }

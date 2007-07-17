@@ -86,7 +86,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			NodeState nodeState = state as NodeState;
 			ParametersNode node = nodeState.DataObject as ParametersNode;
 
-			ICollection<ParameterSchema> parameters = nodeState.ConnectionContext.SchemaProvider.GetProcedureParameters (node.Procedure);
+			ParameterSchemaCollection parameters = nodeState.ConnectionContext.SchemaProvider.GetProcedureParameters (node.Procedure);
 			if (parameters == null)
 				return;
 			

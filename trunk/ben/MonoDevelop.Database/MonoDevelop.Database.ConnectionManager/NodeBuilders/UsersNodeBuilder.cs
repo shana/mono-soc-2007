@@ -84,7 +84,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		private void BuildChildNodesThreaded (object state)
 		{
 			NodeState nodeState = state as NodeState;
-			ICollection<UserSchema> users = nodeState.ConnectionContext.SchemaProvider.GetUsers ();
+			UserSchemaCollection users = nodeState.ConnectionContext.SchemaProvider.GetUsers ();
 			foreach (UserSchema user in users) {
 				Services.DispatchService.GuiDispatch (delegate {
 					nodeState.TreeBuilder.AddChild (new UserNode (nodeState.ConnectionContext, user));
@@ -127,6 +127,13 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnCreateUser ()
 		{
 			
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.CreateUser)]
+		protected void OnUpdateCreateUser (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.User);
 		}
 	}
 }

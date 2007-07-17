@@ -50,6 +50,10 @@ namespace MonoDevelop.Database.ConnectionManager
 			get { return typeof (DatabaseConnectionContextCollection); }
 		}
 		
+		public override Type CommandHandlerType {
+			get { return typeof (ConnectionContextCommandHandler); }
+		}
+		
 		public override string ContextMenuAddinPath {
 			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode"; }
 		}
@@ -94,6 +98,14 @@ namespace MonoDevelop.Database.ConnectionManager
 				builder.Remove ();
 				builder.MoveToParent ();
 			}
+		}
+	}
+	
+	public class ConnectionContextCollectionCommandHandler : NodeCommandHandler
+	{
+		public override DragOperation CanDragNode ()
+		{
+			return DragOperation.None;
 		}
 	}
 }

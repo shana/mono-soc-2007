@@ -33,6 +33,7 @@ using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
@@ -95,6 +96,60 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override DragOperation CanDragNode ()
 		{
 			return DragOperation.None;
+		}
+		
+		public override void RenameItem (string newName)
+		{
+			//TODO: check if a view with the same name already exists
+			ViewNode node = CurrentNode.DataItem as ViewNode;
+			
+			node.View.Name = newName;
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.Refresh)]
+		protected void OnRefresh ()
+		{
+			BaseNode node = CurrentNode.DataItem as BaseNode;
+			node.Refresh ();
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.AlterView)]
+		protected void OnAlterView ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.DropView)]
+		protected void OnDropView ()
+		{
+			
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.Rename)]
+		protected void OnRenameView ()
+		{
+			Tree.StartLabelEdit ();
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.DropView)]
+		protected void OnUpdateDropView (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.View);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
+		protected void OnUpdateRenameView (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.View);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.AlterView)]
+		protected void OnUpdateAlterView (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.View);
 		}
 	}
 }
