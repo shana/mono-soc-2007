@@ -32,8 +32,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	// see:
 	// http://www.alberton.info/sql_server_meta_info.html
@@ -53,6 +52,8 @@ namespaceMonoDevelop.Database.Sql
 			else if (type == typeof(ViewSchema))
 				return true;
 			else if (type == typeof(ProcedureSchema))
+				return true;
+			else if (type == typeof(ParameterSchema))
 				return true;
 			else if (type == typeof(UserSchema))
 				return true;
@@ -368,7 +369,7 @@ namespaceMonoDevelop.Database.Sql
 					break;
 				case "bit":
 					dts.LengthRange = new Range (1);
-					dts.DataTypeCategory = DataTypeCategory.Boolean;
+					dts.DataTypeCategory = DataTypeCategory.Bit;
 					break;
 				case "char":
 					dts.LengthRange = new Range (1, 8000);
@@ -454,7 +455,7 @@ namespaceMonoDevelop.Database.Sql
 					break;
 				case "timestamp":
 					dts.LengthRange = new Range (1, 8);
-					dts.DataTypeCategory = DataTypeCategory.Time;
+					dts.DataTypeCategory = DataTypeCategory.TimeStamp;
 					break;
 				case "tinyint":
 					dts.LengthRange = new Range (1);
