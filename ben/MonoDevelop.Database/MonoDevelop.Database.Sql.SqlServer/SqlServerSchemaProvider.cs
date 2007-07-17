@@ -41,37 +41,51 @@ using System.Collections.Generic;
 		public SqlServerSchemaProvider (IConnectionPool connectionPool)
 			: base (connectionPool)
 		{
-		}
-
-		public override bool SupportsSchemaType (Type type)
+	}
+		
+		public override bool SupportsSchemaOperation (SchemaOperation operation)
 		{
-			if (type == typeof(TableSchema))
-				return true;
-			else if (type == typeof(ColumnSchema))
-				return true;
-			else if (type == typeof(ViewSchema))
-				return true;
-			else if (type == typeof(ProcedureSchema))
-				return true;
-			else if (type == typeof(ParameterSchema))
-				return true;
-			else if (type == typeof(UserSchema))
-				return true;
-			else if (type == typeof(SequenceSchema))
-				return true;
-			else if (type == typeof(TriggerSchema))
-				return true;
-			else if (type == typeof(DatabaseSchema))
-				return true;
-			else if (type == typeof(ConstraintSchema))
-				return true;
-			else
+			switch (operation.Statement) {
+			case SqlStatementType.Select:
+				switch (operation.Schema) {
+				case SqlSchemaType.Table:
+				case SqlSchemaType.Column:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Procedure:
+				case SqlSchemaType.Database:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Parameter:
+				case SqlSchemaType.User:
+				case SqlSchemaType.Trigger:
+				case SqlSchemaType.DataType:
+				case SqlSchemaType.Sequence:
+					return true;
+				default:
+					return false;
+				}
+			case SqlStatementType.Create:
+			case SqlStatementType.Drop:
+			case SqlStatementType.Rename:
+			case SqlStatementType.Alter:
+				switch (operation.Schema) {
+				case SqlSchemaType.Database:
+				case SqlSchemaType.Table:
+				case SqlSchemaType.View:
+				case SqlSchemaType.Procedure:
+				case SqlSchemaType.Constraint:
+				case SqlSchemaType.Trigger:
+					return true;
+				default:
+					return false;
+				}
+			default:
 				return false;
+			}
 		}
 		
-		public override ICollection<DatabaseSchema> GetDatabases ()
+		public override DatabaseSchemaCollection GetDatabases ()
 		{
-			List<DatabaseSchema> databases = new List<DatabaseSchema> ();
+			DatabaseSchemaCollection databases = new DatabaseSchemaCollection ();
 			
 			//TODO: check if the current database is "master", the drawback is that this only works if you have sysadmin privileges
 			IPooledDbConnection conn = connectionPool.Request ();
@@ -91,9 +105,9 @@ using System.Collections.Generic;
 			return databases;
 		}
 
-		public override ICollection<TableSchema> GetTables ()
+		public override TableSchemaCollection GetTables ()
 		{
-			List<TableSchema> tables = new List<TableSchema> ();
+			TableSchemaCollection tables = new TableSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -126,9 +140,9 @@ using System.Collections.Generic;
 			return tables;
 		}
 		
-		public override ICollection<ColumnSchema> GetTableColumns (TableSchema table)
+		public override ColumnSchemaCollection GetTableColumns (TableSchema table)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -177,9 +191,9 @@ using System.Collections.Generic;
 			return columns;
 		}
 
-		public override ICollection<ViewSchema> GetViews ()
+		public override ViewSchemaCollection GetViews ()
 		{
-			List<ViewSchema> views = new List<ViewSchema> ();
+			ViewSchemaCollection views = new ViewSchemaCollection ();
 
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -215,9 +229,9 @@ using System.Collections.Generic;
 			return views;
 		}
 
-		public override ICollection<ColumnSchema> GetViewColumns (ViewSchema view)
+		public override ColumnSchemaCollection GetViewColumns (ViewSchema view)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -246,9 +260,9 @@ using System.Collections.Generic;
 			return columns;
 		}
 
-		public override ICollection<ProcedureSchema> GetProcedures ()
+		public override ProcedureSchemaCollection GetProcedures ()
 		{
-			List<ProcedureSchema> procedures = new List<ProcedureSchema> ();
+			ProcedureSchemaCollection procedures = new ProcedureSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -283,9 +297,9 @@ using System.Collections.Generic;
 			return procedures; 
 		}
 
-		public override ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure)
+		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
 		{
-			List<ColumnSchema> columns = new List<ColumnSchema> ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			SqlCommand command = conn.CreateCommand ("sp_sproc_columns") as SqlCommand;
@@ -312,14 +326,14 @@ using System.Collections.Generic;
 			return columns;
 		}
 		
-		public override ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure)
+		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public override ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
+		public override ConstraintSchemaCollection GetTableConstraints (TableSchema table)
 		{
-			List<ConstraintSchema> constraints = new List<ConstraintSchema> ();
+			ConstraintSchemaCollection constraints = new ConstraintSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("select name, xtype from sysobjects where xtype = 'F'");
@@ -494,6 +508,154 @@ using System.Collections.Generic;
 			return dts;
 		}
 		
+		//http://msdn2.microsoft.com/en-us/library/aa258257(SQL.80).aspx
+		public override void CreateDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa258259(SQL.80).aspx
+		public override void CreateTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa258254(SQL.80).aspx
+		public override void CreateView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa258259(SQL.80).aspx
+		public override void CreateProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa258259(SQL.80).aspx
+		public override void CreateConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://msdn2.microsoft.com/en-us/library/aa258254(SQL.80).aspx
+		public override void CreateTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://msdn2.microsoft.com/en-us/library/aa275464(SQL.80).aspx
+		public override void AlterDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
+		public override void AlterTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
+		public override void AlterView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
+		public override void AlterProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public override void AlterConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
+		public override void AlterTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public override void AlterUser (UserSchema user)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
+		public override void DropDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa258841(SQL.80).aspx
+		public override void DropTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa258835(SQL.80).aspx
+		public override void DropView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa258830(SQL.80).aspx
+		public override void DropProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+
+		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
+		public override void DropConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://msdn2.microsoft.com/en-us/library/aa258846(SQL.80).aspx
+		public override void DropTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
+		public override void RenameDatabase (DatabaseSchema database, string name)
+		{
+			Rename (database.Name, name, "DATABASE");
+		}
+
+		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
+		public override void RenameTable (TableSchema table, string name)
+		{
+			Rename (table.Name, name, "OBJECT");
+		}
+
+		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
+		public override void RenameView (ViewSchema view, string name)
+		{
+			Rename (view.Name, name, "OBJECT");
+		}
+
+		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
+		public override void RenameProcedure (ProcedureSchema procedure, string name)
+		{
+			Rename (procedure.Name, name, "OBJECT");
+		}
+
+		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
+		public override void RenameConstraint (ConstraintSchema constraint, string name)
+		{
+			Rename (constraint.Name, name, "INDEX");
+		}
+		
+		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
+		public override void RenameTrigger (TriggerSchema trigger, string name)
+		{
+			Rename (trigger.Name, name, "OBJECT");
+		}
+		
 		protected string GetTableDefinition (TableSchema table)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -501,14 +663,14 @@ using System.Collections.Generic;
 			sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
 			sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
 
-			ICollection<ColumnSchema> columns = table.Columns;
+			ColumnSchemaCollection columns = table.Columns;
 			string[] parts = new string[columns.Count];
 			int i = 0;
 			foreach (ColumnSchema col in columns)
 				parts[i++] = col.Definition;
 			sb.Append (String.Join (",\n", parts));
 				
-			ICollection<ConstraintSchema> constraints = table.Constraints;
+			ConstraintSchemaCollection constraints = table.Constraints;
 			parts = new string[constraints.Count];
 			if (constraints.Count > 0)
 				sb.Append (",\n");
@@ -525,7 +687,7 @@ using System.Collections.Generic;
 		private string GetSource (string objectName) 
 		{
 			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand (
+			IDbCommand command = conn.CreateStoredProcedure (
 				String.Format ("EXEC [master].[dbo].[sp_helptext] '{0}', null", objectName)
 			);
 			StringBuilder sb = new StringBuilder ();
@@ -539,6 +701,18 @@ using System.Collections.Generic;
 			conn.Release ();
 
 			return sb.ToString ();
+		}
+		
+		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
+		private void Rename (string oldName, string newName, string type) 
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateStoredProcedure (
+				String.Format ("EXEC sp_rename '{0}', '{1}', '{2}'", oldName, newName, type)
+			);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
 		}
 	}
 }
