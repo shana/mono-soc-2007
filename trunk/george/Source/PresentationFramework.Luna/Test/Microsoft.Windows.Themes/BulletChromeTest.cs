@@ -417,5 +417,27 @@ namespace Microsoft.Windows.Themes {
 			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "2");
 			Assert.AreEqual(gd.Geometry.ToString(), "M0;0L100;0L100;100L0;100z M100;200L100;200L100;200L100;200z", "3");
 		}
+
+		[Test]
+		public void DrawingBackgroundBorderBrushNonUniformVeryLargeBorderThicknessIsCheckedRenderPressed() {
+			BulletChrome c = new BulletChrome();
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.BorderThickness = new Thickness(1000, 2000, 3000, 4000);
+			c.IsChecked = true;
+			c.RenderPressed = true;
+			c.Width = 100;
+			c.Height = 100;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.AreEqual(drawing_group.Children.Count, 1, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.IsNull(gd.Pen, "1");
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "2");
+			Assert.AreEqual(gd.Geometry.ToString(), "M0;0L100;0L100;100L0;100z M1000;2000L1000;2000L1000;2000L1000;2000z", "3");
+		}
 	}
 }
