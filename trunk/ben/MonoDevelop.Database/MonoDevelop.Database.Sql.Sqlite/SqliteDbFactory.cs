@@ -23,11 +23,15 @@
 // THE SOFTWARE.
 //
 
+using Gtk;
 using System;
 using System.Data;
 using System.Collections.Generic;
-
-namespaceMonoDevelop.Database.Sql
+using MonoDevelop.Core;
+using MonoDevelop.Core.Gui;
+using MonoDevelop.Database.Components;
+using MonoDevelop.Ide.Gui.Dialogs;
+namespace MonoDevelop.Database.Sql
 {
 	public class SqliteDbFactory : IDbFactory
 	{
@@ -58,9 +62,9 @@ namespaceMonoDevelop.Database.Sql
 			}
 		}
 		
-		public IConnectionPool CreateConnectionPool (ConnectionSettings settings)
+		public IConnectionPool CreateConnectionPool (DatabaseConnectionContext context)
 		{
-			return new DefaultConnectionPool (this, ConnectionProvider, settings);
+			return new DefaultConnectionPool (this, ConnectionProvider, context);
 		}
 		
 		public ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool)
@@ -68,13 +72,71 @@ namespaceMonoDevelop.Database.Sql
 			return new SqliteSchemaProvider (connectionPool);
 		}
 		
-		public ConnectionSettings GetDefaultConnectionSettings ()
+		public object GetOption (string name)
 		{
-			ConnectionSettings settings = new ConnectionSettings ();
+			switch (name) {
+			case "settings.can_open_database":
+				return true;
+			default:
+				return null;
+			}
+		}
+		
+		public DatabaseConnectionSettings GetDefaultConnectionSettings ()
+		{
+			DatabaseConnectionSettings settings = new DatabaseConnectionSettings ();
 			settings.ProviderIdentifier = Identifier;
-			settings.Port = -1;
-			settings.Database = String.Empty;
+			settings.MaxPoolSize = 5;
+			
 			return settings;
+		}
+		
+		public bool ShowOpenDatabaseDialog (out string database)
+		{
+			FileChooserDialog dlg = new FileChooserDialog (
+				GettextCatalog.GetString ("Open Database"), null, FileChooserAction.Open,
+				"gtk-cancel", ResponseType.Cancel,
+				"gtk-open", ResponseType.Accept
+			);
+			dlg.SelectMultiple = false;
+			dlg.LocalOnly = true;
+			dlg.Modal = true;
+			
+			FileFilter filter = new FileFilter ();
+			filter.AddMimeType ("application/x-sqlite2");
+			filter.AddMimeType ("application/x-sqlite3");
+			filter.AddPattern ("*.db");
+			filter.Name = GettextCatalog.GetString ("SQLite databases");
+			FileFilter filterAll = new FileFilter ();
+			filterAll.AddPattern ("*");
+			filterAll.Name = GettextCatalog.GetString ("All files");
+			dlg.AddFilter (filter);
+			dlg.AddFilter (filterAll);
+
+			if (dlg.Run () == (int)ResponseType.Accept) {
+				database = dlg.Filename;
+				dlg.Destroy ();
+				return true;
+			} else {
+				dlg.Destroy ();
+				database = null;
+				return false;
+			}
+		}
+		
+		public bool ShowEditDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings)
+		{
+			DatabaseConnectionSettingsDialog dlg = new DatabaseConnectionSettingsDialog (connectionSettings);
+			int result = dlg.Run ();
+			dlg.Destroy ();
+			return result == (int)ResponseType.Ok;
+		}
+		
+		public bool ShowRemoveDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings)
+		{
+			return Services.MessageService.AskQuestionFormatted (
+				GettextCatalog.GetString ("Are you sure you want to remove connection '{0}'?"),
+				connectionSettings.Name); 
 		}
 	}
 }

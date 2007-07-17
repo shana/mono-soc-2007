@@ -26,7 +26,7 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using MonoDevelop.Database.SqliteClient;
+using Mono.Data.SqliteClient;
 
 namespace MonoDevelop.Database.Sql
 {

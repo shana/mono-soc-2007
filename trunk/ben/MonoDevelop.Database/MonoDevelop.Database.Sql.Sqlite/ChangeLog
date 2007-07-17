@@ -1,3 +1,8 @@
+2007-07-17  Ben Motmans <ben.motmans@gmail.com>
+
+	* Makefile.am: initial makefile
+	* SqliteDbFactory.cs: implemented methods required for the connection settings dialog
+
 2007-07-15  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqliteDialect.cs: dialect implementation with keyword detection
