@@ -45,8 +45,9 @@ namespace MonoDevelop.Database.Components
 		{
 			string xml = GetContent (dataObject);
 
-			using (ShowXmlTreeDialog dlg = new ShowXmlTreeDialog (xml))
-				dlg.Run ();
+			//TODO: 
+			//using (ShowXmlTreeDialog dlg = new ShowXmlTreeDialog (xml))
+			//	dlg.Run ();
 		}
 	}
 }

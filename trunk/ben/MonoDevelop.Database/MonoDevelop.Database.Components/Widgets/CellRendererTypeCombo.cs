@@ -25,8 +25,7 @@
 
 using Gtk;
 using System;
-using System.Collections.Generic;
-usingMonoDevelop.Database.Sql;
+using System.Collections.Generic;using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Components
 {

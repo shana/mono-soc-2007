@@ -21,7 +21,6 @@
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialogs/SelectColumnDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Components.SelectColumnDialog.cs" subtype="Code" buildaction="Compile" />
-    <File name="./gtk-gui/MonoDevelop.Database.Components.ConnectionDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./Widgets/ProjectDirectoryComboBox.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/SelectColumnWidget.cs" subtype="Code" buildaction="Compile" />
@@ -34,10 +33,6 @@
     <File name="./Widgets/ColumnMappingWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/SchemaMappingWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/CellRendererTypeCombo.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Widgets/ConnectionComboBox.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Dialogs/PasswordDialog.cs" subtype="Code" buildaction="Compile" />
-    <File name="./gtk-gui/MonoDevelop.Database.Components.PasswordDialog.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Dialogs/ConnectionDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/DataGrid/DataGridColumn.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/DataGrid/Renderers" subtype="Directory" buildaction="Compile" />
     <File name="./Widgets/DataGrid/Visualizers" subtype="Directory" buildaction="Compile" />
@@ -67,9 +62,9 @@
     <File name="./Widgets/DataGrid/Visualizers/XmlTextVisualizer.cs" subtype="Code" buildaction="Compile" />
     <File name="./Codons/DataGridVisualizerCodon.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/DataGrid/VisualizerMenuItem.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Dialogs/ShowXmlTreeDialog.cs" subtype="Code" buildaction="Compile" />
-    <File name="./gtk-gui/MonoDevelop.Database.Components.ShowXmlTreeDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/DataGrid/Visualizers/XmlTreeVisualizer.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/DatabaseConnectionSettingsDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Components.DatabaseConnectionSettingsDialog.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -90,6 +85,15 @@
     <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
   </References>
+  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True">
+    <BuildFilesVar Sync="True" Name="FILES" />
+    <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
+    <ResourcesVar />
+    <OthersVar />
+    <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <ProjectRefVar Sync="True" Name="REFS" Prefix="-r:" />
+  </MonoDevelop.Autotools.MakefileInfo>
   <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
     <ExportedWidgets>
       <Widget>MonoDevelop.Database.Components.ProjectDirectoryComboBox</Widget>

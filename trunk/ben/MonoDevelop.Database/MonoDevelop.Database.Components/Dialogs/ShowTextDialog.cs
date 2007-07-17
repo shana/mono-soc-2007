@@ -56,7 +56,8 @@ namespace MonoDevelop.Database.Components
 			sourceView.ShowLineNumbers = true;
 			sourceView.Editable = false;
 			
-			//FIXME: vbox.PackStart (sourceView, true, true, 0);
+			vboxContent.PackStart (sourceView, true, true, 0);
+			vboxContent.ShowAll ();
 			if (text != null)
 				sourceView.Buffer.Text = text;
 		}
