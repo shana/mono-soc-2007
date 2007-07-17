@@ -1,9 +1,7 @@
 //
 // Authors:
-//   Christian Hergert <chris@mosaix.net>
 //   Ben Motmans  <ben.motmans@gmail.com>
 //
-// Copyright (c) 2005 Christian Hergert
 // Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,52 +31,52 @@ using System.Collections.Generic;
 namespace MonoDevelop.Database.Sql
 {
 	[Serializable]
-	public class ConnectionSettingsCollection : CollectionBase, IEnumerable<ConnectionSettings>
+	public class DatabaseConnectionSettingsCollection : CollectionBase, IEnumerable<DatabaseConnectionSettings>
 	{
 		public event EventHandler Changed;
 		
-		public ConnectionSettingsCollection ()
+		public DatabaseConnectionSettingsCollection ()
 			: base ()
 		{
 		}
 
-		public ConnectionSettings this[int index] {
-			get { return List[index] as ConnectionSettings; }
+		public DatabaseConnectionSettings this[int index] {
+			get { return List[index] as DatabaseConnectionSettings; }
 			set { List[index] = value; }
 		}
 
-		public int Add (ConnectionSettings item)
+		public int Add (DatabaseConnectionSettings item)
 		{
 			int retval = List.Add (item);
 			OnChanged (EventArgs.Empty);
 			return retval;
 		}
 
-		public int IndexOf (ConnectionSettings item)
+		public int IndexOf (DatabaseConnectionSettings item)
 		{
 			return List.IndexOf (item);
 		}
 
-		public void Insert (int index, ConnectionSettings item)
+		public void Insert (int index, DatabaseConnectionSettings item)
 		{
 			List.Insert (index, item);
 			OnChanged (EventArgs.Empty);
 		}
 
-		public void Remove (ConnectionSettings item)
+		public void Remove (DatabaseConnectionSettings item)
 		{
 			List.Remove (item);
 			OnChanged (EventArgs.Empty);
 		}
 
-		public bool Contains (ConnectionSettings item)
+		public bool Contains (DatabaseConnectionSettings item)
 		{
 			return List.Contains (item);
 		}
 		
-		IEnumerator<ConnectionSettings> IEnumerable<ConnectionSettings>.GetEnumerator ()
+		IEnumerator<DatabaseConnectionSettings> IEnumerable<DatabaseConnectionSettings>.GetEnumerator ()
 		{
-			foreach (ConnectionSettings cs in this)
+			foreach (DatabaseConnectionSettings cs in this)
 				yield return cs;
 		}
 		

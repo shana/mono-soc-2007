@@ -29,13 +29,14 @@ using System.Collections.Generic;
 namespace MonoDevelop.Database.Sql
 {
 	[Serializable]
-	public class ConnectionSettings
+	public class DatabaseConnectionSettings
 	{
 		private string name;
 		private string providerIdentifier;
 		
 		private string server;
 		private int port;
+		
 		private string database;
 		private string username;
 		private string password;
@@ -47,24 +48,14 @@ namespace MonoDevelop.Database.Sql
 		private string connectionString;
 		private bool useConnectionString;
 		
-		[NonSerialized]
-		private IConnectionPool connectionPool;
-		[NonSerialized]
-		private ISchemaProvider schemaProvider;
-		
-		public string Name {
-			get { return name; }
-			set { name = value; }
-		}
-		
 		public string ProviderIdentifier {
 			get { return providerIdentifier; }
 			set { providerIdentifier = value; }
 		}
 		
-		public string Database {
-			get { return database; }
-			set { database = value; }
+		public string Name {
+			get { return name; }
+			set { name = value; }
 		}
 		
 		public string Server {
@@ -77,6 +68,11 @@ namespace MonoDevelop.Database.Sql
 			set { port = value; }
 		}
 		
+		public string Database {
+			get { return database; }
+			set { database = value; }
+		}
+
 		public string Username {
 			get { return username; }
 			set { username = value; }
@@ -110,33 +106,6 @@ namespace MonoDevelop.Database.Sql
 		public bool UseConnectionString {
 			get { return useConnectionString; }
 			set { useConnectionString = value; }
-		}
-
-		public IConnectionPool ConnectionPool {
-			get {
-				if (connectionPool == null)
-					connectionPool = DbFactoryService.CreateConnectionPool (this);
-				return connectionPool;
-			}
-		}
-		
-		public bool HasConnectionPool {
-			get { return connectionPool != null; }
-		}
-
-		public ISchemaProvider SchemaProvider {
-			get {
-				if (ConnectionPool != null) {
-					if (schemaProvider == null)
-						schemaProvider = DbFactoryService.CreateSchemaProvider (this, connectionPool);
-					return schemaProvider;
-				}
-				return null;
-			}
-		}
-		
-		public bool HasSchemaProvider {
-			get { return schemaProvider != null; }
 		}
 	}
 }

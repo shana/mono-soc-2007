@@ -96,23 +96,39 @@
     <File name="./Dialect/AbstractSqlDialect.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect/Expressions/IConditionalExpression.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialect/Literals/BooleanLiteral.cs" subtype="Code" buildaction="Compile" />
-    <File name="./ConnectionSettingsService.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionContextService.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionPool" subtype="Directory" buildaction="Compile" />
     <File name="./ConnectionPool/IConnectionPool.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionPool/IPooledDbConnection.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionPool/DefaultConnectionPool.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionPool/PooledDataReader.cs" subtype="Code" buildaction="Compile" />
-    <File name="./ConnectionPool/ConnectionSettings.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionPool/AbstractPooledDbConnection.cs" subtype="Code" buildaction="Compile" />
     <File name="./ConnectionPool/PooledCommand.cs" subtype="Code" buildaction="Compile" />
-    <File name="./ConnectionPool/ConnectionSettingsCollection.cs" subtype="Code" buildaction="Compile" />
-    <File name="./ConnectionPool/ConnectionSettingsEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="./Providers/AbstractConnectionProvider.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Configuration" subtype="Directory" buildaction="Compile" />
+    <File name="./Configuration/DatabaseConnectionSettings.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Configuration/DatabaseConnectionSettingsCollection.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Configuration/DatabaseConnectionContext.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Configuration/DatabaseConnectionContextEventArgs.cs" subtype="Code" buildaction="Compile" />
+    <File name="./ConnectionPool/FakeConnectionPool.cs" subtype="Code" buildaction="Compile" />
+    <File name="./QueryService.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Configuration/DatabaseConnectionContextCollection.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Core, Version=0.14.0.0, Culture=neutral" />
+    <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Core.Gui, Version=0.14.0.0, Culture=neutral" />
   </References>
+  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True">
+    <BuildFilesVar Sync="True" Name="FILES" />
+    <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
+    <ResourcesVar />
+    <OthersVar />
+    <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <ProjectRefVar Sync="True" Name="REFS" Prefix="-r:" />
+  </MonoDevelop.Autotools.MakefileInfo>
 </Project>

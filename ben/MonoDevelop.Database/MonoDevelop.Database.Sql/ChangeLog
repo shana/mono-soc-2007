@@ -1,3 +1,12 @@
+2007-07-17  Ben Motmans <ben.motmans@gmail.com>
+
+	* Makefile.am: initial makefile
+	* Configuration/*.cs: moved ConnectionSettings class and splitted into DatabaseConnectionSettings
+	and DatabaseConnectionContext
+	* QueryService.cs: service to easily ensure the connection state
+	* IDbFactory.cs: additional methods required for the connection settings dialog
+	* ConnectionPool/FakeConnectionPool.cs: fake connection pool for use with temporary connections
+
 2007-07-15  Ben Motmans <ben.motmans@gmail.com>
 
 	* Dialect/ISqlDialect.cs, Dialect/AbstractSqlDialect.cs: replaced QuoteChar and ParameterChar

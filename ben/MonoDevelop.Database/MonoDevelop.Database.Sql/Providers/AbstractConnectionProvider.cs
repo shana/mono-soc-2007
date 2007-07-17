@@ -32,13 +32,13 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public abstract class AbstractConnectionProvider : IConnectionProvider
 	{
-		public abstract IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings);
+		public abstract IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings);
 
-		public virtual bool CheckConnection (IPooledDbConnection connection, ConnectionSettings settings)
+		public virtual bool CheckConnection (IPooledDbConnection connection, DatabaseConnectionSettings settings)
 		{
 			if (connection.IsOpen) {
 				IDbConnection conn = connection.DbConnection;

@@ -59,7 +59,7 @@ namespace MonoDevelop.Database.Sql
 			return null;
 		}
 		
-		public static IDbFactory GetDbFactory (ConnectionSettings settings)
+		public static IDbFactory GetDbFactory (DatabaseConnectionSettings settings)
 		{
 			if (settings == null)
 				throw new ArgumentNullException ("settings");
@@ -67,25 +67,25 @@ namespace MonoDevelop.Database.Sql
 			return GetDbFactory (settings.ProviderIdentifier);
 		}
 		
-		public static IConnectionPool CreateConnectionPool (ConnectionSettings settings)
+		public static IConnectionPool CreateConnectionPool (DatabaseConnectionContext context)
 		{
-			if (settings == null)
-				throw new ArgumentNullException ("settings");
+			if (context == null)
+				throw new ArgumentNullException ("context");
 			
-			IDbFactory fac = GetDbFactory (settings);
+			IDbFactory fac = GetDbFactory (context.ConnectionSettings);
 			if (fac != null)
-				return fac.CreateConnectionPool (settings);
+				return fac.CreateConnectionPool (context);
 			return null;
 		}
 		
-		public static ISchemaProvider CreateSchemaProvider (ConnectionSettings settings, IConnectionPool pool)
+		public static ISchemaProvider CreateSchemaProvider (DatabaseConnectionContext context, IConnectionPool pool)
 		{
-			if (settings == null)
-				throw new ArgumentNullException ("settings");
+			if (context == null)
+				throw new ArgumentNullException ("context");
 			if (pool == null)
 				throw new ArgumentNullException ("pool");
 			
-			IDbFactory fac = GetDbFactory (settings);
+			IDbFactory fac = GetDbFactory (context.ConnectionSettings);
 			if (fac != null)
 				return fac.CreateSchemaProvider (pool);
 			return null;

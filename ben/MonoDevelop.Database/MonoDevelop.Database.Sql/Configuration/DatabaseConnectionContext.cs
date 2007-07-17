@@ -28,19 +28,50 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public delegate void ConnectionSettingsEventHandler (object sender, ConnectionSettingsEventArgs args);
-	
-	public class ConnectionSettingsEventArgs : EventArgs
+	public sealed class DatabaseConnectionContext
 	{
-		protected ConnectionSettings settings;
+		private DatabaseConnectionSettings connectionSettings;
 		
-		public ConnectionSettingsEventArgs (ConnectionSettings settings)
+		private IConnectionPool connectionPool;
+		private ISchemaProvider schemaProvider;
+		
+		public DatabaseConnectionContext (DatabaseConnectionSettings connectionSettings)
 		{
-			this.settings = settings;
+			if (connectionSettings == null)
+				throw new ArgumentNullException ("connectionSettings");
+			
+			this.connectionSettings = connectionSettings;
 		}
 		
-		public ConnectionSettings ConnectionSettings {
-			get { return settings; }
+		public DatabaseConnectionSettings ConnectionSettings {
+			get { return connectionSettings; }
+		}
+		
+		public IConnectionPool ConnectionPool {
+			get {
+				if (connectionPool == null)
+					connectionPool = DbFactoryService.CreateConnectionPool (this);
+				return connectionPool;
+			}
+		}
+		
+		public bool HasConnectionPool {
+			get { return connectionPool != null; }
+		}
+
+		public ISchemaProvider SchemaProvider {
+			get {
+				if (ConnectionPool != null) {
+					if (schemaProvider == null)
+						schemaProvider = DbFactoryService.CreateSchemaProvider (this, connectionPool);
+					return schemaProvider;
+				}
+				return null;
+			}
+		}
+		
+		public bool HasSchemaProvider {
+			get { return schemaProvider != null; }
 		}
 	}
 }
