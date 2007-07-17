@@ -39,15 +39,18 @@ namespace MonoDevelop.Database.Sql
 		
 		IConnectionProvider ConnectionProvider { get; }
 		
-		/// <summary>
-		/// This method is used to get the default connection settings and also
-		/// to determine which fields should be editable in the Add Connection Dialog.
-		/// To ignore a property, use 'null' or -1, all other values are considered default values.
-		/// </summary>
-		ConnectionSettings GetDefaultConnectionSettings ();
+		object GetOption (string name);
 
-		IConnectionPool CreateConnectionPool (ConnectionSettings settings);
+		DatabaseConnectionSettings GetDefaultConnectionSettings ();
+
+		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
 		
 		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
+		
+		bool ShowOpenDatabaseDialog (out string database);
+		
+		bool ShowEditDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings);
+		
+		bool ShowRemoveDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings);
 	}
 }

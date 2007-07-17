@@ -25,8 +25,7 @@
 //
 
 using System;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public class Range
 	{

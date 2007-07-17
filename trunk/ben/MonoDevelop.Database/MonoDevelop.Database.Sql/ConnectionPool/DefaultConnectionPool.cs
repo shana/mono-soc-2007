@@ -37,7 +37,7 @@ namespace MonoDevelop.Database.Sql
 		protected int shrinkSize = 5;
 		
 		protected IDbFactory factory;
-		protected ConnectionSettings settings;
+		protected DatabaseConnectionContext context;
 		protected IConnectionProvider connectionProvider;
 		
 		protected bool isInitialized;
@@ -47,18 +47,18 @@ namespace MonoDevelop.Database.Sql
 		
 		protected object sync = new object ();
 		
-		public DefaultConnectionPool (IDbFactory factory, IConnectionProvider connectionProvider, ConnectionSettings settings)
+		public DefaultConnectionPool (IDbFactory factory, IConnectionProvider connectionProvider, DatabaseConnectionContext context)
 		{
 			if (factory == null)
 				throw new ArgumentNullException ("factory");
 			if (connectionProvider == null)
 				throw new ArgumentNullException ("connectionProvider");
-			if (settings == null)
-				throw new ArgumentNullException ("settings");
+			if (context == null)
+				throw new ArgumentNullException ("context");
 			
 			this.factory = factory;
 			this.connectionProvider = connectionProvider;
-			this.settings = settings;
+			this.context = context;
 			
 			connections = new List<IPooledDbConnection> ();
 			freeConnections = new Queue<IPooledDbConnection> ();
@@ -68,8 +68,8 @@ namespace MonoDevelop.Database.Sql
 			get { return factory; }
 		}
 		
-		public virtual ConnectionSettings ConnectionSettings  {
-			get { return settings; }
+		public virtual DatabaseConnectionContext ConnectionContext  {
+			get { return context; }
 		}
 		
 		public virtual IConnectionProvider ConnectionProvider {
@@ -156,11 +156,14 @@ namespace MonoDevelop.Database.Sql
 
 		public virtual void Release (IPooledDbConnection connection)
 		{
+			if (connection == null)
+				return;
+			
 			lock (sync) {
 				if (freeConnections.Contains (connection))
 					return;
 				
-				if (connectionProvider.CheckConnection (connection, settings))
+				if (connectionProvider.CheckConnection (connection, context.ConnectionSettings))
 					freeConnections.Enqueue (connection);
 				connections.Remove (connection);
 			}
@@ -170,7 +173,7 @@ namespace MonoDevelop.Database.Sql
 		public virtual bool Initialize ()
 		{
 			for (int i=0; i<minSize; i++) {
-				IPooledDbConnection conn = connectionProvider.CreateConnection (this, settings);
+				IPooledDbConnection conn = connectionProvider.CreateConnection (this, context.ConnectionSettings);
 				if (conn == null)
 					return false;
 				
@@ -196,7 +199,7 @@ namespace MonoDevelop.Database.Sql
 		protected virtual bool Grow ()
 		{
 			for (int i=0; i<growSize; i++) {
-				IPooledDbConnection conn = connectionProvider.CreateConnection (this, settings);
+				IPooledDbConnection conn = connectionProvider.CreateConnection (this, context.ConnectionSettings);
 				if (conn == null)
 					return false;
 				

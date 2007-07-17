@@ -25,8 +25,7 @@
 //
 
 using System;
-
-namespaceMonoDevelop.Database.Sql
+namespace MonoDevelop.Database.Sql
 {
 	public enum DataTypeCategory
 	{
@@ -38,6 +37,10 @@ namespaceMonoDevelop.Database.Sql
 		/// Data type allowing only 2 possibilities, like: true/false, 1/0, ...
 		/// </summary>
 		Boolean,
+		/// <summary>
+		/// Data type allowing to store individual bits, length will be shown in bits instead of bytes
+		/// </summary>
+		Bit,
 		/// <summary>
 		/// Used for all numerical values without a comma (int, long, ...)
 		/// </summary>
@@ -82,6 +85,10 @@ namespaceMonoDevelop.Database.Sql
 		/// Time field
 		/// </summary>
 		Time,
+		/// <summary>
+		/// TimeStamp field
+		/// </summary>
+		TimeStamp,
 		/// <summary>
 		/// Field containing both a date and a time
 		/// </summary>

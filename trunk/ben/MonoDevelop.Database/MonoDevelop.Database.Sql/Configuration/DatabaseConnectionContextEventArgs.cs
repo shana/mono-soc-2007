@@ -24,33 +24,23 @@
 //
 
 using System;
-using System.Data;
 using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface IConnectionPool
+	public delegate void DatabaseConnectionContextEventHandler (object sender, DatabaseConnectionContextEventArgs args);
+	
+	public class DatabaseConnectionContextEventArgs : EventArgs
 	{
-		IDbFactory DbFactory { get; }
-		DatabaseConnectionContext ConnectionContext { get; }
+		protected DatabaseConnectionContext context;
 		
-		bool IsInitialized { get; }
+		public DatabaseConnectionContextEventArgs (DatabaseConnectionContext context)
+		{
+			this.context = context;
+		}
 		
-		int MinSize { get; set; }
-		int MaxSize { get; set; }
-		
-		int GrowSize { get; set; }
-		int ShrinkSize { get; set; }
-		
-		int ConnectionCount { get; }
-		int FreeConnectionCount { get; }
-		
-		bool HasFreeConnection { get; }
-		
-		IPooledDbConnection Request ();
-		void Release (IPooledDbConnection connection);
-		
-		bool Initialize ();
-		void Close ();
+		public DatabaseConnectionContext ConnectionContext {
+			get { return context; }
+		}
 	}
 }
