@@ -86,7 +86,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			NodeState nodeState = state as NodeState;
 			
 			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
-			ICollection<ProcedureSchema> procedures = nodeState.ConnectionContext.SchemaProvider.GetProcedures ();
+			ProcedureSchemaCollection procedures = nodeState.ConnectionContext.SchemaProvider.GetProcedures ();
 			foreach (ProcedureSchema procedure in procedures) {
 				if (procedure.IsSystemProcedure && !showSystemObjects)
 					continue;
@@ -132,6 +132,13 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnCreateProcedure ()
 		{
 			
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.CreateProcedure)]
+		protected void OnUpdateCreateProcedure (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.Procedure);
 		}
 	}
 }

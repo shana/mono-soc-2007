@@ -55,7 +55,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof (ConnectionSettingsCommandHandler); }
+			get { return typeof (ConnectionContextCommandHandler); }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
@@ -103,37 +103,37 @@ namespace MonoDevelop.Database.ConnectionManager
 			nodeState.TreeBuilder.Update ();
 			if (connected) {
 				ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
-				if (provider.SupportsSchemaType (typeof (TableSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Table))
 					nodeState.TreeBuilder.AddChild (new TablesNode (nodeState.ConnectionContext));
 
-				if (provider.SupportsSchemaType (typeof (ViewSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.View))
 					nodeState.TreeBuilder.AddChild (new ViewsNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (ProcedureSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Procedure))
 					nodeState.TreeBuilder.AddChild (new ProceduresNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (AggregateSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Aggregate))
 					nodeState.TreeBuilder.AddChild (new AggregatesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (GroupSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Group))
 					nodeState.TreeBuilder.AddChild (new GroupsNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (LanguageSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Language))
 					nodeState.TreeBuilder.AddChild (new LanguagesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (OperatorSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Operator))
 					nodeState.TreeBuilder.AddChild (new OperatorsNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (RoleSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Role))
 					nodeState.TreeBuilder.AddChild (new RolesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (SequenceSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Sequence))
 					nodeState.TreeBuilder.AddChild (new SequencesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (UserSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.User))
 					nodeState.TreeBuilder.AddChild (new UsersNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaType (typeof (DataTypeSchema)))
+				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.DataType))
 					nodeState.TreeBuilder.AddChild (new TypesNode (nodeState.ConnectionContext));
 				
 				nodeState.TreeBuilder.Expanded = true;
@@ -146,28 +146,33 @@ namespace MonoDevelop.Database.ConnectionManager
 		}
 	}
 	
-	public class ConnectionSettingsCommandHandler : NodeCommandHandler
+	public class ConnectionContextCommandHandler : NodeCommandHandler
 	{
 		[CommandHandler (ConnectionManagerCommands.RemoveConnection)]
 		protected void OnRemoveConnection ()
 		{
-			//TODO: dialog to confirm
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			ConnectionContextService.RemoveDatabaseConnectionContext (context);
+			if (Services.MessageService.AskQuestionFormatted (
+				GettextCatalog.GetString ("Are you sure you want to remove connection '{0}'?"),
+				context.ConnectionSettings.Name)) {
+				ConnectionContextService.RemoveDatabaseConnectionContext (context);
+			}
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.EditConnection)]
 		protected void OnEditConnection ()
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			IDbFactory fac = DbFactoryService.GetDbFactory (context.ConnectionSettings.ProviderIdentifier);
-			if (fac.ShowEditDatabaseConnectionDialog (context.ConnectionSettings)) {
+			DatabaseConnectionSettingsDialog dlg = new DatabaseConnectionSettingsDialog (context.ConnectionSettings);
+
+			if (dlg.Run () == (int)ResponseType.Ok) {
 				ConnectionContextService.EditDatabaseConnectionContext (context);
 				OnRefreshConnection ();
 			}
+			dlg.Destroy ();
 		}
 		
-		[CommandHandler (ConnectionManagerCommands.RefreshConnection)]
+		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefreshConnection ()
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
@@ -195,6 +200,27 @@ namespace MonoDevelop.Database.ConnectionManager
 //			IdeApp.Workbench.OpenDocument (sql, true);
 //			
 //			CurrentNode.MoveToParent ();
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.DropDatabase)]
+		protected void OnUpdateDropDatabase (CommandInfo info)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.Database);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
+		protected void OnUpdateRenameDatabase (CommandInfo info)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.Database);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.AlterDatabase)]
+		protected void OnUpdateAlterDatabase (CommandInfo info)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.Database);
 		}
 	}
 }

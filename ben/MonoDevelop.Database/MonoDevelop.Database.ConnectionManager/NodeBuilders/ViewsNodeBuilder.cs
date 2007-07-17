@@ -85,7 +85,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			NodeState nodeState = state as NodeState;
 			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
-			ICollection<ViewSchema> views = nodeState.ConnectionContext.SchemaProvider.GetViews ();
+			ViewSchemaCollection views = nodeState.ConnectionContext.SchemaProvider.GetViews ();
 			foreach (ViewSchema view in views) {
 				if (view.IsSystemView && !showSystemObjects)
 					continue;
@@ -125,6 +125,13 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			BaseNode node = CurrentNode.DataItem as BaseNode;
 			node.Refresh ();
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.CreateView)]
+		protected void OnUpdateCreateView (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.View);
 		}
 	}
 }

@@ -101,10 +101,31 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 		}
 		
-		[CommandHandler (ConnectionManagerCommands.RenameUser)]
+		[CommandHandler (ConnectionManagerCommands.Rename)]
 		protected void OnRenameUser ()
 		{
-			
+			Tree.StartLabelEdit ();
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.DropUser)]
+		protected void OnUpdateDropUser (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.User);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
+		protected void OnUpdateRenameUser (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.User);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.AlterUser)]
+		protected void OnUpdateAlterUser (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.User);
 		}
 	}
 }

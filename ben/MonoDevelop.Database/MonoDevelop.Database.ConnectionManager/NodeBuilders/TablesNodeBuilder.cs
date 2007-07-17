@@ -85,7 +85,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			NodeState nodeState = state as NodeState;
 			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
-			ICollection<TableSchema> tables = nodeState.ConnectionContext.SchemaProvider.GetTables ();
+			TableSchemaCollection tables = nodeState.ConnectionContext.SchemaProvider.GetTables ();
 		
 			foreach (TableSchema table in tables) {
 				if (table.IsSystemTable && !showSystemObjects)
@@ -132,6 +132,13 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnCreateTable ()
 		{
 			
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.CreateTable)]
+		protected void OnUpdateCreateTable (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.Table);
 		}
 	}
 }

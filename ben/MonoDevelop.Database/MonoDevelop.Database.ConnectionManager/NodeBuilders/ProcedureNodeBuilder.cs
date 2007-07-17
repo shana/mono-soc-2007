@@ -83,7 +83,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
 			
-			//TODO: build columns
+			//TODO: build columns + params
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -117,10 +117,31 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 		}
 		
-		[CommandHandler (ConnectionManagerCommands.RenameProcedure)]
+		[CommandHandler (ConnectionManagerCommands.Rename)]
 		protected void OnRenameProcedure ()
 		{
-			
+			Tree.StartLabelEdit ();
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.DropProcedure)]
+		protected void OnUpdateDropProcedure (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.Procedure);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
+		protected void OnUpdateRenameProcedure (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.Procedure);
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.AlterProcedure)]
+		protected void OnUpdateAlterProcedure (CommandInfo info)
+		{
+			BaseNode node = (BaseNode)CurrentNode.DataItem;
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.Procedure);
 		}
 	}
 }

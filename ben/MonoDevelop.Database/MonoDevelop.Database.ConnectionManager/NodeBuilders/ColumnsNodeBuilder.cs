@@ -87,7 +87,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ColumnsNode node = nodeState.DataObject as ColumnsNode;
 			ISchema schema = node.Schema;
 			
-			ICollection<ColumnSchema> columns = null;
+			ColumnSchemaCollection columns = null;
 			if (schema is TableSchema)
 				columns = nodeState.ConnectionContext.SchemaProvider.GetTableColumns (schema as TableSchema);
 			else if (schema is ViewSchema)
