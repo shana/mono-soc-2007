@@ -1,3 +1,10 @@
+2007-07-17  Ben Motmans <ben.motmans@gmail.com>
+
+	* Makefile.am: initial makefile
+	* Widgets/ConnectionComboBox.cs, Dialogs/ShowXmlTreeDialog.cs, Dialogs/PasswordDialog.cs:
+	removed obsolete classes
+	* Dialogs/DatabaseConnectionSettingsDialog.cs: improved connection settings dialog, fixes most of the old bugs
+
 2007-07-14  Ben Motmans <ben.motmans@gmail.com>
 
 	* Widgets/DataGrid/*: New DataGrid widget, with support for data visualizers and content based renderers
