@@ -1127,18 +1127,66 @@ Example:
             <property name="Position">183</property>
             <property name="BorderWidth">6</property>
             <child>
-              <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
+              <widget class="Gtk.Notebook" id="notebook1">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
-                <property name="VscrollbarPolicy">Automatic</property>
-                <property name="HscrollbarPolicy">Automatic</property>
-                <property name="ShadowType">In</property>
+                <property name="CurrentPage">1</property>
                 <child>
-                  <widget class="Gtk.TreeView" id="packageTreeView">
+                  <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
-                    <property name="HeadersClickable">True</property>
+                    <property name="VscrollbarPolicy">Automatic</property>
+                    <property name="HscrollbarPolicy">Automatic</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TreeView" id="normalPackageTreeView">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="HeadersClickable">True</property>
+                      </widget>
+                    </child>
                   </widget>
+                  <packing>
+                    <property name="TabExpand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="label1">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Normal Packages</property>
+                  </widget>
+                  <packing>
+                    <property name="type">tab</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="scrolledwindow3">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="VscrollbarPolicy">Automatic</property>
+                    <property name="HscrollbarPolicy">Automatic</property>
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TreeView" id="projectPackageTreeView">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="HeadersClickable">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="TabExpand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="label2">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Project Packages</property>
+                  </widget>
+                  <packing>
+                    <property name="type">tab</property>
+                  </packing>
                 </child>
               </widget>
               <packing>
@@ -1156,7 +1204,7 @@ Example:
                   <placeholder />
                 </child>
                 <child>
-                  <widget class="Gtk.Label" id="label1">
+                  <widget class="Gtk.Label" id="label3">
                     <property name="MemberName" />
                     <property name="Xalign">0</property>
                     <property name="Yalign">0</property>

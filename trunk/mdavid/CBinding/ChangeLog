@@ -1,3 +1,10 @@
+2007-07-17  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/EditPackagesDialog.cs, gtk-gui/CBinding.EditPackagesDialog.cs,
+	  gtk-gui/gui.stetic: Got the edit packages dialog to work with
+	  adding packages from projects in the combine (though it's a bit
+	  buggy)
+
 2007-07-15  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/EditPackagesDialog.cs, Project/ProjectPackage.cs,
