@@ -29,13 +29,13 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-usingMonoDevelop.Database.SqliteClient;
+using Mono.Data.SqliteClient;
 
 namespace MonoDevelop.Database.Sql
 {
 	public class SqliteConnectionProvider : AbstractConnectionProvider
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, ConnectionSettings settings)
+		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings)
 		{
 			string connStr = null;
 			try {

@@ -29,7 +29,7 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-usingMonoDevelop.Database.SqliteClient;
+using Mono.Data.SqliteClient;
 
 namespace MonoDevelop.Database.Sql
 {
@@ -48,8 +48,10 @@ namespace MonoDevelop.Database.Sql
 				return true;
 			if (type == typeof(ColumnSchema))
 				return true;
-			else if (type == typeof(UserSchema))
-				return false;
+			if (type == typeof(ViewSchema))
+				return true;
+			if (type == typeof(ConstraintSchema))
+				return true;
 			else
 				return false;
 		}
