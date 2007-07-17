@@ -34,11 +34,65 @@ namespace MonoDevelop.Database.Sql
 {
 	public class TriggerSchema : AbstractSchema
 	{
+		protected string tableName;
+		protected TriggerType triggerType;
+		protected TriggerEvent triggerEvent;
+		protected int position;
+		protected bool isActive;
+		
 		public TriggerSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
 		}
 		
-		//TODO: table name
+		public string TableName {
+			get { return tableName; }
+			set {
+				if (tableName != value) {
+					tableName = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public TriggerType TriggerType {
+			get { return triggerType; }
+			set {
+				if (triggerType != value) {
+					triggerType = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public TriggerEvent TriggerEvent {
+			get { return triggerEvent; }
+			set {
+				if (triggerEvent != value) {
+					triggerEvent = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public int Position {
+			get { return position; }
+			set {
+				if (position != value) {
+					position = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public bool IsActive {
+			get { return isActive; }
+			set {
+				if (isActive != value) {
+					isActive = value;
+					OnChanged ();
+				}
+			}
+		}
 	}
 }

@@ -33,17 +33,17 @@ namespace MonoDevelop.Database.Sql
 {
 	public class ForeignKeyConstraintSchema : ConstraintSchema
 	{
-		protected string referenceTable = String.Empty;
+		protected string referenceTable;
+		protected ColumnSchemaCollection referenceColumns;
 		
 		public ForeignKeyConstraintSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+			referenceColumns = new ColumnSchemaCollection ();
 		}
 		
 		public TableSchema ReferenceTable {
-			get {
-				throw new NotImplementedException();
-			}
+			get { throw new NotImplementedException(); }
 			set {
 				referenceTable = value.FullName;
 				OnChanged();
@@ -51,15 +51,12 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public string ReferenceTableName {
-			set {
-				referenceTable = value;
-			}
+			get { return referenceTable; }
+			set { referenceTable = value; }
 		}
 		
-		public ICollection<ColumnSchema> ReferenceColumns {
-			get {
-				return (ColumnSchema[]) null;
-			}
+		public ColumnSchemaCollection ReferenceColumns {
+			get { return referenceColumns; }
 		}
 	}
 }

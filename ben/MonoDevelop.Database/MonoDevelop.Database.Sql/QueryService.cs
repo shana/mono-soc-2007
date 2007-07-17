@@ -91,31 +91,15 @@ namespace MonoDevelop.Database.Sql
 			} catch (Exception e) {
 				Runtime.LoggingService.Debug (e);
 				
-				internalState.Attempt = internalState.Attempt + 1;
 				Services.DispatchService.GuiDispatch (delegate () {
-					EditConnectionGui (internalState);
+					internalState.Callback (internalState.ConnectionContext, false, internalState.State);
 				});
 			}
-		}
-		
-		private static void EditConnectionGui (object obj)
-		{
-			EnsureConnectionState internalState = obj as EnsureConnectionState;
-			if (internalState.Attempt < 4) {
-				IDbFactory fac = DbFactoryService.GetDbFactory (internalState.ConnectionContext.ConnectionSettings.ProviderIdentifier);
-				
-				if (fac.ShowEditDatabaseConnectionDialog (internalState.ConnectionContext.ConnectionSettings)) {
-					ThreadPool.QueueUserWorkItem (new WaitCallback (EnsureConnectionThreaded), internalState);
-					return;
-				}
-			}
-			internalState.Callback (internalState.ConnectionContext, false, internalState.State);
 		}
 	}
 					
 	internal class EnsureConnectionState
 	{
-		public int Attempt;
 		public object State;
 		public DatabaseConnectionContext ConnectionContext;
 		public DatabaseConnectionContextCallback Callback;
@@ -124,7 +108,6 @@ namespace MonoDevelop.Database.Sql
 		{
 			ConnectionContext = context;
 			Callback = callback;
-			Attempt = attempt;
 			State = state;
 		}
 	}

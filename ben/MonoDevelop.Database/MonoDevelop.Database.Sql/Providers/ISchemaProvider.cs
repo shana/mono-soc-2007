@@ -34,33 +34,65 @@ namespace MonoDevelop.Database.Sql
 	public interface ISchemaProvider
 	{
 		IConnectionPool ConnectionPool { get; }
-
-		bool SupportsSchemaType (Type type);
 		
-		ICollection<DatabaseSchema> GetDatabases ();
+		bool SupportsSchemaOperation (SqlStatementType statement, SqlSchemaType schema);
 
-		ICollection<TableSchema> GetTables ();
+		bool SupportsSchemaOperation (SchemaOperation operation);
 		
-		ICollection<ColumnSchema> GetTableColumns (TableSchema table);
+		DatabaseSchemaCollection GetDatabases ();
 
-		ICollection<ViewSchema> GetViews ();
-
-		ICollection<ColumnSchema> GetViewColumns (ViewSchema view);
-
-		ICollection<ProcedureSchema> GetProcedures ();
-
-		ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure);
+		TableSchemaCollection GetTables ();
 		
-		ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure);
+		ColumnSchemaCollection GetTableColumns (TableSchema table);
 
-		ICollection<ConstraintSchema> GetTableConstraints (TableSchema table);
+		ViewSchemaCollection GetViews ();
 
-		ICollection<UserSchema> GetUsers ();
+		ColumnSchemaCollection GetViewColumns (ViewSchema view);
+
+		ProcedureSchemaCollection GetProcedures ();
+
+		ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure);
 		
-		ICollection<RoleSchema> GetRoles ();
+		ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure);
+
+		ConstraintSchemaCollection GetTableConstraints (TableSchema table);
 		
-		ICollection<TriggerSchema> GetTriggers ();
+		TriggerSchemaCollection GetTableTriggers (TableSchema table);
+
+		UserSchemaCollection GetUsers ();
 		
 		DataTypeSchema GetDataType (string name);
+		
+		void CreateDatabase (DatabaseSchema database);
+		void CreateTable (TableSchema table);
+		void CreateView (ViewSchema view);
+		void CreateProcedure (ProcedureSchema procedure);
+		void CreateConstraint (ConstraintSchema constraint);
+		void CreateTrigger (TriggerSchema trigger);
+		void CreateUser (UserSchema user);
+		
+		void AlterDatabase (DatabaseSchema database);
+		void AlterTable (TableSchema table);
+		void AlterView (ViewSchema view);
+		void AlterProcedure (ProcedureSchema procedure);
+		void AlterConstraint (ConstraintSchema constraint);
+		void AlterTrigger (TriggerSchema trigger);
+		void AlterUser (UserSchema user);
+		
+		void DropDatabase (DatabaseSchema database);
+		void DropTable (TableSchema table);
+		void DropView (ViewSchema view);
+		void DropProcedure (ProcedureSchema procedure);
+		void DropConstraint (ConstraintSchema constraint);
+		void DropTrigger (TriggerSchema trigger);
+		void DropUser (UserSchema user);
+		
+		void RenameDatabase (DatabaseSchema database, string name);
+		void RenameTable (TableSchema table, string name);
+		void RenameView (ViewSchema view, string name);
+		void RenameProcedure (ProcedureSchema procedure, string name);
+		void RenameConstraint (ConstraintSchema constraint, string name);
+		void RenameTrigger (TriggerSchema trigger, string name);
+		void RenameUser (UserSchema user, string name);
 	}
 }

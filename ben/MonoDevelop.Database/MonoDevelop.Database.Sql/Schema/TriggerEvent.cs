@@ -29,24 +29,11 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface IDbFactory
+	[Flags]
+	public enum TriggerEvent
 	{
-		string Identifier { get; }
-		
-		string Name { get; }
-		
-		ISqlDialect Dialect { get; }
-		
-		IConnectionProvider ConnectionProvider { get; }
-		
-		object GetOption (string name);
-
-		DatabaseConnectionSettings GetDefaultConnectionSettings ();
-
-		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
-		
-		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
-		
-		bool ShowOpenDatabaseDialog (out string database);
+		Insert,
+		Update,
+		Delete
 	}
 }

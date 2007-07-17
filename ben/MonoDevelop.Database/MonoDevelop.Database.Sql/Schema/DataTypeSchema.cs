@@ -106,10 +106,10 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public ICollection<ColumnSchema> Columns {
+		public ColumnSchemaCollection Columns {
 			get {
 				if (isComplex == false) {
-					return new List<ColumnSchema> ();
+					return new ColumnSchemaCollection ();
 				} else {
 					// TODO: Get complex columns from the provider
 					throw new NotImplementedException();

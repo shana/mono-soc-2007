@@ -47,57 +47,62 @@ namespace MonoDevelop.Database.Sql
 			get { return connectionPool; }
 		}
 		
-		public virtual bool SupportsSchemaType (Type type)
+		public virtual bool SupportsSchemaOperation (SqlStatementType statement, SqlSchemaType schema)
+		{
+			return SupportsSchemaOperation (new SchemaOperation (statement, schema));
+		}
+		
+		public virtual bool SupportsSchemaOperation (SchemaOperation operation)
 		{
 			return false;
 		}
 		
-		public virtual ICollection<DatabaseSchema> GetDatabases ()
+		public virtual DatabaseSchemaCollection GetDatabases ()
 		{
 			throw new NotImplementedException ();
 		}
 
-		public virtual ICollection<TableSchema> GetTables ()
+		public virtual TableSchemaCollection GetTables ()
 		{
 			throw new NotImplementedException ();
 		}
 		
-		public virtual ICollection<ColumnSchema> GetTableColumns (TableSchema table)
+		public virtual ColumnSchemaCollection GetTableColumns (TableSchema table)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public virtual ICollection<ViewSchema> GetViews ()
+		public virtual ViewSchemaCollection GetViews ()
 		{
 			throw new NotImplementedException ();
 		}
 
-		public virtual ICollection<ColumnSchema> GetViewColumns (ViewSchema view)
+		public virtual ColumnSchemaCollection GetViewColumns (ViewSchema view)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public virtual ICollection<ProcedureSchema> GetProcedures ()
+		public virtual ProcedureSchemaCollection GetProcedures ()
 		{
 			throw new NotImplementedException ();
 		}
 
-		public virtual ICollection<ColumnSchema> GetProcedureColumns (ProcedureSchema procedure)
+		public virtual ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
 		{
 			throw new NotImplementedException ();
 		}
 		
-		public virtual ICollection<ParameterSchema> GetProcedureParameters (ProcedureSchema procedure)
+		public virtual ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public virtual ICollection<ConstraintSchema> GetTableConstraints (TableSchema table)
+		public virtual ConstraintSchemaCollection GetTableConstraints (TableSchema table)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public virtual ICollection<UserSchema> GetUsers ()
+		public virtual UserSchemaCollection GetUsers ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -107,12 +112,147 @@ namespace MonoDevelop.Database.Sql
 			throw new NotImplementedException ();
 		}
 		
-		public virtual ICollection<RoleSchema> GetRoles ()
+		public virtual TriggerSchemaCollection GetTableTriggers (TableSchema table)
 		{
 			throw new NotImplementedException ();
 		}
 		
-		public virtual ICollection<TriggerSchema> GetTriggers ()
+		public virtual void CreateDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void CreateTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void CreateView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void CreateProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void CreateConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual void CreateTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void CreateUser (UserSchema user)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual void AlterDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void AlterTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void AlterView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void AlterProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void AlterConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual void AlterTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void AlterUser (UserSchema user)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual void DropDatabase (DatabaseSchema database)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void DropTable (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void DropView (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void DropProcedure (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void DropConstraint (ConstraintSchema constraint)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual void DropTrigger (TriggerSchema trigger)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void DropUser (UserSchema user)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual void RenameDatabase (DatabaseSchema database, string name)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void RenameTable (TableSchema table, string name)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void RenameView (ViewSchema view, string name)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void RenameProcedure (ProcedureSchema procedure, string name)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void RenameConstraint (ConstraintSchema constraint, string name)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual void RenameTrigger (TriggerSchema trigger, string name)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public virtual void RenameUser (UserSchema user, string name)
 		{
 			throw new NotImplementedException ();
 		}

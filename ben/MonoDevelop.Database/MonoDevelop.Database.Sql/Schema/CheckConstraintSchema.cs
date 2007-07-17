@@ -32,9 +32,16 @@ namespace MonoDevelop.Database.Sql
 {
 	public class CheckConstraintSchema : ConstraintSchema
 	{
+		protected string source;
+		
 		public CheckConstraintSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+		}
+		
+		public string Source {
+			get { return source; }
+			set { source = value; }
 		}
 	}
 }

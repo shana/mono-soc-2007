@@ -9,6 +9,17 @@ REFS =  \
 
 FILES =  \
 	Codons/DbFactoryCodon.cs \
+	Collections/ColumnSchemaCollection.cs \
+	Collections/ConstraintSchemaCollection.cs \
+	Collections/DatabaseSchemaCollection.cs \
+	Collections/IPropertyComparer.cs \
+	Collections/ParameterSchemaCollection.cs \
+	Collections/ProcedureSchemaCollection.cs \
+	Collections/SortedCollectionBase.cs \
+	Collections/TableSchemaCollection.cs \
+	Collections/TriggerSchemaCollection.cs \
+	Collections/UserSchemaCollection.cs \
+	Collections/ViewSchemaCollection.cs \
 	Configuration/DatabaseConnectionContext.cs \
 	Configuration/DatabaseConnectionContextCollection.cs \
 	Configuration/DatabaseConnectionContextEventArgs.cs \
@@ -60,6 +71,7 @@ FILES =  \
 	Dialect/Statements/InsertStatement.cs \
 	Dialect/Statements/IStatement.cs \
 	Dialect/Statements/SelectStatement.cs \
+	Dialect/Statements/SqlStatementType.cs \
 	Dialect/Statements/TruncateStatement.cs \
 	Dialect/Statements/UpdateStatement.cs \
 	IDbFactory.cs \
@@ -67,6 +79,7 @@ FILES =  \
 	Providers/AbstractSchemaProvider.cs \
 	Providers/IConnectionProvider.cs \
 	Providers/ISchemaProvider.cs \
+	Providers/SchemaOperation.cs \
 	QueryService.cs \
 	Schema/AbstractSchema.cs \
 	Schema/AggregateSchema.cs \
@@ -79,6 +92,7 @@ FILES =  \
 	Schema/ForeignKeyConstraintSchema.cs \
 	Schema/GroupSchema.cs \
 	Schema/IndexConstraintSchema.cs \
+	Schema/IndexConstraintSortType.cs \
 	Schema/ISchema.cs \
 	Schema/LanguageSchema.cs \
 	Schema/OperatorSchema.cs \
@@ -91,8 +105,11 @@ FILES =  \
 	Schema/RuleSchema.cs \
 	Schema/SchemaSchema.cs \
 	Schema/SequenceSchema.cs \
+	Schema/SqlSchemaType.cs \
 	Schema/TableSchema.cs \
+	Schema/TriggerEvent.cs \
 	Schema/TriggerSchema.cs \
+	Schema/TriggerType.cs \
 	Schema/UniqueConstraintSchema.cs \
 	Schema/UserSchema.cs \
 	Schema/ViewSchema.cs
