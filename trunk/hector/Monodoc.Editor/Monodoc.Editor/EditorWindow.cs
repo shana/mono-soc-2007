@@ -70,10 +70,8 @@ public partial class EditorWindow : Gtk.Window {
 				if (!current_tab.Title.Equals ("Untitled"))
 					AddTab ();
 				
-				current_tab.Title = doc.Name;
-				DocumentBuffer newBuffer = new DocumentBuffer ();
-				DocumentBufferArchiver.Deserialize (newBuffer, doc.Text);
-				current_tab.Buffer = newBuffer;
+				current_tab.Title = doc.Filename;
+				current_tab.Buffer.Load (doc);
 				SaveAs.Sensitive = Save.Sensitive = true;
 			} catch (ArgumentException emsg) {
 				// TODO: Add message dialog about error.
