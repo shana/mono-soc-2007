@@ -2,12 +2,25 @@ ADDIN_BUILD = $(top_builddir)/build/AddIns/MonoDevelop.Database
 ASSEMBLY = $(ADDIN_BUILD)/MonoDevelop.Database.Designer.dll
 REFS =  \
 	-pkg:gtk-sharp-2.0 \
+	-pkg:monodevelop \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:Mono.Posix \
 	-r:System
 
-FILES = gtk-gui/generated.cs
+FILES =  \
+	Commands/temp.cs \
+	Dialogs/TableEditorDialog.cs \
+	gtk-gui/generated.cs \
+	gtk-gui/MonoDevelop.Database.Designer.ColumnsEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.ConstraintsEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.IndicesEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.TableEditorDialog.cs \
+	gtk-gui/MonoDevelop.Database.Designer.TriggersEditorWidget.cs \
+	Widgets/ColumnsEditorWidget.cs \
+	Widgets/ConstraintsEditorWidget.cs \
+	Widgets/IndicesEditorWidget.cs \
+	Widgets/TriggersEditorWidget.cs
 
 ADDIN = MonoDevelop.Database.Designer.addin.xml
 
