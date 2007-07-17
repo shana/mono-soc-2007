@@ -123,20 +123,5 @@ using MonoDevelop.Ide.Gui.Dialogs;
 				return false;
 			}
 		}
-		
-		public bool ShowEditDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings)
-		{
-			DatabaseConnectionSettingsDialog dlg = new DatabaseConnectionSettingsDialog (connectionSettings);
-			int result = dlg.Run ();
-			dlg.Destroy ();
-			return result == (int)ResponseType.Ok;
-		}
-		
-		public bool ShowRemoveDatabaseConnectionDialog (DatabaseConnectionSettings connectionSettings)
-		{
-			return Services.MessageService.AskQuestionFormatted (
-				GettextCatalog.GetString ("Are you sure you want to remove connection '{0}'?"),
-				connectionSettings.Name); 
-		}
 	}
 }

@@ -1,3 +1,8 @@
+2007-07-18  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqliteSchemaProvider.cs: SupportsSchemaOperation implementation, use of strongly typed
+	collections, Drop* and Rename* implementations
+
 2007-07-17  Ben Motmans <ben.motmans@gmail.com>
 
 	* Makefile.am: initial makefile
