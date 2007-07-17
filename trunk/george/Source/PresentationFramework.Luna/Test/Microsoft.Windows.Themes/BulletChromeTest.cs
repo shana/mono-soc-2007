@@ -439,5 +439,92 @@ namespace Microsoft.Windows.Themes {
 			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "2");
 			Assert.AreEqual(gd.Geometry.ToString(), "M0;0L100;0L100;100L0;100z M1000;2000L1000;2000L1000;2000L1000;2000z", "3");
 		}
+
+		[Test]
+		public void DrawingBackgroundBorderBrushBorderThicknessIsCheckedSmallSize() {
+			BulletChrome c = new BulletChrome();
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.BorderThickness = new Thickness(1);
+			c.IsChecked = true;
+			c.Width = 1;
+			c.Height = 1;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.IsNull(drawing_group);
+		}
+
+		[Test]
+		public void DrawingBackgroundBorderBrushBorderThicknessIsCheckedSmallSize2() {
+			BulletChrome c = new BulletChrome();
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.BorderThickness = new Thickness(1);
+			c.IsChecked = true;
+			c.Width = 2;
+			c.Height = 2;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.IsNull(drawing_group);
+		}
+
+		[Test]
+		public void DrawingBackgroundBorderBrushIsCheckedSmallSize() {
+			BulletChrome c = new BulletChrome();
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.IsChecked = true;
+			c.Width = 3;
+			c.Height = 3;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.IsNull(drawing_group);
+		}
+
+		//[Test]
+		//public void DrawingBackgroundBorderBrushBorderThicknessIsCheckedSmallSize3() {
+		//    BulletChrome c = new BulletChrome();
+		//    c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+		//    c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+		//    c.BorderThickness = new Thickness(1);
+		//    c.IsChecked = true;
+		//    c.Width = 2;
+		//    c.Height = 2;
+		//    Window w = new Window();
+		//    w.Content = c;
+		//    w.Show();
+		//    DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+		//    Assert.AreEqual(drawing_group.Children.Count, 3, "1");
+
+		//    GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+		//    Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)c.Background).Color, "2");
+		//    Assert.IsNull(gd.Pen, "3");
+		//    RectangleGeometry rg = (RectangleGeometry)gd.Geometry;
+		//    Assert.AreEqual(rg.Rect, new Rect(1, 1, 98, 98), "4");
+		//    Assert.AreEqual(rg.RadiusX, 0, "5");
+		//    Assert.AreEqual(rg.RadiusY, 0, "6");
+
+		//    gd = (GeometryDrawing)drawing_group.Children[1];
+
+		//    Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, Color.FromArgb(0xFF, 0x21, 0xA1, 0x21), "7");
+		//    Assert.IsNull(gd.Pen, "8");
+		//    StreamGeometry sg = (StreamGeometry)gd.Geometry;
+		//    Assert.AreEqual(sg.ToString(), "M3;5L3;7,8 5,5;10,4 10,1;5,8 10,1;3 5,5;7,6z", "9");
+
+		//    gd = (GeometryDrawing)drawing_group.Children[2];
+		//    Assert.IsNull(gd.Brush, "10");
+		//    Assert.AreEqual(gd.Pen.Thickness, 1, "11");
+		//    Assert.AreEqual(((SolidColorBrush)gd.Pen.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "12");
+		//    rg = (RectangleGeometry)gd.Geometry;
+		//    Assert.AreEqual(rg.Rect, new Rect(0.5, 0.5, 99, 99), "13");
+		//    Assert.AreEqual(rg.RadiusX, 0, "14");
+		//    Assert.AreEqual(rg.RadiusY, 0, "15");
+		//}
 	}
 }
