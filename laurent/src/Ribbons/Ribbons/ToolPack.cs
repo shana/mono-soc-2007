@@ -37,7 +37,7 @@ namespace Ribbons
 		
 		/// <summary>Inserts a button at the specified location.</summary>
 		/// <param name="Widget">The button to add.</param>
-		/// <param name="ButtonIndex">The index (starting at 0) at which the button must be inserted, or -1 to insert the page after all existing buttons.</param>
+		/// <param name="ButtonIndex">The index (starting at 0) at which the button must be inserted, or -1 to insert the button after all existing buttons.</param>
 		public void InsertButton (Button Widget, int ButtonIndex)
 		{
 			Widget.Parent = this;
