@@ -1,5 +1,9 @@
 2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
 	
+	* BulletChrome.cs: Added a Freeze call on a StreamGeometry.
+
+2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
+	
 	* BulletChrome.cs: Finished (hopefully) proper implementation of radio button rendering.
 
 2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
