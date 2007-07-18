@@ -269,6 +269,7 @@ namespace System.Windows.Controls.Primitives {
 				context.LineTo(point2, false, false);
 				context.LineTo(point3, false, false);
 			}
+			geometry.Freeze();
 			drawingContext.DrawGeometry(Fill, null, geometry);
 		}
 		#endregion

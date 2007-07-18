@@ -1,3 +1,7 @@
+2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
+	
+	* TickBar.cs: Added a Freeze call on a StreamGeometry.
+
 2007-07-12  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ItemContainerGenerator.cs: Moved to System.Windows.Controls.
