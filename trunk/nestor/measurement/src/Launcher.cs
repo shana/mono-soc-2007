@@ -32,14 +32,62 @@ using Mono.Cecil;
 
 namespace Measurement {
 	public class Launcher {
+		private int limit;
+		private string assembly;
+
+		private string GetNext (string[] args, int index) 
+		{
+			if ((args == null) || (index < 0) || (index >= args.Length))
+				return String.Empty;
+			return args[index];
+		}
+		
+		private bool ParseOptions (string[] args) 
+		{
+			for (int index = 0; index < args.Length; index++) {
+				switch (args [index]) {
+					case "--limit":
+						limit = Int32.Parse (GetNext (args, ++index));
+						break;
+					default:
+						assembly = args[index];
+						break;
+				}
+			}
+			return true;
+		}
+	
+		private void PrintHelp () 
+		{
+			Console.WriteLine ("Usage: measure [--limit limit] [assembly]");
+			Console.WriteLine ("Where:");
+			Console.WriteLine ("  --limit limit\t\tSpecify an upper limit for the measure");
+			Console.WriteLine ("  assembly\t\tSpecify the assembly to measure");
+			Console.WriteLine ();
+		}
+
+		public string Assembly {
+			get {
+				return assembly;
+			}
+		}
+
+		public int Limit {
+			get {
+				return limit;
+			}
+		}
+
 		public static int Main (string[] args) 
 		{
-			if (args.Length != 1) {
-				Console.WriteLine ("You should provide an assembly for inspect");
+			Launcher launcher = new Launcher ();
+
+			if (!launcher.ParseOptions (args)) {
+				launcher.PrintHelp ();
 				return 1;
 			}
-			
-			new MeasureRunner (AssemblyFactory.GetAssembly (args[0])).ApplyMeasures ();
+		
+			new MeasureRunner (AssemblyFactory.GetAssembly (launcher.Assembly), launcher.Limit).ApplyMeasures ();
 
 			return 0;
 		}
