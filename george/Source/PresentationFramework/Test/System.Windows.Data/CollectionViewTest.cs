@@ -519,6 +519,206 @@ namespace System.Windows.Data {
 		#endregion
 		#endregion
 
+		#region DeferRefresh
+		#region DeferRefresh
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage="Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh() {
+			new DeferRefreshCollectionView();
+		}
+
+		class DeferRefreshCollectionView : CollectionView {
+			public DeferRefreshCollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					MoveCurrentToNext();
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh4
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh4() {
+			new DeferRefresh4CollectionView();
+		}
+
+		class DeferRefresh4CollectionView : CollectionView {
+			public DeferRefresh4CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					MoveCurrentTo(1);
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh5
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh5() {
+			new DeferRefresh5CollectionView();
+		}
+
+		class DeferRefresh5CollectionView : CollectionView {
+			public DeferRefresh5CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					MoveCurrentToFirst();
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh6
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh6() {
+			new DeferRefresh5CollectionView();
+		}
+
+		class DeferRefresh6CollectionView : CollectionView {
+			public DeferRefresh6CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					MoveCurrentToLast();
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh7
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh7() {
+			new DeferRefresh7CollectionView();
+		}
+
+		class DeferRefresh7CollectionView : CollectionView {
+			public DeferRefresh7CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					MoveCurrentToPosition(1);
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh8
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh8() {
+			new DeferRefresh8CollectionView();
+		}
+
+		class DeferRefresh8CollectionView : CollectionView {
+			public DeferRefresh8CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					MoveCurrentToPrevious();
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh10
+		[Test]
+		public void DeferRefresh10() {
+			new DeferRefresh10CollectionView();
+		}
+
+		class DeferRefresh10CollectionView : CollectionView {
+			public DeferRefresh10CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					SetCurrent(1, 0);
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh11
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh11() {
+			new DeferRefresh11CollectionView();
+		}
+
+		class DeferRefresh11CollectionView : CollectionView {
+			public DeferRefresh11CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					object dummy = CurrentItem;
+				}
+			}
+		}
+		#endregion
+
+		#region DeferRefresh12
+		[Test]
+		[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.")]
+		public void DeferRefresh12() {
+			new DeferRefresh12CollectionView();
+		}
+
+		class DeferRefresh12CollectionView : CollectionView {
+			public DeferRefresh12CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+					object dummy = CurrentPosition;
+				}
+			}
+		}
+		#endregion
+
+
+		#region DeferRefresh2
+		[Test]
+		public void DeferRefresh2() {
+			new DeferRefresh2CollectionView();
+		}
+
+		class DeferRefresh2CollectionView : CollectionView {
+			public DeferRefresh2CollectionView()
+				: base(new object[] { 1, 2 }) {
+				using (DeferRefresh()) {
+				}
+				MoveCurrentToNext();
+			}
+		}
+		#endregion
+
+		#region DeferRefresh9
+		[Test]
+		public void DeferRefresh9() {
+			new DeferRefresh9CollectionView();
+		}
+
+		class DeferRefresh9CollectionView : CollectionView {
+			public DeferRefresh9CollectionView()
+				: base(new object[] { 1, 2 }) {
+				Assert.IsFalse(IsRefreshDeferred, "1");
+				using (DeferRefresh()) {
+					Assert.IsTrue(IsRefreshDeferred, "2");
+				}
+				Assert.IsFalse(IsRefreshDeferred, "3");
+			}
+		}
+		#endregion
+
+		#region DeferRefresh3
+		[Test]
+		public void DeferRefresh3() {
+			Assert.AreEqual(new CollectionView(new object[] { }).DeferRefresh().GetType().FullName, 
+#if Implementation
+			"Mono." +
+#endif
+			"System.Windows.Data.CollectionView+DeferHelper");
+		}
+		#endregion
+		#endregion
+
 		#region GetItemAt
 		[Test]
 		public void GetItemAtNullFilter() {
