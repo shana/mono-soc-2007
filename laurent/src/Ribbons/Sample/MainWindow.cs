@@ -36,9 +36,12 @@ namespace Sample
 			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Open, "Open", false));
 			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, "Save", false));
 			
+			Ribbons.ToolBox box0 = new ToolBox ();
+			box0.Append (toolPack);
+			
 			group1 = new RibbonGroup ();
 			group1.Label = "I will be back";
-			group1.Child = toolPack;
+			group1.Child = box0;
 			
 			HBox page0 = new HBox (false, 2);
 			page0.PackStart (group0, false, false, 0);
