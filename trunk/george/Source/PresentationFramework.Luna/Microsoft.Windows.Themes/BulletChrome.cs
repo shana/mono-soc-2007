@@ -103,14 +103,38 @@ namespace Microsoft.Windows.Themes {
 			} else {
 				#region Render check box bullet
 				Thickness border_thickness = BorderThickness;
+				const double MinimumSize = 2;
+				//FIXME: This is most likely wrong.
+				const double BorderSizeWhenBehaviorChanges = 100;
+				const double MinimumSizeWhenBehaviorChanges = 3;
+
+				double actual_width = ActualWidth;
+				double minimum_size_computed_using_border = border_thickness.Left + border_thickness.Right + 1;
+				double minimum_size;
+				if (minimum_size_computed_using_border >= BorderSizeWhenBehaviorChanges)
+					minimum_size = MinimumSizeWhenBehaviorChanges;
+				else
+					minimum_size = Math.Max(MinimumSize, minimum_size_computed_using_border);
+				if (actual_width <= minimum_size)
+					return;
+
+				double actual_height = ActualWidth;
+				minimum_size_computed_using_border = border_thickness.Top + border_thickness.Bottom + 1;
+				if (minimum_size_computed_using_border >= BorderSizeWhenBehaviorChanges)
+					minimum_size = MinimumSizeWhenBehaviorChanges;
+				else
+					minimum_size = Math.Max(MinimumSize, minimum_size_computed_using_border);
+				if (actual_width <= minimum_size)
+					return;
+
 				bool render_pressed = RenderPressed;
 				Brush background = Background;
 				double width;
 				double height;
 				bool fill_displayed;
 				if (render_pressed || background != null) {
-					width = ActualWidth - border_thickness.Left - border_thickness.Right;
-					height = ActualHeight - border_thickness.Top - border_thickness.Bottom;
+					width = actual_width - border_thickness.Left - border_thickness.Right;
+					height = actual_height - border_thickness.Top - border_thickness.Bottom;
 					if (fill_displayed = (width >= 0 && height >= 0)) {
 						Brush fill_brush;
 						if (render_pressed)
@@ -126,7 +150,7 @@ namespace Microsoft.Windows.Themes {
 					fill_displayed = false;
 				if (fill_displayed)
 					if (RenderMouseOver && !render_pressed)
-						if ((width = ActualWidth - border_thickness.Left - border_thickness.Right - 2) >= 0 && (height = ActualHeight - border_thickness.Top - border_thickness.Bottom - 2) >= 0)
+						if ((width = actual_width - border_thickness.Left - border_thickness.Right - 2) >= 0 && (height = actual_height - border_thickness.Top - border_thickness.Bottom - 2) >= 0)
 							drawingContext.DrawRectangle(null, new Pen(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
 								new GradientStop(Color.FromArgb(0xFF, 0xFF, 0xF0, 0xCF), 0),
 								new GradientStop(Color.FromArgb(0xFF, 0xF8, 0xB3, 0x30), 1)
@@ -152,19 +176,19 @@ namespace Microsoft.Windows.Themes {
 				if (BorderBrush != null) {
 					if (has_uniform_border_thickness) {
 						double border_thickness_size = border_thickness.Bottom;
-						if ((width = ActualWidth - 2 * border_thickness_size + 1) >= 0 && (height = ActualHeight - 2 * border_thickness_size + 1) >= 0)
+						if ((width = actual_width - 2 * border_thickness_size + 1) >= 0 && (height = actual_height - 2 * border_thickness_size + 1) >= 0)
 							drawingContext.DrawRectangle(null, new Pen(BorderBrush, border_thickness.Bottom), new Rect(border_thickness_size - 0.5, border_thickness_size - 0.5, width, height));
 					} else {
 						drawingContext.DrawGeometry(BorderBrush, null, new PathGeometry(new PathFigure[] {
 							new PathFigure(new Point(0, 0), new PathSegment[] {
-								new LineSegment(new Point(ActualWidth, 0), false),
-								new LineSegment(new Point(ActualWidth, ActualHeight), false),
-								new LineSegment(new Point(0, ActualHeight), false)
+								new LineSegment(new Point(actual_width, 0), false),
+								new LineSegment(new Point(actual_width, actual_height), false),
+								new LineSegment(new Point(0, actual_height), false)
 							}, true),
 							new PathFigure(new Point(border_thickness.Left, border_thickness.Top), new PathSegment[] {
-								new LineSegment(new Point((width = ActualWidth - border_thickness.Right) >= 0 ? width : border_thickness.Left, border_thickness.Top), false),
-								new LineSegment(new Point((width = ActualWidth - border_thickness.Right) >= 0 ? width : border_thickness.Left, (height = ActualHeight - border_thickness.Bottom) >= 0 ? height : border_thickness.Top), false),
-								new LineSegment(new Point(border_thickness.Left, (height = ActualHeight - border_thickness.Bottom) >= 0 ? height : border_thickness.Top), false)
+								new LineSegment(new Point((width = actual_width - border_thickness.Right) >= 0 ? width : border_thickness.Left, border_thickness.Top), false),
+								new LineSegment(new Point((width = actual_width - border_thickness.Right) >= 0 ? width : border_thickness.Left, (height = actual_height - border_thickness.Bottom) >= 0 ? height : border_thickness.Top), false),
+								new LineSegment(new Point(border_thickness.Left, (height = actual_height - border_thickness.Bottom) >= 0 ? height : border_thickness.Top), false)
 							}, true)
 						}));
 					}
