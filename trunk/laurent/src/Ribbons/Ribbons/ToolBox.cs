@@ -9,7 +9,7 @@ namespace Ribbons
 		private List<Widget> widgets;
 		private Gtk.Requisition[] requisitions;
 		
-		public ToolBox()
+		public ToolBox ()
 		{
 			this.widgets = new List<Widget> ();
 			
@@ -36,13 +36,22 @@ namespace Ribbons
 			}
 			
 			int totalWidth = 0, rowHeight = 0;
-			foreach(Widget w in widgets) rowHeight = Math.Max (rowHeight, w.SizeRequest ().Height);
+			foreach(Widget w in widgets)
+			{
+				if(w.Visible)
+				{
+					rowHeight = Math.Max (rowHeight, w.SizeRequest ().Height);
+				}
+			}
 			int i = 0;
 			foreach(Widget w in widgets)
 			{
-				w.HeightRequest = rowHeight;
-				requisitions[i] = w.SizeRequest ();
-				totalWidth += requisitions[i].Width;
+				if(w.Visible)
+				{
+					w.HeightRequest = rowHeight;
+					requisitions[i] = w.SizeRequest ();
+					totalWidth += requisitions[i].Width;
+				}
 				++i;
 			}
 			
@@ -56,17 +65,24 @@ namespace Ribbons
 				int totalHeight = 0, curWidth = 0;
 				int availWidth = WidthRequest - 2*(int)BorderWidth;
 				
-				foreach(Gtk.Requisition r in requisitions)
+				i = 0;
+				foreach(Widget w in widgets)
 				{
-					if(curWidth == 0 || curWidth + r.Width <= availWidth)
-					{	// Continue current line
-						curWidth += r.Width;
+					if(w.Visible)
+					{
+						Gtk.Requisition r = requisitions[i];
+						
+						if(curWidth == 0 || curWidth + r.Width <= availWidth)
+						{	// Continue current line
+							curWidth += r.Width;
+						}
+						else
+						{	// Start new line
+							totalHeight += rowHeight;
+							curWidth = 0;
+						}
 					}
-					else
-					{	// Start new line
-						totalHeight += rowHeight;
-						curWidth = 0;
-					}
+					++i;
 				}
 				
 				requisition.Width = WidthRequest;
@@ -79,18 +95,25 @@ namespace Ribbons
 				int curWidth = 0, maxWidth = 0;
 				int minWidth = widthLeft / rowsLeft;
 				
-				foreach(Gtk.Requisition r in requisitions)
+				i = 0;
+				foreach(Widget w in widgets)
 				{
-					widthLeft -= r.Width;
-					curWidth += r.Width;
-					
-					if(curWidth >= minWidth)
-					{	// Start new line
-						maxWidth = Math.Max (maxWidth, curWidth);
-						curWidth = 0;
-						--rowsLeft;
-						minWidth = widthLeft / rowsLeft;
+					if(w.Visible)
+					{
+						Gtk.Requisition r = requisitions[i];
+						
+						widthLeft -= r.Width;
+						curWidth += r.Width;
+						
+						if(curWidth >= minWidth)
+						{	// Start new line
+							maxWidth = Math.Max (maxWidth, curWidth);
+							curWidth = 0;
+							--rowsLeft;
+							minWidth = widthLeft / rowsLeft;
+						}
 					}
+					++i;
 				}
 				
 				requisition.Width = minWidth + 2*(int)BorderWidth;
@@ -102,7 +125,39 @@ namespace Ribbons
 		{
 			base.OnSizeAllocated (allocation);
 			
+			int right = allocation.X + allocation.Width - (int)BorderWidth;
+			int left = allocation.X + (int)BorderWidth;
+			int bottom = allocation.Y + allocation.Height - (int)BorderWidth;
+			int x = left, rowY = allocation.Y + (int)BorderWidth;
+			int maxHeight = 0;
 			
+			int i = 0;
+			foreach(Widget w in widgets)
+			{
+				if(w.Visible)
+				{
+					Gdk.Rectangle r;
+					r.Width = requisitions[i].Width;
+					r.Height = requisitions[i].Height;
+					
+					if(x > left && x + r.Width > right)
+					{
+						rowY += maxHeight;
+						maxHeight = 0;
+						x = left;
+					}
+					
+					r.X = x;
+					r.Y = rowY;
+					r.Width = r.X - Math.Min (right, r.X + r.Width);
+					r.Height = r.Y - Math.Min (bottom, r.Y + r.Height);
+					w.SizeAllocate (r);
+					
+					x += r.Width;
+					maxHeight = Math.Max (maxHeight, r.Height);
+				}
+				++i;
+			}
 		}
 	}
 }
