@@ -119,33 +119,41 @@ namespace Measures.Ui {
 			}
 		}
 
-		private void ShowMethodInformation (string type, string method) 
+		private TypeMeasure FindTypeMeasure (string type) 
 		{
-			MethodMeasure methodMeasureToShow = null;
 			foreach (TypeMeasure typeMeasure in measures) {
-				if (String.Compare (typeMeasure.Name, type) == 0) {
-					foreach (MethodMeasure methodMeasure in typeMeasure.MethodMeasures) {
-						if (String.Compare (methodMeasure.Name, method) == 0) {
-							methodMeasureToShow = methodMeasure; 
-						}
-					}
-				}
+				if (String.Compare (typeMeasure.Name, type) == 0)
+					return typeMeasure;
 			}
+			return null;
+		}
+
+		private MethodMeasure FindMethodMeasure (string type, string method) 
+		{
+			TypeMeasure typeMeasure = FindTypeMeasure (type);
+			foreach (MethodMeasure methodMeasure in typeMeasure.MethodMeasures) {
+				if (String.Compare (methodMeasure.Name, method) == 0) 
+					return methodMeasure;
+			}
+			return null;
+		}
+
+		private void CleanExpander () 
+		{
 			if (expander1.Child != null)
 				expander1.Remove (expander1.Child);
-			expander1.Child = new MethodMeasureWidget (methodMeasureToShow).Widget;
+		}
+		
+		private void ShowMethodInformation (string type, string method) 
+		{
+			CleanExpander ();
+			expander1.Child = new MethodMeasureWidget (FindMethodMeasure (type, method)).Widget;
 			expander1.ShowAll ();
 		}
 
 		private void ShowTypeInformation (string type) {
-			TypeMeasure typeMeasureToShow = null;
-			foreach (TypeMeasure typeMeasure in measures) {
-				if (String.Compare (typeMeasure.Name, type) == 0)
-					typeMeasureToShow = typeMeasure;
-			}
-			if (expander1.Child != null)
-				expander1.Remove (expander1.Child);
-			expander1.Child = new TypeMeasureWidget (typeMeasureToShow).Widget;
+			CleanExpander ();
+			expander1.Child = new TypeMeasureWidget (FindTypeMeasure (type)).Widget;
 			expander1.ShowAll ();
 
 		}
