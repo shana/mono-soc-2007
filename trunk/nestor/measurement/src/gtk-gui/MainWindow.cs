@@ -50,11 +50,15 @@ namespace Measures.Ui {
 			measuresTreeView.Selection.Changed += new EventHandler (OnTreeSelectionChanged);
 			mainWindow.ShowAll ();
 		}
-
+		
+		//Disabling warning 0169 because this code will be called at 
+		//runtime with glade.
+		#pragma warning disable 0169
 		private void OnWindowDeleteEvent (object sender, DeleteEventArgs args) 
 		{
 			Application.Quit ();
 		}
+		#pragma warning restore 0169
 		
 		private FileFilter CreateAssemblyFilter () {
 			FileFilter fileFilter = new FileFilter ();
@@ -63,7 +67,10 @@ namespace Measures.Ui {
 			fileFilter.AddPattern ("*.exe");
 			return fileFilter;
 		}
-
+		
+		//Disabling warning 0169 because this code will be called at
+		//runtime with glade.
+		#pragma warning disable 0169
 		private void OnOpenToolButtonClicked (object sender, EventArgs args) 
 		{
 			FileChooserDialog fileChooser = new FileChooserDialog (
@@ -78,6 +85,7 @@ namespace Measures.Ui {
 			}
 			fileChooser.Destroy ();
 		}
+		#pragma warning restore 0169
 
 		private void FillTreeView (IEnumerable results) 
 		{
