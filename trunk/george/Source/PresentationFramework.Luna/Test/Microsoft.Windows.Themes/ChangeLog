@@ -1,5 +1,9 @@
 2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* BulletChromeTest.cs: Added some radio button rendering tests.
+
+2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* BulletChromeTest.cs: Stopped working on the check box rendering tests.
 
 2007-07-16  George Giolfan  <georgegiolfan@yahoo.com>

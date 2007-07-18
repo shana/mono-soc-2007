@@ -517,5 +517,243 @@ namespace Microsoft.Windows.Themes {
 			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
 			Assert.IsNotNull(drawing_group);
 		}
+
+		[Test]
+		public void DrawingIsRoundBackgroundBorderBrushBorderThicknessIsChecked() {
+			BulletChrome c = new BulletChrome();
+			c.IsRound = true;
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.BorderThickness = new Thickness(1);
+			c.IsChecked = true;
+			c.Width = 100;
+			c.Height = 100;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.AreEqual(drawing_group.Children.Count, 3, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)c.Background).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			EllipseGeometry eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "4");
+			Assert.AreEqual(eg.RadiusX, 49, "5");
+			Assert.AreEqual(eg.RadiusY, 49, "6");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			LinearGradientBrush lgb = (LinearGradientBrush)gd.Brush;
+			Assert.AreEqual(lgb.StartPoint, new Point(0, 0), "7");
+			Assert.AreEqual(lgb.EndPoint, new Point(1, 1), "8");
+			Assert.AreEqual(lgb.GradientStops.Count, 3, "9");
+			Assert.AreEqual(lgb.GradientStops[0].Color, Color.FromArgb(0xFF, 0x60, 0xCF, 0x5D), "10");
+			Assert.AreEqual(lgb.GradientStops[0].Offset, 0, "11");
+			Assert.AreEqual(lgb.GradientStops[1].Color, Color.FromArgb(0xFF, 0xAC, 0xEF, 0xAA), "12");
+			Assert.AreEqual(lgb.GradientStops[1].Offset, 0.302469134, "13");
+			Assert.AreEqual(lgb.GradientStops[2].Color, Color.FromArgb(0xFF, 0x13, 0x92, 0x10), "14");
+			Assert.AreEqual(lgb.GradientStops[2].Offset, 1, "15");
+			Assert.IsNull(gd.Pen, "16");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "17");
+			Assert.AreEqual(eg.RadiusX, 46, "18");
+			Assert.AreEqual(eg.RadiusY, 46, "19");
+
+			gd = (GeometryDrawing)drawing_group.Children[2];
+			Assert.IsNull(gd.Brush, "20");
+			Assert.AreEqual(((SolidColorBrush)gd.Pen.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "21");
+			Assert.AreEqual(gd.Pen.Thickness, 1, "22");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "23");
+			Assert.AreEqual(eg.RadiusX, 49.5, "24");
+			Assert.AreEqual(eg.RadiusY, 49.5, "25");
+		}
+
+		[Test]
+		public void DrawingIsRoundBackgroundBorderBrushBorderThicknessIsCheckedRenderPressed() {
+			BulletChrome c = new BulletChrome();
+			c.IsRound = true;
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.BorderThickness = new Thickness(1);
+			c.IsChecked = true;
+			c.RenderPressed = true;
+			c.Width = 100;
+			c.Height = 100;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.AreEqual(drawing_group.Children.Count, 3, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			LinearGradientBrush lgb = (LinearGradientBrush)gd.Brush;
+			Assert.AreEqual(lgb.StartPoint, new Point(0, 0), "2");
+			Assert.AreEqual(lgb.EndPoint, new Point(1, 1), "2 2");
+			Assert.AreEqual(lgb.GradientStops.Count, 2, "2 3");
+			Assert.AreEqual(lgb.GradientStops[0].Color, Color.FromArgb(0xFF, 0xB2, 0xB2, 0xA9), "2 4");
+			Assert.AreEqual(lgb.GradientStops[0].Offset, 0, "2 5");
+			Assert.AreEqual(lgb.GradientStops[1].Color, Color.FromArgb(0xFF, 0xEB, 0xEA, 0xDA), "2 6");
+			Assert.AreEqual(lgb.GradientStops[1].Offset, 1, "2 7");
+			Assert.IsNull(gd.Pen, "3");
+			EllipseGeometry eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "4");
+			Assert.AreEqual(eg.RadiusX, 49, "5");
+			Assert.AreEqual(eg.RadiusY, 49, "6");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			lgb = (LinearGradientBrush)gd.Brush;
+			Assert.AreEqual(lgb.StartPoint, new Point(0, 0), "7");
+			Assert.AreEqual(lgb.EndPoint, new Point(1, 1), "8");
+			Assert.AreEqual(lgb.GradientStops.Count, 3, "9");
+			Assert.AreEqual(lgb.GradientStops[0].Color, Color.FromArgb(0xFF, 0x60, 0xCF, 0x5D), "10");
+			Assert.AreEqual(lgb.GradientStops[0].Offset, 0, "11");
+			Assert.AreEqual(lgb.GradientStops[1].Color, Color.FromArgb(0xFF, 0xAC, 0xEF, 0xAA), "12");
+			Assert.AreEqual(lgb.GradientStops[1].Offset, 0.302469134, "13");
+			Assert.AreEqual(lgb.GradientStops[2].Color, Color.FromArgb(0xFF, 0x13, 0x92, 0x10), "14");
+			Assert.AreEqual(lgb.GradientStops[2].Offset, 1, "15");
+			Assert.IsNull(gd.Pen, "16");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "17");
+			Assert.AreEqual(eg.RadiusX, 46, "18");
+			Assert.AreEqual(eg.RadiusY, 46, "19");
+
+			gd = (GeometryDrawing)drawing_group.Children[2];
+			Assert.IsNull(gd.Brush, "20");
+			Assert.AreEqual(((SolidColorBrush)gd.Pen.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "21");
+			Assert.AreEqual(gd.Pen.Thickness, 1, "22");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "23");
+			Assert.AreEqual(eg.RadiusX, 49.5, "24");
+			Assert.AreEqual(eg.RadiusY, 49.5, "25");
+		}
+
+		[Test]
+		public void DrawingIsRoundBackgroundBorderBrushBorderThicknessIsCheckedRenderPressedRenderMouseOver() {
+			BulletChrome c = new BulletChrome();
+			c.IsRound = true;
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.BorderThickness = new Thickness(1);
+			c.IsChecked = true;
+			c.RenderPressed = true;
+			c.RenderMouseOver = true;
+			c.Width = 100;
+			c.Height = 100;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.AreEqual(drawing_group.Children.Count, 3, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			LinearGradientBrush lgb = (LinearGradientBrush)gd.Brush;
+			Assert.AreEqual(lgb.StartPoint, new Point(0, 0), "2");
+			Assert.AreEqual(lgb.EndPoint, new Point(1, 1), "2 2");
+			Assert.AreEqual(lgb.GradientStops.Count, 2, "2 3");
+			Assert.AreEqual(lgb.GradientStops[0].Color, Color.FromArgb(0xFF, 0xB2, 0xB2, 0xA9), "2 4");
+			Assert.AreEqual(lgb.GradientStops[0].Offset, 0, "2 5");
+			Assert.AreEqual(lgb.GradientStops[1].Color, Color.FromArgb(0xFF, 0xEB, 0xEA, 0xDA), "2 6");
+			Assert.AreEqual(lgb.GradientStops[1].Offset, 1, "2 7");
+			Assert.IsNull(gd.Pen, "3");
+			EllipseGeometry eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "4");
+			Assert.AreEqual(eg.RadiusX, 49, "5");
+			Assert.AreEqual(eg.RadiusY, 49, "6");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			lgb = (LinearGradientBrush)gd.Brush;
+			Assert.AreEqual(lgb.StartPoint, new Point(0, 0), "7");
+			Assert.AreEqual(lgb.EndPoint, new Point(1, 1), "8");
+			Assert.AreEqual(lgb.GradientStops.Count, 3, "9");
+			Assert.AreEqual(lgb.GradientStops[0].Color, Color.FromArgb(0xFF, 0x60, 0xCF, 0x5D), "10");
+			Assert.AreEqual(lgb.GradientStops[0].Offset, 0, "11");
+			Assert.AreEqual(lgb.GradientStops[1].Color, Color.FromArgb(0xFF, 0xAC, 0xEF, 0xAA), "12");
+			Assert.AreEqual(lgb.GradientStops[1].Offset, 0.302469134, "13");
+			Assert.AreEqual(lgb.GradientStops[2].Color, Color.FromArgb(0xFF, 0x13, 0x92, 0x10), "14");
+			Assert.AreEqual(lgb.GradientStops[2].Offset, 1, "15");
+			Assert.IsNull(gd.Pen, "16");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "17");
+			Assert.AreEqual(eg.RadiusX, 46, "18");
+			Assert.AreEqual(eg.RadiusY, 46, "19");
+
+			gd = (GeometryDrawing)drawing_group.Children[2];
+			Assert.IsNull(gd.Brush, "20");
+			Assert.AreEqual(((SolidColorBrush)gd.Pen.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "21");
+			Assert.AreEqual(gd.Pen.Thickness, 1, "22");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "23");
+			Assert.AreEqual(eg.RadiusX, 49.5, "24");
+			Assert.AreEqual(eg.RadiusY, 49.5, "25");
+		}
+
+		[Test]
+		public void DrawingIsRoundBackgroundBorderBrushBorderThicknessIsCheckedRenderMouseOver() {
+			BulletChrome c = new BulletChrome();
+			c.IsRound = true;
+			c.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			c.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			c.BorderThickness = new Thickness(1);
+			c.IsChecked = true;
+			c.RenderMouseOver = true;
+			c.Width = 100;
+			c.Height = 100;
+			Window w = new Window();
+			w.Content = c;
+			w.Show();
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(c);
+			Assert.AreEqual(drawing_group.Children.Count, 4, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)c.Background).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			EllipseGeometry eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "4");
+			Assert.AreEqual(eg.RadiusX, 49, "5");
+			Assert.AreEqual(eg.RadiusY, 49, "6");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			LinearGradientBrush lgb = (LinearGradientBrush)gd.Pen.Brush;
+			Assert.AreEqual(lgb.StartPoint, new Point(0, 0), "6 1");
+			Assert.AreEqual(lgb.EndPoint, new Point(1, 1), "6 2");
+			Assert.AreEqual(lgb.GradientStops.Count, 2, "6 3");
+			Assert.AreEqual(lgb.GradientStops[0].Color, Color.FromArgb(0xFF, 0xFE, 0xDF, 0x9C), "6 4");
+			Assert.AreEqual(lgb.GradientStops[0].Offset, 0, "6 5");
+			Assert.AreEqual(lgb.GradientStops[1].Color, Color.FromArgb(0xFF, 0xF9, 0xBB, 0x43), "6 6");
+			Assert.AreEqual(lgb.GradientStops[1].Offset, 1, "6 7");
+			Assert.IsNull(gd.Brush, "6 8");
+			Assert.AreEqual(gd.Pen.Thickness, 2, "6 8 1");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "6 9");
+			Assert.AreEqual(eg.RadiusX, 48, "6 10");
+			Assert.AreEqual(eg.RadiusY, 48, "6 11");
+			
+			gd = (GeometryDrawing)drawing_group.Children[2];
+			lgb = (LinearGradientBrush)gd.Brush;
+			Assert.AreEqual(lgb.StartPoint, new Point(0, 0), "7");
+			Assert.AreEqual(lgb.EndPoint, new Point(1, 1), "8");
+			Assert.AreEqual(lgb.GradientStops.Count, 3, "9");
+			Assert.AreEqual(lgb.GradientStops[0].Color, Color.FromArgb(0xFF, 0x60, 0xCF, 0x5D), "10");
+			Assert.AreEqual(lgb.GradientStops[0].Offset, 0, "11");
+			Assert.AreEqual(lgb.GradientStops[1].Color, Color.FromArgb(0xFF, 0xAC, 0xEF, 0xAA), "12");
+			Assert.AreEqual(lgb.GradientStops[1].Offset, 0.302469134, "13");
+			Assert.AreEqual(lgb.GradientStops[2].Color, Color.FromArgb(0xFF, 0x13, 0x92, 0x10), "14");
+			Assert.AreEqual(lgb.GradientStops[2].Offset, 1, "15");
+			Assert.IsNull(gd.Pen, "16");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "17");
+			Assert.AreEqual(eg.RadiusX, 46, "18");
+			Assert.AreEqual(eg.RadiusY, 46, "19");
+
+			gd = (GeometryDrawing)drawing_group.Children[3];
+			Assert.IsNull(gd.Brush, "20");
+			Assert.AreEqual(((SolidColorBrush)gd.Pen.Brush).Color, ((SolidColorBrush)c.BorderBrush).Color, "21");
+			Assert.AreEqual(gd.Pen.Thickness, 1, "22");
+			eg = (EllipseGeometry)gd.Geometry;
+			Assert.AreEqual(eg.Center, new Point(50, 50), "23");
+			Assert.AreEqual(eg.RadiusX, 49.5, "24");
+			Assert.AreEqual(eg.RadiusY, 49.5, "25");
+		}
 	}
 }
