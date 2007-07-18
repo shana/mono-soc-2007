@@ -37,7 +37,14 @@ namespace Ribbons
 		/// <param name="WidgetIndex">The index (starting at 0) at which the widget must be inserted, or -1 to insert the widget after all existing widgets.</param>
 		public void Insert (Widget w, int WidgetIndex)
 		{
-			widgets.Insert (WidgetIndex, w);
+			w.Parent = this;
+			w.Visible = true;
+			
+			if(WidgetIndex == -1)
+				widgets.Add (w);
+			else
+				widgets.Insert (WidgetIndex, w);
+			
 			QueueDraw ();
 		}
 		
@@ -45,10 +52,13 @@ namespace Ribbons
 		/// <param name="WidgetIndex">Index of the widget to remove.</param>
 		public void RemoveButton (int WidgetIndex)
 		{
+			widgets[WidgetIndex].Parent = null;
+			
 			if(WidgetIndex == -1)
 				widgets.RemoveAt (widgets.Count - 1);
 			else
 				widgets.RemoveAt (WidgetIndex);
+			
 			QueueDraw ();
 		}
 		
@@ -150,7 +160,7 @@ namespace Ribbons
 					++i;
 				}
 				
-				requisition.Width = minWidth + 2*(int)BorderWidth;
+				requisition.Width = maxWidth + 2*(int)BorderWidth;
 				requisition.Height = HeightRequest;
 			}
 		}
@@ -183,8 +193,8 @@ namespace Ribbons
 					
 					r.X = x;
 					r.Y = rowY;
-					r.Width = r.X - Math.Min (right, r.X + r.Width);
-					r.Height = r.Y - Math.Min (bottom, r.Y + r.Height);
+					r.Width = Math.Min (right, r.X + r.Width) - r.X;
+					r.Height = Math.Min (bottom, r.Y + r.Height) - r.Y;
 					w.SizeAllocate (r);
 					
 					x += r.Width;
