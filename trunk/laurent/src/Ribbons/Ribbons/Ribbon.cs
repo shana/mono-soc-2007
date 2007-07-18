@@ -191,7 +191,10 @@ namespace Ribbons
 			}
 			
 			RibbonPage p = pages[PageNumber];
-			pages.RemoveAt (PageNumber);
+			if(curPageIndex == -1)
+				pages.RemoveAt (pages.Count - 1);
+			else
+				pages.RemoveAt (PageNumber);
 			
 			OnPageRemoved (new PageEventArgs (p));
 		}

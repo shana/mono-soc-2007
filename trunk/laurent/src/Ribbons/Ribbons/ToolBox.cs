@@ -18,6 +18,40 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 		}
 		
+		/// <summary>Adds a widget before all existing widgetw.</summary>
+		/// <param name="w">The widget to add.</param>
+		public void Prepend (Widget w)
+		{
+			Insert (w, 0);
+		}
+		
+		/// <summary>Adds a widget after all existing widgets.</summary>
+		/// <param name="w">The widget to add.</param>
+		public void Append (Widget w)
+		{
+			Insert (w, -1);
+		}
+		
+		/// <summary>Inserts a widget at the specified location.</summary>
+		/// <param name="w">The widget to add.</param>
+		/// <param name="WidgetIndex">The index (starting at 0) at which the widget must be inserted, or -1 to insert the widget after all existing widgets.</param>
+		public void Insert (Widget w, int WidgetIndex)
+		{
+			widgets.Insert (WidgetIndex, w);
+			QueueDraw ();
+		}
+		
+		/// <summary>Removes the widget at the specified index.</summary>
+		/// <param name="WidgetIndex">Index of the widget to remove.</param>
+		public void RemoveButton (int WidgetIndex)
+		{
+			if(WidgetIndex == -1)
+				widgets.RemoveAt (widgets.Count - 1);
+			else
+				widgets.RemoveAt (WidgetIndex);
+			QueueDraw ();
+		}
+		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
 			foreach(Widget w in widgets)
