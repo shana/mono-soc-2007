@@ -1,5 +1,5 @@
 //
-// Measures.Launcher class
+// Measures.MethodMeasure class
 //
 // Authors:
 //	Néstor Salceda <nestor.salceda@gmail.com>
@@ -27,16 +27,42 @@
 //
 
 using System;
-using Gtk;
-using Measures.Ui;
+using Mono.Cecil;
 
 namespace Measures {
-	public class Launcher {
-		public static void Main (string[] args) 
+
+	public class MethodMeasure{
+		MethodDefinition method;
+		int totalLines;
+		int parameters;
+
+		internal MethodMeasure (MethodDefinition method) 
 		{
-			Application.Init ();
-			new MainWindow ();
-			Application.Run ();
+			this.method = method;
+		}
+
+		public string Name {
+			get {
+				return method.Name;
+			}
+		}
+
+		public int TotalLines {
+			get {
+				return totalLines;
+			}
+			internal set {
+				totalLines = value;
+			}
+		}
+
+		public int Parameters {
+			get {
+				return parameters;
+			}
+			internal set {
+				parameters = value;
+			}
 		}
 	}
 }

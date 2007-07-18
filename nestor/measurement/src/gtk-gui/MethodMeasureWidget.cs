@@ -1,5 +1,5 @@
 //
-// Measures.Launcher class
+// Measures.Ui.MethodMeasureWidget class
 //
 // Authors:
 //	Néstor Salceda <nestor.salceda@gmail.com>
@@ -27,16 +27,31 @@
 //
 
 using System;
+using System.Collections;
 using Gtk;
-using Measures.Ui;
+using Glade;
+using Mono.Cecil;
 
-namespace Measures {
-	public class Launcher {
-		public static void Main (string[] args) 
+namespace Measures.Ui {
+	
+	public class MethodMeasureWidget {
+		Glade.XML xmlMethodMeasureWidget;
+		[Widget] Table table2;
+		[Widget] Label numberOfLines;
+		[Widget] Label numberOfParameters;
+
+		public MethodMeasureWidget (MethodMeasure methodMeasure) 
 		{
-			Application.Init ();
-			new MainWindow ();
-			Application.Run ();
+			xmlMethodMeasureWidget = new Glade.XML (null,"measures.glade", "table2", null);
+			xmlMethodMeasureWidget.Autoconnect (this);
+			numberOfLines.Text = methodMeasure.TotalLines.ToString ();
+			numberOfParameters.Text = methodMeasure.Parameters.ToString ();
+		}
+
+		public Widget Widget {
+			get {
+				return table2;
+			}
 		}
 	}
 }
