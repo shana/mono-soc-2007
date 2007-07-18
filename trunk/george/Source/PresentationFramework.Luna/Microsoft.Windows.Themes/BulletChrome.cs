@@ -21,11 +21,6 @@ namespace Microsoft.Windows.Themes {
 		#endregion
 		#endregion
 
-		static Brush pressed_brush = new LinearGradientBrush(Colors.Gray, Colors.LightGray, 45);
-		static Brush mouse_over_brush = new LinearGradientBrush(Colors.Yellow, Colors.Orange, 45);
-		static Pen check_box_check_pen = new Pen(Brushes.Green, 2);
-		static Brush radio_button_check_brush = new LinearGradientBrush(Colors.LightGreen, Colors.Green, 45);
-
 		#region Public Constructors
 		public BulletChrome() {
 		}
@@ -83,22 +78,41 @@ namespace Microsoft.Windows.Themes {
 
 		protected override void OnRender(DrawingContext drawingContext) {
 			base.OnRender(drawingContext);
+			double actual_width = ActualWidth;
+			double actual_height = ActualHeight;
 			if (IsRound) {
-				//FIXME:
 				#region Render radio button bullet
-				double radius_x = ActualWidth / 2 - .5;
-				double radius_y = ActualHeight / 2 - .5;
-				Point center = new Point(radius_x + .5, radius_y + .5);
-				if (Background != null)
-					drawingContext.DrawEllipse(Background, null, center, radius_x - 1, radius_y - 1);
+				double radius_x = actual_width / 2;
+				double radius_y = actual_height / 2;
+				Point center = new Point(radius_x, radius_y);
+				const double BackgroundPadding = 1;
 				if (RenderPressed)
-					drawingContext.DrawEllipse(pressed_brush, null, center, radius_x - 1, radius_y - 1);
-				if (BorderBrush != null)
-					drawingContext.DrawEllipse(null, new Pen(BorderBrush, 1), center, radius_x, radius_y);
-				if (IsChecked.Value)
-					drawingContext.DrawEllipse(radio_button_check_brush, null, center, radius_x - 3.5, radius_y - 3.5);
-				if (RenderMouseOver && !RenderPressed)
-					drawingContext.DrawEllipse(null, new Pen(mouse_over_brush, 2), center, radius_x - 2, radius_y - 2);
+					drawingContext.DrawEllipse(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+						new GradientStop(Color.FromArgb(0xFF, 0xB2, 0xB2, 0xA9), 0),
+						new GradientStop(Color.FromArgb(0xFF, 0xEB, 0xEA, 0xDA), 1)
+					}), new Point(0, 0), new Point(1, 1)), null, center, radius_x - BackgroundPadding, radius_y - BackgroundPadding);
+				else
+					if (Background != null)
+						drawingContext.DrawEllipse(Background, null, center, radius_x - BackgroundPadding, radius_y - BackgroundPadding);
+				if (RenderMouseOver && !RenderPressed) {
+					const double MouseOverPadding = 2;
+					drawingContext.DrawEllipse(null, new Pen(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+						new GradientStop(Color.FromArgb(0xFF, 0xFE, 0xDF, 0x9C), 0),
+						new GradientStop(Color.FromArgb(0xFF, 0xF9, 0xBB, 0x43), 1)
+					}), new Point(0, 0), new Point(1, 1)), 2), center, radius_x - MouseOverPadding, radius_y - MouseOverPadding);
+				}
+				if (IsChecked.Value) {
+					const double CheckPadding = 4;
+					drawingContext.DrawEllipse(new LinearGradientBrush(new GradientStopCollection(new GradientStop[] {
+						new GradientStop(Color.FromArgb(0xFF, 0x60, 0xCF, 0x5D), 0),
+						new GradientStop(Color.FromArgb(0xFF, 0xAC, 0xEF, 0xAA), 0.302469134),
+						new GradientStop(Color.FromArgb(0xFF, 0x13, 0x92, 0x10), 1)
+					}), new Point(0, 0), new Point(1, 1)), null, center, radius_x - CheckPadding, radius_y - CheckPadding);
+				}
+				if (BorderBrush != null) {
+					const double BorderPadding = 0.5;
+					drawingContext.DrawEllipse(null, new Pen(BorderBrush, 1), center, radius_x - BorderPadding, radius_y - BorderPadding);
+				}
 				#endregion
 			} else {
 				#region Render check box bullet
@@ -108,7 +122,6 @@ namespace Microsoft.Windows.Themes {
 				const double BorderSizeWhenBehaviorChanges = 100;
 				const double MinimumSizeWhenBehaviorChanges = 3;
 
-				double actual_width = ActualWidth;
 				double minimum_size_computed_using_border = border_thickness.Left + border_thickness.Right + 1;
 				double minimum_size;
 				if (minimum_size_computed_using_border >= BorderSizeWhenBehaviorChanges)
@@ -118,7 +131,6 @@ namespace Microsoft.Windows.Themes {
 				if (actual_width <= minimum_size)
 					return;
 
-				double actual_height = ActualWidth;
 				minimum_size_computed_using_border = border_thickness.Top + border_thickness.Bottom + 1;
 				if (minimum_size_computed_using_border >= BorderSizeWhenBehaviorChanges)
 					minimum_size = MinimumSizeWhenBehaviorChanges;
