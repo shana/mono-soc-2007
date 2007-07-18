@@ -172,16 +172,17 @@ namespace Microsoft.Windows.Themes {
 					if (IsChecked.Value) {
 						if (!has_uniform_border_thickness)
 							drawingContext.PushTransform(new TranslateTransform(border_thickness.Left - 1, border_thickness.Top - 1));
-						StreamGeometry stream_geometry = new StreamGeometry();
-						StreamGeometryContext context = stream_geometry.Open();
-						context.BeginFigure(new Point(3, 5), true, true);
-						context.LineTo(new Point(3, 7.8), false, false);
-						context.LineTo(new Point(5.5, 10.4), false, false);
-						context.LineTo(new Point(10.1, 5.8), false, false);
-						context.LineTo(new Point(10.1, 3), false, false);
-						context.LineTo(new Point(5.5, 7.6), false, false);
-						context.Close();
-						drawingContext.DrawGeometry(new SolidColorBrush(render_pressed ? Color.FromArgb(0xFF, 0x1A, 0x7E, 0x18) : Color.FromArgb(0xFF, 0x21, 0xA1, 0x21)), null, stream_geometry);
+						StreamGeometry geometry = new StreamGeometry();
+						using (StreamGeometryContext context = geometry.Open()) {
+							context.BeginFigure(new Point(3, 5), true, true);
+							context.LineTo(new Point(3, 7.8), false, false);
+							context.LineTo(new Point(5.5, 10.4), false, false);
+							context.LineTo(new Point(10.1, 5.8), false, false);
+							context.LineTo(new Point(10.1, 3), false, false);
+							context.LineTo(new Point(5.5, 7.6), false, false);
+						}
+						geometry.Freeze();
+						drawingContext.DrawGeometry(new SolidColorBrush(render_pressed ? Color.FromArgb(0xFF, 0x1A, 0x7E, 0x18) : Color.FromArgb(0xFF, 0x21, 0xA1, 0x21)), null, geometry);
 						if (!has_uniform_border_thickness)
 							drawingContext.Pop();
 					}
