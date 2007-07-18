@@ -1,5 +1,5 @@
 //
-// Measures.Launcher class
+// Measures.TypeMeasure class
 //
 // Authors:
 //	Néstor Salceda <nestor.salceda@gmail.com>
@@ -25,18 +25,55 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
+//
 using System;
-using Gtk;
-using Measures.Ui;
+using System.Collections;
+using Mono.Cecil;
 
 namespace Measures {
-	public class Launcher {
-		public static void Main (string[] args) 
+
+	public class TypeMeasure {
+		TypeDefinition type;
+		float linesPerMethod;
+		float parametersPerMethod;
+		IEnumerable methodMeasures;
+
+		public TypeMeasure (TypeDefinition type) 
 		{
-			Application.Init ();
-			new MainWindow ();
-			Application.Run ();
+			this.type = type;
+		}
+
+		public string Name {
+			get {
+				return type.FullName;
+			}
+		}
+
+		public float LinesPerMethod {
+			get {
+				return linesPerMethod;
+			}
+			internal set {
+				linesPerMethod = value;
+			}
+		}
+
+		public float ParametersPerMethod {
+			get {
+				return parametersPerMethod;
+			}
+			internal set {
+				parametersPerMethod = value;
+			}
+		}
+
+		public IEnumerable MethodMeasures {
+			get {
+				return methodMeasures;
+			}
+			internal set {
+				methodMeasures = value;
+			}
 		}
 	}
 }
