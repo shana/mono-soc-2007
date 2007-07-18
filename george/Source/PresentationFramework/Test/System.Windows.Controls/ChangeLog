@@ -1,3 +1,7 @@
+2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* BorderTest.cs: Added drawing tests.
+
 2007-07-15  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ProgressBarTest.cs: Disabled a buggy test.
