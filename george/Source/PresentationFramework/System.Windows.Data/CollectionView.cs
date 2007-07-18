@@ -24,6 +24,7 @@ namespace System.Windows.Data {
 		bool is_current_after_last;
 		bool is_current_before_first;
 		IEnumerable source_collection;
+		bool is_refresh_deferred;
 		#endregion
 
 		#region Public Constructors
@@ -83,11 +84,17 @@ namespace System.Windows.Data {
 		}
 
 		public virtual Object CurrentItem {
-			get { return current_item; }
+			get {
+				VerifyRefreshNotDeferred();
+				return current_item; 
+			}
 		}
 
 		public virtual int CurrentPosition {
-			get { return current_position; }
+			get {
+				VerifyRefreshNotDeferred();
+				return current_position; 
+			}
 		}
 
 		public virtual Predicate<Object> Filter {
@@ -157,10 +164,7 @@ namespace System.Windows.Data {
 		}
 
 		protected bool IsRefreshDeferred {
-			get {
-				//WDTDH
-				return false;
-			}
+			get { return is_refresh_deferred; }
 		}
 
 		protected bool UpdatedOutsideDispatcher {
@@ -184,8 +188,7 @@ namespace System.Windows.Data {
 		}
 
 		public virtual IDisposable DeferRefresh() {
-			//WDTDH
-			return null;
+			return new DeferHelper(this);
 		}
 
 		public virtual Object GetItemAt(int index) {
@@ -213,6 +216,7 @@ namespace System.Windows.Data {
 		}
 
 		public virtual bool MoveCurrentTo(object item) {
+			VerifyRefreshNotDeferred();
 			if (object.Equals(current_item, item))
 				return true;
 			int current_collection_item_index = 0;
@@ -225,6 +229,7 @@ namespace System.Windows.Data {
 		}
 
 		public virtual bool MoveCurrentToFirst() {
+			VerifyRefreshNotDeferred();
 			current_position = 0;
 			IEnumerator enumerator = source_collection.GetEnumerator();
 			if (enumerator.MoveNext()) {
@@ -241,6 +246,7 @@ namespace System.Windows.Data {
 		}
 
 		public virtual bool MoveCurrentToLast() {
+			VerifyRefreshNotDeferred();
 			current_item = null;
 			current_position = -1;
 			foreach (object item in source_collection) {
@@ -253,10 +259,12 @@ namespace System.Windows.Data {
 		}
 
 		public virtual bool MoveCurrentToNext() {
+			VerifyRefreshNotDeferred();
 			return is_current_after_last ? false : MoveCurrentToPosition(current_position + 1);
 		}
 
 		public virtual bool MoveCurrentToPosition(int position) {
+			VerifyRefreshNotDeferred();
 			CurrentChangingEventArgs e;
 			is_current_after_last = false;
 			is_current_before_first = false;
@@ -299,6 +307,7 @@ namespace System.Windows.Data {
 		}
 
 		public virtual bool MoveCurrentToPrevious() {
+			VerifyRefreshNotDeferred();
 			return is_current_before_first ? false : MoveCurrentToPosition(current_position - 1);
 		}
 
@@ -411,6 +420,28 @@ namespace System.Windows.Data {
 			remove { PropertyChanged -= value; }
 		}
 		#endregion
+		#endregion
+
+		#region Private Methods
+		void VerifyRefreshNotDeferred() {
+			if (is_refresh_deferred)
+				throw new InvalidOperationException("Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.");
+		}
+		#endregion
+
+		#region Private Classes
+		class DeferHelper : IDisposable {
+			CollectionView owner;
+
+			public DeferHelper(CollectionView owner) {
+				this.owner = owner;
+				owner.is_refresh_deferred = true;
+			}
+
+			public void Dispose() {
+				owner.is_refresh_deferred = false;
+			}
+		}
 		#endregion
 	}
 }
