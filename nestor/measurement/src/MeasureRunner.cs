@@ -34,10 +34,12 @@ using Mono.Cecil.Cil;
 namespace Measurement {
 	public class MeasureRunner {
 		private AssemblyDefinition assembly;
+		private int limit;
 
-		public MeasureRunner (AssemblyDefinition assembly)
+		public MeasureRunner (AssemblyDefinition assembly, int limit)
 		{
 			this.assembly = assembly;
+			this.limit = limit;
 		}
 
 		public void ApplyMeasures () 
@@ -96,7 +98,8 @@ namespace Measurement {
 							totalLines+= method.Body.Instructions.Count;				
 					}
 					linesPerMethod = (float) totalLines / type.Methods.Count;
-					Console.WriteLine ("The type {0} has an average of lines per method {1}",type.FullName, linesPerMethod);
+					if (linesPerMethod >= limit)
+						Console.WriteLine ("The type {0} has an average of lines per method {1}",type.FullName, linesPerMethod);
 				}
 			}
 			Console.WriteLine ();
@@ -113,7 +116,8 @@ namespace Measurement {
 						totalParameters += method.Parameters.Count;
 					}
 					parametersPerMethod = (float) totalParameters / type.Methods.Count;
-					Console.WriteLine ("The type {0} has an average of parameters per method {1}", type.FullName, parametersPerMethod);
+					if  (parametersPerMethod >= limit)
+						Console.WriteLine ("The type {0} has an average of parameters per method {1}", type.FullName, parametersPerMethod);
 				}
 			}
 			Console.WriteLine ();
