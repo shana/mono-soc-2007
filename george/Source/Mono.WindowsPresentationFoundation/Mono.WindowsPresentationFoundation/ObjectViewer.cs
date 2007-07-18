@@ -11,6 +11,21 @@ namespace Mono.WindowsPresentationFoundation {
 				if (value == null)
 					return;
 				Items.Add(new ObjectTreeViewItem("Visual", value, value.GetType()));
+				ContextMenu = new ContextMenu();
+				MenuItem copy_menu_item = new MenuItem();
+				copy_menu_item.Header = "_Copy";
+				copy_menu_item.Click += delegate(object sender, RoutedEventArgs e) {
+					if (SelectedItem != null) {
+						object object_ = ((ObjectTreeViewItem)SelectedItem).Object;
+						if (object_ != null)
+							try {
+								Clipboard.SetText(object_.ToString());
+							} catch {
+								MessageBox.Show("There was an error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+							}
+					}
+				};
+				ContextMenu.Items.Add(copy_menu_item);
 			}
 		}
 
@@ -53,6 +68,10 @@ namespace Mono.WindowsPresentationFoundation {
 					}
 				}
 				populated = true;
+			}
+
+			public object Object {
+				get { return object_; }
 			}
 		}
 	}
