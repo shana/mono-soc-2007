@@ -94,6 +94,16 @@ namespace Ribbons
 			Requisition childRequisition = new Requisition ();
 			if(Child != null && Child.Visible)
 			{
+				if(HeightRequest != -1)
+				{
+					int left = HeightRequest - (int)(2 * (2*lineWidth + space)) + (int)(2 * childPadding);
+					Child.HeightRequest = left;
+				}
+				if(WidthRequest != -1)
+				{
+					int left = HeightRequest - (int)(2 * (2*lineWidth + childPadding));
+					Child.WidthRequest = left;
+				}
 				childRequisition = Child.SizeRequest ();
 			}
 			
