@@ -39,6 +39,8 @@ namespace Measures.Ui {
 		[Widget] Window mainWindow;
 		[Widget] TreeView measuresTreeView;
 		[Widget] Expander expander1;
+		[Widget] ToolButton findToolButton;
+		[Widget] ToolButton reloadToolButton;
 		TreeStore measuresTreeStore;
 		IEnumerable measures;
 
@@ -81,15 +83,40 @@ namespace Measures.Ui {
 				"Open", ResponseType.Accept);
 			fileChooser.Filter = CreateAssemblyFilter ();
 			if (fileChooser.Run () == (int) ResponseType.Accept) {
-				FillTreeView (new MeasureCalculator ().ProcessMeasures (AssemblyFactory.GetAssembly (fileChooser.Filename)));
+				measures =  new MeasureCalculator ().ProcessMeasures (AssemblyFactory.GetAssembly (fileChooser.Filename));
+				FillTreeView (measures);
+				findToolButton.Sensitive = true;
 			}
 			fileChooser.Destroy ();
 		}
 		#pragma warning restore 0169
+	
+		//Disabling warning 0169 because this code will be called at
+		//runtime with glade.
+		#pragma warning disable 0169
+		private void OnFindToolButtonClicked (object sender, EventArgs args) 
+		{
+			FindDialog findDialog = new FindDialog (measures);
+			findDialog.ShowDialog ();
+			if (findDialog.Results != null)
+				FillTreeView (findDialog.Results);
+		}
+		#pragma warning restore 0169
 
+		private void OnWindowEvent (object sender, WidgetEventArgs args) 
+		{
+			reloadToolButton.Sensitive = (measures != null);
+		}
+
+		private void OnReloadToolButtonClicked (object sender, EventArgs args)
+		{
+			if (measures != null)
+				FillTreeView (measures);
+		}
+		
+	
 		private void FillTreeView (IEnumerable results) 
 		{
-			measures = results;
 			measuresTreeStore = new TreeStore (typeof (string));
 
 			foreach (TypeMeasure typeMeasure in results) {
