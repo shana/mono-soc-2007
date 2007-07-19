@@ -175,7 +175,7 @@ namespace CBinding
 			List<CProject> projects = new List<CProject> ();
 			
 			foreach (ProjectPackage p in Packages) {
-				if (p.IsProject) {
+				if (p.IsProject && p.Name != Name) {
 					project_names.Add (p.Name);
 				}
 			}

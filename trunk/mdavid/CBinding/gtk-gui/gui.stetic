@@ -493,7 +493,6 @@ Example:
                   <widget class="Gtk.TreeView" id="libTreeView">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
-                    <property name="HeadersClickable">True</property>
                   </widget>
                 </child>
               </widget>
@@ -668,7 +667,6 @@ Example:
                       <widget class="Gtk.TreeView" id="includePathTreeView">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
-                        <property name="HeadersClickable">True</property>
                       </widget>
                     </child>
                   </widget>
@@ -827,7 +825,6 @@ Example:
                       <widget class="Gtk.TreeView" id="libPathTreeView">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
-                        <property name="HeadersClickable">True</property>
                       </widget>
                     </child>
                   </widget>
@@ -1142,7 +1139,6 @@ Example:
                       <widget class="Gtk.TreeView" id="normalPackageTreeView">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
-                        <property name="HeadersClickable">True</property>
                       </widget>
                     </child>
                   </widget>
@@ -1170,7 +1166,6 @@ Example:
                       <widget class="Gtk.TreeView" id="projectPackageTreeView">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
-                        <property name="HeadersClickable">True</property>
                       </widget>
                     </child>
                   </widget>
@@ -1232,7 +1227,6 @@ Example:
                       <widget class="Gtk.TreeView" id="selectedPackagesTreeView">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
-                        <property name="HeadersClickable">True</property>
                       </widget>
                     </child>
                   </widget>

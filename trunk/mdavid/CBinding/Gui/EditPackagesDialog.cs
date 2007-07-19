@@ -117,6 +117,7 @@ namespace CBinding
 			projectPackages = ProjectPackages (project);
 			
 			foreach (ProjectPackage p in projectPackages) {
+				if (p.Name == project.Name) continue;
 				string version = GetPackageVersion (p.File);
 				bool inProject = IsInProject (p.File);
 				projectPackageListStore.AppendValues (inProject, p.Name, version);
@@ -125,7 +126,7 @@ namespace CBinding
 					selectedPackagesListStore.AppendValues (p.Name, version);
 			}
 			
-			// Fill up the normal and selected tree views
+			// Fill up the normal tree view
 			foreach (string dir in ScanDirs ()) {
 				if (Directory.Exists (dir)) {	
 					DirectoryInfo di = new DirectoryInfo (dir);
@@ -145,14 +146,6 @@ namespace CBinding
 					}
 				}
 			}
-			
-			// Packages of referenced projects
-//			foreach (ProjectPackage p in project.Packages) {
-//				if (p.IsProject) {
-//					string version = GetPackageVersion (p.File);
-//					selectedPackagesListStore.AppendValues (p.Name, version);
-//				}
-//			}
 			
 			buttonOk.Clicked += OnOkButtonClick;
 			buttonCancel.Clicked += OnCancelButtonClick;
@@ -203,22 +196,15 @@ namespace CBinding
 		
 		private void OnOkButtonClick (object sender, EventArgs e)
 		{
-//			project.Packages.Clear ();
-//			
-//			Gtk.TreeIter iter;
-//			
-//			bool has_elem = selectedPackagesListStore.GetIterFirst (out iter);
-//			while (has_elem) {
-//				string package = (string)selectedPackagesListStore.GetValue (iter, 0);
-//				project.Packages.Add (new ProjectPackage(package));
-//				if (!selectedPackagesListStore.IterNext (ref iter)) break;
-//			}
-			
-			project.Packages.Clear ();
-			//project.Packages.AddRange (selectedPackages);
-			foreach (ProjectPackage p in selectedPackages) {
-				project.Packages.Add (p);
+			// Use this instead of clear, since clear seems to not update the packages tree
+			while (project.Packages.Count > 0) {
+				project.Packages.RemoveAt (0);
 			}
+
+//			foreach (ProjectPackage p in selectedPackages) {
+//				project.Packages.Add (p);
+//			}
+			project.Packages.AddRange (selectedPackages);
 			
 			Destroy ();
 		}
@@ -267,7 +253,22 @@ namespace CBinding
 					}
 				}
 			} else {
-				// Remove from project packages page
+				Gtk.TreeIter search_iter;
+				bool has_elem = projectPackageListStore.GetIterFirst (out search_iter);
+					
+				if (has_elem) {
+					while (true) {
+						string current = (string)projectPackageListStore.GetValue (search_iter, 1);
+						
+						if (current.Equals (package)) {
+							projectPackageListStore.SetValue (search_iter, 0, false);
+							break;
+						}
+						
+						if (!projectPackageListStore.IterNext (ref search_iter))
+							break;
+					}
+				}
 			}
 		}
 		
