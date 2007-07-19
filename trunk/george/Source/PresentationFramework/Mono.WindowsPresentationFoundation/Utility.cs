@@ -185,5 +185,9 @@ namespace Mono.WindowsPresentationFoundation {
 					return false;
 			}
 		}
+
+		public static bool IsUniform(Thickness thickness) {
+			return thickness.Bottom == thickness.Left && thickness.Bottom == thickness.Right && thickness.Bottom == thickness.Top;
+		}
 	}
 }
