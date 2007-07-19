@@ -15,8 +15,12 @@ namespace Ribbons
 		private Widget img;
 		private Label lbl;
 		private double padding;
+		private bool isSmall;
+		private Menu dropDownMenu;
 		
-		protected double lineWidth = 1.0;
+		protected const double lineWidth = 1.0;
+		protected const double smallArrowSize = 3.0;
+		protected const double bigArrowSize = 5.0;
 		
 		public event EventHandler Clicked;
 		
@@ -93,6 +97,19 @@ namespace Ribbons
 			}
 		}
 		
+		public Menu DropDownMenu
+		{
+			set
+			{
+				dropDownMenu = value;
+				QueueDraw ();
+			}
+			get
+			{
+				return dropDownMenu;
+			}
+		}
+		
 		/// <summary>Default constructor.</summary>
 		public Button ()
 		{
@@ -102,6 +119,7 @@ namespace Ribbons
 			
 			this.Padding = 2;
 			this.ImagePosition = PositionType.Top;
+			this.isSmall = false;
 		}
 		
 		/// <summary>Constructor given a label to display.</summary>
@@ -250,6 +268,20 @@ namespace Ribbons
 				childRequisition = Child.SizeRequest ();
 			}
 			
+			if(dropDownMenu != null)
+			{
+				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * lineWidth);
+				
+				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
+				{
+					childRequisition.Height -= arrowSpace;
+				}
+				else
+				{
+					childRequisition.Width -= arrowSpace;
+				}
+			}
+			
 			if(HeightRequest == -1)
 			{
 				requisition.Height = childRequisition.Height + (int)(lineWidth * 4 + padding * 2);
@@ -268,6 +300,20 @@ namespace Ribbons
 			allocation.Y += (int)(lineWidth * 2 + padding);
 			allocation.Height -= (int)(lineWidth * 4 + padding * 2);
 			allocation.Width -= (int)(lineWidth * 4 + padding * 2);
+			
+			if(dropDownMenu != null)
+			{
+				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * lineWidth);
+				
+				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
+				{
+					allocation.Height -= arrowSpace;
+				}
+				else
+				{
+					allocation.Width -= arrowSpace;
+				}
+			}
 			
 			if(allocation.Height < 0) allocation.Height = 0;
 			if(allocation.Width < 0) allocation.Width = 0;
@@ -292,7 +338,13 @@ namespace Ribbons
 		protected void Draw (Context cr)
 		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
-			theme.DrawButton (cr, rect, state, 3.0, lineWidth, this);
+			double roundSize = isSmall ? 2.0 : 3.0;
+			double arrowSize = 0;
+			if(dropDownMenu != null)
+			{
+				arrowSize = isSmall ? smallArrowSize : bigArrowSize;
+			}
+			theme.DrawButton (cr, rect, state, roundSize, lineWidth, arrowSize, this);
 		}
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
