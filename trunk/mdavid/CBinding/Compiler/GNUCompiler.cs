@@ -69,6 +69,9 @@ namespace CBinding
 			if (configuration.DebugMode)
 				args.Append ("-g ");
 			
+			if (configuration.CompileTarget == CBinding.CompileTarget.SharedLibrary)
+				args.Append ("-fPIC ");
+			
 			switch (cp.WarningLevel)
 			{
 			case WarningLevel.None:
