@@ -167,7 +167,7 @@ namespace Microsoft.Windows.Themes {
 								new GradientStop(Color.FromArgb(0xFF, 0xFF, 0xF0, 0xCF), 0),
 								new GradientStop(Color.FromArgb(0xFF, 0xF8, 0xB3, 0x30), 1)
 							}), new Point(0, 0), new Point(1, 1)), 2), new Rect(border_thickness.Left + 1, border_thickness.Top + 1, width, height));
-				bool has_uniform_border_thickness = border_thickness.Bottom == border_thickness.Left && border_thickness.Bottom == BorderThickness.Right && border_thickness.Bottom == BorderThickness.Top;
+				bool has_uniform_border_thickness = Utility.IsUniform(border_thickness);
 				if (fill_displayed)
 					if (IsChecked.Value) {
 						if (!has_uniform_border_thickness)
