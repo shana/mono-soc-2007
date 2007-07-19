@@ -19,8 +19,9 @@ namespace Ribbons
 		private Menu dropDownMenu;
 		
 		protected const double lineWidth = 1.0;
-		protected const double smallArrowSize = 3.0;
-		protected const double bigArrowSize = 5.0;
+		protected const double arrowPadding = 2.0;
+		protected const double smallArrowSize = 5.0;
+		protected const double bigArrowSize = 8.0;
 		
 		public event EventHandler Clicked;
 		
@@ -270,15 +271,15 @@ namespace Ribbons
 			
 			if(dropDownMenu != null)
 			{
-				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * lineWidth);
+				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * (lineWidth + arrowPadding));
 				
 				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
 				{
-					childRequisition.Height -= arrowSpace;
+					childRequisition.Height += arrowSpace;
 				}
 				else
 				{
-					childRequisition.Width -= arrowSpace;
+					childRequisition.Width += arrowSpace;
 				}
 			}
 			
@@ -303,7 +304,7 @@ namespace Ribbons
 			
 			if(dropDownMenu != null)
 			{
-				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * lineWidth);
+				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * (lineWidth + arrowPadding));
 				
 				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
 				{
@@ -344,7 +345,8 @@ namespace Ribbons
 			{
 				arrowSize = isSmall ? smallArrowSize : bigArrowSize;
 			}
-			theme.DrawButton (cr, rect, state, roundSize, lineWidth, arrowSize, this);
+			bool drawSeparator = (Clicked != null) && (dropDownMenu != null);
+			theme.DrawButton (cr, rect, state, roundSize, lineWidth, arrowSize, arrowPadding, drawSeparator, this);
 		}
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)

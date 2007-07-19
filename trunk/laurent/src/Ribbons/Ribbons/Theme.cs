@@ -214,7 +214,7 @@ namespace Ribbons
 		}
 		
 		/// <summary>Draws a button.</summary>
-		public void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, double arrowSize, Button widget)
+		public void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, double arrowSize, double arrowPadding, bool drawSeparator, Button widget)
 		{
 			double lineWidth05 = lineWidth / 2;
 			double lineWidth15 = lineWidth05 * 3;
@@ -366,6 +366,65 @@ namespace Ribbons
 				
 				cr.Color = new Color (1, 1, 1, 0.8);
 				cr.Stroke ();
+			}
+			
+			if(arrowSize > 0)
+			{
+				double x, y;
+				
+				switch(widget.ImagePosition)
+				{
+					case Gtk.PositionType.Bottom:
+					case Gtk.PositionType.Top:
+						x = bodyAllocation.X + (bodyAllocation.Width - arrowSize) / 2.0;
+						y = bodyAllocation.Y + bodyAllocation.Height - 2 * lineWidth - arrowSize - 2 * arrowPadding;
+						
+						if(drawSeparator)
+						{
+							double left = bodyAllocation.X + 2 * lineWidth, right = bodyAllocation.X + bodyAllocation.Width - 2 * lineWidth;
+							
+							cr.MoveTo (left, y - lineWidth / 2);
+							cr.LineTo (right, y - lineWidth / 2);
+							cr.Color = new Color (0, 0, 0, 0.1);
+							cr.Stroke ();
+							
+							cr.MoveTo (left, y + lineWidth / 2);
+							cr.LineTo (right, y + lineWidth / 2);
+							cr.Color = new Color (1, 1, 1, 0.6);
+							cr.Stroke ();
+						}
+						
+						y += arrowPadding;
+						break;
+					default:
+						x = bodyAllocation.X + bodyAllocation.Width - 2 * lineWidth - arrowSize - 2 * arrowPadding;
+						y = bodyAllocation.Y + (bodyAllocation.Height - arrowSize) / 2.0;
+						
+						if(drawSeparator)
+						{
+							double top = bodyAllocation.Y + 2 * lineWidth, bottom = bodyAllocation.Y + bodyAllocation.Height - 2 * lineWidth;
+							cr.MoveTo (x - lineWidth / 2, top);
+							cr.LineTo (x - lineWidth / 2, bottom);
+							cr.Color = new Color (0, 0, 0, 0.1);
+							cr.Stroke ();
+							
+							cr.MoveTo (x + lineWidth / 2, top);
+							cr.LineTo (x + lineWidth / 2, bottom);
+							cr.Color = new Color (1, 1, 1, 0.6);
+							cr.Stroke ();
+						}
+						
+						x += arrowPadding;
+						break;
+				}
+				
+				y += arrowSize / 4.0 + lineWidth / 2.0;
+				cr.MoveTo (x, y);
+				cr.LineTo (x + arrowSize, y);
+				cr.LineTo (x + arrowSize / 2.0, y + arrowSize / 2.0);
+				cr.LineTo (x, y);
+				cr.Color = new Color (0, 0, 0);
+				cr.Fill ();
 			}
 		}
 	}
