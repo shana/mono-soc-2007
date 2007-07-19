@@ -37,6 +37,8 @@ namespace Measures {
 		float linesPerMethod;
 		float parametersPerMethod;
 		IEnumerable methodMeasures;
+		int maxLinesInMethod;
+		int maxParametersInMethod;
 
 		public TypeMeasure (TypeDefinition type) 
 		{
@@ -73,6 +75,24 @@ namespace Measures {
 			}
 			internal set {
 				methodMeasures = value;
+			}
+		}
+
+		public int MaxLinesInMethod {
+			get {
+				return maxLinesInMethod;
+			}
+			internal set {
+				maxLinesInMethod = value;
+			}
+		}
+
+		public int MaxParametersInMethod {
+			get {
+				return maxParametersInMethod;
+			}
+			internal set {
+				maxParametersInMethod = value;
 			}
 		}
 	}
