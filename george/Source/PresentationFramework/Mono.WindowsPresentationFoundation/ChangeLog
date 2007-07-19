@@ -1,3 +1,7 @@
+2007-07-19  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Utility.cs: Added IsUniform(Thickness) method.
+
 2007-06-29  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Utility.cs: Added IsInVisibleWindow method.
