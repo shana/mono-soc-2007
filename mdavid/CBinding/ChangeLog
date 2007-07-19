@@ -1,5 +1,10 @@
 2007-07-19  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Compiler/GNUCompiler.cs: Send -fPIC to the compiler if the compile
+	  target is a shared library (Is this really needed?).
+
+2007-07-19  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Compiler/GNUCompiler.cs: Fixed a bug in dependency tracking.
 
 2007-07-18  Marcos David Marín Amador <MarcosMarin@gmail.com> 
