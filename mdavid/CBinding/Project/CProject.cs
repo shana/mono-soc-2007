@@ -216,9 +216,7 @@ namespace CBinding
 			pc.SourceDirectory = BaseDirectory;
 			foreach (ProjectFile f in ProjectFiles) {
 				if (f.BuildAction == BuildAction.FileCopy)
-					Runtime.FileService.CopyFile (
-						f.Name, Path.Combine (pc.OutputDirectory, 
-						                      Path.GetFileName (f.Name)));
+					Runtime.FileService.CopyFile (f.Name, Path.Combine (pc.OutputDirectory, Path.GetFileName (f.Name)));
 			}
 			
 			return compiler_manager.Compile (
