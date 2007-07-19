@@ -18,7 +18,6 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public Border() {
-			//WDTDH
 		}
 		#endregion
 
@@ -67,6 +66,25 @@ namespace System.Windows.Controls {
 
 		protected override void OnRender(DrawingContext drawingContext) {
 			base.OnRender(drawingContext);
+			Thickness border_thickness = BorderThickness;
+			CornerRadius corner_radius = CornerRadius;
+			double actual_width = ActualWidth;
+			double actual_height = ActualHeight;
+			double uniform_corner_radius = corner_radius.BottomLeft;
+			if (Utility.IsUniform(border_thickness) && uniform_corner_radius == corner_radius.BottomRight && uniform_corner_radius == corner_radius.TopLeft && uniform_corner_radius == corner_radius.TopRight) {
+				double uniform_border_thickness = border_thickness.Bottom;
+				if (BorderBrush != null)
+					drawingContext.DrawRoundedRectangle(null, new Pen(BorderBrush, uniform_border_thickness), new Rect(uniform_border_thickness / 2, uniform_border_thickness / 2, actual_width - uniform_border_thickness, actual_height - uniform_border_thickness), uniform_corner_radius, uniform_corner_radius);
+				if (Background != null) {
+					double background_radius = uniform_corner_radius - 0.5;
+					if (background_radius < 0)
+						background_radius = 0;
+					drawingContext.DrawRoundedRectangle(Background, null, new Rect(uniform_border_thickness, uniform_border_thickness, actual_width - 2 * uniform_border_thickness, actual_height - 2 * uniform_border_thickness), background_radius, background_radius);
+				}
+			} else if (Utility.IsVoid(corner_radius)) {
+			}
+
+			return;
 			//HACK
 			if (Utility.IsVoid(CornerRadius)) {
 				if (Background != null)
