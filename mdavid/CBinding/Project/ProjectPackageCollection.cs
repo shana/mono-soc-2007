@@ -111,6 +111,15 @@ namespace CBinding
 			}
 		}
 		
+//		protected override void OnClearComplete ()
+//		{
+//			if (project != null) {
+//				foreach (ProjectPackage package in (ArrayList)InnerList) {
+//					project.NotifyPackageRemovedFromProject (package);
+//				}
+//			}
+//		}
+		
 		protected override void OnInsertComplete (int index, object value)
 		{
 			if (project != null)

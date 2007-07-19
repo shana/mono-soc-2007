@@ -94,6 +94,7 @@ RES =  \
 	icons/Icons.16x16.ProtectedUnion \
 	icons/Icons.16x16.Union \
 	icons/update \
+	icons/Icons.16x16.ProjectReference \
 	templates/EmptyCFile.xft.xml \
 	templates/EmptyCppProject.xpt.xml \
 	templates/EmptyCProject.xpt.xml

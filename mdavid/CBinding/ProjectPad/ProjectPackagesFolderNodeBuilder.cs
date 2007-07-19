@@ -149,7 +149,12 @@ namespace CBinding.ProjectPad
 				return true;
 			
 			if (dataObject is CProject) {
-				CProjectConfiguration config = (CProjectConfiguration)((CProject)dataObject).ActiveConfiguration;
+				CProject project = (CProject)dataObject;
+				
+				if (((ProjectPackageCollection)CurrentNode.DataItem).Project.Equals (project))
+					return false;
+				
+				CProjectConfiguration config = (CProjectConfiguration)project.ActiveConfiguration;
 				
 				if (config.CompileTarget == CBinding.CompileTarget.StaticLibrary)
 					return true;
@@ -187,8 +192,11 @@ namespace CBinding.ProjectPad
 				draggedProject.WritePkgPackage ();
 				
 				ProjectPackage package = new ProjectPackage (draggedProject);
-				destProject.Packages.Add (package);
-				IdeApp.ProjectOperations.SaveProject (destProject);
+				
+				if (!destProject.Packages.Contains (package)) {				
+					destProject.Packages.Add (package);
+					IdeApp.ProjectOperations.SaveProject (destProject);
+				}
 			}
 		}
 	}

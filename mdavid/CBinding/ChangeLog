@@ -1,3 +1,13 @@
+2007-07-18  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/EditPackagesDialog.cs, Project/ProjectPackageCollection.cs,
+	  Project/CProject.cs, gtk-gui/CBinding.EditPackagesDialog.cs,
+	  gtk-gui/gui.stetic, CBinding.addin.xml,
+	  ProjectPad/ProjectPackagesFolderNodeBuilder.cs: Fixed several bugs.
+	* Makefile.am, ProjectPad/ProjectPackageNodeBuilder.cs,
+	  icons/Icons.16x16.ProjectReference, CBinding.mdp: Project packages
+	  have a different icon.
+
 2007-07-17  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/EditPackagesDialog.cs, gtk-gui/CBinding.EditPackagesDialog.cs,

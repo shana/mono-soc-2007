@@ -30,6 +30,7 @@
 //
 
 using System;
+using System.Reflection;
 
 using Mono.Addins;
 
@@ -67,7 +68,11 @@ namespace CBinding.ProjectPad
 		                                ref Gdk.Pixbuf closedIcon)
 		{
 			label = ((ProjectPackage)dataObject).Name;
-			icon = Context.GetIcon (Stock.Reference);
+			
+			if (((ProjectPackage)dataObject).IsProject)
+				icon = new Gdk.Pixbuf (Assembly.GetExecutingAssembly (), "Icons.16x16.ProjectReference");
+			else
+				icon = Context.GetIcon (Stock.Reference);
 		}
 	}
 	

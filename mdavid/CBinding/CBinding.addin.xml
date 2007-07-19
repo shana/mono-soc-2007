@@ -10,6 +10,8 @@
 
 	<Runtime>
 		<Import assembly = "CBinding.dll"/>
+		<!-- This is here so that the delete command shows in the package node's context menu -->
+		<Import assembly = "../MonoDevelop.Ide.dll"/>
 	</Runtime>
 	
 	<Dependencies>
