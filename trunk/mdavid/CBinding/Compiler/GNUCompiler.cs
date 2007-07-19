@@ -110,7 +110,6 @@ namespace CBinding
 				if (f.Subtype == Subtype.Directory) continue;
 				
 				if (f.BuildAction == BuildAction.Compile) {
-					
 					if (NeedsCompiling (f))
 						res = DoCompilation (f, args.ToString (), packages, monitor, cr);
 				}
@@ -186,21 +185,15 @@ namespace CBinding
 			if (!File.Exists (dependenciesFile))
 				return null;
 			
+			// It always depends on itself ;)
+			dependencies.Add (file.Name);
+			
 			string temp;
 			StringBuilder output = new StringBuilder ();
 			
 			using (StreamReader reader = new StreamReader (dependenciesFile)) {
-				int numlines = 0;
 				while ((temp = reader.ReadLine ()) != null) {
 					output.Append (temp);
-					numlines++;
-				}
-				
-				if (numlines == 0) {
-					// If the dependencies file is empty, something is up
-					// so we better make sure the compiler thinks at least
-					// the source file is depended on (which it always is).
-					return new string[] { file.Name };
 				}
 			}
 			
@@ -209,8 +202,9 @@ namespace CBinding
 			for (int i = 0; i < lines.Length; i++) {
 				string[] files = lines[i].Split (' ');
 				// first line contains the rule (eg. file.o: dep1.c dep2.h ...) and we must skip it
+				// and we skip the *.cpp or *.c etc. too
 				for (int j = 0; j < files.Length; j++) {
-					if (j == 0) continue;
+					if (j == 0 || j == 1) continue;
 					
 					string depfile = files[j].Trim ();
 					
