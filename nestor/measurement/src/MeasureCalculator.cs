@@ -77,11 +77,36 @@ namespace Measures {
 			return 0;
 		}
 
+		private int CalculateMaxLinesInMethod (TypeDefinition type) 
+		{
+			int maxValue = 0;
+			foreach (MethodDefinition method in type.Methods) {
+				int methodLines = CalculateTotalLines (method);
+				if (methodLines > maxValue)
+					maxValue = methodLines; 
+			}
+			return maxValue;
+		}
+
+		private int CalculateMaxParametersInMethod (TypeDefinition type) 
+		{
+			int maxValue = 0;
+			foreach (MethodDefinition method in type.Methods) {
+				int parameters = CalculateParameters (method);
+				if (parameters > maxValue)
+					maxValue = parameters;
+			}
+			return maxValue;
+		}
+		
+
 		public TypeMeasure MeasureType (TypeDefinition type) 
 		{
 			TypeMeasure typeMeasure = new TypeMeasure (type);
 			typeMeasure.LinesPerMethod = CalculateLinesPerMethod (type);
 			typeMeasure.ParametersPerMethod = CalculateParametersPerMethod (type);
+			typeMeasure.MaxLinesInMethod = CalculateMaxLinesInMethod (type);
+			typeMeasure.MaxParametersInMethod = CalculateMaxParametersInMethod (type);
 			return typeMeasure;
 		}
 

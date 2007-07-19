@@ -39,6 +39,8 @@ namespace Measures.Ui {
 		[Widget] Table table3;
 		[Widget] Label linesPerMethod;
 		[Widget] Label parametersPerMethod;
+		[Widget] Label maxLinesInMethod;
+		[Widget] Label maxParametersInMethod;
 
 		public TypeMeasureWidget (TypeMeasure typeMeasure) 
 		{
@@ -46,6 +48,8 @@ namespace Measures.Ui {
 			xmlTypeMeasureWidget.Autoconnect (this);
 			linesPerMethod.Text = typeMeasure.LinesPerMethod.ToString ();
 			parametersPerMethod.Text = typeMeasure.ParametersPerMethod.ToString ();
+			maxLinesInMethod.Text = typeMeasure.MaxLinesInMethod.ToString ();
+			maxParametersInMethod.Text = typeMeasure.MaxParametersInMethod.ToString ();
 		}
 
 		public Widget Widget {

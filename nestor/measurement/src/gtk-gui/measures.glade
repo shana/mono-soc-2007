@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.2 on Wed Jul 18 19:01:58 2007 by nestor@point-->
+<!--Generated with glade3 3.2.2 on Thu Jul 19 13:08:41 2007 by nestor@point-->
 <glade-interface>
   <widget class="GtkWindow" id="mainWindow">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -106,13 +106,22 @@
         <property name="n_columns">2</property>
         <property name="homogeneous">True</property>
         <child>
-          <widget class="GtkLabel" id="numberOfParameters">
+          <widget class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="label" translatable="yes">&lt;b&gt;Number of Lines:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+            <property name="wrap_mode">PANGO_WRAP_CHAR</property>
+          </widget>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="label" translatable="yes">&lt;b&gt;Number of Parameters:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
           </widget>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
           </packing>
@@ -129,25 +138,16 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label4">
+          <widget class="GtkLabel" id="numberOfParameters">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="label" translatable="yes">&lt;b&gt;Number of Parameters:&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
           </widget>
           <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
           </packing>
-        </child>
-        <child>
-          <widget class="GtkLabel" id="label3">
-            <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="label" translatable="yes">&lt;b&gt;Number of Lines:&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
-            <property name="wrap_mode">PANGO_WRAP_CHAR</property>
-          </widget>
         </child>
       </widget>
     </child>
@@ -158,17 +158,75 @@
       <widget class="GtkTable" id="table3">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="n_rows">2</property>
+        <property name="n_rows">4</property>
         <property name="n_columns">2</property>
         <property name="homogeneous">True</property>
         <child>
-          <widget class="GtkLabel" id="parametersPerMethod">
+          <widget class="GtkLabel" id="maxParametersInMethod">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
           </widget>
           <packing>
             <property name="left_attach">1</property>
             <property name="right_attach">2</property>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="maxLinesInMethod">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+          </widget>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="label" translatable="yes">&lt;b&gt;Maximum number of parameters in a Method:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+          </widget>
+          <packing>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="label" translatable="yes">&lt;b&gt;Maximum number of lines in a Method:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+          </widget>
+          <packing>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label5">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="label" translatable="yes">&lt;b&gt;Lines Per method:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </widget>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label8">
+            <property name="visible">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="label" translatable="yes">&lt;b&gt;Parameters Per Method:&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </widget>
+          <packing>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
           </packing>
@@ -184,24 +242,16 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="label8">
+          <widget class="GtkLabel" id="parametersPerMethod">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="label" translatable="yes">&lt;b&gt;Parameters Per Method:&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
           </widget>
           <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
           </packing>
-        </child>
-        <child>
-          <widget class="GtkLabel" id="label5">
-            <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="label" translatable="yes">&lt;b&gt;Lines Per method:&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
-          </widget>
         </child>
       </widget>
     </child>
