@@ -103,18 +103,26 @@ namespace Measures.Ui {
 		}
 		#pragma warning restore 0169
 
-		private void OnWindowEvent (object sender, WidgetEventArgs args) 
-		{
-			reloadToolButton.Sensitive = (measures != null);
-		}
-
+		//Disabling warning 0169 because this code will be called at
+		//runtime with glade.
+		#pragma warning disable 0169
 		private void OnReloadToolButtonClicked (object sender, EventArgs args)
 		{
 			if (measures != null)
 				FillTreeView (measures);
 		}
-		
-	
+		#pragma warning restore 0169
+
+
+		//Disabling warning 0169 because this code will be called at
+		//runtime with glade.
+		#pragma warning disable 0169
+		private void OnWindowEvent (object sender, WidgetEventArgs args) 
+		{
+			reloadToolButton.Sensitive = (measures != null);
+		}
+		#pragma warning restore 0169
+
 		private void FillTreeView (IEnumerable results) 
 		{
 			measuresTreeStore = new TreeStore (typeof (string));

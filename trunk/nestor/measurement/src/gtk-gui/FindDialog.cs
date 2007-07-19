@@ -65,6 +65,9 @@ namespace Measures.Ui {
 			}
 		}
 
+		//Disabling warning 0169 because this code will be called at
+		//runtime with glade.
+		#pragma warning disable 0169
 		private void OnDialogResponse (object sender, ResponseArgs args) 
 		{
 			if (args.ResponseId == ResponseType.Ok) {
@@ -85,11 +88,16 @@ namespace Measures.Ui {
 			}
 			findDialog.Destroy ();
 		}
-
+		#pragma warning restore 0169
+		
+		//Disabling warning 0169 because this code will be called at
+		//runtime with glade.
+		#pragma warning disable 0169
 		private void OnVBoxEvent (object sender, WidgetEventArgs args) 
 		{
 			okButton.Sensitive = ValidateUpperLimit ();
 		}
+		#pragma warning restore 0169
 
 		private bool ValidateUpperLimit () 
 		{
