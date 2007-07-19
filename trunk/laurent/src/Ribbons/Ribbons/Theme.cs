@@ -214,7 +214,7 @@ namespace Ribbons
 		}
 		
 		/// <summary>Draws a button.</summary>
-		public void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, Button widget)
+		public void DrawButton (Context cr, Rectangle bodyAllocation, ButtonState state, double roundSize, double lineWidth, double arrowSize, Button widget)
 		{
 			double lineWidth05 = lineWidth / 2;
 			double lineWidth15 = lineWidth05 * 3;
