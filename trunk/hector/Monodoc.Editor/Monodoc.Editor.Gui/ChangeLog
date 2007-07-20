@@ -1,3 +1,8 @@
+2007-07-19  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* DocumentBuffer.cs: Added more implementation for easy editing of
+	  summary text.
+
 2007-07-17  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* Test/TestDocumentBufferArchiver.cs: Member name changes and changes
