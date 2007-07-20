@@ -8,12 +8,14 @@ namespace Mono.System.Windows.Controls {
 namespace System.Windows.Controls {
 #endif
 	public class Border : Decorator {
-		#region Dependency Property Fields
+		#region Public Fields
+		#region Dependency Properties
 		public static readonly DependencyProperty BackgroundProperty = DependencyProperty.Register("Background", typeof(Brush), typeof(Border), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender));
 		public static readonly DependencyProperty BorderBrushProperty = DependencyProperty.Register("BorderBrush", typeof(Brush), typeof(Border), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender));
 		public static readonly DependencyProperty BorderThicknessProperty = DependencyProperty.Register("BorderThickness", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(new Thickness(), FrameworkPropertyMetadataOptions.AffectsRender));
 		public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Border), new FrameworkPropertyMetadata(new CornerRadius(), FrameworkPropertyMetadataOptions.AffectsMeasure));
 		public static readonly DependencyProperty PaddingProperty = DependencyProperty.Register("Padding", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(new Thickness(), FrameworkPropertyMetadataOptions.AffectsMeasure));
+		#endregion
 		#endregion
 
 		#region Public Constructors
@@ -21,6 +23,7 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region Public Properties
 		#region Dependency Properties
 		public Brush Background {
 			get { return (Brush)GetValue(BackgroundProperty); }
@@ -47,6 +50,7 @@ namespace System.Windows.Controls {
 			set { SetValue(PaddingProperty, value); }
 		}
 		#endregion
+		#endregion
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size arrangeSize) {
@@ -71,17 +75,56 @@ namespace System.Windows.Controls {
 			double actual_width = ActualWidth;
 			double actual_height = ActualHeight;
 			double uniform_corner_radius = corner_radius.BottomLeft;
+			Brush border_brush = BorderBrush;
 			if (Utility.IsUniform(border_thickness) && uniform_corner_radius == corner_radius.BottomRight && uniform_corner_radius == corner_radius.TopLeft && uniform_corner_radius == corner_radius.TopRight) {
 				double uniform_border_thickness = border_thickness.Bottom;
-				if (BorderBrush != null)
-					drawingContext.DrawRoundedRectangle(null, new Pen(BorderBrush, uniform_border_thickness), new Rect(uniform_border_thickness / 2, uniform_border_thickness / 2, actual_width - uniform_border_thickness, actual_height - uniform_border_thickness), uniform_corner_radius, uniform_corner_radius);
+				if (border_brush != null)
+					drawingContext.DrawRoundedRectangle(null, new Pen(border_brush, uniform_border_thickness), new Rect(uniform_border_thickness / 2, uniform_border_thickness / 2, actual_width - uniform_border_thickness, actual_height - uniform_border_thickness), uniform_corner_radius, uniform_corner_radius);
 				if (Background != null) {
 					double background_radius = uniform_corner_radius - 0.5;
 					if (background_radius < 0)
 						background_radius = 0;
 					drawingContext.DrawRoundedRectangle(Background, null, new Rect(uniform_border_thickness, uniform_border_thickness, actual_width - 2 * uniform_border_thickness, actual_height - 2 * uniform_border_thickness), background_radius, background_radius);
 				}
-			} else if (Utility.IsVoid(corner_radius)) {
+			} else if (Utility.IsVoid(corner_radius) && border_brush is SolidColorBrush && ((SolidColorBrush)border_brush).Color.A == 0xFF) {
+				drawingContext.DrawLine(new Pen(border_brush, border_thickness.Left), new Point(border_thickness.Left / 2, 0), new Point(border_thickness.Left / 2, actual_height));
+				drawingContext.DrawLine(new Pen(border_brush, border_thickness.Right), new Point(actual_width - border_thickness.Right / 2, 0), new Point(actual_width - border_thickness.Right / 2, actual_height));
+				drawingContext.DrawLine(new Pen(border_brush, border_thickness.Top), new Point(0, border_thickness.Top / 2), new Point(actual_width, border_thickness.Top / 2));
+				drawingContext.DrawLine(new Pen(border_brush, border_thickness.Bottom), new Point(0, actual_height - border_thickness.Bottom / 2), new Point(actual_width, actual_height - border_thickness.Bottom / 2));
+				if (Background != null)
+					drawingContext.DrawRectangle(Background, null, new Rect(border_thickness.Left, border_thickness.Top, actual_width - border_thickness.Left - border_thickness.Right, actual_height - border_thickness.Top - border_thickness.Bottom));
+			} else {
+				StreamGeometry geometry;
+				StreamGeometryContext context;
+				if (border_brush != null) {
+					geometry = new StreamGeometry();
+					using (context = geometry.Open()) {
+						context.BeginFigure(new Point(0, 0), true, true);
+						context.LineTo(new Point(actual_width, 0), false, false);
+						context.LineTo(new Point(actual_width, actual_height), false, false);
+						context.LineTo(new Point(0, actual_height), false, false);
+						context.LineTo(new Point(0, 0), false, true);
+						context.BeginFigure(new Point(border_thickness.Left, border_thickness.Top), true, false);
+						context.LineTo(new Point(actual_width - border_thickness.Right, border_thickness.Top), false, false);
+						context.LineTo(new Point(actual_width - border_thickness.Right, ActualHeight - border_thickness.Bottom), false, false);
+						context.LineTo(new Point(border_thickness.Left, ActualHeight - border_thickness.Bottom), false, false);
+						context.LineTo(new Point(border_thickness.Left, border_thickness.Top), false, false);
+					}
+					geometry.Freeze();
+					drawingContext.DrawGeometry(border_brush, null, geometry);
+				}
+				if (Background != null) {
+					geometry = new StreamGeometry();
+					using (context = geometry.Open()) {
+						context.BeginFigure(new Point(border_thickness.Left, border_thickness.Top), true, false);
+						context.LineTo(new Point(actual_width - border_thickness.Right, border_thickness.Top), false, false);
+						context.LineTo(new Point(actual_width - border_thickness.Right, ActualHeight - border_thickness.Bottom), false, false);
+						context.LineTo(new Point(border_thickness.Left, ActualHeight - border_thickness.Bottom), false, false);
+						context.LineTo(new Point(border_thickness.Left, border_thickness.Top), false, false);
+					}
+					geometry.Freeze();
+					drawingContext.DrawGeometry(Background, null, geometry);
+				}
 			}
 
 			return;

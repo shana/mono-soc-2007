@@ -404,7 +404,6 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-		#region DrawingBorderBrushNonUniformBorderThickness2
 		[Test]
 		public void DrawingBorderBrushNonUniformBorderThickness2() {
 			Border b = new Border();
@@ -430,7 +429,6 @@ namespace System.Windows.Controls {
 			Assert.IsNull(gd.Pen, "6");
 			Assert.AreEqual(gd.Geometry.ToString(), "M1;2L97;2 97;96 1;96 1;2z", "7");
 		}
-		#endregion
 
 		[Test]
 		public void DrawingBorderBrushNonUniformBorderThickness3() {
