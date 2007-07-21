@@ -156,24 +156,24 @@ namespace System.Windows.Controls {
 				}
 				create_background_shape = delegate(StreamGeometryContext context) {
 					context.BeginFigure(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), true, true);
-					context.LineTo(new Point(actual_width - top_right_radius_x - border_thickness.Right / 2, border_thickness.Top), false, false);
 					double width = top_right_radius_x - border_thickness.Right / 2;
 					double height = top_right_radius_y - border_thickness.Top / 2;
+					context.LineTo(new Point(actual_width - (width > 0 ? top_right_radius_x + border_thickness.Right / 2 : border_thickness.Right), border_thickness.Top), false, false);
 					if (width >= 0 && height >= 0)
 						context.ArcTo(new Point(actual_width - border_thickness.Right, top_right_radius_y + border_thickness.Top / 2), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
-					context.LineTo(new Point(actual_width - border_thickness.Right, actual_height - bottom_right_radius_y - border_thickness.Bottom / 2), false, false);
 					width = bottom_right_radius_x - border_thickness.Right / 2;
 					height = bottom_right_radius_y - border_thickness.Bottom / 2;
+					context.LineTo(new Point(actual_width - border_thickness.Right, actual_height - (height > 0 ? bottom_right_radius_y + border_thickness.Bottom / 2 : border_thickness.Bottom)), false, false);
 					if (width >= 0 && height >= 0)
 						context.ArcTo(new Point(actual_width - bottom_right_radius_x - border_thickness.Right / 2, actual_height - border_thickness.Bottom), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
-					context.LineTo(new Point(bottom_left_radius_x + border_thickness.Left / 2, actual_height - border_thickness.Bottom), false, false);
 					width = bottom_left_radius_x - border_thickness.Left / 2;
 					height = bottom_left_radius_y - border_thickness.Bottom / 2;
+					context.LineTo(new Point(width > 0 ? bottom_left_radius_x + border_thickness.Left / 2 : border_thickness.Left, actual_height - border_thickness.Bottom), false, false);
 					if (width >= 0 && height >= 0)
 						context.ArcTo(new Point(border_thickness.Left, actual_height - bottom_left_radius_y - border_thickness.Bottom / 2), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
-					context.LineTo(new Point(border_thickness.Left, top_left_radius_y + border_thickness.Top / 2), false, false);
 					width = top_left_radius_x - border_thickness.Left / 2;
 					height = top_left_radius_y - border_thickness.Top / 2;
+					context.LineTo(new Point(border_thickness.Left, height > 0 ? top_left_radius_y + border_thickness.Top / 2 : border_thickness.Top), false, false);
 					if (width >= 0 && height >= 0)
 						context.ArcTo(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
 				};
