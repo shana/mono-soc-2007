@@ -88,10 +88,10 @@ namespace Mono.WebServer.FastCgi
 		public static ApplicationHost GetApplicationForPath (string vhost,
 		                                                     int port,
 		                                                     string path,
-		                                                     bool defaultToRoot)
+		                                                     string realPath)
 		{
 			return appmanager.GetApplicationForPath (vhost, port,
-				path, defaultToRoot).AppHost as ApplicationHost;
+				path, realPath).AppHost as ApplicationHost;
 		}
 		
 		public static int Main (string [] args)
@@ -105,7 +105,8 @@ namespace Mono.WebServer.FastCgi
 			configmanager.LoadCommandLineArgs (args);
 			
 			// Show the help and exit.
-			if ((bool) configmanager ["help"]) {
+			if ((bool) configmanager ["help"] ||
+				(bool) configmanager ["?"]) {
 				ShowHelp ();
 				return 0;
 			}
@@ -235,11 +236,11 @@ namespace Mono.WebServer.FastCgi
 			}
 			
 			root_dir = Environment.CurrentDirectory;
-			
+			bool auto_map = (bool) configmanager ["automappaths"];
 			appmanager = new ApplicationManager (
-				typeof (ApplicationHost));
+				typeof (ApplicationHost), auto_map, false);
 			appmanager.Verbose = (bool) configmanager ["verbose"];
-			
+			appmanager.HostCreated += OnHostCreated;
 			
 			string applications = (string)
 				configmanager ["applications"];
@@ -269,9 +270,8 @@ namespace Mono.WebServer.FastCgi
 					app_config_dir);
 
 			if (applications == null && app_config_dir == null &&
-				app_config_file == null)
-				appmanager.AddApplicationsFromCommandLine (
-					"/:.");
+				app_config_file == null && !auto_map)
+				appmanager.AddApplicationsFromCommandLine ("/:.");
 			
 			Console.WriteLine ("Root directory: {0}", root_dir);
 			Mono.FastCgi.Server server = new Mono.FastCgi.Server (
@@ -306,6 +306,13 @@ namespace Mono.WebServer.FastCgi
 			}
 			
 			return 0;
+		}
+		
+		private static void OnHostCreated (string vhost, int port,
+		                                   string path,
+		                                   IApplicationHost appHost)
+		{
+			// TODO: Implement config registrations.
 		}
 	}
 }

@@ -395,7 +395,7 @@ namespace Mono.WebServer
 			string vhost = null; // TODO: read the headers in InitialWorkerRequest
 			int port = ((IPEndPoint) localEP).Port;
 			
-			VPathToHost vapp = server.GetApplicationForPath (vhost, port, rdata.Path, true);
+			VPathToHost vapp = server.GetApplicationForPath (vhost, port, rdata.Path, null);
 			XSPApplicationHost host = null;
 			if (vapp != null)
 				host = (XSPApplicationHost) vapp.AppHost;
