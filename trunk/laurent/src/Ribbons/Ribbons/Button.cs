@@ -18,6 +18,9 @@ namespace Ribbons
 		private bool isSmall;
 		private Menu dropDownMenu;
 		
+		private double arrowSize;
+		private Gdk.Rectangle arrowAllocation;
+		
 		protected const double lineWidth = 1.0;
 		protected const double arrowPadding = 2.0;
 		protected const double smallArrowSize = 5.0;
@@ -175,6 +178,15 @@ namespace Ribbons
 			if(Clicked != null) Clicked (this, EventArgs.Empty);
 		}
 		
+		/// <summary>Displays the drop down menu if any.</summary>
+		public void Popup ()
+		{
+			if(dropDownMenu != null)
+			{
+				dropDownMenu.Popup ();
+			}
+		}
+		
 		private void BindWidget (Widget w)
 		{
 			w.ButtonPressEvent += BindedWidget_ButtonPressEvent;
@@ -297,6 +309,37 @@ namespace Ribbons
 		{
 			base.OnSizeAllocated (allocation);
 			
+			if(dropDownMenu != null)
+			{
+				arrowSize = isSmall ? smallArrowSize : bigArrowSize;
+				
+				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
+				{
+					if(Clicked != null)
+						arrowAllocation.Height = (int)(arrowSize + 2 * arrowPadding);
+					else
+						arrowAllocation.Height = (int)(allocation.Height - 4 * lineWidth);
+					
+					arrowAllocation.Width = (int)(allocation.Width - 4 * lineWidth);
+				}
+				else
+				{
+					if(Clicked != null)
+						arrowAllocation.Width = (int)(arrowSize + 2 * arrowPadding);
+					else
+						arrowAllocation.Width = (int)(allocation.Width - 4 * lineWidth);
+					
+					arrowAllocation.Height = (int)(allocation.Height - 4 * lineWidth);
+				}
+				
+				arrowAllocation.X = (int)(allocation.Right - arrowAllocation.Width - 2 * lineWidth);
+				arrowAllocation.Y = (int)(allocation.Bottom - arrowAllocation.Height - 2 * lineWidth);
+			}
+			else
+			{
+				arrowSize = 0;
+			}
+			
 			allocation.X += (int)(lineWidth * 2 + padding);
 			allocation.Y += (int)(lineWidth * 2 + padding);
 			allocation.Height -= (int)(lineWidth * 4 + padding * 2);
@@ -340,11 +383,6 @@ namespace Ribbons
 		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
 			double roundSize = isSmall ? 2.0 : 3.0;
-			double arrowSize = 0;
-			if(dropDownMenu != null)
-			{
-				arrowSize = isSmall ? smallArrowSize : bigArrowSize;
-			}
 			bool drawSeparator = (Clicked != null) && (dropDownMenu != null);
 			theme.DrawButton (cr, rect, state, roundSize, lineWidth, arrowSize, arrowPadding, drawSeparator, this);
 		}
@@ -354,6 +392,12 @@ namespace Ribbons
 			bool ret = base.OnButtonPressEvent (evnt);
 			state = Theme.ButtonState.Pressed;
 			this.QueueDraw ();
+			
+			if(dropDownMenu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
+			{Console.WriteLine("foo");
+				Popup ();
+			}
+			
 			return ret;
 		}
 		
