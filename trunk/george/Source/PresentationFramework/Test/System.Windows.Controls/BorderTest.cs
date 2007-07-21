@@ -338,6 +338,28 @@ namespace System.Windows.Controls {
 		}
 
 		[Test]
+		public void DrawingNonUniformBorderBrushCornerRadius5() {
+			Border b = new Border();
+			b.Width = 100;
+			b.Height = 100;
+			b.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			b.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			b.BorderThickness = new Thickness(100, 200, 300, 400);
+			b.CornerRadius = new CornerRadius(1);
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(b);
+			Assert.AreEqual(drawing_group.Children.Count, 1, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.BorderBrush).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			Assert.AreEqual(gd.Geometry.ToString(), "M51;0L249;0A151;101;0;0;1;400;101L400;399A151;201;0;0;1;249;600L51;600A51;201;0;0;1;0;399L0;101A51;101;0;0;1;51;0z", "4");
+		}
+
+		[Test]
 		public void DrawingNonUniformBorderBrushCornerRadius2() {
 			Border b = new Border();
 			b.Width = 100;

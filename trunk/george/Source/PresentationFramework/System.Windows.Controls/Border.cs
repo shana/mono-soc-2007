@@ -169,13 +169,11 @@ namespace System.Windows.Controls {
 					width = bottom_left_radius_x - border_thickness.Left / 2;
 					height = bottom_left_radius_y - border_thickness.Bottom / 2;
 					context.LineTo(new Point(width > 0 ? bottom_left_radius_x + border_thickness.Left / 2 : border_thickness.Left, actual_height - border_thickness.Bottom), false, false);
-					if (width >= 0 && height >= 0)
-						context.ArcTo(new Point(border_thickness.Left, actual_height - bottom_left_radius_y - border_thickness.Bottom / 2), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
+					context.ArcTo(new Point(border_thickness.Left, actual_height - (height > 0 ? bottom_left_radius_y + border_thickness.Bottom / 2 : border_thickness.Bottom)), new Size(width > 0 ? width : 0, height > 0 ? height : 0), 0, false, SweepDirection.Clockwise, false, false);
 					width = top_left_radius_x - border_thickness.Left / 2;
 					height = top_left_radius_y - border_thickness.Top / 2;
 					context.LineTo(new Point(border_thickness.Left, height > 0 ? top_left_radius_y + border_thickness.Top / 2 : border_thickness.Top), false, false);
-					if (width >= 0 && height >= 0)
-						context.ArcTo(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
+					context.ArcTo(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), new Size(width > 0 ? width : 0, height > 0 ? height : 0), 0, false, SweepDirection.Clockwise, false, false);
 				};
 				if (border_brush != null) {
 					geometry = new StreamGeometry();
