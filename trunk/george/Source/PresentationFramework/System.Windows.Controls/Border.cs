@@ -134,26 +134,44 @@ namespace System.Windows.Controls {
 				double top_right_radius_y = top_right_radius_x;
 				double bottom_right_radius_x = corner_radius.BottomRight;
 				double bottom_right_radius_y = bottom_right_radius_x;
-				double scale_factor = actual_height / (corner_radius.TopLeft + corner_radius.BottomLeft);
-				if (scale_factor < 1) {
-					top_left_radius_y *= scale_factor;
-					bottom_left_radius_y *= scale_factor;
-				}
-				scale_factor = actual_height / (corner_radius.TopRight + corner_radius.BottomRight);
-				if (scale_factor < 1) {
-					top_right_radius_y *= scale_factor;
-					bottom_right_radius_y *= scale_factor;
-				}
-				scale_factor = actual_width / (corner_radius.TopLeft + corner_radius.TopRight);
-				if (scale_factor < 1) {
-					top_left_radius_x *= scale_factor;
-					top_right_radius_x *= scale_factor;
-				}
-				scale_factor = actual_width / (corner_radius.BottomLeft + corner_radius.BottomRight);
-				if (scale_factor < 1) {
-					bottom_left_radius_x *= scale_factor;
-					bottom_right_radius_x *= scale_factor;
-				}
+
+				double inner_top_left_arc_area_x = ZeroIfNegative(top_left_radius_x - border_thickness.Left);
+				double inner_top_left_arc_area_y = ZeroIfNegative(top_left_radius_y - border_thickness.Top);
+				double inner_bottom_left_arc_area_x = ZeroIfNegative(bottom_left_radius_x - border_thickness.Left);
+				double inner_bottom_left_arc_area_y = ZeroIfNegative(bottom_left_radius_y - border_thickness.Bottom);
+				double inner_top_right_arc_area_x = ZeroIfNegative(top_right_radius_x - border_thickness.Right);
+				double inner_top_right_arc_area_y = ZeroIfNegative(top_right_radius_y - border_thickness.Top);
+				double inner_bottom_right_arc_area_x = ZeroIfNegative(bottom_right_radius_x - border_thickness.Right);
+				double inner_bottom_right_arc_area_y = ZeroIfNegative(bottom_right_radius_y - border_thickness.Bottom);
+
+				double inner_width = ZeroIfNegative(actual_width - border_thickness.Left - border_thickness.Right);
+				double inner_height = ZeroIfNegative(actual_height - border_thickness.Top - border_thickness.Bottom);
+				
+				double inner_left_straight_section_lenght = ZeroIfNegative(actual_height - top_left_radius_y - bottom_left_radius_y);
+				double inner_right_straight_section_lenght = ZeroIfNegative(actual_height - top_right_radius_y - bottom_right_radius_y);
+				double inner_top_straight_section_lenght = ZeroIfNegative(actual_width - top_left_radius_x - top_right_radius_x);
+				double inner_bottom_straight_section_lenght = ZeroIfNegative(actual_width - bottom_left_radius_x - bottom_right_radius_x);
+
+				//double scale_factor = actual_height / (corner_radius.TopLeft + corner_radius.BottomLeft);
+				//if (scale_factor < 1) {
+				//    top_left_radius_y *= scale_factor;
+				//    bottom_left_radius_y *= scale_factor;
+				//}
+				//scale_factor = actual_height / (corner_radius.TopRight + corner_radius.BottomRight);
+				//if (scale_factor < 1) {
+				//    top_right_radius_y *= scale_factor;
+				//    bottom_right_radius_y *= scale_factor;
+				//}
+				//scale_factor = actual_width / (corner_radius.TopLeft + corner_radius.TopRight);
+				//if (scale_factor < 1) {
+				//    top_left_radius_x *= scale_factor;
+				//    top_right_radius_x *= scale_factor;
+				//}
+				//scale_factor = actual_width / (corner_radius.BottomLeft + corner_radius.BottomRight);
+				//if (scale_factor < 1) {
+				//    bottom_left_radius_x *= scale_factor;
+				//    bottom_right_radius_x *= scale_factor;
+				//}
 				create_background_shape = delegate(StreamGeometryContext context) {
 					context.BeginFigure(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), true, true);
 					double width = top_right_radius_x - border_thickness.Right / 2;
@@ -179,12 +197,12 @@ namespace System.Windows.Controls {
 					geometry = new StreamGeometry();
 					using (stream_geometry_context = geometry.Open()) {
 						stream_geometry_context.BeginFigure(new Point(top_left_radius_x + border_thickness.Left / 2, 0), true, true);
-						stream_geometry_context.LineTo(new Point(actual_width - top_right_radius_x - border_thickness.Right / 2, 0), false, false);
-						stream_geometry_context.ArcTo(new Point(actual_width, top_right_radius_y + border_thickness.Top / 2), new Size(top_right_radius_x + border_thickness.Right / 2, top_right_radius_y + border_thickness.Top / 2), 0, false, SweepDirection.Clockwise, false, false);
-						stream_geometry_context.LineTo(new Point(actual_width, actual_height - bottom_right_radius_y - border_thickness.Bottom / 2), false, false);
-						stream_geometry_context.ArcTo(new Point(actual_width - bottom_right_radius_x - border_thickness.Right / 2, actual_height), new Size(bottom_right_radius_x + border_thickness.Right / 2, bottom_right_radius_y + border_thickness.Bottom / 2), 0, false, SweepDirection.Clockwise, false, false);
-						stream_geometry_context.LineTo(new Point(bottom_left_radius_x + border_thickness.Left / 2, actual_height), false, false);
-						stream_geometry_context.ArcTo(new Point(0, actual_height - bottom_left_radius_y - border_thickness.Bottom / 2), new Size(bottom_left_radius_x + border_thickness.Left / 2, bottom_left_radius_y + border_thickness.Bottom / 2), 0, false, SweepDirection.Clockwise, false, false);
+						stream_geometry_context.LineTo(new Point(top_left_radius_x + inner_top_straight_section_lenght - border_thickness.Right / 2, 0), false, false);
+						stream_geometry_context.ArcTo(new Point(top_left_radius_x + inner_top_straight_section_lenght + top_right_radius_x, top_right_radius_y + border_thickness.Top / 2), new Size(top_right_radius_x + border_thickness.Right / 2, top_right_radius_y + border_thickness.Top / 2), 0, false, SweepDirection.Clockwise, false, false);
+						stream_geometry_context.LineTo(new Point(bottom_left_radius_x + inner_bottom_straight_section_lenght + bottom_right_radius_x, top_right_radius_y + inner_right_straight_section_lenght - border_thickness.Bottom / 2), false, false);
+						stream_geometry_context.ArcTo(new Point(bottom_left_radius_x + inner_bottom_straight_section_lenght - border_thickness.Right / 2, top_right_radius_y + inner_right_straight_section_lenght + bottom_right_radius_y), new Size(bottom_right_radius_x + border_thickness.Right / 2, bottom_right_radius_y + border_thickness.Bottom / 2), 0, false, SweepDirection.Clockwise, false, false);
+						stream_geometry_context.LineTo(new Point(bottom_left_radius_x + border_thickness.Left / 2, top_left_radius_y + inner_left_straight_section_lenght + bottom_left_radius_y), false, false);
+						stream_geometry_context.ArcTo(new Point(0, top_left_radius_y + inner_left_straight_section_lenght - border_thickness.Bottom / 2), new Size(bottom_left_radius_x + border_thickness.Left / 2, bottom_left_radius_y + border_thickness.Bottom / 2), 0, false, SweepDirection.Clockwise, false, false);
 						stream_geometry_context.LineTo(new Point(0, top_left_radius_y + border_thickness.Top / 2), false, false);
 						stream_geometry_context.ArcTo(new Point(top_left_radius_x + border_thickness.Left / 2, 0), new Size(top_left_radius_x + border_thickness.Left / 2, top_left_radius_y + border_thickness.Top / 2), 0, false, SweepDirection.Clockwise, false, false);
 
@@ -205,7 +223,20 @@ namespace System.Windows.Controls {
 				}
 			}
 		}
+		
 		delegate void CreateBackgroundShape(StreamGeometryContext context);
+
+		static double ZeroIfNegative(double value) {
+			return value < 0 ? 0 : value;
+		}
+
+		static void Scale(double availableSize, ref double size1, ref double size2) {
+			double scale_ratio = availableSize / (size1 + size2);
+			if (scale_ratio < 1) {
+				size1 *= scale_ratio;
+				size2 *= scale_ratio;
+			}
+		}
 		#endregion
 	}
 }
