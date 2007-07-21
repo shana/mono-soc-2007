@@ -76,6 +76,9 @@ namespace System.Windows.Controls {
 			double actual_height = ActualHeight;
 			double uniform_corner_radius = corner_radius.BottomLeft;
 			Brush border_brush = BorderBrush;
+			StreamGeometry geometry;
+			StreamGeometryContext stream_geometry_context;
+			CreateBackgroundShape create_background_shape;
 			if (Utility.IsUniform(border_thickness) && uniform_corner_radius == corner_radius.BottomRight && uniform_corner_radius == corner_radius.TopLeft && uniform_corner_radius == corner_radius.TopRight) {
 				double uniform_border_thickness = border_thickness.Bottom;
 				if (border_brush != null)
@@ -93,114 +96,116 @@ namespace System.Windows.Controls {
 				drawingContext.DrawLine(new Pen(border_brush, border_thickness.Bottom), new Point(0, actual_height - border_thickness.Bottom / 2), new Point(actual_width, actual_height - border_thickness.Bottom / 2));
 				if (Background != null)
 					drawingContext.DrawRectangle(Background, null, new Rect(border_thickness.Left, border_thickness.Top, actual_width - border_thickness.Left - border_thickness.Right, actual_height - border_thickness.Top - border_thickness.Bottom));
-			} else {
-				StreamGeometry geometry;
-				StreamGeometryContext context;
+			} else if (Utility.IsVoid(corner_radius)) {
+				create_background_shape = delegate(StreamGeometryContext context) {
+					context.BeginFigure(new Point(border_thickness.Left, border_thickness.Top), true, true);
+					context.LineTo(new Point(actual_width - border_thickness.Right, border_thickness.Top), false, false);
+					context.LineTo(new Point(actual_width - border_thickness.Right, actual_height - border_thickness.Bottom), false, false);
+					context.LineTo(new Point(border_thickness.Left, actual_height - border_thickness.Bottom), false, false);
+					context.LineTo(new Point(border_thickness.Left, border_thickness.Top), false, false);
+				};
 				if (border_brush != null) {
 					geometry = new StreamGeometry();
-					using (context = geometry.Open()) {
-						context.BeginFigure(new Point(0, 0), true, true);
-						context.LineTo(new Point(actual_width, 0), false, false);
-						context.LineTo(new Point(actual_width, actual_height), false, false);
-						context.LineTo(new Point(0, actual_height), false, false);
-						context.LineTo(new Point(0, 0), false, true);
-						context.BeginFigure(new Point(border_thickness.Left, border_thickness.Top), true, false);
-						context.LineTo(new Point(actual_width - border_thickness.Right, border_thickness.Top), false, false);
-						context.LineTo(new Point(actual_width - border_thickness.Right, ActualHeight - border_thickness.Bottom), false, false);
-						context.LineTo(new Point(border_thickness.Left, ActualHeight - border_thickness.Bottom), false, false);
-						context.LineTo(new Point(border_thickness.Left, border_thickness.Top), false, false);
+					using (stream_geometry_context = geometry.Open()) {
+						stream_geometry_context.BeginFigure(new Point(0, 0), true, true);
+						stream_geometry_context.LineTo(new Point(actual_width, 0), false, false);
+						stream_geometry_context.LineTo(new Point(actual_width, actual_height), false, false);
+						stream_geometry_context.LineTo(new Point(0, actual_height), false, false);
+						stream_geometry_context.LineTo(new Point(0, 0), false, false);
+						create_background_shape(stream_geometry_context);
 					}
 					geometry.Freeze();
 					drawingContext.DrawGeometry(border_brush, null, geometry);
 				}
 				if (Background != null) {
 					geometry = new StreamGeometry();
-					using (context = geometry.Open()) {
-						context.BeginFigure(new Point(border_thickness.Left, border_thickness.Top), true, false);
-						context.LineTo(new Point(actual_width - border_thickness.Right, border_thickness.Top), false, false);
-						context.LineTo(new Point(actual_width - border_thickness.Right, ActualHeight - border_thickness.Bottom), false, false);
-						context.LineTo(new Point(border_thickness.Left, ActualHeight - border_thickness.Bottom), false, false);
-						context.LineTo(new Point(border_thickness.Left, border_thickness.Top), false, false);
+					using (stream_geometry_context = geometry.Open()) {
+						create_background_shape(stream_geometry_context);
+					}
+					geometry.Freeze();
+					drawingContext.DrawGeometry(Background, null, geometry);
+				}
+			} else {
+				double top_left_radius_x = corner_radius.TopLeft;
+				double top_left_radius_y = top_left_radius_x;
+				double bottom_left_radius_x = corner_radius.BottomLeft;
+				double bottom_left_radius_y = bottom_left_radius_x;
+				double top_right_radius_x = corner_radius.TopRight;
+				double top_right_radius_y = top_right_radius_x;
+				double bottom_right_radius_x = corner_radius.BottomRight;
+				double bottom_right_radius_y = bottom_right_radius_x;
+				double scale_factor = actual_height / (corner_radius.TopLeft + corner_radius.BottomLeft);
+				if (scale_factor < 1) {
+					top_left_radius_y *= scale_factor;
+					bottom_left_radius_y *= scale_factor;
+				}
+				scale_factor = actual_height / (corner_radius.TopRight + corner_radius.BottomRight);
+				if (scale_factor < 1) {
+					top_right_radius_y *= scale_factor;
+					bottom_right_radius_y *= scale_factor;
+				}
+				scale_factor = actual_width / (corner_radius.TopLeft + corner_radius.TopRight);
+				if (scale_factor < 1) {
+					top_left_radius_x *= scale_factor;
+					top_right_radius_x *= scale_factor;
+				}
+				scale_factor = actual_width / (corner_radius.BottomLeft + corner_radius.BottomRight);
+				if (scale_factor < 1) {
+					bottom_left_radius_x *= scale_factor;
+					bottom_right_radius_x *= scale_factor;
+				}
+				create_background_shape = delegate(StreamGeometryContext context) {
+					context.BeginFigure(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), true, true);
+					context.LineTo(new Point(actual_width - top_right_radius_x - border_thickness.Right / 2, border_thickness.Top), false, false);
+					double width = top_right_radius_x - border_thickness.Right / 2;
+					double height = top_right_radius_y - border_thickness.Top / 2;
+					if (width >= 0 && height >= 0)
+						context.ArcTo(new Point(actual_width - border_thickness.Right, top_right_radius_y + border_thickness.Top / 2), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
+					context.LineTo(new Point(actual_width - border_thickness.Right, actual_height - bottom_right_radius_y - border_thickness.Bottom / 2), false, false);
+					width = bottom_right_radius_x - border_thickness.Right / 2;
+					height = bottom_right_radius_y - border_thickness.Bottom / 2;
+					if (width >= 0 && height >= 0)
+						context.ArcTo(new Point(actual_width - bottom_right_radius_x - border_thickness.Right / 2, actual_height - border_thickness.Bottom), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
+					context.LineTo(new Point(bottom_left_radius_x + border_thickness.Left / 2, actual_height - border_thickness.Bottom), false, false);
+					width = bottom_left_radius_x - border_thickness.Left / 2;
+					height = bottom_left_radius_y - border_thickness.Bottom / 2;
+					if (width >= 0 && height >= 0)
+						context.ArcTo(new Point(border_thickness.Left, actual_height - bottom_left_radius_y - border_thickness.Bottom / 2), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
+					context.LineTo(new Point(border_thickness.Left, top_left_radius_y + border_thickness.Top / 2), false, false);
+					width = top_left_radius_x - border_thickness.Left / 2;
+					height = top_left_radius_y - border_thickness.Top / 2;
+					if (width >= 0 && height >= 0)
+						context.ArcTo(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), new Size(width, height), 0, false, SweepDirection.Clockwise, false, false);
+				};
+				if (border_brush != null) {
+					geometry = new StreamGeometry();
+					using (stream_geometry_context = geometry.Open()) {
+						stream_geometry_context.BeginFigure(new Point(top_left_radius_x + border_thickness.Left / 2, 0), true, true);
+						stream_geometry_context.LineTo(new Point(actual_width - top_right_radius_x - border_thickness.Right / 2, 0), false, false);
+						stream_geometry_context.ArcTo(new Point(actual_width, top_right_radius_y + border_thickness.Top / 2), new Size(top_right_radius_x + border_thickness.Right / 2, top_right_radius_y + border_thickness.Top / 2), 0, false, SweepDirection.Clockwise, false, false);
+						stream_geometry_context.LineTo(new Point(actual_width, actual_height - bottom_right_radius_y - border_thickness.Bottom / 2), false, false);
+						stream_geometry_context.ArcTo(new Point(actual_width - bottom_right_radius_x - border_thickness.Right / 2, actual_height), new Size(bottom_right_radius_x + border_thickness.Right / 2, bottom_right_radius_y + border_thickness.Bottom / 2), 0, false, SweepDirection.Clockwise, false, false);
+						stream_geometry_context.LineTo(new Point(bottom_left_radius_x + border_thickness.Left / 2, actual_height), false, false);
+						stream_geometry_context.ArcTo(new Point(0, actual_height - bottom_left_radius_y - border_thickness.Bottom / 2), new Size(bottom_left_radius_x + border_thickness.Left / 2, bottom_left_radius_y + border_thickness.Bottom / 2), 0, false, SweepDirection.Clockwise, false, false);
+						stream_geometry_context.LineTo(new Point(0, top_left_radius_y + border_thickness.Top / 2), false, false);
+						stream_geometry_context.ArcTo(new Point(top_left_radius_x + border_thickness.Left / 2, 0), new Size(top_left_radius_x + border_thickness.Left / 2, top_left_radius_y + border_thickness.Top / 2), 0, false, SweepDirection.Clockwise, false, false);
+
+						create_background_shape(stream_geometry_context);
+					}
+					geometry.Freeze();
+					drawingContext.DrawGeometry(border_brush, null, geometry);
+				}
+				if (Background != null) {
+					geometry = new StreamGeometry();
+					using (stream_geometry_context = geometry.Open()) {
+						create_background_shape(stream_geometry_context);
 					}
 					geometry.Freeze();
 					drawingContext.DrawGeometry(Background, null, geometry);
 				}
 			}
-
-			return;
-			//HACK
-			if (Utility.IsVoid(CornerRadius)) {
-				if (Background != null)
-					drawingContext.DrawRectangle(Background, null, Utility.GetBounds(this));
-				if (BorderBrush != null)
-					Utility.DrawBox(drawingContext, ActualWidth, ActualHeight, BorderBrush, BorderThickness);
-			} else {
-				if (Background == null) {
-					if (BorderBrush != null)
-						Utility.DrawRoundBox(drawingContext, ActualWidth, ActualHeight, BorderBrush, BorderThickness, CornerRadius);
-				} else {
-					//FIXME: Respect BorderThickness.
-					double top_left_radius_x = CornerRadius.TopLeft;
-					double top_left_radius_y = top_left_radius_x;
-					double bottom_left_radius_x = CornerRadius.BottomLeft;
-					double bottom_left_radius_y = bottom_left_radius_x;
-					double top_right_radius_x = CornerRadius.TopRight;
-					double top_right_radius_y = top_right_radius_x;
-					double bottom_right_radius_x = CornerRadius.BottomRight;
-					double bottom_right_radius_y = bottom_right_radius_x;
-					double scale_factor = ActualHeight / (CornerRadius.TopLeft + CornerRadius.BottomLeft);
-					if (scale_factor < 1) {
-						top_left_radius_y *= scale_factor;
-						bottom_left_radius_y *= scale_factor;
-					}
-					scale_factor = ActualHeight / (CornerRadius.TopRight + CornerRadius.BottomRight);
-					if (scale_factor < 1) {
-						top_right_radius_y *= scale_factor;
-						bottom_right_radius_y *= scale_factor;
-					}
-					scale_factor = ActualWidth / (CornerRadius.TopLeft + CornerRadius.TopRight);
-					if (scale_factor < 1) {
-						top_left_radius_x *= scale_factor;
-						top_right_radius_x *= scale_factor;
-					}
-					scale_factor = ActualWidth / (CornerRadius.BottomLeft + CornerRadius.BottomRight);
-					if (scale_factor < 1) {
-						bottom_left_radius_x *= scale_factor;
-						bottom_right_radius_x *= scale_factor;
-					}
-					double top_left_x = top_left_radius_x;
-					double top_left_y = BorderThickness.Top / 2;
-					double top_x = ActualWidth - top_right_radius_x;
-					double top_y = top_left_y;
-					double top_right_x = ActualWidth - BorderThickness.Right / 2;
-					double top_right_y = top_right_radius_y;
-					double right_x = top_right_x;
-					double right_y = ActualHeight - bottom_right_radius_y;
-					double bottom_right_x = ActualWidth - bottom_right_radius_x;
-					double bottom_right_y = ActualHeight - BorderThickness.Bottom / 2;
-					double bottom_x = bottom_left_radius_x;
-					double bottom_y = bottom_right_y;
-					double bottom_left_x = BorderThickness.Left / 2;
-					double bottom_left_y = ActualHeight - bottom_left_radius_y;
-					double left_x = bottom_left_x;
-					double left_y = top_left_radius_y;
-					StreamGeometry geometry = new StreamGeometry();
-					using (StreamGeometryContext context = geometry.Open()) {
-						context.BeginFigure(new Point(top_left_x, top_left_y), true, true);
-						context.LineTo(new Point(top_x, top_y), true, true);
-						context.ArcTo(new Point(top_right_x, top_right_y), new Size(top_right_radius_x, top_right_radius_y), 0, false, SweepDirection.Clockwise, true, true);
-						context.LineTo(new Point(right_x, right_y), true, true);
-						context.ArcTo(new Point(bottom_right_x, bottom_right_y), new Size(bottom_right_radius_x, bottom_right_radius_y), 0, false, SweepDirection.Clockwise, true, true);
-						context.LineTo(new Point(bottom_x, bottom_y), true, true);
-						context.ArcTo(new Point(bottom_left_x, bottom_left_y), new Size(bottom_left_radius_x, bottom_left_radius_y), 0, false, SweepDirection.Clockwise, true, true);
-						context.LineTo(new Point(left_x, left_y), true, true);
-						context.ArcTo(new Point(top_left_x, top_left_y), new Size(top_left_radius_x, top_left_radius_y), 0, false, SweepDirection.Clockwise, true, true);
-					}
-					geometry.Freeze();
-					drawingContext.DrawGeometry(Background, new Pen(BorderBrush, BorderThickness.Left), geometry);
-				}
-			}
 		}
+		delegate void CreateBackgroundShape(StreamGeometryContext context);
 		#endregion
 	}
 }

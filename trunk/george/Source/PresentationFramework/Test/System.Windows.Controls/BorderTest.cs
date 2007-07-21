@@ -338,6 +338,87 @@ namespace System.Windows.Controls {
 		}
 
 		[Test]
+		public void DrawingNonUniformBorderBrushCornerRadius2() {
+			Border b = new Border();
+			b.Width = 100;
+			b.Height = 100;
+			b.Background = Brushes.Red;
+			b.BorderBrush = Brushes.Green;
+			b.BorderThickness = new Thickness(1, 2, 3, 4);
+			b.CornerRadius = new CornerRadius(1);
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(b);
+			Assert.AreEqual(drawing_group.Children.Count, 2, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.BorderBrush).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			Assert.AreEqual(gd.Geometry.ToString(), "M1,5;0L97,5;0A2,5;2;0;0;1;100;2L100;97A2,5;3;0;0;1;97,5;100L1,5;100A1,5;3;0;0;1;0;97L0;2A1,5;2;0;0;1;1,5;0z M1,5;2L97;2 97;96 1,5;96A0,5;0;0;0;1;1;96L1;2A0,5;0;0;0;1;1,5;2z", "4");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.Background).Color, "5");
+			Assert.IsNull(gd.Pen, "6");
+			Assert.AreEqual(gd.Geometry.ToString(), "M1,5;2L97;2 97;96 1,5;96A0,5;0;0;0;1;1;96L1;2A0,5;0;0;0;1;1,5;2z", "7");
+		}
+
+		[Test]
+		public void DrawingNonUniformBorderBrushCornerRadius3() {
+			Border b = new Border();
+			b.Width = 100;
+			b.Height = 100;
+			b.Background = Brushes.Red;
+			b.BorderBrush = Brushes.Green;
+			b.BorderThickness = new Thickness(1, 2, 3, 4);
+			b.CornerRadius = new CornerRadius(10);
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(b);
+			Assert.AreEqual(drawing_group.Children.Count, 2, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.BorderBrush).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			Assert.AreEqual(gd.Geometry.ToString(), "M10,5;0L88,5;0A11,5;11;0;0;1;100;11L100;88A11,5;12;0;0;1;88,5;100L10,5;100A10,5;12;0;0;1;0;88L0;11A10,5;11;0;0;1;10,5;0z M10,5;2L88,5;2A8,5;9;0;0;1;97;11L97;88A8,5;8;0;0;1;88,5;96L10,5;96A9,5;8;0;0;1;1;88L1;11A9,5;9;0;0;1;10,5;2z", "4");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.Background).Color, "5");
+			Assert.IsNull(gd.Pen, "6");
+			Assert.AreEqual(gd.Geometry.ToString(), "M10,5;2L88,5;2A8,5;9;0;0;1;97;11L97;88A8,5;8;0;0;1;88,5;96L10,5;96A9,5;8;0;0;1;1;88L1;11A9,5;9;0;0;1;10,5;2z", "7");
+		}
+
+		[Test]
+		public void DrawingNonUniformBorderBrushCornerRadius4() {
+			Border b = new Border();
+			b.Width = 100;
+			b.Height = 100;
+			b.Background = Brushes.Red;
+			b.BorderBrush = Brushes.Green;
+			b.BorderThickness = new Thickness(1, 2, 3, 4);
+			b.CornerRadius = new CornerRadius(2);
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(b);
+			Assert.AreEqual(drawing_group.Children.Count, 2, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.BorderBrush).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			Assert.AreEqual(gd.Geometry.ToString(), "M2,5;0L96,5;0A3,5;3;0;0;1;100;3L100;96A3,5;4;0;0;1;96,5;100L2,5;100A2,5;4;0;0;1;0;96L0;3A2,5;3;0;0;1;2,5;0z M2,5;2L96,5;2A0,5;1;0;0;1;97;3L97;96A0,5;0;0;0;1;96,5;96L2,5;96A1,5;0;0;0;1;1;96L1;3A1,5;1;0;0;1;2,5;2z", "4");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.Background).Color, "5");
+			Assert.IsNull(gd.Pen, "6");
+			Assert.AreEqual(gd.Geometry.ToString(), "M2,5;2L96,5;2A0,5;1;0;0;1;97;3L97;96A0,5;0;0;0;1;96,5;96L2,5;96A1,5;0;0;0;1;1;96L1;3A1,5;1;0;0;1;2,5;2z", "7");
+		}
+
+		[Test]
 		public void DrawingBorderBrushNonUniformCornerRadius() {
 			Border b = new Border();
 			b.Width = 100;
@@ -362,6 +443,33 @@ namespace System.Windows.Controls {
 			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.Background).Color, "5");
 			Assert.IsNull(gd.Pen, "6");
 			Assert.AreEqual(gd.Geometry.ToString(), "M1,5;1L97,5;1A1,5;1,5;0;0;1;99;2,5L99;96,5A2,5;2,5;0;0;1;96,5;99L4,5;99A3,5;3,5;0;0;1;1;95,5L1;1,5A0,5;0,5;0;0;1;1,5;1z", "7");
+		}
+
+		[Test]
+		public void DrawingBorderBrushNonUniformCornerRadius2() {
+			Border b = new Border();
+			b.Width = 10000;
+			b.Height = 10000;
+			b.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			b.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			b.BorderThickness = new Thickness(1, 5, 10, 50);
+			b.CornerRadius = new CornerRadius(100, 500, 1000, 5000);
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(b);
+			Assert.AreEqual(drawing_group.Children.Count, 2, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.BorderBrush).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			Assert.AreEqual(gd.Geometry.ToString(), "M100,5;0L9495;0A505;502,5;0;0;1;10000;502,5L10000;8975A1005;1025;0;0;1;8995;10000L5000,5;10000A5000,5;5025;0;0;1;0;4975L0;102,5A100,5;102,5;0;0;1;100,5;0z M100,5;5L9495;5A495;497,5;0;0;1;9990;502,5L9990;8975A995;975;0;0;1;8995;9950L5000,5;9950A4999,5;4975;0;0;1;1;4975L1;102,5A99,5;97,5;0;0;1;100,5;5z", "4");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.Background).Color, "5");
+			Assert.IsNull(gd.Pen, "6");
+			Assert.AreEqual(gd.Geometry.ToString(), "M100,5;5L9495;5A495;497,5;0;0;1;9990;502,5L9990;8975A995;975;0;0;1;8995;9950L5000,5;9950A4999,5;4975;0;0;1;1;4975L1;102,5A99,5;97,5;0;0;1;100,5;5z", "7");
 		}
 
 		#region DrawingBorderBrushNonUniformBorderThickness
