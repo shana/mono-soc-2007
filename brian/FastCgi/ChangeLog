@@ -1,3 +1,25 @@
+2007-07-20 Brian Nickel <brian.nickel@gmail.com>
+
+	* Mono.FastCgi/UnixSocket.cs: DELETED. 
+
+	* bin/fastcgi-mono-server.exe.config:  Moved. Don't automatically add an
+	application for "/:.".
+
+	* Mono.WebServer.FastCgi/ConfigurationManager.xml: 
+	* Mono.WebServer.FastCgi/server.cs: Add support for autodetection argument.
+
+	* Mono.WebServer.FastCgi/Responder.cs: 
+	* Mono.WebServer/XSPApplicationHost.cs: Change for new API. 
+
+	* Mono.WebServer/ApplicationManager.cs: Add support for automatic
+	application detection. When searching for an application, the page's
+	virtual and real path are compared to find the root and if no matching
+	application with that root is detected, a new one will be created.
+
+	* Mono.FastCgi/Mono.FastCgi.mdp: 
+	* Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp: 
+	* Mono.WebServer/Mono.WebServer.mdp: Changed target directory.
+
 2007-06-29 Brian Nickel <brian.nickel@gmail.com>
 
 	* Mono.FastCgi/Structures/NameValuePair.cs: Was returning zero for long

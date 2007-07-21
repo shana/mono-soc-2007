@@ -53,15 +53,18 @@ namespace Mono.WebServer.FastCgi
 			
 			string vhost = request.GetParameter ("HTTP_HOST");
 			int    port  = int.Parse (request.GetParameter ("SERVER_PORT"));
-			string path  = request.GetParameter ("REQUEST_URI");
-			
-			ApplicationHost host = Server.GetApplicationForPath (vhost, port, path, true);
+			string path  = request.GetParameter ("SCRIPT_NAME");
+			string rpath = request.GetParameter ("SCRIPT_FILENAME");
+			//foreach (string key in request.GetParameters ().Keys) {
+			//	Console.WriteLine ("{0}={1}", key, request.GetParameter (key));
+			//}
+			ApplicationHost host = Server.GetApplicationForPath (vhost, port, path, rpath);
 			
 			try {
 				host.ProcessRequest (this);
 			} catch (Exception e) {
 				Logger.Write (LogLevel.Error, "ERROR PROCESSING REQUEST: " + e);
-				return 0;
+				return -1;
 			}
 			
 			// MIN_VALUE means don't close.

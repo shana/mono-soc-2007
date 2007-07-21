@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ConfigurationManager>
+	<Setting Name="?" Type="Bool" />
+	
 	<Setting Name="help" Type="Bool" ConsoleVisible="True">
 		<Description>
 			<para>Shows this help message and exits.</para>
@@ -189,6 +191,15 @@
 		</Description>
 	</Setting>
 	
+	<Setting Name="automappaths" AppSetting="MonoAutomapPaths"
+		Type="Bool" ConsoleVisible="True">
+		<Description>
+			<para>Automatically registers applications as they are
+			encountered, provided pages exist in standard
+			locations.</para>
+		</Description>
+	</Setting>
+	
 	<Setting Name="configfile" Type="File" ConsoleVisible="True">
 		<Description>
 			<para>Specified a file containing configuration options
@@ -206,15 +217,38 @@
 		</Description>
 	</Setting>
 	
-	<Setting Name="configapp" AppSetting="MonoConfigApplication"
+	<Setting Name="configableapps" AppSetting="MonoConfigableApplication"
 		Type="String" ConsoleVisible="True">
 		<Description>
-			<para>Specifies the configuration application to use, in
-			the same format as "applications":</para>
+			<para>Specifies which applications will permit the
+			modification of the configuration application to use, in
+			the same format as "applications", minus
+			"realPath":</para>
 			
 			<example>
-				<code>[hostname:[port:]]VPath:realpath]]</code>
+				<code>[hostname:[port:]]VPath,...</code>
 			</example>
+			
+			<para>If not set, all applications will be
+			configurable.<br/>
+			To use this argument, "editconfig" must be set.</para>
+		</Description>
+	</Setting>
+	
+	<Setting Name="configpage" Type="String" ConsoleVisible="True">
+		<Description>
+			<para>Specifies the name of the configuration page to
+			create on the server, minus the extension. If not set, no
+			page will be created and you will need to add your own
+			configuration page. See
+			"/usr/lib/fastcgi-mono-server/config.aspx" for the default
+			page.</para>
+			
+			<para>For example, if "settings" is specified, a file will
+			and "/" is a virtual path, "http://localhost/settings.aspx"
+			will be the configuration file.</para>
+			
+			<para>To use this argument, "editconfig" must be set.</para>
 		</Description>
 	</Setting>
 </ConfigurationManager>

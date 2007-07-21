@@ -45,8 +45,17 @@ using System.Runtime.InteropServices;
 
 namespace Mono.WebServer
 {
+	public delegate void HostCreatedHandler (string vhost, int port,
+	                                         string path,
+	                                         IApplicationHost appHost);
+	
 	public class ApplicationManager : MarshalByRefObject
 	{
+		public event HostCreatedHandler HostCreated;
+		
+		bool auto_map;
+		// TODO: Add automatic appliciation lookup.
+		// bool auto_find_apps;
 		bool verbose;
 		Type host_type;
 		WebSource web_source;
@@ -54,9 +63,18 @@ namespace Mono.WebServer
 		// This is much faster than hashtable for typical cases.
 		ArrayList vpathToHost = new ArrayList ();
 		
-		public ApplicationManager (Type hostType)
+		[Obsolete]
+		public ApplicationManager (Type hostType) :
+			this (hostType, false, false)
 		{
 			host_type = hostType;
+		}
+		
+		public ApplicationManager (Type hostType, bool autoMapPaths,
+			bool autoFindApps)
+		{
+			host_type = hostType;
+			auto_map = autoMapPaths;
 		}
 		
 		protected ApplicationManager (WebSource source)
@@ -85,8 +103,7 @@ namespace Mono.WebServer
 				Console.WriteLine("Registering application:");
 				Console.WriteLine("    Host:          {0}", (vhost != null) ? vhost : "any");
 				Console.WriteLine("    Port:          {0}", (vport != -1) ?
-									     vport.ToString () : "any");
-
+					vport.ToString () : "any");
 				Console.WriteLine("    Virtual path:  {0}", vpath);
 				Console.WriteLine("    Physical path: {0}", fullPath);
 			}
@@ -227,39 +244,105 @@ namespace Mono.WebServer
 			}
 		}
 		
-		public VPathToHost GetApplicationForPath (string vhost, int port, string path,
-							       bool defaultToRoot)
+		public VPathToHost GetApplicationForPath (string vhost,
+		                                          int vport,
+		                                          string vpath,
+		                                          string realPath)
 		{
+			// Check if auto-mapping is enabled and "realPath"
+			// points to an actual file. If so, we need to perform
+			// extra mapping operations.
+			bool mapping = auto_map && realPath != null
+				&& new FileInfo (realPath).Exists;
+			
+			// If mapping is enabled, we'll have to add an
+			// additional check to make sure that the right path is
+			// returned.
+			// For example, if the virtual path is "/~user/" and the
+			// physical path is "/home/usr/public_html", then the
+			// host "/:/srv/www/htdocs" must not be used, to avoid a
+			// 404 error.
+			// As such, we will verify that the host not only
+			// matches, but it falls in the correct subdirectory.
+			string topVPath = null;
+			if (mapping) {
+				char sep = Path.DirectorySeparatorChar;
+				string [] vSplit = vpath.Split ('/');
+				string [] rSplit = realPath.Split (sep);
+					
+				int parts = 0;
+				while (parts < vSplit.Length &&
+					parts < rSplit.Length &&
+					vSplit [vSplit.Length - parts - 1] ==
+					rSplit [rSplit.Length - parts - 1])
+					parts ++;
+					
+				topVPath = string.Join ("/", vSplit, 0,
+					vSplit.Length - parts) + "/";
+				realPath = string.Join (sep.ToString (),
+					rSplit, 0, rSplit.Length - parts) + sep;
+			}
+			
 			VPathToHost bestMatch = null;
 			int bestMatchLength = 0;
-
-			// Console.WriteLine("GetApplicationForPath({0},{1},{2},{3})", vhost, port,
-			//			path, defaultToRoot);
-			for (int i = vpathToHost.Count - 1; i >= 0; i--) {
+			
+			// Checks for the matching vhost with the longest name.
+			// For example, if the request is for
+			// "/foo/bar/test.aspx", and hosts exist for "/", "/foo/",
+			// "/foo/bar/", "/foo/bar/" should be used.
+			for (int i = vpathToHost.Count - 1; i > -1; i--) {
 				VPathToHost v = (VPathToHost) vpathToHost [i];
 				int matchLength = v.vpath.Length;
-				if (matchLength <= bestMatchLength || !v.Match (vhost, port, path))
+				if (matchLength <= bestMatchLength ||
+					!v.Match (vhost, vport, vpath) ||
+					(mapping && !v.vpath.StartsWith (topVPath)))
 					continue;
 
 				bestMatchLength = matchLength;
 				bestMatch = v;
 			}
-
+			
+			// Create the host and return the best match, if found.
 			if (bestMatch != null) {
-				lock (bestMatch) {
-					if (bestMatch.AppHost == null)
-						bestMatch.CreateHost (this, web_source);
-				}
+				CreateHost (bestMatch);
 				return bestMatch;
 			}
 			
-			if (defaultToRoot)
-				return GetApplicationForPath (vhost, port, "/", false);
-
+			// If no host was found, and we're mapping, we add and
+			// use a new host for the top matching directory.
+			if (mapping) {
+				lock (vpathToHost) {
+					AddApplication (vhost, vport, topVPath,
+						realPath);
+					VPathToHost v = vpathToHost [vpathToHost.Count - 1] as VPathToHost;
+					CreateHost (v);
+					return v;
+				}
+			}
+			
 			if (verbose)
-				Console.WriteLine ("No application defined for: {0}:{1}{2}", vhost, port, path);
+				Console.WriteLine ("No application defined for: {0}:{1}{2}", vhost, vport, vpath);
 
 			return null;
+		}
+		
+		[Obsolete]
+		public VPathToHost GetApplicationForPath (string vhost, int port, string path,
+							       bool defaultToRoot)
+		{
+			return GetApplicationForPath (vhost, port, path, null);
+		}
+		
+		private void CreateHost (VPathToHost v)
+		{
+			lock (v) {
+				if (v.AppHost == null) {
+					v.CreateHost (this, web_source);
+					if (HostCreated != null)
+						HostCreated (v.vhost, v.vport,
+							v.vpath, v.AppHost);
+				}
+			}
 		}
 
 		public void DestroyHost (IApplicationHost host)
@@ -309,6 +392,10 @@ namespace Mono.WebServer
 				if (this.vhost.Length > 2 && this.vhost [1] == '.')
 					this.vhost = this.vhost.Substring (2);
 			}
+			
+			Console.WriteLine (
+				"VPathToHost Created: {0}:{1}{2} => {3}",
+				vhost, vport, vpath, realPath);
 		}
 
 
