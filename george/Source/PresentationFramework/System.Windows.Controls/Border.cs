@@ -146,6 +146,11 @@ namespace System.Windows.Controls {
 
 				double inner_width = ZeroIfNegative(actual_width - border_thickness.Left - border_thickness.Right);
 				double inner_height = ZeroIfNegative(actual_height - border_thickness.Top - border_thickness.Bottom);
+
+				Scale(inner_width, ref inner_top_left_arc_area_x, ref inner_top_right_arc_area_x);
+				Scale(inner_width, ref inner_bottom_left_arc_area_x, ref inner_bottom_right_arc_area_x);
+				Scale(inner_height, ref inner_top_left_arc_area_y, ref inner_bottom_left_arc_area_y);
+				Scale(inner_height, ref inner_top_right_arc_area_y, ref inner_bottom_right_arc_area_y);
 				
 				double inner_left_straight_section_lenght = ZeroIfNegative(actual_height - top_left_radius_y - bottom_left_radius_y);
 				double inner_right_straight_section_lenght = ZeroIfNegative(actual_height - top_right_radius_y - bottom_right_radius_y);
