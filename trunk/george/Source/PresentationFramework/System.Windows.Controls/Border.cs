@@ -194,6 +194,8 @@ namespace System.Windows.Controls {
 					drawingContext.DrawGeometry(border_brush, null, geometry);
 				}
 				if (Background != null) {
+					if (actual_width < border_thickness.Left + border_thickness.Right || actual_height < border_thickness.Top + border_thickness.Bottom)
+						return;
 					geometry = new StreamGeometry();
 					using (stream_geometry_context = geometry.Open()) {
 						create_background_shape(stream_geometry_context);
