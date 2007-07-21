@@ -157,6 +157,17 @@ namespace System.Windows.Controls {
 				double inner_top_straight_section_lenght = inner_width - inner_top_left_arc_area_x - inner_top_right_arc_area_x;
 				double inner_bottom_straight_section_lenght = inner_width - inner_bottom_left_arc_area_x - inner_bottom_right_arc_area_x;
 
+				double top_left_arc_area_x = inner_top_left_arc_area_x + border_thickness.Left;
+				double top_left_arc_area_y = inner_top_left_arc_area_y + border_thickness.Top;
+				double bottom_left_arc_area_x = inner_bottom_left_arc_area_x + border_thickness.Left;
+				double bottom_left_arc_area_y = inner_bottom_left_arc_area_y + border_thickness.Bottom;
+				double top_right_arc_area_x = inner_top_right_arc_area_x + border_thickness.Right;
+				double top_right_arc_area_y = inner_top_right_arc_area_y + border_thickness.Top;
+				double bottom_right_arc_area_x = inner_bottom_right_arc_area_x + border_thickness.Right;
+				double bottom_right_arc_area_y = inner_bottom_right_arc_area_y + border_thickness.Bottom; 
+
+
+
 				double left_straight_section_lenght = ZeroIfNegative(actual_height - top_left_radius_y - bottom_left_radius_y);
 				double right_straight_section_lenght = ZeroIfNegative(actual_height - top_right_radius_y - bottom_right_radius_y);
 				double top_straight_section_lenght = ZeroIfNegative(actual_width - top_left_radius_x - top_right_radius_x);
