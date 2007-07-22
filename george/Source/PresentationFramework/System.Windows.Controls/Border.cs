@@ -128,7 +128,6 @@ namespace System.Windows.Controls {
 				}
 			} else {
 				//FIXME: This needs to be clipped.
-				//FIXME: I am pretty sure this needs more work.
 				actual_width = Math.Max(actual_width, border_thickness.Left + border_thickness.Right);
 				actual_height = Math.Max(actual_height, border_thickness.Top + border_thickness.Bottom);
 
@@ -176,6 +175,11 @@ namespace System.Windows.Controls {
 				double right_straight_section_lenght = ZeroIfNegative(actual_height - top_right_radius_y - bottom_right_radius_y);
 				double top_straight_section_lenght = ZeroIfNegative(actual_width - top_left_radius_x - top_right_radius_x);
 				double bottom_straight_section_lenght = ZeroIfNegative(actual_width - bottom_left_radius_x - bottom_right_radius_x);
+
+				Scale(actual_width, ref top_left_radius_x, ref top_right_radius_x);
+				Scale(actual_width, ref bottom_left_radius_x, ref bottom_right_radius_x);
+				Scale(actual_height, ref top_left_radius_y, ref top_right_radius_y);
+				Scale(actual_height, ref bottom_left_radius_y, ref bottom_right_radius_y);
 
 				create_background_shape = delegate(StreamGeometryContext context) {
 					context.BeginFigure(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), true, true);
