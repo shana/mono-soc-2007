@@ -127,6 +127,7 @@ namespace System.Windows.Controls {
 					drawingContext.DrawGeometry(Background, null, geometry);
 				}
 			} else {
+				//FIXME: This needs to be clipped.
 				//FIXME: I am pretty sure this needs more work.
 				actual_width = Math.Max(actual_width, border_thickness.Left + border_thickness.Right);
 				actual_height = Math.Max(actual_height, border_thickness.Top + border_thickness.Bottom);
