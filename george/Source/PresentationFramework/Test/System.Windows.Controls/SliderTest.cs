@@ -436,6 +436,40 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region TickBarReservedSpace
+		[Test]
+		public void TickBarReservedSpace() {
+			new TickBarReservedSpaceSlider();
+		}
+
+		class TickBarReservedSpaceSlider : Slider {
+			public TickBarReservedSpaceSlider() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				TickPlacement = global::System.Windows.Controls.Primitives.TickPlacement.Both;
+				Assert.AreEqual(((TickBar)GetTemplateChild("TopTick")).ReservedSpace, 0);
+			}
+		}
+		#endregion
+
+		#region TickBarReservedSpace2
+		[Test]
+		public void TickBarReservedSpace2() {
+			new TickBarReservedSpace2Slider();
+		}
+
+		class TickBarReservedSpace2Slider : Slider {
+			public TickBarReservedSpace2Slider() {
+				TickPlacement = global::System.Windows.Controls.Primitives.TickPlacement.Both;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreNotEqual(((TickBar)GetTemplateChild("TopTick")).ReservedSpace, 0);
+			}
+		}
+		#endregion
+
 		[Test]
 		public void WindowsSdkFeb2007LameSpec() {
 			Slider s = new Slider();

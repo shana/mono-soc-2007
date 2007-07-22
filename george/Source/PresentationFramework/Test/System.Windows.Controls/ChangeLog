@@ -1,5 +1,9 @@
 2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* SliderTest.cs: Added some TickBar.ReservedSpace tests.
+
+2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* BorderTest.cs: Added drawing tests.
 
 2007-07-18  George Giolfan  <georgegiolfan@yahoo.com>
