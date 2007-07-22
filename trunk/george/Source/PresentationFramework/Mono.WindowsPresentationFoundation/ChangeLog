@@ -1,3 +1,7 @@
+2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Utility.cs: Removed unused methods.
+
 2007-07-19  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Utility.cs: Added IsUniform(Thickness) method.
