@@ -1,5 +1,6 @@
 //
-// DocumentUndo.cs:
+// DocumentUndoManager.cs: Class that implements a manager for each buffer that handles
+// the undo and redo of contents in the buffer.
 //
 // Author:
 //   Hector E. Gomez M (hectorgm@ciencias.unam.mx)
@@ -11,19 +12,12 @@ using System;
 using System.Collections;
 
 namespace Monodoc.Editor.Gui {
-public class DocumentUndo {
-	
-	public DocumentUndo ()
-	{
-	}
-}
-
-public class UndoManager {
+public class DocumentUndoManager {
 	DocumentBuffer buffer;
 	Stack undo_stack;
 	Stack redo_stack;
 	
-	public UndoManager (DocumentBuffer buffer)
+	public DocumentUndoManager (DocumentBuffer buffer)
 	{
 		this.buffer  = buffer;
 	}
