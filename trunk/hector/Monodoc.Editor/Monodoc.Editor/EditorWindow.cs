@@ -125,5 +125,11 @@ public partial class EditorWindow : Gtk.Window {
 		
 		dialog.Destroy ();
 	}
+
+	private void OnCopyActivated (object sender, System.EventArgs e)
+	{
+		Clipboard cb = Clipboard.Get (Gdk.Selection.Clipboard);
+		current_tab.Buffer.CopyClipboard (cb);
+	}
 }
 }

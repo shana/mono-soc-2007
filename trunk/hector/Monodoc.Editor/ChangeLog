@@ -1,3 +1,19 @@
+2007-07-21  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* Monodoc.Editor/EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/gui.stetic: Basic copy Action handler
+	  method.
+	* Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Added EditAction.cs and
+	  DocumentUndo.cs source file.
+	* Monodoc.Editor.Gui/EditAction.cs: Added interface EditAction that
+	  establishes a contract for the mehtods any editing action that
+	  takes place in the editor should implement, the important ones are
+	  the undo and redo methods that help implement Undo and Redo to the
+	  editor.
+	* Monodoc.Editor.Gui/DocumentUndo.cs: Initial skeleton for the
+	  implementation for undo and redo functionality in the editor. 
+
 2007-07-16  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/DocumentTagTable.cs: Some comments about tags.
