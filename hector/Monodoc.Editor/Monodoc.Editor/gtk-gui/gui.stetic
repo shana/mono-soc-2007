@@ -65,9 +65,9 @@
       <action id="Copy">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">_Copy</property>
-        <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">_Copy</property>
         <property name="StockId">gtk-copy</property>
+        <signal name="Activated" handler="OnCopyActivated" />
       </action>
       <action id="Paste">
         <property name="Type">Action</property>
@@ -136,6 +136,10 @@
             <node name="toolbar1" type="Toolbar">
               <node type="Toolitem" action="Open" />
               <node type="Toolitem" action="Save" />
+              <node type="Separator" />
+              <node type="Toolitem" action="Cut" />
+              <node type="Toolitem" action="Copy" />
+              <node type="Toolitem" action="Paste" />
             </node>
           </widget>
           <packing>
