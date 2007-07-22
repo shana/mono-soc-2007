@@ -1,3 +1,17 @@
+2007-07-21  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
+
+	* Monodoc.Editor.Gui/DocumentUndoManager.cs: Changed file name from
+	  DocumentUndo.cs to DocumentUndoManager.cs
+	* Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Added EditAction.cs and
+	  DocumentUndo.cs source file.
+	* Monodoc.Editor.Gui/EditAction.cs: Added interface EditAction that
+	  establishes a contract for the mehtods any editing action that
+	  takes place in the editor should implement, the important ones are
+	  the undo and redo methods that help implement Undo and Redo to the
+	  editor.
+	* Monodoc.Editor.Gui/DocumentUndo.cs: Initial skeleton for the
+	  implementation for undo and redo functionality in the editor. 
+
 2007-07-19  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* DocumentBuffer.cs: Added more implementation for easy editing of

@@ -1,3 +1,10 @@
+2007-07-21  Hector E. Gomez Morales  <hectorgm@gmail.com>
+
+	* Monodoc.Editor/EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/gui.stetic: Basic copy Action handler
+	  method.
+
 2007-07-17  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* gtk-gui/Monodoc.Editor.EditorWindow.cs, gtk-gui/gui.stetic: Changed
