@@ -31,6 +31,8 @@
 
 using System;
 
+using CBinding.Parser;
+
 namespace CBinding.Navigation
 {
 	public delegate void LanguageItemEventHandler (object sender, LanguageItemEventArgs e);

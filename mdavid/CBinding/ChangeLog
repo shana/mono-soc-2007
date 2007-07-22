@@ -1,3 +1,16 @@
+2007-07-22  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/Enumerator.cs, Navigation/Function.cs,
+	  Navigation/Variable.cs, Navigation/Enumeration.cs,
+	  Navigation/Union.cs, Navigation/Namespace.cs,
+	  Navigation/Typedef.cs, Navigation/Structure.cs,
+	  Navigation/Macro.cs, Navigation/LanguageItem.cs,
+	  Navigation/Class.cs, Navigation/Member.cs: Moved to
+	  CBinding.Parser.
+	* Gui/CTextEditorExtension.cs, Gui/DataProvider.cs, Parser/Tag.cs,
+	  Parser/TagDatabaseManager.cs, CBinding.mdp: Implemented simple
+	  parameters completion.
+
 2007-07-19  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Compiler/GNUCompiler.cs: Send -fPIC to the compiler if the compile

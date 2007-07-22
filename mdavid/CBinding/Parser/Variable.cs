@@ -1,5 +1,5 @@
 //
-// Macro.cs
+// Variable.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -33,13 +33,11 @@ using System;
 
 using MonoDevelop.Projects;
 
-using CBinding.Parser;
-
-namespace CBinding.Navigation
+namespace CBinding.Parser
 {
-	public class Macro : LanguageItem
+	public class Variable : LanguageItem
 	{
-		public Macro (Tag tag, Project project) : base (tag, project)
+		public Variable (Tag tag, Project project) : base (tag, project)
 		{
 		}
 	}

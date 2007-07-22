@@ -70,7 +70,7 @@ namespace CBinding.Parser
 			if (!Directory.Exists (tagsDir))
 				Directory.CreateDirectory (tagsDir);
 			
-			string ctags_options = "--C++-kinds=+p+u --fields=+a-f --language-force=C++ --excmd=pattern";
+			string ctags_options = "--C++-kinds=+p+u --fields=+a-f+S --language-force=C++ --excmd=pattern";
 			
 			StringBuilder args = new StringBuilder (ctags_options);
 			
@@ -99,6 +99,7 @@ namespace CBinding.Parser
 			string _struct = null;
 			string _union = null;
 			string _enum = null;
+			string signature = null;
 			char delimiter;
 			
 			name = tagEntry.Substring (0, tagEntry.IndexOf ('\t'));
@@ -148,11 +149,14 @@ namespace CBinding.Parser
 					case "enum":
 						_enum = val;
 						break;
+					case "signature":
+						signature = val;
+						break;
 					}
 				}
 			}
 			
-			return new Tag (name, file, pattern, kind, access, _class, _namespace, _struct, _union, _enum);
+			return new Tag (name, file, pattern, kind, access, _class, _namespace, _struct, _union, _enum, signature);
 		}
 		
 		public void FillProjectInformation (Project project)

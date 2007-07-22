@@ -70,6 +70,7 @@ namespace CBinding.Parser
 		private string field_struct;
 		private string field_union;
 		private string field_enum;
+		private string field_signature;
 		
 		public Tag (string name,
 		            string file,
@@ -80,7 +81,8 @@ namespace CBinding.Parser
 		            string field_namespace,
 		            string field_struct,
 		            string field_union,
-		            string field_enum)
+		            string field_enum,
+		            string field_signature)
 		{
 			this.name = name;
 			this.file = file;
@@ -92,6 +94,7 @@ namespace CBinding.Parser
 			this.field_struct = field_struct;
 			this.field_union = field_union;
 			this.field_enum = field_enum;
+			this.field_signature = field_signature;
 		}
 		
 		public string Name {
@@ -132,6 +135,10 @@ namespace CBinding.Parser
 		
 		public string Enum {
 			get { return field_enum; }
+		}
+		
+		public string Signature {
+			get { return field_signature; }
 		}
 	}
 }

@@ -1,5 +1,5 @@
 //
-// Enumeration.cs
+// Member.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -33,15 +33,12 @@ using System;
 
 using MonoDevelop.Projects;
 
-using CBinding.Parser;
-
-namespace CBinding.Navigation
+namespace CBinding.Parser
 {
-	public class Enumeration : LanguageItem
+	public class Member : LanguageItem
 	{
-		public Enumeration (Tag tag, Project project) : base (tag, project)
+		public Member (Tag tag, Project project) : base (tag, project)
 		{
-			if (GetNamespace (tag)) return;
 			if (GetClass (tag)) return;
 			if (GetStructure (tag)) return;
 			if (GetUnion (tag)) return;

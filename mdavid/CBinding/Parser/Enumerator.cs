@@ -33,9 +33,7 @@ using System;
 
 using MonoDevelop.Projects;
 
-using CBinding.Parser;
-
-namespace CBinding.Navigation
+namespace CBinding.Parser
 {
 	public class Enumerator : LanguageItem
 	{

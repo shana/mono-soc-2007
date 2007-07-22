@@ -35,6 +35,9 @@ using System.Text;
 
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Content;
+using MonoDevelop.Projects.Gui.Completion;
+
+using CBinding.Parser;
 
 namespace CBinding
 {
@@ -51,25 +54,54 @@ namespace CBinding
 		
 		public override bool KeyPress (Gdk.Key key, Gdk.ModifierType modifier)
 		{
-			TextEditor editor = Document.TextEditor;
 			int line, column;
-			editor.GetLineColumnFromPosition (editor.CursorPosition, out line, out column);
-			string lineText = editor.GetLineText (line);
+			Editor.GetLineColumnFromPosition (Editor.CursorPosition, out line, out column);
+			string lineText = Editor.GetLineText (line);
 			
 			// Formatting Strategy
 			if (key == Gdk.Key.Return) {
 				if (lineText.TrimEnd ().EndsWith ("{")) {
-					editor.InsertText (editor.CursorPosition, "\n\t" + GetIndent (editor, line));
+					Editor.InsertText (Editor.CursorPosition, "\n\t" + GetIndent (Editor, line));
 					return false;
 				}
 			} else if (key == Gdk.Key.braceright && AllWhiteSpace (lineText)) {
 				if (lineText.Length > 0)
 					lineText = lineText.Substring (1);
-				editor.ReplaceLine (line, lineText + "}");
+				Editor.ReplaceLine (line, lineText + "}");
 				return false;
 			}
 			
 			return base.KeyPress (key, modifier);
+		}
+		
+		public override  IParameterDataProvider HandleParameterCompletion (
+		    ICodeCompletionContext completionContext, char completionChar)
+		{
+			if (completionChar != '(')
+				return null;
+			
+			CProject project = Document.Project as CProject;
+			
+			if (project == null)
+				return null;
+			
+			ProjectInformation info = ProjectInformationManager.Instance.Get (project);
+			
+			int line, column;
+			Editor.GetLineColumnFromPosition (Editor.CursorPosition, out line, out column);
+			int position = Editor.GetPositionFromLineColumn (line, 1);
+			string lineText = Editor.GetText (position, Editor.CursorPosition - 1).TrimEnd ();
+			
+			int nameStart = lineText.LastIndexOfAny (new char[] { '.', ':', ' ', '\t' });
+
+			nameStart++;
+			
+			string functionName = lineText.Substring (nameStart).Trim ();
+			
+			if (string.IsNullOrEmpty (functionName))
+				return null;
+			
+			return new ParameterDataProvider (Editor, info, functionName);
 		}
 		
 		private bool AllWhiteSpace (string lineText)
