@@ -45,7 +45,7 @@ namespace System.Windows.Controls {
 			instance.AdjustSelectionRange();
 		}), ValidateNonInfinite);
 		public static readonly DependencyProperty TickFrequencyProperty = DependencyProperty.Register("TickFrequency", typeof(double), typeof(Slider), new FrameworkPropertyMetadata(1D));
-		public static readonly DependencyProperty TickPlacementProperty = DependencyProperty.Register("TickPlacement", typeof(global::System.Windows.Controls.Primitives.TickPlacement), typeof(Slider), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty TickPlacementProperty = DependencyProperty.Register("TickPlacement", typeof(TickPlacement), typeof(Slider), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty TicksProperty = DependencyProperty.Register("Ticks", typeof(DoubleCollection), typeof(Slider), new FrameworkPropertyMetadata());
 		#endregion
 		#endregion
@@ -211,8 +211,8 @@ namespace System.Windows.Controls {
 		}
 
 		[Bindable(true)]
-		public global::System.Windows.Controls.Primitives.TickPlacement TickPlacement {
-			get { return (global::System.Windows.Controls.Primitives.TickPlacement)GetValue(TickPlacementProperty); }
+		public TickPlacement TickPlacement {
+			get { return (TickPlacement)GetValue(TickPlacementProperty); }
 			set { SetValue(TickPlacementProperty, value); }
 		}
 
@@ -643,9 +643,9 @@ namespace System.Windows.Controls {
 
 		void UpdateReservedSpace() {
 			double reserved_space = Orientation == Orientation.Horizontal ? track.Thumb.ActualWidth : track.Thumb.ActualHeight;
-			global::System.Windows.Controls.Primitives.TickPlacement tick_placement = TickPlacement;
-			GetTopTick().ReservedSpace = tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.TopLeft || tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.Both ? reserved_space : 0;
-			GetBottomTick().ReservedSpace = tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.BottomRight || tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.Both ? reserved_space : 0;
+			TickPlacement tick_placement = TickPlacement;
+			GetTopTick().ReservedSpace = tick_placement == TickPlacement.TopLeft || tick_placement == TickPlacement.Both ? reserved_space : 0;
+			GetBottomTick().ReservedSpace = tick_placement == TickPlacement.BottomRight || tick_placement == TickPlacement.Both ? reserved_space : 0;
 		}
 		#endregion
 	}

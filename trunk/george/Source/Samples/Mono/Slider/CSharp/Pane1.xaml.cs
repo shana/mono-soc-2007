@@ -33,7 +33,7 @@ namespace SliderExample
             hslider.IsSelectionRangeEnabled = false;
             hslider.IsSnapToTickEnabled = false;
             hslider.TickFrequency = 3;
-            hslider.TickPlacement = TickPlacement.Both;
+			hslider.TickPlacement = Mono.System.Windows.Controls.Primitives.TickPlacement.Both;
             cv1.Children.Add(hslider);
        }
 
@@ -50,7 +50,7 @@ namespace SliderExample
             tickMarks.Add(7.0);
             tickMarks.Add(10.0);
             hslider.Ticks = tickMarks;
-            hslider.TickPlacement = TickPlacement.BottomRight;
+			hslider.TickPlacement = Mono.System.Windows.Controls.Primitives.TickPlacement.BottomRight;
             hslider.AutoToolTipPlacement =
               AutoToolTipPlacement.TopLeft;
             hslider.AutoToolTipPrecision = 2;

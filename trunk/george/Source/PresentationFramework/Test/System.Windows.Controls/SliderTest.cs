@@ -424,7 +424,7 @@ namespace System.Windows.Controls {
 				Track track = (Track)GetTemplateChild("PART_Track");
 				Assert.IsTrue(top_tick.SnapsToDevicePixels, "SnapsToDevicePixels");
 				Assert.AreEqual(top_tick.ActualWidth, 0, "ActualWidth");
-				TickPlacement = global::System.Windows.Controls.Primitives.TickPlacement.Both;
+				TickPlacement = TickPlacement.Both;
 				Assert.AreEqual(top_tick.ActualWidth, 0, "ActualWidth 2");
 				Assert.AreEqual(top_tick.Width, double.NaN, "Width 2");
 				Assert.AreEqual(top_tick.Margin.Right, 0, "Margin.Right");
@@ -447,7 +447,7 @@ namespace System.Windows.Controls {
 				Window w = new Window();
 				w.Content = this;
 				w.Show();
-				TickPlacement = global::System.Windows.Controls.Primitives.TickPlacement.Both;
+				TickPlacement = TickPlacement.Both;
 				Assert.AreEqual(((TickBar)GetTemplateChild("TopTick")).ReservedSpace, 0);
 			}
 		}
@@ -461,7 +461,7 @@ namespace System.Windows.Controls {
 
 		class TickBarReservedSpace2Slider : Slider {
 			public TickBarReservedSpace2Slider() {
-				TickPlacement = global::System.Windows.Controls.Primitives.TickPlacement.Both;
+				TickPlacement = TickPlacement.Both;
 				Window w = new Window();
 				w.Content = this;
 				w.Show();

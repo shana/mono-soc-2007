@@ -30,7 +30,7 @@ namespace System.Windows.Controls {
 				Window w = new Window();
 				w.Show();
 				w.Content = this;
-				TickPlacement =  global::System.Windows.Controls.Primitives.TickPlacement.Both;
+				TickPlacement =  TickPlacement.Both;
 				ApplyTemplate();
 				Width = 100;
 				SelectionStart = 4;
