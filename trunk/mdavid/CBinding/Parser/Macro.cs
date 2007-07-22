@@ -1,5 +1,5 @@
 //
-// Union.cs
+// Macro.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -33,18 +33,12 @@ using System;
 
 using MonoDevelop.Projects;
 
-using CBinding.Parser;
-
-namespace CBinding.Navigation
+namespace CBinding.Parser
 {
-	public class Union : LanguageItem
+	public class Macro : LanguageItem
 	{
-		public Union (Tag tag, Project project) : base (tag, project)
+		public Macro (Tag tag, Project project) : base (tag, project)
 		{
-			if (GetNamespace (tag)) return;
-			if (GetClass (tag)) return;
-			if (GetStructure (tag)) return;
-			if (GetUnion (tag)) return;
 		}
 	}
 }

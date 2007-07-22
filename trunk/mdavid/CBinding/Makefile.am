@@ -36,41 +36,42 @@ FILES =  \
 	Gui/CodeGenerationPanel.cs \
 	Gui/CompilerPanel.cs \
 	Gui/CTextEditorExtension.cs \
+	Gui/DataProvider.cs \
 	Gui/EditPackagesDialog.cs \
 	Gui/OutputOptionsPanel.cs \
-	Navigation/Class.cs \
 	Navigation/ClassNodeBuilder.cs \
 	Navigation/ClassPadEventArgs.cs \
-	Navigation/Enumeration.cs \
 	Navigation/EnumerationNodeBuilder.cs \
-	Navigation/Enumerator.cs \
 	Navigation/EnumeratorNodeBuilder.cs \
-	Navigation/Function.cs \
 	Navigation/FunctionNodeBuilder.cs \
 	Navigation/GlobalsNodeBuilder.cs \
-	Navigation/LanguageItem.cs \
 	Navigation/LanguageItemCommandHandler.cs \
 	Navigation/LanguageItemEventArgs.cs \
-	Navigation/Macro.cs \
 	Navigation/MacroDefinitionsNodeBuilder.cs \
 	Navigation/MacroNodeBuilder.cs \
-	Navigation/Member.cs \
 	Navigation/MemberNodeBuilder.cs \
-	Navigation/Namespace.cs \
 	Navigation/NamespaceNodeBuilder.cs \
 	Navigation/ProjectNodeBuilderExtension.cs \
-	Navigation/Structure.cs \
 	Navigation/StructureNodeBuilder.cs \
-	Navigation/Typedef.cs \
 	Navigation/TypedefNodeBuilder.cs \
-	Navigation/Union.cs \
 	Navigation/UnionNodeBuilder.cs \
-	Navigation/Variable.cs \
 	Navigation/VariableNodeBuilder.cs \
+	Parser/Class.cs \
+	Parser/Enumeration.cs \
+	Parser/Enumerator.cs \
+	Parser/Function.cs \
+	Parser/LanguageItem.cs \
+	Parser/Macro.cs \
+	Parser/Member.cs \
+	Parser/Namespace.cs \
 	Parser/ProjectInformation.cs \
 	Parser/ProjectInformationManager.cs \
+	Parser/Structure.cs \
 	Parser/Tag.cs \
 	Parser/TagDatabaseManager.cs \
+	Parser/Typedef.cs \
+	Parser/Union.cs \
+	Parser/Variable.cs \
 	Project/CCompilationParameters.cs \
 	Project/CProject.cs \
 	Project/CProjectBinding.cs \

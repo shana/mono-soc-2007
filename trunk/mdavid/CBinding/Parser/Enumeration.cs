@@ -1,5 +1,5 @@
 //
-// Structure.cs
+// Enumeration.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -33,13 +33,11 @@ using System;
 
 using MonoDevelop.Projects;
 
-using CBinding.Parser;
-
-namespace CBinding.Navigation
+namespace CBinding.Parser
 {
-	public class Structure : LanguageItem
+	public class Enumeration : LanguageItem
 	{
-		public Structure (Tag tag, Project project) : base (tag, project)
+		public Enumeration (Tag tag, Project project) : base (tag, project)
 		{
 			if (GetNamespace (tag)) return;
 			if (GetClass (tag)) return;

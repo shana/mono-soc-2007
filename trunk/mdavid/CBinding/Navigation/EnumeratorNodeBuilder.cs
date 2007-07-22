@@ -38,6 +38,8 @@ using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Projects;
 
+using CBinding.Parser;
+
 namespace CBinding.Navigation
 {
 	public class EnumeratorNodeBuilder : TypeNodeBuilder

@@ -1,5 +1,5 @@
 //
-// Namespace.cs
+// Typedef.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -33,15 +33,16 @@ using System;
 
 using MonoDevelop.Projects;
 
-using CBinding.Parser;
-
-namespace CBinding.Navigation
+namespace CBinding.Parser
 {
-	public class Namespace : LanguageItem
-	{	
-		public Namespace (Tag tag, Project project) : base (tag, project)
+	public class Typedef : LanguageItem
+	{		
+		public Typedef (Tag tag, Project project) : base (tag, project)
 		{			
-			GetNamespace (tag);
+			if (GetNamespace (tag)) return;
+			if (GetClass (tag)) return;
+			if (GetStructure (tag)) return;
+			if (GetUnion (tag)) return;
 		}
 	}
 }
