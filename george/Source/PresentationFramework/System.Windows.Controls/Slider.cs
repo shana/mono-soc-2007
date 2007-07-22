@@ -270,9 +270,7 @@ namespace System.Windows.Controls {
 				Bind(top_tick);
 				Bind(GetBottomTick());
 				track.SizeChanged += delegate(object sender, SizeChangedEventArgs e) {
-					double reserved_space = Orientation == Orientation.Horizontal ? track.Thumb.ActualWidth : track.Thumb.ActualHeight;
-					GetTopTick().ReservedSpace = reserved_space;
-					GetBottomTick().ReservedSpace = reserved_space;
+					UpdateReservedSpace();
 				};
 			}
 			Thumb thumb = track.Thumb;
@@ -641,6 +639,13 @@ namespace System.Windows.Controls {
 					value = Maximum;
 				Value = value;
 			}
+		}
+
+		void UpdateReservedSpace() {
+			double reserved_space = Orientation == Orientation.Horizontal ? track.Thumb.ActualWidth : track.Thumb.ActualHeight;
+			global::System.Windows.Controls.Primitives.TickPlacement tick_placement = TickPlacement;
+			GetTopTick().ReservedSpace = tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.TopLeft || tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.Both ? reserved_space : 0;
+			GetBottomTick().ReservedSpace = tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.BottomRight || tick_placement == global::System.Windows.Controls.Primitives.TickPlacement.Both ? reserved_space : 0;
 		}
 		#endregion
 	}

@@ -1,5 +1,9 @@
 2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
 	
+	* Slider.cs: Fixed TickBar ReservedSpace bug.
+
+2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
+	
 	* Border.cs: Improved rendering (some issues remain).
 
 2007-07-13  George Giolfan  <georgegiolfan@yahoo.com>
