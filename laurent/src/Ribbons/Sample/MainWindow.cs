@@ -29,11 +29,17 @@ namespace Sample
 			group0 = new RibbonGroup ();
 			group0.Label = "Summer of Code";
 			group0.Child = button0;
-			group0.Expand += group0_Expand;
+			group0.Expand += onClick;
+			
+			Menu openMenu = new Menu ();
+			
+			Ribbons.Button open = Ribbons.Button.FromStockIcon (Gtk.Stock.Open, "Open", false);
+			open.DropDownMenu = openMenu;
+			open.Clicked += onClick;
 			
 			Ribbons.ToolPack toolPack = new Ribbons.ToolPack ();
 			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
-			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Open, "Open", false));
+			toolPack.AppendButton (open);
 			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, "Save", false));
 			
 			Ribbons.ToolBox box0 = new ToolBox ();
@@ -93,7 +99,7 @@ namespace Sample
 			this.ShowAll ();
 		}
 
-		private void group0_Expand(object Sender, EventArgs e)
+		private void onClick(object Sender, EventArgs e)
 		{
 			Dialog d = new Dialog ("Test", this, DialogFlags.DestroyWithParent);
 			d.Modal = true;
