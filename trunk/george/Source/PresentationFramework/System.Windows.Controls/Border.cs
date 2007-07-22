@@ -1,6 +1,7 @@
 using Mono.WindowsPresentationFoundation;
 using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 namespace Mono.System.Windows.Controls {
@@ -126,6 +127,10 @@ namespace System.Windows.Controls {
 					drawingContext.DrawGeometry(Background, null, geometry);
 				}
 			} else {
+				//FIXME: I am pretty sure this needs more work.
+				actual_width = Math.Max(actual_width, border_thickness.Left + border_thickness.Right);
+				actual_height = Math.Max(actual_height, border_thickness.Top + border_thickness.Bottom);
+
 				double top_left_radius_x = corner_radius.TopLeft;
 				double top_left_radius_y = top_left_radius_x;
 				double bottom_left_radius_x = corner_radius.BottomLeft;
@@ -135,64 +140,42 @@ namespace System.Windows.Controls {
 				double bottom_right_radius_x = corner_radius.BottomRight;
 				double bottom_right_radius_y = bottom_right_radius_x;
 
-				double inner_top_left_arc_area_x = ZeroIfNegative(top_left_radius_x - border_thickness.Left);
-				double inner_top_left_arc_area_y = ZeroIfNegative(top_left_radius_y - border_thickness.Top);
-				double inner_bottom_left_arc_area_x = ZeroIfNegative(bottom_left_radius_x - border_thickness.Left);
-				double inner_bottom_left_arc_area_y = ZeroIfNegative(bottom_left_radius_y - border_thickness.Bottom);
-				double inner_top_right_arc_area_x = ZeroIfNegative(top_right_radius_x - border_thickness.Right);
-				double inner_top_right_arc_area_y = ZeroIfNegative(top_right_radius_y - border_thickness.Top);
-				double inner_bottom_right_arc_area_x = ZeroIfNegative(bottom_right_radius_x - border_thickness.Right);
-				double inner_bottom_right_arc_area_y = ZeroIfNegative(bottom_right_radius_y - border_thickness.Bottom);
+				//double inner_top_left_arc_area_x = ZeroIfNegative(top_left_radius_x - border_thickness.Left);
+				//double inner_top_left_arc_area_y = ZeroIfNegative(top_left_radius_y - border_thickness.Top);
+				//double inner_bottom_left_arc_area_x = ZeroIfNegative(bottom_left_radius_x - border_thickness.Left);
+				//double inner_bottom_left_arc_area_y = ZeroIfNegative(bottom_left_radius_y - border_thickness.Bottom);
+				//double inner_top_right_arc_area_x = ZeroIfNegative(top_right_radius_x - border_thickness.Right);
+				//double inner_top_right_arc_area_y = ZeroIfNegative(top_right_radius_y - border_thickness.Top);
+				//double inner_bottom_right_arc_area_x = ZeroIfNegative(bottom_right_radius_x - border_thickness.Right);
+				//double inner_bottom_right_arc_area_y = ZeroIfNegative(bottom_right_radius_y - border_thickness.Bottom);
 
 				double inner_width = ZeroIfNegative(actual_width - border_thickness.Left - border_thickness.Right);
 				double inner_height = ZeroIfNegative(actual_height - border_thickness.Top - border_thickness.Bottom);
 
-				Scale(inner_width, ref inner_top_left_arc_area_x, ref inner_top_right_arc_area_x);
-				Scale(inner_width, ref inner_bottom_left_arc_area_x, ref inner_bottom_right_arc_area_x);
-				Scale(inner_height, ref inner_top_left_arc_area_y, ref inner_bottom_left_arc_area_y);
-				Scale(inner_height, ref inner_top_right_arc_area_y, ref inner_bottom_right_arc_area_y);
+				//Scale(inner_width, ref inner_top_left_arc_area_x, ref inner_top_right_arc_area_x);
+				//Scale(inner_width, ref inner_bottom_left_arc_area_x, ref inner_bottom_right_arc_area_x);
+				//Scale(inner_height, ref inner_top_left_arc_area_y, ref inner_bottom_left_arc_area_y);
+				//Scale(inner_height, ref inner_top_right_arc_area_y, ref inner_bottom_right_arc_area_y);
 
-				double inner_left_straight_section_lenght = inner_height - inner_top_left_arc_area_y - inner_bottom_left_arc_area_y;
-				double inner_right_straight_section_lenght = inner_height - inner_top_right_arc_area_y - inner_bottom_right_arc_area_y;
-				double inner_top_straight_section_lenght = inner_width - inner_top_left_arc_area_x - inner_top_right_arc_area_x;
-				double inner_bottom_straight_section_lenght = inner_width - inner_bottom_left_arc_area_x - inner_bottom_right_arc_area_x;
+				//double inner_left_straight_section_lenght = inner_height - inner_top_left_arc_area_y - inner_bottom_left_arc_area_y;
+				//double inner_right_straight_section_lenght = inner_height - inner_top_right_arc_area_y - inner_bottom_right_arc_area_y;
+				//double inner_top_straight_section_lenght = inner_width - inner_top_left_arc_area_x - inner_top_right_arc_area_x;
+				//double inner_bottom_straight_section_lenght = inner_width - inner_bottom_left_arc_area_x - inner_bottom_right_arc_area_x;
 
-				double top_left_arc_area_x = inner_top_left_arc_area_x + border_thickness.Left;
-				double top_left_arc_area_y = inner_top_left_arc_area_y + border_thickness.Top;
-				double bottom_left_arc_area_x = inner_bottom_left_arc_area_x + border_thickness.Left;
-				double bottom_left_arc_area_y = inner_bottom_left_arc_area_y + border_thickness.Bottom;
-				double top_right_arc_area_x = inner_top_right_arc_area_x + border_thickness.Right;
-				double top_right_arc_area_y = inner_top_right_arc_area_y + border_thickness.Top;
-				double bottom_right_arc_area_x = inner_bottom_right_arc_area_x + border_thickness.Right;
-				double bottom_right_arc_area_y = inner_bottom_right_arc_area_y + border_thickness.Bottom; 
-
-
+				//double top_left_arc_area_x = inner_top_left_arc_area_x + border_thickness.Left;
+				//double top_left_arc_area_y = inner_top_left_arc_area_y + border_thickness.Top;
+				//double bottom_left_arc_area_x = inner_bottom_left_arc_area_x + border_thickness.Left;
+				//double bottom_left_arc_area_y = inner_bottom_left_arc_area_y + border_thickness.Bottom;
+				//double top_right_arc_area_x = inner_top_right_arc_area_x + border_thickness.Right;
+				//double top_right_arc_area_y = inner_top_right_arc_area_y + border_thickness.Top;
+				//double bottom_right_arc_area_x = inner_bottom_right_arc_area_x + border_thickness.Right;
+				//double bottom_right_arc_area_y = inner_bottom_right_arc_area_y + border_thickness.Bottom;
 
 				double left_straight_section_lenght = ZeroIfNegative(actual_height - top_left_radius_y - bottom_left_radius_y);
 				double right_straight_section_lenght = ZeroIfNegative(actual_height - top_right_radius_y - bottom_right_radius_y);
 				double top_straight_section_lenght = ZeroIfNegative(actual_width - top_left_radius_x - top_right_radius_x);
 				double bottom_straight_section_lenght = ZeroIfNegative(actual_width - bottom_left_radius_x - bottom_right_radius_x);
 
-				//double scale_factor = actual_height / (corner_radius.TopLeft + corner_radius.BottomLeft);
-				//if (scale_factor < 1) {
-				//    top_left_radius_y *= scale_factor;
-				//    bottom_left_radius_y *= scale_factor;
-				//}
-				//scale_factor = actual_height / (corner_radius.TopRight + corner_radius.BottomRight);
-				//if (scale_factor < 1) {
-				//    top_right_radius_y *= scale_factor;
-				//    bottom_right_radius_y *= scale_factor;
-				//}
-				//scale_factor = actual_width / (corner_radius.TopLeft + corner_radius.TopRight);
-				//if (scale_factor < 1) {
-				//    top_left_radius_x *= scale_factor;
-				//    top_right_radius_x *= scale_factor;
-				//}
-				//scale_factor = actual_width / (corner_radius.BottomLeft + corner_radius.BottomRight);
-				//if (scale_factor < 1) {
-				//    bottom_left_radius_x *= scale_factor;
-				//    bottom_right_radius_x *= scale_factor;
-				//}
 				create_background_shape = delegate(StreamGeometryContext context) {
 					context.BeginFigure(new Point(top_left_radius_x + border_thickness.Left / 2, border_thickness.Top), true, true);
 					double width = top_right_radius_x - border_thickness.Right / 2;
@@ -226,21 +209,22 @@ namespace System.Windows.Controls {
 						stream_geometry_context.ArcTo(new Point(0, top_left_radius_y + left_straight_section_lenght - border_thickness.Bottom / 2), new Size(bottom_left_radius_x + border_thickness.Left / 2, bottom_left_radius_y + border_thickness.Bottom / 2), 0, false, SweepDirection.Clockwise, false, false);
 						stream_geometry_context.LineTo(new Point(0, top_left_radius_y + border_thickness.Top / 2), false, false);
 						stream_geometry_context.ArcTo(new Point(top_left_radius_x + border_thickness.Left / 2, 0), new Size(top_left_radius_x + border_thickness.Left / 2, top_left_radius_y + border_thickness.Top / 2), 0, false, SweepDirection.Clockwise, false, false);
-
-						create_background_shape(stream_geometry_context);
+						if (inner_width > 0 && inner_height > 0) {
+							create_background_shape(stream_geometry_context);
+						}
 					}
 					geometry.Freeze();
 					drawingContext.DrawGeometry(border_brush, null, geometry);
 				}
 				if (Background != null) {
-					if (actual_width < border_thickness.Left + border_thickness.Right || actual_height < border_thickness.Top + border_thickness.Bottom)
-						return;
-					geometry = new StreamGeometry();
-					using (stream_geometry_context = geometry.Open()) {
-						create_background_shape(stream_geometry_context);
+					if (inner_width > 0 && inner_height > 0) {
+						geometry = new StreamGeometry();
+						using (stream_geometry_context = geometry.Open()) {
+							create_background_shape(stream_geometry_context);
+						}
+						geometry.Freeze();
+						drawingContext.DrawGeometry(Background, null, geometry);
 					}
-					geometry.Freeze();
-					drawingContext.DrawGeometry(Background, null, geometry);
 				}
 			}
 		}
