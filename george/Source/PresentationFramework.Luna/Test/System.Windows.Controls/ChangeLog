@@ -1,3 +1,7 @@
+2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* SliderTest.cs: Switched to implemented TickPlacement.
+
 2007-06-03  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ButtonTest.cs: Expanded MeasureOverride test, removed an unneeded Ignore attribute.

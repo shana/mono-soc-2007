@@ -46,6 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System.Windows.Controls.Primitives\BulletDecorator.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ButtonBase.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\TickPlacement.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ItemsChangedEventArgs.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ItemsChangedEventHandler.cs" />
     <Compile Include="System.Windows.Controls.Primitives\GeneratorDirection.cs" />

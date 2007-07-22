@@ -1,4 +1,8 @@
 2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Slider.cs: Switched to implemented TickPlacement.
+
+2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
 	
 	* Slider.cs: Fixed TickBar ReservedSpace bug.
 
