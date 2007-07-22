@@ -619,6 +619,38 @@ namespace System.Windows.Controls {
 			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(b);
 			Assert.AreEqual(drawing_group.Children.Count, 4);
 		}
+
+		[Test]
+		public void DrawingLargeCornerRadius() {
+			Border b = new Border();
+			b.Width = 100;
+			b.Height = 100;
+			b.Background = new SolidColorBrush(Color.FromArgb(0x11, 0x11, 0x11, 0x11));
+			b.BorderBrush = new SolidColorBrush(Color.FromArgb(0x22, 0x22, 0x22, 0x22));
+			b.BorderThickness = new Thickness(1, 2, 3, 4);
+			b.CornerRadius = new CornerRadius(1000);
+			Window w = new Window();
+			w.Content = b;
+			w.Show();
+
+			DrawingGroup drawing_group = VisualTreeHelper.GetDrawing(b);
+			Assert.AreEqual(drawing_group.Children.Count, 2, "1");
+
+			GeometryDrawing gd = (GeometryDrawing)drawing_group.Children[0];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.BorderBrush).Color, "2");
+			Assert.IsNull(gd.Pen, "3");
+			Assert.AreEqual(gd.Geometry.ToString(), "M49,975024975025;0L49,975024975025;0A50,024975024975;49,9750374438342;0;0;1;100;49,9750374438342L100;49,9750374438342A50,024975024975;50,0249625561658;0;0;1;49,975024975025;100L49,975024975025;100A49,975024975025;50,0249625561658;0;0;1;0;49,9750374438342L0;49,9750374438342A49,975024975025;49,9750374438342;0;0;1;49,975024975025;0z M49,024024024024;2L49,024024024024;2A47,975975975976;47,0235353029544;0;0;1;97;49,0235353029544L97;49,0235353029544A47,975975975976;46,9764646970456;0;0;1;49,024024024024;96L49,024024024024;96A48,024024024024;46,9764646970456;0;0;1;1;49,0235353029544L1;49,0235353029544A48,024024024024;47,0235353029544;0;0;1;49,024024024024;2z", "4");
+
+			gd = (GeometryDrawing)drawing_group.Children[1];
+			Assert.AreEqual(((SolidColorBrush)gd.Brush).Color, ((SolidColorBrush)b.Background).Color, "5");
+			Assert.IsNull(gd.Pen, "6");
+			Assert.AreEqual(gd.Geometry.ToString(), "M49,024024024024;2L49,024024024024;2A47,975975975976;47,0235353029544;0;0;1;97;49,0235353029544L97;49,0235353029544A47,975975975976;46,9764646970456;0;0;1;49,024024024024;96L49,024024024024;96A48,024024024024;46,9764646970456;0;0;1;1;49,0235353029544L1;49,0235353029544A48,024024024024;47,0235353029544;0;0;1;49,024024024024;2z", "7");
+		}
 		#endregion
+
+		[Test]
+		public void ClipToBounds() {
+			Assert.IsFalse(new Border().ClipToBounds);
+		}
 	}
 }
