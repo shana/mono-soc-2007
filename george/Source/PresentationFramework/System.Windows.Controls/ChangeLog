@@ -1,3 +1,7 @@
+2007-07-23  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* GroupBox.cs: Added (access key feature does not work).
+
 2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Slider.cs: Switched to implemented TickPlacement.
