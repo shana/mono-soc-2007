@@ -83,18 +83,19 @@ public partial class EditorWindow : Gtk.Window {
 	private void OnSaveAsActivated (object sender, System.EventArgs e)
 	{
 		string filename = String.Empty;
-		SaveDocDialog dialog = new SaveDocDialog ();
+		SaveDocDialog dialog = new SaveDocDialog (current_tab.Title);
 		if (dialog.Run () == (int) ResponseType.Ok)
 			filename = dialog.Document;
 		
 		dialog.Destroy ();
 		
 		try {
-			using (FileStream fileStream = new FileStream (filename, FileMode.CreateNew)) {
-				using (StreamWriter streamWriter = new StreamWriter (fileStream)) {
-					streamWriter.Write (DocumentBufferArchiver.Serialize (current_tab.Buffer));
+			if (filename != String.Empty)
+				using (FileStream fileStream = new FileStream (filename, FileMode.CreateNew)) {
+					using (StreamWriter streamWriter = new StreamWriter (fileStream)) {
+						streamWriter.Write (DocumentBufferArchiver.Serialize (current_tab.Buffer));
+					}
 				}
-			}
 		} catch (IOException emsg) {
 			//TODO: Add message dialog about error.
 			Console.WriteLine (emsg.Message);
