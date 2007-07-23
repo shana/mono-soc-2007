@@ -640,6 +640,83 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
     </Style>
 
 	<!-- Skipped. -->
+    <SolidColorBrush x:Key="GroupBoxBorderBrush" 
+                     Color="#D0D0BF"/>
+
+    <SolidColorBrush x:Key="GroupBoxHeaderBrush" 
+                     Color="#0046D5"/>
+
+ 
+    <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
+    <Style x:Key="{x:Type mono_system_windows_controls:GroupBox}"
+           TargetType="{x:Type mono_system_windows_controls:GroupBox}">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource GroupBoxBorderBrush}"/>
+        <Setter Property="BorderThickness"
+                Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls:GroupBox}">
+                    <Grid SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="6"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="6"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="6"/>
+                        </Grid.RowDefinitions>
+                        <Border CornerRadius="4"
+                                Grid.Row="1"
+                                Grid.RowSpan="3"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="Transparent"
+                                Background="{TemplateBinding Background}"/>
+                        <Border x:Name="Header"
+                                Padding="3,0,3,0"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="1">
+                            <ContentPresenter ContentSource="Header" 
+                                              RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              TextElement.Foreground="{StaticResource GroupBoxHeaderBrush}"/>
+                        </Border>
+                        <ContentPresenter Grid.Row="2"
+                                          Grid.Column="1"
+                                          Grid.ColumnSpan="2"
+                                          Margin="{TemplateBinding Padding}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        <Border CornerRadius="4"
+                                Grid.Row="1"
+                                Grid.RowSpan="3"
+                                Grid.ColumnSpan="4"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <Border.OpacityMask>
+                                <MultiBinding Converter="{StaticResource BorderGapMaskConverter}"
+                                              ConverterParameter="7">
+                                    <Binding ElementName="Header"
+                                             Path="ActualWidth"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"
+                                             Path="ActualWidth"/>
+                                    <Binding RelativeSource="{RelativeSource Self}"
+                                             Path="ActualHeight"/>
+                                </MultiBinding>
+                            </Border.OpacityMask>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+	<!-- Skipped. -->
     <Style x:Key="{x:Type mono_system_windows_controls:ItemsControl}"
            TargetType="{x:Type mono_system_windows_controls:ItemsControl}">
         <Setter Property="Template">
