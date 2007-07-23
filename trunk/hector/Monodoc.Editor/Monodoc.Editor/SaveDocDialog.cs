@@ -15,9 +15,10 @@ namespace Monodoc.Editor {
 public partial class SaveDocDialog : Gtk.Dialog {
 	private string filename = String.Empty;
 	
-	public SaveDocDialog()
+	public SaveDocDialog (string filename)
 	{
-		this.Build();
+		this.Build ();
+		saveFileDialog.CurrentName = filename;
 		saveFileDialog.SetCurrentFolder (Environment.CurrentDirectory);
 		saveFileDialog.DoOverwriteConfirmation = true;
 	}

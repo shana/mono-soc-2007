@@ -1,3 +1,11 @@
+2007-07-22  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* EditorWindow.cs: Fixed error when clicking Cancel in the SaveAs
+	  dialog with an empty string name. Another change is that we pass to
+	  the dialog the current tab title to put a default name.
+	* SaveDocDialog.cs: The constructor for the dialog need a parameter
+	  that specifies a default filename for the dialog.
+
 2007-07-21  Hector E. Gomez Morales  <hectorgm@gmail.com>
 
 	* Monodoc.Editor/EditorWindow.cs,
