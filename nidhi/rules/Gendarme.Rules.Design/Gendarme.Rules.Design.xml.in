@@ -1,0 +1,8 @@
+<rules>
+	<rule	Name="UsingCloneWithoutImplementingICloneableRule" 
+		Type="Gendarme.Rules.Design.UsingCloneWithoutImplementingICloneableRule, Gendarme.Rules.Design, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#UsingCloneWithoutImplementingICloneableRule" >
+		<problem>The class '{0}' uses Clone () method but does not implement ICloneable interface.</problem>
+		<solution>Implement the ICloneable interface.</solution>
+	</rule>
+</rules>
