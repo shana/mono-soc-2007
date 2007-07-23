@@ -1,4 +1,4 @@
-<Combine name="FastCgi" fileversion="2.0">
+<Combine name="fastcgi-mono-server" fileversion="2.0">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="CombineConfiguration">
       <Entry build="True" name="Mono.FastCgi" configuration="Debug" />
@@ -17,8 +17,8 @@
     <Execute type="None" entry="Mono.WebServer.FastCgi" />
   </StartMode>
   <Entries>
-    <Entry filename="./Mono.FastCgi/Mono.FastCgi.mdp" />
-    <Entry filename="./Mono.WebServer/Mono.WebServer.mdp" />
-    <Entry filename="./Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp" />
+    <Entry filename="./src/Mono.FastCgi/Mono.FastCgi.mdp" />
+    <Entry filename="./src/Mono.WebServer/Mono.WebServer.mdp" />
+    <Entry filename="./src/Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp" />
   </Entries>
 </Combine>

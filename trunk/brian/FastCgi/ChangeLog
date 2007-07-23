@@ -1,3 +1,8 @@
+2007-07-23 Brian Nickel <brian.nickel@gmail.com>
+
+	* REARRANGED DIRECTORIES: Added src/ and reorganized source folders into
+	it.
+
 2007-07-20 Brian Nickel <brian.nickel@gmail.com>
 
 	* Mono.FastCgi/UnixSocket.cs: DELETED. 
