@@ -39,8 +39,10 @@ namespace Measures.Ui {
 		[Widget] Window mainWindow;
 		[Widget] TreeView measuresTreeView;
 		[Widget] Expander expander1;
+		[Widget] Expander expander2;
 		[Widget] ToolButton findToolButton;
 		[Widget] ToolButton reloadToolButton;
+		[Widget] Frame frame1;
 		TreeStore measuresTreeStore;
 		IEnumerable measures;
 
@@ -83,9 +85,13 @@ namespace Measures.Ui {
 				"Open", ResponseType.Accept);
 			fileChooser.Filter = CreateAssemblyFilter ();
 			if (fileChooser.Run () == (int) ResponseType.Accept) {
-				measures =  new MeasureCalculator ().ProcessMeasures (AssemblyFactory.GetAssembly (fileChooser.Filename));
+				AssemblyDefinition assembly = AssemblyFactory.GetAssembly (fileChooser.Filename);
+				measures =  new MeasureCalculator ().ProcessMeasures (assembly);
 				FillTreeView (measures);
 				findToolButton.Sensitive = true;
+				CleanBin (frame1);
+				frame1.Child = new AssemblyMeasureWidget (assembly).Widget;
+				frame1.ShowAll ();
 			}
 			fileChooser.Destroy ();
 		}
@@ -98,8 +104,12 @@ namespace Measures.Ui {
 		{
 			FindDialog findDialog = new FindDialog (measures);
 			findDialog.ShowDialog ();
-			if (findDialog.Results != null)
+			if (findDialog.Results != null) {
 				FillTreeView (findDialog.Results);
+				CleanBin (expander2);
+				expander2.Child = new FindResultsWidget (findDialog.Results).Widget;
+				expander2.ShowAll ();
+			}
 		}
 		#pragma warning restore 0169
 
@@ -173,24 +183,23 @@ namespace Measures.Ui {
 			return null;
 		}
 
-		private void CleanExpander () 
+		private void CleanBin (Bin bin) 
 		{
-			if (expander1.Child != null)
-				expander1.Remove (expander1.Child);
+			if (bin.Child != null)
+				bin.Remove (bin.Child);
 		}
 		
 		private void ShowMethodInformation (string type, string method) 
 		{
-			CleanExpander ();
+			CleanBin (expander1);
 			expander1.Child = new MethodMeasureWidget (FindMethodMeasure (type, method)).Widget;
 			expander1.ShowAll ();
 		}
 
 		private void ShowTypeInformation (string type) {
-			CleanExpander ();
+			CleanBin (expander1);
 			expander1.Child = new TypeMeasureWidget (FindTypeMeasure (type)).Widget;
 			expander1.ShowAll ();
-
 		}
 	}
 }
