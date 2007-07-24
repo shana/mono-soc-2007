@@ -20,7 +20,7 @@ namespace ImageElementExample
       public void PageLoaded(object sender, RoutedEventArgs args)
       {
          // Create an Image element.
-         Image croppedImage = new Image();
+		 Mono.System.Windows.Controls.Image croppedImage = new Mono.System.Windows.Controls.Image();
          croppedImage.Width = 200;
          croppedImage.Margin = new Thickness(5);
 
@@ -36,7 +36,7 @@ namespace ImageElementExample
          croppedGrid.Children.Add(croppedImage);
 
          // Create an Image element.
-         Image chainImage = new Image();
+		 Mono.System.Windows.Controls.Image chainImage = new Mono.System.Windows.Controls.Image();
          chainImage.Width = 200;
          chainImage.Margin = new Thickness(5);
 

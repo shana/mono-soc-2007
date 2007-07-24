@@ -2,7 +2,8 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="ImageElementExample.SimpleImageExample"
     Title="Simple Image Example"
-    Loaded="PageLoaded">
+    Loaded="PageLoaded"
+    xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
    <DockPanel Background="White">
       <Border DockPanel.Dock="Top" Background="Black">
          <TextBlock Foreground="White" HorizontalAlignment="Stretch" FontSize="20">
@@ -31,17 +32,17 @@
             Attribute XAML
          </TextBlock>
          <!-- Attribute XAML Syntax -->
-         <Image Width="200" Margin="5" Source="sampleImages/apple.jpg" 
+         <mono_sytem_windows_controls:Image Width="200" Margin="5" Source="sampleImages/apple.jpg" 
             Grid.Column="0" Grid.Row="1" />
          <TextBlock Style="{StaticResource Header1}" Grid.Column="1" Grid.Row="0">
             Property Tag XAML
          </TextBlock>
          <!-- Property Tag XAML Syntax -->
-         <Image Width="200"  Margin="5" Grid.Column="1" Grid.Row="1" >
-            <Image.Source>
+         <mono_sytem_windows_controls:Image Width="200"  Margin="5" Grid.Column="1" Grid.Row="1" >
+            <mono_sytem_windows_controls:Image.Source>
                <BitmapImage UriSource="sampleImages/bananas.jpg" />
-            </Image.Source>
-         </Image>
+            </mono_sytem_windows_controls:Image.Source>
+         </mono_sytem_windows_controls:Image>
          <TextBlock Style="{StaticResource Header1}" Grid.Column="2" Grid.Row="0">
             C#
          </TextBlock>

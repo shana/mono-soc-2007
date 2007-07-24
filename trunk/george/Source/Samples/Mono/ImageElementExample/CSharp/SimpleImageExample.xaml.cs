@@ -20,7 +20,7 @@ namespace ImageElementExample
       public void PageLoaded(object sender, RoutedEventArgs args)
       {
          // Create the image element.
-         Image simpleImage = new Image();    
+		  Mono.System.Windows.Controls.Image simpleImage = new Mono.System.Windows.Controls.Image();    
          simpleImage.Width = 200;
          simpleImage.Margin = new Thickness(5);
          

@@ -2,7 +2,8 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="ImageElementExample.CroppedImageExample"
     Title="CroppedImage Example"
-    Loaded="PageLoaded">
+    Loaded="PageLoaded"
+    xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
 <Page.Resources>
    <!-- Define some image resources, for use as the image element source. -->
    <BitmapImage x:Key="masterImage" UriSource="/sampleImages/gecko.jpg" />
@@ -18,7 +19,7 @@
       </Border>
       <TextBlock DockPanel.Dock="Top" Style="{StaticResource Header1}">Original Image</TextBlock>
       <Border DockPanel.Dock="Top" Margin="0,0,0,10">
-         <Image Width="200" Source="{StaticResource masterImage}" />
+         <mono_sytem_windows_controls:Image Width="200" Source="{StaticResource masterImage}" />
       </Border>
       <Grid Name="croppedGrid" Background="{StaticResource CheckeredBrushResource}" 
          DockPanel.Dock="Top" 
@@ -43,7 +44,7 @@
             Cropped with XAML
          </TextBlock>
          <!-- Use the cropped image resource as the images source -->
-         <Image Width="200" Source="{StaticResource croppedImage}" 
+         <mono_sytem_windows_controls:Image Width="200" Source="{StaticResource croppedImage}" 
             Margin="5" Grid.Column="0" Grid.Row="1" />
          <TextBlock 
             Margin="5" Style="{StaticResource Header1}" 
@@ -55,12 +56,12 @@
             Chaining Cropped Images
          </TextBlock>
          <!-- Chain a cropped bitmap off a previosly defined cropped image -->
-         <Image Width="200" Grid.Column="0" Grid.Row="3" Margin="5">
-            <Image.Source>
+         <mono_sytem_windows_controls:Image Width="200" Grid.Column="0" Grid.Row="3" Margin="5">
+            <mono_sytem_windows_controls:Image.Source>
                <CroppedBitmap Source="{StaticResource croppedImage}" 
                   SourceRect="30 0 75 50"/>
-            </Image.Source>
-         </Image>
+            </mono_sytem_windows_controls:Image.Source>
+         </mono_sytem_windows_controls:Image>
       </Grid>
    </DockPanel>
 </Page>
