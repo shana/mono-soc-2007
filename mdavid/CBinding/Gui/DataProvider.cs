@@ -94,7 +94,13 @@ namespace CBinding
 			Function function = functions[overload];
 			string paramTxt = string.Join (", ", parameterMarkup);
 			
-			return function.FullName + " (" + paramTxt + ")";
+			int len = function.FullName.LastIndexOf ("::");
+			string prename = null;
+			
+			if (len > 0)
+				prename = function.FullName.Substring (0, len + 2);
+			
+			return prename + "<b>" + function.Name + "</b>" + " (" + paramTxt + ")";
 		}
 		
 		// Returns the text to use to represent the specified parameter

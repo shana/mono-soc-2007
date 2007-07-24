@@ -163,7 +163,7 @@ namespace CBinding {
             w12.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w13 = new Gtk.Image();
-            w13.Name = "image28";
+            w13.Name = "image3";
             w13.Pixbuf = Stetic.IconLoader.LoadIcon("gtk-remove", 16);
             w12.Add(w13);
             // Container child GtkHBox.Gtk.Container+ContainerChild
