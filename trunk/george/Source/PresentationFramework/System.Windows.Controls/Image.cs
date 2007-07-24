@@ -1,6 +1,7 @@
 using System.Windows.Automation.Peers;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 #if Implementation
 using System;
 using System.Windows;
@@ -21,6 +22,10 @@ namespace System.Windows.Controls {
 		#region Routed Events
 		public static readonly RoutedEvent ImageFailedEvent = EventManager.RegisterRoutedEvent("ImageFailed", RoutingStrategy.Bubble, typeof(EventHandler), typeof(Image));
 		#endregion
+		#endregion
+
+		#region Private Fields
+		Uri base_uri;
 		#endregion
 
 		#region Public Constructors
@@ -49,13 +54,8 @@ namespace System.Windows.Controls {
 
 		#region Protected Properties
 		protected virtual Uri BaseUri {
-			get {
-				//WDTDH
-				return null;
-			}
-			set {
-				//WDTDH
-			}
+			get { return base_uri; }
+			set { base_uri = value; }
 		}
 		#endregion
 
@@ -79,8 +79,38 @@ namespace System.Windows.Controls {
 		}
 
 		protected override void OnRender(DrawingContext drawingContext) {
-			//WDTDH
 			base.OnRender(drawingContext);
+			ImageSource source = Source;
+			if (source == null)
+				return;
+			//FIXME:
+			if (source is BitmapImage)
+				return;
+			double x;
+			double y;
+			double width;
+			double height;
+			switch (Stretch) {
+			case Stretch.None:
+				x = 0;
+				y = 0;
+				width = source.Width;
+				height = source.Height;
+				break;
+			case Stretch.Fill:
+				x = 0;
+				y = 0;
+				width = ActualWidth;
+				height = ActualHeight;
+				break;
+			default:
+				x = 0;
+				y = 0;
+				width = ActualWidth;
+				height = ActualHeight;
+				break;
+			}
+			drawingContext.DrawImage(Source, new Rect(x, y, width, height));
 		}
 		#endregion
 
@@ -93,13 +123,8 @@ namespace System.Windows.Controls {
 
 		#region Explicit Interface Implementations
 		Uri IUriContext.BaseUri {
-			get {
-				//WDTDH
-				return null;
-			}
-			set {
-				//WDTDH
-			}
+			get { return BaseUri; }
+			set { BaseUri = value; }
 		}
 		#endregion
 	}
