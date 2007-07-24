@@ -21,7 +21,6 @@ public class DocumentBuffer : TextBuffer {
 	
 	public DocumentBuffer () : base (new DocumentTagTable ())
 	{
-		InsertText += OnAddedText;
 		TagRemoved += OnRemoved;
 		DeleteRange += OnDelete;
 		document_loaded = false;
@@ -33,36 +32,34 @@ public class DocumentBuffer : TextBuffer {
 		document_loaded = true;
 	}
 
-	private void OnAddedText (object o, InsertTextArgs args)
+	protected override void OnInsertText (TextIter pos, string text)
 	{
+		int offset = pos.Offset;
+		Console.WriteLine ("DEBUG: Inserting Text: {0} at Offset: {1} with Char: {2}", text, pos.Offset, pos.Char);
+		base.OnInsertText (pos, text);
+
+		TextIter previousIter = GetIterAtOffset (offset - 1);
+		TextIter startIter = GetIterAtOffset (offset);
+		TextIter endIter = GetIterAtOffset (offset + text.Length);
+
 		if (document_loaded) {
-			Console.WriteLine ("DEBUG: Inserting: {0}, at Offset {1}", args.Text, args.Pos.Offset);
-			Console.WriteLine ("DEBUG: Offset: {0} Char {1}", args.Pos.Offset, args.Pos.Char);
+			Console.WriteLine ("DEBUG: Inserting: {0}", text);
+			Console.WriteLine ("DEBUG: Start Offset: {0} Char {1}", startIter.Offset, startIter.Char);
+			Console.WriteLine ("DEBUG: End Offset: {0} Char {1}", endIter.Offset, endIter.Char);
+			
+			TextTag last = endIter.Tags [endIter.Tags.Length - 1];
+			TextTag last_last =  previousIter.Tags [previousIter.Tags.Length - 1];
 
-			TextIter insertIter = args.Pos;
-			int last_index = insertIter.Tags.Length - 1;
-			TextTag last = insertIter.Tags [last_index];
+			if (endIter.BeginsTag (last) && last.Editable) {
+				Console.WriteLine ("DEBUG: Inserting text at start of editable region.");
+				Console.WriteLine ("DEBUG: Tag Name: {0} Char: {1}", last.Name, endIter.Char);
 
-			TextIter fooIter = GetIterAtOffset (insertIter.Offset - args.Text.Length - 1);
-			TextTag last_last = fooIter.Tags [fooIter.Tags.Length - 1];
+				ApplyTag (last, startIter, endIter);
+			} else if (previousIter.HasTag (last_last) && !startIter.HasTag (last_last) && last_last.Editable) {
+				Console.WriteLine ("DEBUG: Inserting text at end of editable region.");
+				Console.WriteLine ("DEBUG: Tag Name: {0} Char: {1}", last_last.Name, previousIter.Char);
 
-			TextIter nextIter = fooIter;
-			nextIter.ForwardChar ();
-
-			if (insertIter.BeginsTag (last) && last.Editable) {
-				Console.WriteLine ("DEBUG: Inserting text from start of editable region");
-				Console.WriteLine ("DEBUG: Tag Name: {0} HasTag: {1} Char: {2}" , last_last.Name, fooIter.HasTag (last_last), fooIter.Char);  
-
-				int offset = insertIter.Offset - args.Text.Length;
-				TextIter newIter = GetIterAtOffset (offset);
-				ApplyTag (last, newIter, insertIter);
-			} else if (fooIter.HasTag (last_last) && !nextIter.HasTag (last_last) && last_last.Editable) {
-				Console.WriteLine ("DEBUG: Inserting text from end of editable region");
-				Console.WriteLine ("DEBUG: Tag Name: {0} HasTag: {1} Char: {2}" , last_last.Name, fooIter.HasTag (last_last), fooIter.Char);  
-
-				int offset = fooIter.Offset + args.Text.Length + 1;
-				TextIter newIter = GetIterAtOffset (offset);
-				ApplyTag (last_last, fooIter, newIter);
+				ApplyTag (last_last, startIter, endIter);
 			}
 		}
 	}
