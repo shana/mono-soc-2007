@@ -1,3 +1,10 @@
+2007-07-24  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* Utils.cs, Monodoc.Editor.Gui.mdp: Added Utils.cs this will contain
+	  any helper classes for the other Document* classes.
+	* DocumentBuffer.cs: Some minor changes, using methods from
+	  DocumentUtils, and using conditionals for debug printings.
+
 2007-07-23  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* DocumentBuffer.cs: Overrided OnInsertText default handler for

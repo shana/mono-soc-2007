@@ -35,31 +35,39 @@ public class DocumentBuffer : TextBuffer {
 	protected override void OnInsertText (TextIter pos, string text)
 	{
 		int offset = pos.Offset;
-		Console.WriteLine ("DEBUG: Inserting Text: {0} at Offset: {1} with Char: {2}", text, pos.Offset, pos.Char);
+
+		// Call base method to insert text, we only handle special cases in this override.
 		base.OnInsertText (pos, text);
 
-		TextIter previousIter = GetIterAtOffset (offset - 1);
+		TextIter previousIter = GetIterAtOffset (offset - 1); // Previous is the iter before the insert offset.
 		TextIter startIter = GetIterAtOffset (offset);
 		TextIter endIter = GetIterAtOffset (offset + text.Length);
 
+		// Only handle special inserting cases when we have a fully loaded document.
 		if (document_loaded) {
+			#if DEBUG
 			Console.WriteLine ("DEBUG: Inserting: {0}", text);
 			Console.WriteLine ("DEBUG: Start Offset: {0} Char {1}", startIter.Offset, startIter.Char);
 			Console.WriteLine ("DEBUG: End Offset: {0} Char {1}", endIter.Offset, endIter.Char);
+			#endif
 			
-			TextTag last = endIter.Tags [endIter.Tags.Length - 1];
-			TextTag last_last =  previousIter.Tags [previousIter.Tags.Length - 1];
+			TextTag lastEnd = DocumentUtils.GetLastTag (endIter);
+			TextTag lastPrevious =  DocumentUtils.GetLastTag (previousIter);
 
-			if (endIter.BeginsTag (last) && last.Editable) {
+			if (endIter.BeginsTag (lastEnd) && lastEnd.Editable) {
+				#if DEBUG
 				Console.WriteLine ("DEBUG: Inserting text at start of editable region.");
-				Console.WriteLine ("DEBUG: Tag Name: {0} Char: {1}", last.Name, endIter.Char);
-
-				ApplyTag (last, startIter, endIter);
-			} else if (previousIter.HasTag (last_last) && !startIter.HasTag (last_last) && last_last.Editable) {
+				Console.WriteLine ("DEBUG: Tag Name: {0} Char: {1}", lastEnd.Name, endIter.Char);
+				#endif
+				
+				ApplyTag (lastEnd, startIter, endIter);
+			} else if (DocumentUtils.TagEndsHere (lastPrevious, previousIter, startIter) && lastPrevious.Editable) {
+				#if DEBUG
 				Console.WriteLine ("DEBUG: Inserting text at end of editable region.");
 				Console.WriteLine ("DEBUG: Tag Name: {0} Char: {1}", last_last.Name, previousIter.Char);
+				#endif
 
-				ApplyTag (last_last, startIter, endIter);
+				ApplyTag (lastPrevious, startIter, endIter);
 			}
 		}
 	}
