@@ -20,7 +20,7 @@ namespace ImageElementExample
       public void PageLoaded(object sender, RoutedEventArgs args)
       {
          // Create Image element.
-         Image rotated90 = new Image();
+		  Mono.System.Windows.Controls.Image rotated90 = new Mono.System.Windows.Controls.Image();
          rotated90.Width = 150;
 
          // Create the TransformedBitmap to use as the Image source.

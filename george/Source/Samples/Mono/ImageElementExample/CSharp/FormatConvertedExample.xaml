@@ -2,7 +2,8 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="ImageElementExample.FormatConvertedExample"
     Title="FormatConverted Example"
-    Loaded="PageLoaded">
+    Loaded="PageLoaded"
+    xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
    <Page.Resources>
       <BitmapImage x:Key="masterImage" UriSource="/sampleImages/rocks.jpg" />
    </Page.Resources>
@@ -15,7 +16,7 @@
       </Border>
       <TextBlock DockPanel.Dock="Top" Style="{StaticResource Header1}">Original Image</TextBlock>
       <Border DockPanel.Dock="Top" Margin="0,0,0,10">
-         <Image Width="200" Source="{StaticResource masterImage}" />
+         <mono_sytem_windows_controls:Image Width="200" Source="{StaticResource masterImage}" />
       </Border>
       <Grid Name="convertedGrid" Background="{StaticResource CheckeredBrushResource}" 
          DockPanel.Dock="Top" 
@@ -34,11 +35,11 @@
          <TextBlock Style="{StaticResource Header1}" Margin="5" 
             Grid.Column="0" Grid.Row="0">Grayscale Converted in XAML</TextBlock>
          <!-- Grayscale XAML Image based on page resource -->
-         <Image Width="200" Grid.Column="0" Grid.Row="1">
-            <Image.Source>
+         <mono_sytem_windows_controls:Image Width="200" Grid.Column="0" Grid.Row="1">
+            <mono_sytem_windows_controls:Image.Source>
                <FormatConvertedBitmap Source="{StaticResource masterImage}"  DestinationFormat="Gray4" />
-            </Image.Source>
-         </Image>
+            </mono_sytem_windows_controls:Image.Source>
+         </mono_sytem_windows_controls:Image>
          <TextBlock Style="{StaticResource Header1}" Margin="5" 
             Grid.Column="1" Grid.Row="0">
             Grayscale Converted in C#
