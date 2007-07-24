@@ -1,3 +1,8 @@
+2007-07-23  Hector E. Gomez M. <hectoregm@gmail.com> 
+
+	* DocumentBuffer.cs: Overrided OnInsertText default handler for
+	  DocumentBuffer.
+
 2007-07-21  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
 
 	* Monodoc.Editor.Gui/DocumentUndoManager.cs: Changed file name from
