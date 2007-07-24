@@ -1,3 +1,7 @@
+2007-07-24  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/DataProvider.cs: Make the name of the method bold.
+
 2007-07-22  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/Enumerator.cs, Navigation/Function.cs,
