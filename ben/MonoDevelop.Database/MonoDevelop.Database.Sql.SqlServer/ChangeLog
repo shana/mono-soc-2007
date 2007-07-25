@@ -1,3 +1,8 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlServerPooledDbConnection.cs: expose the GetSchema method of the internal connection
+	* SqlServerDbFactory.cs, SqlServerSchemaProvider.cs: improved metadata support
+
 2007-07-18  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqlServerSchemaProvider.cs: SupportsSchemaOperation implementation, use of strongly typed
