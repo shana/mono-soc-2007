@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Text;
 using Mono.Cecil;
 
 namespace Measures {
@@ -45,6 +46,16 @@ namespace Measures {
 			get {
 				return method.Name;
 			}
+		}
+
+		public string GetParameters () {
+			StringBuilder stringBuilder = new StringBuilder ();
+			foreach (ParameterReference parameter in method.Parameters) {
+				if (stringBuilder.ToString () != String.Empty)
+					stringBuilder.Append (", ");
+				stringBuilder.Append (parameter.ParameterType.Name);
+			}
+			return stringBuilder.ToString ().Trim ();
 		}
 
 		public int TotalLines {

@@ -29,7 +29,7 @@ namespace Test.Measures {
 			Assert.AreEqual (1, ((ICollection) results).Count);
 			Assert.IsTrue (resultEnumerator.MoveNext ());
 			TypeMeasure typeMeasure = (TypeMeasure) resultEnumerator.Current;
-			Assert.AreEqual (3, ((ICollection) typeMeasure.MethodMeasures).Count);
+			Assert.AreEqual (5, ((ICollection) typeMeasure.MethodMeasures).Count);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Test.Measures {
 			Assert.AreEqual (1, ((ICollection) results).Count);
 			Assert.IsTrue (resultEnumerator.MoveNext ());
 			TypeMeasure typeMeasure = (TypeMeasure) resultEnumerator.Current;
-			Assert.AreEqual (2, ((ICollection) typeMeasure.MethodMeasures).Count);
+			Assert.AreEqual (4, ((ICollection) typeMeasure.MethodMeasures).Count);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace Test.Measures {
 			Assert.AreEqual (1, ((ICollection) results).Count);
 			Assert.IsTrue (resultEnumerator.MoveNext ());
 			TypeMeasure typeMeasure = (TypeMeasure) resultEnumerator.Current;
-			Assert.AreEqual (1, ((ICollection) typeMeasure.MethodMeasures).Count);
+			Assert.AreEqual (2, ((ICollection) typeMeasure.MethodMeasures).Count);
 		}
 	}
 }
