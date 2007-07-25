@@ -72,5 +72,10 @@ namespace MonoDevelop.Database.Sql
 			}
 			return table;
 		}
+		
+		public override DataTable GetSchema (string collectionName, params string[] restrictionValues)
+		{
+			return (connection as MySqlConnection).GetSchema (collectionName, restrictionValues);
+		}
 	}
 }

@@ -33,6 +33,7 @@ using MonoDevelop.Database.Components;
 
 namespace MonoDevelop.Database.Sql
 {
+	[ConnectionSettingsMetaData (true, true, true, true, true, false)]
 	public class MySqlDbFactory : IDbFactory
 	{
 		private ISqlDialect dialect;
@@ -72,20 +73,6 @@ namespace MonoDevelop.Database.Sql
 			return new MySqlSchemaProvider (connectionPool);
 		}
 		
-		public object GetOption (string name)
-		{
-			switch (name) {
-			case "settings.requires.server":
-			case "settings.requires.port":
-			case "settings.requires.username":
-			case "settings.requires.password":
-			case "settings.can_list_databases":
-				return true;
-			default:
-				return null;
-			}
-		}
-		
 		public DatabaseConnectionSettings GetDefaultConnectionSettings ()
 		{
 			DatabaseConnectionSettings settings = new DatabaseConnectionSettings ();
@@ -98,7 +85,7 @@ namespace MonoDevelop.Database.Sql
 			return settings;
 		}
 		
-		public bool ShowOpenDatabaseDialog (out string database)
+		public bool ShowSelectDatabaseDialog (bool create, out string database)
 		{
 			database = null;
 			return false;
