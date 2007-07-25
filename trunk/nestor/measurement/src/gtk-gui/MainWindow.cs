@@ -51,6 +51,7 @@ namespace Measures.Ui {
 			xmlMainWindow = new Glade.XML (null,"measures.glade", "mainWindow", null);
 			xmlMainWindow.Autoconnect (this);
 			measuresTreeView.AppendColumn ("Unit", new CellRendererText (), "text", 0);
+			measuresTreeView.AppendColumn ("Parameters", new CellRendererText (), "text", 1);
 			measuresTreeView.Selection.Changed += new EventHandler (OnTreeSelectionChanged);
 			mainWindow.ShowAll ();
 		}
@@ -135,12 +136,12 @@ namespace Measures.Ui {
 
 		private void FillTreeView (IEnumerable results) 
 		{
-			measuresTreeStore = new TreeStore (typeof (string));
+			measuresTreeStore = new TreeStore (typeof (string), typeof (string));
 
 			foreach (TypeMeasure typeMeasure in results) {
-				TreeIter parent = measuresTreeStore.AppendValues (typeMeasure.Name);	
+				TreeIter parent = measuresTreeStore.AppendValues (typeMeasure.Name, String.Empty);	
 				foreach (MethodMeasure methodMeasure in typeMeasure.MethodMeasures) {
-					measuresTreeStore.AppendValues (parent, methodMeasure.Name);
+					measuresTreeStore.AppendValues (parent, methodMeasure.Name, methodMeasure.GetParameters ());
 				}
 			}
 
@@ -155,7 +156,8 @@ namespace Measures.Ui {
 				if (measuresTreeStore.IterParent (out parent, treeIter)) {
 					string type = measuresTreeStore.GetValue (parent, 0).ToString ();
 					string method = measuresTreeStore.GetValue (treeIter, 0).ToString ();
-					ShowMethodInformation (type, method);
+					string parameters = measuresTreeStore.GetValue (treeIter, 1).ToString ();
+					ShowMethodInformation (type, method, parameters);
 				}
 				else {
 					string type = measuresTreeStore.GetValue (treeIter, 0).ToString ();
@@ -173,11 +175,12 @@ namespace Measures.Ui {
 			return null;
 		}
 
-		private MethodMeasure FindMethodMeasure (string type, string method) 
+		private MethodMeasure FindMethodMeasure (string type, string method, string parameters) 
 		{
 			TypeMeasure typeMeasure = FindTypeMeasure (type);
 			foreach (MethodMeasure methodMeasure in typeMeasure.MethodMeasures) {
-				if (String.Compare (methodMeasure.Name, method) == 0) 
+				if (String.Compare (methodMeasure.Name, method) == 0 &&
+					String.Compare (methodMeasure.GetParameters (), parameters) == 0)
 					return methodMeasure;
 			}
 			return null;
@@ -189,10 +192,10 @@ namespace Measures.Ui {
 				bin.Remove (bin.Child);
 		}
 		
-		private void ShowMethodInformation (string type, string method) 
+		private void ShowMethodInformation (string type, string method, string parameters) 
 		{
 			CleanBin (expander1);
-			expander1.Child = new MethodMeasureWidget (FindMethodMeasure (type, method)).Widget;
+			expander1.Child = new MethodMeasureWidget (FindMethodMeasure (type, method, parameters)).Widget;
 			expander1.ShowAll ();
 		}
 

@@ -17,5 +17,13 @@ namespace Test.Assembly {
 		public void MethodWithThreeParameters (int x, char j, string z) 
 		{
 		}
+
+		public void OverloadedMethod (int x, char z) 
+		{
+		}
+
+		public void OverloadedMethod (int x, char z, float f)
+		{
+		}
 	}
 }
