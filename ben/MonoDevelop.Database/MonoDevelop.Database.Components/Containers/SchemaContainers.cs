@@ -35,7 +35,7 @@ namespace MonoDevelop.Database.Components
 		
 		ColumnSchemaCollection Columns { get; }
 		
-			ParameterSchemaCollection Parameters { get; }
+		ParameterSchemaCollection Parameters { get; }
 		
 		SchemaContainerType SchemaContainerType { get; }
 	}
@@ -122,16 +122,16 @@ namespace MonoDevelop.Database.Components
 			get { return schema; }
 		}
 		
-		public ColumnSchemaCollection Columns {
-			get { return schema.Columns; }
-		}
-		
 		public ParameterSchemaCollection Parameters {
 			get { return schema.Parameters; }
 		}
 		
 		public SchemaContainerType SchemaContainerType {
 			get { return SchemaContainerType.Procedure; }
+		}
+		
+		public ColumnSchemaCollection Columns {
+			get { throw new NotImplementedException (); }
 		}
 	}
 }

@@ -15,7 +15,8 @@ REFS =  \
 
 FILES =  \
 	Codons/DataGridContentRendererCodon.cs \
-	Codons/DataGridVisualizerCodon.cs \
+	Commands/DataGridCommands.cs \
+	Commands/SqlEditorCommands.cs \
 	Containers/ColumnContainer.cs \
 	Containers/ConditionContainer.cs \
 	Containers/ParameterContainer.cs \
@@ -24,14 +25,19 @@ FILES =  \
 	Dialogs/SelectColumnDialog.cs \
 	Dialogs/ShowImageDialog.cs \
 	Dialogs/ShowTextDialog.cs \
+	Dialogs/WaitDialog.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/MonoDevelop.Database.Components.DatabaseConnectionSettingsDialog.cs \
 	gtk-gui/MonoDevelop.Database.Components.DataGrid.cs \
 	gtk-gui/MonoDevelop.Database.Components.SelectColumnDialog.cs \
 	gtk-gui/MonoDevelop.Database.Components.ShowImageDialog.cs \
 	gtk-gui/MonoDevelop.Database.Components.ShowTextDialog.cs \
+	gtk-gui/MonoDevelop.Database.Components.SqlEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Components.WaitDialog.cs \
+	MonoDevelop.Database.Components.addin.xml \
 	Widgets/CellRendererTypeCombo.cs \
 	Widgets/ColumnMappingWidget.cs \
+	Widgets/DatabaseConnectionContextComboBox.cs \
 	Widgets/DataGrid/DataGrid.cs \
 	Widgets/DataGrid/DataGridColumn.cs \
 	Widgets/DataGrid/Renderers/BlobContentRenderer.cs \
@@ -46,7 +52,8 @@ FILES =  \
 	Widgets/DataGrid/Renderers/NullContentRenderer.cs \
 	Widgets/DataGrid/Renderers/ObjectContentRenderer.cs \
 	Widgets/DataGrid/Renderers/StringContentRenderer.cs \
-	Widgets/DataGrid/VisualizerMenuItem.cs \
+	Widgets/DataGrid/Visualizers/AbstractDataGridVisualizer.cs \
+	Widgets/DataGrid/Visualizers/DataGridItemCommandHandler.cs \
 	Widgets/DataGrid/Visualizers/IDataGridVisualizer.cs \
 	Widgets/DataGrid/Visualizers/ImageVisualizer.cs \
 	Widgets/DataGrid/Visualizers/TextVisualizer.cs \
@@ -55,7 +62,8 @@ FILES =  \
 	Widgets/ProjectDirectoryComboBox.cs \
 	Widgets/SchemaMappingWidget.cs \
 	Widgets/SelectColumnWidget.cs \
-	Widgets/SelectSchemaWidget.cs
+	Widgets/SelectSchemaWidget.cs \
+	Widgets/SqlEditorWidget.cs
 
 ADDIN = MonoDevelop.Database.Components.addin.xml
 

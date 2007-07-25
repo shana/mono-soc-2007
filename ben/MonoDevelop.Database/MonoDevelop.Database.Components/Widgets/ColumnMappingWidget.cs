@@ -180,7 +180,7 @@ namespace MonoDevelop.Database.Components
 		{
 			CellRendererToggle toggleRenderer = cell as CellRendererToggle;
 			ColumnContainer container = model.GetValue (iter, columnObj) as ColumnContainer;
-			toggleRenderer.Active = !container.ColumnSchema.NotNull;
+			toggleRenderer.Active = container.ColumnSchema.IsNullable;
 		}
 		
 		private void SetterDataFunc (CellLayout layout, CellRenderer cell, TreeModel model, TreeIter iter)

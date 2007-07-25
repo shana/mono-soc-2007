@@ -25,7 +25,9 @@
 
 using Gtk;
 using System;
-using System.Collections.Generic;using MonoDevelop.Database.Sql;
+using System.Collections.Generic;
+using MonoDevelop.Core;
+using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Components
 {
@@ -37,9 +39,14 @@ namespace MonoDevelop.Database.Components
 		private const int columnSelected = 0;
 		private const int columnObj = 1;
 		
+		public SelectColumnWidget ()
+			: this (true)
+		{
+		}
+		
 		public SelectColumnWidget (bool showCheckBoxes)
 		{
-			store = new ListStore (typeof (bool), typeof (ColumnSchema));
+			store = new ListStore (typeof (bool), typeof (string), typeof (ColumnSchema));
 			list = new TreeView (store);
 			
 			TreeViewColumn col = new TreeViewColumn ();
@@ -53,9 +60,11 @@ namespace MonoDevelop.Database.Components
 			
 			CellRendererPixbuf pixbufRenderer = new CellRendererPixbuf ();
 			col.PackStart (pixbufRenderer, false);
+			col.AddAttribute (pixbufRenderer, "active", 0);
 
 			CellRendererText textRenderer = new CellRendererText ();
 			col.PackStart (textRenderer, true);
+			col.AddAttribute (textRenderer, "text", 1);
 
 			col.SetCellDataFunc (textRenderer, new CellLayoutDataFunc (TextDataFunc));
 			col.SetCellDataFunc (pixbufRenderer, new CellLayoutDataFunc (PixbufDataFunc));
@@ -66,10 +75,37 @@ namespace MonoDevelop.Database.Components
 			this.Add (list);
 		}
 		
-		public void Append (IEnumerable<ColumnSchema> columns)
+		public void Initialize (ColumnSchemaCollection columns)
 		{
 			foreach (ColumnSchema column in columns)
-				store.AppendValues (true, column);
+				store.AppendValues (false, column.Name, column);
+			
+			columns.ItemAdded += new SortedCollectionItemEventHandler<ColumnSchema> (ColumnAdded);
+			columns.ItemRemoved += new SortedCollectionItemEventHandler<ColumnSchema> (ColumnRemoved);
+		}
+		
+		protected virtual void ColumnAdded (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
+		{
+			ColumnSchemaCollection columns = sender as ColumnSchemaCollection;
+			int index = columns.IndexOf (args.Item);
+			TreeIter iter = store.Insert (index);
+			store.SetValue (iter, 0, false);
+			store.SetValue (iter, 1, args.Item.Name);
+			store.SetValue (iter, 2, args.Item);
+		}
+		
+		protected virtual void ColumnRemoved (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
+		{
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					object obj = store.GetValue (iter, 2);
+					if (obj == args.Item) {
+						store.Remove (ref iter);
+						return;
+					}
+				} while (store.IterNext (ref iter));
+			}
 		}
 		
 		public ColumnSchema SelectedColumn {

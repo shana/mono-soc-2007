@@ -1,4 +1,4 @@
-﻿//
+//
 // Authors:
 //   Ben Motmans  <ben.motmans@gmail.com>
 //
@@ -24,39 +24,48 @@
 //
 
 using Gtk;
+using GtkSourceView;
 using System;
-using System.Data;
-using Mono.Addins;
+using System.Collections.Generic;
 using MonoDevelop.Core;
+using MonoDevelop.Core.Gui;
+using MonoDevelop.Components;
+using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Components
 {
-	internal class VisualizerMenuItem : ImageMenuItem
+	public partial class SqlEditorWidget : Bin
 	{
-		private int columnIndex;
-		private TreeIter iter;
-		private IDataGridVisualizer visualizer;
+		private SourceView sourceView;
 		
-		internal VisualizerMenuItem (IDataGridVisualizer visualizer, TreeIter iter, int columnIndex)
-			: base (visualizer.Description)
+		public SqlEditorWidget()
 		{
-			this.columnIndex = columnIndex;
-			this.iter = iter;
-			this.visualizer = visualizer;
+			this.Build();
 			
-			Image = MonoDevelop.Core.Gui.Services.Resources.GetImage (visualizer.IconString, IconSize.Menu);
+			SourceLanguagesManager lm = new SourceLanguagesManager ();
+			SourceLanguage lang = lm.GetLanguageFromMimeType ("text/x-sql");
+			SourceBuffer buf = new SourceBuffer (lang);
+			buf.Highlight = true;
+			sourceView = new SourceView (buf);
+			sourceView.ShowLineNumbers = true;
+			
+			Add (sourceView);
+			ShowAll ();
 		}
 		
-		public int ColumnIndex {
-			get { return columnIndex; }
+		public string Text {
+			get { return sourceView.Buffer.Text; }
+			set {
+				if (value == null)
+					sourceView.Buffer.Text = String.Empty;
+				else
+					sourceView.Buffer.Text = value;
+			}
 		}
 		
-		public TreeIter TreeIter {
-			get { return iter; }
-		}
-		
-		public IDataGridVisualizer Visualizer {
-			get { return visualizer; }
+		public bool Editable {
+			get { return sourceView.Editable; }
+			set { sourceView.Editable = false; }
 		}
 	}
 }

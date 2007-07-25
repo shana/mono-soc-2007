@@ -159,7 +159,7 @@ namespace MonoDevelop.Database.Components {
             this.hboxDatabase.Name = "hboxDatabase";
             this.hboxDatabase.Spacing = 6;
             // Container child hboxDatabase.Gtk.Box+BoxChild
-            this.comboDatabase = new Gtk.ComboBoxEntry();
+            this.comboDatabase = Gtk.ComboBoxEntry.NewText();
             this.comboDatabase.Name = "comboDatabase";
             this.hboxDatabase.Add(this.comboDatabase);
             Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.hboxDatabase[this.comboDatabase]));
