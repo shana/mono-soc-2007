@@ -381,6 +381,7 @@
                     <property name="CanFocus">True</property>
                     <property name="IsEditable">True</property>
                     <property name="InvisibleChar">●</property>
+                    <signal name="Changed" handler="NameChanged" />
                   </widget>
                   <packing>
                     <property name="Position">1</property>
@@ -408,6 +409,7 @@
                 <property name="UseUnderline">True</property>
               </widget>
               <packing>
+                <property name="PackType">End</property>
                 <property name="Position">2</property>
                 <property name="AutoSize">True</property>
                 <property name="Expand">False</property>

@@ -326,7 +326,7 @@ namespace MonoDevelop.Database.Sql
 			sb.Append (" );");
 			
 			string sql = sb.ToString ();
-			Runtime.LoggingService.Debug (sql);
+			Runtime.LoggingService.Error (sql);
 			
 //			IPooledDbConnection conn = connectionPool.Request ();
 //			IDbCommand command = conn.CreateCommand (sql);
@@ -342,20 +342,31 @@ namespace MonoDevelop.Database.Sql
 			//CHECK ( expr )
 			//COLLATE collation-name
 			
+			StringBuilder sb = new StringBuilder ();
+			sb.Append ("CONSTRAINT ");
+			sb.Append (constraint.Name);
+			sb.Append (' ');
+			
 			switch (constraint.ConstraintType) {
 			case ConstraintType.PrimaryKey:
 				//PrimaryKeyConstraintSchema pk = constraint as PrimaryKeyConstraintSchema;
-				return "PRIMARY KEY"; //TODO: auto inc + sort
+				sb.Append ("PRIMARY KEY"); //TODO: auto inc + sort
+				break;
 			case ConstraintType.Unique:
 				//UniqueConstraintSchema u = constraint as UniqueConstraintSchema;
-				return "UNIQUE";
+				sb.Append ("UNIQUE");
+				break;
 			case ConstraintType.Check:
 				CheckConstraintSchema chk = constraint as CheckConstraintSchema;
-				return String.Concat ("CHECK (", chk.Source, ")");
+				sb.Append ("CHECK (");
+				sb.Append (chk.Source);
+				sb.Append (")");
+				break;
 			default:
 				throw new NotImplementedException ();
 			}
 			
+			return sb.ToString ();
 		}
 
 		//http://www.sqlite.org/lang_createview.html

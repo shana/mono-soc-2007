@@ -1,5 +1,6 @@
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
+	* Dialogs/TableEditorDialog.cs: small bugfixes
 	* Dialogs/CreateDatabaseDialog.cs: dialog to create a new database
 	* Dialogs/ViewEditorDialog.cs, Dialogs/UserEditorDialog.cs, 
 	Dialogs/ProcedureEditorDialog.cs, Dialogs/PreviewDialog.cs:

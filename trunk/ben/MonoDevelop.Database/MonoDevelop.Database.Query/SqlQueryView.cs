@@ -103,6 +103,7 @@ namespace MonoDevelop.Database.Query
 			
 			toolbar.Add (buttonExecute);
 			toolbar.Add (buttonStop);
+			toolbar.Add (buttonClear);
 			toolbar.Add (new SeparatorToolItem ());
 			toolbar.Add (menuConnectionsButton);
 			
@@ -217,7 +218,7 @@ namespace MonoDevelop.Database.Query
 							Environment.NewLine, "\t", GettextCatalog.GetString ("Affected Rows"), ": ", table.Rows.Count);
 						status.Buffer.Text += msg;
 							
-						TabLabel label = new TabLabel (new Label (table.TableName), Services.Resources.GetImage ("md-db-table", IconSize.Button));
+						TabLabel label = new TabLabel (new Label (table.TableName), Services.Resources.GetImage ("md-db-table", IconSize.Menu));
 						label.CloseClicked += new EventHandler (OnResultTabClose);
 						notebook.AppendPage (grid, label);
 						notebook.ShowAll ();
@@ -324,6 +325,7 @@ namespace MonoDevelop.Database.Query
 		{
 			buttonExecute.Sensitive = !exec;
 			buttonStop.Sensitive = exec;
+			buttonClear.Sensitive = !exec;
 			sqlEditor.Editable = !exec;
 			
 			status.Buffer.Text = msg + Environment.NewLine;
