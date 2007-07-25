@@ -37,7 +37,7 @@ namespace CBinding.Navigation
 {
 	public delegate void LanguageItemEventHandler (object sender, LanguageItemEventArgs e);
 	
-	public class LanguageItemEventArgs
+	public class LanguageItemEventArgs : EventArgs
 	{
 		LanguageItem item;
 		

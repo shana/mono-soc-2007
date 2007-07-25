@@ -30,8 +30,10 @@
 //
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
+using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Projects.Gui.Completion;
 
@@ -117,4 +119,85 @@ namespace CBinding
 			return functions[overload].Parameters.Length;
 		}
 	}
+	
+	public class CompletionDataProvider : ICompletionDataProvider
+	{
+		private string defaultCompletionString;
+		private ArrayList completionData = new ArrayList ();
+		
+		public ICompletionData[] GenerateCompletionData (ICompletionWidget widget, char charTyped)
+		{
+			return (ICompletionData[])completionData.ToArray (typeof(ICompletionData));
+		}
+		
+		public void AddCompletionData (ICompletionData data)
+		{
+			completionData.Add (data);
+		}
+		
+		public string DefaultCompletionString {
+			get { return defaultCompletionString; }
+		}
+		
+		public virtual void Dispose ()
+		{
+		}
+	}
+	
+	public class CompletionData : ICompletionDataWithMarkup
+	{
+		private string image;
+		private string text;
+		private string description;
+		private string completion_string;
+		private string description_pango;
+		
+		public CompletionData (LanguageItem item)
+		{
+			if (item is Class)
+				image = Stock.Class;
+			else if (item is Structure)
+				image = Stock.Struct;
+			else if (item is Union)
+				image = Stock.Struct;
+			else if (item is Enumeration)
+				image = Stock.Enum;
+			else if (item is Enumerator)
+				image = Stock.Literal;
+			else if (item is Function)
+				image = Stock.Method;
+			else if (item is Namespace)
+				image = Stock.NameSpace;
+			else if (item is Typedef)
+				image = Stock.Reference;
+			else
+				image = Stock.Literal;
+			
+			this.text = item.Name;
+			this.completion_string = item.Name;
+			this.description = string.Empty;
+			this.description_pango = string.Empty;
+		}
+		
+		public string Image {
+			get { return image; }
+		}
+		
+		public string[] Text {
+			get { return new string[] { text }; }
+		}
+		
+		public string Description {
+			get { return description; }
+		}
+
+		public string CompletionString {
+			get { return completion_string; }
+		}
+		
+		public string DescriptionPango {
+			get { return description_pango; }
+		}		
+	}
+
 }

@@ -37,7 +37,7 @@ namespace CBinding.Navigation
 {
 	public delegate void ClassPadEventHandler (ClassPadEventArgs e);
 	
-	public class ClassPadEventArgs
+	public class ClassPadEventArgs : EventArgs
 	{
 		private Project project;
 		

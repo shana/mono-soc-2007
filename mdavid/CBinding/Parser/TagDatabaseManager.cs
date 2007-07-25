@@ -48,6 +48,7 @@ namespace CBinding.Parser
 	public class TagDatabaseManager
 	{
 		private static TagDatabaseManager instance;
+		public event ClassPadEventHandler FileUpdated;
 		
 		private TagDatabaseManager()
 		{
@@ -83,6 +84,139 @@ namespace CBinding.Parser
 			} catch (Exception ex) {
 				throw new IOException ("Could not create tags database (You must have exuberant ctags installed).", ex);
 			}
+		}
+		
+		private string Headers (string filename)
+		{
+			ProcessWrapper p = Runtime.ProcessService.StartProcess ("gcc", "-MM -MG " + filename, null, null);
+			p.WaitForExit ();
+			
+			StringBuilder output = new StringBuilder ();
+			string line;
+			
+			while ((line = p.StandardOutput.ReadLine ()) != null)
+				output.Append (line);
+			
+			p.Close ();
+			
+			string[] lines = output.ToString ().Split ('\\');
+			StringBuilder headers = new StringBuilder ();
+			
+			for (int i = 0; i < lines.Length; i++) {
+				string[] files = lines[i].Split (' ');
+				// first line contains the rule (eg. file.o: dep1.c dep2.h ...) and we must skip it
+				// and we skip the *.cpp or *.c etc. too
+				for (int j = 0; j < files.Length; j++) {
+					if (j == 0 || j == 1) continue;
+					
+					string depfile = files[j].Trim ();
+					
+					if (!string.IsNullOrEmpty (depfile))
+						headers.Append (depfile + " ");
+				}
+			}
+			
+			return headers.ToString ();
+		}
+		
+		public void UpdateFileTags (Project project, string filename)
+		{
+			string tagsDir = Path.Combine (project.BaseDirectory, ".tags");
+			
+			if (!Directory.Exists (tagsDir))
+				Directory.CreateDirectory (tagsDir);
+			
+			string tagsFile = Path.Combine (tagsDir, Path.GetFileName (filename) + ".tags");
+			
+			string ctags_options = "--C++-kinds=+p+u --fields=+a-f+S --language-force=C++ --excmd=pattern -f " + tagsFile + " " + filename + " " + Headers (filename);
+			
+			try {
+				ProcessWrapper p = Runtime.ProcessService.StartProcess ("ctags", ctags_options, tagsDir, null);
+				p.WaitForExit ();
+				p.Close ();
+			} catch (Exception ex) {
+				throw new IOException ("Could not create tags database (You must have exuberant ctags installed).", ex);
+			}
+			
+			ProjectInformation info = ProjectInformationManager.Instance.Get (project);
+			string tagEntry;
+			
+			using (StreamReader reader = new StreamReader (tagsFile)) {
+				while ((tagEntry = reader.ReadLine ()) != null) {
+					if (tagEntry.StartsWith ("!_")) continue;
+					
+					Tag tag = ParseTag (tagEntry);
+					
+					switch (tag.Kind)
+					{
+					case TagKind.Class:
+						Class c = new Class (tag, project);
+						if (!info.Classes.Contains (c))
+							info.Classes.Add (c);
+						break;
+					case TagKind.Enumeration:
+						Enumeration e = new Enumeration (tag, project);
+						if (!info.Enumerations.Contains (e))
+							info.Enumerations.Add (e);
+						break;
+					case TagKind.Enumerator:
+						Enumerator en= new Enumerator (tag, project);
+						if (!info.Enumerators.Contains (en))
+							info.Enumerators.Add (en);
+						break;
+					case TagKind.ExternalVariable:
+						break;
+					case TagKind.Function:
+						Function f = new Function (tag, project);
+						if (!info.Functions.Contains (f))
+							info.Functions.Add (f);
+						break;
+					case TagKind.Local:
+						break;
+					case TagKind.Macro:
+						Macro m = new Macro (tag, project);
+						if (!info.Macros.Contains (m))
+							info.Macros.Add (m);
+						break;
+					case TagKind.Member:
+						Member me = new Member (tag, project);
+						if (!info.Members.Contains (me))
+							info.Members.Add (me);
+						break;
+					case TagKind.Namespace:
+						Namespace n = new Namespace (tag, project);
+						if (!info.Namespaces.Contains (n))
+							info.Namespaces.Add (n);
+						break;
+					case TagKind.Prototype:
+						break;
+					case TagKind.Structure:
+						Structure s = new Structure (tag, project);
+						if (!info.Structures.Contains (s))
+							info.Structures.Add (s);
+						break;
+					case TagKind.Typedef:
+						Typedef t = new Typedef (tag, project);
+						if (!info.Typedefs.Contains (t))
+							info.Typedefs.Add (t);
+						break;
+					case TagKind.Union:
+						Union u = new Union (tag, project);
+						if (!info.Unions.Contains (u))
+							info.Unions.Add (u);
+						break;
+					case TagKind.Variable:
+						Variable v = new Variable (tag, project);
+						if (!info.Variables.Contains (v))
+							info.Variables.Add (v);
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			
+			FileUpdated (new ClassPadEventArgs (project));
 		}
 		
 		private Tag ParseTag (string tagEntry)
@@ -182,43 +316,65 @@ namespace CBinding.Parser
 					switch (tag.Kind)
 					{
 					case TagKind.Class:
-						info.Classes.Add (new Class (tag, project));
+						Class c = new Class (tag, project);
+						if (!info.Classes.Contains (c))
+							info.Classes.Add (c);
 						break;
 					case TagKind.Enumeration:
-						info.Enumerations.Add (new Enumeration (tag, project));
+						Enumeration e = new Enumeration (tag, project);
+						if (!info.Enumerations.Contains (e))
+							info.Enumerations.Add (e);
 						break;
 					case TagKind.Enumerator:
-						info.Enumerators.Add (new Enumerator (tag, project));
+						Enumerator en= new Enumerator (tag, project);
+						if (!info.Enumerators.Contains (en))
+							info.Enumerators.Add (en);
 						break;
 					case TagKind.ExternalVariable:
 						break;
 					case TagKind.Function:
-						info.Functions.Add (new Function (tag, project));
+						Function f = new Function (tag, project);
+						if (!info.Functions.Contains (f))
+							info.Functions.Add (f);
 						break;
 					case TagKind.Local:
 						break;
 					case TagKind.Macro:
-						info.Macros.Add (new Macro (tag, project));
+						Macro m = new Macro (tag, project);
+						if (!info.Macros.Contains (m))
+							info.Macros.Add (m);
 						break;
 					case TagKind.Member:
-						info.Members.Add (new Member (tag, project));
+						Member me = new Member (tag, project);
+						if (!info.Members.Contains (me))
+							info.Members.Add (me);
 						break;
 					case TagKind.Namespace:
-						info.Namespaces.Add (new Namespace (tag, project));
+						Namespace n = new Namespace (tag, project);
+						if (!info.Namespaces.Contains (n))
+							info.Namespaces.Add (n);
 						break;
 					case TagKind.Prototype:
 						break;
 					case TagKind.Structure:
-						info.Structures.Add (new Structure (tag, project));
+						Structure s = new Structure (tag, project);
+						if (!info.Structures.Contains (s))
+							info.Structures.Add (s);
 						break;
 					case TagKind.Typedef:
-						info.Typedefs.Add (new Typedef (tag, project));
+						Typedef t = new Typedef (tag, project);
+						if (!info.Typedefs.Contains (t))
+							info.Typedefs.Add (t);
 						break;
 					case TagKind.Union:
-						info.Unions.Add (new Union (tag, project));
+						Union u = new Union (tag, project);
+						if (!info.Unions.Contains (u))
+							info.Unions.Add (u);
 						break;
 					case TagKind.Variable:
-						info.Variables.Add (new Variable (tag, project));
+						Variable v = new Variable (tag, project);
+						if (!info.Variables.Contains (v))
+							info.Variables.Add (v);
 						break;
 					default:
 						break;
