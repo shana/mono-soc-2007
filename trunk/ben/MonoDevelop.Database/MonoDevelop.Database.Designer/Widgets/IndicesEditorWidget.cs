@@ -34,13 +34,17 @@ using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Designer
 {
-	
-	
 	public partial class IndicesEditorWidget : Gtk.Bin
 	{
+		private ISchemaProvider schemaProvider;
 		
-		public IndicesEditorWidget()
+		public IndicesEditorWidget(ISchemaProvider schemaProvider)
 		{
+			if (schemaProvider == null)
+				throw new ArgumentNullException ("schemaProvider");
+			
+			this.schemaProvider = schemaProvider;
+
 			this.Build();
 		}
 	}

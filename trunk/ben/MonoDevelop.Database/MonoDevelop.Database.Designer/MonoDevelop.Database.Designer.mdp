@@ -28,6 +28,19 @@
     <File name="./gtk-gui/MonoDevelop.Database.Designer.IndicesEditorWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialogs/TableEditorDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Designer.TableEditorDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MonoDevelop.Database.Designer.addin.xml" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/CreateDatabaseDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.CreateDatabaseDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/ViewEditorDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.ViewEditorDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/ProcedureEditorDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.ProcedureEditorDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/CommentEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.CommentEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/PreviewDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.PreviewDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Dialogs/UserEditorDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.UserEditorDialog.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -45,6 +58,8 @@
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Projects, Version=0.14.0.0, Culture=neutral" />
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Projects.Gui, Version=0.14.0.0, Culture=neutral" />
     <ProjectReference type="Gac" localcopy="True" refto="NRefactory, Version=0.0.0.0, Culture=neutral" />
+    <ProjectReference type="Gac" localcopy="True" refto="gtksourceview-sharp, Version=1.0.0.2, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Addins.dll" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True">
     <BuildFilesVar Sync="True" Name="FILES" />
@@ -62,6 +77,7 @@
       <Widget>MonoDevelop.Database.Designer.ColumnsEditorWidget</Widget>
       <Widget>MonoDevelop.Database.Designer.ConstraintsEditorWidget</Widget>
       <Widget>MonoDevelop.Database.Designer.IndicesEditorWidget</Widget>
+      <Widget>MonoDevelop.Database.Designer.CommentEditorWidget</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
 </Project>

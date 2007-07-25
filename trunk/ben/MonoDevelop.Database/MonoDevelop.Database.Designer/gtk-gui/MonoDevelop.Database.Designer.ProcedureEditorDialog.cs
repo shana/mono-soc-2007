@@ -11,7 +11,7 @@
 namespace MonoDevelop.Database.Designer {
     
     
-    public partial class TableEditorDialog {
+    public partial class ProcedureEditorDialog {
         
         private Gtk.VBox vboxContent;
         
@@ -21,22 +21,17 @@ namespace MonoDevelop.Database.Designer {
         
         private Gtk.Entry entryName;
         
-        private Gtk.CheckButton checkPreview;
-        
         private Gtk.Button buttonCancel;
         
         private Gtk.Button buttonOk;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize();
-            // Widget MonoDevelop.Database.Designer.TableEditorDialog
-            this.Name = "MonoDevelop.Database.Designer.TableEditorDialog";
-            this.Title = Mono.Unix.Catalog.GetString("Edit Table");
-            this.TypeHint = ((Gdk.WindowTypeHint)(1));
-            this.WindowPosition = ((Gtk.WindowPosition)(1));
-            this.SkipTaskbarHint = true;
+            // Widget MonoDevelop.Database.Designer.ProcedureEditorDialog
+            this.Name = "MonoDevelop.Database.Designer.ProcedureEditorDialog";
+            this.WindowPosition = ((Gtk.WindowPosition)(4));
             this.HasSeparator = false;
-            // Internal child MonoDevelop.Database.Designer.TableEditorDialog.VBox
+            // Internal child MonoDevelop.Database.Designer.ProcedureEditorDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
             w1.BorderWidth = ((uint)(2));
@@ -73,27 +68,15 @@ namespace MonoDevelop.Database.Designer {
             w4.Position = 0;
             w4.Expand = false;
             w4.Fill = false;
-            // Container child vboxContent.Gtk.Box+BoxChild
-            this.checkPreview = new Gtk.CheckButton();
-            this.checkPreview.CanFocus = true;
-            this.checkPreview.Name = "checkPreview";
-            this.checkPreview.Label = Mono.Unix.Catalog.GetString("Preview SQL");
-            this.checkPreview.DrawIndicator = true;
-            this.checkPreview.UseUnderline = true;
-            this.vboxContent.Add(this.checkPreview);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vboxContent[this.checkPreview]));
-            w5.Position = 2;
-            w5.Expand = false;
-            w5.Fill = false;
             w1.Add(this.vboxContent);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
-            w6.Position = 0;
-            // Internal child MonoDevelop.Database.Designer.TableEditorDialog.ActionArea
-            Gtk.HButtonBox w7 = this.ActionArea;
-            w7.Name = "dialog1_ActionArea";
-            w7.Spacing = 6;
-            w7.BorderWidth = ((uint)(5));
-            w7.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
+            w5.Position = 0;
+            // Internal child MonoDevelop.Database.Designer.ProcedureEditorDialog.ActionArea
+            Gtk.HButtonBox w6 = this.ActionArea;
+            w6.Name = "dialog1_ActionArea";
+            w6.Spacing = 6;
+            w6.BorderWidth = ((uint)(5));
+            w6.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonCancel = new Gtk.Button();
             this.buttonCancel.CanDefault = true;
@@ -103,9 +86,9 @@ namespace MonoDevelop.Database.Designer {
             this.buttonCancel.UseUnderline = true;
             this.buttonCancel.Label = "gtk-cancel";
             this.AddActionWidget(this.buttonCancel, -6);
-            Gtk.ButtonBox.ButtonBoxChild w8 = ((Gtk.ButtonBox.ButtonBoxChild)(w7[this.buttonCancel]));
-            w8.Expand = false;
-            w8.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w7 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.buttonCancel]));
+            w7.Expand = false;
+            w7.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
             this.buttonOk.CanDefault = true;
@@ -115,18 +98,16 @@ namespace MonoDevelop.Database.Designer {
             this.buttonOk.UseUnderline = true;
             this.buttonOk.Label = "gtk-ok";
             this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w9 = ((Gtk.ButtonBox.ButtonBoxChild)(w7[this.buttonOk]));
-            w9.Position = 1;
-            w9.Expand = false;
-            w9.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w8 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.buttonOk]));
+            w8.Position = 1;
+            w8.Expand = false;
+            w8.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 538;
-            this.DefaultHeight = 355;
+            this.DefaultWidth = 400;
+            this.DefaultHeight = 300;
             this.Show();
-            this.buttonCancel.Clicked += new System.EventHandler(this.CancelClicked);
-            this.buttonOk.Clicked += new System.EventHandler(this.OkClicked);
         }
     }
 }

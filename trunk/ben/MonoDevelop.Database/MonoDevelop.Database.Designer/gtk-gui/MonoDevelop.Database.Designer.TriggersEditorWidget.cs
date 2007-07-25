@@ -12,5 +12,16 @@ namespace MonoDevelop.Database.Designer {
     
     
     public partial class TriggersEditorWidget {
+        
+        protected virtual void Build() {
+            Stetic.Gui.Initialize();
+            // Widget MonoDevelop.Database.Designer.TriggersEditorWidget
+            Stetic.BinContainer.Attach(this);
+            this.Name = "MonoDevelop.Database.Designer.TriggersEditorWidget";
+            if ((this.Child != null)) {
+                this.Child.ShowAll();
+            }
+            this.Show();
+        }
     }
 }

@@ -36,53 +36,72 @@ namespace MonoDevelop.Database.Designer
 {
 	public partial class ColumnsEditorWidget : Gtk.Bin
 	{
+		public EventHandler ContentChanged;
+		
 		private ListStore storeColumns;
 		private ListStore storeTypes;
 		
 		private const int colPKIndex = 0;
-		private const int colFKIndex = 1;
-		private const int colNameIndex = 2;
-		private const int colTypeIndex = 3;
-		private const int colLengthIndex = 4;
-		private const int colNullableIndex = 5;
-		private const int colCommentIndex = 6;
-		private const int colObjectIndex = 7;
-		private const int colKeyObjectIndex = 8;
+		private const int colNameIndex = 1;
+		private const int colTypeIndex = 2;
+		private const int colLengthIndex = 3;
+		private const int colNullableIndex = 4;
+		private const int colCommentIndex = 5;
+		private const int colObjectIndex = 6;
 		
+		private ColumnSchemaCollection columns;
+		private ConstraintSchemaCollection constraints;
+		private DataTypeSchemaCollection dataTypes;
 		private ISchemaProvider schemaProvider;
-		private TableSchema table;
-		private object sync = new object ();
 		
-		private ColumnSchemaCollection columns = null;
-		private ConstraintSchemaCollection constraints = null;
-		private TriggerSchemaCollection triggers = null;
-		
-		public ColumnsEditorWidget()
+		public ColumnsEditorWidget (ISchemaProvider schemaProvider)
 		{
+			if (schemaProvider == null)
+				throw new ArgumentNullException ("schemaProvider");
+			
+			this.schemaProvider = schemaProvider;
+
 			this.Build();
 			
-			storeTypes = new ListStore (typeof (string));
-			storeColumns = new ListStore (typeof (Gdk.Pixbuf), typeof (Gdk.Pixbuf), typeof (string), typeof (string), typeof (int), typeof (bool), typeof (string), typeof (object), typeof (object));
+			storeTypes = new ListStore (typeof (string), typeof (object));
+			storeColumns = new ListStore (typeof (bool), typeof (string), typeof (string), typeof (string), typeof (bool), typeof (string), typeof (object));
 			treeColumns.Model = storeColumns;
+			treeColumns.Selection.Changed += new EventHandler (OnSelectionChanged);
+
+			//TODO: cols for scale, precision, ... ?
+			TreeViewColumn colPK = new TreeViewColumn ();
+			TreeViewColumn colName = new TreeViewColumn ();
+			TreeViewColumn colType = new TreeViewColumn ();
+			TreeViewColumn colLength = new TreeViewColumn ();
+			TreeViewColumn colNullable = new TreeViewColumn ();
+			TreeViewColumn colComment = new TreeViewColumn ();
 			
-			TreeViewColumn colName = new TreeViewColumn (GettextCatalog.GetString ("Name"));
-			TreeViewColumn colType = new TreeViewColumn (GettextCatalog.GetString ("Type"));
-			TreeViewColumn colLength = new TreeViewColumn (GettextCatalog.GetString ("Length"));
-			TreeViewColumn colPK = new TreeViewColumn (GettextCatalog.GetString ("PK"));
-			TreeViewColumn colNullable = new TreeViewColumn (GettextCatalog.GetString ("N"));
-			TreeViewColumn colComment = new TreeViewColumn (GettextCatalog.GetString ("Comment"));
+			colPK.Title = GettextCatalog.GetString ("PK");
+			colName.Title = GettextCatalog.GetString ("Name");
+			colType.Title = GettextCatalog.GetString ("Type");
+			colLength.Title = GettextCatalog.GetString ("Length");
+			colNullable.Title = GettextCatalog.GetString ("Nullable");
+			colComment.Title = GettextCatalog.GetString ("Comment");
 			
+			colType.MinWidth = 120; //request a bigger width
+
+			CellRendererToggle pkRenderer = new CellRendererToggle ();
 			CellRendererText nameRenderer = new CellRendererText ();
 			CellRendererCombo typeRenderer = new CellRendererCombo ();
-			CellRendererSpin lengthRenderer = new CellRendererSpin ();
-			CellRendererToggle pkRenderer = new CellRendererToggle ();
+			CellRendererText lengthRenderer = new CellRendererText ();
 			CellRendererToggle nullableRenderer = new CellRendererToggle ();
 			CellRendererText commentRenderer = new CellRendererText ();
-			
+
 			nameRenderer.Editable = true;
 			nameRenderer.Edited += new EditedHandler (NameEdited);
 			
 			typeRenderer.Model = storeTypes;
+			typeRenderer.TextColumn = 0;
+			typeRenderer.Editable = true;
+			typeRenderer.Edited += new EditedHandler (TypeEdited);
+			
+			lengthRenderer.Editable = true;
+			lengthRenderer.Edited += new EditedHandler (LengthEdited);
 			
 			pkRenderer.Activatable = true;
 			pkRenderer.Toggled += new ToggledHandler (PkToggled);
@@ -93,67 +112,88 @@ namespace MonoDevelop.Database.Designer
 			commentRenderer.Editable = true;
 			commentRenderer.Edited += new EditedHandler (CommentEdited);
 			
+			colPK.PackStart (pkRenderer, true);
 			colName.PackStart (nameRenderer, true);
 			colType.PackStart (typeRenderer, true);
 			colLength.PackStart (lengthRenderer, true);
-			colPK.PackStart (pkRenderer, true);
 			colNullable.PackStart (nullableRenderer, true);
 			colComment.PackStart (commentRenderer, true);
-			
+
+			colPK.AddAttribute (pkRenderer, "active", colPKIndex);
+			colName.AddAttribute (nameRenderer, "text", colNameIndex);
+			colType.AddAttribute (typeRenderer, "text", colTypeIndex);
+			colLength.AddAttribute (lengthRenderer, "text", colLengthIndex);
+			colNullable.AddAttribute (nullableRenderer, "active", colNullableIndex);
+			colComment.AddAttribute (commentRenderer, "text", colCommentIndex);
+
+			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.PrimaryKeyConstraints))
+				treeColumns.AppendColumn (colPK);
 			treeColumns.AppendColumn (colName);
 			treeColumns.AppendColumn (colType);
-			treeColumns.AppendColumn (colLength);
-			treeColumns.AppendColumn (colPK);
-			treeColumns.AppendColumn (colNullable);
-			treeColumns.AppendColumn (colComment);
-			
+			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.Length))
+				treeColumns.AppendColumn (colLength);
+			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.Nullable))
+				treeColumns.AppendColumn (colNullable);
+			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.Comment))
+				treeColumns.AppendColumn (colComment);
+
 			treeColumns.Reorderable = false;
 			treeColumns.HeadersClickable = false;
 			treeColumns.HeadersVisible = true;
-			treeColumns.EnableGridLines = TreeViewGridLines.Vertical;
+			treeColumns.EnableGridLines = TreeViewGridLines.Both;
 			treeColumns.EnableSearch = false;
-			
-			treeColumns.ShowAll ();
+
+			ShowAll ();
 		}
 		
-		public void Initialize (ISchemaProvider schemaProvider, TableSchema table)
+		public void Initialize (ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
 		{
-			if (schemaProvider == null)
-				throw new ArgumentNullException ("schemaProvider");
-			if (table == null)
-				throw new ArgumentNullException ("table");
+			if (columns == null)
+				throw new ArgumentNullException ("columns");
+			if (constraints == null)
+				throw new ArgumentNullException ("constraints");
+
+			this.columns = columns;
+			this.constraints = constraints;
+			this.dataTypes = dataTypes;
 			
-			lock (sync) {
-				this.schemaProvider = schemaProvider;
-				this.table = table;
-			}
-			ThreadPool.QueueUserWorkItem (new WaitCallback (InitializeThreaded));
+			foreach (ColumnSchema column in columns)
+				AppendColumnSchema (column);
+			
+			foreach (DataTypeSchema dataType in dataTypes)
+				storeTypes.AppendValues (dataType.Name, storeTypes);
 		}
 		
-		private void InitializeThreaded (object state)
+		public bool ValidateContent ()
 		{
-			lock (sync) {
-				columns = schemaProvider.GetTableColumns (table);
-				constraints = schemaProvider.GetTableConstraints (table);
-				triggers = schemaProvider.GetTriggers (table);
-			}
-			
-			foreach (ColumnSchema column in columns) {
-				Services.DispatchService.GuiDispatch (delegate () {
-					AppendColumnSchema (column);
-				});
-			}
+			//TODO: validate col types
+			return false;
 		}
 		
 		private void AppendColumnSchema (ColumnSchema column)
 		{
-			//TODO: PK+FK
-			//storeColumns.AppendValues (column.Name, column.DataTypeName, column.Length, false, column.NotNull, column.Comment, column);
+			bool pk = false;
+			
+//			pk = column.Constraints.GetConstraintWithColumn (column.Name, ConstraintType.PrimaryKey) != null;
+//			fk = column.Constraints.GetConstraintWithColumn (column.Name, ConstraintType.ForeignKey) != null;
+//			
+//			pk |= constraints.GetConstraintWithColumn (column.Name, ConstraintType.PrimaryKey) != null;
+//			fk |= constraints.GetConstraintWithColumn (column.Name, ConstraintType.ForeignKey) != null;
+			
+			storeColumns.AppendValues (pk, column.Name, column.DataTypeName, column.Length.ToString (), column.IsNullable, column.Comment, column);
 		}
 
 		protected virtual void AddClicked (object sender, EventArgs e)
 		{
 			ColumnSchema column = new ColumnSchema (schemaProvider);
+			column.Name = CreateColumnName ();
+			TreeIter iter;
+			if (storeTypes.GetIterFirst (out iter))
+				column.DataTypeName = storeTypes.GetValue (iter, 0) as string;
+			
+			Runtime.LoggingService.DebugFormat ("ADD: {0} {1}", column.Name, column.DataTypeName);
+			
+			columns.Add (column);
 			AppendColumnSchema (column);
 		}
 
@@ -162,6 +202,8 @@ namespace MonoDevelop.Database.Designer
 			TreeIter iter;
 			if (treeColumns.Selection.GetSelected (out iter)) {
 				ColumnSchema column = storeColumns.GetValue (iter, colObjectIndex) as ColumnSchema;
+				
+				//TODO: also check for attached constraints
 				
 				bool result = Services.MessageService.AskQuestion (
 					GettextCatalog.GetString ("Are you sure you want to remove column '{0}'", column.Name),
@@ -177,8 +219,8 @@ namespace MonoDevelop.Database.Designer
 		{
 	 		TreeIter iter;
 			if (storeColumns.GetIterFromString (out iter, args.Path)) {
-	 			bool val = (bool) storeColumns.GetValue (iter, colPkIndex);
-	 			storeColumns.SetValue (iter, colPkIndex, !val);
+	 			bool val = (bool) storeColumns.GetValue (iter, colPKIndex);
+	 			storeColumns.SetValue (iter, colPKIndex, !val);
 	 		}
 		}
 		
@@ -204,11 +246,92 @@ namespace MonoDevelop.Database.Designer
 			}
 		}
 		
+		private void TypeEdited (object sender, EditedArgs args)
+		{
+			TreeIter iter;
+			if (storeColumns.GetIterFromString (out iter, args.Path)) {
+				if (!string.IsNullOrEmpty (args.NewText)) {
+					storeColumns.SetValue (iter, colTypeIndex, args.NewText);
+				} else {
+					string oldText = storeColumns.GetValue (iter, colTypeIndex) as string;
+					(sender as CellRendererText).Text = oldText;
+				}
+			}
+		}
+		
+		private void LengthEdited (object sender, EditedArgs args)
+		{
+			TreeIter iter;
+			if (storeColumns.GetIterFromString (out iter, args.Path)) {
+				int len;
+				if (!string.IsNullOrEmpty (args.NewText) && int.TryParse (args.NewText, out len)) {
+					storeColumns.SetValue (iter, colLengthIndex, args.NewText);
+				} else {
+					string oldText = storeColumns.GetValue (iter, colLengthIndex) as string;
+					(sender as CellRendererText).Text = oldText;
+				}
+			}
+		}
+		
 		private void CommentEdited (object sender, EditedArgs args)
 		{
 			TreeIter iter;
 			if (storeColumns.GetIterFromString (out iter, args.Path))
-				storeColumns.SetValue (iter, colNameIndex, args.NewText);
+				storeColumns.SetValue (iter, colCommentIndex, args.NewText);
+		}
+
+		protected virtual void DownClicked (object sender, EventArgs e)
+		{
+			TreeIter iter;
+			if (treeColumns.Selection.GetSelected (out iter)) {
+				TreePath path = storeColumns.GetPath (iter);
+				int x = path.Indices[0];
+				columns.Swap (x, x + 1);
+			}
+		}
+
+		protected virtual void UpClicked (object sender, EventArgs e)
+		{
+			TreeIter iter;
+			if (treeColumns.Selection.GetSelected (out iter)) {
+				TreePath path = storeColumns.GetPath (iter);
+				int x = path.Indices[0];
+				columns.Swap (x, x - 1);
+			}
+		}
+		
+		private void OnSelectionChanged (object sender, EventArgs e)
+		{
+			TreeIter iter;
+			bool sel = false;
+			bool next = false;
+			bool prev = false;
+			
+			if (treeColumns.Selection.GetSelected (out iter)) {
+				TreePath path = storeColumns.GetPath (iter);
+				int index = path.Indices[0];
+				
+				sel = true;
+				prev = index > 0;
+				next = storeColumns.IterNext (ref iter);
+			}
+			
+			buttonUp.Sensitive = prev;
+			buttonDown.Sensitive = next;
+			buttonRemove.Sensitive = sel;
+		}
+		
+		private string CreateColumnName ()
+		{
+			string prefix = "column";
+			int counter = 0;
+			
+			bool isUnique = false;
+			do {
+				isUnique = !columns.Contains (prefix + (++counter));
+			} while (!isUnique);
+			
+			return prefix + counter;
 		}
 	}
 }

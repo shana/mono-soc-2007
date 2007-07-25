@@ -12,5 +12,16 @@ namespace MonoDevelop.Database.Designer {
     
     
     public partial class IndicesEditorWidget {
+        
+        protected virtual void Build() {
+            Stetic.Gui.Initialize();
+            // Widget MonoDevelop.Database.Designer.IndicesEditorWidget
+            Stetic.BinContainer.Attach(this);
+            this.Name = "MonoDevelop.Database.Designer.IndicesEditorWidget";
+            if ((this.Child != null)) {
+                this.Child.ShowAll();
+            }
+            this.Show();
+        }
     }
 }

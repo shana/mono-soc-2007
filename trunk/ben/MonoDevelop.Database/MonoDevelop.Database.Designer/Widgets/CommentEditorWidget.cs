@@ -34,18 +34,21 @@ using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Designer
 {
-	public partial class TriggersEditorWidget : Gtk.Bin
+	public partial class CommentEditorWidget : Gtk.Bin
 	{
-		private ISchemaProvider schemaProvider;
-		
-		public TriggersEditorWidget(ISchemaProvider schemaProvider)
+		public CommentEditorWidget()
 		{
-			if (schemaProvider == null)
-				throw new ArgumentNullException ("schemaProvider");
-			
-			this.schemaProvider = schemaProvider;
-
 			this.Build();
+		}
+		
+		public string Comment {
+			get { return textComment.Buffer.Text; }
+			set {
+				if (value == null)
+					textComment.Buffer.Text = String.Empty;
+				else
+					textComment.Buffer.Text = value;
+			}
 		}
 	}
 }

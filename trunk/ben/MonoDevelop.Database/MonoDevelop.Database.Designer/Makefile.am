@@ -2,7 +2,9 @@ ADDIN_BUILD = $(top_builddir)/build/AddIns/MonoDevelop.Database
 ASSEMBLY = $(ADDIN_BUILD)/MonoDevelop.Database.Designer.dll
 REFS =  \
 	-pkg:gtk-sharp-2.0 \
+	-pkg:gtksourceview-sharp-2.0 \
 	-pkg:monodevelop \
+	-r:../../contrib/Mono.Addins.dll \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:Mono.Posix \
@@ -10,14 +12,27 @@ REFS =  \
 
 FILES =  \
 	Commands/temp.cs \
+	Dialogs/CreateDatabaseDialog.cs \
+	Dialogs/PreviewDialog.cs \
+	Dialogs/ProcedureEditorDialog.cs \
 	Dialogs/TableEditorDialog.cs \
+	Dialogs/UserEditorDialog.cs \
+	Dialogs/ViewEditorDialog.cs \
 	gtk-gui/generated.cs \
 	gtk-gui/MonoDevelop.Database.Designer.ColumnsEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.CommentEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.ConstraintsEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.CreateDatabaseDialog.cs \
 	gtk-gui/MonoDevelop.Database.Designer.IndicesEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.PreviewDialog.cs \
+	gtk-gui/MonoDevelop.Database.Designer.ProcedureEditorDialog.cs \
 	gtk-gui/MonoDevelop.Database.Designer.TableEditorDialog.cs \
 	gtk-gui/MonoDevelop.Database.Designer.TriggersEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.UserEditorDialog.cs \
+	gtk-gui/MonoDevelop.Database.Designer.ViewEditorDialog.cs \
+	MonoDevelop.Database.Designer.addin.xml \
 	Widgets/ColumnsEditorWidget.cs \
+	Widgets/CommentEditorWidget.cs \
 	Widgets/ConstraintsEditorWidget.cs \
 	Widgets/IndicesEditorWidget.cs \
 	Widgets/TriggersEditorWidget.cs
