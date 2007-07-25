@@ -45,35 +45,35 @@ using System.Collections.Generic;
 		
 		public override bool SupportsSchemaOperation (SchemaOperation operation)
 		{
-			switch (operation.Statement) {
-			case SqlStatementType.Select:
+			switch (operation.Operation) {
+			case OperationMetaData.Select:
 				switch (operation.Schema) {
-				case SqlSchemaType.Table:
-				case SqlSchemaType.Column:
-				case SqlSchemaType.View:
-				case SqlSchemaType.Procedure:
-				case SqlSchemaType.Database:
-				case SqlSchemaType.Constraint:
-				case SqlSchemaType.Parameter:
-				case SqlSchemaType.User:
-				case SqlSchemaType.Trigger:
-				case SqlSchemaType.DataType:
-				case SqlSchemaType.Sequence:
+				case SchemaMetaData.Table:
+				case SchemaMetaData.Column:
+				case SchemaMetaData.View:
+				case SchemaMetaData.Procedure:
+				case SchemaMetaData.Database:
+				case SchemaMetaData.Constraint:
+				case SchemaMetaData.Parameter:
+				case SchemaMetaData.User:
+				case SchemaMetaData.Trigger:
+				case SchemaMetaData.DataType:
+				case SchemaMetaData.Sequence:
 					return true;
 				default:
 					return false;
 				}
-			case SqlStatementType.Create:
-			case SqlStatementType.Drop:
-			case SqlStatementType.Rename:
-			case SqlStatementType.Alter:
+			case OperationMetaData.Create:
+			case OperationMetaData.Drop:
+			case OperationMetaData.Rename:
+			case OperationMetaData.Alter:
 				switch (operation.Schema) {
-				case SqlSchemaType.Database:
-				case SqlSchemaType.Table:
-				case SqlSchemaType.View:
-				case SqlSchemaType.Procedure:
-				case SqlSchemaType.Constraint:
-				case SqlSchemaType.Trigger:
+				case SchemaMetaData.Database:
+				case SchemaMetaData.Table:
+				case SchemaMetaData.View:
+				case SchemaMetaData.Procedure:
+				case SchemaMetaData.Constraint:
+				case SchemaMetaData.Trigger:
 					return true;
 				default:
 					return false;
@@ -168,17 +168,17 @@ using System.Collections.Generic;
 						
 						column.Name = r.GetString (2);
 						column.DataTypeName = r.GetString (3);
-						column.Default = String.Empty;
+						column.DefaultValue = String.Empty;
 						column.Comment = String.Empty;
 						column.OwnerName = table.OwnerName;
 						column.SchemaName = table.SchemaName;
-						column.NotNull = r.GetValue (7).ToString () == "0" ? true : false;
+						column.IsNullable = r.GetValue (7).ToString () == "0" ? true : false;
 						column.Length = r.GetInt32 (4);
 						column.Precision = r.IsDBNull (5) ? 0 : r.GetInt32 (5);
 						column.Scale = r.IsDBNull (6) ? 0 : r.GetInt32 (6);
 						column.Definition = String.Concat (column.Name, " ", column.DataTypeName, " ",
 							column.Length > 0 ? "(" + column.Length + ")" : "",
-							column.NotNull ? " NOT NULL" : " NULL");
+							column.IsNullable ? " NULL" : " NOT NULL");
 						//TODO: append " DEFAULT ..." if column.Default.Length > 0
 
 						columns.Add (column);
@@ -245,7 +245,7 @@ using System.Collections.Generic;
 						
 						column.Name = r.GetName(i);
 						column.DataTypeName = r.GetDataTypeName(i);
-						column.Default = "";
+						column.DefaultValue = "";
 						column.Definition = "";
 						column.OwnerName = view.OwnerName;
 						column.SchemaName = view.OwnerName;
@@ -295,40 +295,6 @@ using System.Collections.Generic;
 			conn.Release ();
 			
 			return procedures; 
-		}
-
-		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
-		{
-			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
-			
-			IPooledDbConnection conn = connectionPool.Request ();
-			SqlCommand command = conn.CreateCommand ("sp_sproc_columns") as SqlCommand;
-			command.CommandType = CommandType.StoredProcedure;
-			SqlParameter owner = command.Parameters.Add ("@procedure_owner", SqlDbType.VarChar);
-			SqlParameter name = command.Parameters.Add ("@procedure_name", SqlDbType.VarChar);
-			owner.Value = procedure.OwnerName;
-			name.Value = procedure.Name;
-
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ColumnSchema column = new ColumnSchema (this);
-						column.Name = (string) r ["COLUMN_NAME"];
-						column.DataTypeName = (string) r ["TYPE_NAME"];
-
-						columns.Add (column);
-					}
-					r.Close ();
-				}
-			}
-			conn.Release ();
-		      
-			return columns;
-		}
-		
-		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
-		{
-			throw new NotImplementedException ();
 		}
 
 		public override ConstraintSchemaCollection GetTableConstraints (TableSchema table)
@@ -511,7 +477,11 @@ using System.Collections.Generic;
 		//http://msdn2.microsoft.com/en-us/library/aa258257(SQL.80).aspx
 		public override void CreateDatabase (DatabaseSchema database)
 		{
-			throw new NotImplementedException ();
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("CREATE DATABASE " + database.Name);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa258259(SQL.80).aspx
