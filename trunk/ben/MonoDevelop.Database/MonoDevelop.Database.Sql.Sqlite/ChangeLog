@@ -1,3 +1,11 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqliteDbFactory.cs: Added support for a save database dialog
+	* SqliteConnectionProvider.cs, SqlitePooledDbConnection.cs: moved from
+	Mono.Data.SqliteClient to Mono.Data.Sqlite
+	* SqliteSchemaProvider.cs: added meta data information, support for GetDataTypes,
+	CreateTable, DropDatabase and CreateDatabase
+
 2007-07-18  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqliteSchemaProvider.cs: SupportsSchemaOperation implementation, use of strongly typed

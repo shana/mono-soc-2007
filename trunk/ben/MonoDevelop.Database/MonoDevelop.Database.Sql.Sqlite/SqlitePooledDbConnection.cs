@@ -26,7 +26,7 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Data.SqliteClient;
+using Mono.Data.Sqlite;
 
 namespace MonoDevelop.Database.Sql
 {
@@ -71,6 +71,11 @@ namespace MonoDevelop.Database.Sql
 				}
 			}
 			return table;
+		}
+		
+		public override DataTable GetSchema (string collectionName, params string[] restrictionValues)
+		{
+			return (connection as SqliteConnection).GetSchema (collectionName, restrictionValues);
 		}
 	}
 }
