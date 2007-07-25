@@ -12,5 +12,179 @@ namespace MonoDevelop.Database.Designer {
     
     
     public partial class ConstraintsEditorWidget {
+        
+        private Gtk.Notebook notebook;
+        
+        private Gtk.ScrolledWindow windowPK;
+        
+        private MonoDevelop.Database.Components.SelectColumnWidget listPK;
+        
+        private Gtk.Label label1;
+        
+        private Gtk.Label label2;
+        
+        private Gtk.VBox vboxCheck;
+        
+        private Gtk.ScrolledWindow windowCheck;
+        
+        private Gtk.TreeView listCheck;
+        
+        private Gtk.HButtonBox hbboxCheck;
+        
+        private Gtk.Button buttonAddCheck;
+        
+        private Gtk.Button buttonRemoveCheck;
+        
+        private Gtk.Label label3;
+        
+        private Gtk.ScrolledWindow windowUnique;
+        
+        private MonoDevelop.Database.Components.SelectColumnWidget listUnique;
+        
+        private Gtk.Label label4;
+        
+        protected virtual void Build() {
+            Stetic.Gui.Initialize();
+            // Widget MonoDevelop.Database.Designer.ConstraintsEditorWidget
+            Stetic.BinContainer.Attach(this);
+            this.Name = "MonoDevelop.Database.Designer.ConstraintsEditorWidget";
+            // Container child MonoDevelop.Database.Designer.ConstraintsEditorWidget.Gtk.Container+ContainerChild
+            this.notebook = new Gtk.Notebook();
+            this.notebook.CanFocus = true;
+            this.notebook.Name = "notebook";
+            this.notebook.CurrentPage = 0;
+            this.notebook.TabPos = ((Gtk.PositionType)(0));
+            // Container child notebook.Gtk.Notebook+NotebookChild
+            this.windowPK = new Gtk.ScrolledWindow();
+            this.windowPK.CanFocus = true;
+            this.windowPK.Name = "windowPK";
+            this.windowPK.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowPK.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowPK.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child windowPK.Gtk.Container+ContainerChild
+            Gtk.Viewport w1 = new Gtk.Viewport();
+            w1.Name = "GtkViewport";
+            w1.ShadowType = ((Gtk.ShadowType)(0));
+            // Container child GtkViewport.Gtk.Container+ContainerChild
+            this.listPK = new MonoDevelop.Database.Components.SelectColumnWidget();
+            this.listPK.CanFocus = true;
+            this.listPK.Name = "listPK";
+            this.listPK.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.listPK.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.listPK.ShadowType = ((Gtk.ShadowType)(1));
+            w1.Add(this.listPK);
+            this.windowPK.Add(w1);
+            this.notebook.Add(this.windowPK);
+            Gtk.Notebook.NotebookChild w4 = ((Gtk.Notebook.NotebookChild)(this.notebook[this.windowPK]));
+            w4.TabExpand = false;
+            // Notebook tab
+            this.label1 = new Gtk.Label();
+            this.label1.Name = "label1";
+            this.label1.LabelProp = Mono.Unix.Catalog.GetString("Primary Key");
+            this.notebook.SetTabLabel(this.windowPK, this.label1);
+            // Notebook tab
+            Gtk.Label w5 = new Gtk.Label();
+            w5.Visible = true;
+            this.notebook.Add(w5);
+            this.label2 = new Gtk.Label();
+            this.label2.Name = "label2";
+            this.label2.LabelProp = Mono.Unix.Catalog.GetString("Foreign Key");
+            this.notebook.SetTabLabel(w5, this.label2);
+            // Container child notebook.Gtk.Notebook+NotebookChild
+            this.vboxCheck = new Gtk.VBox();
+            this.vboxCheck.Name = "vboxCheck";
+            this.vboxCheck.Spacing = 6;
+            // Container child vboxCheck.Gtk.Box+BoxChild
+            this.windowCheck = new Gtk.ScrolledWindow();
+            this.windowCheck.CanFocus = true;
+            this.windowCheck.Name = "windowCheck";
+            this.windowCheck.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowCheck.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowCheck.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child windowCheck.Gtk.Container+ContainerChild
+            this.listCheck = new Gtk.TreeView();
+            this.listCheck.CanFocus = true;
+            this.listCheck.Name = "listCheck";
+            this.windowCheck.Add(this.listCheck);
+            this.vboxCheck.Add(this.windowCheck);
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vboxCheck[this.windowCheck]));
+            w7.Position = 0;
+            // Container child vboxCheck.Gtk.Box+BoxChild
+            this.hbboxCheck = new Gtk.HButtonBox();
+            this.hbboxCheck.Name = "hbboxCheck";
+            this.hbboxCheck.Spacing = 6;
+            this.hbboxCheck.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
+            // Container child hbboxCheck.Gtk.ButtonBox+ButtonBoxChild
+            this.buttonAddCheck = new Gtk.Button();
+            this.buttonAddCheck.CanFocus = true;
+            this.buttonAddCheck.Name = "buttonAddCheck";
+            this.buttonAddCheck.UseStock = true;
+            this.buttonAddCheck.UseUnderline = true;
+            this.buttonAddCheck.Label = "gtk-add";
+            this.hbboxCheck.Add(this.buttonAddCheck);
+            Gtk.ButtonBox.ButtonBoxChild w8 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbboxCheck[this.buttonAddCheck]));
+            w8.Expand = false;
+            w8.Fill = false;
+            // Container child hbboxCheck.Gtk.ButtonBox+ButtonBoxChild
+            this.buttonRemoveCheck = new Gtk.Button();
+            this.buttonRemoveCheck.CanFocus = true;
+            this.buttonRemoveCheck.Name = "buttonRemoveCheck";
+            this.buttonRemoveCheck.UseStock = true;
+            this.buttonRemoveCheck.UseUnderline = true;
+            this.buttonRemoveCheck.Label = "gtk-remove";
+            this.hbboxCheck.Add(this.buttonRemoveCheck);
+            Gtk.ButtonBox.ButtonBoxChild w9 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbboxCheck[this.buttonRemoveCheck]));
+            w9.Position = 1;
+            w9.Expand = false;
+            w9.Fill = false;
+            this.vboxCheck.Add(this.hbboxCheck);
+            Gtk.Box.BoxChild w10 = ((Gtk.Box.BoxChild)(this.vboxCheck[this.hbboxCheck]));
+            w10.Position = 1;
+            w10.Expand = false;
+            w10.Fill = false;
+            this.notebook.Add(this.vboxCheck);
+            Gtk.Notebook.NotebookChild w11 = ((Gtk.Notebook.NotebookChild)(this.notebook[this.vboxCheck]));
+            w11.Position = 2;
+            w11.TabExpand = false;
+            // Notebook tab
+            this.label3 = new Gtk.Label();
+            this.label3.Name = "label3";
+            this.label3.LabelProp = Mono.Unix.Catalog.GetString("Check");
+            this.notebook.SetTabLabel(this.vboxCheck, this.label3);
+            // Container child notebook.Gtk.Notebook+NotebookChild
+            this.windowUnique = new Gtk.ScrolledWindow();
+            this.windowUnique.CanFocus = true;
+            this.windowUnique.Name = "windowUnique";
+            this.windowUnique.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowUnique.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowUnique.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child windowUnique.Gtk.Container+ContainerChild
+            Gtk.Viewport w12 = new Gtk.Viewport();
+            w12.Name = "GtkViewport1";
+            w12.ShadowType = ((Gtk.ShadowType)(0));
+            // Container child GtkViewport1.Gtk.Container+ContainerChild
+            this.listUnique = new MonoDevelop.Database.Components.SelectColumnWidget();
+            this.listUnique.CanFocus = true;
+            this.listUnique.Name = "listUnique";
+            this.listUnique.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.listUnique.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.listUnique.ShadowType = ((Gtk.ShadowType)(1));
+            w12.Add(this.listUnique);
+            this.windowUnique.Add(w12);
+            this.notebook.Add(this.windowUnique);
+            Gtk.Notebook.NotebookChild w15 = ((Gtk.Notebook.NotebookChild)(this.notebook[this.windowUnique]));
+            w15.Position = 3;
+            w15.TabExpand = false;
+            // Notebook tab
+            this.label4 = new Gtk.Label();
+            this.label4.Name = "label4";
+            this.label4.LabelProp = Mono.Unix.Catalog.GetString("Unique");
+            this.notebook.SetTabLabel(this.windowUnique, this.label4);
+            this.Add(this.notebook);
+            if ((this.Child != null)) {
+                this.Child.ShowAll();
+            }
+            this.Show();
+        }
     }
 }

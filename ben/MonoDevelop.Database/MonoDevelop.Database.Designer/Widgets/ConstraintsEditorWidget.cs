@@ -34,14 +34,34 @@ using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Designer
 {
-	
-	
 	public partial class ConstraintsEditorWidget : Gtk.Bin
 	{
+		private ISchemaProvider schemaProvider;
+		private ConstraintSchemaCollection constraints;
+		private ColumnSchemaCollection columns;
 		
-		public ConstraintsEditorWidget()
+		public ConstraintsEditorWidget (ISchemaProvider schemaProvider)
 		{
+			if (schemaProvider == null)
+				throw new ArgumentNullException ("schemaProvider");
+			
+			this.schemaProvider = schemaProvider;
+			
 			this.Build();
+		}
+		
+		public void Initialize (ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
+		{
+			if (columns == null)
+				throw new ArgumentNullException ("columns");
+			if (constraints == null)
+				throw new ArgumentNullException ("constraints");
+
+			this.columns = columns;
+			this.constraints = constraints;
+			
+			listPK.Initialize (columns);
+			listUnique.Initialize (columns);
 		}
 	}
 }
