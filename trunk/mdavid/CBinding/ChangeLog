@@ -1,3 +1,19 @@
+2007-07-25  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/ProjectNodeBuilderExtension.cs,
+	  Parser/TagDatabaseManager.cs: It is now possible to update tags for
+	  only one source file instead of the entire project (though it's
+	  curently not in use anywhere).
+	
+	  When it does this it creates a tags file for the source file and
+	  the included non system headers and parses that file.
+	
+	  I'm not sure where this code should be called.
+	* Navigation/LanguageItemEventArgs.cs, Navigation/ClassPadEventArgs.cs:
+	  Made these subclass EventArgs.
+	* Gui/CTextEditorExtension.cs, Gui/DataProvider.cs: Implemented simple
+	  code completion by pressing ctrl+space.
+
 2007-07-24  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/DataProvider.cs: Make the name of the method bold.

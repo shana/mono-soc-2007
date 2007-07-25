@@ -64,11 +64,13 @@ namespace CBinding.Navigation
 		{
 			finishedBuildingTreeHandler = (ClassPadEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ClassPadEventHandler (OnFinishedBuildingTree));
 			FinishedBuildingTree += finishedBuildingTreeHandler;
+			TagDatabaseManager.Instance.FileUpdated += finishedBuildingTreeHandler;
 		}
 		
 		public override void Dispose ()
 		{
 			FinishedBuildingTree -= finishedBuildingTreeHandler;
+			TagDatabaseManager.Instance.FileUpdated -= finishedBuildingTreeHandler;
 		}
 		
 		public static void CreatePadTree (object o)

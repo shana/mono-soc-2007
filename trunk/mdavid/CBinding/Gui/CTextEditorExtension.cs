@@ -74,6 +74,54 @@ namespace CBinding
 			return base.KeyPress (key, modifier);
 		}
 		
+		public override ICompletionDataProvider HandleCodeCompletion (
+		    ICodeCompletionContext completionContext, char completionChar)
+		{
+			return null;
+		}
+		
+		public override ICompletionDataProvider CodeCompletionCommand (
+		    ICodeCompletionContext completionContext)
+		{
+			CProject project = Document.Project as CProject;
+			
+			if (project == null)
+				return null;
+			
+			ProjectInformation info = ProjectInformationManager.Instance.Get (project);
+			
+			CompletionDataProvider provider = new CompletionDataProvider ();
+			
+			foreach (Namespace n in info.Namespaces)
+				if (n.Parent == null)
+					provider.AddCompletionData (new CompletionData (n));
+			
+			foreach (Function f in info.Functions)
+				if (f.Parent == null)
+					provider.AddCompletionData (new CompletionData (f));
+			
+			foreach (Class c in info.Classes)
+				if (c.Parent == null)
+					provider.AddCompletionData (new CompletionData (c));
+			
+			foreach (Structure s in info.Structures)
+				if (s.Parent == null)
+					provider.AddCompletionData (new CompletionData (s));
+			
+			foreach (Union u in info.Unions)
+				if (u.Parent == null)
+					provider.AddCompletionData (new CompletionData (u));
+			
+			foreach (Enumeration e in info.Enumerations)
+				if (e.Parent == null)
+					provider.AddCompletionData (new CompletionData (e));
+			
+			foreach (Enumerator e in info.Enumerators)
+				provider.AddCompletionData (new CompletionData (e));
+			
+			return provider;
+		}
+		
 		public override  IParameterDataProvider HandleParameterCompletion (
 		    ICodeCompletionContext completionContext, char completionChar)
 		{
