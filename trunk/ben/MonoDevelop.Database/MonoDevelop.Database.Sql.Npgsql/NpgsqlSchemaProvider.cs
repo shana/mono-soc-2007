@@ -42,43 +42,43 @@ using Npgsql;
 		
 		public override bool SupportsSchemaOperation (SchemaOperation operation)
 		{
-			switch (operation.Statement) {
-			case SqlStatementType.Select:
+			switch (operation.Operation) {
+			case OperationMetaData.Select:
 				switch (operation.Schema) {
-				case SqlSchemaType.Table:
-				case SqlSchemaType.Column:
-				case SqlSchemaType.View:
-				case SqlSchemaType.Procedure:
-				case SqlSchemaType.Database:
-				case SqlSchemaType.Constraint:
-				case SqlSchemaType.Parameter:
-				case SqlSchemaType.User:
-				case SqlSchemaType.Trigger:
-				case SqlSchemaType.Aggregate:
-				case SqlSchemaType.Group:
-				case SqlSchemaType.Language:
-				case SqlSchemaType.Operator:
-				case SqlSchemaType.Role:
-				case SqlSchemaType.Rule:
-				case SqlSchemaType.DataType:
-				case SqlSchemaType.Sequence:
+				case SchemaMetaData.Table:
+				case SchemaMetaData.Column:
+				case SchemaMetaData.View:
+				case SchemaMetaData.Procedure:
+				case SchemaMetaData.Database:
+				case SchemaMetaData.Constraint:
+				case SchemaMetaData.Parameter:
+				case SchemaMetaData.User:
+				case SchemaMetaData.Trigger:
+				case SchemaMetaData.Aggregate:
+				case SchemaMetaData.Group:
+				case SchemaMetaData.Language:
+				case SchemaMetaData.Operator:
+				case SchemaMetaData.Role:
+				case SchemaMetaData.Rule:
+				case SchemaMetaData.DataType:
+				case SchemaMetaData.Sequence:
 					return true;
 				default:
 					return false;
 				}
-			case SqlStatementType.Create:
-			case SqlStatementType.Drop:
-			case SqlStatementType.Rename:
-			case SqlStatementType.Alter:
+			case OperationMetaData.Create:
+			case OperationMetaData.Drop:
+			case OperationMetaData.Rename:
+			case OperationMetaData.Alter:
 				switch (operation.Schema) {
-				case SqlSchemaType.Database:
-				case SqlSchemaType.Table:
-				case SqlSchemaType.Constraint:
-				case SqlSchemaType.Trigger:
-				case SqlSchemaType.User:
+				case SchemaMetaData.Database:
+				case SchemaMetaData.Table:
+				case SchemaMetaData.Constraint:
+				case SchemaMetaData.Trigger:
+				case SchemaMetaData.User:
 					return true;
-				case SqlSchemaType.View:
-					return operation.Statement != SqlStatementType.Alter;
+				case SchemaMetaData.View:
+					return operation.Operation != OperationMetaData.Alter;
 				default:
 					return false;
 				}
@@ -120,14 +120,14 @@ using Npgsql;
 						sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
 						sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
 						
-					ColumnSchemaCollection columns = table.Columns;
+						ColumnSchemaCollection columns = table.Columns;
 						string[] parts = new string[columns.Count];
 						int i = 0;
 						foreach (ColumnSchema col in columns)
 							parts[i++] = col.Definition;
 						sb.Append (String.Join (",\n", parts));
 						
-					ConstraintSchemaCollection constraints = table.Constraints;
+						ConstraintSchemaCollection constraints = table.Constraints;
 						parts = new string[constraints.Count];
 						if (constraints.Count > 0)
 							sb.Append (",\n");
@@ -152,7 +152,7 @@ using Npgsql;
 		
 		public override ColumnSchemaCollection GetTableColumns (TableSchema table)
 		{
-		ColumnSchemaCollection columns = new ColumnSchemaCollection ();
+			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
@@ -179,8 +179,8 @@ using Npgsql;
 		
 						column.Name = r.GetString (0);
 						column.DataTypeName = r.GetString (3);
-						column.NotNull = r.GetBoolean (1);
-						column.Default = r.GetString (4);
+						column.IsNullable = r.GetBoolean (1);
+						column.DefaultValue = r.GetString (4);
 						column.Length = r.GetInt32 (2);
 				
 						StringBuilder sb = new StringBuilder();
@@ -188,9 +188,9 @@ using Npgsql;
 							column.Name,
 							column.DataTypeName,
 							(column.Length > 0) ? ("(" + column.Length + ")") : "");
-						sb.AppendFormat(" {0}", column.NotNull ? "NOT NULL" : "NULL");
-						if (column.Default.Length > 0)
-							sb.AppendFormat(" DEFAULT {0}", column.Default);
+						sb.AppendFormat(" {0}", column.IsNullable ? "NULL" : "NOT NULL");
+						if (column.DefaultValue.Length > 0)
+							sb.AppendFormat(" DEFAULT {0}", column.DefaultValue);
 						column.Definition = sb.ToString();
 		
 						columns.Add (column);
@@ -273,7 +273,7 @@ using Npgsql;
 						column.Name = r.GetString(0);
 						column.DataTypeName = r.GetString (1);
 						column.SchemaName = view.SchemaName;
-						column.NotNull = r.GetBoolean (3);
+						column.IsNullable = r.GetBoolean (3);
 						column.Length = r.GetInt32 (2);
 		
 						columns.Add (column);
@@ -335,36 +335,36 @@ using Npgsql;
 			return procedures;
 		}
 
-		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
-		{
-			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
-			
-			// FIXME: Won't work properly with overload functions.
-			// Maybe check the number of columns in the parameters for
-			// proper match.
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand (String.Format (
-				"SELECT format_type (prorettype, NULL) "
-				+ "FROM pg_proc pc, pg_language pl "
-				+ "WHERE pc.prolang = pl.oid "
-				+ "AND pc.proname = '{0}';", procedure.Name
-			));
-			
-			using (command) {
-			    	using (IDataReader r = command.ExecuteReader()) {
-			    		while (r.Read ()) {	
-						ColumnSchema column = new ColumnSchema (this);
-						column.DataTypeName = r.GetString (0);
-						column.Name = r.GetString (0);
-						columns.Add (column);
-			    		}
-					r.Close ();
-				}
-			}
-			conn.Release ();
-			
-			return columns;
-		}
+//		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
+//		{
+//			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
+//			
+//			// FIXME: Won't work properly with overload functions.
+//			// Maybe check the number of columns in the parameters for
+//			// proper match.
+//			IPooledDbConnection conn = connectionPool.Request ();
+//			IDbCommand command = conn.CreateCommand (String.Format (
+//				"SELECT format_type (prorettype, NULL) "
+//				+ "FROM pg_proc pc, pg_language pl "
+//				+ "WHERE pc.prolang = pl.oid "
+//				+ "AND pc.proname = '{0}';", procedure.Name
+//			));
+//			
+//			using (command) {
+//			    	using (IDataReader r = command.ExecuteReader()) {
+//			    		while (r.Read ()) {	
+//						ColumnSchema column = new ColumnSchema (this);
+//						column.DataTypeName = r.GetString (0);
+//						column.Name = r.GetString (0);
+//						columns.Add (column);
+//			    		}
+//					r.Close ();
+//				}
+//			}
+//			conn.Release ();
+//			
+//			return columns;
+//		}
 		
 		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
@@ -508,7 +508,11 @@ using Npgsql;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createdatabase.html
 		public override void CreateDatabase (DatabaseSchema database)
 		{
-			throw new NotImplementedException ();
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("CREATE DATABASE " + database.Name);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createtable.html
@@ -605,15 +609,15 @@ using Npgsql;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-dropindex.html
 		public override void DropConstraint (ConstraintSchema constraint)
 		{
-			if (constraint is IndexConstraintSchema) {
-				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
-				
-				IPooledDbConnection conn = connectionPool.Request ();
-				IDbCommand command = conn.CreateCommand ("DROP INDEX IF EXISTS " + constraint.Name + " ON " + indexConstraint.TableName + ";");
-				using (command)
-					command.ExecuteNonQuery ();
-				conn.Release ();
-			}
+//			if (constraint is IndexConstraintSchema) {
+//				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
+//				
+//				IPooledDbConnection conn = connectionPool.Request ();
+//				IDbCommand command = conn.CreateCommand ("DROP INDEX IF EXISTS " + constraint.Name + " ON " + indexConstraint.TableName + ";");
+//				using (command)
+//					command.ExecuteNonQuery ();
+//				conn.Release ();
+//			}
 		}
 		
 		//http://www.postgresql.org/docs/8.2/interactive/sql-droptrigger.html
