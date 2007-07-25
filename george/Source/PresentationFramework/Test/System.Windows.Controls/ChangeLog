@@ -1,3 +1,7 @@
+2007-07-25  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ImageTest.cs: Added layout tests.
+
 2007-07-24  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ImageTest.cs: Added.
