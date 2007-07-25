@@ -32,6 +32,7 @@ using MonoDevelop.Core.Gui;
 using MonoDevelop.Database.Components;
 namespace MonoDevelop.Database.Sql
 {
+	[ConnectionSettingsMetaData (true, true, true, true, false, false)]
 	public class NpgsqlDbFactory : IDbFactory
 	{
 		private ISqlDialect dialect;
@@ -71,19 +72,6 @@ using MonoDevelop.Database.Components;
 			return new NpgsqlSchemaProvider (connectionPool);
 		}
 		
-		public object GetOption (string name)
-		{
-			switch (name) {
-			case "settings.requires.server":
-			case "settings.requires.port":
-			case "settings.requires.username":
-			case "settings.requires.password":
-				return true;
-			default:
-				return null;
-			}
-		}
-		
 		public DatabaseConnectionSettings GetDefaultConnectionSettings ()
 		{
 			DatabaseConnectionSettings settings = new DatabaseConnectionSettings ();
@@ -96,7 +84,7 @@ using MonoDevelop.Database.Components;
 			return settings;
 		}
 		
-		public bool ShowOpenDatabaseDialog (out string database)
+		public bool ShowSelectDatabaseDialog (bool create, out string database)
 		{
 			database = null;
 			return false;
