@@ -32,6 +32,8 @@
     <File name="./PageEventArgs.cs" subtype="Code" buildaction="Compile" />
     <File name="./ToolPack.cs" subtype="Code" buildaction="Compile" />
     <File name="./ToolBox.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Tile.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Gallery.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
