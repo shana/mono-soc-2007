@@ -59,5 +59,7 @@ namespace MonoDevelop.Database.Sql
 		void ExecuteReaderAsync (IDbCommand command, ExecuteCallback<IDataReader> callback, object state);
 		void ExecuteSetAsync (IDbCommand command, ExecuteCallback<DataSet> callback, object state);
 		void ExecuteTableAsync (IDbCommand command, ExecuteCallback<DataTable> callback, object state);
+		
+		DataTable GetSchema (string collectionName, params string[] restrictionValues);
 	}
 }

@@ -25,7 +25,7 @@
     <File name="./Schema/DataTypeSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ForeignKeyConstraintSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/GroupSchema.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Schema/IndexConstraintSchema.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Schema/IndexSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/LanguageSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/OperatorSchema.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ParameterSchema.cs" subtype="Code" buildaction="Compile" />
@@ -103,13 +103,10 @@
     <File name="./ConnectionPool/FakeConnectionPool.cs" subtype="Code" buildaction="Compile" />
     <File name="./QueryService.cs" subtype="Code" buildaction="Compile" />
     <File name="./Configuration/DatabaseConnectionContextCollection.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Dialect/Statements/SqlStatementType.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Schema/SqlSchemaType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Providers/SchemaOperation.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/TriggerType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/TriggerEvent.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Schema/IndexConstraintSortType.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Collections" subtype="Directory" buildaction="Compile" />
+    <File name="./Schema/IndexSortType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Collections/TableSchemaCollection.cs" subtype="Code" buildaction="Compile" />
     <File name="./Collections/UserSchemaCollection.cs" subtype="Code" buildaction="Compile" />
     <File name="./Collections/ViewSchemaCollection.cs" subtype="Code" buildaction="Compile" />
@@ -121,6 +118,27 @@
     <File name="./Collections/SortedCollectionBase.cs" subtype="Code" buildaction="Compile" />
     <File name="./Collections/IPropertyComparer.cs" subtype="Code" buildaction="Compile" />
     <File name="./Collections/DatabaseSchemaCollection.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Collections/IndexSchemaCollection.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Schema/ConstraintType.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Collections/DataTypeSchemaCollection.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Schema/ParameterType.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/TableMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/ViewMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/ProcedureMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/UserMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/UniqueConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/CheckConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/PrimaryKeyConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/ForeignKeyConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/TriggerMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/ColumnMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/ParameterMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/MetaDataService.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/SchemaMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/OperationMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/ConnectionSettingsMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/DataTypeMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Collections/SortedCollectionItemEventArgs.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

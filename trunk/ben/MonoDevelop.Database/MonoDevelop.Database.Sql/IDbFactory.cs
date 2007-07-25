@@ -38,8 +38,6 @@ namespace MonoDevelop.Database.Sql
 		ISqlDialect Dialect { get; }
 		
 		IConnectionProvider ConnectionProvider { get; }
-		
-		object GetOption (string name);
 
 		DatabaseConnectionSettings GetDefaultConnectionSettings ();
 
@@ -47,6 +45,6 @@ namespace MonoDevelop.Database.Sql
 		
 		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
 		
-		bool ShowOpenDatabaseDialog (out string database);
+		bool ShowSelectDatabaseDialog (bool create, out string database);
 	}
 }

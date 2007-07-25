@@ -29,36 +29,11 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public sealed class ConstraintSchemaCollection : SortedCollectionBase<ConstraintSchema>
+	public sealed class IndexSchemaCollection : SortedCollectionBase<IndexSchema>
 	{
-		public ConstraintSchemaCollection ()
+		public IndexSchemaCollection ()
 			: base (true)
 		{
-		}
-		
-		public ConstraintSchema GetConstraintWithColumn (string columnName, ConstraintType type)
-		{
-			foreach (ConstraintSchema item in List) {
-				if (item.ConstraintType != type)
-					continue;
-				
-				foreach (ColumnSchema column in item.Columns) {
-					if (column.Name == columnName)
-						return item;
-				}
-			}
-			return null;
-		}
-		
-		public ConstraintSchema GetConstraintWithColumn (string columnName)
-		{
-			foreach (ConstraintSchema item in List) {
-				foreach (ColumnSchema column in item.Columns) {
-					if (column.Name == columnName)
-						return item;
-				}
-			}
-			return null;
 		}
 	}
 }

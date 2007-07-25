@@ -24,14 +24,40 @@
 //
 
 using System;
-using System.Data;
-using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public enum IndexConstraintSortType
+	[Flags]
+	public enum OperationMetaData
 	{
-		Ascending,
-		Descending
+		Schema,
+		Select,
+		Insert,
+		Update,
+		Delete,
+		Truncate,
+		
+		Create,
+		Alter,
+		Drop,
+		Rename,
+		
+		Grant,
+		Revoke
+	}
+			
+	[AttributeUsage (AttributeTargets.Class)]
+	public sealed class OperationMetaDataAttribute : Attribute
+	{
+		private OperationMetaData meta;
+		
+		public OperationMetaDataAttribute (OperationMetaData meta)
+		{
+			this.meta = meta;
+		}
+		
+		public OperationMetaData OperationMetaData {
+			get { return meta; }
+		}
 	}
 }

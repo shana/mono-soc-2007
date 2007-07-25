@@ -1,6 +1,6 @@
-﻿//
+//
 // Authors:
-//   Ben Motmans  <ben.motmans@gmail.com>
+//	Ben Motmans  <ben.motmans@gmail.com>
 //
 // Copyright (c) 2007 Ben Motmans
 //
@@ -24,41 +24,60 @@
 //
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public sealed class ConstraintSchemaCollection : SortedCollectionBase<ConstraintSchema>
+	[Flags]
+	public enum ColumnMetaData
 	{
-		public ConstraintSchemaCollection ()
-			: base (true)
+		Name,
+		Owner,
+		Comment,
+		Definition,
+		Schema,
+		DataType,
+		DefaultValue,
+		Nullable,
+		Length,
+		Precision,
+		Scale,
+		Position,
+		PrimaryKeyConstraints,
+		ForeignKeyConstraints,
+		CheckConstraints,
+		UniqueConstraint
+	}
+	
+	[AttributeUsage (AttributeTargets.Class)]
+	public abstract class ColumnMetaDataAttribute : Attribute
+	{
+		private ColumnMetaData meta;
+		
+		public ColumnMetaDataAttribute (ColumnMetaData meta)
 		{
+			this.meta = meta;
 		}
 		
-		public ConstraintSchema GetConstraintWithColumn (string columnName, ConstraintType type)
-		{
-			foreach (ConstraintSchema item in List) {
-				if (item.ConstraintType != type)
-					continue;
-				
-				foreach (ColumnSchema column in item.Columns) {
-					if (column.Name == columnName)
-						return item;
-				}
-			}
-			return null;
+		public ColumnMetaData ColumnMetaData {
+			get { return meta; }
 		}
+	}
 		
-		public ConstraintSchema GetConstraintWithColumn (string columnName)
+	[AttributeUsage (AttributeTargets.Class)]
+	public sealed class TableColumnMetaDataAttribute : ColumnMetaDataAttribute
+	{
+		public TableColumnMetaDataAttribute (ColumnMetaData meta)
+			: base (meta)
 		{
-			foreach (ConstraintSchema item in List) {
-				foreach (ColumnSchema column in item.Columns) {
-					if (column.Name == columnName)
-						return item;
-				}
-			}
-			return null;
+		}
+	}
+		
+	[AttributeUsage (AttributeTargets.Class)]
+	public sealed class ViewColumnMetaDataAttribute : ColumnMetaDataAttribute
+	{
+		public ViewColumnMetaDataAttribute (ColumnMetaData meta)
+			: base (meta)
+		{
 		}
 	}
 }

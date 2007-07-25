@@ -33,6 +33,8 @@ namespace MonoDevelop.Database.Sql
 	public class ParameterSchema : AbstractSchema
 	{
 		protected string dataType = String.Empty;
+		protected ParameterType paramType;
+		protected int position;
 		
 		public ParameterSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
@@ -40,11 +42,36 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public DataTypeSchema DataType {
-			get {
-				return provider.GetDataType (dataType);
-			}
+			get { return provider.GetDataType (dataType); }
+		}
+		
+		public string DataTypeName {
+			get { return dataType; }
 			set {
-				dataType = value.FullName;
+				if (dataType != value) {
+					dataType = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public ParameterType ParameterType {
+			get { return paramType; }
+			set {
+				if (paramType != value) {
+					paramType = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public virtual int Position {
+			get { return position; }
+			set {
+				if (position != value) {
+					position = value;
+					OnChanged();
+				}
 			}
 		}
 	}

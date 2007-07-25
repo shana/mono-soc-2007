@@ -31,6 +31,9 @@ namespace MonoDevelop.Database.Sql
 {
 	public abstract class SortedCollectionBase<T> : CollectionBase, IEnumerable<T>, IPropertyComparer<T, string> where T : ISchema
 	{
+		public SortedCollectionItemEventHandler<T> ItemAdded;
+		public SortedCollectionItemEventHandler<T> ItemRemoved;
+		
 		protected bool sort = false;
 		
 		protected SortedCollectionBase (bool sort)
@@ -59,10 +62,16 @@ namespace MonoDevelop.Database.Sql
 			if (item == null)
 				throw new ArgumentNullException ("item");
 			
+			int index = -1;
 			if (sort)
-				return SortedInsert (item);
+				index = SortedInsert (item);
 			else
-				return List.Add (item);
+				index = List.Add (item);
+			
+			if (ItemAdded != null)
+				ItemAdded (this, new SortedCollectionItemEventArgs<T> (item));
+			
+			return index;
 		}
 
 		public int IndexOf (T item)
@@ -82,6 +91,9 @@ namespace MonoDevelop.Database.Sql
 				throw new InvalidOperationException ("Insert can only be used in an unsorted collection.");
 			
 			List.Insert (index, item);
+			
+			if (ItemAdded != null)
+				ItemAdded (this, new SortedCollectionItemEventArgs<T> (item));
 		}
 
 		public void Remove (T item)
@@ -90,6 +102,9 @@ namespace MonoDevelop.Database.Sql
 				throw new ArgumentNullException ("item");
 			
 			List.Remove (item);
+			
+			if (ItemRemoved != null)
+				ItemRemoved (this, new SortedCollectionItemEventArgs<T> (item));
 		}
 
 		public bool Contains (T item)
@@ -98,6 +113,17 @@ namespace MonoDevelop.Database.Sql
 				throw new ArgumentNullException ("item");
 			
 			return List.Contains (item);
+		}
+		
+		public bool Contains (string name)
+		{
+			if (name == null)
+				throw new ArgumentNullException ("name");
+			
+			if (sort)
+				return BinarySearchIndex<string> (this, name) >= 0;
+			else
+				return SearchIndex<string> (this, name) >= 0;
 		}
 		
 		public T Search (string name)
@@ -126,17 +152,35 @@ namespace MonoDevelop.Database.Sql
 				return SearchIndex<string> (this, name);
 		}
 		
-		public bool Contains (string name)
-		{
-			return SearchIndex (name) >= 0;
-		}
-		
 		public virtual void Sort ()
 		{
 			if (List.Count <= 1) return;
 
 			//quicksort
 			Sort (0, List.Count - 1);
+		}
+		
+		public virtual void Swap (T x, T y)
+		{
+			if (x == null)
+				throw new ArgumentNullException ("x");
+			if (y == null)
+				throw new ArgumentNullException ("y");
+			
+			int indexX = IndexOf (x);
+			int indexY = IndexOf (y);
+			
+			if (indexX < 0 || indexY < 0)
+				throw new ArgumentException ("Both items must be present in the collection.");
+			
+			Swap (indexX, indexY);
+		}
+		
+		public virtual void Swap (int left, int right)
+		{
+			object swap = List[left];
+			List[left] = List[right];
+			List[right] = swap;
 		}
 		
 		IEnumerator<T> IEnumerable<T>.GetEnumerator ()
@@ -200,14 +244,7 @@ namespace MonoDevelop.Database.Sql
 			Swap (lower, right);
 			return right;
 		}
-		
-		protected virtual void Swap (int left, int right)
-		{
-			object swap = List[left];
-			List[left] = List[right];
-			List[right] = swap;
-		}
-		
+
 		protected virtual int BinarySearchIndex<U> (IPropertyComparer<T, U> comparer, U value)
 		{
 			int min = 0;

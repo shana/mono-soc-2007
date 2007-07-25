@@ -37,7 +37,7 @@ namespace MonoDevelop.Database.Sql
 		protected ColumnSchemaCollection referenceColumns;
 		
 		public ForeignKeyConstraintSchema (ISchemaProvider schemaProvider)
-			: base (schemaProvider)
+			: base (schemaProvider, ConstraintType.ForeignKey)
 		{
 			referenceColumns = new ColumnSchemaCollection ();
 		}

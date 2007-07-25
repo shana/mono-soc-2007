@@ -31,31 +31,47 @@ using System;
 	{
 		private int min;
 		private int max;
+		private int defaultValue;
 
 		public Range (int min, int max)
 		{
-			if (min > max) {
-				int tmp = min;
-				min = max;
-				max = tmp;
-			}
-			
-			this.min = min;
-			this.max = max;
+			Max = max;
+			Min = min;
 		}
 		
 		public Range (int constRange)
-			: this (constRange, constRange)
+			: this (constRange, constRange, constRange)
 		{
+		}
+		
+		public Range (int min, int max, int defaultValue)
+			: this (min, max)
+		{
+			this.defaultValue = defaultValue;
 		}
 		
 		public int Min {
 			get { return min; }
+			set {
+				min = value;
+				if (min > max)
+					max = min;
+			}
 		}
 		
 		
 		public int Max {
 			get { return max; }
+			set {
+				max = value;
+				if (max < min)
+					min = max;
+			}
+		}
+		
+		public int Default {
+			get { return defaultValue; }
+			set { defaultValue = value; }
 		}
 
 		public bool IsInRange (int value)

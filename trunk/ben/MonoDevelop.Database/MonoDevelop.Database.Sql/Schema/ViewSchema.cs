@@ -34,6 +34,7 @@ namespace MonoDevelop.Database.Sql
 	public class ViewSchema : AbstractSchema
 	{
 		protected bool isSystemView = false;
+		protected string statement;
 		protected ColumnSchemaCollection columns;
 		
 		public ViewSchema (ISchemaProvider schemaProvider)
@@ -42,17 +43,23 @@ namespace MonoDevelop.Database.Sql
 		}
 
 		public bool IsSystemView {
-			get {
-				return isSystemView;
-			}
+			get { return isSystemView; }
 			set {
 				isSystemView = value;
 				OnChanged();
 			}
 		}
 		
+		public string Statement {
+			get { return statement; }
+			set {
+				statement = value;
+				OnChanged();
+			}
+		}
+		
 		/// <summary>
-		/// Collection of columns associated with this table.
+		/// Collection of columns associated with this view.
 		/// </summary>
 		public ColumnSchemaCollection Columns {
 			get {

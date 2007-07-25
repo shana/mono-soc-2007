@@ -34,7 +34,6 @@ namespace MonoDevelop.Database.Sql
 	public class ProcedureSchema : AbstractSchema
 	{
 		protected ParameterSchemaCollection parameters;
-		protected ColumnSchemaCollection columns;
 		protected string language = String.Empty;
 		protected bool isSystemProcedure = false;
 		
@@ -48,14 +47,6 @@ namespace MonoDevelop.Database.Sql
 				if (parameters == null)
 					parameters = provider.GetProcedureParameters (this);
 				return parameters;
-			}
-		}
-		
-		public ColumnSchemaCollection Columns {
-			get {
-				if (columns == null)
-					columns = provider.GetProcedureColumns (this);
-				return columns;
 			}
 		}
 		

@@ -29,30 +29,9 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public enum SqlSchemaType
+	public enum IndexSortType
 	{
-		Aggregate,
-		CheckConstraint,
-		Column,
-		Constraint,
-		Database,
-		DataType,
-		ForeignKeyConstraint,
-		Group,
-		IndexConstraint,
-		Language,
-		Operator,
-		Parameter,
-		PrimaryKeyConstraint,
-		Privilege,
-		Procedure,
-		Role,
-		Rule,
-		Sequence,
-		Table,
-		Trigger,
-		UniqueConstraint,
-		User,
-		View
+		Ascending,
+		Descending
 	}
 }

@@ -201,6 +201,8 @@ namespace MonoDevelop.Database.Sql
 			ThreadPool.QueueUserWorkItem (new WaitCallback (ExecuteTableThreaded), internalState);
 		}
 		
+		public abstract DataTable GetSchema (string collectionName, params string[] restrictionValues);
+		
 		private void ExecuteNonQueryThreaded (object state)
 		{
 			AsyncExecuteState<int> internalState = state as AsyncExecuteState<int>;

@@ -48,6 +48,26 @@ namespace MonoDevelop.Database.Sql
 		private string connectionString;
 		private bool useConnectionString;
 		
+		public DatabaseConnectionSettings ()
+		{
+		}
+		
+		public DatabaseConnectionSettings (DatabaseConnectionSettings copy)
+		{
+			name = copy.Name;
+			providerIdentifier = copy.ProviderIdentifier;
+			server = copy.Server;
+			port = copy.Port;
+			database = copy.Database;
+			username = copy.Username;
+			password = copy.Password;
+			savePassword = copy.SavePassword;
+			minPoolSize = copy.MinPoolSize;
+			maxPoolSize = copy.MaxPoolSize;
+			useConnectionString = copy.UseConnectionString;
+			connectionString = copy.ConnectionString;
+		}
+		
 		public string ProviderIdentifier {
 			get { return providerIdentifier; }
 			set { providerIdentifier = value; }

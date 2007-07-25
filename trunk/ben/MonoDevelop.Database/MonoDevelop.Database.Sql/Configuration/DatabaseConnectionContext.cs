@@ -30,17 +30,34 @@ namespace MonoDevelop.Database.Sql
 {
 	public sealed class DatabaseConnectionContext
 	{
+		private bool temp;
 		private DatabaseConnectionSettings connectionSettings;
 		
 		private IConnectionPool connectionPool;
 		private ISchemaProvider schemaProvider;
 		
 		public DatabaseConnectionContext (DatabaseConnectionSettings connectionSettings)
+			: this (connectionSettings, false)
+		{
+		}
+		
+		public DatabaseConnectionContext (DatabaseConnectionSettings connectionSettings, bool temp)
 		{
 			if (connectionSettings == null)
 				throw new ArgumentNullException ("connectionSettings");
 			
 			this.connectionSettings = connectionSettings;
+			this.temp = temp;
+		}
+		
+		//temp connection contexts are not shown in the database pad
+		public bool IsTemporary {
+			get { return temp; }
+			set { temp = false; }
+		}
+		
+		public IDbFactory DbFactory {
+			get { return DbFactoryService.GetDbFactory (connectionSettings.ProviderIdentifier); }
 		}
 		
 		public DatabaseConnectionSettings ConnectionSettings {

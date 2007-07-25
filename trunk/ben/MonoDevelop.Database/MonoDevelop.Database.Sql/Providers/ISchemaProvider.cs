@@ -35,10 +35,10 @@ namespace MonoDevelop.Database.Sql
 	{
 		IConnectionPool ConnectionPool { get; }
 		
-		bool SupportsSchemaOperation (SqlStatementType statement, SqlSchemaType schema);
+		bool SupportsSchemaOperation (OperationMetaData operation, SchemaMetaData schema);
 
 		bool SupportsSchemaOperation (SchemaOperation operation);
-		
+
 		DatabaseSchemaCollection GetDatabases ();
 
 		TableSchemaCollection GetTables ();
@@ -50,16 +50,22 @@ namespace MonoDevelop.Database.Sql
 		ColumnSchemaCollection GetViewColumns (ViewSchema view);
 
 		ProcedureSchemaCollection GetProcedures ();
-
-		ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure);
 		
 		ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure);
 
 		ConstraintSchemaCollection GetTableConstraints (TableSchema table);
 		
+		ConstraintSchemaCollection GetColumnConstraints (TableSchema table, ColumnSchema column);
+		
+		IndexSchemaCollection GetTableIndexes (TableSchema table);
+		
+		ColumnSchemaCollection GetTableIndexColumns (TableSchema table, IndexSchema index);
+		
 		TriggerSchemaCollection GetTableTriggers (TableSchema table);
 
 		UserSchemaCollection GetUsers ();
+		
+		DataTypeSchemaCollection GetDataTypes ();
 		
 		DataTypeSchema GetDataType (string name);
 		
@@ -86,7 +92,7 @@ namespace MonoDevelop.Database.Sql
 		void DropConstraint (ConstraintSchema constraint);
 		void DropTrigger (TriggerSchema trigger);
 		void DropUser (UserSchema user);
-		
+
 		void RenameDatabase (DatabaseSchema database, string name);
 		void RenameTable (TableSchema table, string name);
 		void RenameView (ViewSchema view, string name);
