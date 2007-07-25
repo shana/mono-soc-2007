@@ -3,10 +3,10 @@ ASSEMBLY = $(ADDIN_BUILD)/MonoDevelop.Database.Sql.Sqlite.dll
 REFS =  \
 	-pkg:gtk-sharp-2.0 \
 	-pkg:monodevelop \
+	-r:../../contrib/Mono.Data.Sqlite.dll \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:Mono.Data \
-	-r:Mono.Data.SqliteClient \
 	-r:System \
 	-r:System.Data
 

@@ -33,13 +33,14 @@ using MonoDevelop.Database.Components;
 using MonoDevelop.Ide.Gui.Dialogs;
 namespace MonoDevelop.Database.Sql
 {
+	[ConnectionSettingsMetaData (false, false, false, false, false, true)]
 	public class SqliteDbFactory : IDbFactory
 	{
 		private ISqlDialect dialect;
 		private IConnectionProvider connectionProvider;
 		
 		public string Identifier {
-			get { return "MonoDevelop.Database.SqliteClient"; }
+			get { return "Mono.Data.Sqlite"; }
 		}
 		
 		public string Name {
@@ -72,16 +73,6 @@ using MonoDevelop.Ide.Gui.Dialogs;
 			return new SqliteSchemaProvider (connectionPool);
 		}
 		
-		public object GetOption (string name)
-		{
-			switch (name) {
-			case "settings.can_open_database":
-				return true;
-			default:
-				return null;
-			}
-		}
-		
 		public DatabaseConnectionSettings GetDefaultConnectionSettings ()
 		{
 			DatabaseConnectionSettings settings = new DatabaseConnectionSettings ();
@@ -91,13 +82,22 @@ using MonoDevelop.Ide.Gui.Dialogs;
 			return settings;
 		}
 		
-		public bool ShowOpenDatabaseDialog (out string database)
+		public bool ShowSelectDatabaseDialog (bool create, out string database)
 		{
-			FileChooserDialog dlg = new FileChooserDialog (
-				GettextCatalog.GetString ("Open Database"), null, FileChooserAction.Open,
-				"gtk-cancel", ResponseType.Cancel,
-				"gtk-open", ResponseType.Accept
-			);
+			FileChooserDialog dlg = null;
+			if (create) {
+				dlg = new FileChooserDialog (
+					GettextCatalog.GetString ("Save Database"), null, FileChooserAction.Save,
+					"gtk-cancel", ResponseType.Cancel,
+					"gtk-save", ResponseType.Accept
+				);
+			} else {
+				dlg = new FileChooserDialog (
+					GettextCatalog.GetString ("Open Database"), null, FileChooserAction.Open,
+					"gtk-cancel", ResponseType.Cancel,
+					"gtk-open", ResponseType.Accept
+				);
+			}
 			dlg.SelectMultiple = false;
 			dlg.LocalOnly = true;
 			dlg.Modal = true;

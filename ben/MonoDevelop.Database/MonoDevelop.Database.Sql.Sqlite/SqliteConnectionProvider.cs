@@ -29,7 +29,7 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
-using Mono.Data.SqliteClient;
+using Mono.Data.Sqlite;
 
 namespace MonoDevelop.Database.Sql
 {
