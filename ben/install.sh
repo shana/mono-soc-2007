@@ -6,6 +6,7 @@ mkdir -p $DIR
 echo $DIR
 
 cp ./contrib/QuickGraph.dll $DIR/
+cp ./contrib/Mono.Data.Sqlite.dll $DIR/
 
 find ./MonoDevelop.Database -type f -iname "*.dll" -or -iname "*.addin.xml" | while read a; do
 	cp -f "$a" $DIR

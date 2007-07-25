@@ -17,7 +17,7 @@
       <Entry build="False" name="MonoDevelop.Database.Sql.Odbc" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.ConnectionManager" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Components" configuration="Debug" />
-      <Entry build="False" name="MonoDevelop.Database.Designer" configuration="Debug" />
+      <Entry build="True" name="MonoDevelop.Database.Designer" configuration="Debug" />
     </Configuration>
     <Configuration name="Release" ctype="CombineConfiguration">
       <Entry build="True" name="MonoDevelop.Database.Sql" configuration="Release" />
