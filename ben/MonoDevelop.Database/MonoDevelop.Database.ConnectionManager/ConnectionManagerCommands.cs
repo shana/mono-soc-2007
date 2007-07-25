@@ -51,6 +51,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		SelectColumns,
 		EmptyTable,
 		Rename,
+		RenameDatabase,
 		
 		CreateDatabase,
 		CreateTable,

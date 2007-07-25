@@ -6,6 +6,7 @@ REFS =  \
 	-pkg:monodevelop \
 	-r:../../contrib/Mono.Addins.dll \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
+	-r:../MonoDevelop.Database.Designer/bin/Debug/MonoDevelop.Database.Designer.dll \
 	-r:../MonoDevelop.Database.Query/bin/Debug/MonoDevelop.Database.Query.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:Mono.Posix \

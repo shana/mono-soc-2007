@@ -1,3 +1,14 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* NodeBuilders/ProceduresNodeBuilder.cs, NodeBuilders/TablesNodeBuilder.cs,
+	NodeBuilders/UsersNodeBuilder.cs, NodeBuilders/ViewsNodeBuilder.cs:
+	implemented create command
+	* NodeBuilders/ProcedureNodeBuilder.cs, NodeBuilders/TableNodeBuilder.cs,
+	NodeBuilders/UserNodeBuilder.cs, NodeBuilders/ViewNodeBuilder.cs:
+	implemented drop, rename and refresh commands
+	* NodeBuilders/ConnectionContextNodeBuilder.cs: use the new schemaprovider metadata support
+	* NodeBuilders/ConnectionContextCollectionNodeBuilder.cs: implemented CreateDatabase
+
 2007-07-18  Ben Motmans <ben.motmans@gmail.com>
 
 	* NodeBuilders/ViewNodeBuilder.cs, NodeBuilders/UserNodeBuilder.cs,

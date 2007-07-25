@@ -30,6 +30,7 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Designer;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
@@ -85,8 +86,11 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
+			CurrentNode.MoveToParent ();
 			BaseNode node = CurrentNode.DataItem as BaseNode;
-			node.Refresh ();
+			if (node != null)
+				node.Refresh ();
+			CurrentNode.ExpandToNode ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.AlterUser)]
@@ -98,7 +102,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.DropUser)]
 		protected void OnDropUser ()
 		{
+			UserNode node = (UserNode)CurrentNode.DataItem;
+			if (Services.MessageService.AskQuestion (
+				GettextCatalog.GetString ("Are you sure you want to drop user '{0}'", node.User.Name),
+				GettextCatalog.GetString ("Drop User")
+			)) {
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnDropUserThreaded), CurrentNode.DataItem);
+			}
+		}
 			
+		private void OnDropUserThreaded (object state)
+		{
+			UserNode node = (UserNode)state;
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
+			
+			provider.DropUser (node.User);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Rename)]
@@ -111,21 +129,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.User);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.User);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.User);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.User);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterUser)]
 		protected void OnUpdateAlterUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.User);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.User);
 		}
 	}
 }

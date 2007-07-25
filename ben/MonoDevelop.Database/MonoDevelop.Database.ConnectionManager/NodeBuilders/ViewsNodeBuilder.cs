@@ -26,10 +26,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Gtk;
 using System;
 using System.Threading;
 using System.Collections.Generic;
 using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Designer;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
@@ -127,11 +129,37 @@ namespace MonoDevelop.Database.ConnectionManager
 			node.Refresh ();
 		}
 		
+		[CommandHandler (ConnectionManagerCommands.CreateView)]
+		protected void OnCreateView ()
+		{
+			BaseNode node = CurrentNode.DataItem as BaseNode;
+			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
+			ViewSchema view = new ViewSchema (schemaProvider);
+			view.Name = "New View";
+
+			ViewEditorDialog dlg = new ViewEditorDialog (schemaProvider, view, true);
+			if (dlg.Run () == (int)ResponseType.Ok)
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateViewThreaded), new object[] {schemaProvider, view, node} as object);
+			dlg.Destroy ();
+		}
+		
+		private void OnCreateViewThreaded (object state)
+		{
+			object[] objs = state as object[];
+			
+			ISchemaProvider provider = objs[0] as ISchemaProvider;
+			ViewSchema view = objs[1] as ViewSchema;
+			BaseNode node = objs[2] as BaseNode;
+			
+			provider.CreateView (view);
+			node.Refresh ();
+		}
+		
 		[CommandUpdateHandler (ConnectionManagerCommands.CreateView)]
 		protected void OnUpdateCreateView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.View);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.View);
 		}
 	}
 }

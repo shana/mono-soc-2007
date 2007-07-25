@@ -42,7 +42,8 @@ namespace MonoDevelop.Database.ConnectionManager
 		public ConnectionManagerPad ()
 		{
 			if (!ConnectionContextService.IsInitialized) {
-				string configFile = Path.Combine (Path.Combine (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), ".config"), "MonoDevelop"), "MonoDevelop.Database.ConnectionManager.xml");
+				
+				string configFile = Path.Combine (Runtime.Properties.ConfigDirectory, "MonoDevelop.Database.ConnectionManager.xml");
 				ConnectionContextService.Initialize (configFile);
 			}
 		}

@@ -99,10 +99,19 @@ namespace MonoDevelop.Database.ConnectionManager
 			return DragOperation.None;
 		}
 		
+		public override void RenameItem (string newName)
+		{
+			
+		}
+		
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
-			
+			CurrentNode.MoveToParent ();
+			BaseNode node = CurrentNode.DataItem as BaseNode;
+			if (node != null)
+				node.Refresh ();
+			CurrentNode.ExpandToNode ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.AlterProcedure)]
@@ -114,7 +123,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.DropProcedure)]
 		protected void OnDropProcedure ()
 		{
+			ProcedureNode node = (ProcedureNode)CurrentNode.DataItem;
+			if (Services.MessageService.AskQuestion (
+				GettextCatalog.GetString ("Are you sure you want to drop procedure '{0}'", node.Procedure.Name),
+				GettextCatalog.GetString ("Drop Procedure")
+			)) {
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnDropProcedureThreaded), CurrentNode.DataItem);
+			}
+		}
 			
+		private void OnDropProcedureThreaded (object state)
+		{
+			ProcedureNode node = (ProcedureNode)state;
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
+			
+			provider.DropProcedure (node.Procedure);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Rename)]
@@ -127,21 +150,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.Procedure);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.Procedure);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.Procedure);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.Procedure);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterProcedure)]
 		protected void OnUpdateAlterProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.Procedure);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.Procedure);
 		}
 	}
 }

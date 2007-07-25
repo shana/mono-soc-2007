@@ -30,6 +30,7 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Designer;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
@@ -109,8 +110,11 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
+			CurrentNode.MoveToParent ();
 			BaseNode node = CurrentNode.DataItem as BaseNode;
-			node.Refresh ();
+			if (node != null)
+				node.Refresh ();
+			CurrentNode.ExpandToNode ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.AlterView)]
@@ -122,7 +126,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.DropView)]
 		protected void OnDropView ()
 		{
+			ViewNode node = (ViewNode)CurrentNode.DataItem;
+			if (Services.MessageService.AskQuestion (
+				GettextCatalog.GetString ("Are you sure you want to drop view '{0}'", node.View.Name),
+				GettextCatalog.GetString ("Drop View")
+			)) {
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnDropViewThreaded), CurrentNode.DataItem);
+			}
+		}
+		
+		private void OnDropViewThreaded (object state)
+		{
+			ViewNode node = (ViewNode)state;
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 			
+			provider.DropView (node.View);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Rename)]
@@ -135,21 +153,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.View);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.View);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.View);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.View);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterView)]
 		protected void OnUpdateAlterView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.View);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.View);
 		}
 	}
 }

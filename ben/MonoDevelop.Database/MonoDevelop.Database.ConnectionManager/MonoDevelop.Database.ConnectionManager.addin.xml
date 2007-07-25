@@ -16,8 +16,9 @@
 		<Addin id="Core.Gui" version="0.14.0"/>
 		<Addin id="Ide" version="0.14.0"/>
 		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
+		<Addin id="Database.Components" version="0.14.0"/>
 		<Addin id="Database.Query" version="0.14.0"/>
-		<!--<Addin id="Database.Visualization" version="0.14.0"/>-->
+		<Addin id="Database.Designer" version="0.14.0"/>
 	</Dependencies>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads">
@@ -191,6 +192,8 @@
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"
 			_label = "Re_name"
 			shortcut = "F2"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RenameDatabase"
+			_label = "Rename Database">
 			
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateDatabase"
 			_label = "Create Database"
@@ -261,12 +264,14 @@
 
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AddConnection"/>
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateDatabase"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DisconnectConnection"/>
 		<SeparatorItem />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RenameDatabase"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EditConnection"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RemoveConnection"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropDatabase"/>
