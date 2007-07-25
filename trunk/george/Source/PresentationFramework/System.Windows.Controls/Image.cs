@@ -61,13 +61,22 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
+			if (Source == null)
+				return new Size(0, 0);
 			//WDTDH
-			return base.ArrangeOverride(finalSize);
+			return finalSize;
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
+			ImageSource source= Source;
+			if (source == null)
+				return new Size(0, 0);
+			switch (Stretch) {
+			case Stretch.None:
+				return new Size(source.Width, source.Height);
+			}
 			//WDTDH
-			return base.MeasureOverride(availableSize);
+			return availableSize;
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer() {
