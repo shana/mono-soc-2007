@@ -10,6 +10,7 @@ namespace Test.Measures {
 	public class MeasureCalculatorTest {
 		MeasureCalculator measureCalculator;
 		AssemblyDefinition assembly;
+		IEnumerable measures;
 
 		[TestFixtureSetUp]
 		public void FixtureSetUp () 
@@ -17,11 +18,33 @@ namespace Test.Measures {
 			assembly = AssemblyFactory.GetAssembly ("Test.Assembly.dll");
 			measureCalculator = new MeasureCalculator ();
 		}
-
+		
 		[Test]
 		public void NotEmptyMeasuresTest () 
 		{
-			Assert.IsNotNull (measureCalculator.ProcessMeasures (assembly));
+			measures = measureCalculator.ProcessMeasures (assembly);
+			Assert.IsNotNull (measures);
+		}
+
+		[Test]
+		public void CountTypeMeasuresTest () 
+		{
+			measures = measureCalculator.ProcessMeasures (assembly);
+			if (measures is ICollection)
+				Assert.AreEqual (assembly.MainModule.Types.Count, ((ICollection) measures).Count);
+		}
+		
+		[Test]
+		public void CountMethodMeasureTest () 
+		{
+			measures = measureCalculator.ProcessMeasures (assembly);
+			IEnumerator measureEnumerator = measures.GetEnumerator ();
+			IEnumerator typeEnumerator = assembly.MainModule.Types.GetEnumerator ();
+			while (measureEnumerator.MoveNext () && typeEnumerator.MoveNext ()) {
+				TypeDefinition type = (TypeDefinition) typeEnumerator.Current;
+				TypeMeasure typeMeasure = (TypeMeasure) measureEnumerator.Current;
+				Assert.AreEqual (type.Methods.Count, ((ICollection) typeMeasure.MethodMeasures).Count);
+			}
 		}
 	}
 }
