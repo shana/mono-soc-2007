@@ -1,0 +1,17 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* Dialogs/CreateDatabaseDialog.cs: dialog to create a new database
+	* Dialogs/ViewEditorDialog.cs, Dialogs/UserEditorDialog.cs, 
+	Dialogs/ProcedureEditorDialog.cs, Dialogs/PreviewDialog.cs:
+	Stubs for the dialogs
+	* MonoDevelop.Database.Designer.addin.xml: addin definitions
+	* Widgets/TriggersEditorWidget.cs, Widgets/IndicesEditorWidget.cs,
+	Widgets/ConstraintsEditorWidget.cs: stubs with ctor
+	* Widgets/ColumnsEditorWidget.cs: Various improvements and bugfixes
+	* Widgets/CommentEditorWidget.cs: Widget to edit comment
+
+2007-07-18  Ben Motmans <ben.motmans@gmail.com>
+
+	* Dialogs/TableEditorDialog.cs, Widgets/TriggersEditorWidget.cs,
+	Widgets/IndicesEditorWidget.cs, Widgets/ConstraintsEditorWidget.cs,
+	Widgets/ColumnsEditorWidget.cs: Widgets and dialogs used by the Table Editor (unfinished)
