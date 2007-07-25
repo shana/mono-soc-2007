@@ -32,7 +32,7 @@ using Mono.Cecil;
 
 namespace Measures {
 
-	public class TypeMeasure {
+	public class TypeMeasure : ICloneable {
 		TypeDefinition type;
 		float linesPerMethod;
 		float parametersPerMethod;
@@ -94,6 +94,17 @@ namespace Measures {
 			internal set {
 				maxParametersInMethod = value;
 			}
+		}
+
+		public object Clone () 
+		{
+			TypeMeasure typeMeasure = new TypeMeasure (type);
+			typeMeasure.MaxParametersInMethod = MaxParametersInMethod;
+			typeMeasure.MaxLinesInMethod = MaxLinesInMethod;
+			typeMeasure.MethodMeasures = MethodMeasures;
+			typeMeasure.ParametersPerMethod = ParametersPerMethod;
+			typeMeasure.LinesPerMethod = LinesPerMethod;
+			return typeMeasure;
 		}
 	}
 }

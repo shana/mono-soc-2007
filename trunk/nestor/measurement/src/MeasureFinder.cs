@@ -65,8 +65,9 @@ namespace Measures {
 					}
 				}
 				if (methodMeasures.Count != 0) {
-					typeMeasure.MethodMeasures = methodMeasures;
-					arrayList.Add (typeMeasure);
+					TypeMeasure resultTypeMeasure = (TypeMeasure) typeMeasure.Clone ();
+					resultTypeMeasure.MethodMeasures = methodMeasures;
+					arrayList.Add (resultTypeMeasure);
 				}
 			}
 			return arrayList;
@@ -78,13 +79,14 @@ namespace Measures {
 			foreach (TypeMeasure typeMeasure in measures) {
 				ArrayList methodMeasures = new ArrayList ();
 				foreach (MethodMeasure methodMeasure in typeMeasure.MethodMeasures) {
-					if (minimumValue <= methodMeasure.Parameters) {
+					if (methodMeasure.Parameters >= minimumValue) {
 						methodMeasures.Add (methodMeasure);
 					}
 				}
 				if (methodMeasures.Count != 0) {
-					typeMeasure.MethodMeasures = methodMeasures;
-					arrayList.Add (typeMeasure);
+					TypeMeasure resultTypeMeasure = (TypeMeasure) typeMeasure.Clone ();
+					resultTypeMeasure.MethodMeasures = methodMeasures;
+					arrayList.Add (resultTypeMeasure);
 				}
 			}
 			return arrayList;
