@@ -1,3 +1,28 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* Schema/ParameterSchema.cs, Schema/ParameterType.cs: Added a property to
+	define the parameter direction (in, out, inout)
+	* Schema/IndexSortType.cs, Schema/IndexSchema.cs: Indices no longer subclass
+	constraints but are a type on its own
+	* Schema/DataTypeSchema.cs: added properties for the create format, auto inc,
+	isNullable and isFixedLength
+	* Schema/ConstraintType.cs: enum containing the different types of constraints
+	* Schema/ConstraintSchema.cs: property to distinguish the difference between
+	table and column constraints
+	* Providers/ISchemaProvider.cs, Providers/AbstractSchemaProvider.cs: Seperate
+	methods to get indices and constraints
+	* MetaData/*.cs: attributes and enumerations to store information about
+	database capabilities and features
+	* ConnectionPool/AbstractPooledDbConnection.cs, ConnectionPool/IPooledDbConnection.cs:
+	Expose the GetSchema method of the internal IDbConnection
+	* Configuration/DatabaseConnectionContext.cs: added support for temp contexts
+	to be used in the create database dialog
+	* Configuration/DatabaseConnectionSettings.cs: added a copy constructor
+	* Collections/ConstraintSchemaCollection.cs, Collections/DataTypeSchemaCollection.cs,
+	Collections/IndexSchemaCollection.cs: strong typed schema collections
+	* Collections/SortedCollectionItemEventArgs.cs: EventArgs to be used in
+	Add and Remove events
+
 2007-07-18  Ben Motmans <ben.motmans@gmail.com>
 
 	* Providers/ISchemaProvider.cs, Providers/AbstractSchemaProvider.cs: Create, Alter, Drop

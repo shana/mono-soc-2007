@@ -27,6 +27,7 @@
 
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
@@ -34,6 +35,34 @@ namespace MonoDevelop.Database.Sql
 	public abstract class AbstractSchemaProvider : ISchemaProvider
 	{
 		protected IConnectionPool connectionPool;
+		
+		protected string databasesCollectionString = "Databases";
+		protected string tablesCollectionString = "Tables";
+		protected string viewsCollectionString = "Views";
+		protected string proceduresCollectionString = "Procedures";
+		protected string tableColumnsCollectionString = "Columns";
+		protected string viewColumnsCollectionString = "ViewColumns";
+		protected string procedureParametersCollectionString = "Procedure Parameters";
+		protected string usersCollectionString = "Users";
+		protected string indexesCollectionString = "Indexes";
+		protected string indexColumnsCollectionString = "IndexColumns";
+		protected string foreignKeysCollectionString = "Foreign Keys";
+		protected string triggersCollectionString = "Triggers";
+		protected string dataTypesCollectionString = "DataTypes";
+		
+		protected string[] databaseItemStrings = new string[] { "DATABASE_NAME" };
+		protected string[] tableItemStrings = new string[] { "TABLE_SCHEMA", "TABLE_NAME", "TABLE_COMMENT" };
+		protected string[] viewItemStrings = new string[] { "TABLE_SCHEMA", "TABLE_NAME", "TABLE_COMMENT" };
+		protected string[] procedureItemStrings = new string[] { "ROUTINE_SCHEMA", "ROUTINE_NAME" };
+		protected string[] tableColumnItemStrings = new string[] { "COLUMN_NAME", "COLUMN_DEFAULT", "COLUMN_HASDEFAULT", "IS_NULLABLE", "ORDINAL_POSITION", "NUMERIC_PRECISION", "NUMERIC_SCALE", "DATA_TYPE" };
+		protected string[] viewColumnItemStrings = new string[] { "COLUMN_NAME" };
+		protected string[] procedureParameterItemStrings = new string[] { "PARAMETER_NAME", "DATA_TYPE", "ORDINAL_POSITION", "PARAMETER_MODE" };
+		protected string[] userItemStrings = new string[] { "user_name" };
+		protected string[] indexItemStrings = new string[] {  };
+		protected string[] indexColumnItemStrings = new string[] {  };
+		protected string[] foreignKeyItemStrings = new string[] {  };
+		protected string[] triggerItemStrings = new string[] {  };
+		protected string[] dataTypeItemStrings = new string[] { "TypeName", "ColumnSize", "CreateFormat", "CreateParameters", "DataType", "IsAutoIncrementable", "IsFixedLength", "IsNullable", "MaximumScale", "MinimumScale" };
 		
 		protected AbstractSchemaProvider (IConnectionPool connectionPool)
 		{
@@ -47,9 +76,9 @@ namespace MonoDevelop.Database.Sql
 			get { return connectionPool; }
 		}
 		
-		public virtual bool SupportsSchemaOperation (SqlStatementType statement, SqlSchemaType schema)
+		public virtual bool SupportsSchemaOperation (OperationMetaData operation, SchemaMetaData schema)
 		{
-			return SupportsSchemaOperation (new SchemaOperation (statement, schema));
+			return SupportsSchemaOperation (new SchemaOperation (operation, schema));
 		}
 		
 		public virtual bool SupportsSchemaOperation (SchemaOperation operation)
@@ -59,62 +88,374 @@ namespace MonoDevelop.Database.Sql
 		
 		public virtual DatabaseSchemaCollection GetDatabases ()
 		{
-			throw new NotImplementedException ();
+			DatabaseSchemaCollection collection = new DatabaseSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: name
+			DataTable dt = conn.GetSchema (databasesCollectionString);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetDatabase (row));
+			}
+			
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual DatabaseSchema GetDatabase (DataRow row)
+		{
+			DatabaseSchema schema = new DatabaseSchema (this);
+			schema.Name = GetRowString (row, databaseItemStrings[0]);
+			return schema;
 		}
 
 		public virtual TableSchemaCollection GetTables ()
 		{
-			throw new NotImplementedException ();
+			TableSchemaCollection collection = new TableSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, table, table type
+			DataTable dt = conn.GetSchema (tablesCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetTable (row));
+			}
+			conn.Release ();
+			
+			return collection;
 		}
 		
+		protected virtual TableSchema GetTable (DataRow row)
+		{
+			TableSchema schema = new TableSchema (this);
+
+			schema.SchemaName = GetRowString (row, tableItemStrings[0]);
+			schema.Name = GetRowString (row, tableItemStrings[1]);
+			schema.Comment = GetRowString (row, tableItemStrings[2]);
+			
+			return schema;
+		}
+
 		public virtual ColumnSchemaCollection GetTableColumns (TableSchema table)
 		{
-			throw new NotImplementedException ();
+			ColumnSchemaCollection collection = new ColumnSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, table, column
+			DataTable dt = conn.GetSchema (tableColumnsCollectionString, null, table.SchemaName, table.Name);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetTableColumn (row, table));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual ColumnSchema GetTableColumn (DataRow row, TableSchema table)
+		{
+			ColumnSchema schema = new ColumnSchema (this);
+
+			schema.SchemaName = table.SchemaName;
+			schema.Name = GetRowString (row, tableColumnItemStrings[0]);
+			schema.DefaultValue = GetRowString (row, tableColumnItemStrings[1]);
+			schema.HasDefaultValue = GetRowBool (row, tableColumnItemStrings[2]);
+			schema.IsNullable = GetRowBool (row, tableColumnItemStrings[3]);
+			schema.Position = GetRowInt (row, tableColumnItemStrings[4]);
+			schema.Precision = GetRowInt (row, tableColumnItemStrings[5]);
+			schema.Scale = GetRowInt (row, tableColumnItemStrings[6]);
+			schema.DataTypeName = GetRowString (row, tableColumnItemStrings[7]);
+			
+			return schema;
 		}
 
 		public virtual ViewSchemaCollection GetViews ()
 		{
-			throw new NotImplementedException ();
+			ViewSchemaCollection collection = new ViewSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, table
+			DataTable dt = conn.GetSchema (viewsCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetView (row));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual ViewSchema GetView (DataRow row)
+		{
+			ViewSchema schema = new ViewSchema (this);
+	
+			schema.SchemaName = GetRowString (row, viewItemStrings[0]);
+			schema.Name = GetRowString (row, viewItemStrings[1]);
+			schema.Comment = GetRowString (row, viewItemStrings[2]);
+			
+			return schema;
 		}
 
 		public virtual ColumnSchemaCollection GetViewColumns (ViewSchema view)
 		{
-			throw new NotImplementedException ();
+			ColumnSchemaCollection collection = new ColumnSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, table, column
+			DataTable dt = conn.GetSchema (viewColumnsCollectionString, null, view.SchemaName, view.Name);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetViewColumn (row, view));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual ColumnSchema GetViewColumn (DataRow row, ViewSchema view)
+		{
+			ColumnSchema schema = new ColumnSchema (this);
+			
+			schema.SchemaName = view.SchemaName;
+			schema.Name = GetRowString (row, viewColumnItemStrings[0]);
+			
+			return schema;
 		}
 
 		public virtual ProcedureSchemaCollection GetProcedures ()
 		{
-			throw new NotImplementedException ();
+			ProcedureSchemaCollection collection = new ProcedureSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, name, type
+			DataTable dt = conn.GetSchema (proceduresCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetProcedure (row));
+			}
+			conn.Release ();
+			
+			return collection;
 		}
-
-		public virtual ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
+		
+		protected virtual ProcedureSchema GetProcedure (DataRow row)
 		{
-			throw new NotImplementedException ();
+			ProcedureSchema schema = new ProcedureSchema (this);
+			
+			schema.SchemaName = GetRowString (row, procedureItemStrings[0]);
+			schema.Name = GetRowString (row, procedureItemStrings[1]);
+			
+			return schema;
 		}
 		
 		public virtual ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
-			throw new NotImplementedException ();
+			ParameterSchemaCollection collection = new ParameterSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, name, type, parameter
+			DataTable dt = conn.GetSchema (procedureParametersCollectionString, null, procedure.SchemaName, procedure.Name);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetProcedureParameter (row, procedure));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual ParameterSchema GetProcedureParameter (DataRow row, ProcedureSchema procedure)
+		{
+			ParameterSchema schema = new ParameterSchema (this);
+			
+			schema.SchemaName = procedure.SchemaName;
+			schema.Name = GetRowString (row, procedureParameterItemStrings[0]);
+			schema.DataTypeName = GetRowString (row, procedureParameterItemStrings[1]);
+			schema.Position = GetRowInt (row, procedureParameterItemStrings[2]);
+			
+			string paramType = GetRowString (row, procedureParameterItemStrings[3]);
+			schema.ParameterType = String.Compare (paramType, "IN", true) == 0 ?
+				ParameterType.In : (String.Compare (paramType, "OUT", true) == 0 ?
+				ParameterType.Out : ParameterType.InOut);
+			
+			return schema;
 		}
 
 		public virtual ConstraintSchemaCollection GetTableConstraints (TableSchema table)
+		{
+			ConstraintSchemaCollection collection = new ConstraintSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, table, name
+			DataTable dt = conn.GetSchema (foreignKeysCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetTableConstraint (row, table));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual ConstraintSchema GetTableConstraint (DataRow row, TableSchema table)
+		{
+			return null;
+		}
+		
+		public virtual ColumnSchemaCollection GetTableIndexColumns (TableSchema table, IndexSchema index)
+		{
+			ColumnSchemaCollection collection = new ColumnSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, table, ConstraintName, column
+			DataTable dt = conn.GetSchema (indexColumnsCollectionString, null, table.SchemaName, table.Name, index.Name);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetTableIndexColumn (row, table, index));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual ColumnSchema GetTableIndexColumn (DataRow row, TableSchema table, IndexSchema index)
+		{
+			ColumnSchema schema = new ColumnSchema (this);
+			
+			return schema;
+		}
+		
+		public virtual IndexSchemaCollection GetTableIndexes (TableSchema table)
+		{
+			IndexSchemaCollection collection = new IndexSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, table, name
+			DataTable dt = conn.GetSchema (indexesCollectionString, null, table.SchemaName, table.Name);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetTableIndex (row, table));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual IndexSchema GetTableIndex (DataRow row, TableSchema table)
+		{
+			IndexSchema schema = new IndexSchema (this);
+			
+			return schema;
+		}
+		
+		public virtual ConstraintSchemaCollection GetColumnConstraints (TableSchema table, ColumnSchema column)
 		{
 			throw new NotImplementedException ();
 		}
 
 		public virtual UserSchemaCollection GetUsers ()
 		{
-			throw new NotImplementedException ();
+			UserSchemaCollection collection = new UserSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: name
+			DataTable dt = conn.GetSchema (usersCollectionString);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetUser (row));
+			}
+			
+			conn.Release ();
+			
+			return collection;
 		}
 		
+		protected virtual UserSchema GetUser (DataRow row)
+		{
+			UserSchema schema = new UserSchema (this);
+			schema.Name = GetRowString (row, userItemStrings[0]);
+			return schema;
+		}
+		
+		public virtual DataTypeSchemaCollection GetDataTypes ()
+		{
+			DataTypeSchemaCollection collection = new DataTypeSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: name
+			DataTable dt = conn.GetSchema (dataTypesCollectionString);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetDataType (row));
+			}
+			
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual DataTypeSchema GetDataType (DataRow row)
+		{
+			DataTypeSchema schema = new DataTypeSchema (this);
+			schema.Name = GetRowString (row, dataTypeItemStrings[0]);
+			schema.LengthRange = new Range (GetRowInt (row, dataTypeItemStrings[1]));
+			schema.CreateFormat = GetRowString (row, dataTypeItemStrings[2]);
+			schema.CreateParameters = GetRowString (row, dataTypeItemStrings[3]);
+			schema.DataType = Type.GetType (GetRowString (row, dataTypeItemStrings[4]), false, false);
+			schema.IsAutoincrementable = GetRowBool (row, dataTypeItemStrings[5]);
+			schema.IsFixedLength = GetRowBool (row, dataTypeItemStrings[6]);
+			schema.IsNullable = GetRowBool (row, dataTypeItemStrings[7]);
+			schema.ScaleRange = new Range (GetRowInt (row, dataTypeItemStrings[9]), GetRowInt (row, dataTypeItemStrings[8]));
+			schema.PrecisionRange = new Range (0);
+			
+			ProvideDataTypeInformation (schema);
+			
+			return schema;
+		}
+
+		protected virtual void ProvideDataTypeInformation (DataTypeSchema schema)
+		{
+		}
+
 		public virtual DataTypeSchema GetDataType (string name)
 		{
-			throw new NotImplementedException ();
+			if (name == null)
+				throw new ArgumentNullException ("name");
+			
+			DataTypeSchema schema = null;
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: name
+			DataTable dt = conn.GetSchema (dataTypesCollectionString, name);
+			if (dt.Rows.Count > 0)
+				schema = GetDataType (dt.Rows[0]);
+			conn.Release ();
+			
+			return schema;
 		}
 		
 		public virtual TriggerSchemaCollection GetTableTriggers (TableSchema table)
 		{
-			throw new NotImplementedException ();
+			TriggerSchemaCollection collection = new TriggerSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			//restrictions: database, schema, name, EventObjectTable
+			DataTable dt = conn.GetSchema (triggersCollectionString, null, table.SchemaName, null, table.Name);
+			for (int r = 0; r < dt.Rows.Count; r++) {
+				DataRow row = dt.Rows[r];
+				collection.Add (GetTableTrigger (row, table));
+			}
+			conn.Release ();
+			
+			return collection;
+		}
+		
+		protected virtual TriggerSchema GetTableTrigger (DataRow row, TableSchema table)
+		{
+			TriggerSchema schema = new TriggerSchema (this);
+			schema.TableName = table.Name;
+			
+			return schema;
 		}
 		
 		public virtual void CreateDatabase (DatabaseSchema database)
@@ -275,6 +616,42 @@ namespace MonoDevelop.Database.Sql
 				return null;
 
 			return reader.GetValue (field).ToString ();
+		}
+		
+		protected virtual object GetRowObject (DataRow row, string name)
+		{
+			try {
+				return row[name];
+			} catch {
+				return null;
+			}
+		}
+		
+		protected virtual string GetRowString (DataRow row, string name)
+		{
+			try {
+				return row[name].ToString ();
+			} catch {
+				return null;
+			}
+		}
+		
+		protected virtual int GetRowInt (DataRow row, string name)
+		{
+			try {
+				return (int)row[name];
+			} catch {
+				return 0;
+			}
+		}
+		
+		protected virtual bool GetRowBool (DataRow row, string name)
+		{
+			try {
+				return (bool)row[name];
+			} catch {
+				return false;
+			}
 		}
 	}
 }

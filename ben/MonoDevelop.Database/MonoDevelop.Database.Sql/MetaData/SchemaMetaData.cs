@@ -24,32 +24,49 @@
 //
 
 using System;
-using System.Data;
-using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public class SchemaOperation
+	[Flags]
+	public enum SchemaMetaData
 	{
-		protected OperationMetaData operation;
-		protected SchemaMetaData schema;
+		Aggregate,
+		CheckConstraint,
+		Column,
+		Constraint,
+		Database,
+		DataType,
+		ForeignKeyConstraint,
+		Group,
+		IndexConstraint,
+		Language,
+		Operator,
+		Parameter,
+		PrimaryKeyConstraint,
+		Privilege,
+		Procedure,
+		Role,
+		Rule,
+		Sequence,
+		Table,
+		Trigger,
+		UniqueConstraint,
+		User,
+		View
+	}
+			
+	[AttributeUsage (AttributeTargets.Class)]
+	public sealed class SchemaMetaDataAttribute : Attribute
+	{
+		private SchemaMetaData meta;
 		
-		protected SchemaOperation ()
+		public SchemaMetaDataAttribute (SchemaMetaData meta)
 		{
+			this.meta = meta;
 		}
 		
-		public SchemaOperation (OperationMetaData operation, SchemaMetaData schema)
-		{
-			this.operation = operation;
-			this.schema = schema;
-		}
-		
-		public OperationMetaData Operation {
-			get { return operation; }
-		}
-		
-		public SchemaMetaData Schema {
-			get { return schema; }
+		public SchemaMetaData SchemaMetaData {
+			get { return meta; }
 		}
 	}
 }

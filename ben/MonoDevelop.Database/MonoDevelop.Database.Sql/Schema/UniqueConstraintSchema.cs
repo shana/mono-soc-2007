@@ -33,7 +33,7 @@ namespace MonoDevelop.Database.Sql
 	public class UniqueConstraintSchema : ConstraintSchema
 	{
 		public UniqueConstraintSchema (ISchemaProvider schemaProvider)
-			: base (schemaProvider)
+			: base (schemaProvider, ConstraintType.Unique)
 		{
 		}
 	}

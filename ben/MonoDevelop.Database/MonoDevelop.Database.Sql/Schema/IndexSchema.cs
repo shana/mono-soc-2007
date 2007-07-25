@@ -30,12 +30,12 @@ using System;
 
 namespace MonoDevelop.Database.Sql
 {
-	public class IndexConstraintSchema : ConstraintSchema
+	public class IndexSchema : AbstractSchema
 	{
 		protected string tableName;
-		protected IndexConstraintSortType sortType;
+		protected IndexSortType sortType;
 
-		public IndexConstraintSchema (ISchemaProvider schemaProvider)
+		public IndexSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
 		}
@@ -50,7 +50,7 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public IndexConstraintSortType SortType {
+		public IndexSortType SortType {
 			get { return sortType; }
 			set {
 				if (sortType != value) {

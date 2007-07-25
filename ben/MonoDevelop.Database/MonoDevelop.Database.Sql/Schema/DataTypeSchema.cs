@@ -33,9 +33,16 @@ namespace MonoDevelop.Database.Sql
 {
 	public class DataTypeSchema : AbstractSchema
 	{
-		protected bool isComplex = false;
+		protected bool isComplex;
+		protected bool isNullable;
+		protected bool isAutoincrementable;
+		protected bool isFixedLength;
 		
 		protected DataTypeCategory category;
+		protected Type dataType;
+		
+		protected string createFormat;
+		protected string createParameters;
 
 		protected Range lengthRange;
 		protected Range precisionRange;
@@ -95,12 +102,70 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public bool IsComplex {
-			get {
-				return isComplex;
-			}
+			get { return isComplex; }
 			set {
 				if (isComplex != value) {
 					isComplex = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public bool IsNullable {
+			get { return isNullable; }
+			set {
+				if (isNullable != value) {
+					isNullable = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public bool IsAutoincrementable {
+			get { return isAutoincrementable; }
+			set {
+				if (isAutoincrementable != value) {
+					isAutoincrementable = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public bool IsFixedLength {
+			get { return isFixedLength; }
+			set {
+				if (isFixedLength != value) {
+					isFixedLength = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public Type DataType {
+			get { return dataType; }
+			set {
+				if (dataType != value) {
+					dataType = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public string CreateFormat {
+			get { return createFormat; }
+			set {
+				if (createFormat != value) {
+					createFormat = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public string CreateParameters {
+			get { return createParameters; }
+			set {
+				if (createParameters != value) {
+					createParameters = value;
 					OnChanged();
 				}
 			}

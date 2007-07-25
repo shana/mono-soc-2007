@@ -35,7 +35,7 @@ namespace MonoDevelop.Database.Sql
 		protected string source;
 		
 		public CheckConstraintSchema (ISchemaProvider schemaProvider)
-			: base (schemaProvider)
+			: base (schemaProvider, ConstraintType.Check)
 		{
 		}
 		

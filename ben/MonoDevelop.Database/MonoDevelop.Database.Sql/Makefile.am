@@ -12,10 +12,13 @@ FILES =  \
 	Collections/ColumnSchemaCollection.cs \
 	Collections/ConstraintSchemaCollection.cs \
 	Collections/DatabaseSchemaCollection.cs \
+	Collections/DataTypeSchemaCollection.cs \
+	Collections/IndexSchemaCollection.cs \
 	Collections/IPropertyComparer.cs \
 	Collections/ParameterSchemaCollection.cs \
 	Collections/ProcedureSchemaCollection.cs \
 	Collections/SortedCollectionBase.cs \
+	Collections/SortedCollectionItemEventArgs.cs \
 	Collections/TableSchemaCollection.cs \
 	Collections/TriggerSchemaCollection.cs \
 	Collections/UserSchemaCollection.cs \
@@ -71,10 +74,25 @@ FILES =  \
 	Dialect/Statements/InsertStatement.cs \
 	Dialect/Statements/IStatement.cs \
 	Dialect/Statements/SelectStatement.cs \
-	Dialect/Statements/SqlStatementType.cs \
 	Dialect/Statements/TruncateStatement.cs \
 	Dialect/Statements/UpdateStatement.cs \
 	IDbFactory.cs \
+	MetaData/CheckConstraintMetaData.cs \
+	MetaData/ColumnMetaData.cs \
+	MetaData/ConnectionSettingsMetaData.cs \
+	MetaData/DataTypeMetaData.cs \
+	MetaData/ForeignKeyConstraintMetaData.cs \
+	MetaData/MetaDataService.cs \
+	MetaData/OperationMetaData.cs \
+	MetaData/ParameterMetaData.cs \
+	MetaData/PrimaryKeyConstraintMetaData.cs \
+	MetaData/ProcedureMetaData.cs \
+	MetaData/SchemaMetaData.cs \
+	MetaData/TableMetaData.cs \
+	MetaData/TriggerMetaData.cs \
+	MetaData/UniqueConstraintMetaData.cs \
+	MetaData/UserMetaData.cs \
+	MetaData/ViewMetaData.cs \
 	Providers/AbstractConnectionProvider.cs \
 	Providers/AbstractSchemaProvider.cs \
 	Providers/IConnectionProvider.cs \
@@ -86,17 +104,19 @@ FILES =  \
 	Schema/CheckConstraintSchema.cs \
 	Schema/ColumnSchema.cs \
 	Schema/ConstraintSchema.cs \
+	Schema/ConstraintType.cs \
 	Schema/DatabaseSchema.cs \
 	Schema/DataTypeCategory.cs \
 	Schema/DataTypeSchema.cs \
 	Schema/ForeignKeyConstraintSchema.cs \
 	Schema/GroupSchema.cs \
-	Schema/IndexConstraintSchema.cs \
-	Schema/IndexConstraintSortType.cs \
+	Schema/IndexSchema.cs \
+	Schema/IndexSortType.cs \
 	Schema/ISchema.cs \
 	Schema/LanguageSchema.cs \
 	Schema/OperatorSchema.cs \
 	Schema/ParameterSchema.cs \
+	Schema/ParameterType.cs \
 	Schema/PrimaryKeyConstraintSchema.cs \
 	Schema/PrivilegeSchema.cs \
 	Schema/ProcedureSchema.cs \
@@ -105,7 +125,6 @@ FILES =  \
 	Schema/RuleSchema.cs \
 	Schema/SchemaSchema.cs \
 	Schema/SequenceSchema.cs \
-	Schema/SqlSchemaType.cs \
 	Schema/TableSchema.cs \
 	Schema/TriggerEvent.cs \
 	Schema/TriggerSchema.cs \

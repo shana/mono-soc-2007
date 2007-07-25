@@ -43,6 +43,7 @@ namespace MonoDevelop.Database.Sql
 		
 		protected ColumnSchemaCollection columns;
 		protected ConstraintSchemaCollection constraints;
+		protected TriggerSchemaCollection triggers;
 		
 		public TableSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
@@ -105,6 +106,14 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
+		public TriggerSchemaCollection Triggers {
+			get {
+				if (triggers == null)
+					triggers = provider.GetTableTriggers(this);
+				return triggers;
+			}
+		}
+		
 		/// <summary>
 		/// Refresh the information associated with this table.
 		/// </summary>
@@ -113,6 +122,7 @@ namespace MonoDevelop.Database.Sql
 			// TODO: Update Name, etc.
 			columns = null;
 			constraints = null;
+			triggers = null;
 			definition = null;
 		}
 	}

@@ -2,9 +2,11 @@
 // Schema/ConstraintSchema.cs
 //
 // Authors:
-//   Christian Hergert	<chris@mosaix.net>
+//	Christian Hergert  <chris@mosaix.net>
+//	Ben Motmans  <ben.motmans@gmail.com>
 //
 // Copyright (C) 2005 Mosaix Communications, Inc.
+// Copyright (c) 2007 Ben Motmans
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -34,14 +36,26 @@ namespace MonoDevelop.Database.Sql
 	public class ConstraintSchema : AbstractSchema
 	{
 		protected ColumnSchemaCollection columns;
+		protected bool isColumnConstraint;
+		protected ConstraintType constraintType;
 		
-		public ConstraintSchema (ISchemaProvider schemaProvider)
+		protected ConstraintSchema (ISchemaProvider schemaProvider, ConstraintType constraintType)
 			: base (schemaProvider)
 		{
 			columns = new ColumnSchemaCollection ();
+			this.constraintType = constraintType;
 		}		
 		public ColumnSchemaCollection Columns {
 			get { return columns; }
+		}
+		
+		public bool IsColumnConstraint {
+			get { return isColumnConstraint; }
+			set { isColumnConstraint = value; }
+		}
+		
+		public ConstraintType ConstraintType {
+			get { return constraintType; }
 		}
 	}
 }

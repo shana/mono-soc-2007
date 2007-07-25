@@ -33,12 +33,14 @@ namespace MonoDevelop.Database.Sql
 	public class ColumnSchema : AbstractSchema
 	{
 		protected string dataType = String.Empty;
-		protected string defaultValue = String.Empty;
-		protected bool notNull = false;
+		protected bool hasDefaultValue;
+		protected string defaultValue;
+		protected bool nullable;
 		protected int length = 0;
 		protected int precision = 0;
 		protected int scale = 0;
-		protected int columnID = 0;
+		protected int position = 0;
+		protected ConstraintSchemaCollection constraints;
 		
 		public ColumnSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
@@ -46,15 +48,11 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public DataTypeSchema DataType {
-			get {
-				return SchemaProvider.GetDataType (dataType);
-			}
+			get { return SchemaProvider.GetDataType (dataType); }
 		}
 		
 		public string DataTypeName {
-			get {
-				return dataType;
-			}
+			get { return dataType; }
 			set {
 				if (dataType != value) {
 					dataType = value;
@@ -63,10 +61,8 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public virtual string Default {
-			get {
-				return defaultValue;
-			}
+		public virtual string DefaultValue {
+			get { return defaultValue; }
 			set {
 				if (defaultValue != value) {
 					defaultValue = value;
@@ -75,22 +71,28 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public virtual bool NotNull {
-			get {
-				return notNull;
-			}
+		public virtual bool HasDefaultValue {
+			get { return hasDefaultValue; }
 			set {
-				if (notNull != value) {
-					notNull = value;
+				if (hasDefaultValue != value) {
+					hasDefaultValue = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public virtual bool IsNullable {
+			get { return nullable; }
+			set {
+				if (nullable != value) {
+					nullable = value;
 					OnChanged();
 				}
 			}
 		}
 		
 		public virtual int Length {
-			get {
-				return length;
-			}
+			get { return length; }
 			set {
 				if (length != value) {
 					length = value;
@@ -100,9 +102,7 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public virtual int Precision {
-			get {
-				return precision;
-			}
+			get { return precision; }
 			set {
 				if (precision != value) {
 					precision = value;
@@ -112,9 +112,7 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public virtual int Scale {
-			get {
-				return scale;
-			}
+			get { return scale; }
 			set {
 				if (scale != value) {
 					scale = value;
@@ -123,16 +121,27 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public virtual int ColumnID {
-			get {
-				return columnID;
-			}
+		public virtual int Position {
+			get { return position; }
 			set {
-				if (columnID != value) {
-					columnID = value;
+				if (position != value) {
+					position = value;
 					OnChanged();
 				}
 			}
+		}
+		
+		public ConstraintSchemaCollection Constraints {
+			get {
+				//if (constraints == null)
+				//	constraints = provider.GetTableConstraints(this);
+				return constraints;
+			}
+		}
+		
+		public override void Refresh()
+		{
+			constraints = null;
 		}
 	}
 }

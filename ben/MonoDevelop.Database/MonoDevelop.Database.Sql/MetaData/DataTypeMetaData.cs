@@ -1,6 +1,6 @@
-﻿//
+//
 // Authors:
-//   Ben Motmans  <ben.motmans@gmail.com>
+//	Ben Motmans  <ben.motmans@gmail.com>
 //
 // Copyright (c) 2007 Ben Motmans
 //
@@ -24,41 +24,43 @@
 //
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public sealed class ConstraintSchemaCollection : SortedCollectionBase<ConstraintSchema>
+	[Flags]
+	public enum DataTypeMetaData
 	{
-		public ConstraintSchemaCollection ()
-			: base (true)
+		Name,
+		Owner,
+		Comment,
+		Definition,
+		Schema,
+		DotNetType,
+		MinLength,
+		DefaultLength,
+		MaxLength,
+		MinPrecision,
+		DefaultPrecision,
+		MaxPrecision,
+		MinScale,
+		DefaultScale,
+		MaxScale,
+		IsNullable,
+		CreateFormat,
+		CreateParameters
+	}
+		
+	[AttributeUsage (AttributeTargets.Class)]
+	public sealed class DataTypeMetaDataAttribute : Attribute
+	{
+		private DataTypeMetaData meta;
+	
+		public DataTypeMetaDataAttribute (DataTypeMetaData meta)
 		{
 		}
-		
-		public ConstraintSchema GetConstraintWithColumn (string columnName, ConstraintType type)
-		{
-			foreach (ConstraintSchema item in List) {
-				if (item.ConstraintType != type)
-					continue;
-				
-				foreach (ColumnSchema column in item.Columns) {
-					if (column.Name == columnName)
-						return item;
-				}
-			}
-			return null;
-		}
-		
-		public ConstraintSchema GetConstraintWithColumn (string columnName)
-		{
-			foreach (ConstraintSchema item in List) {
-				foreach (ColumnSchema column in item.Columns) {
-					if (column.Name == columnName)
-						return item;
-				}
-			}
-			return null;
+			
+		public DataTypeMetaData DataTypeMetaData {
+			get { return meta; }
 		}
 	}
 }

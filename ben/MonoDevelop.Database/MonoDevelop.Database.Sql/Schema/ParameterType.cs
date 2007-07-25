@@ -29,20 +29,10 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public enum SqlStatementType
+	public enum ParameterType
 	{
-		Select,
-		Insert,
-		Update,
-		Delete,
-		Truncate,
-		
-		Create,
-		Alter,
-		Drop,
-		Rename,
-		
-		Grant,
-		Revoke
+		In,
+		Out,
+		InOut
 	}
 }
