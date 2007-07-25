@@ -31,28 +31,20 @@ using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Components
 {
-	public class TextVisualizer : IDataGridVisualizer
+	public class TextVisualizer : AbstractDataGridVisualizer
 	{
-		public virtual string Description {
-			get { return GettextCatalog.GetString ("Show as text"); }
-		}
-		
-		public virtual string IconString {
-			get { return "md-text-file-icon"; }
-		}
-		
-		public virtual bool CanVisualize (Type type)
+		public override bool CanVisualize (Type type)
 		{
 			return type == typeof (string) || type == typeof (byte[]);
 		}
 		
-		public virtual void ShowContent (object dataObject)
-		{
-			string txt = GetContent (dataObject);
-
-			using (ShowTextDialog dlg = new ShowTextDialog (txt, "text/plain"))
-				dlg.Run ();
-		}
+//		public virtual void ShowContent (object dataObject)
+//		{
+//			string txt = GetContent (dataObject);
+//
+//			using (ShowTextDialog dlg = new ShowTextDialog (txt, "text/plain"))
+//				dlg.Run ();
+//		}
 		
 		protected virtual string GetContent (object dataObject)
 		{

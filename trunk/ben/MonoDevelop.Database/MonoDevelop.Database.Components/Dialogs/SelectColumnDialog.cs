@@ -33,7 +33,7 @@ namespace MonoDevelop.Database.Components
 	{
 		private SelectColumnWidget selecter;
 		
-		public SelectColumnDialog(bool showCheckBoxes)
+		public SelectColumnDialog (bool showCheckBoxes)
 		{
 			this.Build();
 			
@@ -49,9 +49,9 @@ namespace MonoDevelop.Database.Components
 			get { return selecter.CheckedColumns; }
 		}
 		
-		public void Append (IEnumerable<ColumnSchema> columns)
+		public void Initialize (ColumnSchemaCollection columns)
 		{
-			selecter.Append (columns);
+			selecter.Initialize (columns);
 		}
 
 		protected virtual void CancelClicked (object sender, System.EventArgs e)

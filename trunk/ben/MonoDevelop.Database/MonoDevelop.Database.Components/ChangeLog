@@ -1,3 +1,18 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* Dialogs/DatabaseConnectionSettingsDialog.cs: Various improvements and bugfixes
+	* Commands/SqlEditorCommands.cs, Commands/DataGridCommands.cs: Commands
+	* Dialogs/WaitDialog.cs: Dialog to alert the user of progress during a
+	background operation
+	* Widgets/DataGrid/Visualizers/DataGridItemCommandHandler.cs: Command
+	Handler for DataGrid context menu's
+	* Widgets/DataGrid/Visualizers/AbstractDataGridVisualizer.cs: Abstract
+	Visualizer implementation
+	* Widgets/DatabaseConnectionContextComboBox.cs: ComboBox to list all
+	DatabaseConnectionContexts
+	* Widgets/SqlEditorWidget.cs: re-useable sql editor with syntax highlighting
+	* MonoDevelop.Database.Components.addin.xml: addin definitions
+
 2007-07-18  Ben Motmans <ben.motmans@gmail.com>
 
 	* Dialogs/DatabaseConnectionSettingsDialog.cs: Do not make the name entry and provider combo

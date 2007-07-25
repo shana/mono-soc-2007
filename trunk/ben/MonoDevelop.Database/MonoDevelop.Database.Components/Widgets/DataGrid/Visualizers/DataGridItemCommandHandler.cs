@@ -26,36 +26,40 @@
 using Gtk;
 using System;
 using System.Data;
+using System.Collections;
+using System.Collections.Generic;
 using Mono.Addins;
 using MonoDevelop.Core;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.Components
 {
-	public class ImageVisualizer : AbstractDataGridVisualizer
+	public class DataGridItemCommandHandler : ICommandRouter
 	{
-		public override bool CanVisualize (Type type)
+		private object nextTarget;
+		private object dataObject;
+		
+		internal void SetDataObject (object dataObject)
 		{
-			return type == typeof (byte[]);
+			this.dataObject = dataObject;
 		}
 		
-		public override Type CommandHandlerType {
-			get { return typeof (ImageVisualizerCommandHandler); }
-		}
-	}
-	
-	public class ImageVisualizerCommandHandler : DataGridItemCommandHandler
-	{
-		public override void ActivateItem ()
+		internal void SetNextTarget (object nextTarget)
 		{
-			byte[] blob = DataObject as byte[];
-			
-			Gdk.Pixbuf pixbuf = null;
-			try {
-				pixbuf = new Gdk.Pixbuf (blob);
-			} catch {}
-			
-			using (ShowImageDialog dlg = new ShowImageDialog (pixbuf))
-				dlg.Run ();
+			this.nextTarget = nextTarget;
+		}
+		
+		object ICommandRouter.GetNextCommandTarget ()
+		{
+			return nextTarget;
+		}
+		
+		protected object DataObject {
+			get { return dataObject; }
+		}
+		
+		public virtual void ActivateItem ()
+		{
 		}
 	}
 }

@@ -31,31 +31,25 @@ using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Components
 {
-	public class ImageVisualizer : AbstractDataGridVisualizer
+	public abstract class AbstractDataGridVisualizer : IDataGridVisualizer
 	{
-		public override bool CanVisualize (Type type)
+		protected DataGridItemCommandHandler commandHandler;
+
+		public virtual bool CanVisualize (Type type)
 		{
-			return type == typeof (byte[]);
+			return false;
 		}
 		
-		public override Type CommandHandlerType {
-			get { return typeof (ImageVisualizerCommandHandler); }
+		public virtual Type CommandHandlerType {
+			get { return typeof (DataGridItemCommandHandler); }
 		}
-	}
-	
-	public class ImageVisualizerCommandHandler : DataGridItemCommandHandler
-	{
-		public override void ActivateItem ()
-		{
-			byte[] blob = DataObject as byte[];
-			
-			Gdk.Pixbuf pixbuf = null;
-			try {
-				pixbuf = new Gdk.Pixbuf (blob);
-			} catch {}
-			
-			using (ShowImageDialog dlg = new ShowImageDialog (pixbuf))
-				dlg.Run ();
+		
+		public virtual DataGridItemCommandHandler CommandHandler {
+			get {
+				if (commandHandler == null)
+					commandHandler = (DataGridItemCommandHandler) Activator.CreateInstance (CommandHandlerType);
+				return commandHandler;
+			}
 		}
 	}
 }

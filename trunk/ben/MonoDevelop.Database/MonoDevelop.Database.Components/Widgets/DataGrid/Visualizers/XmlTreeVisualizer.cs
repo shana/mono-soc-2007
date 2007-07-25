@@ -33,21 +33,13 @@ namespace MonoDevelop.Database.Components
 {
 	public class XmlTreeVisualizer : TextVisualizer
 	{
-		public override string Description {
-			get { return GettextCatalog.GetString ("Show as xml tree"); }
-		}
-		
-		public override string IconString {
-			get { return "md-xml-file-icon"; }
-		}
-
-		public override void ShowContent (object dataObject)
-		{
-			string xml = GetContent (dataObject);
-
-			//TODO: 
-			//using (ShowXmlTreeDialog dlg = new ShowXmlTreeDialog (xml))
-			//	dlg.Run ();
-		}
+//		public override void ShowContent (object dataObject)
+//		{
+//			string xml = GetContent (dataObject);
+//
+//			//TODO: 
+//			//using (ShowXmlTreeDialog dlg = new ShowXmlTreeDialog (xml))
+//			//	dlg.Run ();
+//		}
 	}
 }

@@ -30,12 +30,15 @@ using System.Collections.Generic;
 using System.Data;
 using Mono.Addins;
 using MonoDevelop.Core;
+using MonoDevelop.Ide;
+using MonoDevelop.Ide.Gui;
+using MonoDevelop.Components.Commands;
 
 namespace MonoDevelop.Database.Components
 {
-	public partial class DataGrid : Gtk.Bin
+	public partial class DataGrid : Bin, ICommandDelegatorRouter
 	{
-		private bool limitPageSize;
+		private bool limitPageSize = true;
 		private int pageSize = 50;
 		private int currentRecord = 0;
 		private int numRecords = 0;
@@ -48,11 +51,13 @@ namespace MonoDevelop.Database.Components
 		private int sortColumn = 0;
 		private IComparer sortComparer;
 		
+		private object dataObject;
+		
 		private ObjectContentRenderer defaultContentRenderer;
 		private Dictionary<Type, IDataGridContentRenderer> contentRenderers;
 		private List<IDataGridVisualizer> visualizers;
 		
-		public DataGrid (string rendererExtensionPath, string visualizerExtensionPath)
+		public DataGrid ()
 		{
 			this.Build ();
 			
@@ -76,19 +81,9 @@ namespace MonoDevelop.Database.Components
 			visualizers.Add (new TextVisualizer ());
 			visualizers.Add (new XmlTextVisualizer ());
 			visualizers.Add (new XmlTreeVisualizer ());
-			
-			if (rendererExtensionPath != null) {
-				foreach (DataGridContentRendererCodon codon in AddinManager.GetExtensionNodes (rendererExtensionPath))
-					AddContentRenderer (codon.ContentRenderer);
-			}
-			
-			if (visualizerExtensionPath != null) {
-				foreach (DataGridVisualizerCodon codon in AddinManager.GetExtensionNodes (visualizerExtensionPath)) {
-					IDataGridVisualizer vis = codon.Visualizer;
-					if (!visualizers.Contains (vis))
-						visualizers.Add (vis);
-				}
-			}
+
+			foreach (DataGridContentRendererCodon codon in AddinManager.GetExtensionNodes ("/SharpDevelop/Components/DataGrid/Renderers"))
+				AddContentRenderer (codon.ContentRenderer);
 		}
 		
 		public bool ShowNavigator {
@@ -203,6 +198,33 @@ namespace MonoDevelop.Database.Components
 			ShowNavigationState ();
 		}
 		
+		object ICommandDelegatorRouter.GetNextCommandTarget ()
+		{
+			return null;
+		}
+		
+		object ICommandDelegatorRouter.GetDelegatedCommandTarget ()
+		{
+//			if (dataObject != null) {
+//				IDataGridVisualizer[] visualizers = GetItemVisualizers (dataObject);
+//				if (visualizers.Length > 0) {
+//					DataGridItemCommandHandler[] handlers = new DataGridItemCommandHandler [visualizers.Length];
+//					for (int n=0; n<visualizers.Length; n++) {
+//						handlers [n] = chain [n].CommandHandler;
+//
+//					for (int n=0; n<handlers.Length; n++) {
+//						handlers [n].SetDataObject (dataObject);
+//						if (n < chain.Length - 1)
+//							handlers [n].SetNextTarget (handlers [n+1]);
+//						else
+//							handlers [n].SetNextTarget (null);
+//					}
+//					return handlers [0];
+//				}
+//			}
+			return null;
+		}
+		
 		private void ShowNavigationState ()
 		{
 			entryTotal.Text = numRecords.ToString ();
@@ -253,6 +275,11 @@ namespace MonoDevelop.Database.Components
 		protected virtual void ButtonNextClicked (object sender, System.EventArgs e)
 		{
 			currentRecord += pageSize;
+			if ((currentRecord + pageSize) > numRecords) {
+				int modulus = numRecords % pageSize;
+				currentRecord = numRecords - modulus;
+			}
+			NavigateToRecord (currentRecord);
 		}
 
 		protected virtual void ButtonLastClicked (object sender, System.EventArgs e)
@@ -284,9 +311,9 @@ namespace MonoDevelop.Database.Components
 				return;
 			}
 			
-			if (split.Length > 1 && int.TryParse (split[0], out curEnd)) {
+			if (split.Length > 1 && int.TryParse (split[1], out curEnd)) {
 				pageSize = curEnd - curRec;
-				if (pageSize < 0)
+				if (pageSize <= 0)
 					pageSize = 50;
 			}
 			
@@ -363,34 +390,12 @@ namespace MonoDevelop.Database.Components
 					DataGridColumn dgCol = col as DataGridColumn;
 					TreeIter iter;
 					if (store.GetIter (out iter, path)) {
-						object dataObject = store.GetValue (iter, dgCol.ColumnIndex);
-						if (dataObject == null)
-							return;
-
-						Menu menu = new Menu ();
-						bool show = false;
-						foreach (IDataGridVisualizer vis in visualizers) {
-							if (vis.CanVisualize (dgCol.DataType)) {
-								show = true;
-								VisualizerMenuItem item = new VisualizerMenuItem (vis, iter, dgCol.ColumnIndex);
-								item.Activated += new EventHandler (VisualizerMenuItemClicked);
-								menu.Append (item);
-							}
-						}
-						if (show) {
-							menu.Popup (null, null, null, args.Event.Button, args.Event.Time);
-							menu.ShowAll ();
-						}
+						dataObject = store.GetValue (iter, dgCol.ColumnIndex);
+							
+						IdeApp.CommandService.ShowContextMenu ("/SharpDevelop/Components/DataGrid/ContextMenu");
 					}
 				}
 			}
-		}
-		
-		private void VisualizerMenuItemClicked (object sender, EventArgs args)
-		{
-			VisualizerMenuItem item = sender as VisualizerMenuItem;
-			object dataObject = store.GetValue (item.TreeIter, item.ColumnIndex);
-			item.Visualizer.ShowContent (dataObject);
 		}
 	}
 }
