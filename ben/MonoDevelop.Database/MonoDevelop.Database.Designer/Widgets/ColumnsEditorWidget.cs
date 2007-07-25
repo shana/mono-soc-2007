@@ -191,8 +191,6 @@ namespace MonoDevelop.Database.Designer
 			if (storeTypes.GetIterFirst (out iter))
 				column.DataTypeName = storeTypes.GetValue (iter, 0) as string;
 			
-			Runtime.LoggingService.DebugFormat ("ADD: {0} {1}", column.Name, column.DataTypeName);
-			
 			columns.Add (column);
 			AppendColumnSchema (column);
 		}
@@ -323,15 +321,13 @@ namespace MonoDevelop.Database.Designer
 		
 		private string CreateColumnName ()
 		{
-			string prefix = "column";
-			int counter = 0;
-			
-			bool isUnique = false;
+			int counter = 1;
 			do {
-				isUnique = !columns.Contains (prefix + (++counter));
-			} while (!isUnique);
-			
-			return prefix + counter;
+				string name = "column" + (counter++);
+				if (!columns.Contains (name))
+					return name;
+			} while (true);
+			return null;
 		}
 	}
 }

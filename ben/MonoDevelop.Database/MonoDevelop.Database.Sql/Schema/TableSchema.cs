@@ -50,6 +50,16 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public TableSchema (ISchemaProvider schemaProvider, string name)
+			: base (schemaProvider)
+		{
+			Name = name;
+			
+			columns = new ColumnSchemaCollection ();
+			constraints = new ConstraintSchemaCollection ();
+			triggers = new TriggerSchemaCollection ();
+		}
+		
 		/// <summary>
 		/// Is this table part of the database core
 		/// </summary>

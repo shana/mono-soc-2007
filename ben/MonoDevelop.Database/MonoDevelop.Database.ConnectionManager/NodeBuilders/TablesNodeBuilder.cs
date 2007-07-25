@@ -136,8 +136,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			BaseNode node = CurrentNode.DataItem as BaseNode;
 			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
-			TableSchema table = new TableSchema (schemaProvider);
-			table.Name = "New Table";
+			TableSchema table = new TableSchema (schemaProvider, "NewTable");
 
 			TableEditorDialog dlg = new TableEditorDialog (schemaProvider, table, true);
 			if (dlg.Run () == (int)ResponseType.Ok)
@@ -147,6 +146,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void OnCreateTableThreaded (object state)
 		{
+			Runtime.LoggingService.Error ("OnCreateTableThreaded");
 			object[] objs = state as object[];
 			
 			ISchemaProvider provider = objs[0] as ISchemaProvider;

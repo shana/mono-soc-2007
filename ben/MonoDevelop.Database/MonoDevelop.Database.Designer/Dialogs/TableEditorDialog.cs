@@ -97,40 +97,26 @@ namespace MonoDevelop.Database.Designer
 
 			dataTypes = schemaProvider.GetDataTypes ();
 			
-			if (!create) {
-				//WaitDialog.ShowDialog ("Loading table data ...");
-				notebook.Sensitive = false;
-				Runtime.LoggingService.Debug ("InitializeThreaded CALL");
-				ThreadPool.QueueUserWorkItem (new WaitCallback (InitializeThreaded));
-			} else {
-				columns = new ColumnSchemaCollection ();
-				constraints = new ConstraintSchemaCollection ();
-				indexes = new IndexSchemaCollection ();
-				triggers = new TriggerSchemaCollection ();
-				
-				InitializeGui ();
-			}
+			WaitDialog.ShowDialog ("Loading table data ...");
+			notebook.Sensitive = false;
+			ThreadPool.QueueUserWorkItem (new WaitCallback (InitializeThreaded));
 			vboxContent.ShowAll ();
 		}
 		
 		private void InitializeThreaded (object state)
 		{
-			Runtime.LoggingService.Debug ("InitializeThreaded IN");
+			columns = table.Columns;
+			constraints = table.Constraints;
+			triggers = table.Triggers;
+			//TODO: indexex
+			indexes = new IndexSchemaCollection ();
 			
-			columns = schemaProvider.GetTableColumns (table);
 			Runtime.LoggingService.Debug ("COLUMNS.COUNT = " + columns.Count);
 			
 //			foreach (ColumnSchema col in columns) {
 //				int dummy = col.Constraints.Count; //get column constraints
 //			}
-			//TEMP:
-			constraints = new ConstraintSchemaCollection ();
-				indexes = new IndexSchemaCollection ();
-				triggers = new TriggerSchemaCollection ();
-			//constraints = schemaProvider.GetTableConstraints (table);
-			//indexes = schemaProvider.GetTableIndexes (table);
-			//triggers = schemaProvider.GetTableTriggers (table);
-		
+
 			Services.DispatchService.GuiDispatch (delegate () {
 				InitializeGui ();
 			});
@@ -140,8 +126,6 @@ namespace MonoDevelop.Database.Designer
 		{
 			notebook.Sensitive = true;
 			WaitDialog.HideDialog ();
-
-			Runtime.LoggingService.Debug ("HIDE DIALOG");
 
 			columnEditor.Initialize (columns, constraints, dataTypes);
 			constraintEditor.Initialize (columns, constraints, dataTypes);
@@ -159,6 +143,14 @@ namespace MonoDevelop.Database.Designer
 			
 			Respond (ResponseType.Ok);
 			Hide ();
+		}
+
+		protected virtual void NameChanged (object sender, System.EventArgs e)
+		{
+			if (entryName.Text.Length == 0)
+				entryName.Text = table.Name;
+			else
+				table.Name = entryName.Text;
 		}
 	}
 }

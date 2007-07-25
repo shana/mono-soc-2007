@@ -1,5 +1,6 @@
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
+	* Schema/TableSchema.cs: added additional constructor that initializes all properties
 	* Schema/ParameterSchema.cs, Schema/ParameterType.cs: Added a property to
 	define the parameter direction (in, out, inout)
 	* Schema/IndexSortType.cs, Schema/IndexSchema.cs: Indices no longer subclass

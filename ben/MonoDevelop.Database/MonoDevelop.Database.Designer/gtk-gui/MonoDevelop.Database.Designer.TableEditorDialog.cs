@@ -82,6 +82,7 @@ namespace MonoDevelop.Database.Designer {
             this.checkPreview.UseUnderline = true;
             this.vboxContent.Add(this.checkPreview);
             Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vboxContent[this.checkPreview]));
+            w5.PackType = ((Gtk.PackType)(1));
             w5.Position = 2;
             w5.Expand = false;
             w5.Fill = false;
@@ -125,6 +126,7 @@ namespace MonoDevelop.Database.Designer {
             this.DefaultWidth = 538;
             this.DefaultHeight = 355;
             this.Show();
+            this.entryName.Changed += new System.EventHandler(this.NameChanged);
             this.buttonCancel.Clicked += new System.EventHandler(this.CancelClicked);
             this.buttonOk.Clicked += new System.EventHandler(this.OkClicked);
         }
