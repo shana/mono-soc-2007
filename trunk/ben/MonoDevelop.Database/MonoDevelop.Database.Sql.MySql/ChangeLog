@@ -1,3 +1,8 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* MySqlPooledDbConnection.cs: expose the GetSchema method of the internal connection
+	* MySqlDbFactory.cs, MySqlSchemaProvider.cs: improved metadata support
+
 2007-07-18  Ben Motmans <ben.motmans@gmail.com>
 
 	* MySqlSchemaProvider.cs: SupportsSchemaOperation implementation, use of strongly typed

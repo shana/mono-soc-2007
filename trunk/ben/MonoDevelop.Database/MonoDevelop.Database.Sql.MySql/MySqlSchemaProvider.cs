@@ -44,43 +44,43 @@ using System.Collections.Generic;
 
 		public override bool SupportsSchemaOperation (SchemaOperation operation)
 		{
-			switch (operation.Statement) {
-			case SqlStatementType.Select:
+			switch (operation.Operation) {
+			case OperationMetaData.Select:
 				switch (operation.Schema) {
-				case SqlSchemaType.Table:
-				case SqlSchemaType.Column:
-				case SqlSchemaType.View:
-				case SqlSchemaType.Procedure:
-				case SqlSchemaType.Database:
-				case SqlSchemaType.Constraint:
-				case SqlSchemaType.Parameter:
-				case SqlSchemaType.User:
-				case SqlSchemaType.Trigger:
+				case SchemaMetaData.Table:
+				case SchemaMetaData.Column:
+				case SchemaMetaData.View:
+				case SchemaMetaData.Procedure:
+				case SchemaMetaData.Database:
+				case SchemaMetaData.Constraint:
+				case SchemaMetaData.Parameter:
+				case SchemaMetaData.User:
+				case SchemaMetaData.Trigger:
 					return true;
 				default:
 					return false;
 				}
-			case SqlStatementType.Create:
-			case SqlStatementType.Drop:
-			case SqlStatementType.Rename:
+			case OperationMetaData.Create:
+			case OperationMetaData.Drop:
+			case OperationMetaData.Rename:
 				switch (operation.Schema) {
-				case SqlSchemaType.Database:
-				case SqlSchemaType.Table:
-				case SqlSchemaType.View:
-				case SqlSchemaType.Procedure:
-				case SqlSchemaType.Constraint:
-				case SqlSchemaType.Trigger:
-				case SqlSchemaType.User:
+				case SchemaMetaData.Database:
+				case SchemaMetaData.Table:
+				case SchemaMetaData.View:
+				case SchemaMetaData.Procedure:
+				case SchemaMetaData.Constraint:
+				case SchemaMetaData.Trigger:
+				case SchemaMetaData.User:
 					return true;
 				default:
 					return false;
 				}
-			case SqlStatementType.Alter:
+			case OperationMetaData.Alter:
 				switch (operation.Schema) {
-				case SqlSchemaType.Database:
-				case SqlSchemaType.Table:
-				case SqlSchemaType.View:
-				case SqlSchemaType.Procedure:
+				case SchemaMetaData.Database:
+				case SchemaMetaData.Table:
+				case SchemaMetaData.View:
+				case SchemaMetaData.Procedure:
 					return true;
 				default:
 					return false;
@@ -184,8 +184,8 @@ using System.Collections.Generic;
 		
 						column.Name = r.GetString (0);
 						column.DataTypeName = r.GetString (1);
-						column.NotNull = r.IsDBNull (2);
-						column.Default = r.GetString (4);
+						column.IsNullable = r.IsDBNull (2);
+						column.DefaultValue = r.GetString (4);
 						column.Comment = r.GetString (5);
 						column.OwnerName = table.Name;
 		
@@ -249,8 +249,8 @@ using System.Collections.Generic;
 		
 						column.Name = r.GetString (0);
 						column.DataTypeName = r.GetString (1);
-						column.NotNull = r.IsDBNull (2);
-						column.Default = r.GetString (4);
+						column.IsNullable = r.IsDBNull (2);
+						column.DefaultValue = r.GetString (4);
 						column.Comment = r.GetString (5);
 						column.OwnerName = view.Name;
 		
@@ -302,43 +302,43 @@ using System.Collections.Generic;
 			
 			return procedures;
 		}
-
-		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
-		{
-			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
-			
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand (
-				"SELECT param_list FROM mysql.proc where name = '" + procedure.Name + "'"
-			);
-			
-			using (command) {
-				if (GetMainVersion (command) >= 5) {
-				    	using (IDataReader r = command.ExecuteReader()) {
-				    		while (r.Read ()) {
-				    			if (r.IsDBNull (0))
-				    				continue;
-				
-				    			string[] field = Encoding.ASCII.GetString ((byte[])r.GetValue (0)).Split (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-				    			foreach (string chunk in field) {
-				    				ColumnSchema column = new ColumnSchema (this);
-				    				
-				    				string[] tmp = chunk.TrimStart (new char[] { ' ' }).Split (new char[] { ' ' });
-				    				column.Name = tmp[0];
-				    				column.OwnerName = procedure.Name;
-								column.DataTypeName = tmp[1];
-				    				
-				    				columns.Add (column);
-				    			}
-				    		}
-						r.Close ();
-					}
-				} //else: do nothing, since procedures are only supported since mysql 5.x
-			}
-			conn.Release ();
-			
-			return columns;
-		}
+//
+//		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
+//		{
+//			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
+//			
+//			IPooledDbConnection conn = connectionPool.Request ();
+//			IDbCommand command = conn.CreateCommand (
+//				"SELECT param_list FROM mysql.proc where name = '" + procedure.Name + "'"
+//			);
+//			
+//			using (command) {
+//				if (GetMainVersion (command) >= 5) {
+//				    	using (IDataReader r = command.ExecuteReader()) {
+//				    		while (r.Read ()) {
+//				    			if (r.IsDBNull (0))
+//				    				continue;
+//				
+//				    			string[] field = Encoding.ASCII.GetString ((byte[])r.GetValue (0)).Split (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+//				    			foreach (string chunk in field) {
+//				    				ColumnSchema column = new ColumnSchema (this);
+//				    				
+//				    				string[] tmp = chunk.TrimStart (new char[] { ' ' }).Split (new char[] { ' ' });
+//				    				column.Name = tmp[0];
+//				    				column.OwnerName = procedure.Name;
+//								column.DataTypeName = tmp[1];
+//				    				
+//				    				columns.Add (column);
+//				    			}
+//				    		}
+//						r.Close ();
+//					}
+//				} //else: do nothing, since procedures are only supported since mysql 5.x
+//			}
+//			conn.Release ();
+//			
+//			return columns;
+//		}
 		
 		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
@@ -515,7 +515,11 @@ using System.Collections.Generic;
 		//http://dev.mysql.com/doc/refman/5.1/en/create-database.html
 		public override void CreateDatabase (DatabaseSchema database)
 		{
-			throw new NotImplementedException ();
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand ("CREATE DATABASE " + database.Name);
+			using (command)
+				command.ExecuteNonQuery ();
+			conn.Release ();
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-table.html
@@ -621,15 +625,15 @@ using System.Collections.Generic;
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-index.html
 		public override void DropConstraint (ConstraintSchema constraint)
 		{
-			if (constraint is IndexConstraintSchema) {
-				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
-				
-				IPooledDbConnection conn = connectionPool.Request ();
-				IDbCommand command = conn.CreateCommand ("DROP INDEX " + constraint.Name + " ON " + indexConstraint.TableName + ";");
-				using (command)
-					command.ExecuteNonQuery ();
-				conn.Release ();
-			}
+//			if (constraint is IndexConstraintSchema) {
+//				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
+//				
+//				IPooledDbConnection conn = connectionPool.Request ();
+//				IDbCommand command = conn.CreateCommand ("DROP INDEX " + constraint.Name + " ON " + indexConstraint.TableName + ";");
+//				using (command)
+//					command.ExecuteNonQuery ();
+//				conn.Release ();
+//			}
 		}
 		
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-trigger.html
