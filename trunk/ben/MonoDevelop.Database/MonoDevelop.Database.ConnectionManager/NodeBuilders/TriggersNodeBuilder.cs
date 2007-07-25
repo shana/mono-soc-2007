@@ -120,7 +120,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateTrigger (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.Trigger);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.Trigger);
 		}
 	}
 }

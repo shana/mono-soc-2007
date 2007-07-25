@@ -26,12 +26,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Gtk;
 using System;
-
-using MonoDevelop.Database.Sql;
+using System.Threading;
 using MonoDevelop.Core;
+using MonoDevelop.Components.Commands;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
+using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Designer;
+using MonoDevelop.Database.Components;
 
 namespace MonoDevelop.Database.ConnectionManager
 {
@@ -51,7 +55,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		}
 		
 		public override Type CommandHandlerType {
-			get { return typeof (ConnectionContextCommandHandler); }
+			get { return typeof (ConnectionContextCollectionCommandHandler); }
 		}
 		
 		public override string ContextMenuAddinPath {
@@ -106,6 +110,34 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override DragOperation CanDragNode ()
 		{
 			return DragOperation.None;
+		}
+
+		[CommandHandler (ConnectionManagerCommands.CreateDatabase)]
+		protected void OnCreateDatabase ()
+		{
+			CreateDatabaseDialog dlg = new CreateDatabaseDialog ();
+			if (dlg.Run () == (int)ResponseType.Ok) {
+				DatabaseConnectionContext context = dlg.DatabaseConnection;
+				WaitDialog.ShowDialog ("Creating database ...");
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateDatabaseThreaded), context);
+			}
+			dlg.Destroy ();
+		}
+		
+		private void OnCreateDatabaseThreaded (object state)
+		{
+			DatabaseConnectionContext context = state as DatabaseConnectionContext;
+			
+			ISchemaProvider schemaProvider = context.SchemaProvider;
+			DatabaseSchema db = new DatabaseSchema (schemaProvider);
+			db.Name = context.ConnectionSettings.Database;
+			
+			schemaProvider.CreateDatabase (db);
+			
+			Services.DispatchService.GuiDispatch (delegate () {
+				WaitDialog.HideDialog ();
+				ConnectionContextService.AddDatabaseConnectionContext (context);
+			});
 		}
 	}
 }

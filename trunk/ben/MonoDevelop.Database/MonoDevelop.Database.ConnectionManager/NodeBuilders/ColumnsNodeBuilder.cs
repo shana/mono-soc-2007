@@ -92,8 +92,8 @@ namespace MonoDevelop.Database.ConnectionManager
 				columns = nodeState.ConnectionContext.SchemaProvider.GetTableColumns (schema as TableSchema);
 			else if (schema is ViewSchema)
 				columns = nodeState.ConnectionContext.SchemaProvider.GetViewColumns (schema as ViewSchema);
-			else if (schema is ProcedureSchema)
-				columns = nodeState.ConnectionContext.SchemaProvider.GetProcedureColumns (schema as ProcedureSchema);
+			//else if (schema is ProcedureSchema)
+			//	columns = nodeState.ConnectionContext.SchemaProvider.GetProcedureColumns (schema as ProcedureSchema);
 			
 			if (columns == null)
 				return;

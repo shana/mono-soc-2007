@@ -26,10 +26,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Gtk;
 using System;
 using System.Threading;
 using System.Collections.Generic;
 using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Designer;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
@@ -131,14 +133,34 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.CreateProcedure)]
 		protected void OnCreateProcedure ()
 		{
+			BaseNode node = CurrentNode.DataItem as BaseNode;
+			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
+			ProcedureSchema proc = new ProcedureSchema (schemaProvider);
+			proc.Name = "New Procedure";
+
+			ProcedureEditorDialog dlg = new ProcedureEditorDialog (schemaProvider, proc, true);
+			if (dlg.Run () == (int)ResponseType.Ok)
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateProcedureThreaded), new object[] {schemaProvider, proc, node} as object);
+			dlg.Destroy ();
+		}
+		
+		private void OnCreateProcedureThreaded (object state)
+		{
+			object[] objs = state as object[];
 			
+			ISchemaProvider provider = objs[0] as ISchemaProvider;
+			ProcedureSchema proc = objs[1] as ProcedureSchema;
+			BaseNode node = objs[2] as BaseNode;
+			
+			provider.CreateProcedure (proc);
+			node.Refresh ();
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.CreateProcedure)]
 		protected void OnUpdateCreateProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.Procedure);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.Procedure);
 		}
 	}
 }

@@ -103,37 +103,37 @@ namespace MonoDevelop.Database.ConnectionManager
 			nodeState.TreeBuilder.Update ();
 			if (connected) {
 				ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Table))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Table))
 					nodeState.TreeBuilder.AddChild (new TablesNode (nodeState.ConnectionContext));
 
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.View))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.View))
 					nodeState.TreeBuilder.AddChild (new ViewsNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Procedure))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Procedure))
 					nodeState.TreeBuilder.AddChild (new ProceduresNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Aggregate))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Aggregate))
 					nodeState.TreeBuilder.AddChild (new AggregatesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Group))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Group))
 					nodeState.TreeBuilder.AddChild (new GroupsNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Language))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Language))
 					nodeState.TreeBuilder.AddChild (new LanguagesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Operator))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Operator))
 					nodeState.TreeBuilder.AddChild (new OperatorsNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Role))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Role))
 					nodeState.TreeBuilder.AddChild (new RolesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.Sequence))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Sequence))
 					nodeState.TreeBuilder.AddChild (new SequencesNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.User))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.User))
 					nodeState.TreeBuilder.AddChild (new UsersNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (SqlStatementType.Select, SqlSchemaType.DataType))
+				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.DataType))
 					nodeState.TreeBuilder.AddChild (new TypesNode (nodeState.ConnectionContext));
 				
 				nodeState.TreeBuilder.Expanded = true;
@@ -152,9 +152,9 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnRemoveConnection ()
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			if (Services.MessageService.AskQuestionFormatted (
-				GettextCatalog.GetString ("Are you sure you want to remove connection '{0}'?"),
-				context.ConnectionSettings.Name)) {
+			if (Services.MessageService.AskQuestion (
+				GettextCatalog.GetString ("Are you sure you want to remove connection '{0}'?", context.ConnectionSettings.Name),
+				GettextCatalog.GetString ("Remove Connection"))) {
 				ConnectionContextService.RemoveDatabaseConnectionContext (context);
 			}
 		}
@@ -206,21 +206,27 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Drop, SqlSchemaType.Database);
+			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.Database);
 		}
-		
-		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
-		protected void OnUpdateRenameDatabase (CommandInfo info)
-		{
-			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Rename, SqlSchemaType.Database);
-		}
-		
+
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterDatabase)]
 		protected void OnUpdateAlterDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Alter, SqlSchemaType.Database);
+			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.Database);
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.RenameDatabase)]
+		protected void OnRenameDatabase ()
+		{
+			//TODO: show a dialog, since inline tree renaming for this node renames the custom name
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.RenameDatabase)]
+		protected void OnUpdateRenameDatabase (CommandInfo info)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.Database);
 		}
 	}
 }

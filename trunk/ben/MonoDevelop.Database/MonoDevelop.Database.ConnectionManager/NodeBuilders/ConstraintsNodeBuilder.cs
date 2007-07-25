@@ -132,7 +132,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateConstraint (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.Constraint);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.Constraint);
 		}
 	}
 }

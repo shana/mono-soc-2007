@@ -26,10 +26,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Gtk;
 using System;
 using System.Threading;
 using System.Collections.Generic;
 using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Components;
+using MonoDevelop.Database.Designer;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Ide.Gui.Pads;
@@ -86,7 +89,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			NodeState nodeState = state as NodeState;
 			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
 			TableSchemaCollection tables = nodeState.ConnectionContext.SchemaProvider.GetTables ();
-		
+			
 			foreach (TableSchema table in tables) {
 				if (table.IsSystemTable && !showSystemObjects)
 					continue;
@@ -131,14 +134,34 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.CreateTable)]
 		protected void OnCreateTable ()
 		{
+			BaseNode node = CurrentNode.DataItem as BaseNode;
+			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
+			TableSchema table = new TableSchema (schemaProvider);
+			table.Name = "New Table";
+
+			TableEditorDialog dlg = new TableEditorDialog (schemaProvider, table, true);
+			if (dlg.Run () == (int)ResponseType.Ok)
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateTableThreaded), new object[] {schemaProvider, table, node} as object);
+			dlg.Destroy ();
+		}
+		
+		private void OnCreateTableThreaded (object state)
+		{
+			object[] objs = state as object[];
 			
+			ISchemaProvider provider = objs[0] as ISchemaProvider;
+			TableSchema table = objs[1] as TableSchema;
+			BaseNode node = objs[2] as BaseNode;
+			
+			provider.CreateTable (table);
+			node.Refresh ();
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.CreateTable)]
 		protected void OnUpdateCreateTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (SqlStatementType.Create, SqlSchemaType.Table);
+			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.Table);
 		}
 	}
 }

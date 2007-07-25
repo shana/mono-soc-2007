@@ -66,6 +66,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Projects, Version=0.14.0.0, Culture=neutral" />
     <ProjectReference type="Gac" localcopy="True" refto="MonoDevelop.Projects.Gui, Version=0.14.0.0, Culture=neutral" />
     <ProjectReference type="Gac" localcopy="True" refto="NRefactory, Version=0.0.0.0, Culture=neutral" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Designer" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True">
     <BuildFilesVar Sync="True" Name="FILES" />
