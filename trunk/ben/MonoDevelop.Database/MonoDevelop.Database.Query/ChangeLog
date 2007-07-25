@@ -1,3 +1,7 @@
+2007-07-25  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlQueryView.cs: Show query results in the same view using a VPaned
+
 2007-07-15  Ben Motmans <ben.motmans@gmail.com>
 
 	* Commands/ToolCommands.cs, MonoDevelop.Database.Query.addin.xml: moved generator commands
