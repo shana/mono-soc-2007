@@ -28,12 +28,12 @@
 //
 
 using Gtk;
-using GtkSourceView;
 using System;
 using System.Data;
 using System.Threading;
 using System.Collections.Generic;
-using Mono.Addins;using MonoDevelop.Database.Sql;
+using Mono.Addins;
+using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Components;
@@ -45,14 +45,16 @@ namespace MonoDevelop.Database.Query
 	public class SqlQueryView : AbstractViewContent
 	{
 		private VBox vbox;
-		private SourceView sourceView;
+		private SqlEditorWidget sqlEditor;
 		private ToolButton buttonExecute;
 		private ToolButton buttonStop;
+		private ToolButton buttonClear;
 		private Menu menuConnections;
-		private Statusbar status;
-		private uint statusId;
+		private Notebook notebook;
+		private VPaned pane;
 		private GLib.SList group;
 		private EventHandler connectionMenuActivatedHandler;
+		private TextView status;
 		
 		private object currentQueryState;
 		private List<object> stoppedQueries;
@@ -65,28 +67,29 @@ namespace MonoDevelop.Database.Query
 			
 			vbox = new VBox (false, 6);
 			vbox.BorderWidth = 6;
-			
-			SourceLanguagesManager lm = new SourceLanguagesManager ();
-			SourceLanguage lang = lm.GetLanguageFromMimeType ("text/x-sql");
-			SourceBuffer buf = new SourceBuffer (lang);
-			buf.Highlight = true;
-			sourceView = new SourceView (buf);
-			sourceView.ShowLineNumbers = true;
+
+			sqlEditor = new SqlEditorWidget ();
 			
 			Toolbar toolbar = new Toolbar ();
 			toolbar.ToolbarStyle = ToolbarStyle.BothHoriz;
 			
 			buttonExecute = new ToolButton (
-				Services.Resources.GetImage ("md-db-execute", IconSize.SmallToolbar), GettextCatalog.GetString ("Execute")
+				Services.Resources.GetImage ("md-db-execute", IconSize.SmallToolbar),
+				GettextCatalog.GetString ("Execute")
 			);
 			buttonStop = new ToolButton ("gtk-stop");
+			buttonClear = new ToolButton (Services.Resources.GetImage ("gtk-clear", IconSize.Button), GettextCatalog.GetString ("Clear Results"));
 			buttonStop.Sensitive = false;
 			buttonExecute.Sensitive = false;
 			
 			buttonExecute.Clicked += new EventHandler (ExecuteClicked);
 			buttonStop.Clicked += new EventHandler (StopClicked);
+			buttonClear.Clicked += new EventHandler (ClearClicked);
 			
-			MenuToolButton menuConnectionsButton = new MenuToolButton (Services.Resources.GetImage ("md-db-database", IconSize.SmallToolbar), GettextCatalog.GetString ("Select Connection"));
+			MenuToolButton menuConnectionsButton = new MenuToolButton (
+				Services.Resources.GetImage ("md-db-database", IconSize.SmallToolbar),
+				GettextCatalog.GetString ("Select Connection")
+			);
 			menuConnections = new Menu ();
 			menuConnectionsButton.Menu = menuConnections;
 
@@ -103,25 +106,32 @@ namespace MonoDevelop.Database.Query
 			toolbar.Add (new SeparatorToolItem ());
 			toolbar.Add (menuConnectionsButton);
 			
-			status = new Statusbar ();
-			status.HasResizeGrip = false;
+			pane = new VPaned ();
+
+			ScrolledWindow windowStatus = new ScrolledWindow ();
+			status = new TextView ();
+			windowStatus.Add (status);
+			
+			notebook = new Notebook ();
+			notebook.AppendPage (windowStatus, new Label (GettextCatalog.GetString ("Status")));
+			
+			pane.Pack1 (sqlEditor, true, true);
+			pane.Pack2 (notebook, true, true);
 			
 			vbox.PackStart (toolbar, false, true, 0);
-			vbox.PackStart (sourceView, true, true, 0);
-			vbox.PackEnd (status, false, true, 0);
-			
-			sourceView.GrabFocus ();
+			vbox.PackStart (pane, true, true, 0);
 			
 			ConnectionContextService.ConnectionContextAdded += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionAdded));
 			ConnectionContextService.ConnectionContextRemoved += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionRemoved));
 			ConnectionContextService.ConnectionContextEdited += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionEdited));
-			
+
 			vbox.ShowAll ();
+			notebook.Hide ();
 		}
 		
 		public string Text {
-			get { return sourceView.Buffer.Text; }
-			set { sourceView.Buffer.Text = value; }
+			get { return sqlEditor.Text; }
+			set { sqlEditor.Text = value; }
 		}
 		
 		public DatabaseConnectionContext SelectedConnectionContext {
@@ -186,7 +196,9 @@ namespace MonoDevelop.Database.Query
 			connection.Release ();
 
 			Services.DispatchService.GuiDispatch (delegate () {
-				SetQueryState (false, "Query executed (" + result.Tables.Count + " result tables)");
+				notebook.ShowAll ();
+				SetQueryState (false, GettextCatalog.GetPluralString ("Query executed ({0} result table)",
+					"Query executed ({0} result tables)", result.Tables.Count));
 			});
 			
 			if (stoppedQueries.Contains (state)) {
@@ -197,9 +209,36 @@ namespace MonoDevelop.Database.Query
 			if (result != null) {
 				foreach (DataTable table in result.Tables) {
 					Services.DispatchService.GuiDispatch (delegate () {
-						QueryResultView view = new QueryResultView (table);
-						IdeApp.Workbench.OpenDocument (view, true);
+						MonoDevelop.Database.Components.DataGrid grid = new MonoDevelop.Database.Components.DataGrid ();
+						grid.DataSource = table;
+						grid.DataBind ();
+	
+						string msg = String.Concat (Environment.NewLine, GettextCatalog.GetString ("Table"), ": ",table.TableName,
+							Environment.NewLine, "\t", GettextCatalog.GetString ("Affected Rows"), ": ", table.Rows.Count);
+						status.Buffer.Text += msg;
+							
+						TabLabel label = new TabLabel (new Label (table.TableName), Services.Resources.GetImage ("md-db-table", IconSize.Button));
+						label.CloseClicked += new EventHandler (OnResultTabClose);
+						notebook.AppendPage (grid, label);
+						notebook.ShowAll ();
 					});
+				}
+			}
+			
+			if (result == null || result.Tables.Count == 0) {
+				Services.DispatchService.GuiDispatch (delegate () {
+					status.Buffer.Text += GettextCatalog.GetString ("No Results");
+				});
+			}
+		}
+			
+		private void OnResultTabClose (object sender, EventArgs args)
+		{
+			Widget tabLabel = (Widget)sender;
+			foreach (Widget child in notebook.Children) {
+				if (notebook.GetTabLabel (child) == tabLabel) {
+					notebook.Remove (child);
+					break;
 				}
 			}
 		}
@@ -210,9 +249,17 @@ namespace MonoDevelop.Database.Query
 			ExecuteQuery ();
 		}
 		
+		private void ClearClicked (object sender, EventArgs e)
+		{
+			for (int i=1; i<notebook.NPages; i++)
+				notebook.RemovePage (i);
+			status.Buffer.Text = String.Empty;
+			notebook.Hide ();
+		}
+		
 		private void StopClicked (object sender, EventArgs e)
 		{
-			SetQueryState (false, "Query stopped");
+			SetQueryState (false, "Query execute cancelled");
 			
 			//since we can't abort a threadpool task, each task is assigned a unique state
 			//when stop is pressed, the state is added to the list of results that need
@@ -277,12 +324,9 @@ namespace MonoDevelop.Database.Query
 		{
 			buttonExecute.Sensitive = !exec;
 			buttonStop.Sensitive = exec;
-			sourceView.Editable = !exec;
+			sqlEditor.Editable = !exec;
 			
-			if (statusId > 0)
-				status.Pop (statusId);
-			else
-				statusId = status.Push (1, msg);
+			status.Buffer.Text = msg + Environment.NewLine;
 		}
 		
 		private void SelectFirstConnectionSettings ()

@@ -44,7 +44,7 @@ namespace MonoDevelop.Database.Query
 		public QueryResultView ()
 			: base ()
 		{
-			grid = new DataGrid ("/SharpDevelop/Views/SqlQueryView/DataGrid/ContentRenderers", "/SharpDevelop/Views/SqlQueryView/DataGrid/Visualizers");
+			grid = new DataGrid ();
 			grid.ShowAll ();
 		}
 		
