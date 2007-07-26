@@ -71,30 +71,28 @@ namespace System.Windows.Controls {
 			ImageSource source = Source;
 			if (source == null)
 				return new Size(0, 0);
-			double width;
-			double height;
+			Stretch stretch = Stretch;
+			if (stretch == Stretch.None)
+				return new Size(source.Width, source.Height);
+			if (stretch == Stretch.Fill && !double.IsPositiveInfinity(availableSize.Width) && !double.IsPositiveInfinity(availableSize.Height))
+				return availableSize;
+			double width_ratio = double.IsPositiveInfinity(availableSize.Width) ? double.NaN : availableSize.Width / source.Width;
+			double height_ratio = double.IsPositiveInfinity(availableSize.Height) ? double.NaN : availableSize.Height / source.Height;
 			double ratio;
-			switch (Stretch) {
-			case Stretch.None:
-				width = source.Width;
-				height = source.Height;
-				break;
-			case Stretch.Fill:
-				width = availableSize.Width;
-				height = availableSize.Height;
-				break;
-			case Stretch.Uniform:
-				ratio = Math.Min(availableSize.Width / source.Width, availableSize.Height / source.Height);
-				width = source.Width * ratio;
-				height = source.Height * ratio;
-				break;
-			default:
-				ratio = Math.Max(availableSize.Width / source.Width, availableSize.Height / source.Height);
-				width = source.Width * ratio;
-				height = source.Height * ratio;
-				break;
-			}
-			return new Size(width, height);
+			if (double.IsNaN(width_ratio))
+				if (double.IsNaN(height_ratio))
+					ratio = 1;
+				else
+					ratio = height_ratio;
+			else
+				if (double.IsNaN(height_ratio))
+					ratio = width_ratio;
+				else
+					if (stretch == Stretch.UniformToFill)
+						ratio = Math.Max(width_ratio, height_ratio);
+					else
+						ratio = Math.Min(width_ratio, height_ratio);
+			return new Size(source.Width * ratio, source.Height * ratio);
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer() {
