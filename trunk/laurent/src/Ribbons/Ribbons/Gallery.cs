@@ -4,10 +4,11 @@ using Gtk;
 
 namespace Ribbons
 {
-	public class Gallery : Widget
+	public class Gallery : Container
 	{
 		private int tileWidth, tileHeight;
 		private List<Tile> tiles;
+		private ScrolledWindow scrollWin;
 		
 		public int TileWidth
 		{
@@ -34,6 +35,8 @@ namespace Ribbons
 			this.SetFlag (WidgetFlags.NoWindow);
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
+			this.scrollWin = new ScrolledWindow ();
 		}
 		
 		/// <summary>Adds a tile before all existing tiles.</summary>
@@ -75,6 +78,43 @@ namespace Ribbons
 			tiles[TileIndex].Parent = null;
 			
 			tiles.RemoveAt (TileIndex);
+		}
+		
+		protected override void ForAll (bool include_internals, Callback callback)
+		{
+			if(include_internals) callback (scrollWin);
+		}
+		
+		protected override void OnSizeRequested (ref Requisition requisition)
+		{
+			base.OnSizeRequested (ref requisition);
+			
+			Requisition scrollReq = scrollWin.SizeRequest ();
+			
+			requisition.Width = scrollReq.Width + 2 * (int)BorderWidth;
+			requisition.Height = scrollReq.Height + 2 * (int)BorderWidth;
+			
+			if(WidthRequest != -1) requisition.Width = WidthRequest;
+			if(HeightRequest != -1) requisition.Height = HeightRequest;
+		}
+		
+		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
+		{
+			base.OnSizeAllocated (allocation);
+			
+			allocation.X += (int)BorderWidth;
+			allocation.Y += (int)BorderWidth;
+			allocation.Width -= 2 * (int)BorderWidth;
+			allocation.Height -= 2 * (int)BorderWidth;
+			
+			scrollWin.SizeAllocate (allocation);
+			
+			foreach(Tile t in tiles)
+			{
+				t.HeightRequest = tileHeight;
+				t.WidthRequest = tileWidth;
+				
+			}
 		}
 	}
 }
