@@ -312,14 +312,12 @@ namespace System.Windows.Controls {
 
 			public MeasureOverrideInfiniteAvailableSizeImage() {
 				Source = new DrawingImage(new GeometryDrawing(Brushes.Red, null, new RectangleGeometry(new Rect(0, 0, 10, 20))));
-				Width = 100;
-				Height = 100;
 				Window w = new Window();
 				Canvas c = new Canvas();
 				w.Content = c;
 				c.Children.Add(this);
 				w.Show();
-				Assert.AreEqual(measure_result, new Size(50, 100));
+				Assert.AreEqual(measure_result, new Size(10, 20));
 			}
 
 			protected override Size MeasureOverride(Size availableSize) {
