@@ -39,23 +39,23 @@ namespace CBinding.Parser
 	{
 		private string[] parameters;
 		
-		public Function (Tag tag, Project project) : base (tag, project)
+		public Function (Tag tag, Project project, string ctags_output) : base (tag, project)
 		{
 			ParseSignature (tag.Signature);
 			
 			// We need the prototype tag because the implementation tag
 			// marks the belonging namespace as a if it were a class
 			// and it does not have the access field.
-			Tag prototypeTag = TagDatabaseManager.Instance.FindTag (Name, TagKind.Prototype, Project);
+			Tag prototypeTag = TagDatabaseManager.Instance.FindTag (Name, TagKind.Prototype, ctags_output);
 			
 			if (prototypeTag == null) {
 				// It does not have a prototype tag which means it is inline
 				// and when it is inline it does have all the info we need
 				
-				if (GetNamespace (tag)) return;
-				if (GetClass (tag)) return;
-				if (GetStructure (tag)) return;
-				if (GetUnion (tag)) return;
+				if (GetNamespace (tag, ctags_output)) return;
+				if (GetClass (tag, ctags_output)) return;
+				if (GetStructure (tag, ctags_output)) return;
+				if (GetUnion (tag, ctags_output)) return;
 				
 				return;
 			}
@@ -63,10 +63,10 @@ namespace CBinding.Parser
 			// we need to re-get the access
 			Access = prototypeTag.Access;
 			
-			if (GetNamespace (prototypeTag))return;
-			if (GetClass (prototypeTag)) return;
-			if (GetStructure (prototypeTag)) return;
-			if (GetUnion (prototypeTag)) return;
+			if (GetNamespace (prototypeTag, ctags_output))return;
+			if (GetClass (prototypeTag, ctags_output)) return;
+			if (GetStructure (prototypeTag, ctags_output)) return;
+			if (GetUnion (prototypeTag, ctags_output)) return;
 		}
 		
 		private void ParseSignature (string signature)

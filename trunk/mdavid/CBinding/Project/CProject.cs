@@ -46,6 +46,8 @@ using MonoDevelop.Projects;
 using MonoDevelop.Projects.Serialization;
 using MonoDevelop.Ide.Gui;
 
+using CBinding.Parser;
+
 namespace CBinding
 {
 	public enum Language {
@@ -165,7 +167,8 @@ namespace CBinding
 			} else {
 				return (Path.GetExtension (fileName.ToUpper ()) == ".CPP" ||
 				        Path.GetExtension (fileName.ToUpper ()) == ".CXX" ||
-				        Path.GetExtension (fileName.ToUpper ()) == ".C");
+				        Path.GetExtension (fileName.ToUpper ()) == ".C"   ||
+				        Path.GetExtension (fileName.ToUpper ()) == ".CC");
 			}
 		}
 		
@@ -322,6 +325,11 @@ namespace CBinding
 			
 			if (!IsCompileable (e.ProjectFile.Name))
 				e.ProjectFile.BuildAction = BuildAction.Nothing;
+		}
+		
+		protected override void OnFileChangedInProject (ProjectFileEventArgs e)
+		{
+			TagDatabaseManager.Instance.UpdateFileTags (this, e.ProjectFile.Name);
 		}
 		
 		internal void NotifyPackageRemovedFromProject (ProjectPackage package)

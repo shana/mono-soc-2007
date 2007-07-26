@@ -1,3 +1,15 @@
+2007-07-26  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/ProjectNodeBuilderExtension.cs,
+	  Gui/CTextEditorExtension.cs, Project/CProject.cs,
+	  Parser/Enumerator.cs, Parser/Function.cs, Parser/Enumeration.cs,
+	  Parser/Union.cs, Parser/TagDatabaseManager.cs, Parser/Namespace.cs,
+	  Parser/Typedef.cs, Parser/Structure.cs, Parser/LanguageItem.cs,
+	  Parser/Class.cs, Parser/Member.cs: Now a file's tags are updated
+	  when the file is saved. Also, instead of writing the tags to a file
+	  I now write them to stdout and parse them from there since I now
+	  parse per file instead of the entire project.
+
 2007-07-25  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/ProjectNodeBuilderExtension.cs,

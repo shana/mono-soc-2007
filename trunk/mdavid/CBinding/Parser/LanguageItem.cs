@@ -37,7 +37,7 @@ using MonoDevelop.Ide.Gui;
 
 namespace CBinding.Parser
 {
-	public abstract class LanguageItem
+	public class LanguageItem
 	{
 		private Project project;
 		private string name;
@@ -62,7 +62,7 @@ namespace CBinding.Parser
 		/// has a namespace the method will not have a namespace since
 		/// it should be placed under the class node and not the namespace node
 		/// </summary>
-		protected bool GetNamespace (Tag tag)
+		protected bool GetNamespace (Tag tag, string ctags_output)
 		{
 			string n;
 			
@@ -74,10 +74,10 @@ namespace CBinding.Parser
 				
 				try {
 					Tag namespaceTag = TagDatabaseManager.Instance.FindTag (
-					    n, TagKind.Namespace, project);
+					    n, TagKind.Namespace, ctags_output);
 					
 					if (namespaceTag != null)
-						parent = new Namespace (namespaceTag, project);
+						parent = new Namespace (namespaceTag, project, ctags_output);
 					
 				} catch (IOException ex) {
 					IdeApp.Services.MessageService.ShowError (ex);
@@ -89,7 +89,7 @@ namespace CBinding.Parser
 			return false;
 		}
 		
-		protected bool GetClass (Tag tag)
+		protected bool GetClass (Tag tag, string ctags_output)
 		{
 			string c;
 			
@@ -101,10 +101,10 @@ namespace CBinding.Parser
 				
 				try {
 					Tag classTag = TagDatabaseManager.Instance.FindTag (
-					    c, TagKind.Class, project);
+					    c, TagKind.Class, ctags_output);
 					
 					if (classTag != null)
-						parent = new Class (classTag, project);
+						parent = new Class (classTag, project, ctags_output);
 					
 				} catch (IOException ex) {
 					IdeApp.Services.MessageService.ShowError (ex);
@@ -116,7 +116,7 @@ namespace CBinding.Parser
 			return false;
 		}
 		
-		protected bool GetStructure (Tag tag)
+		protected bool GetStructure (Tag tag, string ctags_output)
 		{
 			string s;
 			
@@ -128,10 +128,10 @@ namespace CBinding.Parser
 				
 				try {
 					Tag classTag = TagDatabaseManager.Instance.FindTag (
-					    s, TagKind.Structure, project);
+					    s, TagKind.Structure, ctags_output);
 					
 					if (classTag != null)
-						parent = new Structure (classTag, project);
+						parent = new Structure (classTag, project, ctags_output);
 					
 				} catch (IOException ex) {
 					IdeApp.Services.MessageService.ShowError (ex);
@@ -143,7 +143,7 @@ namespace CBinding.Parser
 			return false;
 		}
 		
-		protected bool GetEnumeration (Tag tag)
+		protected bool GetEnumeration (Tag tag, string ctags_output)
 		{
 			string e;
 			
@@ -155,10 +155,10 @@ namespace CBinding.Parser
 				
 				try {
 					Tag enumTag = TagDatabaseManager.Instance.FindTag (
-					    e, TagKind.Enumeration, project);
+					    e, TagKind.Enumeration, ctags_output);
 					
 					if (enumTag != null)
-						parent = new Enumeration (enumTag, project);
+						parent = new Enumeration (enumTag, project, ctags_output);
 					
 				} catch (IOException ex) {
 					IdeApp.Services.MessageService.ShowError (ex);
@@ -170,7 +170,7 @@ namespace CBinding.Parser
 			return false;
 		}
 		
-		protected bool GetUnion (Tag tag)
+		protected bool GetUnion (Tag tag, string ctags_output)
 		{
 			string u;
 			
@@ -182,10 +182,10 @@ namespace CBinding.Parser
 				
 				try {
 					Tag unionTag = TagDatabaseManager.Instance.FindTag (
-					    u, TagKind.Union, project);
+					    u, TagKind.Union, ctags_output);
 					
 					if (unionTag != null)
-						parent = new Union (unionTag, project);
+						parent = new Union (unionTag, project, ctags_output);
 					
 				} catch (IOException ex) {
 					IdeApp.Services.MessageService.ShowError (ex);
@@ -203,6 +203,7 @@ namespace CBinding.Parser
 		
 		public LanguageItem Parent {
 			get { return parent; }
+			set { parent = value; }
 		}
 		
 		public string Name {

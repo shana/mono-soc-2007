@@ -83,6 +83,21 @@ namespace CBinding
 		public override ICompletionDataProvider CodeCompletionCommand (
 		    ICodeCompletionContext completionContext)
 		{
+			int pos = completionContext.TriggerOffset;
+			int line, column;
+			Editor.GetLineColumnFromPosition (Editor.CursorPosition, out line, out column);
+			string lineText = Editor.GetLineText (line);
+			
+			if (!lineText.Contains (".") &&
+			    !lineText.Contains ("::") &&
+			    !lineText.Contains ("->"))
+			    return GlobalComplete ();
+			
+			return HandleCodeCompletion (completionContext, Editor.GetText (pos - 1, pos)[0]);
+		}
+		
+		private ICompletionDataProvider GlobalComplete ()
+		{
 			CProject project = Document.Project as CProject;
 			
 			if (project == null)
@@ -119,6 +134,9 @@ namespace CBinding
 			foreach (Enumerator e in info.Enumerators)
 				provider.AddCompletionData (new CompletionData (e));
 			
+			foreach (Macro m in info.Macros)
+				provider.AddCompletionData (new CompletionData (m));
+			
 			return provider;
 		}
 		
@@ -140,7 +158,9 @@ namespace CBinding
 			int position = Editor.GetPositionFromLineColumn (line, 1);
 			string lineText = Editor.GetText (position, Editor.CursorPosition - 1).TrimEnd ();
 			
-			int nameStart = lineText.LastIndexOfAny (new char[] { '.', ':', ' ', '\t' });
+			char[] allowedChars = new char[] { '.', ':', ' ', '\t', '=', '*', '+', '-', '/', '%', ',', '&', '|', '^', '{', '}', '[', ']', '(', ')', '\n', '!', '?' };
+			
+			int nameStart = lineText.LastIndexOfAny (allowedChars);
 
 			nameStart++;
 			
