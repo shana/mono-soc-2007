@@ -66,7 +66,7 @@ namespace Test.Rules.Smells {
 		{
 		}
 
-		public void MethodWithLongParameterList (int x, char c, object obj, bool j, string f, float z, double u, short s)
+		public void MethodWithLongParameterList (int x, char c, object obj, bool j, string f, float z, double u, short s, int v, string[] array)
 		{
 		}
 
