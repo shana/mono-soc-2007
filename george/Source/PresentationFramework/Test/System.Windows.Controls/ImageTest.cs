@@ -325,5 +325,31 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region MeasureOverrideMixedAvailableSize
+		[Test]
+		public void MeasureOverrideMixedAvailableSize() {
+			new MeasureOverrideMixedAvailableSizeImage();
+		}
+
+		class MeasureOverrideMixedAvailableSizeImage : Image {
+			Size measure_result;
+
+			public MeasureOverrideMixedAvailableSizeImage() {
+				Source = new DrawingImage(new GeometryDrawing(Brushes.Red, null, new RectangleGeometry(new Rect(0, 0, 10, 20))));
+				Height = 100;
+				Window w = new Window();
+				Canvas c = new Canvas();
+				w.Content = c;
+				c.Children.Add(this);
+				w.Show();
+				Assert.AreEqual(measure_result, new Size(50, 100));
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				return measure_result = base.MeasureOverride(availableSize);
+			}
+		}
+		#endregion
 	}
 }
