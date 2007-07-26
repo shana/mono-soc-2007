@@ -34,6 +34,12 @@ using Gendarme.Framework;
 
 namespace Gendarme.Rules.Smells {
 	
+	//SUGGESTION: You *may* want offer a discount if the method is overloaded with a
+	//subset of parameters.
+	//SUGGESTION: Setting all required properties in a constructor isn't
+	//uncommon.
+	//SUGGESTION: Different value for public / private / protected methods *may*
+	//be useful.
 	public class DetectLongParameterListRule : IMethodRule {
 
 		public const int MaxParameters = 10;
