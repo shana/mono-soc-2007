@@ -37,12 +37,12 @@ namespace CBinding.Parser
 {
 	public class Enumeration : LanguageItem
 	{
-		public Enumeration (Tag tag, Project project) : base (tag, project)
+		public Enumeration (Tag tag, Project project, string ctags_output) : base (tag, project)
 		{
-			if (GetNamespace (tag)) return;
-			if (GetClass (tag)) return;
-			if (GetStructure (tag)) return;
-			if (GetUnion (tag)) return;
+			if (GetNamespace (tag, ctags_output)) return;
+			if (GetClass (tag, ctags_output)) return;
+			if (GetStructure (tag, ctags_output)) return;
+			if (GetUnion (tag, ctags_output)) return;
 		}
 	}
 }

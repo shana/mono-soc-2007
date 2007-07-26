@@ -37,9 +37,9 @@ namespace CBinding.Parser
 {
 	public class Enumerator : LanguageItem
 	{
-		public Enumerator (Tag tag, Project project) : base (tag, project)
+		public Enumerator (Tag tag, Project project, string ctags_output) : base (tag, project)
 		{
-				GetEnumeration (tag);
+				GetEnumeration (tag, ctags_output);
 		}
 	}
 }

@@ -124,7 +124,7 @@
 	
 	<Extension path = "/SharpDevelop/Commands">
 		<Command id = "CBinding.CProjectCommands.AddPackage" _label = "Edit Packages..."/>
-		<Command id = "CBinding.CProjectCommands.UpdateClassPad" _label = "Update class pad" icon = "res:update"/>"
+		<Command id = "CBinding.CProjectCommands.UpdateClassPad" _label = "Update class pad" icon = "res:update"/>
 	</Extension>
 	
 	<Extension path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode">

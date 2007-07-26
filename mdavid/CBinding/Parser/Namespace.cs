@@ -37,9 +37,9 @@ namespace CBinding.Parser
 {
 	public class Namespace : LanguageItem
 	{	
-		public Namespace (Tag tag, Project project) : base (tag, project)
+		public Namespace (Tag tag, Project project, string ctags_output) : base (tag, project)
 		{			
-			GetNamespace (tag);
+			GetNamespace (tag, ctags_output);
 		}
 	}
 }

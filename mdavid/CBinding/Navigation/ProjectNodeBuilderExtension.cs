@@ -48,7 +48,7 @@ namespace CBinding.Navigation
 {
 	public class ProjectNodeBuilderExtension : NodeBuilderExtension
 	{
-		public static event ClassPadEventHandler FinishedBuildingTree;
+//		public static event ClassPadEventHandler FinishedBuildingTree;
 		public ClassPadEventHandler finishedBuildingTreeHandler;
 		
 		public override bool CanBuildNode (Type dataType)
@@ -63,13 +63,13 @@ namespace CBinding.Navigation
 		protected override void Initialize ()
 		{
 			finishedBuildingTreeHandler = (ClassPadEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ClassPadEventHandler (OnFinishedBuildingTree));
-			FinishedBuildingTree += finishedBuildingTreeHandler;
+//			FinishedBuildingTree += finishedBuildingTreeHandler;
 			TagDatabaseManager.Instance.FileUpdated += finishedBuildingTreeHandler;
 		}
 		
 		public override void Dispose ()
 		{
-			FinishedBuildingTree -= finishedBuildingTreeHandler;
+//			FinishedBuildingTree -= finishedBuildingTreeHandler;
 			TagDatabaseManager.Instance.FileUpdated -= finishedBuildingTreeHandler;
 		}
 		
@@ -79,14 +79,16 @@ namespace CBinding.Navigation
 			if (o == null) return;
 			
 			try {
-				TagDatabaseManager.Instance.WriteTags (p);
-				TagDatabaseManager.Instance.FillProjectInformation (p);
+				foreach (ProjectFile f in p.ProjectFiles) {
+					if (f.BuildAction == BuildAction.Compile)
+						TagDatabaseManager.Instance.UpdateFileTags (p, f.Name);
+				}
 			} catch (IOException ex) {
 				IdeApp.Services.MessageService.ShowError (ex);
 				return;
 			}
 			
-			FinishedBuildingTree (new ClassPadEventArgs (p));
+//			FinishedBuildingTree (new ClassPadEventArgs (p));
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
