@@ -36,11 +36,11 @@ namespace Gendarme.Rules.Smells {
 	
 	public class DetectLongParameterListRule : IMethodRule {
 
-		public const int MaxParameters = 7;
+		public const int MaxParameters = 10;
 
 		private bool HasLongParameterList (MethodDefinition method) 
 		{
-			return method.Parameters.Count > MaxParameters;
+			return method.Parameters.Count >= MaxParameters;
 		}
 
 		public MessageCollection CheckMethod (MethodDefinition method, Runner runner) 
