@@ -69,6 +69,11 @@ namespace System.Windows.Controls {
 
 		protected override Size MeasureOverride(Size availableSize) {
 			ImageSource source = Source;
+			
+			//FIXME:
+			if (source is BitmapImage)
+				return new Size(0, 0);
+			
 			if (source == null)
 				return new Size(0, 0);
 			Stretch stretch = Stretch;
@@ -111,31 +116,7 @@ namespace System.Windows.Controls {
 			//FIXME:
 			if (source is BitmapImage)
 				return;
-			double x;
-			double y;
-			double width;
-			double height;
-			switch (Stretch) {
-			case Stretch.None:
-				x = 0;
-				y = 0;
-				width = source.Width;
-				height = source.Height;
-				break;
-			case Stretch.Fill:
-				x = 0;
-				y = 0;
-				width = ActualWidth;
-				height = ActualHeight;
-				break;
-			default:
-				x = 0;
-				y = 0;
-				width = ActualWidth;
-				height = ActualHeight;
-				break;
-			}
-			drawingContext.DrawImage(Source, new Rect(x, y, width, height));
+			drawingContext.DrawImage(Source, new Rect(0, 0, ActualWidth, ActualHeight));
 		}
 		#endregion
 
