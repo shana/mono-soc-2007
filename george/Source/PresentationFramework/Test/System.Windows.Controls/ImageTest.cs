@@ -351,5 +351,86 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region MeasureOverrideMixedAvailableSizeStretchNone
+		[Test]
+		public void MeasureOverrideMixedAvailableSizeStretchNone() {
+			new MeasureOverrideMixedAvailableSizeStretchNoneImage();
+		}
+
+		class MeasureOverrideMixedAvailableSizeStretchNoneImage : Image {
+			Size measure_result;
+
+			public MeasureOverrideMixedAvailableSizeStretchNoneImage() {
+				Stretch = Stretch.None;
+				Source = new DrawingImage(new GeometryDrawing(Brushes.Red, null, new RectangleGeometry(new Rect(0, 0, 10, 20))));
+				Height = 100;
+				Window w = new Window();
+				Canvas c = new Canvas();
+				w.Content = c;
+				c.Children.Add(this);
+				w.Show();
+				Assert.AreEqual(measure_result, new Size(10, 20));
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				return measure_result = base.MeasureOverride(availableSize);
+			}
+		}
+		#endregion
+
+		#region MeasureOverrideMixedAvailableSizeStretchFill
+		[Test]
+		public void MeasureOverrideMixedAvailableSizeStretchFill() {
+			new MeasureOverrideMixedAvailableSizeStretchFillImage();
+		}
+
+		class MeasureOverrideMixedAvailableSizeStretchFillImage : Image {
+			Size measure_result;
+
+			public MeasureOverrideMixedAvailableSizeStretchFillImage() {
+				Stretch = Stretch.Fill;
+				Source = new DrawingImage(new GeometryDrawing(Brushes.Red, null, new RectangleGeometry(new Rect(0, 0, 10, 20))));
+				Height = 100;
+				Window w = new Window();
+				Canvas c = new Canvas();
+				w.Content = c;
+				c.Children.Add(this);
+				w.Show();
+				Assert.AreEqual(measure_result, new Size(50, 100));
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				return measure_result = base.MeasureOverride(availableSize);
+			}
+		}
+		#endregion
+
+		#region MeasureOverrideMixedAvailableSizeStretchUniformToFill
+		[Test]
+		public void MeasureOverrideMixedAvailableSizeStretchUniformToFill() {
+			new MeasureOverrideMixedAvailableSizeStretchUniformToFillImage();
+		}
+
+		class MeasureOverrideMixedAvailableSizeStretchUniformToFillImage : Image {
+			Size measure_result;
+
+			public MeasureOverrideMixedAvailableSizeStretchUniformToFillImage() {
+				Stretch = Stretch.UniformToFill;
+				Source = new DrawingImage(new GeometryDrawing(Brushes.Red, null, new RectangleGeometry(new Rect(0, 0, 10, 20))));
+				Height = 100;
+				Window w = new Window();
+				Canvas c = new Canvas();
+				w.Content = c;
+				c.Children.Add(this);
+				w.Show();
+				Assert.AreEqual(measure_result, new Size(50, 100));
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				return measure_result = base.MeasureOverride(availableSize);
+			}
+		}
+		#endregion
 	}
 }
