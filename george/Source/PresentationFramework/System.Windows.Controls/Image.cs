@@ -68,15 +68,33 @@ namespace System.Windows.Controls {
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			ImageSource source= Source;
+			ImageSource source = Source;
 			if (source == null)
 				return new Size(0, 0);
+			double width;
+			double height;
+			double ratio;
 			switch (Stretch) {
 			case Stretch.None:
-				return new Size(source.Width, source.Height);
+				width = source.Width;
+				height = source.Height;
+				break;
+			case Stretch.Fill:
+				width = availableSize.Width;
+				height = availableSize.Height;
+				break;
+			case Stretch.Uniform:
+				ratio = Math.Min(availableSize.Width / source.Width, availableSize.Height / source.Height);
+				width = source.Width * ratio;
+				height = source.Height * ratio;
+				break;
+			default:
+				ratio = Math.Max(availableSize.Width / source.Width, availableSize.Height / source.Height);
+				width = source.Width * ratio;
+				height = source.Height * ratio;
+				break;
 			}
-			//WDTDH
-			return availableSize;
+			return new Size(width, height);
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer() {
