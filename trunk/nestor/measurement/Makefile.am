@@ -9,8 +9,8 @@ REWRITE = \
             -e "s|\@bindir\@|$(bindir)|g"		\
 	    -e "s|\@MONO\@|$(MONO)|g" 
 
-$(bin_SCRIPTS): $(srcdir)/script.in Makefile
-	$(REWRITE) $(srcdir)/script.in > $@.tmp
+$(bin_SCRIPTS): $(srcdir)/measurement.in Makefile
+	$(REWRITE) $(srcdir)/measurement.in > $@.tmp
 	mv $@.tmp $@
 
 

@@ -1,7 +1,7 @@
 measurementdir=$(pkglibdir)
 measurement_SCRIPTS = measurement.exe
 EXTRA_DIST = $(measurement_sources) $(measurement_sources_in)
-CLEANFILES = measurement.exe Test.Measures.dll Test.Assembly.dll
+CLEANFILES = measurement.exe Test.Measures.dll Test.Assembly.dll TestResult.xml
 DISTCLEANFILES = Makefile.in
 
 measurement_sources_in = AssemblyInfo.cs.in

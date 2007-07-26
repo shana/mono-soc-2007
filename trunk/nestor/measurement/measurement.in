@@ -1,2 +1,2 @@
 #!/bin/sh
-exec @MONO@ @prefix@/lib/measurement-tool/measurement-tool.exe $MONO_EXTRA_ARGS "$@"
+exec @MONO@ @prefix@/lib/measurement/measurement.exe $MONO_EXTRA_ARGS "$@"
