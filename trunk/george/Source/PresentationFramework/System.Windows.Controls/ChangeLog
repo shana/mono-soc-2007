@@ -1,5 +1,9 @@
 2007-07-26  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Image.cs: Improved MeasureOverride.
+
+2007-07-26  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Image.cs: Improved layout a little.
 
 2007-07-25  George Giolfan  <georgegiolfan@yahoo.com>
