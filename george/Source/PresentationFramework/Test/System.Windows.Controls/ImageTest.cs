@@ -272,5 +272,33 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region MeasureOverrideStretchUniformToFillDifferentWidthHeight
+		[Test]
+		public void MeasureOverrideStretchUniformToFillDifferentWidthHeight() {
+			new MeasureOverrideStretchUniformToFillDifferentWidthHeightImage();
+		}
+
+		class MeasureOverrideStretchUniformToFillDifferentWidthHeightImage : Image {
+			Size measure_size;
+			Size measure_result;
+
+			public MeasureOverrideStretchUniformToFillDifferentWidthHeightImage() {
+				Stretch = Stretch.UniformToFill;
+				Source = new DrawingImage(new GeometryDrawing(Brushes.Red, null, new RectangleGeometry(new Rect(0, 0, 10, 20))));
+				Width = 100;
+				Height = 100;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(measure_size, new Size(100, 100), "1");
+				Assert.AreEqual(measure_result, new Size(100, 200), "2");
+			}
+
+			protected override Size MeasureOverride(Size availableSize) {
+				return measure_result = base.MeasureOverride(measure_size = availableSize);
+			}
+		}
+		#endregion
 	}
 }
