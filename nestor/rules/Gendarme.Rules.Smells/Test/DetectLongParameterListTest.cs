@@ -53,13 +53,13 @@ namespace Test.Rules.Smells {
 			messageCollection = null;
 		}
 
-		private MethodDefinition GetMethodForTest (string methodName) 
+		private MethodDefinition GetMethodForTest (string methodName, Type[] parameterTypes) 
 		{
-			foreach (MethodDefinition method in type.Methods) {
-				if (method.Name == methodName)
-					return method;
+			if (parameterTypes == Type.EmptyTypes) {
+				if (type.Methods.GetMethod (methodName).Length == 1)
+					return type.Methods.GetMethod (methodName)[0];
 			}
-			return null;
+			return type.Methods.GetMethod (methodName, parameterTypes);
 		}
 
 		public void MethodWithoutParameters () 
@@ -70,10 +70,19 @@ namespace Test.Rules.Smells {
 		{
 		}
 
+		public void OverloadedMethod () 
+		{
+		}
+
+		public void OverloadedMethod (int x) 
+		{
+		}
+
+
 		[Test]
 		public void MethodWithoutParametersTest () 
 		{
-			method = GetMethodForTest ("MethodWithoutParameters");
+			method = GetMethodForTest ("MethodWithoutParameters", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
@@ -81,10 +90,26 @@ namespace Test.Rules.Smells {
 		[Test]
 		public void MethodwithLongParameterListTest () 
 		{
-			method = GetMethodForTest ("MethodWithLongParameterList");
+			method = GetMethodForTest ("MethodWithLongParameterList", Type.EmptyTypes);
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void OverloadedMethodTest () 
+		{
+			method = GetMethodForTest ("OverloadedMethod", Type.EmptyTypes);
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void OverloadedMethodWithParametersTest () 
+		{
+			method = GetMethodForTest ("OverloadedMethod", new Type[] {typeof (int)});
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
 		}
 	}
 }
