@@ -10,6 +10,11 @@ namespace Ribbons
 		private List<Tile> tiles;
 		private Button up, down, expand;
 		private int defaultTilesPerRow;
+		private int tileSpacing;
+		
+		private int firstDisplayedTileIndex, lastDisplayedTileIndex;
+		private int btnWidth;
+		private Requisition upReq, downReq, expandReq;
 		
 		public int TileWidth
 		{
@@ -29,6 +34,16 @@ namespace Ribbons
 				QueueDraw ();
 			}
 			get { return tileHeight; }
+		}
+		
+		public int TileSpacing
+		{
+			set
+			{
+				tileSpacing = value;
+				QueueDraw ();
+			}
+			get { return tileSpacing; }
 		}
 		
 		public int DefaultTilesPerRow
@@ -109,11 +124,11 @@ namespace Ribbons
 		{
 			base.OnSizeRequested (ref requisition);
 			
-			Requisition upReq = up.SizeRequest ();
-			Requisition downReq = down.SizeRequest ();
-			Requisition expandReq = expand.SizeRequest ();
+			upReq = up.SizeRequest ();
+			downReq = down.SizeRequest ();
+			expandReq = expand.SizeRequest ();
 			
-			int btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
+			btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
 			
 			requisition.Width = btnWidth + 2 * (int)BorderWidth;
 			requisition.Height = upReq.Height + downReq.Height + expandReq.Height + 2 * (int)BorderWidth;
@@ -131,13 +146,46 @@ namespace Ribbons
 			allocation.Width -= 2 * (int)BorderWidth;
 			allocation.Height -= 2 * (int)BorderWidth;
 			
+			Gdk.Rectangle btnAlloc;
+			btnAlloc.Width = btnWidth;
+			btnAlloc.X = allocation.Width - (int)BorderWidth - btnAlloc.Width;
 			
+			btnAlloc.Y = (int)BorderWidth;
+			btnAlloc.Height = upReq.Height;
+			up.SizeAllocate (btnAlloc);
 			
-			foreach(Tile t in tiles)
+			btnAlloc.Y += btnAlloc.Height;
+			btnAlloc.Height = downReq.Height;
+			down.SizeAllocate (btnAlloc);
+			
+			btnAlloc.Y += btnAlloc.Height;
+			btnAlloc.Height = expandReq.Height;
+			expand.SizeAllocate (btnAlloc);
+			
+			Gdk.Rectangle tilesAlloc;
+			tilesAlloc.Y = allocation.Y + (int)BorderWidth + tileSpacing;
+			tilesAlloc.X = allocation.X + (int)BorderWidth + tileSpacing;
+			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing;
+			tilesAlloc.Height = allocation.Height - 2 * ((int)BorderWidth + tileSpacing); 
+			
+			Gdk.Rectangle tileAlloc;
+			tileAlloc.X = tilesAlloc.X;
+			tileAlloc.Y = tilesAlloc.Y;
+			tileAlloc.Height = tilesAlloc.Height;
+			tileAlloc.Width = tileWidth;
+			
+			for(int tileIndex = firstDisplayedTileIndex ; tileIndex < tiles.Count && tileAlloc.Right <= tilesAlloc.Right ; ++tileIndex)
 			{
+				Tile t = tiles[tileIndex];
+				
 				t.HeightRequest = tileHeight;
 				t.WidthRequest = tileWidth;
+				t.SizeRequest ();
 				
+				t.SizeAllocate (tileAlloc);
+				tileAlloc.X += tileAlloc.Width + tileSpacing;
+				
+				lastDisplayedTileIndex = tileIndex;
 			}
 		}
 	}
