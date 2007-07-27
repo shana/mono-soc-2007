@@ -327,7 +327,8 @@ public class CoverageModel : CoverageItem {
 
 				if (! klass.methodsByMethod.ContainsKey (mb)) {
 					MethodEntry entry = symbolFile.GetMethodByToken ((int)mb.MetadataToken.ToUInt());
-					ProcessMethod (mb, entry, klass, mb.Name, null);
+					string name = GetMethodNameWithParameters( mb );
+					ProcessMethod (mb, entry, klass, name, null);
 				}
 			}
 		}
@@ -352,6 +353,52 @@ public class CoverageModel : CoverageItem {
 		// Free memory
 		symbolFiles = null;
 	}
+
+	private string GetMethodNameWithParameters(MethodDefinition method)
+   {
+		if (method.Parameters.Count == 0)
+			return method.Name + " ()";
+		// Monocov output for overloaded methods look like:
+		// MethodName (string,byte[],System.Data.DataTable)
+		// MethodName (string,int)
+		string[] paramList = new string[method.Parameters.Count];
+		int i = 0;
+		foreach (ParameterDefinition param in method.Parameters)
+		{
+			paramList[i] = GetParameterName(param);
+			i++;
+		}
+		return method.Name + " (" + string.Join(",", paramList ) +")";
+	}
+
+	// format uses full name for non-value types
+   // value types, strings, objects use short name.
+	// for types with alias, the alias is used: int32 -> int
+	private string GetParameterName(ParameterDefinition param)
+	{
+		if (param.ParameterType.IsValueType || 
+			 param.ParameterType.FullName.Equals("System.String") ||
+			 param.ParameterType.FullName.Equals("System.Object") )
+		{
+			string name = param.ParameterType.Name.ToLower();
+			//if (name.EndsWith("16") ||
+			//	 name.EndsWith("32") ||
+			//	 name.EndsWith("64"))
+   		if (name.IndexOf("16") > -1 ||
+             name.IndexOf("32") > -1 ||
+             name.IndexOf("64") > -1 )
+			{
+			//	name = name.Substring(0, name.Length - 2);
+				name = name.Replace("16", "");
+				name = name.Replace("32", "");
+				name = name.Replace("64", "");
+			}
+			return name;
+		}
+		else
+			return param.ParameterType.FullName;
+	}
+
 
 	//
 	// Computes the coverage of METHOD
@@ -554,6 +601,11 @@ public class CoverageModel : CoverageItem {
 
 		LineNumberEntry[] lines = entry.LineNumbers;
 
+		// DEBUG
+		//if( cov_info == null )
+		//	Console.WriteLine( lines.Length );	
+		// DEBUG
+
 		if (lines.Length == 0)
 			return;
 
@@ -577,7 +629,7 @@ public class CoverageModel : CoverageItem {
 			string sourceFile = entry.SourceFile.FileName;
 
 			SourceFileCoverageData source = (SourceFileCoverageData)sources [sourceFile];
-			Console.WriteLine( source );
+			//Console.WriteLine( source );
 			if (source == null) {
 				source = new SourceFileCoverageData (sourceFile);
 				sources [sourceFile] = source;

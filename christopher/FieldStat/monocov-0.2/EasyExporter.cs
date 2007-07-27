@@ -103,12 +103,11 @@ public class EasyExporter {
 
 		if (item.sourceFile != null) 
 		{
-			Console.WriteLine( "item.sourceFile isn't null " + item);
 			writer.WriteAttributeString ("sourceFile", item.sourceFile.sourceFile);
 
 			int[] coverage = item.sourceFile.Coverage;
 			
-			foreach( MethodCoverageItem method in item.sourceFile.methods )
+			foreach( MethodCoverageItem method in item.Methods )
 			{
 				int sum = 0;
 				int length = method.endLine - method.startLine;
@@ -119,10 +118,12 @@ public class EasyExporter {
 				}
 				if( length == 0 )
 					continue;
+				
 				writer.WriteStartElement ("Method");
 				writer.WriteAttributeString ("type", item.FullName);
 				writer.WriteAttributeString ("method", method.Name);
 				writer.WriteAttributeString ("coverage", "" + ((float)sum)/length );
+				writer.WriteAttributeString ("length", "" + length );
 				writer.WriteEndElement ();
 			}
 		}
