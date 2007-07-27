@@ -1,3 +1,10 @@
+2007-07-27 Brian Nickel <brian.nickel@gmail.com>
+
+	* System.Net.Sockets.Socket-endpoint.diff: Redoes some internals of
+	System.Net.Sockets.Socket to keep track of the endpoints used so
+	endpoints can be created without guesswork or loading unnecessary
+	assemblies.
+
 2007-06-24 Brian Nickel <brian.nickel@gmail.com>
 
 	* committed-with-changes/xsp-baseapplicationhost-dont-assume.patch:
