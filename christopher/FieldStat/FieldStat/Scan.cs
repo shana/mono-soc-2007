@@ -114,9 +114,9 @@ namespace FieldStat
                         
                         if ( IsSystem( assemRef.PublicKeyToken ) )
                         {
-                            string typeName = rf.DeclaringType.FullName;
+                            string typeName = GetClassName(rf.DeclaringType);
                             //string methName = methd.Name;  //calling context
-                            string methName = ((MethodReference)i.Operand).Name;
+                            string methName = GetMethodNameWithParameters(((MethodReference)i.Operand));
                             
                             if (!m_htTypeFreq.Contains(typeName))
                             {
@@ -145,7 +145,72 @@ namespace FieldStat
                 }
             }
         }
-        public bool IsSystem( byte[] bytes )
+        class Special<T>
+        {
+            public void Meth ()
+            {
+                System.Collections.Generic.LinkedList<Special<Scan>> test = new System.Collections.Generic.LinkedList<Special<Scan>>();
+                System.Collections.Generic.LinkedList<Scan> test2 = new System.Collections.Generic.LinkedList<Scan>();
+                System.Collections.Generic.LinkedList<ImportCoverage> test3 = new System.Collections.Generic.LinkedList<ImportCoverage>();
+                test.Clear();
+                test2.Clear();
+                test3.Clear();
+            }
+        }
+        
+        private string GetClassName(TypeReference type)
+        {
+            // Trim off Generic Parameters to classes.  e.g. System.Collections.Generic.List`1<MyFirstClass> =>
+            // System.Collections.Generic.List
+            if (type.FullName.Contains("`"))
+            {
+                return type.FullName.Remove( type.FullName.IndexOf("`"));
+            }
+            return type.FullName;
+        }
+
+        private string GetMethodNameWithParameters(MethodReference method)
+        {
+            if (method.Parameters.Count == 0)
+                return method.Name + " ()";
+            // Monocov output for overloaded methods look like:
+            // MethodName (string,byte[],System.Data.DataTable)
+            // MethodName (string,int)
+            string[] paramList = new string[method.Parameters.Count];
+            int i = 0;
+            foreach (ParameterDefinition param in method.Parameters)
+            {
+                paramList[i] = GetParameterName(param);
+                i++;
+            }
+            return method.Name + " (" + string.Join(",", paramList ) +")";
+        }
+
+        // format uses full name for non-value types
+        // for types with alias, the alias is used: int32 -> int
+        private string GetParameterName(ParameterDefinition param)
+        {
+            if (param.ParameterType.IsValueType || 
+                param.ParameterType.FullName == "System.Object" ||
+                param.ParameterType.FullName == "System.String")
+            {
+                string name = param.ParameterType.Name.ToLower();
+                if (name.IndexOf("16") > -1 ||
+                    name.IndexOf("32") > -1 ||
+                    name.IndexOf("64") > -1 )
+                {
+                    //name = name.Substring(0, name.Length - 2);
+                    name = name.Replace("16", "");
+                    name = name.Replace("32", "");
+                    name = name.Replace("64", "");
+                }
+                return name;
+            }
+            else
+                return param.ParameterType.FullName;
+        }
+
+        private bool IsSystem( byte[] bytes )
         {
             if (bytes.Length == 0)
                 return false;

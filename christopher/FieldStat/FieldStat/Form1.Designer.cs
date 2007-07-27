@@ -48,11 +48,11 @@ namespace FieldStat
             this.btnScan = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnImportResults = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
             this.m_dgResults = new System.Windows.Forms.DataGridView();
-            this.btnImportResults = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_dgAssemblies)).BeginInit();
@@ -278,6 +278,16 @@ namespace FieldStat
             this.tabPage4.Text = "Results";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // btnImportResults
+            // 
+            this.btnImportResults.Location = new System.Drawing.Point(359, 221);
+            this.btnImportResults.Name = "btnImportResults";
+            this.btnImportResults.Size = new System.Drawing.Size(91, 23);
+            this.btnImportResults.TabIndex = 5;
+            this.btnImportResults.Text = "Import Results";
+            this.btnImportResults.UseVisualStyleBackColor = true;
+            this.btnImportResults.Click += new System.EventHandler(this.btnImportResults_Click);
+            // 
             // button6
             // 
             this.button6.Location = new System.Drawing.Point(235, 221);
@@ -308,21 +318,13 @@ namespace FieldStat
             // 
             // m_dgResults
             // 
+            this.m_dgResults.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.m_dgResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.m_dgResults.Location = new System.Drawing.Point(31, 15);
             this.m_dgResults.Name = "m_dgResults";
             this.m_dgResults.Size = new System.Drawing.Size(654, 196);
             this.m_dgResults.TabIndex = 1;
-            // 
-            // btnImportResults
-            // 
-            this.btnImportResults.Location = new System.Drawing.Point(359, 221);
-            this.btnImportResults.Name = "btnImportResults";
-            this.btnImportResults.Size = new System.Drawing.Size(91, 23);
-            this.btnImportResults.TabIndex = 5;
-            this.btnImportResults.Text = "Import Results";
-            this.btnImportResults.UseVisualStyleBackColor = true;
-            this.btnImportResults.Click += new System.EventHandler(this.btnImportResults_Click);
             // 
             // Form1
             // 
