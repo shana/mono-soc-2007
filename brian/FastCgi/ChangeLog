@@ -1,3 +1,34 @@
+2007-07-27 Brian Nickel <brian.nickel@gmail.com>
+
+	* fastcgi-mono-server.in: 
+	* fastcgi-mono-server2.in: Wrapper scripts to install into /usr/bin
+	
+	* src/AssemblyInfo.cs.in: 
+	* Mono.FastCgi.snk: Assembly signing.
+	
+	* src/Mono.FastCgi/AssemblyInfo.cs: 
+	* src/Mono.WebServer/AssemblyInfo.cs.in: 
+	* src/Mono.WebServer.FastCgi/AssemblyInfo.cs: Updated not to conflict
+	with src/AssemblyInfo.cs
+	
+	* src/bin/fastcgi-mono-server2.exe.config: 
+	* src/bin/fastcgi-mono-server.exe.config: Added/Updated for both
+	verrsions.
+	
+	* src/Mono.WebServer/ApplicationManager.cs: Remove output when paths are
+	added.
+	
+	* autogen.sh: 
+	* configure.ac: 
+	* Makefile.am: 
+	* src/Makefile.am: 
+	* src/Mono.FastCgi.sources: 
+	* src/Mono.WebServer.sources: 
+	* src/Mono.WebServer.FastCgi.sources: 
+	* AUTHORS: 
+	* NEWS: 
+	* README: New files for autotools.
+
 2007-07-23 Brian Nickel <brian.nickel@gmail.com>
 
 	* REARRANGED DIRECTORIES: Added src/ and reorganized source folders into

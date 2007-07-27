@@ -1,0 +1,24 @@
+FCGI_CSFILES = \
+	$(srcdir)/Mono.FastCgi/Server.cs \
+	$(srcdir)/Mono.FastCgi/Structures/UnknownTypeBody.cs \
+	$(srcdir)/Mono.FastCgi/Structures/EndRequestBody.cs \
+	$(srcdir)/Mono.FastCgi/Structures/Record.cs \
+	$(srcdir)/Mono.FastCgi/Structures/BeginRequestBody.cs \
+	$(srcdir)/Mono.FastCgi/Structures/NameValuePair.cs \
+	$(srcdir)/Mono.FastCgi/SocketFactory.cs \
+	$(srcdir)/Mono.FastCgi/AssemblyInfo.cs \
+	$(srcdir)/Mono.FastCgi/Requests/Request.cs \
+	$(srcdir)/Mono.FastCgi/Requests/ResponderRequest.cs \
+	$(srcdir)/Mono.FastCgi/Connection.cs \
+	$(srcdir)/Mono.FastCgi/Logger.cs \
+	$(srcdir)/Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs \
+	$(srcdir)/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs \
+	$(srcdir)/Mono.FastCgi/SocketAbstractions/StandardSocket.cs \
+	$(srcdir)/Mono.FastCgi/SocketAbstractions/TcpSocket.cs
+
+FCGI_DEPS = $(WEB_CSFILES)
+
+FCGI_FLAGS = /unsafe /r:Mono.Posix
+
+FCGI1_FLAGS = $(FCGI_FLAGS)
+FCGI2_FLAGS = $(FCGI_FLAGS)
