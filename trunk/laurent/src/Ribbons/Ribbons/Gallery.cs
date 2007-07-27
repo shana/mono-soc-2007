@@ -8,7 +8,8 @@ namespace Ribbons
 	{
 		private int tileWidth, tileHeight;
 		private List<Tile> tiles;
-		private ScrolledWindow scrollWin;
+		private Button up, down, expand;
+		private int defaultTilesPerRow;
 		
 		public int TileWidth
 		{
@@ -30,13 +31,27 @@ namespace Ribbons
 			get { return tileHeight; }
 		}
 		
+		public int DefaultTilesPerRow
+		{
+			set
+			{
+				defaultTilesPerRow = value;
+				QueueDraw ();
+			}
+			get { return defaultTilesPerRow; }
+		}
+		
 		public Gallery()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
-			this.scrollWin = new ScrolledWindow ();
+			this.defaultTilesPerRow = 5;
+			
+			this.up = new Button ();
+			this.down = new Button ();
+			this.expand = new Button ();
 		}
 		
 		/// <summary>Adds a tile before all existing tiles.</summary>
@@ -58,9 +73,6 @@ namespace Ribbons
 		/// <param name="TileIndex">The index (starting at 0) at which the tile must be inserted, or -1 to insert the tile after all existing tiles.</param>
 		public void InsertTile (Tile t, int TileIndex)
 		{
-			t.Parent = this;
-			t.Visible = true;
-			
 			if(TileIndex == -1 || TileIndex == tiles.Count)
 			{
 				tiles.Add (t);
@@ -69,6 +81,9 @@ namespace Ribbons
 			{
 				tiles.Insert (TileIndex, t);
 			}
+			
+			t.Parent = this;
+			t.Visible = true;
 		}
 		
 		/// <summary>Removes the tile at the specified index.</summary>
@@ -82,17 +97,26 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
-			if(include_internals) callback (scrollWin);
+			if(include_internals)
+			{
+				callback (up);
+				callback (down);
+				callback (expand);
+			}
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
 		{
 			base.OnSizeRequested (ref requisition);
 			
-			Requisition scrollReq = scrollWin.SizeRequest ();
+			Requisition upReq = up.SizeRequest ();
+			Requisition downReq = down.SizeRequest ();
+			Requisition expandReq = expand.SizeRequest ();
 			
-			requisition.Width = scrollReq.Width + 2 * (int)BorderWidth;
-			requisition.Height = scrollReq.Height + 2 * (int)BorderWidth;
+			int btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
+			
+			requisition.Width = btnWidth + 2 * (int)BorderWidth;
+			requisition.Height = upReq.Height + downReq.Height + expandReq.Height + 2 * (int)BorderWidth;
 			
 			if(WidthRequest != -1) requisition.Width = WidthRequest;
 			if(HeightRequest != -1) requisition.Height = HeightRequest;
@@ -107,7 +131,7 @@ namespace Ribbons
 			allocation.Width -= 2 * (int)BorderWidth;
 			allocation.Height -= 2 * (int)BorderWidth;
 			
-			scrollWin.SizeAllocate (allocation);
+			
 			
 			foreach(Tile t in tiles)
 			{
