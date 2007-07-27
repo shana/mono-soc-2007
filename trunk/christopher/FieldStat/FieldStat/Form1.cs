@@ -193,5 +193,12 @@ namespace FieldStat
                 m_dtResults.DefaultView.Sort = "AppFrequency DESC";
             }
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            CoverageReport report = new CoverageReport();
+            report.CalcReport(m_dtResults);
+            report.Show();
+        }
     }
 }

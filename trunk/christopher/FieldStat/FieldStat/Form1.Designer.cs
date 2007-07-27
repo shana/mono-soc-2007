@@ -296,6 +296,7 @@ namespace FieldStat
             this.button6.TabIndex = 4;
             this.button6.Text = "Coverage Report";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button5
             // 
