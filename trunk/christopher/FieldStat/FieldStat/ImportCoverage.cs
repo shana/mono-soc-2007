@@ -27,7 +27,8 @@ namespace FieldStat
                     string type = method.Attributes["type"].Value;
                     string meth = method.Attributes["method"].Value;
                     float cov = float.Parse(method.Attributes["coverage"].Value);
-                    m_dtCoverage.Rows.Add(type, meth, cov);
+                    int length = int.Parse(method.Attributes["length"].Value);
+                    m_dtCoverage.Rows.Add(type, meth, cov, length);
                 }
             }
         }

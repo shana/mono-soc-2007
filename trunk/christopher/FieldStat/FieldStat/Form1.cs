@@ -34,10 +34,12 @@ namespace FieldStat
             m_dtCoverage.Columns.Add("Type", typeof(string));
             m_dtCoverage.Columns.Add("Method", typeof(string));
             m_dtCoverage.Columns.Add("Coverage", typeof(float));
+            m_dtCoverage.Columns.Add("Length", typeof(int));
 
             m_dtResults = new DataTable();
             m_dtResults.Columns.Add("Type", typeof(string));
             m_dtResults.Columns.Add("Method", typeof(string));
+            m_dtResults.Columns.Add("Length", typeof(int));
             m_dtResults.Columns.Add("Frequency", typeof(int));
             m_dtResults.Columns.Add("AppFrequency", typeof(int));
             m_dtResults.Columns.Add("Coverage", typeof(float));
@@ -106,7 +108,7 @@ namespace FieldStat
             {
                 foreach( MethodResult mr in tr.Methods.Values )
                 {
-                    m_dtResults.Rows.Add(tr.Name, mr.Name, mr.MethodFrequency, mr.TotalAppCount, -1);
+                    m_dtResults.Rows.Add(tr.Name, mr.Name, -1, mr.MethodFrequency, mr.TotalAppCount, -1);
                 }
             }
             JoinCoverage();
@@ -120,6 +122,7 @@ namespace FieldStat
                 if (resultDr != null)
                 {
                     resultDr["Coverage"] = row["Coverage"];
+                    resultDr["Length"] = row["Length"];
                 }
             }
         }
@@ -142,7 +145,7 @@ namespace FieldStat
                     ImportCoverage imp = new ImportCoverage();
                     imp.Import(fileName, m_dtCoverage);  
                 }
-            }    
+            }
         }
 
         private void btnScanRepos_Click(object sender, EventArgs e)
