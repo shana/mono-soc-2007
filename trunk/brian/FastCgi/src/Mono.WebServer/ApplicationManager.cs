@@ -392,10 +392,6 @@ namespace Mono.WebServer
 				if (this.vhost.Length > 2 && this.vhost [1] == '.')
 					this.vhost = this.vhost.Substring (2);
 			}
-			
-			Console.WriteLine (
-				"VPathToHost Created: {0}:{1}{2} => {3}",
-				vhost, vport, vpath, realPath);
 		}
 
 

@@ -1,0 +1,20 @@
+WEB_CSFILES = \
+	$(srcdir)/Mono.WebServer/ApplicationManager.cs \
+	$(srcdir)/Mono.WebServer/IApplicationHost.cs \
+	$(srcdir)/Mono.WebServer/Tracing.cs \
+	$(srcdir)/Mono.WebServer/MonoWorkerRequest.cs \
+	$(srcdir)/Mono.WebServer/BaseRequestBroker.cs \
+	$(srcdir)/Mono.WebServer/XSPWorkerRequest.cs \
+	$(srcdir)/Mono.WebServer/XSPApplicationHost.cs \
+	$(srcdir)/Mono.WebServer/ApplicationServer.cs \
+	$(srcdir)/Mono.WebServer/BaseApplicationHost.cs \
+	$(srcdir)/Mono.WebServer/InitialWorkerRequest.cs \
+	$(srcdir)/Mono.WebServer/LingeringNetworkStream.cs \
+	$(srcdir)/Mono.WebServer/IWebSource.cs
+
+WEB_DEPS = $(WEB_CSFILES)
+
+WEB_FLAGS = /unsafe /r:Mono.Security /r:System.Xml /r:System.Web
+
+WEB1_FLAGS = $(WEB_FLAGS)
+WEB2_FLAGS = $(WEB_FLAGS)

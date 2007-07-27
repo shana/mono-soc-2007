@@ -1,0 +1,13 @@
+Authors by assembly
+
+Mono.FastCgi:
+	Brian Nickel (brian.nickel@gmail.com)
+
+Mono.WebServer:
+	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+	Marek Habersack (mhabersack@novell.com)
+	Lluis Sanchez Gual (lluis@ximian.com)
+	Brian Nickel (brian.nickel@gmail.com)
+
+Mono.WebServer.FastCgi / fastcgi-mono-server:
+	Brian Nickel (brian.nickel@gmail.com)

@@ -1,0 +1,6 @@
+using System;
+using System.Reflection;
+
+[assembly:AssemblyVersion("@VERSION@")]
+[assembly:AssemblyDelaySign(false)]
+[assembly:AssemblyKeyFile("@top_srcdir@/Mono.FastCgi.snk")]
