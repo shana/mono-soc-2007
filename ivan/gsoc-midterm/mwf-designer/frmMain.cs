@@ -1,6 +1,6 @@
 /* vi:set ts=4 sw=4: */
 //
-// Authors:
+// Authors: 
 //	  Ivan N. Zlatev (contact i-nZ.net)
 //
 // (C) 2007 Ivan N. Zlatev
