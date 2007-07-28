@@ -717,6 +717,20 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
         </Setter>
     </Style>
 	<!-- Skipped. -->
+    <Style x:Key="{x:Type mono_system_windows_controls:HeaderedContentControl}"
+           TargetType="{x:Type mono_system_windows_controls:HeaderedContentControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls:HeaderedContentControl}">
+                    <StackPanel>
+                        <ContentPresenter ContentSource="Header"/>
+                        <ContentPresenter/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+	<!-- Skipped. -->
     <Style x:Key="{x:Type mono_system_windows_controls:ItemsControl}"
            TargetType="{x:Type mono_system_windows_controls:ItemsControl}">
         <Setter Property="Template">
