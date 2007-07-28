@@ -1,1 +1,0 @@
-<%@ Page Language="C#" ValidateRequest="false" AutoEventWireup="true" CodeBehind="SaveFile.aspx.cs" Inherits="umbraco.presentation.umbraco.webservices.aspx_ajax_calls.SaveFile" %>
