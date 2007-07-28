@@ -1,0 +1,1 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="disableUser.aspx.cs" Inherits="umbraco.presentation.webservices.aspx_ajax_calls.disableUser" %>
