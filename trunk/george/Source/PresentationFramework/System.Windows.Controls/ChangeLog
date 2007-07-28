@@ -1,5 +1,9 @@
 2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Image.cs: Fixed the ImageFailed declaration. I will probably not be able to implement this. I just noticed it implements a private interface called System.Windows.Markup.IProvidePropertyFallback (likely to enable XAML like <Image Source="<file name"/>).
+
+2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Image.cs: Fixed ArrangeOverride.
 
 2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
