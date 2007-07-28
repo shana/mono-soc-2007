@@ -20,7 +20,7 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Routed Events
-		public static readonly RoutedEvent ImageFailedEvent = EventManager.RegisterRoutedEvent("ImageFailed", RoutingStrategy.Bubble, typeof(EventHandler), typeof(Image));
+		public static readonly RoutedEvent ImageFailedEvent = EventManager.RegisterRoutedEvent("ImageFailed", RoutingStrategy.Bubble, typeof(EventHandler<ExceptionRoutedEventArgs>), typeof(Image));
 		#endregion
 		#endregion
 
@@ -128,15 +128,15 @@ namespace System.Windows.Controls {
 			ImageSource source = Source;
 			if (source == null)
 				return;
-			//FIXME:
-			if (source is BitmapImage)
-				return;
-			drawingContext.DrawImage(Source, new Rect(0, 0, ActualWidth, ActualHeight));
+			try {
+				drawingContext.DrawImage(source, new Rect(0, 0, ActualWidth, ActualHeight));
+			} catch {
+			}
 		}
 		#endregion
 
 		#region Public Events
-		public event EventHandler ImageFailed {
+		public event EventHandler<ExceptionRoutedEventArgs> ImageFailed {
 			add { AddHandler(ImageFailedEvent, value); }
 			remove { RemoveHandler(ImageFailedEvent, value); }
 		}
