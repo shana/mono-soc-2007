@@ -65,8 +65,16 @@ namespace Ribbons
 			this.defaultTilesPerRow = 5;
 			
 			this.up = new Button ();
+			this.up.DrawBackground = true;
+			this.up.Clicked += up_Clicked;
+			
 			this.down = new Button ();
+			this.down.DrawBackground = true;
+			this.down.Clicked += down_Clicked;
+			
 			this.expand = new Button ();
+			this.expand.DrawBackground = true;
+			this.expand.Clicked += expand_Clicked;
 		}
 		
 		/// <summary>Adds a tile before all existing tiles.</summary>
@@ -110,6 +118,41 @@ namespace Ribbons
 			tiles.RemoveAt (TileIndex);
 		}
 		
+		private void up_Clicked(object Sender, EventArgs e)
+		{
+			MoveUp ();
+		}
+		
+		private void down_Clicked(object Sender, EventArgs e)
+		{
+			MoveUp ();
+		}
+		
+		private void expand_Clicked(object Sender, EventArgs e)
+		{
+			
+		}
+		
+		private void MoveUp ()
+		{
+			if(firstDisplayedTileIndex > 0)
+			{
+				firstDisplayedTileIndex = -1;
+				lastDisplayedTileIndex = firstDisplayedTileIndex - 1;
+			}
+			QueueDraw ();
+		}
+		
+		private void MoveDown ()
+		{
+			if(lastDisplayedTileIndex < tiles.Count - 1)
+			{
+				firstDisplayedTileIndex = lastDisplayedTileIndex + 1;
+				lastDisplayedTileIndex = -1;
+			}
+			QueueDraw ();
+		}
+		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
 			if(include_internals)
@@ -117,6 +160,11 @@ namespace Ribbons
 				callback (up);
 				callback (down);
 				callback (expand);
+			}
+			
+			for(int i = firstDisplayedTileIndex ; i < lastDisplayedTileIndex ; ++i)
+			{
+				callback (tiles[i]);
 			}
 		}
 		
@@ -129,9 +177,10 @@ namespace Ribbons
 			expandReq = expand.SizeRequest ();
 			
 			btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
+			int btnHeight = upReq.Height + downReq.Height + expandReq.Height;
 			
 			requisition.Width = btnWidth + 2 * (int)BorderWidth;
-			requisition.Height = upReq.Height + downReq.Height + expandReq.Height + 2 * (int)BorderWidth;
+			requisition.Height = Math.Max (tileHeight + 2*tileSpacing, btnHeight) + 2 * (int)BorderWidth;
 			
 			if(WidthRequest != -1) requisition.Width = WidthRequest;
 			if(HeightRequest != -1) requisition.Height = HeightRequest;
@@ -174,7 +223,28 @@ namespace Ribbons
 			tileAlloc.Height = tilesAlloc.Height;
 			tileAlloc.Width = tileWidth;
 			
-			for(int tileIndex = firstDisplayedTileIndex ; tileIndex < tiles.Count && tileAlloc.Right <= tilesAlloc.Right ; ++tileIndex)
+			int maxTiles = (tilesAlloc.Width + tileSpacing) / (tileWidth + tileSpacing);
+			
+			if(firstDisplayedTileIndex == -1)
+			{
+				firstDisplayedTileIndex = lastDisplayedTileIndex - maxTiles + 1;
+				if(firstDisplayedTileIndex < 0)
+				{
+					lastDisplayedTileIndex -= firstDisplayedTileIndex;
+					firstDisplayedTileIndex = 0;
+				}
+			}
+			else if(lastDisplayedTileIndex == -1)
+			{
+				lastDisplayedTileIndex = firstDisplayedTileIndex + maxTiles - 1;
+			}
+			
+			if(lastDisplayedTileIndex >= tiles.Count)
+			{
+				lastDisplayedTileIndex = tiles.Count - 1;
+			}
+			
+			for(int tileIndex = firstDisplayedTileIndex ; tileIndex <= lastDisplayedTileIndex ; ++tileIndex)
 			{
 				Tile t = tiles[tileIndex];
 				
@@ -184,8 +254,6 @@ namespace Ribbons
 				
 				t.SizeAllocate (tileAlloc);
 				tileAlloc.X += tileAlloc.Width + tileSpacing;
-				
-				lastDisplayedTileIndex = tileIndex;
 			}
 		}
 	}
