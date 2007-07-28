@@ -1,0 +1,171 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.presentation", "umbraco\presentation\umbraco.presentation.csproj", "{651E1350-91B6-44B7-BD60-7207006D7003}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{C584F126-315D-4136-A3EA-E87A108D27DA} = {C584F126-315D-4136-A3EA-E87A108D27DA}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.businesslogic", "umbraco\businesslogic\umbraco.businesslogic.csproj", "{E469A9CE-1BEC-423F-AC44-713CD72457EA}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.cms", "umbraco\cms\umbraco.cms.csproj", "{CCD75EC3-63DB-4184-B49D-51C1DD337230}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.interfaces", "umbraco\interfaces\umbraco.interfaces.csproj", "{511F6D8D-7717-440A-9A57-A507E9A8B27F}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.editorControls", "components\editorControls\umbraco.editorControls.csproj", "{255F5DF1-4E43-4758-AC05-7A0B68EB021B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.macroRenderings", "components\macroRenderings\umbraco.macroRenderings.csproj", "{52AB8F1F-FB76-4E8C-885F-0747B6CE71EC}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.CPalmTidy", "components\PalmTidy\umbraco.CPalmTidy.csproj", "{C584F126-315D-4136-A3EA-E87A108D27DA}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.standardFormhandlers", "components\standardFormhandlers\umbraco.standardFormhandlers.csproj", "{F58B68F8-AB7F-4559-A37F-6A00AD86365E}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F0242771-6DE6-4E03-BD3A-7B79BA79105B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		foreign dlls\CookComputing.XmlRpc.dll = foreign dlls\CookComputing.XmlRpc.dll
+		foreign dlls\DotNetOpenMail.dll = foreign dlls\DotNetOpenMail.dll
+		foreign dlls\ICSharpCode.SharpZipLib.dll = foreign dlls\ICSharpCode.SharpZipLib.dll
+		foreign dlls\IronMath.dll = foreign dlls\IronMath.dll
+		IronPython License.Rtf = IronPython License.Rtf
+		foreign dlls\IronPython.dll = foreign dlls\IronPython.dll
+		License.txt = License.txt
+		foreign dlls\Lucene.Net.dll = foreign dlls\Lucene.Net.dll
+		foreign dlls\Microsoft.ApplicationBlocks.Data.dll = foreign dlls\Microsoft.ApplicationBlocks.Data.dll
+		foreign dlls\TidyDll.dll = foreign dlls\TidyDll.dll
+		foreign dlls\UrlRewritingNet.UrlRewriter.dll = foreign dlls\UrlRewritingNet.UrlRewriter.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.webservices", "umbraco\presentation\webservices\umbraco.webservices.csproj", "{08D3F8D8-C6FD-411F-BC3B-787134BE5AB8}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "umbraco.uicontrols", "components\umbracoControls\Controls\umbraco.uicontrols.csproj", "{EAC19FCD-30BA-4C53-8AD2-B0537C2BE2C3}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{651E1350-91B6-44B7-BD60-7207006D7003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{651E1350-91B6-44B7-BD60-7207006D7003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{651E1350-91B6-44B7-BD60-7207006D7003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{651E1350-91B6-44B7-BD60-7207006D7003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E469A9CE-1BEC-423F-AC44-713CD72457EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E469A9CE-1BEC-423F-AC44-713CD72457EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E469A9CE-1BEC-423F-AC44-713CD72457EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E469A9CE-1BEC-423F-AC44-713CD72457EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCD75EC3-63DB-4184-B49D-51C1DD337230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCD75EC3-63DB-4184-B49D-51C1DD337230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCD75EC3-63DB-4184-B49D-51C1DD337230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCD75EC3-63DB-4184-B49D-51C1DD337230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{511F6D8D-7717-440A-9A57-A507E9A8B27F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511F6D8D-7717-440A-9A57-A507E9A8B27F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511F6D8D-7717-440A-9A57-A507E9A8B27F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511F6D8D-7717-440A-9A57-A507E9A8B27F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{255F5DF1-4E43-4758-AC05-7A0B68EB021B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{255F5DF1-4E43-4758-AC05-7A0B68EB021B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{255F5DF1-4E43-4758-AC05-7A0B68EB021B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{255F5DF1-4E43-4758-AC05-7A0B68EB021B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52AB8F1F-FB76-4E8C-885F-0747B6CE71EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52AB8F1F-FB76-4E8C-885F-0747B6CE71EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52AB8F1F-FB76-4E8C-885F-0747B6CE71EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52AB8F1F-FB76-4E8C-885F-0747B6CE71EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C584F126-315D-4136-A3EA-E87A108D27DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C584F126-315D-4136-A3EA-E87A108D27DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C584F126-315D-4136-A3EA-E87A108D27DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C584F126-315D-4136-A3EA-E87A108D27DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F58B68F8-AB7F-4559-A37F-6A00AD86365E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F58B68F8-AB7F-4559-A37F-6A00AD86365E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F58B68F8-AB7F-4559-A37F-6A00AD86365E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F58B68F8-AB7F-4559-A37F-6A00AD86365E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08D3F8D8-C6FD-411F-BC3B-787134BE5AB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08D3F8D8-C6FD-411F-BC3B-787134BE5AB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08D3F8D8-C6FD-411F-BC3B-787134BE5AB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08D3F8D8-C6FD-411F-BC3B-787134BE5AB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAC19FCD-30BA-4C53-8AD2-B0537C2BE2C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC19FCD-30BA-4C53-8AD2-B0537C2BE2C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC19FCD-30BA-4C53-8AD2-B0537C2BE2C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC19FCD-30BA-4C53-8AD2-B0537C2BE2C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs01.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = umbraco\\businesslogic\\umbraco.businesslogic.csproj
+		SccProjectName1 = umbraco/businesslogic
+		SccLocalPath1 = umbraco\\businesslogic
+		SccProjectUniqueName2 = umbraco\\cms\\umbraco.cms.csproj
+		SccProjectName2 = umbraco/cms
+		SccLocalPath2 = umbraco\\cms
+		SccProjectUniqueName3 = components\\umbracoControls\\controls\\umbraco.controls.vbproj
+		SccProjectName3 = components/umbracoControls/controls
+		SccLocalPath3 = components\\umbracoControls\\controls
+		SccProjectUniqueName4 = components\\PalmTidy\\umbraco.CPalmTidy.csproj
+		SccProjectName4 = components/PalmTidy
+		SccLocalPath4 = components\\PalmTidy
+		SccProjectUniqueName5 = components\\editorControls\\umbraco.editorControls.csproj
+		SccProjectName5 = components/editorControls
+		SccLocalPath5 = components\\editorControls
+		SccProjectUniqueName6 = umbraco\\interfaces\\umbraco.interfaces.csproj
+		SccProjectName6 = umbraco/interfaces
+		SccLocalPath6 = umbraco\\interfaces
+		SccProjectUniqueName7 = components\\macroRenderings\\umbraco.macroRenderings.csproj
+		SccProjectName7 = components/macroRenderings
+		SccLocalPath7 = components\\macroRenderings
+		SccProjectUniqueName8 = umbraco\\presentation\\umbraco.presentation.csproj
+		SccProjectName8 = umbraco/presentation
+		SccLocalPath8 = umbraco\\presentation
+		SccProjectUniqueName9 = components\\standardFormhandlers\\umbraco.standardFormhandlers.csproj
+		SccProjectName9 = components/standardFormhandlers
+		SccLocalPath9 = components\\standardFormhandlers
+		SccProjectUniqueName10 = umbraco\\presentation\\webservices\\umbraco.webservices.csproj
+		SccProjectName10 = umbraco/presentation/webservices
+		SccLocalPath10 = umbraco\\presentation\\webservices
+	EndGlobalSection
+EndGlobal
