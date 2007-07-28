@@ -62,14 +62,25 @@ namespace System.Windows.Controls {
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
 			ImageSource source = Source;
+			if (source == null)
+				return new Size(0, 0);
 			try {
-				if (source == null || source.Width == 0 || source.Height == 0)
-					return new Size(0, 0);
+				Stretch stretch = Stretch;
+				if (stretch == Stretch.None)
+					return new Size(source.Width, source.Height);
+				if (stretch == Stretch.Fill)
+					return finalSize;
+				double width_ratio = finalSize.Width / source.Width;
+				double height_ratio = finalSize.Height / source.Height;
+				double ratio;
+				if (stretch == Stretch.UniformToFill)
+					ratio = Math.Max(width_ratio, height_ratio);
+				else
+					ratio = Math.Min(width_ratio, height_ratio);
+				return new Size(source.Width * ratio, source.Height * ratio);
 			} catch {
 				return new Size(0, 0);
 			}
-			//WDTDH
-			return finalSize;
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
