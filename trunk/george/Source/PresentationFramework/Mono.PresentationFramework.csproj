@@ -101,6 +101,9 @@
     <Compile Include="System.Windows.Controls\TabControl.cs" />
     <Compile Include="System.Windows.Controls\TabItem trivial things.cs" />
     <Compile Include="System.Windows.Controls\TabItem.cs" />
+    <Compile Include="System.Windows.Controls\Viewbox.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="System.Windows.Controls\WrapPanel.cs" />
     <Compile Include="System.Windows.Data\CollectionView.cs" />
     <Compile Include="Theme.cs" />
