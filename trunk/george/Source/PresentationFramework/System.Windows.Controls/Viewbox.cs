@@ -51,9 +51,7 @@ namespace System.Windows.Controls {
 		}
 
 		protected override int VisualChildrenCount {
-			get {
-				return base.VisualChildrenCount;
-			}
+			get { return 1; }
 		}
 		#endregion
 
