@@ -11,7 +11,7 @@ namespace ViewboxCode
 	{
         System.Windows.Controls.Canvas myCanvas;
 		System.Windows.Window mainWindow;
-        System.Windows.Controls.Viewbox myViewbox;
+        Mono.System.Windows.Controls.Viewbox myViewbox;
         System.Windows.Controls.Grid myGrid;
         System.Windows.Controls.TextBlock myTextBlock;
         System.Windows.Shapes.Ellipse myEllipse;
@@ -35,7 +35,7 @@ namespace ViewboxCode
             
             
             // Create a Viewbox and add it to the Canvas
-            myViewbox = new Viewbox();
+            myViewbox = new Mono.System.Windows.Controls.Viewbox();
             myViewbox.StretchDirection = StretchDirection.Both;
             myViewbox.Stretch = Stretch.Fill;
             myViewbox.MaxWidth = 400;
