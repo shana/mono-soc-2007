@@ -1,5 +1,6 @@
 //#define PropertyGrid
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,11 +9,16 @@ using System.Windows.Media;
 using System.Text;
 namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 	class VisualStructureViewerWindow : Window {
+		string xaml_file_name = Path.Combine(System.Windows.Forms.Application.UserAppDataPath, "XAML.xaml");
+		TextBox xaml_text_box = new TextBox();
+
 		public VisualStructureViewerWindow() {
 			Title = "Visual structure viewer";
 
-			TextBox xaml_text_box = new TextBox();
-			xaml_text_box.Text = @"<theme:ScrollChrome xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:theme=""clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"" theme:ScrollGlyph=""DownArrow"" Width=""100"" Height=""100""/>";
+			if (File.Exists(xaml_file_name))
+				xaml_text_box.Text = new StreamReader(xaml_file_name).ReadToEnd();
+			else
+				xaml_text_box.Text = @"<theme:ScrollChrome xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:theme=""clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"" theme:ScrollGlyph=""DownArrow"" Width=""100"" Height=""100""/>";
 			xaml_text_box.TextWrapping = TextWrapping.Wrap;
 			Label xaml_label = new Label("_XAML", xaml_text_box);
 			DockPanel xaml_panel = new DockPanel();
@@ -76,6 +82,13 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			splitter.Width = 10;
 			contents.Children.Add(splitter);
 			Content = contents;
+		}
+
+		protected override void OnClosing(CancelEventArgs e) {
+			base.OnClosing(e);
+			StreamWriter stream_writer = new StreamWriter(xaml_file_name);
+			stream_writer.Write(xaml_text_box.Text);
+			stream_writer.Close();
 		}
 	}
 }
