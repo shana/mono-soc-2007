@@ -61,43 +61,47 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
-			if (Source == null)
+			ImageSource source = Source;
+			try {
+				if (source == null || source.Width == 0 || source.Height == 0)
+					return new Size(0, 0);
+			} catch {
 				return new Size(0, 0);
+			}
 			//WDTDH
 			return finalSize;
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
 			ImageSource source = Source;
-			
-			//FIXME:
-			if (source is BitmapImage)
-				return new Size(0, 0);
-			
 			if (source == null)
 				return new Size(0, 0);
-			Stretch stretch = Stretch;
-			if (stretch == Stretch.None)
-				return new Size(source.Width, source.Height);
-			if (stretch == Stretch.Fill && !double.IsPositiveInfinity(availableSize.Width) && !double.IsPositiveInfinity(availableSize.Height))
-				return availableSize;
-			double width_ratio = double.IsPositiveInfinity(availableSize.Width) ? double.NaN : availableSize.Width / source.Width;
-			double height_ratio = double.IsPositiveInfinity(availableSize.Height) ? double.NaN : availableSize.Height / source.Height;
-			double ratio;
-			if (double.IsNaN(width_ratio))
-				if (double.IsNaN(height_ratio))
-					ratio = 1;
-				else
-					ratio = height_ratio;
-			else
-				if (double.IsNaN(height_ratio))
-					ratio = width_ratio;
-				else
-					if (stretch == Stretch.UniformToFill)
-						ratio = Math.Max(width_ratio, height_ratio);
+			try {
+				Stretch stretch = Stretch;
+				if (stretch == Stretch.None)
+					return new Size(source.Width, source.Height);
+				if (stretch == Stretch.Fill && !double.IsPositiveInfinity(availableSize.Width) && !double.IsPositiveInfinity(availableSize.Height))
+					return availableSize;
+				double width_ratio = double.IsPositiveInfinity(availableSize.Width) ? double.NaN : availableSize.Width / source.Width;
+				double height_ratio = double.IsPositiveInfinity(availableSize.Height) ? double.NaN : availableSize.Height / source.Height;
+				double ratio;
+				if (double.IsNaN(width_ratio))
+					if (double.IsNaN(height_ratio))
+						ratio = 1;
 					else
-						ratio = Math.Min(width_ratio, height_ratio);
-			return new Size(source.Width * ratio, source.Height * ratio);
+						ratio = height_ratio;
+				else
+					if (double.IsNaN(height_ratio))
+						ratio = width_ratio;
+					else
+						if (stretch == Stretch.UniformToFill)
+							ratio = Math.Max(width_ratio, height_ratio);
+						else
+							ratio = Math.Min(width_ratio, height_ratio);
+				return new Size(source.Width * ratio, source.Height * ratio);
+			} catch {
+				return new Size(0, 0);
+			}
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer() {
