@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<fontConfig>
+	<fonts>
+		<font filename="n019003t">Nimbus Regular</font>
+	</fonts>
+	<sizes>
+		<size>10</size>
+		<size>12</size>
+		<size>14</size>
+		<size>18</size>
+		<size>24</size>
+		<size>36</size>
+		<size>48</size>
+		<size>64</size>
+		<size>72</size>
+	</sizes>
+	<colors>
+		<color>000000</color>
+		<color>999999</color>
+		<color>FFFFFF</color>
+		<color>ffcc33</color>
+	</colors>
+	<bgcolors>
+		<color>000000</color>
+		<color>FFFFFF</color>
+	</bgcolors>
+</fontConfig>

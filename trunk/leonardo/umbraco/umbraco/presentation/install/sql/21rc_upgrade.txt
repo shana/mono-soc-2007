@@ -1,0 +1,21 @@
+alter TABLE [umbracoRelationType] 
+add [alias] [nvarchar] (100) NULL
+|
+
+alter TABLE [umbracoStatSession] 
+add [visitorId] [char] (36) NULL
+|
+
+alter TABLE [umbracoStatSession] 
+add [browserType] [nvarchar] (255) NULL
+|
+
+alter TABLE [umbracoStatSession] 
+add [isHuman] [bit] NULL DEFAULT (0)
+|
+
+update umbracoStatSession set isHuman = 1 where not userAgent like '%bot%' or browser != 'unknown'
+
+alter TABLE [cmsMacro]
+add [macroDontRender] [bit] NOT NULL CONSTRAINT
+[DF_cmsMacro_macroDontRender] DEFAULT (0)

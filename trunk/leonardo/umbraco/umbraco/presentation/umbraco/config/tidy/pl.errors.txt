@@ -1,0 +1,4 @@
+line 1 column 1 - Warning: inserting missing 'title' element
+line 1 column 1 - Warning: missing </h1> before <p>
+line 1 column 23 - Warning: discarding unexpected </h1>
+lumn 18 - Warning: discarding unexpected </h1>
