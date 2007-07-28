@@ -1,5 +1,9 @@
 2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* ViewBox.cs: Added.
+
+2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* HeaderedContentControl.cs: Added.
 
 2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
