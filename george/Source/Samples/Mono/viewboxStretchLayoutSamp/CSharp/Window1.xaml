@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Viewbox_Stretch_Layout_Samp.Window1"
-    Title="ViewBox Stretch and StretchDirection Sample">
+    Title="ViewBox Stretch and StretchDirection Sample"
+    xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework">
 
 	<DockPanel Background="White">
 	
@@ -25,9 +26,9 @@
         <TextBlock DockPanel.Dock="Top" Name="txt2" />
         
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Viewbox MaxWidth="500" MaxHeight="500" Name="vb1">
+            <mono_sytem_windows_controls:Viewbox MaxWidth="500" MaxHeight="500" Name="vb1">
                 <Image Source="tulip_farm.jpg"/>
-            </Viewbox>    
+            </mono_sytem_windows_controls:Viewbox>    
         </StackPanel>
 	</DockPanel>
 </Window>
