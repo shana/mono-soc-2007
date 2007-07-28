@@ -70,6 +70,11 @@ namespace Mono.WindowsPresentationFoundation.VisualStructureViewer {
 			contents.Children.Add(structure_viewer_panel);
 			Grid.SetRow(view_button, 1);
 			contents.Children.Add(view_button);
+			GridSplitter splitter = new GridSplitter();
+			splitter.HorizontalAlignment = HorizontalAlignment.Right;
+			splitter.VerticalAlignment = VerticalAlignment.Stretch;
+			splitter.Width = 10;
+			contents.Children.Add(splitter);
 			Content = contents;
 		}
 	}
