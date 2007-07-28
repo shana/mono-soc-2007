@@ -54,6 +54,7 @@
     <Compile Include="Test\System.Windows.Controls.Primitives\ButtonBaseTest.cs" />
     <None Include="Test\System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="Test\System.Windows.Controls\ChangeLog" />
+    <Compile Include="Test\System.Windows.Controls\HeaderedContentControlTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ImageTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ItemContainerGeneratorTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\GeneratorPositionTest.cs" />
