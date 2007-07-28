@@ -482,5 +482,29 @@ namespace System.Windows.Controls {
 			w.Show();
 			Assert.AreEqual(image.ActualWidth, 34, "2");
 		}
+
+		[Test]
+		public void ImageFailed() {
+			BitmapImage bitmap_image = new BitmapImage();
+			bitmap_image.BeginInit();
+			Assert.IsFalse(File.Exists("Nonexistent"), "1");
+			bitmap_image.UriSource = new Uri("Nonexistent", UriKind.Relative);
+			bitmap_image.EndInit();
+			Image image = new Image();
+			int calls = 0;
+			image.ImageFailed += delegate(object sender, ExceptionRoutedEventArgs e) {
+				calls++;
+			};
+			image.Source = bitmap_image;
+			image.Stretch = Stretch.None;
+			Window w = new Window();
+			w.Content = image;
+			Assert.AreEqual(calls, 0, "1");
+			w.Show();
+			Assert.AreEqual(calls, 1, "2");
+			Assert.AreEqual(image.ActualWidth, 0, "3");
+		}
+
+		
 	}
 }
