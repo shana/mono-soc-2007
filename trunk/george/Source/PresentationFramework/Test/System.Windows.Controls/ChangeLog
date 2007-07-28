@@ -1,3 +1,8 @@
+2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ImageTest.cs: Added more tests.
+	* Test.png: Added.
+
 2007-07-26  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ImageTest.cs: Added more MeasureOverride tests.
