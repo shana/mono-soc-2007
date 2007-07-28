@@ -1,0 +1,13 @@
+doctype: omit
+alt-text: 
+tidy-mark: no
+word-2000: yes
+clean: yes
+drop-font-tags: yes
+indent: no
+indent-spaces: 2
+wrap: 72
+markup: yes
+output-xml: yes
+
+

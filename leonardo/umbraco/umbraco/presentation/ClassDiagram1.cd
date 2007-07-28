@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="umbraco.presentation.nodeFactory.Node">
+    <Position X="3" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>umbraco\pageFactory\Page.cs</FileName>
+      <HashCode>MACSIAAAEaACMALAABFEQAQUAAAAIIAAIAABAAECgAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Field Name="_children" Hidden="true" />
+      <Field Name="_createDate" Hidden="true" />
+      <Field Name="_creatorName" Hidden="true" />
+      <Field Name="_id" Hidden="true" />
+      <Field Name="_initialized" Hidden="true" />
+      <Field Name="_name" Hidden="true" />
+      <Field Name="_nodeTypeAlias" Hidden="true" />
+      <Field Name="_pageXmlNode" Hidden="true" />
+      <Field Name="_parent" Hidden="true" />
+      <Field Name="_path" Hidden="true" />
+      <Field Name="_properties" Hidden="true" />
+      <Field Name="_template" Hidden="true" />
+      <Field Name="_updateDate" Hidden="true" />
+      <Field Name="_version" Hidden="true" />
+      <Field Name="_writerName" Hidden="true" />
+      <Method Name="initialize" Hidden="true" />
+      <Method Name="initializeStructure" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="umbraco.presentation.nodeFactory.Property">
+    <Position X="3" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>umbraco\pageFactory\Page.cs</FileName>
+      <HashCode>IBAAAAAAAAIAIAAAAAAAAAAAAAAAAAAAAAAgAAAQAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Field Name="_alias" Hidden="true" />
+      <Field Name="_value" Hidden="true" />
+      <Field Name="_version" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="umbraco.library">
+    <Position X="0.5" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <FileName>library.cs</FileName>
+      <HashCode>GSgbAAMJFADBd8igAIAAE1SIMEBg+CQWCiCCABomsaA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Field Name="_page" Hidden="true" />
+      <Field Name="_xmlChangeFile" Hidden="true" />
+      <Method Name="generateXmlDocument" Hidden="true" />
+      <Field Name="IsPublishing" Hidden="true" />
+      <Method Name="niceUrlDo" Hidden="true" />
+      <Field Name="nodeRepublishCounter" Hidden="true" />
+      <Field Name="nodes" Hidden="true" />
+      <Field Name="NodesPublished" Hidden="true" />
+      <Field Name="parents" Hidden="true" />
+      <Field Name="PublishStart" Hidden="true" />
+      <Field Name="umbContent" Hidden="true" />
+      <Method Name="XmlChanged" Hidden="true" />
+    </Members>
+  </Class>
+</ClassDiagram>

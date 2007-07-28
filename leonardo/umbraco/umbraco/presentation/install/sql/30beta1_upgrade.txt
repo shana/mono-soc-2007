@@ -1,0 +1,9 @@
+
+set identity_insert umbracoNode on
+insert into umbracoNode
+(id, trashed, parentID, nodeUser, level, path, sortOrder, uniqueID, text, nodeObjectType)
+values
+(-20, 0, -1, 0, 0, '-1,-20', 0, '0F582A79-1E41-4CF0-BFA0-76340651891A', 'Recycle Bin', '01BB7FF2-24DC-4C0C-95A2-C24EF72BBAC8')
+set identity_insert umbracoNode off
+|
+ALTER TABLE cmsDataTypePreValues ALTER COLUMN value NVARCHAR(2500) NULL

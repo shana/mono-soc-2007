@@ -1,0 +1,3 @@
+alter TABLE [cmsDocument]
+add [newest] [bit] NOT NULL CONSTRAINT
+[DF_cmsDocument_newest] DEFAULT (0)

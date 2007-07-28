@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<language alias="da" intName="Danish" localName="Dansk" lcid="" culture="da-DK">
+	<area alias="main">
+		<key alias="sections">Sektioner</key>
+		<key alias="dashboard">Skrivebord</key>
+		<key alias="tree">Indhold</key>
+	</area>
+	<area alias="defaultdialogs">
+		<key alias="link">Link</key>
+		<key alias="insertlink">Indsæt link</key>
+		<key alias="insertgraphicheadline">Indsæt grafisk overskrift</key>
+		<key alias="linknewwindow">Åben i nyt vindue?</key>
+		<key alias="linkinternal">Internt link:</key>
+		<key alias="linklocaltip">Ved lokalt link, indsæt da en "#" foran linket</key>
+		<key alias="insertimage">Indsæt billede</key>
+		<key alias="treepicker">Vælg punkt</key>
+		<key alias="confirmdelete">Er du sikker på at du vil slette</key>
+		<key alias="confirmlogout">Er du sikker på at du vil forlade umbraco?</key>
+		<key alias="insertAnchor">Indsæt lokalt link</key>
+		<key alias="anchorInsert">Navn på lokalt link</key>
+		<key alias="insertMacro">Indsæt makro</key>
+		<key alias="inserttable">Indsæt tabel</key>
+		<key alias="tableColumns">Antal kolonner</key>
+		<key alias="tableRows">Antal rækker</key>
+		<key alias="paste">Indsæt tekst</key>		
+		<key alias="assignDomain">Rediger domæner</key>
+		<key alias="confirmSure">Er du sikker?</key>
+		<key alias="requiredField">Obligatorisk</key>
+		<key alias="lastEdited">Sidst redigeret</key>
+		<key alias="siterepublished">Siten er nu genudgivet</key>
+		<key alias="editdictionary">Rediger ordbogs nøgle</key>
+		<key alias="editlanguage">Rediger sprog</key>
+		<key alias="viewCacheItem">Se Cache Item</key>
+	</area>
+	
+	<area alias="general">
+		<key alias="properties">Egenskaber</key>
+		<key alias="elements">Elementer</key>
+		<key alias="new">Ny</key>
+		<key alias="add">Tilføj</key>
+		<key alias="rename">Omdøb</key>
+		<key alias="open">Åben</key>
+		<key alias="edit">Rediger</key>
+		<key alias="close">Luk</key>
+		<key alias="create">Opret</key>
+		<key alias="delete">Slet</key>
+		<key alias="sort">Sortér</key>
+		<key alias="move">Flyt</key>
+		<key alias="copy">Kopiér</key>
+		<key alias="rename">Omdøb</key>
+		<key alias="logoff">Log af</key>
+		<key alias="rights">Rettigheder</key>
+		<key alias="choose">Vælg</key>
+		<key alias="alias">Alias</key>
+		<key alias="name">Navn</key>
+		<key alias="icon">Ikon</key>
+		<key alias="default">Standard</key>
+		<key alias="type">Type</key>
+		<key alias="yes">Ja</key>
+		<key alias="no">Nej</key>
+		<key alias="ok">OK</key>
+		<key alias="update">Opdatér</key>
+		<key alias="cancel">Fortryd</key>
+		<key alias="macro">Makro</key>
+		<key alias="insert">Indsæt</key>
+		<key alias="size">Størrelse</key>
+		<key alias="layout">Layout</key>
+		<key alias="design">Design</key>
+		<key alias="width">Bredde</key>
+		<key alias="height">Højde</key>
+		<key alias="justify">Justering</key>
+		<key alias="innerMargin">Indre margen</key>
+		<key alias="cellMargin">Celle margen</key>
+		<key alias="border">Kant</key>
+		<key alias="pleasewait">Et øjeblik...</key>
+		<key alias="areyousure">Er du sikker?</key>
+		<key alias="error">Fejl</key>
+		<key alias="username">Brugernavn</key>
+		<key alias="password">Kodeord</key>
+		<key alias="login">Login</key>
+		<key alias="welcome">Velkommen...</key>
+		<key alias="language">Sprog</key>
+		<key alias="closewindow">Luk vindue</key>
+		<key alias="deleted">Slettet</key>
+		<key alias="edited">Redigeret</key>
+		<key alias="styles">Styles</key>
+		<key alias="of">af</key>
+		<key alias="about">Om</key>
+		<key alias="help">Hjælp</key>
+		<key alias="logout">Log ud</key>
+		<key alias="findDocument">Find</key>
+		<key alias="continue">Fortsæt</key>
+		<key alias="value">Værdi</key>
+		<key alias="reciept">Email der skal modtage indhold af formular</key>
+		<key alias="showPageOnSend">Hvilken side skal vises efter at formularen er sendt</key>
+	</area>
+	<area alias="dashboard">
+		<key alias="welcome">Velkommen</key>
+		<key alias="openinnew">er åbnet i nyt vindue</key>
+		<key alias="nothinghappens">Hvis umbraco ikke starter, kan det skyldes at ikke tillader pop-up vinduer</key>
+		<key alias="restart">Genstart</key>
+		<key alias="browser">Til dit website</key>
+		<key alias="visit">Besøg</key>
+	</area>
+	<area alias="sections">
+		<key alias="content">Indhold</key>
+		<key alias="media">Mediearkiv</key>
+		<key alias="member">Medlemmer</key>
+		<key alias="newsletters">Nyhedsbreve</key>
+		<key alias="users">Brugere</key>
+		<key alias="settings">Indstillinger</key>
+		<key alias="developer">Developer</key>
+		<key alias="statistics">Statistik</key>
+	</area>
+	<area alias="buttons">
+		<key alias="save">Gem</key>
+		<key alias="saveAndPublish">Gem og udgiv</key>
+		<key alias="saveToPublish">Gem og send til udgivelse</key>
+		<key alias="htmlEdit">Redigér Html</key>
+		<key alias="relations">Redigér relationer</key>
+		<key alias="showPage">Se siden</key>
+		<key alias="styleChoose">Vælg formattering</key>
+		<key alias="styleShow">Vis koder</key>
+		<key alias="bold">Fed</key>
+		<key alias="italic">Kursiv</key>
+		<key alias="graphicHeadline">Indsæt grafisk overskrift</key>
+		<key alias="justifyLeft">Venstrestil afsnit</key>
+		<key alias="justifyCenter">Centrér</key>
+		<key alias="justifyRight">Højrestil afsnit</key>
+		<key alias="listBullet">Punktopstilling</key>
+		<key alias="listNumeric">Nummerorden</key>
+		<key alias="indent">Indryk afsnit</key>
+		<key alias="deindent">Fortryd indryk afsnit</key>
+		<key alias="linkInsert">Indsæt link</key>
+		<key alias="linkLocal">Indsæt lokaltlink (anker)</key>
+		<key alias="pictureInsert">Indsæt billede</key>
+		<key alias="macroInsert">Indsæt makro</key>
+		<key alias="tableInsert">Indsæt tabel</key>
+		<key alias="formFieldInsert">Indsæt formularfelt</key>
+	</area>
+	<area alias="content">
+		<key alias="about">Om siden</key>
+		<key alias="nodeName">Sidetitel</key>
+		<key alias="alias">Alternativ link</key>
+		<key alias="createDate">Oprettet den</key>
+		<key alias="createBy">Oprettet af</key>
+		<key alias="updateDate">Sidst redigeret</key>
+		<key alias="lastPublished">Sidst udgivet</key>
+		<key alias="type">Type</key>
+		<key alias="statistics">Statistik</key>
+		<key alias="releaseDate">Udgivelsesdato</key>
+		<key alias="expireDate">Nedtagningsdato</key>
+		<key alias="publish">Udgivet</key>
+		<key alias="otherElements">Egenskaber</key>
+		<key alias="editing">Redigerer</key>
+		<key alias="itemNotPublished">Dette punkt er endnu ikke udgivet</key>
+		<key alias="itemChanged">Dette punkt er ændret siden udgivelsen</key>
+		<key alias="clickToEdit">Klik på musen for at redigere dette punkt</key>
+		<key alias="documentType">Dokumenttype</key>
+		<key alias="urls">Link til dokument</key>
+		<key alias="alternativeUrls">Alternative links</key>
+		<key alias="unPublish">Fortryd udgivelse</key>
+		<key alias="publishStatus">Udgivelses status</key>
+		<key alias="parentNotPublished">Dette dokument er udgivet, men ikke synligt da den ovenliggende side '%0%' ikke er udgivet!</key>
+		<key alias="uploadClear">Fjern fil</key>
+	</area>
+	<area alias="user">
+		<key alias="username">Brugernavn</key>
+		<key alias="loginname">Login</key>
+		<key alias="password">Kodeord</key>
+		<key alias="usertype">Brugertype</key>
+		<key alias="language">Sprog</key>
+		<key alias="startnode">Start node</key>
+		<key alias="modules">Moduler</key>
+		<key alias="administrators">Administrator</key>
+		<key alias="editors">Redaktør</key>
+		<key alias="writer">Forfatter</key>
+		<key alias="noConsole">Deaktivér adgang til umbraco</key>
+		<key alias="disabled">Deaktivér User</key>
+	</area>
+	<area alias="settings">
+		<key alias="nodetype">Nodetype</key>
+		<key alias="tab">Faneblad</key>
+		<key alias="tabs">Faneblade</key>
+		<key alias="tabname">Titel på faneblad</key>
+		<key alias="objecttype">Type</key>
+		<key alias="defaulttemplate">Standard skabelon</key>
+		<key alias="newtabname">Ny titel på faneblad</key>
+	</area>
+	<area alias="graphicheadline">
+		<key alias="bold">Fed</key>
+		<key alias="text">Tekst</key>
+		<key alias="font">Skrifttype</key>
+		<key alias="color">Tekst farve</key>
+		<key alias="backgroundcolor">Baggrundsfarve</key>
+	</area>
+	<area alias="update">
+		<key alias="updateAvailable">Ny opdatering er klar</key>
+		<key alias="updateDownloadText">%0% er klar, klik her for at downloade</key>
+		<key alias="updateNoServer">Ingen forbindelse til server</key>
+		<key alias="updateNoServerError">Der kunne ikke tjekkes for ny opdatering. Se trace for mere info.</key>
+	</area>
+	<area alias="actions">
+		<key alias="create">Opret</key>
+		<key alias="move">Flyt</key>
+		<key alias="copy">Kopier</key>
+		<key alias="delete">Slet</key>
+		<key alias="sort">Sortér</key>
+		<key alias="publish">Udgiv</key>
+		<key alias="toPublish">Send til udgivelse</key>
+		<key alias="rights">Rettigheder</key>
+		<key alias="protect">Offentlig adgang</key>
+		<key alias="refreshNode">Genindlæs noder</key>
+		<key alias="update">Opdatér</key>
+		<key alias="notify">Notificeringer</key>
+		<key alias="logout">Luk umbraco</key>
+		<key alias="republish">Genudgiv hele siten</key>
+		<key alias="assignDomain">Tilføj domæne</key>
+		<key alias="auditTrail" version="2.1">Audit Trail</key>
+	</area>
+	<area alias="errors">
+		<key alias="startNodeDoesNotExists">Startnode er slettet kontakt systemadministrator</key>
+		<key alias="stylesNoStylesOnPage">Der er ingen aktive styles eller formatteringer på denne side</key>
+		<key alias="stylesMustMarkBeforeSelect">Du skal markere noget indhold før du kan ændre stylen</key>
+		<key alias="pictureResizeBiggerThanOrg">Du er ved at gøre billedet størrere end originalen. Det vil forringe kvaliteten af billedet, ønsker du at fortsætte?</key>
+		<key alias="tableColMergeLeft">Du skal stå til venstre for de 2 celler du ønsker at samle!</key>
+		<key alias="tableSplitNotSplittable">Du kan ikke opdele en celle, som ikke allerede er delt.</key>
+		<key alias="missingType">Du skal vælge en type</key>
+		<key alias="missingTitle">Du skal skrive en titel</key>
+		<key alias="xsltErrorHeader">Fejl i xslt kode</key>
+		<key alias="xsltErrorText">Din xslt er ikke opdateret, da det indeholdt en fejl</key>
+		<key alias="contentTypeAliasAndNameNotNull">Du skal udfylde både Alias &amp; Navn på den nye egenskabstype!</key>
+	</area>
+	<area alias="speechBubbles">
+		<key alias="xsltSavedHeader">Xslt gemt</key>
+		<key alias="xsltSavedText">Der var ingen fejl i din xslt!</key>
+		<key alias="contentTypeSavedHeader">Indholdstype gemt</key>
+		<key alias="contentTypeTabCreated">Du har oprettet et faneblad</key>
+		<key alias="contentTypeTabDeleted">Faneblad slettet</key>
+		<key alias="contentTypeTabDeletedText">Faneblad med id: %0% slettet</key>
+		<key alias="contentTypePropertyTypeCreated">Egenskabstype oprettet</key>
+		<key alias="contentTypePropertyTypeCreatedText">Navn: %0% &lt;br /&gt; DataType: %1%</key>		
+		<key alias="contentTypePropertyTypeDeleted">Egenskabs type slettet</key>
+		<key alias="dataTypeSaved">Datatype gemt</key>
+		<key alias="editContentSavedHeader">Indhold gemt</key>
+		<key alias="editContentSavedText">Husk at publisere for at gøre det synligt for besøgende</key>
+		<key alias="editContentPublishedHeader">Indhold publiseret</key>
+		<key alias="editContentPublishedText">og nu synligt for besøgende</key>
+		<key alias="editMemberSaved">Medlem gemt</key>
+		<key alias="editTemplateSaved">Template gemt</key>
+		<key alias="editStylesheetSaved">Stylesheet gemt</key>
+		<key alias="editStylesheetPropertySaved">Stylesheetegenskab gemt</key>
+		<key alias="editUserSaved">Bruger gemt</key>
+	</area>
+	<area alias="headers">
+		<key alias="page">Side</key>
+	</area>
+	<area alias="paste">
+		<key alias="errorMessage">Den tekst du er ved at indsætte indeholder specialtegn eller formattering. Dette kan skyldes at du kopierer fra f.eks. Microsoft Word. umbraco kan fjerne denne specialformattering automatisk så indholdet er mere velegnet til visning på en webside.</key>
+		<key alias="removeSpecialFormatting">Indsæt, men fjern formattering som ikke bør være på en webside (Anbefales)</key>
+		<key alias="removeAll">Indsæt som ren tekst, dvs. fjern al formattering</key>
+		<key alias="doNothing">Indsæt med fuld formattering (Anbefales ikke)</key>
+	</area>
+	<area alias="assignDomain">
+		<key alias="domain">Domæmne</key>
+		<key alias="addNew">Tilføj nyt domæne</key>
+		<key alias="orEdit">eller rediger nuværende domæner</key>
+		<key alias="domainDeleted">Domænet '%0%' er nu slettet</key>
+		<key alias="domainCreated">Domænet '%0%' er nu oprettet og tilknyttet siden</key>
+		<key alias="domainUpdated">Domænet '%0%' er nu opdateret</key>
+	</area>
+	<area alias="publish">
+		<key alias="publishAll">Publisér alle undersider</key>
+		<key alias="nodePublish">%0% er nu publiseret</key>
+		<key alias="nodePublishAll">%0% og alle undersider er nu publiseret</key>
+		<key alias="inProgress">Publiserer - vent venligst...</key>
+	</area>
+	<area alias="moveOrCopy">
+		<key alias="moveTo">Flyt til</key>
+		<key alias="copyTo">Kopier til</key>
+		<key alias="choose">Vælg siden ovenover...</key>
+		<key alias="notAllowedByContentType">Den nuværende node kan ikke ligges under denne pga. dens type</key>
+		<key alias="notAllowedByPath">Den nuværende node kan ikke ligge under en af dens undersider</key>
+		<key alias="moveDone">%0% er nu flyttet til %1%</key>
+		<key alias="copyDone">%0% er nu kopieret til %1%</key>
+	</area>
+	<area alias="login">
+		<key alias="topText">Velkommen til umbraco, indtast dit brugernavn og kodeord:</key>
+		<key alias="bottomText"><![CDATA[<p style="text-align:right;">&copy; 2001 - %0% <br /><a href="http://umbraco.org" style="text-decoration: none" target="_blank">umbraco.org</a></p> ]]></key>
+	</area>
+	<area alias="stylesheet">
+		<key alias="editstylesheet">Rediger stylesheet</key>
+		<key alias="styles">Styles</key>
+	</area>
+	<area alias="editcontenttype">
+		<key alias="newtab">Ny fane</key>
+		<key alias="create">Opret</key>
+		<key alias="allowedchildnodetypes">Tilladte typer</key>
+		<key alias="tab">Fane</key>
+		<key alias="deletetab">Slet fane</key>
+	</area>
+	<area alias="template">
+		<key alias="template">Skabelon</key>
+		<key alias="mastertemplate">Master skabelon</key>
+		<key alias="edittemplate">Rediger skabelon</key>
+	</area>
+	<area alias="language">
+		<key alias="cultureCode">Culture Code</key>
+		<key alias="displayName">Culture Name</key>
+	</area>
+	<area alias="templateEditor">
+		<key alias="chooseField">Felt som skal indsættes</key>
+		<key alias="alternativeField">Alternativt felt</key>
+		<key alias="usedIfEmpty">Dette felt vil blive brugt hvis ovenstående felt er tomt</key>
+		<key alias="usedIfAllEmpty">Denne tekst vil blive brugt hvis ovenstående felter er tomme</key>
+		<key alias="alternativeText">Alternativ tekst</key>
+		<key alias="recursive">Rekursivt</key>
+		<key alias="preContent">Indsæt før felt</key>
+		<key alias="postContent">Indsæt efter felt</key>
+		<key alias="insertedBefore">Denne tekst vil blive sat ind lige før værdien af feltet</key>
+		<key alias="insertedAfter">Denne tekst vil blive sat ind lige efter værdien af feltet</key>
+		<key alias="formatAsDate">Formatér som dato</key>
+		<key alias="dateOnly">Ja, kun dato</key>
+		<key alias="withTime">Ja, med klokkeslet. Dato/tid separator: </key>
+		<key alias="casing">Casing</key>
+		<key alias="none">Ingen</key>
+		<key alias="lowercase">Lowercase</key>
+		<key alias="uppercase">Uppercase</key>
+		<key alias="urlEncode">URL encode</key>
+		<key alias="urlEncodeHelp">Hvis indholdet af felterne skal sendes til en url, skal denne slåes til så specialtegn formateres</key>
+		<key alias="convertLineBreaks">Konvertér linieskift</key>
+		<key alias="convertLineBreaksHelp">Erstatter et linieskift med html-tag'et &amp;lt;br&amp;gt;</key>
+		<key alias="removeParagraph">Fjern paragraf-tags</key>
+		<key alias="removeParagraphHelp">Fjerner eventuelle &amp;lt;P&amp;gt; omkring teksten</key>
+	</area>
+	<area alias="create">
+		<key alias="createUnder">Opret under</key>
+		<key alias="chooseNode">Hvor ønsker du at oprette den nye %0%</key>
+		<key alias="updateData">Vælg en type og skriv en titel</key>
+	</area>
+	<area alias="errorHandling" version="2.1">
+		<key alias="errorHeader" version="2.1">Der var fejl i dokumentet:</key>
+		<key alias="errorHeaderWithoutTab" version="2.1">Der var fejl i formularen:</key>
+		<key alias="errorMandatory" version="2.1">%0% under %1% er et obligatorisk felt og skal udfyldes</key>
+		<key alias="errorMandatoryWithoutTab" version="2.1">%0% er et obligatorisk felt og skal udfyldes</key>
+		<key alias="errorRegExp" version="2.1">%0% under %1% er ikke i et korrekt format</key>
+		<key alias="errorRegExpWithoutTab" version="2.1">%0% er ikke i et korrekt format</key>
+	</area>
+	<area alias="notifications" version="2.1">
+		<key alias="notifications" version="2.1">Notificeringer</key>
+		<key alias="editNotifications" version="2.1">Rediger dine notificeringer for %0%</key>
+		<key alias="mailSubject" version="2.1">[%0%] Notificering om %1% udført på %2%</key>
+		<key alias="mailBody" version="2.1">
+Hej %0%
+
+Dette er en automatisk mail for at fortælle at handlingen '%1%'
+er blevet udført på siden '%2%'
+af brugeren '%3%'
+		
+Gå til http://%4%/umbraco/default.aspx?section=content&amp;id=%5% for at redigere.
+	
+Ha' en dejlig dag!
+		
+Mange hilsner fra umbraco robotten
+		</key>
+	</area>
+</language>
