@@ -1,6 +1,8 @@
 using NUnit.Framework;
+using System.IO;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 #if Implementation
 using System;
 using System.Windows;
@@ -432,5 +434,53 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		[Test]
+		public void BitmapImageUriKindRelativeOrAbsolute() {
+			BitmapImage bitmap_image = new BitmapImage();
+			bitmap_image.BeginInit();
+			Assert.IsTrue(File.Exists("Test.png"), "1");
+			bitmap_image.UriSource = new Uri("/Test.png", UriKind.RelativeOrAbsolute);
+			bitmap_image.EndInit();
+			Image image = new Image();
+			image.Source = bitmap_image;
+			image.Stretch = Stretch.None;
+			Window w = new Window();
+			w.Content = image;
+			w.Show();
+			Assert.AreEqual(image.ActualWidth, 0, "2");
+		}
+
+		[Test]
+		public void BitmapImageUriKindRelative() {
+			BitmapImage bitmap_image = new BitmapImage();
+			bitmap_image.BeginInit();
+			Assert.IsTrue(File.Exists("Test.png"), "1");
+			bitmap_image.UriSource = new Uri("/Test.png", UriKind.Relative);
+			bitmap_image.EndInit();
+			Image image = new Image();
+			image.Source = bitmap_image;
+			image.Stretch = Stretch.None;
+			Window w = new Window();
+			w.Content = image;
+			w.Show();
+			Assert.AreEqual(image.ActualWidth, 0, "2");
+		}
+
+		[Test]
+		public void BitmapImageUriKindAbsolute() {
+			BitmapImage bitmap_image = new BitmapImage();
+			bitmap_image.BeginInit();
+			Assert.IsTrue(File.Exists("Test.png"), "1");
+			bitmap_image.UriSource = new Uri(Path.Combine(Environment.CurrentDirectory, "Test.png"), UriKind.Absolute);
+			bitmap_image.EndInit();
+			Image image = new Image();
+			image.Source = bitmap_image;
+			image.Stretch = Stretch.None;
+			Window w = new Window();
+			w.Content = image;
+			w.Show();
+			Assert.AreEqual(image.ActualWidth, 34, "2");
+		}
 	}
 }
