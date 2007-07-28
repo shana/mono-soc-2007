@@ -1,8 +1,0 @@
-alter TABLE [cmsContentType]
-add [thumbnail] nvarchar(255) NOT NULL CONSTRAINT
-[DF_cmsContentType_thumbnail] DEFAULT ('folder.png')
-|
-alter TABLE [cmsContentType]
-add [description] nvarchar(1500) NULL
-|
-ALTER TABLE umbracoLog ALTER COLUMN logComment NVARCHAR(4000) NULL
