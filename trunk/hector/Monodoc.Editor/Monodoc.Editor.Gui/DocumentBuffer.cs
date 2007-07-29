@@ -22,7 +22,6 @@ public class DocumentBuffer : TextBuffer {
 	public DocumentBuffer () : base (new DocumentTagTable ())
 	{
 		TagRemoved += OnRemoved;
-		DeleteRange += OnDelete;
 		document_loaded = false;
 	}
 
@@ -72,18 +71,32 @@ public class DocumentBuffer : TextBuffer {
 		}
 	}
 
+	protected override void OnDeleteRange (TextIter startIter, TextIter endIter)
+	{
+		Console.WriteLine ("DEBUG: Deleting range");
+		if (startIter.Offset == endIter.Offset)
+			Console.WriteLine ("DEBUG: Zero length range.");
+		Console.WriteLine ("DEBUG: Start Offset: {0} Char: {1}", startIter.Offset, startIter.Char);
+		Console.WriteLine ("DEBUG: End Offset: {0} Char: {1}", endIter.Offset, endIter.Char);
+
+		int startOffset = startIter.Offset;
+		int endOffset = endIter.Offset;
+
+		TextTag last = DocumentUtils.GetLastTag (startIter);
+		bool startsRegion = startIter.BeginsTag (last);
+		bool endsRegion = !endIter.HasTag (last);
+		base.OnDeleteRange (startIter, endIter);
+		
+		if (startsRegion && endsRegion) {
+			Console.WriteLine ("Deleting whole editing region");
+			TextIter insertIter = GetIterAtOffset (startOffset);
+			InsertWithTags (ref insertIter, "Insert documentation", last);
+		}
+	}
+
 	private void OnRemoved (object o, TagRemovedArgs args)
 	{
 		Console.WriteLine ("DEBUG: Deleting Tag {0}", args.Tag.Name);
-	}
-
-	private void OnDelete (object o, DeleteRangeArgs args)
-	{
-		Console.WriteLine ("DEBUG: Deleting range");
-		if (args.Start.Offset == args.End.Offset)
-			Console.WriteLine ("DEBUG: Zero length range.");
-		Console.WriteLine ("DEBUG: Start Offset: {0} Char: {1}", args.Start.Offset, args.Start.Char);
-		Console.WriteLine ("DEBUG: End Offset: {0} Char: {1}", args.End.Offset, args.End.Char);
 	}
 }
 }
