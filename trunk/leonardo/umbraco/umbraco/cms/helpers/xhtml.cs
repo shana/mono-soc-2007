@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-namespace umbraco.cms.helpers
+namespace Umbraco.Cms.helpers
 {
 	/// <summary>
 	/// Summary description for xhtml.

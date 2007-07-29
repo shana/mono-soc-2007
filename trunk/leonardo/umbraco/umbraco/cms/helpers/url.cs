@@ -1,7 +1,7 @@
 using System;
 using System.Xml;
 
-namespace umbraco.cms.helpers
+namespace Umbraco.Cms.helpers
 {
 	/// <summary>
 	/// Summary description for url.
@@ -22,7 +22,7 @@ namespace umbraco.cms.helpers
 			foreach (XmlNode n in replaceChars.SelectNodes("char")) 
 			{
 				if (n.Attributes.GetNamedItem("org") != null && n.Attributes.GetNamedItem("org").Value != "")
-					_newUrl = _newUrl.Replace(n.Attributes.GetNamedItem("org").Value,xmlHelper.GetNodeValue(n)); 
+					_newUrl = _newUrl.Replace(n.Attributes.GetNamedItem("org").Value,XmlHelper.GetNodeValue(n)); 
 			}
 
 			return _newUrl;

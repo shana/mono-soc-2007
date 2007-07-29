@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
 
-namespace umbraco.controls
+namespace Umbraco.controls
 {
 	/// <summary>
 	/// Summary description for datePicker.
@@ -86,7 +86,7 @@ namespace umbraco.controls
 
 		protected override void OnInit(EventArgs e)
 		{
-			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "datepicker", "<script language='javascript' src='/umbraco_client/datepicker/javascript.js'></script>");
+			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "datepicker", "<script language='javascript' src='/Umbraco_client/datepicker/javascript.js'></script>");
 			base.OnInit (e);
 		}
 
@@ -94,7 +94,7 @@ namespace umbraco.controls
 		/// <summary> 
 		/// Render this control to the output parameter specified.
 		/// </summary>
-		/// <param name="output"> The HTML writer to write out to </param>
+		/// <param Name="output"> The HTML writer to write out to </param>
 		protected override void Render(HtmlTextWriter output)
 		{
 
@@ -222,7 +222,7 @@ namespace umbraco.controls
 
 			base.RenderChildren(output);
 
-			output.WriteLine("<input type=\"hidden\" id=\"" + this.ClientID + "\" name=\"" + this.ClientID + "\" value=\"" + _datetime.ToString() + "\"/>");
+			output.WriteLine("<input type=\"hidden\" id=\"" + this.ClientID + "\" Name=\"" + this.ClientID + "\" value=\"" + _datetime.ToString() + "\"/>");
 		}
 
 		private string markMinute(int minute) 

@@ -9,9 +9,9 @@ using System.Web;
 
 using Microsoft.ApplicationBlocks.Data;
 
-using umbraco.cms.businesslogic.member;
+using Umbraco.Cms.BusinessLogic.Member;
 
-namespace umbraco.cms.businesslogic.stat
+namespace Umbraco.Cms.BusinessLogic.stat
 {
 	/// <summary>
 	/// Summary description for Session.
@@ -191,7 +191,7 @@ namespace umbraco.cms.businesslogic.stat
                 	try
                 	{
                 		this._sqlSessionId = int.Parse(
-                			SqlHelper.ExecuteScalar(GlobalSettings.StatDbDSN, CommandType.Text,
+                			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.StatDbDSN, CommandType.Text,
                 				"insert into umbracoStatSession (MemberId, NewsletterId, ReturningUser, SessionStart, [Language], UserAgent, Browser, BrowserVersion, OperatingSystem, Ip, Referrer, ReferrerKeyword, allowCookies, browserType, visitorId, isHuman) values (@MemberId, @NewsletterId, @ReturningUser, @SessionStart, @Language, @UserAgent, @Browser, @BrowserVersion, @OperatingSystem, @Ip, @Referrer, @ReferrerKeyword, @Cookies, @browserType, @visitorId, @isHuman) select @@identity",
                 				sqlParams).ToString());
                 	}
@@ -225,7 +225,7 @@ namespace umbraco.cms.businesslogic.stat
 				{
 					try
 					{
-						SqlHelper.ExecuteScalar(GlobalSettings.StatDbDSN, CommandType.Text,
+						Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.StatDbDSN, CommandType.Text,
 							"update umbracoStatSession set sessionEnd = @sessionEnd where id = @id",
 							new SqlParameter("@sessionEnd", DateTime.Now),
 							new SqlParameter("@id", _sqlSessionId));
@@ -276,7 +276,7 @@ namespace umbraco.cms.businesslogic.stat
 				{
 					try
 					{
-						SqlHelper.ExecuteNonQuery(GlobalSettings.StatDbDSN, CommandType.Text,
+						Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.StatDbDSN, CommandType.Text,
 							"insert into umbracoStatEntry (SessionId, EntryTime, RefNodeId, NodeId) values (@SessionId, @EntryTime, @RefNodeId, @NodeId)",
 							new SqlParameter("@SessionId", _sqlSessionId),
 							new SqlParameter("@EntryTime", e.EntryTime),

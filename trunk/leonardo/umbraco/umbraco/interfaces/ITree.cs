@@ -1,7 +1,7 @@
 using System;
 using System.Xml;
 
-namespace umbraco.interfaces
+namespace Umbraco.interfaces
 {
 	/// <summary>
 	/// Summary description for ITree.

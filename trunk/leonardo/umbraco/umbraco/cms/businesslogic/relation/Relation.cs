@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.relation
+namespace Umbraco.Cms.BusinessLogic.relation
 {
 	/// <summary>
 	/// Summary description for Relation.
@@ -22,7 +22,7 @@ namespace umbraco.cms.businesslogic.relation
 			get {return _parentNode;}
 			set 
 			{
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set parentId = @parent where id = " + this.Id, new SqlParameter("@parent", value.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set parentId = @parent where id = " + this.Id, new SqlParameter("@parent", value.Id));
 				_parentNode = value;
 			}
 		}
@@ -32,7 +32,7 @@ namespace umbraco.cms.businesslogic.relation
 			get {return _childNode;}
 			set 
 			{
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set childId = @child where id = " + this.Id, new SqlParameter("@child", value.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set childId = @child where id = " + this.Id, new SqlParameter("@child", value.Id));
 				_childNode = value;
 			}
 		}
@@ -42,7 +42,7 @@ namespace umbraco.cms.businesslogic.relation
 			get {return _comment;}
 			set 
 			{
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set comment = @comment where id = " + this.Id, new SqlParameter("@comment", value));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set comment = @comment where id = " + this.Id, new SqlParameter("@comment", value));
 				_comment = value;
 			}
 		}
@@ -57,7 +57,7 @@ namespace umbraco.cms.businesslogic.relation
 			get {return _relType;}
 			set 
 			{
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set relType = @relType where id = " + this.Id, new SqlParameter("@relType", value.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update umbracoRelation set relType = @relType where id = " + this.Id, new SqlParameter("@relType", value.Id));
 				_relType = value;
 			}
 		}
@@ -69,7 +69,7 @@ namespace umbraco.cms.businesslogic.relation
 
 		public Relation(int Id)
 		{
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoRelation where id = @id", new SqlParameter("@id", Id)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoRelation where id = @id", new SqlParameter("@id", Id)))
 			{
 				if(dr.Read())
 				{
@@ -93,18 +93,18 @@ namespace umbraco.cms.businesslogic.relation
 
 		public void Delete() 
 		{
-			SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from umbracoRelation where id = @id", new SqlParameter("@id", this.Id));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from umbracoRelation where id = @id", new SqlParameter("@id", this.Id));
 		}
 
 		public static Relation MakeNew(int ParentId, int ChildId, RelationType RelType, string Comment) 
 		{
-			return new Relation(int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "set nocount on insert into umbracoRelation (childId, parentId, relType, comment) values (@childId, @parentId, @relType, @comment) select @@identity as Id", new SqlParameter("@childId", ChildId), new SqlParameter("@parentId", ParentId), new SqlParameter("@relType", RelType.Id), new SqlParameter("@comment", Comment)).ToString()));
+			return new Relation(int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "set nocount on insert into umbracoRelation (childId, parentId, relType, comment) values (@childId, @parentId, @relType, @comment) select @@identity as Id", new SqlParameter("@childId", ChildId), new SqlParameter("@parentId", ParentId), new SqlParameter("@relType", RelType.Id), new SqlParameter("@comment", Comment)).ToString()));
 		}
 
 		public static Relation[] GetRelations(int NodeId) 
 		{
 			System.Collections.ArrayList tmp = new System.Collections.ArrayList();
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select umbracoRelation.id from umbracoRelation inner join umbracoRelationType on umbracoRelationType.id = umbracoRelation.relType where umbracoRelation.parentId = @id or (umbracoRelation.childId = @id and umbracoRelationType.dual = 1)", new SqlParameter("@id", NodeId)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select umbracoRelation.id from umbracoRelation inner join umbracoRelationType on umbracoRelationType.id = umbracoRelation.relType where umbracoRelation.parentId = @id or (umbracoRelation.childId = @id and umbracoRelationType.dual = 1)", new SqlParameter("@id", NodeId)))
 			{
 				while(dr.Read())
 				{
@@ -122,7 +122,7 @@ namespace umbraco.cms.businesslogic.relation
         public static Relation[] GetRelations(int NodeId, RelationType Filter)
         {
             System.Collections.ArrayList tmp = new System.Collections.ArrayList();
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select umbracoRelation.id from umbracoRelation inner join umbracoRelationType on umbracoRelationType.id = umbracoRelation.relType and umbracoRelationType.id = @relTypeId where umbracoRelation.parentId = @id or (umbracoRelation.childId = @id and umbracoRelationType.dual = 1)", new SqlParameter("@id", NodeId), new SqlParameter("@relTypeId", Filter.Id)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select umbracoRelation.id from umbracoRelation inner join umbracoRelationType on umbracoRelationType.id = umbracoRelation.relType and umbracoRelationType.id = @relTypeId where umbracoRelation.parentId = @id or (umbracoRelation.childId = @id and umbracoRelationType.dual = 1)", new SqlParameter("@id", NodeId), new SqlParameter("@relTypeId", Filter.Id)))
 			{
 				while(dr.Read())
 				{

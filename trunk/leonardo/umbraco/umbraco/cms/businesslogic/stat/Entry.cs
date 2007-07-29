@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.cms.businesslogic.stat
+namespace Umbraco.Cms.BusinessLogic.stat
 {
 	/// <summary>
 	/// Summary description for Entry.

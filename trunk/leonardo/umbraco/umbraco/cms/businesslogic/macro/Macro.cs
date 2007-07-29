@@ -3,13 +3,12 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 using System.Xml;
+using SqlHelper=Umbraco.SqlHelper;
 
-
-
-namespace umbraco.cms.businesslogic.macro
+namespace Umbraco.Cms.BusinessLogic.macro
 {
 	/// <summary>
-	/// The Macro component are one of the umbraco essentials, used for drawing dynamic content in the public website of umbraco.
+	/// The Macro component are one of the Umbraco essentials, used for drawing dynamic content in the public website of Umbraco.
 	/// 
 	/// A Macro is a placeholder for either a xsl transformation, a custom .net control or a .net usercontrol.
 	/// 
@@ -49,12 +48,12 @@ namespace umbraco.cms.businesslogic.macro
 			set 
 			{
 				_useInEditor = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroUseInEditor = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroUseInEditor = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
 			}
 		}
 
 		/// <summary>
-		/// The cache refreshrate - the maximum amount of time the macro should remain cached in the umbraco
+		/// The cache refreshrate - the maximum amount of time the macro should remain cached in the Umbraco
 		/// runtime layer.
 		/// 
 		/// The macro caches are refreshed whenever a document is changed
@@ -65,14 +64,14 @@ namespace umbraco.cms.businesslogic.macro
 			set 
 			{
 				_refreshRate = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroRefreshRate = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroRefreshRate = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
 			}
 		}
 
 		/// <summary>
 		/// The alias of the macro - are used for retrieving the macro when parsing the <?UMBRACO_MACRO></?UMBRACO_MACRO> element,
 		/// by using the alias instead of the Id, it's possible to distribute macroes from one installation to another - since the id
-		/// is given by an autoincrementation in the database table, and might be used by another macro in the foreing umbraco
+		/// is given by an autoincrementation in the database table, and might be used by another macro in the foreing Umbraco
 		/// </summary>
 		public string Alias
 		{
@@ -80,12 +79,12 @@ namespace umbraco.cms.businesslogic.macro
 			set 
 			{
 				_alias = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroAlias = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroAlias = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
 			}
 		}
 		
 		/// <summary>
-		/// The userfriendly name
+		/// The userfriendly Name
 		/// </summary>
 		public string Name
 		{
@@ -93,12 +92,12 @@ namespace umbraco.cms.businesslogic.macro
 			set 
 			{
 				_name = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroName = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroName = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
 			}
 		}
 
 		/// <summary>
-		/// If the macro is a wrapper for a custom control, this is the assemly name from which to load the macro
+		/// If the macro is a wrapper for a custom control, this is the assemly Name from which to load the macro
 		/// 
 		/// specified like: /bin/mydll (without the .dll extension)
 		/// </summary>
@@ -108,7 +107,7 @@ namespace umbraco.cms.businesslogic.macro
 			set 
 			{
 				_assembly = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroScriptAssembly = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroScriptAssembly = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
 			}
 		}
 
@@ -123,7 +122,7 @@ namespace umbraco.cms.businesslogic.macro
 			set 
 			{
 				_type = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroScriptType = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroScriptType = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
 			}
 		}
 
@@ -138,7 +137,7 @@ namespace umbraco.cms.businesslogic.macro
 			set 
 			{
 				_xslt = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroXSLT = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "update cmsMacro set macroXSLT = @macroAlias where id = @id", new SqlParameter("@macroAlias", value), new SqlParameter("@id", this.Id));
 			}
 		}
 
@@ -158,7 +157,7 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Macro initializer
 		/// </summary>
-		/// <param name="Id">The id of the macro</param>
+		/// <param Name="Id">The id of the macro</param>
 		public Macro(int Id)
 		{
 			_id = Id;
@@ -181,13 +180,13 @@ namespace umbraco.cms.businesslogic.macro
 		{
 			foreach(MacroProperty p in this.Properties)
 				p.Delete();
-			SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from cmsMacro where id = @id", new SqlParameter("@id", this._id));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from cmsMacro where id = @id", new SqlParameter("@id", this._id));
 
 		}
 
 		private void setup() 
 		{
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select macroUseInEditor, macroRefreshRate, macroAlias, macroName, macroScriptType, macroScriptAssembly, macroXSLT from cmsMacro where id = @id", new SqlParameter("@id", _id)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select macroUseInEditor, macroRefreshRate, macroAlias, macroName, macroScriptType, macroScriptAssembly, macroXSLT from cmsMacro where id = @id", new SqlParameter("@id", _id)))
 			{
 				if(dr.Read())
 				{
@@ -206,20 +205,20 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Get an xmlrepresentation of the macro, used for exporting the macro to a package for distribution
 		/// </summary>
-		/// <param name="xd">Current xmldocument context</param>
+		/// <param Name="xd">Current xmldocument context</param>
 		/// <returns>An xmlrepresentation of the macro</returns>
 		public XmlElement ToXml(XmlDocument xd) {
 
 			XmlElement doc = xd.CreateElement("macro");
 
 			// info section
-			doc.AppendChild(xmlHelper.addTextNode(xd, "name", this.Name));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "alias", this.Alias));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "scriptType", this.Type));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "scriptAssembly", this.Assembly));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "xslt", this.Xslt));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "useInEditor", this.UseInEditor.ToString()));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "refreshRate", this.RefreshRate.ToString()));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "Name", this.Name));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "alias", this.Alias));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "scriptType", this.Type));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "scriptAssembly", this.Assembly));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "xslt", this.Xslt));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "useInEditor", this.UseInEditor.ToString()));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "refreshRate", this.RefreshRate.ToString()));
 
 			// properties
 			XmlElement props = xd.CreateElement("properties");
@@ -234,15 +233,15 @@ namespace umbraco.cms.businesslogic.macro
 		#region STATICS
 
 		/// <summary>
-		/// Creates a new macro given the name
+		/// Creates a new macro given the Name
 		/// </summary>
-		/// <param name="Name">Userfriendly name</param>
+		/// <param Name="Name">Userfriendly Name</param>
 		/// <returns>The newly macro</returns>
 		public static Macro MakeNew(string Name) 
 		{
 			return new Macro( int.Parse(
-			SqlHelper.ExecuteScalar(GlobalSettings.DbDSN,
-				CommandType.Text, "SET NOCOUNT ON; insert into cmsMacro (macroAlias, macroName) values ('" + sqlHelper.safeString(Name.Replace(" ", "")) + "','" + sqlHelper.safeString(Name) + "') select @@identity as id").ToString()));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN,
+				CommandType.Text, "SET NOCOUNT ON; insert into cmsMacro (macroAlias, macroName) values ('" + Umbraco.SqlHelper.SafeString(Name.Replace(" ", "")) + "','" + SqlHelper.SafeString(Name) + "') select @@identity as id").ToString()));
 		}
 
 		/// <summary>
@@ -251,9 +250,9 @@ namespace umbraco.cms.businesslogic.macro
 		/// <returns>A list of all macroes</returns>
 		public static Macro[] GetAll() 
 		{
-			int total = int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select count(*) from cmsMacro").ToString());
+			int total = int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select count(*) from cmsMacro").ToString());
 			int count = 0;
-			SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacro order by macroName");
+			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacro order by macroName");
 			Macro[] retval = new Macro[total];
 			while (dr.Read()) 
 			{
@@ -267,13 +266,13 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Static contructor for retrieving a macro given an alias
 		/// </summary>
-		/// <param name="Alias">The alias of the macro</param>
+		/// <param Name="Alias">The alias of the macro</param>
 		/// <returns>If the macro with the given alias exists, it returns the macro, else null</returns>
 		public static Macro GetByAlias(string Alias) 
 		{
 			try 
 			{
-				return new Macro(int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacro where macroAlias = @alias", new SqlParameter("@alias", Alias)).ToString()));
+				return new Macro(int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacro where macroAlias = @alias", new SqlParameter("@alias", Alias)).ToString()));
 			} 
 			catch 
 			{

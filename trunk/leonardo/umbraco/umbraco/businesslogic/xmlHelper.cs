@@ -1,12 +1,12 @@
 using System;
 using System.Xml;
 
-namespace umbraco
+namespace Umbraco
 {
 	/// <summary>
 	/// Summary description for xmlHelper.
 	/// </summary>
-	public class xmlHelper
+	public class XmlHelper
 	{
 		public static XmlNode ImportXmlNodeFromText (string text, ref XmlDocument xmlDoc) 
 		{

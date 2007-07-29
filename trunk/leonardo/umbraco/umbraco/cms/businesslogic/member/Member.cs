@@ -7,19 +7,16 @@ using System.Diagnostics;
 using System.Web;
 using System.Web.Caching;
 using System.Xml;
-
-using businesslogic;
-
 using Microsoft.ApplicationBlocks.Data;
+using Umbraco.BusinessLogic;
+using Umbraco.BusinessLogic;
 
-using umbraco.BusinessLogic;
-
-namespace umbraco.cms.businesslogic.member
+namespace Umbraco.Cms.BusinessLogic.Member
 {
 	/// <summary>
-	/// The Member class represents a member of the public website (not to be confused with umbraco users)
+	/// The Member class represents a member of the public website (not to be confused with Umbraco users)
 	/// 
-	/// Members are used when creating communities and collaborative applications using umbraco, or if there are a 
+	/// Members are used when creating communities and collaborative applications using Umbraco, or if there are a 
 	/// need for identifying or authentifying the visitor. (extranets, protected/private areas of the public website)
 	/// 
 	/// Inherits generic datafields from it's baseclass content.
@@ -39,7 +36,7 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Initializes a new instance of the Member class.
 		/// </summary>
-		/// <param name="id">Identifier</param>
+		/// <param Name="id">Identifier</param>
 		public Member(int id) : base(id)
 		{
 		}
@@ -47,34 +44,35 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Initializes a new instance of the Member class.
 		/// </summary>
-		/// <param name="id">Identifier</param>
+		/// <param Name="id">Identifier</param>
 		public Member(Guid id) : base(id)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the Member class, with an option to only initialize 
-		/// the data used by the tree in the umbraco console.
+		/// the data used by the tree in the Umbraco console.
 		/// 
 		/// Performace
 		/// </summary>
-		/// <param name="id">Identifier</param>
-		/// <param name="noSetup"></param>
+		/// <param Name="id">Identifier</param>
+		/// <param Name="noSetup"></param>
 		public Member(int id, bool noSetup) : base(id, noSetup)
 		{
 		}
 
 		/// <summary>
-		/// The name of the member
+		/// The Name of the member
 		/// </summary>
 		public new string Text
 		{
 			get
 			{
-				if(string.IsNullOrEmpty(_text))
-					_text = SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
-						"select text from umbracoNode where id = @id",
-						new SqlParameter("@id", Id)).ToString();
+				// TODO: SQL
+				if (string.IsNullOrEmpty(_text))
+					_text = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+					                                "select text from umbracoNode where id = @id",
+					                                new SqlParameter("@id", Id)).ToString();
 				return _text;
 			}
 			set
@@ -85,7 +83,7 @@ namespace umbraco.cms.businesslogic.member
 		}
 
 		/// <summary>
-		/// A list of all members in the current umbraco install
+		/// A list of all members in the current Umbraco install
 		/// 
 		/// Note: is ressource intensive, use with care.
 		/// </summary>
@@ -106,16 +104,18 @@ namespace umbraco.cms.businesslogic.member
 		{
 			get
 			{
-				return SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
-					"select Password from cmsMember where nodeId = @id",
-					new SqlParameter("@id", Id)).ToString();
+				// TODO: SQL
+				return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+				                               "select Password from cmsMember where nodeId = @id",
+				                               new SqlParameter("@id", Id)).ToString();
 			}
 			set
 			{
-				SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-					"update cmsMember set Password = @password where nodeId = @id",
-					new SqlParameter("@password", value),
-					new SqlParameter("@id", Id));
+				// TODO: SQL
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+				                          "update cmsMember set Password = @password where nodeId = @id",
+				                          new SqlParameter("@password", value),
+				                          new SqlParameter("@id", Id));
 			}
 		}
 
@@ -126,16 +126,18 @@ namespace umbraco.cms.businesslogic.member
 		{
 			get
 			{
-				return SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
-					"select LoginName from cmsMember where nodeId = @id",
-					new SqlParameter("@id", Id)).ToString();
+				// TODO: SQL
+				return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+				                               "select LoginName from cmsMember where nodeId = @id",
+				                               new SqlParameter("@id", Id)).ToString();
 			}
 			set
 			{
-				SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-					"update cmsMember set LoginName = @loginName where nodeId =  @id",
-					new SqlParameter("@loginName", value),
-					new SqlParameter("@id", Id));
+				// TODO: SQL
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+				                          "update cmsMember set LoginName = @loginName where nodeId =  @id",
+				                          new SqlParameter("@loginName", value),
+				                          new SqlParameter("@id", Id));
 			}
 		}
 
@@ -146,7 +148,7 @@ namespace umbraco.cms.businesslogic.member
 		{
 			get
 			{
-				if(_groups == null)
+				if (_groups == null)
 					populateGroups();
 				return _groups;
 			}
@@ -159,15 +161,17 @@ namespace umbraco.cms.businesslogic.member
 		{
 			get
 			{
-				return SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
-					"select Email from cmsMember where nodeId = @id",
-					new SqlParameter("@id", Id)).ToString();
+				// TODO: SQL
+				return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+				                               "select Email from cmsMember where nodeId = @id",
+				                               new SqlParameter("@id", Id)).ToString();
 			}
 			set
 			{
-				SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-					"update cmsMember set Email = @email where nodeId = @id",
-					new SqlParameter("@id", Id), new SqlParameter("@email", value));
+				// TODO: SQL
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+				                          "update cmsMember set Email = @email where nodeId = @id",
+				                          new SqlParameter("@id", Id), new SqlParameter("@email", value));
 			}
 		}
 
@@ -184,13 +188,14 @@ namespace umbraco.cms.businesslogic.member
 		/// <returns>array of members</returns>
 		public static Member[] getAllOtherMembers()
 		{
+			// TODO: SQL
 			string query =
 				"SELECT id, text FROM umbracoNode WHERE (nodeObjectType = @nodeObjectType) AND (ASCII(SUBSTRING(text, 1, 1)) NOT BETWEEN ASCII('a') AND ASCII('z')) AND (ASCII(SUBSTRING(text, 1, 1)) NOT BETWEEN ASCII('A') AND ASCII('Z'))";
 			List<Member> m = new List<Member>();
-			using(SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text, query,
-				new SqlParameter("@nodeObjectType", _objectType)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text, query,
+			                                                  new SqlParameter("@nodeObjectType", _objectType)))
 			{
-				while(dr.Read())
+				while (dr.Read())
 				{
 					Member newMember = new Member(int.Parse(dr["id"].ToString()), true);
 					newMember._text = dr["text"].ToString();
@@ -202,20 +207,21 @@ namespace umbraco.cms.businesslogic.member
 		}
 
 		/// <summary>
-		/// Retrieves a list of members by the first letter in their name.
+		/// Retrieves a list of members by the first letter in their Name.
 		/// </summary>
-		/// <param name="letter">The first letter</param>
+		/// <param Name="letter">The first letter</param>
 		/// <returns></returns>
 		public static Member[] getMemberFromFirstLetter(char letter)
 		{
+			// TODO: SQL
 			string query =
 				"Select id, text from umbracoNode where NodeObjectType = @objectType and text like @letter order by text";
 			List<Member> m = new List<Member>();
-			using(SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text, query,
-				new SqlParameter("@objectType", _objectType),
-				new SqlParameter("@letter", letter + "%")))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text, query,
+			                                                  new SqlParameter("@objectType", _objectType),
+			                                                  new SqlParameter("@letter", letter + "%")))
 			{
-				while(dr.Read())
+				while (dr.Read())
 				{
 					Member newMember = new Member(int.Parse(dr["id"].ToString()), true);
 					newMember._text = dr["text"].ToString();
@@ -228,9 +234,9 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Creates a new member
 		/// </summary>
-		/// <param name="Name">Membername</param>
-		/// <param name="mbt">Member type</param>
-		/// <param name="u">The umbraco usercontext</param>
+		/// <param Name="Name">Membername</param>
+		/// <param Name="mbt">Member type</param>
+		/// <param Name="u">The Umbraco usercontext</param>
 		/// <returns>The new member</returns>
 		public static Member MakeNew(string Name, MemberType mbt, User u)
 		{
@@ -241,20 +247,22 @@ namespace umbraco.cms.businesslogic.member
 
 			tmp.CreateContent(mbt);
 			// Create member specific data ..
-			SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-				"insert into cmsMember (nodeId,Email,LoginName,Password) values (@id,'',@text,'')",
-				new SqlParameter("@id", tmp.Id),
-				new SqlParameter("@text", tmp.Text));
+
+			// TODO: SQL
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+			                          "insert into cmsMember (nodeId,Email,LoginName,Password) values (@id,'',@text,'')",
+			                          new SqlParameter("@id", tmp.Id),
+			                          new SqlParameter("@text", tmp.Text));
 			return tmp;
 		}
 
 		/// <summary>
 		/// Creates a new member
 		/// </summary>
-		/// <param name="Name">Membername</param>
-		/// <param name="mbt">Member type</param>
-		/// <param name="u">The umbraco usercontext</param>
-		/// <param name="Email">The email of the user</param>
+		/// <param Name="Name">Membername</param>
+		/// <param Name="mbt">Member type</param>
+		/// <param Name="u">The Umbraco usercontext</param>
+		/// <param Name="Email">The email of the user</param>
 		/// <returns>The new member</returns>
 		public static Member MakeNew(string Name, string Email, MemberType mbt, User u)
 		{
@@ -265,45 +273,47 @@ namespace umbraco.cms.businesslogic.member
 
 			tmp.CreateContent(mbt);
 			// Create member specific data ..
-			SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-				"insert into cmsMember (nodeId,Email,LoginName,Password) values (@id,@email,@text,'')",
-				new SqlParameter("@id", tmp.Id),
-				new SqlParameter("@text", tmp.Text),
-				new SqlParameter("@email", Email));
+			// TODO: SQL
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+			                          "insert into cmsMember (nodeId,Email,LoginName,Password) values (@id,@email,@text,'')",
+			                          new SqlParameter("@id", tmp.Id),
+			                          new SqlParameter("@text", tmp.Text),
+			                          new SqlParameter("@email", Email));
 			return tmp;
 		}
 
 		/// <summary>
 		/// Generates the xmlrepresentation of a member
 		/// </summary>
-		/// <param name="xd"></param>
+		/// <param Name="xd"></param>
 		public override void XmlGenerate(XmlDocument xd)
 		{
 			XmlNode x = xd.CreateNode(XmlNodeType.Element, "node", "");
 			XmlPopulate(xd, ref x, false);
-			x.Attributes.Append(xmlHelper.addAttribute(xd, "loginName", LoginName));
-			x.Attributes.Append(xmlHelper.addAttribute(xd, "email", Email));
+			x.Attributes.Append(XmlHelper.addAttribute(xd, "loginName", LoginName));
+			x.Attributes.Append(XmlHelper.addAttribute(xd, "email", Email));
 
 			// Save to db
-			SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
-				@"if exists(select nodeId from cmsContentXml where nodeId = @nodeId) " +
-				@"update cmsContentXml set xml = @xml where nodeId = @nodeId " +
-				@"else " +
-				@"insert into cmsContentXml(nodeId, xml) values (@nodeId, @xml)",
-				new SqlParameter("@nodeId", Id), new SqlParameter("@xml", x.OuterXml));
+			// TODO: SQL
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+			                          @"if exists(select nodeId from cmsContentXml where nodeId = @nodeId) " +
+			                          @"update cmsContentXml set xml = @xml where nodeId = @nodeId " +
+			                          @"else " +
+			                          @"insert into cmsContentXml(nodeId, xml) values (@nodeId, @xml)",
+			                          new SqlParameter("@nodeId", Id), new SqlParameter("@xml", x.OuterXml));
 		}
 
 		/// <summary>
 		/// Xmlrepresentation of a member
 		/// </summary>
-		/// <param name="xd">The xmldocument context</param>
-		/// <param name="Deep">Recursive - should always be set to false</param>
+		/// <param Name="xd">The xmldocument context</param>
+		/// <param Name="Deep">Recursive - should always be set to false</param>
 		/// <returns>A the xmlrepresentation of the current member</returns>
 		public override XmlNode ToXml(XmlDocument xd, bool Deep)
 		{
 			XmlNode x = base.ToXml(xd, Deep);
-			x.Attributes.Append(xmlHelper.addAttribute(xd, "loginName", LoginName));
-			x.Attributes.Append(xmlHelper.addAttribute(xd, "email", Email));
+			x.Attributes.Append(XmlHelper.addAttribute(xd, "loginName", LoginName));
+			x.Attributes.Append(XmlHelper.addAttribute(xd, "email", Email));
 			return x;
 		}
 
@@ -314,14 +324,15 @@ namespace umbraco.cms.businesslogic.member
 		{
 			/*
 			// delete all content created by this member!
-			foreach (BusinessLogic.console.IconI d in this.ChildrenOfAllObjectTypes) 
+			foreach (Umbraco.Cms.BusinessLogic.console.IIcon d in this.ChildrenOfAllObjectTypes) 
 			{
-				new cms.businesslogic.contentitem.ContentItem(d.UniqueId).delete();
+				new cms.Umbraco.Cms.BusinessLogic.contentitem.ContentItem(d.UniqueId).delete();
 			}
 			*/
 			// delete memeberspecific data!
-			SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "Delete from cmsMember where nodeId = @id",
-				new SqlParameter("@id", Id));
+			// TODO: SQL
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "Delete from cmsMember where nodeId = @id",
+			                          new SqlParameter("@id", Id));
 
 			// Delete all content and cmsnode specific data!
 			base.delete();
@@ -334,13 +345,13 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Use with care
 		/// </summary>
-		/// <param name="dt">The membertype which are being deleted</param>
+		/// <param Name="dt">The membertype which are being deleted</param>
 		public static void DeleteFromType(MemberType dt)
 		{
-			foreach(Content c in getContentOfContentType(dt))
+			foreach (Content c in getContentOfContentType(dt))
 			{
 				// due to recursive structure document might already been deleted..
-				if(IsNode(c.UniqueId))
+				if (IsNode(c.UniqueId))
 				{
 					Member tmp = new Member(c.UniqueId);
 					tmp.delete();
@@ -351,37 +362,40 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Adds the member to group with the specified id
 		/// </summary>
-		/// <param name="GroupId">The id of the group which the member is being added to</param>
+		/// <param Name="GroupId">The id of the group which the member is being added to</param>
 		public void AddGroup(int GroupId)
 		{
-			SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-				"if not exists(select member from cmsMember2MemberGroup where member = @id and memberGroup = @groupId) insert into cmsMember2MemberGroup (member, memberGroup) values (@id, @groupId)",
-				new SqlParameter("@id", Id), new SqlParameter("@groupId", GroupId));
+			// TODO: SQL
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+			                          "if not exists(select member from cmsMember2MemberGroup where member = @id and memberGroup = @groupId) insert into cmsMember2MemberGroup (member, memberGroup) values (@id, @groupId)",
+			                          new SqlParameter("@id", Id), new SqlParameter("@groupId", GroupId));
 			populateGroups();
 		}
 
 		/// <summary>
 		/// Removes the member from the MemberGroup specified
 		/// </summary>
-		/// <param name="GroupId">The MemberGroup from which the Member is removed</param>
+		/// <param Name="GroupId">The MemberGroup from which the Member is removed</param>
 		public void RemoveGroup(int GroupId)
 		{
-			SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-				"delete from cmsMember2MemberGroup where member = @id and Membergroup = @groupId",
-				new SqlParameter("@id", Id), new SqlParameter("@groupId", GroupId));
+			// TODO: SQL
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+			                          "delete from cmsMember2MemberGroup where member = @id and Membergroup = @groupId",
+			                          new SqlParameter("@id", Id), new SqlParameter("@groupId", GroupId));
 			populateGroups();
 		}
 
 		private void populateGroups()
 		{
 			Hashtable temp = new Hashtable();
-			using(SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
-				"select memberGroup from cmsMember2MemberGroup where member = @id",
-				new SqlParameter("@id", Id)))
+			// TODO: SQL
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+			                                                  "select memberGroup from cmsMember2MemberGroup where member = @id",
+			                                                  new SqlParameter("@id", Id)))
 			{
-				while(dr.Read())
+				while (dr.Read())
 					temp.Add(int.Parse(dr["memberGroup"].ToString()),
-						new MemberGroup(int.Parse(dr["memberGroup"].ToString())));
+					         new MemberGroup(int.Parse(dr["memberGroup"].ToString())));
 			}
 			_groups = temp;
 		}
@@ -391,15 +405,16 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Used when authentifying the Member
 		/// </summary>
-		/// <param name="loginName">The unique Loginname</param>
+		/// <param Name="loginName">The unique Loginname</param>
 		/// <returns>The member with the specified loginname - null if no Member with the login exists</returns>
 		public static Member GetMemberFromLoginName(string loginName)
 		{
-			if(IsMember(loginName))
+			// TODO: SQL
+			if (IsMember(loginName))
 			{
-				object o = SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
-					"select nodeID from cmsMember where LoginName = @loginName",
-					new SqlParameter("@loginName", loginName));
+				object o = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+				                                   "select nodeID from cmsMember where LoginName = @loginName",
+				                                   new SqlParameter("@loginName", loginName));
 
 				if (o == null)
 					return null;
@@ -421,15 +436,16 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Used when authentifying the Member
 		/// </summary>
-		/// <param name="email">The email of the member</param>
+		/// <param Name="email">The email of the member</param>
 		/// <returns>The member with the specified email - null if no Member with the email exists</returns>
 		public static Member GetMemberFromEmail(string email)
 		{
-			object o = SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
-				"select nodeID from cmsMember where Email = @email",
-				new SqlParameter("@email", email));
+			// TODO: SQL
+			object o = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+			                                   "select nodeID from cmsMember where Email = @email",
+			                                   new SqlParameter("@email", email));
 
-			if(o == null)
+			if (o == null)
 				return null;
 
 			int tmpId;
@@ -444,21 +460,22 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Used when authentifying the member
 		/// </summary>
-		/// <param name="loginName">Member login</param>
-		/// <param name="password">Member password</param>
+		/// <param Name="loginName">Member login</param>
+		/// <param Name="password">Member password</param>
 		/// <returns>The member with the credentials - null if none exists</returns>
 		public static Member GetMemberFromLoginNameAndPassword(string loginName, string password)
 		{
-			if(IsMember(loginName))
+			if (IsMember(loginName))
 			{
-				object o = SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
-					"select nodeID from cmsMember where LoginName = @loginName and Password = @password",
-					new SqlParameter("loginName", loginName),
-					new SqlParameter("@password", password));
-				
-				if(o == null)
+				// TODO: SQL
+				object o = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+				                                   "select nodeID from cmsMember where LoginName = @loginName and Password = @password",
+				                                   new SqlParameter("loginName", loginName),
+				                                   new SqlParameter("@password", password));
+
+				if (o == null)
 					return null;
-				
+
 				int tmpId;
 				if (!int.TryParse(o.ToString(), out tmpId))
 					return null;
@@ -476,18 +493,19 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Helper method - checks if a Member with the LoginName exists
 		/// </summary>
-		/// <param name="loginName">Member login</param>
+		/// <param Name="loginName">Member login</param>
 		/// <returns>True if the member exists</returns>
 		public static bool IsMember(string loginName)
 		{
+			// TODO: SQL
 			Debug.Assert(loginName != null, "loginName cannot be null");
-			object o = SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
-				"select count(nodeID) as tmp from cmsMember where LoginName = @loginName",
-				new SqlParameter("@loginName", loginName));
-			if(o == null)
+			object o = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+			                                   "select count(nodeID) as tmp from cmsMember where LoginName = @loginName",
+			                                   new SqlParameter("@loginName", loginName));
+			if (o == null)
 				return false;
 			int count;
-			if(!int.TryParse(o.ToString(), out count))
+			if (!int.TryParse(o.ToString(), out count))
 				return false;
 			return count > 0;
 		}
@@ -509,15 +527,16 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Can be used in the runtime
 		/// </summary>
-		/// <param name="m">The member to log in</param>
+		/// <param Name="m">The member to log in</param>
 		public static void AddMemberToCache(Member m)
 		{
-			if(m != null)
+			if (m != null)
 			{
+				// TODO: Hard coded
 				Hashtable umbracoMembers = CachedMembers();
 
 				// Check if member already exists
-				if(umbracoMembers[m.Id] == null)
+				if (umbracoMembers[m.Id] == null)
 					umbracoMembers.Add(m.Id, m);
 
 				removeCookie("umbracoMemberId");
@@ -529,8 +548,8 @@ namespace umbraco.cms.businesslogic.member
 
 				// Debug information
 				HttpContext.Current.Trace.Write("member",
-					"Member added to cache: " + m.Text + "/" + m.LoginName + " (" +
-					m.Id + ")");
+				                                "Member added to cache: " + m.Text + "/" + m.LoginName + " (" +
+				                                m.Id + ")");
 
 				_memberCache["umbracoMembers"] = umbracoMembers;
 			}
@@ -541,7 +560,7 @@ namespace umbraco.cms.businesslogic.member
 		private static void removeCookie(string Name)
 		{
 			HttpCookie c = HttpContext.Current.Request.Cookies[Name];
-			if(c != null)
+			if (c != null)
 			{
 				c.Expires = DateTime.Now.AddDays(-1);
 				HttpContext.Current.Response.Cookies.Add(c);
@@ -568,16 +587,16 @@ namespace umbraco.cms.businesslogic.member
 		{
 			string tempValue = "";
 
-			if(HttpContext.Current.Session[Name] != null)
-				if(HttpContext.Current.Session[Name].ToString() != "0")
+			if (HttpContext.Current.Session[Name] != null)
+				if (HttpContext.Current.Session[Name].ToString() != "0")
 					tempValue = HttpContext.Current.Session[Name].ToString();
 
-			if(tempValue == "")
+			if (tempValue == "")
 			{
-				if(Array.IndexOf(HttpContext.Current.Response.Cookies.AllKeys, Name) == -1)
+				if (Array.IndexOf(HttpContext.Current.Response.Cookies.AllKeys, Name) == -1)
 				{
-					if(HttpContext.Current.Request.Cookies[Name] != null)
-						if(HttpContext.Current.Request.Cookies[Name].Value != "")
+					if (HttpContext.Current.Request.Cookies[Name] != null)
+						if (HttpContext.Current.Request.Cookies[Name].Value != "")
 						{
 							tempValue = HttpContext.Current.Request.Cookies[Name].Value;
 						}
@@ -602,20 +621,20 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Can be used in the runtime
 		/// </summary>
-		/// <param name="m">The member to log in</param>
-		/// <param name="UseSession">Use sessionbased recognition</param>
-		/// <param name="TimespanForCookie">The live time of the cookie</param>
+		/// <param Name="m">The member to log in</param>
+		/// <param Name="UseSession">Use sessionbased recognition</param>
+		/// <param Name="TimespanForCookie">The live time of the cookie</param>
 		public static void AddMemberToCache(Member m, bool UseSession, TimeSpan TimespanForCookie)
 		{
-			if(m != null)
+			if (m != null)
 			{
 				Hashtable umbracoMembers = CachedMembers();
 
 				// Check if member already exists
-				if(umbracoMembers[m.Id] == null)
+				if (umbracoMembers[m.Id] == null)
 					umbracoMembers.Add(m.Id, m);
 
-				if(!UseSession)
+				if (!UseSession)
 				{
 					removeCookie("umbracoMemberId");
 
@@ -633,8 +652,8 @@ namespace umbraco.cms.businesslogic.member
 
 				// Debug information
 				HttpContext.Current.Trace.Write("member",
-					string.Format("Member added to cache: {0}/{1} ({2})",
-						m.Text, m.LoginName, m.Id));
+				                                string.Format("Member added to cache: {0}/{1} ({2})",
+				                                              m.Text, m.LoginName, m.Id));
 
 				_memberCache["umbracoMembers"] = umbracoMembers;
 			}
@@ -645,11 +664,11 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Can be used in the public website
 		/// </summary>
-		/// <param name="m">Member to remove</param>
+		/// <param Name="m">Member to remove</param>
 		public static void RemoveMemberFromCache(Member m)
 		{
 			Hashtable umbracoMembers = CachedMembers();
-			if(umbracoMembers.ContainsKey(m.Id))
+			if (umbracoMembers.ContainsKey(m.Id))
 				umbracoMembers.Remove(m.Id);
 
 			_memberCache["umbracoMembers"] = umbracoMembers;
@@ -660,7 +679,7 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Can be used in the public website
 		/// </summary>
-		/// <param name="m">Member</param>
+		/// <param Name="m">Member</param>
 		public static void ClearMemberFromClient(Member m)
 		{
 			removeCookie("umbracoMemberId");
@@ -682,10 +701,10 @@ namespace umbraco.cms.businesslogic.member
 			Hashtable umbracoMembers;
 
 			// Check for member hashtable in cache
-			if(_memberCache["umbracoMembers"] == null)
+			if (_memberCache["umbracoMembers"] == null)
 				umbracoMembers = new Hashtable();
 			else
-				umbracoMembers = (Hashtable)_memberCache["umbracoMembers"];
+				umbracoMembers = (Hashtable) _memberCache["umbracoMembers"];
 
 			return umbracoMembers;
 		}
@@ -695,13 +714,13 @@ namespace umbraco.cms.businesslogic.member
 		/// 
 		/// Can be used from the public website
 		/// </summary>
-		/// <param name="id">Id of the member</param>
+		/// <param Name="id">Id of the member</param>
 		/// <returns>If the member is cached it returns the member - else null</returns>
 		public static Member GetMemberFromCache(int id)
 		{
 			Hashtable members = CachedMembers();
-			if(members.ContainsKey(id))
-				return (Member)members[id];
+			if (members.ContainsKey(id))
+				return (Member) members[id];
 			else
 				return null;
 		}
@@ -715,7 +734,7 @@ namespace umbraco.cms.businesslogic.member
 		public static bool IsLoggedOn()
 		{
 			bool _isMember = false;
-			if(CurrentMemberId() != 0)
+			if (CurrentMemberId() != 0)
 				_isMember = true;
 
 			return _isMember;
@@ -729,9 +748,9 @@ namespace umbraco.cms.businesslogic.member
 		{
 			int _currentMemberId = 0;
 
-			if(StateHelper.HasCookieValue(UmbracoMemberIdCookieKey) &&
-			   StateHelper.HasCookieValue(UmbracoMemberGuidCookieKey) &&
-			   StateHelper.HasCookieValue(UmbracoMemberLoginCookieKey))
+			if (StateHelper.HasCookieValue(UmbracoMemberIdCookieKey) &&
+			    StateHelper.HasCookieValue(UmbracoMemberGuidCookieKey) &&
+			    StateHelper.HasCookieValue(UmbracoMemberLoginCookieKey))
 			{
 				int.TryParse(StateHelper.GetCookieValue(UmbracoMemberIdCookieKey), out _currentMemberId);
 			}
@@ -747,16 +766,16 @@ namespace umbraco.cms.businesslogic.member
 		{
 			try
 			{
-			    int _currentMemberId = CurrentMemberId();
-                if (_currentMemberId != 0)
+				int _currentMemberId = CurrentMemberId();
+				if (_currentMemberId != 0)
 				{
 					// return member from cache
-                    Member m = GetMemberFromCache(_currentMemberId);
-					if(m == null)
-                        m = new Member(_currentMemberId);
+					Member m = GetMemberFromCache(_currentMemberId);
+					if (m == null)
+						m = new Member(_currentMemberId);
 
-					if(m.UniqueId == new Guid(getCookieValue("umbracoMemberGuid")) &&
-					   m.LoginName == getCookieValue("umbracoMemberLogin"))
+					if (m.UniqueId == new Guid(getCookieValue("umbracoMemberGuid")) &&
+					    m.LoginName == getCookieValue("umbracoMemberLogin"))
 						return m;
 
 					return null;

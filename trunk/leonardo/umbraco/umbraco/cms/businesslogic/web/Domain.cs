@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
-using umbraco.BusinessLogic;
-using umbraco.BusinessLogic.Actions;
-using umbraco.cms.businesslogic.cache;
-using umbraco.cms.businesslogic.language;
-using umbraco.interfaces;
+using Umbraco.BusinessLogic;
+using Umbraco.BusinessLogic.Actions;
+using Umbraco.Cms.BusinessLogic.cache;
+using Umbraco.Cms.BusinessLogic.language;
+using Umbraco.interfaces;
+using SqlHelper=Umbraco.SqlHelper;
 
-namespace umbraco.cms.businesslogic.web
+namespace Umbraco.Cms.BusinessLogic.web
 {
     /// <summary>
     /// Summary description for Domain.
@@ -28,17 +29,17 @@ namespace umbraco.cms.businesslogic.web
 
         public Domain(string DomainName)
         {
-            object result = SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+            object result = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
 				"select id from umbracoDomains where domainName = @DomainName",
 				new SqlParameter("@DomainName", DomainName));
             if (result == null || !(result is int))
-                throw new Exception(string.Format("Domain name '{0}' does not exists", DomainName));
+                throw new Exception(string.Format("Domain Name '{0}' does not exists", DomainName));
             initDomain((int) result);
         }
 
         private void initDomain(int id)
         {
-            using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+            using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
 				"select domainDefaultLanguage, domainRootStructureID, domainName from umbracoDomains where id = @ID",
 				new SqlParameter("@ID", id)))
             {
@@ -57,9 +58,9 @@ namespace umbraco.cms.businesslogic.web
             get { return _name; }
             set
             {
-                SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                         string.Format("update umbracoDomains set domainName = '{0}' where id = {1}",
-                                                      sqlHelper.safeString(value), _id));
+                                                      Umbraco.SqlHelper.SafeString(value), _id));
                 _name = value;
             }
         }
@@ -69,7 +70,7 @@ namespace umbraco.cms.businesslogic.web
             get { return _language; }
             set
             {
-                SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                         string.Format(
                                             "update umbracoDomains set domainDefaultLanguage = {0} where id = {1}",
                                             value.id, _id));
@@ -82,7 +83,7 @@ namespace umbraco.cms.businesslogic.web
             get { return _root; }
             set
             {
-                SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                         string.Format(
                                             "update umbracoDomains set domainRootStructureID = '{0}' where id = {1}",
                                             value, _id));
@@ -97,7 +98,7 @@ namespace umbraco.cms.businesslogic.web
 
         public void Delete()
         {
-            SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                     string.Format("delete from umbracoDomains where id = {0}", Id));
         	InvalidateCache();
         }
@@ -116,7 +117,7 @@ namespace umbraco.cms.businesslogic.web
         		delegate
         		{
         			List<Domain> result = new List<Domain>();
-        			using(SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+        			using(SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
 						"select id, domainName from umbracoDomains"))
         			{
         				while(dr.Read())
@@ -163,10 +164,10 @@ namespace umbraco.cms.businesslogic.web
                 throw new Exception("Domain " + DomainName + " already exists!");
             else
             {
-                SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                         string.Format(
                                             "insert into umbracoDomains (domainDefaultLanguage, domainRootStructureID, domainName) values ({0}, {1},'{2}')",
-                                            LanguageId, RootNodeId, sqlHelper.safeString(DomainName.ToLower())));
+                                            LanguageId, RootNodeId, SqlHelper.SafeString(DomainName.ToLower())));
             	InvalidateCache();
             }
         }

@@ -5,11 +5,11 @@ using System.Data.SqlClient;
 using System.Web;
 using System.Web.Caching;
 
-using businesslogic;
+using Umbraco.Cms.BusinessLogic;
 
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.BusinessLogic
+namespace Umbraco.BusinessLogic
 {
 	/// <summary>
 	/// hhh
@@ -42,7 +42,7 @@ namespace umbraco.BusinessLogic
 		public UserType(int id)
 		{
 			_id = id;
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(_connstring, CommandType.Text,
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connstring, CommandType.Text,
 					"select UserTypeName, UserTypeDefaultPermissions, UserTypeAlias from umbracoUserType where id = @id",
 					new SqlParameter("@id", id)))
 			{
@@ -71,7 +71,7 @@ namespace umbraco.BusinessLogic
 					{
 						List<UserType> tmp = new List<UserType>();
 						using (SqlDataReader dr =
-							SqlHelper.ExecuteReader(_connstring, CommandType.Text, "select id, UserTypeName from umbracoUserType"))
+							Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connstring, CommandType.Text, "select id, UserTypeName from umbracoUserType"))
 						{
 							while (dr.Read())
 							{

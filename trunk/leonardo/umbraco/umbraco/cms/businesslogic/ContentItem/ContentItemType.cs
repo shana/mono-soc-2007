@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.cms.businesslogic.contentitem
+namespace Umbraco.Cms.BusinessLogic.contentitem
 {
 	/// <summary>
 	/// Summary description for ContentItemType.

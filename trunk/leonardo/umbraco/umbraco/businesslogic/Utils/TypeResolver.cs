@@ -4,7 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace umbraco.BusinessLogic.Utils
+namespace Umbraco.BusinessLogic.Utils
 {
 	[Serializable]
 	public class TypeResolver : MarshalByRefObject

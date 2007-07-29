@@ -5,7 +5,7 @@ using System.Web;
 
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.relation
+namespace Umbraco.Cms.BusinessLogic.relation
 {
 	/// <summary>
 	/// Summary description for RelationType.
@@ -29,8 +29,8 @@ namespace umbraco.cms.businesslogic.relation
 
 		public RelationType(int Id)
 		{
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
-				"select id, dual, name, alias from umbracoRelationType where id = @id", new SqlParameter("@id", Id)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+				"select id, dual, Name, alias from umbracoRelationType where id = @id", new SqlParameter("@id", Id)))
 			{
 				if(dr.Read())
 				{
@@ -38,7 +38,7 @@ namespace umbraco.cms.businesslogic.relation
 					this._dual = bool.Parse(dr["dual"].ToString());
 					//this._parentObjectType = new Guid(dr["parentObjectType"].ToString());
 					//this._childObjectType = new Guid(dr["childObjectType"].ToString());
-					this._name = dr["name"].ToString();
+					this._name = dr["Name"].ToString();
 					this._alias = dr["alias"].ToString();
 				}
 			}
@@ -59,8 +59,8 @@ namespace umbraco.cms.businesslogic.relation
 			set
 			{
 				_name = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
-					"update umbracoRelationType set name = @name where id = " + this.Id.ToString(), new SqlParameter("@name", value));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+					"update umbracoRelationType set Name = @Name where id = " + this.Id.ToString(), new SqlParameter("@Name", value));
 				this.InvalidateCache();
 			}
 		}
@@ -71,7 +71,7 @@ namespace umbraco.cms.businesslogic.relation
 			set
 			{
 				_alias = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
 					"update umbracoRelationType set alias = @alias where id = " + this.Id.ToString(), new SqlParameter("@alias", value));
 				this.InvalidateCache();
 			}
@@ -83,7 +83,7 @@ namespace umbraco.cms.businesslogic.relation
 			set
 			{
 				_dual = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
 					"update umbracoRelationType set dual = @dual where id = " + this.Id.ToString(), new SqlParameter("@dual", value));
 				this.InvalidateCache();
 			}
@@ -104,7 +104,7 @@ namespace umbraco.cms.businesslogic.relation
 		{
 			try
 			{
-				return umbraco.cms.businesslogic.cache.Cache.GetCacheItem<RelationType>(
+				return Umbraco.Cms.BusinessLogic.cache.Cache.GetCacheItem<RelationType>(
 					GetCacheKey(id), relationTypeSyncLock, TimeSpan.FromMinutes(30),
 					delegate { return new RelationType(id); });
 			}
@@ -118,7 +118,7 @@ namespace umbraco.cms.businesslogic.relation
 		{
 			try
 			{
-				return GetById(int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+				return GetById(int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
 					"select id from umbracoRelationType where alias = @alias",
 					new SqlParameter("@alias", Alias)).ToString()));
 			}
@@ -130,7 +130,7 @@ namespace umbraco.cms.businesslogic.relation
 
 		protected virtual void InvalidateCache()
 		{
-			umbraco.cms.businesslogic.cache.Cache.ClearCacheItem(GetCacheKey(this.Id));
+			Umbraco.Cms.BusinessLogic.cache.Cache.ClearCacheItem(GetCacheKey(this.Id));
 		}
 
 		private static string GetCacheKey(int id)

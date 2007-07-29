@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using System.Web;
 using ICSharpCode.SharpZipLib.Zip;
-using umbraco;
+using Umbraco;
 
-namespace umbraco.cms.businesslogic.utilities
+namespace Umbraco.Cms.BusinessLogic.utilities
 {
     public class Zip
     {

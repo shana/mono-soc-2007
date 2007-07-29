@@ -11,17 +11,17 @@ using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
-using umbraco.cms.businesslogic.web;
-using umbraco.cms.businesslogic.propertytype;
-using umbraco.BusinessLogic;
+using Umbraco.Cms.BusinessLogic.web;
+using Umbraco.Cms.BusinessLogic.propertytype;
+using Umbraco.BusinessLogic;
 using Microsoft.ApplicationBlocks.Data;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace umbraco.cms.businesslogic.macro
+namespace Umbraco.Cms.BusinessLogic.macro
 {
     /// <summary>
-    /// The packager is a component which enables sharing of both data and functionality components between different umbraco installations.
+    /// The packager is a component which enables sharing of both data and functionality components between different Umbraco installations.
     /// 
     /// The output is a .umb (a zip compressed file) which contains the exported documents/medias/macroes/documenttypes (etc.)
     /// in a Xml document, along with the physical files used (images/usercontrols/xsl documents etc.)
@@ -76,18 +76,18 @@ namespace umbraco.cms.businesslogic.macro
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="Name">The name of the package</param>
-        /// <param name="Version">The version of the package</param>
-        /// <param name="Url">The url to a descriptionpage</param>
-        /// <param name="License">The license under which the package is released (preferably GPL ;))</param>
-        /// <param name="LicenseUrl">The url to a licensedescription</param>
-        /// <param name="Author">The original author of the package</param>
-        /// <param name="AuthorUrl">The url to the Authors website</param>
-        /// <param name="RequirementsMajor">Umbraco version major</param>
-        /// <param name="RequirementsMinor">Umbraco version minor</param>
-        /// <param name="RequirementsPatch">Umbraco version patch</param>
-        /// <param name="Readme">The readme text</param>
-        /// <param name="Control">The name of the usercontrol used to configure the package after install</param>
+        /// <param Name="Name">The Name of the package</param>
+        /// <param Name="Version">The version of the package</param>
+        /// <param Name="Url">The url to a descriptionpage</param>
+        /// <param Name="License">The license under which the package is released (preferably GPL ;))</param>
+        /// <param Name="LicenseUrl">The url to a licensedescription</param>
+        /// <param Name="Author">The original author of the package</param>
+        /// <param Name="AuthorUrl">The url to the Authors website</param>
+        /// <param Name="RequirementsMajor">Umbraco version major</param>
+        /// <param Name="RequirementsMinor">Umbraco version minor</param>
+        /// <param Name="RequirementsPatch">Umbraco version patch</param>
+        /// <param Name="Readme">The readme text</param>
+        /// <param Name="Control">The Name of the usercontrol used to configure the package after install</param>
         public Packager(string Name, string Version, string Url, string License, string LicenseUrl, string Author, string AuthorUrl, int RequirementsMajor, int RequirementsMinor, int RequirementsPatch, string Readme, string Control)
         {
             _name = Name;
@@ -107,7 +107,7 @@ namespace umbraco.cms.businesslogic.macro
         /// <summary>
         /// Adds the macro to the package
         /// </summary>
-        /// <param name="MacroToAdd">Macro to add</param>
+        /// <param Name="MacroToAdd">Macro to add</param>
         public void AddMacro(Macro MacroToAdd)
         {
             _macros.Add(MacroToAdd);
@@ -117,7 +117,7 @@ namespace umbraco.cms.businesslogic.macro
         /// <summary>
         /// Not implemented
         /// </summary>
-        /// <param name="OutputPath">Not implemented</param>
+        /// <param Name="OutputPath">Not implemented</param>
         public void Package(string OutputPath)
         {
         }
@@ -125,7 +125,7 @@ namespace umbraco.cms.businesslogic.macro
         /// <summary>
         /// Imports the specified package
         /// </summary>
-        /// <param name="InputFile">Filename of the umbracopackage</param>
+        /// <param Name="InputFile">Filename of the umbracopackage</param>
         /// <returns></returns>
         public string Import(string InputFile)
         {
@@ -158,7 +158,7 @@ namespace umbraco.cms.businesslogic.macro
         /// <summary>
         /// Invoking this method installs the current package
         /// </summary>
-        /// <param name="tempDir">Temporary folder where the package's content are extracted to</param>
+        /// <param Name="tempDir">Temporary folder where the package's content are extracted to</param>
         public void Install(string tempDir)
         {
 
@@ -167,15 +167,15 @@ namespace umbraco.cms.businesslogic.macro
             // Install macros
             foreach (XmlNode n in _packageConfig.DocumentElement.SelectNodes("//macro"))
             {
-                cms.businesslogic.macro.Macro m = cms.businesslogic.macro.Macro.MakeNew(xmlHelper.GetNodeValue(n.SelectSingleNode("name")));
-                m.Alias = xmlHelper.GetNodeValue(n.SelectSingleNode("alias"));
-                m.Assembly = xmlHelper.GetNodeValue(n.SelectSingleNode("scriptAssembly"));
-                m.Type = xmlHelper.GetNodeValue(n.SelectSingleNode("scriptType"));
-                m.Xslt = xmlHelper.GetNodeValue(n.SelectSingleNode("xslt"));
-                m.RefreshRate = int.Parse(xmlHelper.GetNodeValue(n.SelectSingleNode("refreshRate")));
+                Cms.BusinessLogic.macro.Macro m = Cms.BusinessLogic.macro.Macro.MakeNew(XmlHelper.GetNodeValue(n.SelectSingleNode("Name")));
+                m.Alias = XmlHelper.GetNodeValue(n.SelectSingleNode("alias"));
+                m.Assembly = XmlHelper.GetNodeValue(n.SelectSingleNode("scriptAssembly"));
+                m.Type = XmlHelper.GetNodeValue(n.SelectSingleNode("scriptType"));
+                m.Xslt = XmlHelper.GetNodeValue(n.SelectSingleNode("xslt"));
+                m.RefreshRate = int.Parse(XmlHelper.GetNodeValue(n.SelectSingleNode("refreshRate")));
                 try
                 {
-                    m.UseInEditor = bool.Parse(xmlHelper.GetNodeValue(n.SelectSingleNode("useInEditor")));
+                    m.UseInEditor = bool.Parse(XmlHelper.GetNodeValue(n.SelectSingleNode("useInEditor")));
                 }
                 catch
                 { }
@@ -185,12 +185,12 @@ namespace umbraco.cms.businesslogic.macro
                 {
                     try
                     {
-                        cms.businesslogic.macro.MacroProperty.MakeNew(
+                        Cms.BusinessLogic.macro.MacroProperty.MakeNew(
                             m,
                             bool.Parse(mp.Attributes.GetNamedItem("show").Value),
                             mp.Attributes.GetNamedItem("alias").Value,
-                            mp.Attributes.GetNamedItem("name").Value,
-                            new cms.businesslogic.macro.MacroPropertyType(mp.Attributes.GetNamedItem("propertyType").Value)
+                            mp.Attributes.GetNamedItem("Name").Value,
+                            new Cms.BusinessLogic.macro.MacroPropertyType(mp.Attributes.GetNamedItem("propertyType").Value)
                             );
                     }
                     catch (Exception macroPropertyExp)
@@ -206,32 +206,32 @@ namespace umbraco.cms.businesslogic.macro
                 appPath = "";
             foreach (XmlNode n in _packageConfig.DocumentElement.SelectNodes("//file"))
             {
-                if (!Directory.Exists(HttpContext.Current.Server.MapPath(appPath + xmlHelper.GetNodeValue(n.SelectSingleNode("orgPath")))))
-                    Directory.CreateDirectory(HttpContext.Current.Server.MapPath(appPath + xmlHelper.GetNodeValue(n.SelectSingleNode("orgPath"))));
-                File.Copy(tempDir + Path.DirectorySeparatorChar + xmlHelper.GetNodeValue(n.SelectSingleNode("guid")), HttpContext.Current.Server.MapPath(appPath + xmlHelper.GetNodeValue(n.SelectSingleNode("orgPath")) + Path.DirectorySeparatorChar + xmlHelper.GetNodeValue(n.SelectSingleNode("orgName"))), true);
-                File.Delete(tempDir + Path.DirectorySeparatorChar + xmlHelper.GetNodeValue(n.SelectSingleNode("guid")));
+                if (!Directory.Exists(HttpContext.Current.Server.MapPath(appPath + XmlHelper.GetNodeValue(n.SelectSingleNode("orgPath")))))
+                    Directory.CreateDirectory(HttpContext.Current.Server.MapPath(appPath + XmlHelper.GetNodeValue(n.SelectSingleNode("orgPath"))));
+                File.Copy(tempDir + Path.DirectorySeparatorChar + XmlHelper.GetNodeValue(n.SelectSingleNode("guid")), HttpContext.Current.Server.MapPath(appPath + XmlHelper.GetNodeValue(n.SelectSingleNode("orgPath")) + Path.DirectorySeparatorChar + XmlHelper.GetNodeValue(n.SelectSingleNode("orgName"))), true);
+                File.Delete(tempDir + Path.DirectorySeparatorChar + XmlHelper.GetNodeValue(n.SelectSingleNode("guid")));
             }
 
 
             // Get current user
-            BasePages.UmbracoEnsuredPage uep = new umbraco.BasePages.UmbracoEnsuredPage();
-            BusinessLogic.User u = uep.getUser();
+            BasePages.UmbracoEnsuredPage uep = new Umbraco.BasePages.UmbracoEnsuredPage();
+            BusinessLogic.User u = uep.ValidatedUser;
 
             // Add Templates
             foreach (XmlNode n in _packageConfig.DocumentElement.SelectNodes("Templates/Template"))
             {
-                template.Template t = template.Template.MakeNew(xmlHelper.GetNodeValue(n.SelectSingleNode("Name")), u);
-                t.Alias = xmlHelper.GetNodeValue(n.SelectSingleNode("Alias"));
-                t.Design = xmlHelper.GetNodeValue(n.SelectSingleNode("Design"));
+                template.Template t = template.Template.MakeNew(XmlHelper.GetNodeValue(n.SelectSingleNode("Name")), u);
+                t.Alias = XmlHelper.GetNodeValue(n.SelectSingleNode("Alias"));
+                t.Design = XmlHelper.GetNodeValue(n.SelectSingleNode("Design"));
             }
 
             // Add master templates
             foreach (XmlNode n in _packageConfig.DocumentElement.SelectNodes("Templates/Template"))
             {
-                string master = xmlHelper.GetNodeValue(n.SelectSingleNode("Master"));
+                string master = XmlHelper.GetNodeValue(n.SelectSingleNode("Master"));
                 if (master.Trim() != "")
                 {
-                    template.Template t = template.Template.GetByAlias(xmlHelper.GetNodeValue(n.SelectSingleNode("Alias")));
+                    template.Template t = template.Template.GetByAlias(XmlHelper.GetNodeValue(n.SelectSingleNode("Alias")));
                     template.Template masterTemplate = template.Template.GetByAlias(master);
                     if (masterTemplate != null)
                         t.MasterTemplate = template.Template.GetByAlias(master).Id;
@@ -248,13 +248,13 @@ namespace umbraco.cms.businesslogic.macro
             // Add documenttype structure
             foreach (XmlNode n in _packageConfig.DocumentElement.SelectNodes("DocumentTypes/DocumentType"))
             {
-                DocumentType dt = DocumentType.GetByAlias(xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Alias")));
+                DocumentType dt = DocumentType.GetByAlias(XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Alias")));
                 if (dt != null)
                 {
                     ArrayList allowed = new ArrayList();
                     foreach (XmlNode structure in n.SelectNodes("Structure/DocumentType"))
                     {
-                        DocumentType dtt = DocumentType.GetByAlias(xmlHelper.GetNodeValue(structure));
+                        DocumentType dtt = DocumentType.GetByAlias(XmlHelper.GetNodeValue(structure));
                         allowed.Add(dtt.Id);
                     }
                     int[] adt = new int[allowed.Count];
@@ -269,18 +269,18 @@ namespace umbraco.cms.businesslogic.macro
             {
                 StyleSheet s = StyleSheet.MakeNew(
                     u,
-                    xmlHelper.GetNodeValue(n.SelectSingleNode("Name")),
-                    xmlHelper.GetNodeValue(n.SelectSingleNode("FileName")),
-                    xmlHelper.GetNodeValue(n.SelectSingleNode("Content")));
+                    XmlHelper.GetNodeValue(n.SelectSingleNode("Name")),
+                    XmlHelper.GetNodeValue(n.SelectSingleNode("FileName")),
+                    XmlHelper.GetNodeValue(n.SelectSingleNode("Content")));
 
                 foreach (XmlNode prop in n.SelectNodes("Properties/Property"))
                 {
                     StylesheetProperty sp = StylesheetProperty.MakeNew(
-                        xmlHelper.GetNodeValue(prop.SelectSingleNode("Name")),
+                        XmlHelper.GetNodeValue(prop.SelectSingleNode("Name")),
                         s,
                         u);
-                    sp.Alias = xmlHelper.GetNodeValue(prop.SelectSingleNode("Alias"));
-                    sp.value = xmlHelper.GetNodeValue(prop.SelectSingleNode("Value"));
+                    sp.Alias = XmlHelper.GetNodeValue(prop.SelectSingleNode("Alias"));
+                    sp.value = XmlHelper.GetNodeValue(prop.SelectSingleNode("Value"));
                 }
                 s.saveCssToFile();
 
@@ -290,7 +290,7 @@ namespace umbraco.cms.businesslogic.macro
 
             // Documents
             foreach (XmlElement n in _packageConfig.DocumentElement.SelectNodes("Documents/DocumentSet [@importMode = 'root']/node"))
-                cms.businesslogic.web.Document.Import(-1, u, n);
+                Cms.BusinessLogic.web.Document.Import(-1, u, n);
 
             callCommands("end");
 
@@ -298,27 +298,27 @@ namespace umbraco.cms.businesslogic.macro
 
         public static void ImportDocumentType(XmlNode n, BusinessLogic.User u, bool ImportStructure)
         {
-            DocumentType dt = DocumentType.GetByAlias(xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Alias")));
+            DocumentType dt = DocumentType.GetByAlias(XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Alias")));
             if (dt == null)
             {
-                dt = DocumentType.MakeNew(u, xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Name")));
-                dt.Alias = xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Alias"));
+                dt = DocumentType.MakeNew(u, XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Name")));
+                dt.Alias = XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Alias"));
             }
             else
             {
-                dt.Text = xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Name"));
+                dt.Text = XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Name"));
             }
 
             // Info
-            dt.IconUrl = xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Icon"));
-            dt.Thumbnail = xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Thumbnail"));
-            dt.Description = xmlHelper.GetNodeValue(n.SelectSingleNode("Info/Description"));
+            dt.IconUrl = XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Icon"));
+            dt.Thumbnail = XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Thumbnail"));
+            dt.Description = XmlHelper.GetNodeValue(n.SelectSingleNode("Info/Description"));
 
             // Templates	
             ArrayList templates = new ArrayList();
             foreach (XmlNode tem in n.SelectNodes("Info/AllowedTemplates/Template"))
             {
-                template.Template t = template.Template.GetByAlias(xmlHelper.GetNodeValue(tem));
+                template.Template t = template.Template.GetByAlias(XmlHelper.GetNodeValue(tem));
                 if (t != null)
                     templates.Add(t);
             }
@@ -338,8 +338,8 @@ namespace umbraco.cms.businesslogic.macro
             // Default template
             try
             {
-                if (xmlHelper.GetNodeValue(n.SelectSingleNode("Info/DefaultTemplate")) != "")
-                    dt.DefaultTemplate = template.Template.GetByAlias(xmlHelper.GetNodeValue(n.SelectSingleNode("Info/DefaultTemplate"))).Id;
+                if (XmlHelper.GetNodeValue(n.SelectSingleNode("Info/DefaultTemplate")) != "")
+                    dt.DefaultTemplate = template.Template.GetByAlias(XmlHelper.GetNodeValue(n.SelectSingleNode("Info/DefaultTemplate"))).Id;
             }
             catch (Exception ee)
             {
@@ -347,7 +347,7 @@ namespace umbraco.cms.businesslogic.macro
             }
 
             // Tabs
-            cms.businesslogic.ContentType.TabI[] tabs = dt.getVirtualTabs;
+            Cms.BusinessLogic.ContentType.TabI[] tabs = dt.getVirtualTabs;
             string tabNames = ";";
             for (int t = 0; t < tabs.Length; t++)
                 tabNames += tabs[t].Caption + ";";
@@ -355,17 +355,17 @@ namespace umbraco.cms.businesslogic.macro
             Hashtable ht = new Hashtable();
             foreach (XmlNode t in n.SelectNodes("Tabs/Tab"))
             {
-                if (tabNames.IndexOf(";" + xmlHelper.GetNodeValue(t.SelectSingleNode("Caption")) + ";") == -1)
+                if (tabNames.IndexOf(";" + XmlHelper.GetNodeValue(t.SelectSingleNode("Caption")) + ";") == -1)
                 {
-                    ht.Add(int.Parse(xmlHelper.GetNodeValue(t.SelectSingleNode("Id"))),
-                        dt.AddVirtualTab(xmlHelper.GetNodeValue(t.SelectSingleNode("Caption"))));
+                    ht.Add(int.Parse(XmlHelper.GetNodeValue(t.SelectSingleNode("Id"))),
+                        dt.AddVirtualTab(XmlHelper.GetNodeValue(t.SelectSingleNode("Caption"))));
                 }
             }
 
 
             // Get all tabs in hashtable
             Hashtable tabList = new Hashtable();
-            foreach (cms.businesslogic.ContentType.TabI t in dt.getVirtualTabs)
+            foreach (Cms.BusinessLogic.ContentType.TabI t in dt.getVirtualTabs)
             {
                 if (!tabList.ContainsKey(t.Caption))
                     tabList.Add(t.Caption, t.Id);
@@ -376,7 +376,7 @@ namespace umbraco.cms.businesslogic.macro
             foreach (XmlNode gp in n.SelectNodes("GenericProperties/GenericProperty"))
             {
 
-                Guid dtId = new Guid(xmlHelper.GetNodeValue(gp.SelectSingleNode("Type")));
+                Guid dtId = new Guid(XmlHelper.GetNodeValue(gp.SelectSingleNode("Type")));
                 int dfId = 0;
                 foreach (datatype.DataTypeDefinition df in datatype.DataTypeDefinition.GetAll())
                     if (df.DataType.Id == dtId)
@@ -386,31 +386,31 @@ namespace umbraco.cms.businesslogic.macro
                     }
                 if (dfId != 0)
                 {
-                    PropertyType pt = dt.getPropertyType(xmlHelper.GetNodeValue(gp.SelectSingleNode("Alias")));
+                    PropertyType pt = dt.getPropertyType(XmlHelper.GetNodeValue(gp.SelectSingleNode("Alias")));
                     if (pt == null)
                     {
                         dt.AddPropertyType(
                             datatype.DataTypeDefinition.GetDataTypeDefinition(dfId),
-                            xmlHelper.GetNodeValue(gp.SelectSingleNode("Alias")),
-                            xmlHelper.GetNodeValue(gp.SelectSingleNode("Name"))
+                            XmlHelper.GetNodeValue(gp.SelectSingleNode("Alias")),
+                            XmlHelper.GetNodeValue(gp.SelectSingleNode("Name"))
                             );
-                        pt = dt.getPropertyType(xmlHelper.GetNodeValue(gp.SelectSingleNode("Alias")));
+                        pt = dt.getPropertyType(XmlHelper.GetNodeValue(gp.SelectSingleNode("Alias")));
                     }
                     else
                     {
                         pt.DataTypeDefinition = datatype.DataTypeDefinition.GetDataTypeDefinition(dfId);
-                        pt.Name = xmlHelper.GetNodeValue(gp.SelectSingleNode("Name"));
+                        pt.Name = XmlHelper.GetNodeValue(gp.SelectSingleNode("Name"));
                     }
 
-                    pt.Mandatory = bool.Parse(xmlHelper.GetNodeValue(gp.SelectSingleNode("Mandatory")));
-                    pt.ValidationRegExp = xmlHelper.GetNodeValue(gp.SelectSingleNode("Validation"));
-                    pt.Description = xmlHelper.GetNodeValue(gp.SelectSingleNode("Description"));
+                    pt.Mandatory = bool.Parse(XmlHelper.GetNodeValue(gp.SelectSingleNode("Mandatory")));
+                    pt.ValidationRegExp = XmlHelper.GetNodeValue(gp.SelectSingleNode("Validation"));
+                    pt.Description = XmlHelper.GetNodeValue(gp.SelectSingleNode("Description"));
 
                     // tab
                     try
                     {
-                        if (tabList.ContainsKey(xmlHelper.GetNodeValue(gp.SelectSingleNode("Tab"))))
-                            pt.TabId = (int)tabList[xmlHelper.GetNodeValue(gp.SelectSingleNode("Tab"))];
+                        if (tabList.ContainsKey(XmlHelper.GetNodeValue(gp.SelectSingleNode("Tab"))))
+                            pt.TabId = (int)tabList[XmlHelper.GetNodeValue(gp.SelectSingleNode("Tab"))];
                     }
                     catch (Exception ee)
                     {
@@ -426,7 +426,7 @@ namespace umbraco.cms.businesslogic.macro
                     ArrayList allowed = new ArrayList();
                     foreach (XmlNode structure in n.SelectNodes("Structure/DocumentType"))
                     {
-                        DocumentType dtt = DocumentType.GetByAlias(xmlHelper.GetNodeValue(structure));
+                        DocumentType dtt = DocumentType.GetByAlias(XmlHelper.GetNodeValue(structure));
                         if (dtt != null)
                             allowed.Add(dtt.Id);
                     }
@@ -461,13 +461,13 @@ namespace umbraco.cms.businesslogic.macro
         /// <summary>
         /// Reads the configuration of the package from the configuration xmldocument
         /// </summary>
-        /// <param name="tempDir">The folder to which the contents of the package is extracted</param>
+        /// <param Name="tempDir">The folder to which the contents of the package is extracted</param>
         public void LoadConfig(string tempDir)
         {
             _packageConfig = new XmlDocument();
             _packageConfig.Load(tempDir + Path.DirectorySeparatorChar + "package.xml");
 
-            _name = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/name").FirstChild.Value;
+            _name = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/Name").FirstChild.Value;
             _version = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/version").FirstChild.Value;
             _url = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/url").FirstChild.Value;
             _license = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/license").FirstChild.Value;
@@ -475,16 +475,16 @@ namespace umbraco.cms.businesslogic.macro
             _reqMajor = int.Parse(_packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/requirements/major").FirstChild.Value);
             _reqMinor = int.Parse(_packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/requirements/major").FirstChild.Value);
             _reqPatch = int.Parse(_packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/package/requirements/patch").FirstChild.Value);
-            _authorName = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/author/name").FirstChild.Value;
+            _authorName = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/author/Name").FirstChild.Value;
             _authorUrl = _packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/author/website").FirstChild.Value;
             try
             {
-                _readme = xmlHelper.GetNodeValue(_packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/readme"));
+                _readme = XmlHelper.GetNodeValue(_packageConfig.DocumentElement.SelectSingleNode("/umbPackage/info/readme"));
             }
             catch { }
             try
             {
-                _control = xmlHelper.GetNodeValue(_packageConfig.DocumentElement.SelectSingleNode("/umbPackage/control"));
+                _control = XmlHelper.GetNodeValue(_packageConfig.DocumentElement.SelectSingleNode("/umbPackage/control"));
             }
             catch { }
         }
@@ -539,14 +539,14 @@ namespace umbraco.cms.businesslogic.macro
         {
 
             // Check for package directory
-            if (!System.IO.Directory.Exists(System.Web.HttpContext.Current.Server.MapPath(umbraco.GlobalSettings.StorageDirectory + "\\packages")))
-                System.IO.Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(umbraco.GlobalSettings.StorageDirectory + "\\packages"));
+            if (!System.IO.Directory.Exists(System.Web.HttpContext.Current.Server.MapPath(Umbraco.GlobalSettings.StorageDirectory + "\\packages")))
+                System.IO.Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(Umbraco.GlobalSettings.StorageDirectory + "\\packages"));
 
             System.Net.WebClient wc = new System.Net.WebClient();
 
             wc.DownloadFile(
                 "http://" + UmbracoSettings.PackageServer + "/fetch?package=" + Package.ToString(),
-                System.Web.HttpContext.Current.Server.MapPath(umbraco.GlobalSettings.StorageDirectory + "\\packages\\" + Package.ToString() + ".umb"));
+                System.Web.HttpContext.Current.Server.MapPath(Umbraco.GlobalSettings.StorageDirectory + "\\packages\\" + Package.ToString() + ".umb"));
 
             return "packages\\" + Package.ToString() + ".umb";
         }
@@ -564,10 +564,10 @@ namespace umbraco.cms.businesslogic.macro
 
         /// <summary>
         /// Initialize package install status object by specifying the internal id of the installation. 
-        /// The id is specific to the local umbraco installation and cannot be used to identify the package in general. 
+        /// The id is specific to the local Umbraco installation and cannot be used to identify the package in general. 
         /// Use the Package(Guid) constructor to check whether a package has been installed
         /// </summary>
-        /// <param name="Id">The internal id.</param>
+        /// <param Name="Id">The internal id.</param>
         public Package(int Id)
         {
             initialize(Id);
@@ -576,7 +576,7 @@ namespace umbraco.cms.businesslogic.macro
         public Package(Guid Id)
         {
             int installStatusId = int.Parse(
-                SqlHelper.ExecuteScalar(
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
                 GlobalSettings.DbDSN,
                 CommandType.Text,
                 "select id from umbracoInstalledPackages where package = @package and upgradeId = 0",
@@ -592,7 +592,7 @@ namespace umbraco.cms.businesslogic.macro
         {
 
             SqlDataReader dr =
-                SqlHelper.ExecuteReader(
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
                 GlobalSettings.DbDSN,
                 CommandType.Text,
                 "select id, uninstalled, upgradeId, installDate, userId, package, versionMajor, versionMinor, versionPatch from umbracoInstalledPackages where id = @id",
@@ -631,14 +631,14 @@ namespace umbraco.cms.businesslogic.macro
             if (Id == 0)
             {
                 Id = int.Parse(
-                    SqlHelper.ExecuteScalar(
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
                     GlobalSettings.DbDSN,
                     CommandType.Text,
                     "SET NOCOUNT ON insert into umbracoInstalledPackages (uninstalled, upgradeId, installDate, userId, versionMajor, versionMinor, versionPatch) values (@uninstalled, @upgradeId, @installDate, @userId, @versionMajor, @versionMinor, @versionPatch) select @@IDENTITY SET NOCOUNT OFF",
                     values).ToString());
             }
 
-            SqlHelper.ExecuteNonQuery(
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(
                 GlobalSettings.DbDSN,
                 CommandType.Text,
                 "update umbracoInstalledPackages set " +

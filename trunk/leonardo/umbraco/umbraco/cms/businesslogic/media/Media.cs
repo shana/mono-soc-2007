@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.cms.businesslogic.media
+namespace Umbraco.Cms.BusinessLogic.media
 {
 	/// <summary>
 	/// A media represents a physical file and metadata on the file.
@@ -12,7 +12,7 @@ namespace umbraco.cms.businesslogic.media
 		/// <summary>
 		/// Contructs a media object given the Id
 		/// </summary>
-		/// <param name="id">Identifier</param>
+		/// <param Name="id">Identifier</param>
 		public Media(int id) : base(id)
 		{
 		}
@@ -20,7 +20,7 @@ namespace umbraco.cms.businesslogic.media
 		/// <summary>
 		/// Contructs a media object given the Id
 		/// </summary>
-		/// <param name="id">Identifier</param>
+		/// <param Name="id">Identifier</param>
 		public Media(Guid id) : base(id)
 		{}
 
@@ -41,10 +41,10 @@ namespace umbraco.cms.businesslogic.media
 		/// <summary>
 		/// Creates a new Media
 		/// </summary>
-		/// <param name="Name">The name of the media</param>
-		/// <param name="dct">The type of the media</param>
-		/// <param name="u">The user creating the media</param>
-		/// <param name="ParentId">The id of the folder under which the media is created</param>
+		/// <param Name="Name">The Name of the media</param>
+		/// <param Name="dct">The type of the media</param>
+		/// <param Name="u">The user creating the media</param>
+		/// <param Name="ParentId">The id of the folder under which the media is created</param>
 		/// <returns></returns>
 		public static Media MakeNew(string Name, MediaType dct, BusinessLogic.User u, int ParentId) 
 		{			
@@ -96,7 +96,7 @@ namespace umbraco.cms.businesslogic.media
 		/// 
 		/// Use with care.
 		/// </summary>
-		/// <param name="dt"></param>
+		/// <param Name="dt"></param>
 		public static void DeleteFromType(MediaType dt) 
 		{
 			foreach (Content c in Media.getContentOfContentType(dt)) 

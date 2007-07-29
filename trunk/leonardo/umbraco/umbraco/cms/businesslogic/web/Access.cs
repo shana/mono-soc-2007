@@ -7,7 +7,7 @@ using System.Xml.XPath;
 using System.Collections;
 using System.IO;
 
-namespace umbraco.cms.businesslogic.web
+namespace Umbraco.Cms.BusinessLogic.web
 {
 	/// <summary>
 	/// Summary description for Access.
@@ -146,7 +146,7 @@ namespace umbraco.cms.businesslogic.web
 		{
 			bool isProtected = false;
 
-			cms.businesslogic.web.Document d = new Document(DocumentId);
+			Cms.BusinessLogic.web.Document d = new Document(DocumentId);
 
 			if (!IsProtected(DocumentId, d.Path))
 				isProtected = false;
@@ -162,20 +162,20 @@ namespace umbraco.cms.businesslogic.web
 			return isProtected;
 		}
 
-		public static cms.businesslogic.member.MemberGroup[] GetAccessingGroups(int DocumentId) 
+		public static Cms.BusinessLogic.Member.MemberGroup[] GetAccessingGroups(int DocumentId) 
 		{
-			cms.businesslogic.web.Document d = new Document(DocumentId);
+			Cms.BusinessLogic.web.Document d = new Document(DocumentId);
 
 			if (!IsProtected(DocumentId, d.Path))
 				return null;
 			else 
 			{
                 XmlNode currentNode = getPage(getProtectedPage(d.Path));
-				cms.businesslogic.member.MemberGroup[] mg = new umbraco.cms.businesslogic.member.MemberGroup[currentNode.SelectNodes("./group").Count];
+				Cms.BusinessLogic.Member.MemberGroup[] mg = new Umbraco.Cms.BusinessLogic.Member.MemberGroup[currentNode.SelectNodes("./group").Count];
 				int count = 0;
 				foreach (XmlNode n in currentNode.SelectNodes("./group"))
 				{
-					mg[count] = new cms.businesslogic.member.MemberGroup(int.Parse(n.Attributes.GetNamedItem("id").Value));
+					mg[count] = new Cms.BusinessLogic.Member.MemberGroup(int.Parse(n.Attributes.GetNamedItem("id").Value));
 					count++;
 				}
 				return mg;
@@ -183,9 +183,9 @@ namespace umbraco.cms.businesslogic.web
 
 		}
 
-		public static cms.businesslogic.member.Member GetAccessingMember(int DocumentId) 
+		public static Cms.BusinessLogic.Member.Member GetAccessingMember(int DocumentId) 
 		{
-			cms.businesslogic.web.Document d = new Document(DocumentId);
+			Cms.BusinessLogic.web.Document d = new Document(DocumentId);
 
 			if (!IsProtected(DocumentId, d.Path))
 				return null;
@@ -195,21 +195,21 @@ namespace umbraco.cms.businesslogic.web
 			{
 				XmlNode currentNode = getPage(getProtectedPage(d.Path));
 				if (currentNode.Attributes.GetNamedItem("memberId") != null)
-					return new cms.businesslogic.member.Member(int.Parse(
+					return new Cms.BusinessLogic.Member.Member(int.Parse(
 						currentNode.Attributes.GetNamedItem("memberId").Value));
 				else
-					throw new Exception("Document doesn't contain a memberId. This might be caused if document is protected using umbraco RC1 or older.");
+					throw new Exception("Document doesn't contain a memberId. This might be caused if document is protected using Umbraco RC1 or older.");
 
 			}
 
 		}
 
 
-		public static bool HasAccess(int DocumentId, cms.businesslogic.member.Member Member) 
+		public static bool HasAccess(int DocumentId, Cms.BusinessLogic.Member.Member Member) 
 		{
 			bool hasAccess = false;
 
-			cms.businesslogic.web.Document d = new Document(DocumentId);
+			Cms.BusinessLogic.web.Document d = new Document(DocumentId);
 
 			if (!IsProtected(DocumentId, d.Path))
 				hasAccess = true;
@@ -221,7 +221,7 @@ namespace umbraco.cms.businesslogic.web
 					IDictionaryEnumerator ide = Member.Groups.GetEnumerator();
 					while(ide.MoveNext())
 					{
-						cms.businesslogic.member.MemberGroup mg = (cms.businesslogic.member.MemberGroup) ide.Value;
+						Cms.BusinessLogic.Member.MemberGroup mg = (Cms.BusinessLogic.Member.MemberGroup) ide.Value;
 						if (currentNode.SelectSingleNode("./group [@id=" + mg.Id.ToString() + "]") != null) 
 						{
 							hasAccess = true;
@@ -235,7 +235,7 @@ namespace umbraco.cms.businesslogic.web
 		}
 
 
-		public static bool HasAccess(int DocumentId, string Path, cms.businesslogic.member.Member Member) 
+		public static bool HasAccess(int DocumentId, string Path, Cms.BusinessLogic.Member.Member Member) 
 		{
 			bool hasAccess = false;
 
@@ -249,7 +249,7 @@ namespace umbraco.cms.businesslogic.web
 					IDictionaryEnumerator ide = Member.Groups.GetEnumerator();
 					while(ide.MoveNext())
 					{
-						cms.businesslogic.member.MemberGroup mg = (cms.businesslogic.member.MemberGroup) ide.Value;
+						Cms.BusinessLogic.Member.MemberGroup mg = (Cms.BusinessLogic.Member.MemberGroup) ide.Value;
 						if (currentNode.SelectSingleNode("./group [@id=" + mg.Id.ToString() + "]") != null) 
 						{
 							hasAccess = true;

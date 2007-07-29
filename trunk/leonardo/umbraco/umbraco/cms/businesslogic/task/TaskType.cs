@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using umbraco.BusinessLogic;
+using Umbraco.BusinessLogic;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.task
+namespace Umbraco.Cms.BusinessLogic.task
 {
     public class TaskType
     {
@@ -33,7 +33,7 @@ namespace umbraco.cms.businesslogic.task
 
         public TaskType(string TypeAlias)
         {
-            Id = int.Parse(SqlHelper.ExecuteScalar(
+            Id = int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
                 GlobalSettings.DbDSN,
                 CommandType.Text,
                 "select id from cmsTaskType where alias = @alias",
@@ -50,7 +50,7 @@ namespace umbraco.cms.businesslogic.task
         private void setup()
         {
 			using (SqlDataReader dr =
-				SqlHelper.ExecuteReader(
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
 				GlobalSettings.DbDSN,
 				CommandType.Text,
 				"select alias from cmsTaskType where id = @id",
@@ -69,7 +69,7 @@ namespace umbraco.cms.businesslogic.task
             if (Id == 0)
             {
                 Id = int.Parse(
-                    SqlHelper.ExecuteScalar(
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
                     GlobalSettings.DbDSN,
                     CommandType.Text,
                     "SET NOCOUNT ON insert into cmsTaskType (alias) values (@alias) select @@IDENTITY SET NOCOUNT OFF",
@@ -77,7 +77,7 @@ namespace umbraco.cms.businesslogic.task
             }
             else
             {
-                SqlHelper.ExecuteNonQuery(
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(
                     GlobalSettings.DbDSN,
                     CommandType.Text,
                     "update cmsTaskType set alias = @alias where id = @id",

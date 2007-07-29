@@ -1,7 +1,7 @@
 using System;
 using System.Web.Caching;
 
-namespace umbraco.cms.businesslogic.cache
+namespace Umbraco.Cms.BusinessLogic.cache
 {
 	/// <summary>
 	/// Summary description for Cache.
@@ -10,8 +10,8 @@ namespace umbraco.cms.businesslogic.cache
 	{
 
 		/// <summary>
-		/// Clears everything in umbraco's runtime cache, which means that not only
-		/// umbraco content is removed, but also other cache items from pages runing in
+		/// Clears everything in Umbraco's runtime cache, which means that not only
+		/// Umbraco content is removed, but also other cache items from pages runing in
 		/// the same application / website. Use with care :-)
 		/// </summary>
 		public static void ClearAllCache() 
@@ -28,9 +28,9 @@ namespace umbraco.cms.businesslogic.cache
 		}
 		
 		/// <summary>
-		/// Clears the item in umbraco's runtime cache with the given key 
+		/// Clears the item in Umbraco's runtime cache with the given key 
 		/// </summary>
-		/// <param name="Key">Key</param>
+		/// <param Name="Key">Key</param>
 		public static void ClearCacheItem(string Key) 
 		{
 			if (System.Web.HttpRuntime.Cache[Key] != null) 
@@ -42,10 +42,10 @@ namespace umbraco.cms.businesslogic.cache
 		
 		
 		/// <summary>
-		/// Clears all objects in the System.Web.Cache with the System.Type name as the
+		/// Clears all objects in the System.Web.Cache with the System.Type Name as the
 		/// input parameter. (using [object].GetType())
 		/// </summary>
-		/// <param name="TypeName">The name of the System.Type which should be cleared from cache ex "System.Xml.XmlDocument"</param>
+		/// <param Name="TypeName">The Name of the System.Type which should be cleared from cache ex "System.Xml.XmlDocument"</param>
 		public static void ClearCacheObjectTypes(string TypeName) 
 		{
 			System.Web.Caching.Cache c = System.Web.HttpRuntime.Cache;

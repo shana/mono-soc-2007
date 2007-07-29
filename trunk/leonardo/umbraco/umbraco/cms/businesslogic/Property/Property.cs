@@ -5,11 +5,11 @@ using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 using System.Xml;
 
-namespace umbraco.cms.businesslogic.property
+namespace Umbraco.Cms.BusinessLogic.property
 {
 	/// <summary>
 	/// Property class encapsulates property factory, ensuring that the work
-	/// with umbraco generic properties stays nice and easy..
+	/// with Umbraco generic properties stays nice and easy..
 	/// </summary>
 	public class Property
 	{
@@ -30,8 +30,8 @@ namespace umbraco.cms.businesslogic.property
 		public Property(int Id) 
 		{
 			_id = Id;
-			_pt = umbraco.cms.businesslogic.propertytype.PropertyType.GetPropertyType(int.Parse(
-				SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select propertytypeid from cmsPropertyData where id = @id", new SqlParameter("@id", Id)).ToString()));
+			_pt = Umbraco.Cms.BusinessLogic.propertytype.PropertyType.GetPropertyType(int.Parse(
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select propertytypeid from cmsPropertyData where id = @id", new SqlParameter("@id", Id)).ToString()));
 			_data = _pt.DataTypeDefinition.DataType.Data;
 			_data.PropertyId = Id;
 		}
@@ -40,7 +40,7 @@ namespace umbraco.cms.businesslogic.property
 		{
 			get 
 			{
-				return (Guid) SqlHelper.ExecuteScalar(_connstring, CommandType.Text,"Select versionId from cmsPropertyData where id = " + _id.ToString());
+				return (Guid) Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_connstring, CommandType.Text,"Select versionId from cmsPropertyData where id = " + _id.ToString());
 			}
 		}
 		public int Id {
@@ -60,8 +60,8 @@ namespace umbraco.cms.businesslogic.property
 		}
 
 		public void delete() {
-			int contentId = int.Parse(SqlHelper.ExecuteScalar(_connstring,CommandType.Text,"Select contentNodeId from cmsPropertyData where Id = " + _id).ToString());
-            SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text, "Delete from cmsPropertyData where PropertyTypeId =" + _pt.Id + " And contentNodeId = "+ contentId);
+			int contentId = int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_connstring,CommandType.Text,"Select contentNodeId from cmsPropertyData where Id = " + _id).ToString());
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text, "Delete from cmsPropertyData where PropertyTypeId =" + _pt.Id + " And contentNodeId = "+ contentId);
 			_data.Delete();
 		}
 
@@ -84,7 +84,7 @@ namespace umbraco.cms.businesslogic.property
 		}
 		public static Property MakeNew(propertytype.PropertyType pt, Content c, Guid VersionId) 
 		{
-			int newPropertyId = int.Parse(SqlHelper.ExecuteScalar(_connstring, CommandType.Text,"Insert into cmsPropertyData (contentNodeId, versionId, propertyTypeId) values ("+ c.Id.ToString()+ ", '" + VersionId.ToString() + "',"+ pt.Id.ToString()+") select @@identity").ToString());
+			int newPropertyId = int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_connstring, CommandType.Text,"Insert into cmsPropertyData (contentNodeId, versionId, propertyTypeId) values ("+ c.Id.ToString()+ ", '" + VersionId.ToString() + "',"+ pt.Id.ToString()+") select @@identity").ToString());
 			interfaces.IData d = pt.DataTypeDefinition.DataType.Data;
 			d.MakeNew(newPropertyId);
 			return new Property(newPropertyId, pt);

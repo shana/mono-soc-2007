@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.language
+namespace Umbraco.Cms.BusinessLogic.language
 {
 	/// <summary>
 	/// Item class contains method for accessing language translated text, its a generic component which
@@ -26,7 +26,7 @@ namespace umbraco.cms.businesslogic.language
 			if (!isInitialized) 
 			{
 				// load all data
-				SqlDataReader dr = SqlHelper.ExecuteReader(_Connstring,CommandType.Text,"Select LanguageId, UniqueId,[value] from cmsLanguageText order by UniqueId");
+				SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_Connstring,CommandType.Text,"Select LanguageId, UniqueId,[value] from cmsLanguageText order by UniqueId");
 							
 				while(dr.Read()) 
 				{
@@ -69,8 +69,8 @@ namespace umbraco.cms.businesslogic.language
 		/// <summary>
 		/// Retrieves the value of a languagetranslated item given the key
 		/// </summary>
-		/// <param name="key">Unique identifier</param>
-		/// <param name="LanguageId">Umbraco languageid</param>
+		/// <param Name="key">Unique identifier</param>
+		/// <param Name="LanguageId">Umbraco languageid</param>
 		/// <returns>The language translated text</returns>
 		public static string Text(Guid key, int LanguageId) 
 		{
@@ -83,8 +83,8 @@ namespace umbraco.cms.businesslogic.language
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="key">Unique identifier</param>
-		/// <param name="LanguageId">Umbraco language id</param>
+		/// <param Name="key">Unique identifier</param>
+		/// <param Name="LanguageId">Umbraco language id</param>
 		/// <returns>returns True if there is a value associated to the unique identifier with the specified language</returns>
 		public static bool hasText(Guid key, int LanguageId) 
 		{
@@ -100,9 +100,9 @@ namespace umbraco.cms.businesslogic.language
 		/// Updates the value of the language translated item, throws an exeption if the
 		/// key does not exist
 		/// </summary>
-		/// <param name="LanguageId">Umbraco language id</param>
-		/// <param name="key">Unique identifier</param>
-		/// <param name="value">The new dictionaryvalue</param>
+		/// <param Name="LanguageId">Umbraco language id</param>
+		/// <param Name="key">Unique identifier</param>
+		/// <param Name="value">The new dictionaryvalue</param>
 		
 		public static void setText(int LanguageId, Guid key, string value) 
 		{
@@ -110,7 +110,7 @@ namespace umbraco.cms.businesslogic.language
 			if(!hasText(key,LanguageId)) throw new ArgumentException("Key does not exist");
 
 			updateCache(LanguageId, key, value);
-			SqlHelper.ExecuteNonQuery(_Connstring, CommandType.Text, "Update cmsLanguageText set [value] = @value where LanguageId = @languageId And UniqueId = @key",
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_Connstring, CommandType.Text, "Update cmsLanguageText set [value] = @value where LanguageId = @languageId And UniqueId = @key",
                 new SqlParameter("@value", value),
                 new SqlParameter("@languageId", LanguageId),
                 new SqlParameter("@key", key));
@@ -120,15 +120,15 @@ namespace umbraco.cms.businesslogic.language
 		/// Adds a new languagetranslated item to the collection
 		/// 
 		/// </summary>
-		/// <param name="LanguageId">Umbraco languageid</param>
-		/// <param name="key">Unique identifier</param>
-		/// <param name="value"></param>
+		/// <param Name="LanguageId">Umbraco languageid</param>
+		/// <param Name="key">Unique identifier</param>
+		/// <param Name="value"></param>
 		public static void addText(int LanguageId, Guid key, string value)
 		{
 			ensureData();
 			if(hasText(key,LanguageId)) throw new ArgumentException("Key being add'ed already exists");
 			updateCache(LanguageId, key, value);
-			SqlHelper.ExecuteNonQuery(_Connstring, CommandType.Text, "Insert Into cmsLanguageText (languageId,UniqueId,[value]) values (@languageId, @key, @value)",
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_Connstring, CommandType.Text, "Insert Into cmsLanguageText (languageId,UniqueId,[value]) values (@languageId, @key, @value)",
                 new SqlParameter("@languageId", LanguageId),
                 new SqlParameter("@key", key),
                 new SqlParameter("@value", value));
@@ -136,13 +136,13 @@ namespace umbraco.cms.businesslogic.language
 		/// <summary>
 		/// Removes all languagetranslated texts associated to the unique identifier.
 		/// </summary>
-		/// <param name="key">Unique identifier</param>
+		/// <param Name="key">Unique identifier</param>
 		public static void removeText(Guid key) 
 		{
 			// remove from cache
 			_items.Remove(key);
 			// remove from database
-			SqlHelper.ExecuteNonQuery(_Connstring, CommandType.Text, "Delete from cmsLanguageText where UniqueId =  @key",
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_Connstring, CommandType.Text, "Delete from cmsLanguageText where UniqueId =  @key",
                 new SqlParameter("@key", key));		
 		}
 	}

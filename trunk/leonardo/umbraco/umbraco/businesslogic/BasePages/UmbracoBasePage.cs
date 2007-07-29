@@ -1,21 +1,17 @@
 using System;
-using umbraco.BusinessLogic;
+using Umbraco;
+using Umbraco.BusinessLogic;
 
-namespace umbraco.BasePages
+namespace Umbraco.BasePages
 {
 	/// <summary>
 	/// Summary description for BasePage1.
 	/// </summary>
 	public class UmbracoEnsuredPage : BasePage
 	{
-		public UmbracoEnsuredPage()
-		{
-
-		}
-
         private bool _redirectToUmbraco;
         /// <summary>
-        /// If true then umbraco will force any window/frame to reload umbraco in the main window
+        /// If true then Umbraco will force any window/frame to reload Umbraco in the main window
         /// </summary>
         public bool RedirectToUmbraco
         {
@@ -26,7 +22,7 @@ namespace umbraco.BasePages
         public bool ValidateUserApp(string app)
         {
 
-            foreach(Application uApp in getUser().Applications)
+            foreach(Application uApp in ValidatedUser.Applications)
                 if (uApp.alias == app)
                     return true;
             return false;
@@ -34,19 +30,19 @@ namespace umbraco.BasePages
 
         public bool ValidateUserNodeTreePermissions(string Path, string Action)
         {
-            string permissions = getUser().GetPermissions(Path);
-                        if (permissions.IndexOf(Action) > -1 && (Path.Contains("-20") || (","+Path+",").Contains("," + getUser().StartNodeId.ToString() + ",")))
+            string permissions = ValidatedUser.GetPermissions(Path);
+                        if (permissions.IndexOf(Action) > -1 && (Path.Contains("-20") || (","+Path+",").Contains("," + ValidatedUser.StartNodeId.ToString() + ",")))
                             return true;
 
-            Log.Add(LogTypes.LoginFailure, getUser(), -1, "Insufient permissions in UmbracoEnsuredPage: '" + Path + "', '" + permissions + "', '" + Action + "'");
+            Log.Add(LogTypes.LoginFailure, ValidatedUser, -1, "Insufient permissions in UmbracoEnsuredPage: '" + Path + "', '" + permissions + "', '" + Action + "'");
             return false;
         }
 
 		public static BusinessLogic.User CurrentUser {
 			get 
 			{
-				if (BasePage.umbracoUserContextID != "")
-					return BusinessLogic.User.GetUser(BasePage.GetUserId(BasePage.umbracoUserContextID));
+				if (BasePage.UmbracoUserContextID != "")
+					return BusinessLogic.User.GetUser(BasePage.GetUserId(BasePage.UmbracoUserContextID));
 				else
 					return BusinessLogic.User.GetUser(0);
 			}
@@ -56,18 +52,18 @@ namespace umbraco.BasePages
 		{
 			base.OnInit (e);
 			try {
-				ensureContext();
+				EnsureContext();
 			}
 			catch 
 			{
-                // Some umbraco pages should not be loaded on timeout, but instead reload the main application in the top window. Like the treeview for instance
+                // Some Umbraco pages should not be loaded on timeout, but instead reload the main application in the top window. Like the treeview for instance
                 if (RedirectToUmbraco)
                     Response.Redirect(GlobalSettings.Path+"/logout.aspx?");
                 else
                     Response.Redirect(GlobalSettings.Path + "/logout.aspx?redir=" + Server.UrlEncode(Request.RawUrl));
             }
 
-			System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(ui.Culture(this.getUser()));
+			System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(UIHelper.GetUserCulture(this.ValidatedUser));
 			System.Threading.Thread.CurrentThread.CurrentUICulture = System.Threading.Thread.CurrentThread.CurrentCulture;
 		}
 	}

@@ -1,32 +1,45 @@
-using System;
+using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.BusinessLogic
+namespace Umbraco.BusinessLogic
 {
 	/// <summary>
 	/// Summary description for Application.
 	/// </summary>
 	public class Application
 	{
-		private static string _ConnString = GlobalSettings.DbDSN;
+		private static string _connString = GlobalSettings.DbDSN;
 
 		private string _name;
 		private string _alias;
 		private string _icon;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Application"/> class.
+		/// </summary>
 		public Application()
 		{
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Application"/> class.
+		/// </summary>
+		/// <param Name="name">The Name.</param>
+		/// <param Name="alias">The alias.</param>
+		/// <param Name="icon">The icon.</param>
 		public Application(string name,string alias, string icon)
 		{
-			this.name = name;
+			this.Name = name;
 			this.alias = alias;
 			this.icon = icon;
 		}
 
-		public string name 
+		/// <summary>
+		/// Gets or sets the Name.
+		/// </summary>
+		/// <value>The Name.</value>
+		public string Name 
 		{
 			get {return _name;}
 			set {_name = value;}
@@ -45,8 +58,9 @@ namespace umbraco.BusinessLogic
 		}
 
 		public static Application[] getAll() {
-			SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString,CommandType.Text,"Select appAlias, appIcon, appName from umbracoApp");
-			System.Collections.ArrayList tmp = new System.Collections.ArrayList();
+			// TODO: SQL
+			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connString,CommandType.Text,"Select appAlias, appIcon, appName from umbracoApp");
+			ArrayList tmp = new ArrayList();
 
 			while (dr.Read()) {
 				tmp.Add(new Application(dr["appName"].ToString(),dr["appAlias"].ToString(), dr["appIcon"].ToString()));

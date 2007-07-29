@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.cms.businesslogic
+namespace Umbraco.Cms.BusinessLogic
 {
 	/// <summary>
 	/// Not implemented yet

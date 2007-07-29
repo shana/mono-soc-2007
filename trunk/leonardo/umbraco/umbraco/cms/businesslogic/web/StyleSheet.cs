@@ -5,7 +5,7 @@ using Microsoft.ApplicationBlocks.Data;
 
 using System.Xml;
 
-namespace umbraco.cms.businesslogic.web
+namespace Umbraco.Cms.BusinessLogic.web
 {
 	/// <summary>
 	/// Summary description for StyleSheet.
@@ -23,7 +23,7 @@ namespace umbraco.cms.businesslogic.web
 			get {return _filename;}
 			set {
 				_filename = value;
-				SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "update cmsStylesheet set filename = '" + _filename + "' where nodeId = " + base.Id.ToString());
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "update cmsStylesheet set filename = '" + _filename + "' where nodeId = " + base.Id.ToString());
 			}
 		}
 
@@ -32,7 +32,7 @@ namespace umbraco.cms.businesslogic.web
 			get {return _content;}
 			set {
 				_content = value;
-				SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "update cmsStylesheet set content = '" + _content.Replace("'","''") + "' where nodeId = " + base.Id.ToString());
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "update cmsStylesheet set content = '" + _content.Replace("'","''") + "' where nodeId = " + base.Id.ToString());
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace umbraco.cms.businesslogic.web
 		private void setupStyleSheet() 
 		{
 			// Get stylesheet data
-			SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select filename, content from cmsStylesheet where nodeid = " + base.Id.ToString());
+			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select filename, content from cmsStylesheet where nodeid = " + base.Id.ToString());
 			if (dr.Read()) 
 			{
 				if (!dr.IsDBNull(dr.GetOrdinal("filename")))
@@ -86,11 +86,11 @@ namespace umbraco.cms.businesslogic.web
 		public static StyleSheet MakeNew(BusinessLogic.User user, string Text, string FileName, string Content) 
 		{
 			
-			// Create the umbraco node
+			// Create the Umbraco node
 			CMSNode newNode = CMSNode.MakeNew(-1, moduleObjectType, user.Id, 1, Text, Guid.NewGuid());
 
 			// Create the stylesheet data
-			SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "insert into cmsStylesheet (nodeId, filename, content) values ('" + newNode.Id.ToString() + "','" + FileName + "',@content)", new SqlParameter("@content", Content));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "insert into cmsStylesheet (nodeId, filename, content) values ('" + newNode.Id.ToString() + "','" + FileName + "',@content)", new SqlParameter("@content", Content));
 			
 			return new StyleSheet(newNode.UniqueId);
 		}
@@ -110,7 +110,7 @@ namespace umbraco.cms.businesslogic.web
 			System.IO.File.Delete(System.Web.HttpContext.Current.Server.MapPath(GlobalSettings.Path + "/../css/"+this.Text+".css"));
 			foreach (StylesheetProperty p in this.Properties)
 				p.delete();
-			SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"delete from cmsStylesheet where nodeId = @nodeId", new SqlParameter("@nodeId", this.Id));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"delete from cmsStylesheet where nodeId = @nodeId", new SqlParameter("@nodeId", this.Id));
 			base.delete();		
 		}
 
@@ -131,9 +131,9 @@ namespace umbraco.cms.businesslogic.web
 		public XmlElement ToXml(XmlDocument xd) 
 		{
 			XmlElement doc = xd.CreateElement("Stylesheet");
-			doc.AppendChild(xmlHelper.addTextNode(xd, "Name", this.Text));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "FileName", this.Filename));
-			doc.AppendChild(xmlHelper.addCDataNode(xd, "Content", this.Content));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "Name", this.Text));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "FileName", this.Filename));
+			doc.AppendChild(XmlHelper.addCDataNode(xd, "Content", this.Content));
 
 			if (this.Properties.Length > 0) 
 			{
@@ -141,9 +141,9 @@ namespace umbraco.cms.businesslogic.web
 				foreach(StylesheetProperty sp in this.Properties) 
 				{
 					XmlElement prop = xd.CreateElement("Property");
-					prop.AppendChild(xmlHelper.addTextNode(xd, "Name", sp.Text));
-					prop.AppendChild(xmlHelper.addTextNode(xd, "Alias", sp.Alias));
-					prop.AppendChild(xmlHelper.addTextNode(xd, "Value", sp.value));
+					prop.AppendChild(XmlHelper.addTextNode(xd, "Name", sp.Text));
+					prop.AppendChild(XmlHelper.addTextNode(xd, "Alias", sp.Alias));
+					prop.AppendChild(XmlHelper.addTextNode(xd, "Value", sp.value));
 					props.AppendChild(prop);
 				}
 				doc.AppendChild(props);

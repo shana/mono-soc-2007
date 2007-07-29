@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.interfaces
+namespace Umbraco.interfaces
 {
 	/// <summary>
 	/// Summary description for ITask.

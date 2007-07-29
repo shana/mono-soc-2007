@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.cms.businesslogic.macro
+namespace Umbraco.Cms.BusinessLogic.macro
 {
 	/// <summary>
 	/// Not implemented
@@ -27,7 +27,7 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Not implemented
 		/// </summary>
-		/// <param name="Comment">Not implemented</param>
+		/// <param Name="Comment">Not implemented</param>
 		public MacroComment(string Comment)
 		{
 			_comment = Comment;

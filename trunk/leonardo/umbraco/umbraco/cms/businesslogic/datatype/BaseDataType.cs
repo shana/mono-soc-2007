@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.datatype
+namespace Umbraco.Cms.BusinessLogic.datatype
 {
 	public abstract class BaseDataType
 	{
@@ -39,7 +39,7 @@ namespace umbraco.cms.businesslogic.datatype
 			}
 			set {
 				_DBType = value;
-				 SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN,CommandType.Text,"update cmsDataType set  dbType = '" + value.ToString() + "' where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
+				 Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(Umbraco.GlobalSettings.DbDSN,CommandType.Text,"update cmsDataType set  dbType = '" + value.ToString() + "' where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
 				
 			}
 		}
@@ -52,7 +52,7 @@ namespace umbraco.cms.businesslogic.datatype
 			get {
 				if (_datafield == "") 
 				{
-					string dbtypestr = SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN,CommandType.Text,"select dbType from cmsDataType where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
+					string dbtypestr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(Umbraco.GlobalSettings.DbDSN,CommandType.Text,"select dbType from cmsDataType where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
 					DBTypes DataTypeSQLType = (DBTypes) Enum.Parse(typeof(DBTypes),dbtypestr,true);
 					_DBType = DataTypeSQLType;
 					switch (DataTypeSQLType) 

@@ -4,10 +4,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Xml;
 using Microsoft.ApplicationBlocks.Data;
-using umbraco.BusinessLogic;
-using umbraco.cms.businesslogic.propertytype;
+using Umbraco.BusinessLogic;
+using Umbraco.Cms.BusinessLogic.propertytype;
+using SqlHelper=Umbraco.SqlHelper;
 
-namespace umbraco.cms.businesslogic.web
+namespace Umbraco.Cms.BusinessLogic.web
 {
     /// <summary>
     /// Summary description for DocumentType.
@@ -63,9 +64,9 @@ namespace umbraco.cms.businesslogic.web
                 return
                     new DocumentType(
                         int.Parse(
-                            SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                                     "select nodeid from cmsContentType where alias = '" +
-                                                    sqlHelper.safeString(Alias) + "'").ToString()));
+                                                    SqlHelper.SafeString(Alias) + "'").ToString()));
             }
             catch
             {
@@ -77,12 +78,12 @@ namespace umbraco.cms.businesslogic.web
         {
             if (
                 int.Parse(
-                    SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                             "select count(TemplateNodeId) as tmp from cmsDocumentType where contentTypeNodeId =" +
                                             Id).ToString()) > 0)
             {
                 SqlDataReader dr =
-                    SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                             "Select templateNodeId, IsDefault from cmsDocumentType where contentTypeNodeId =" +
                                             Id);
                 while (dr.Read())
@@ -149,7 +150,7 @@ namespace umbraco.cms.businesslogic.web
                 RemoveDefaultTemplate();
                 _defaultTemplate = value;
                 if (_defaultTemplate != 0)
-                    SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                               "update cmsDocumentType set IsDefault = 1 where contentTypeNodeId = " +
                                               Id.ToString() + " and TemplateNodeId = " + value.ToString());
             }
@@ -158,7 +159,7 @@ namespace umbraco.cms.businesslogic.web
         public void RemoveDefaultTemplate()
         {
             _defaultTemplate = 0;
-            SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                       "update cmsDocumentType set IsDefault = 0 where contentTypeNodeId = " +
                                       Id.ToString());
         }
@@ -183,7 +184,7 @@ namespace umbraco.cms.businesslogic.web
                 clearTemplates();
                 foreach (template.Template t in value)
                 {
-                    SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                               "Insert into cmsDocumentType (contentTypeNodeId, templateNodeId) values (" +
                                               Id + "," + t.Id + ")");
                     _templateIds.Add(t.Id);
@@ -193,7 +194,7 @@ namespace umbraco.cms.businesslogic.web
 
         public void clearTemplates()
         {
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "Delete from cmsDocumentType where contentTypeNodeId =" + Id);
             _templateIds.Clear();
         }
@@ -205,42 +206,42 @@ namespace umbraco.cms.businesslogic.web
             // info section
             XmlElement info = xd.CreateElement("Info");
             doc.AppendChild(info);
-            info.AppendChild(xmlHelper.addTextNode(xd, "Name", Text));
-            info.AppendChild(xmlHelper.addTextNode(xd, "Alias", Alias));
-            info.AppendChild(xmlHelper.addTextNode(xd, "Icon", IconUrl));
-            info.AppendChild(xmlHelper.addTextNode(xd, "Thumbnail", Thumbnail));
-            info.AppendChild(xmlHelper.addTextNode(xd, "Description", Description));
+            info.AppendChild(XmlHelper.addTextNode(xd, "Name", Text));
+            info.AppendChild(XmlHelper.addTextNode(xd, "Alias", Alias));
+            info.AppendChild(XmlHelper.addTextNode(xd, "Icon", IconUrl));
+            info.AppendChild(XmlHelper.addTextNode(xd, "Thumbnail", Thumbnail));
+            info.AppendChild(XmlHelper.addTextNode(xd, "Description", Description));
 
             // templates
             XmlElement allowed = xd.CreateElement("AllowedTemplates");
             foreach (template.Template t in allowedTemplates)
-                allowed.AppendChild(xmlHelper.addTextNode(xd, "Template", t.Alias));
+                allowed.AppendChild(XmlHelper.addTextNode(xd, "Template", t.Alias));
             info.AppendChild(allowed);
             if (DefaultTemplate != 0)
                 info.AppendChild(
-                    xmlHelper.addTextNode(xd, "DefaultTemplate", new template.Template(DefaultTemplate).Alias));
+                    XmlHelper.addTextNode(xd, "DefaultTemplate", new template.Template(DefaultTemplate).Alias));
             else
-                info.AppendChild(xmlHelper.addTextNode(xd, "DefaultTemplate", ""));
+                info.AppendChild(XmlHelper.addTextNode(xd, "DefaultTemplate", ""));
 
             // structure
             XmlElement structure = xd.CreateElement("Structure");
             doc.AppendChild(structure);
 
             foreach (int cc in AllowedChildContentTypeIDs)
-                structure.AppendChild(xmlHelper.addTextNode(xd, "DocumentType", new DocumentType(cc).Alias));
+                structure.AppendChild(XmlHelper.addTextNode(xd, "DocumentType", new DocumentType(cc).Alias));
 
             // generic properties
             XmlElement pts = xd.CreateElement("GenericProperties");
             foreach (PropertyType pt in PropertyTypes)
             {
                 XmlElement ptx = xd.CreateElement("GenericProperty");
-                ptx.AppendChild(xmlHelper.addTextNode(xd, "Name", pt.Name));
-                ptx.AppendChild(xmlHelper.addTextNode(xd, "Alias", pt.Alias));
-                ptx.AppendChild(xmlHelper.addTextNode(xd, "Type", pt.DataTypeDefinition.DataType.Id.ToString()));
-                ptx.AppendChild(xmlHelper.addTextNode(xd, "Tab", Tab.GetCaptionById(pt.TabId)));
-                ptx.AppendChild(xmlHelper.addTextNode(xd, "Mandatory", pt.Mandatory.ToString()));
-                ptx.AppendChild(xmlHelper.addTextNode(xd, "Validation", pt.ValidationRegExp));
-                ptx.AppendChild(xmlHelper.addCDataNode(xd, "Description", pt.Description));
+                ptx.AppendChild(XmlHelper.addTextNode(xd, "Name", pt.Name));
+                ptx.AppendChild(XmlHelper.addTextNode(xd, "Alias", pt.Alias));
+                ptx.AppendChild(XmlHelper.addTextNode(xd, "Type", pt.DataTypeDefinition.DataType.Id.ToString()));
+                ptx.AppendChild(XmlHelper.addTextNode(xd, "Tab", Tab.GetCaptionById(pt.TabId)));
+                ptx.AppendChild(XmlHelper.addTextNode(xd, "Mandatory", pt.Mandatory.ToString()));
+                ptx.AppendChild(XmlHelper.addTextNode(xd, "Validation", pt.ValidationRegExp));
+                ptx.AppendChild(XmlHelper.addCDataNode(xd, "Description", pt.Description));
                 pts.AppendChild(ptx);
             }
             doc.AppendChild(pts);
@@ -250,8 +251,8 @@ namespace umbraco.cms.businesslogic.web
             foreach (TabI t in getVirtualTabs)
             {
                 XmlElement tabx = xd.CreateElement("Tab");
-                tabx.AppendChild(xmlHelper.addTextNode(xd, "Id", t.Id.ToString()));
-                tabx.AppendChild(xmlHelper.addTextNode(xd, "Caption", t.Caption));
+                tabx.AppendChild(XmlHelper.addTextNode(xd, "Id", t.Id.ToString()));
+                tabx.AppendChild(XmlHelper.addTextNode(xd, "Caption", t.Caption));
                 tabs.AppendChild(tabx);
             }
             doc.AppendChild(tabs);

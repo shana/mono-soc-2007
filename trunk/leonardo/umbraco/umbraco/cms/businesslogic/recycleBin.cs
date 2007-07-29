@@ -6,7 +6,7 @@ using Microsoft.ApplicationBlocks.Data;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace umbraco.cms.businesslogic
+namespace Umbraco.Cms.BusinessLogic
 {
     public class RecycleBin : CMSNode
     {
@@ -22,7 +22,7 @@ namespace umbraco.cms.businesslogic
         public bool Smells()
         {
             return
-                (int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN,
+                (int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN,
                 CommandType.Text,
                 "select count(id) from umbracoNode where nodeObjectType = @nodeObjectType and parentId = @parentId",
                 new SqlParameter("@parentId", this.Id),
@@ -30,12 +30,12 @@ namespace umbraco.cms.businesslogic
 
         }
 
-        public override umbraco.BusinessLogic.console.IconI[] Children
+        public override Umbraco.BusinessLogic.Console.IIcon[] Children
         {
             get
             {
                 System.Collections.ArrayList tmp = new System.Collections.ArrayList();
-                SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select id from umbracoNode where ParentID = " + this.Id + " And NodeObjectType = '" + _nodeObjectType.ToString() + "' order by sortOrder");
+                SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select id from umbracoNode where ParentID = " + this.Id + " And NodeObjectType = '" + _nodeObjectType.ToString() + "' order by sortOrder");
 
                 while (dr.Read())
                     tmp.Add(dr["Id"]);
@@ -59,7 +59,7 @@ namespace umbraco.cms.businesslogic
         {
             return
                 int.Parse(
-                    SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                             "select count(id) from umbracoNode where path like '%,-20,%'").ToString());
         }
 

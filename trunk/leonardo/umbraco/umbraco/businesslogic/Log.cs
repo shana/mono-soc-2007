@@ -4,17 +4,20 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Threading;
 
-using Microsoft.ApplicationBlocks.Data;
-
-namespace umbraco.BusinessLogic
+namespace Umbraco.BusinessLogic
 {
 	/// <summary>
 	/// Summary description for Log.
 	/// </summary>
-	public class Log
+	public static class Log
 	{
-		#region statics
-
+		/// <summary>
+		/// Adds the specified type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="user">The user.</param>
+		/// <param name="nodeId">The node id.</param>
+		/// <param name="comment">The comment.</param>
 		public static void Add(LogTypes type, User user, int nodeId, string comment)
 		{
 			if(GlobalSettings.DisableLogging) return;
@@ -32,16 +35,29 @@ namespace umbraco.BusinessLogic
 			AddSynced(type, user == null ? 0 : user.Id, nodeId, comment);
 		}
 
+		/// <summary>
+		/// Adds the specified type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="nodeId">The node id.</param>
+		/// <param name="comment">The comment.</param>
 		public static void Add(LogTypes type, int nodeId, string comment)
 		{
 			Add(type, null, nodeId, comment);
 		}
 
+		/// <summary>
+		/// Adds the synced.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="userId">The user id.</param>
+		/// <param name="nodeId">The node id.</param>
+		/// <param name="comment">The comment.</param>
 		public static void AddSynced(LogTypes type, int userId, int nodeId, string comment)
 		{
 			try
 			{
-				SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
 					"insert into umbracoLog (userId, nodeId, logHeader, logComment) values (@userId, @nodeId, @logHeader, @comment)",
 					new SqlParameter("@userId", userId),
 					new SqlParameter("@nodeId", nodeId),
@@ -55,62 +71,104 @@ namespace umbraco.BusinessLogic
 			}
 		}
 
+		/// <summary>
+		/// Gets the log.
+		/// </summary>
+		/// <param name="Type">The type.</param>
+		/// <param name="SinceDate">The since date.</param>
+		/// <returns></returns>
 		public static DataSet GetLog(LogTypes Type, DateTime SinceDate)
 		{
-			return SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
+			return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
 				"select userId, NodeId, DateStamp, logHeader, logComment from umbracoLog where logHeader = @logHeader and DateStamp >= @dateStamp order by dateStamp desc",
 				new SqlParameter("@logHeader", Type.ToString()),
 				new SqlParameter("@dateStamp", SinceDate));
 		}
 
+		/// <summary>
+		/// Gets the log.
+		/// </summary>
+		/// <param name="Type">The type.</param>
+		/// <param name="SinceDate">The since date.</param>
+		/// <param name="Limit">The limit.</param>
+		/// <returns></returns>
 		public static DataSet GetLog(LogTypes Type, DateTime SinceDate, int Limit)
 		{
-			return SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
+			return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
 				"select top " + Limit +
 				" userId, NodeId, DateStamp, logHeader, logComment from umbracoLog where logHeader = @logHeader and DateStamp >= @dateStamp order by dateStamp desc",
 				new SqlParameter("@logHeader", Type.ToString()),
 				new SqlParameter("@dateStamp", SinceDate));
 		}
 
+		/// <summary>
+		/// Gets the log.
+		/// </summary>
+		/// <param name="NodeId">The node id.</param>
+		/// <returns></returns>
 		public static DataSet GetLog(int NodeId)
 		{
-			return SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
+			return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
 				"select u.userName, DateStamp, logHeader, logComment from umbracoLog inner join umbracoUser u on u.id = userId where nodeId = @id",
 				new SqlParameter("@id", NodeId));
 		}
 
+		/// <summary>
+		/// Gets the audit log.
+		/// </summary>
+		/// <param name="NodeId">The node id.</param>
+		/// <returns></returns>
 		public static DataSet GetAuditLog(int NodeId)
 		{
-			return SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
+			return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
 				"select u.userName as [User], logHeader as Action, DateStamp as Date, logComment as Comment from umbracoLog inner join umbracoUser u on u.id = userId where nodeId = @id and logHeader not in ('open','system') order by DateStamp desc",
 				new SqlParameter("@id", NodeId));
 		}
 
+		/// <summary>
+		/// Gets the log.
+		/// </summary>
+		/// <param name="u">The u.</param>
+		/// <param name="SinceDate">The since date.</param>
+		/// <returns></returns>
 		public static DataSet GetLog(User u, DateTime SinceDate)
 		{
-			return SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
+			return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
 				"select userId, NodeId, DateStamp, logHeader, logComment from umbracoLog where UserId = @user and DateStamp >= @dateStamp order by dateStamp desc",
 				new SqlParameter("@user", u.Id), new SqlParameter("@dateStamp", SinceDate));
 		}
 
+		/// <summary>
+		/// Gets the log.
+		/// </summary>
+		/// <param name="u">The u.</param>
+		/// <param name="Type">The type.</param>
+		/// <param name="SinceDate">The since date.</param>
+		/// <returns></returns>
 		public static DataSet GetLog(User u, LogTypes Type, DateTime SinceDate)
 		{
-			return SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
+			return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
 				"select userId, NodeId, DateStamp, logHeader, logComment from umbracoLog where UserId = @user and logHeader = @logHeader and DateStamp >= @dateStamp order by dateStamp desc",
 				new SqlParameter("@logHeader", Type.ToString()),
 				new SqlParameter("@user", u.Id), new SqlParameter("@dateStamp", SinceDate));
 		}
 
+		/// <summary>
+		/// Gets the log.
+		/// </summary>
+		/// <param name="u">The u.</param>
+		/// <param name="Type">The type.</param>
+		/// <param name="SinceDate">The since date.</param>
+		/// <param name="Limit">The limit.</param>
+		/// <returns></returns>
 		public static DataSet GetLog(User u, LogTypes Type, DateTime SinceDate, int Limit)
 		{
-			return SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
+			return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteDataset(GlobalSettings.DbDSN, CommandType.Text,
 				"select top " + Limit +
 				" userId, NodeId, DateStamp, logHeader, logComment from umbracoLog where UserId = @user and logHeader = @logHeader and DateStamp >= @dateStamp order by dateStamp desc",
 				new SqlParameter("@logHeader", Type.ToString()),
 				new SqlParameter("@user", u.Id), new SqlParameter("@dateStamp", SinceDate));
 		}
-
-		#endregion
 	}
 
 	public enum LogTypes

@@ -5,10 +5,10 @@ using Microsoft.ApplicationBlocks.Data;
 using System.Collections;
 
 
-namespace umbraco.cms.businesslogic.datatype
+namespace Umbraco.Cms.BusinessLogic.datatype
 {
 	/// <summary>
-	/// Datatypedefinitions is the basic buildingblocks of umbraco's documents/medias/members generic datastructure 
+	/// Datatypedefinitions is the basic buildingblocks of Umbraco's documents/medias/members generic datastructure 
 	/// 
 	/// A datatypedefinition encapsulates an object which implements the interface IDataType, and are used when defining
 	/// the properties of a document in the documenttype. This extra layer between IDataType and a documenttypes propertytype
@@ -25,7 +25,7 @@ namespace umbraco.cms.businesslogic.datatype
 		/// <summary>
 		/// Initialization of the datatypedefinition
 		/// </summary>
-		/// <param name="id">Datattypedefininition id</param>
+		/// <param Name="id">Datattypedefininition id</param>
 		public DataTypeDefinition(int id) : base(id)
 		{
 			setupDataTypeDefinition();
@@ -40,7 +40,7 @@ namespace umbraco.cms.businesslogic.datatype
 	    /// <summary>
 		/// Initialization of the datatypedefinition
 		/// </summary>
-		/// <param name="id">Datattypedefininition id</param>
+		/// <param Name="id">Datattypedefininition id</param>
 		public DataTypeDefinition(Guid id) : base(id)
 		{
 			setupDataTypeDefinition();
@@ -57,7 +57,7 @@ namespace umbraco.cms.businesslogic.datatype
 
 
 		private void setupDataTypeDefinition() {
-			SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select dbType, controlId from cmsDataType where nodeId = '" + this.Id.ToString() + "'");
+			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select dbType, controlId from cmsDataType where nodeId = '" + this.Id.ToString() + "'");
 			if (dr.Read()) 
 			{
 				_controlId = dr.GetGuid(dr.GetOrdinal("controlId"));
@@ -69,12 +69,12 @@ namespace umbraco.cms.businesslogic.datatype
 
 
 		/// <summary>
-		/// The associated datatype, which delivers the methods for editing data, editing prevalues see: umbraco.interfaces.IDataType
+		/// The associated datatype, which delivers the methods for editing data, editing prevalues see: Umbraco.interfaces.IDataType
 		/// </summary>
 		public interfaces.IDataType DataType
 		{
 			get {
-				cms.businesslogic.datatype.controls.Factory f = new cms.businesslogic.datatype.controls.Factory();
+				Cms.BusinessLogic.datatype.controls.Factory f = new Cms.BusinessLogic.datatype.controls.Factory();
 				interfaces.IDataType dt = f.DataType(_controlId);
 				dt.DataTypeDefinitionId = Id;
 				
@@ -82,7 +82,7 @@ namespace umbraco.cms.businesslogic.datatype
 				}
 			set 
 			{
-				SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "update cmsDataType set controlId = '" + value.Id + "' where nodeID = " + this.Id.ToString());
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "update cmsDataType set controlId = '" + value.Id + "' where nodeID = " + this.Id.ToString());
 				_controlId = value.Id;
 			}
 		}
@@ -128,24 +128,24 @@ namespace umbraco.cms.businesslogic.datatype
 		}
 
 		/// <summary>
-		/// Creates a new datatypedefinition given its name and the user which creates it.
+		/// Creates a new datatypedefinition given its Name and the user which creates it.
 		/// </summary>
-		/// <param name="u">The user who creates the datatypedefinition</param>
-		/// <param name="Text">The name of the DataTypeDefinition</param>
+		/// <param Name="u">The user who creates the datatypedefinition</param>
+		/// <param Name="Text">The Name of the DataTypeDefinition</param>
 		/// <returns></returns>
 		public static DataTypeDefinition MakeNew(BusinessLogic.User u, string Text) 
 		{
 			int newId = CMSNode.MakeNew(-1, _objectType,u.Id,1, Text, Guid.NewGuid()).Id;
-			cms.businesslogic.datatype.controls.Factory f = new cms.businesslogic.datatype.controls.Factory();
+			Cms.BusinessLogic.datatype.controls.Factory f = new Cms.BusinessLogic.datatype.controls.Factory();
 			Guid FirstControlId = f.GetAll()[0].Id;
-			SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text, "Insert into cmsDataType (nodeId, controlId, dbType) values (" + newId.ToString() +",'" + FirstControlId.ToString() + "','Ntext')");
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text, "Insert into cmsDataType (nodeId, controlId, dbType) values (" + newId.ToString() +",'" + FirstControlId.ToString() + "','Ntext')");
 			return new DataTypeDefinition(newId);
 		}
 
 		/// <summary>
 		/// Retrieve a list of datatypedefinitions which share the same IDataType datatype
 		/// </summary>
-		/// <param name="DataTypeId">The unique id of the IDataType</param>
+		/// <param Name="DataTypeId">The unique id of the IDataType</param>
 		/// <returns>A list of datatypedefinitions which are based on the IDataType specified</returns>
 		public static DataTypeDefinition GetByDataTypeId(Guid DataTypeId) 
 		{
@@ -164,9 +164,9 @@ namespace umbraco.cms.businesslogic.datatype
 		}
 
         /// <summary>
-        /// Analyzes an object to see if its basetype is umbraco.editorControls.DefaultData
+        /// Analyzes an object to see if its basetype is Umbraco.editorControls.DefaultData
         /// </summary>
-        /// <param name="Data">The Data object to analyze</param>
+        /// <param Name="Data">The Data object to analyze</param>
         /// <returns>True if the basetype is the DefaultData class</returns>
         public static bool IsDefaultData(object Data)
         {
@@ -175,7 +175,7 @@ namespace umbraco.cms.businesslogic.datatype
             while (typeOfData.BaseType != new Object().GetType())
                 typeOfData = typeOfData.BaseType;
 
-            return (typeOfData.FullName == "umbraco.cms.businesslogic.datatype.DefaultData");
+            return (typeOfData.FullName == "Cms.Umbraco.Cms.BusinessLogic.datatype.DefaultData");
         }
 
         public static DataTypeDefinition GetDataTypeDefinition(int id)

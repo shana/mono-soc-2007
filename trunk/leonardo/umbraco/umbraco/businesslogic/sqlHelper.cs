@@ -1,20 +1,19 @@
 using System;
 
-namespace umbraco
+namespace Umbraco
 {
 	/// <summary>
-	/// Summary description for sqlHelper.
+	/// This class implements common SQL related functions
 	/// </summary>
-	public class sqlHelper
+	public static class SqlHelper
 	{
-		public sqlHelper()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-
-		public static string safeString(string text) 
+		/// <summary>
+		/// Safes the string.
+		/// </summary>
+		/// <param Name="text">The text.</param>
+		/// <returns></returns>
+		[Obsolete("Use parameterized queries instead")]
+		public static string SafeString(string text) 
 		{
 			return text.Replace("'", "''");
 		}

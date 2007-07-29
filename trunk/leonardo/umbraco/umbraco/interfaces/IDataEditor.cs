@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.interfaces
+namespace Umbraco.interfaces
 {
 
 	public interface IDataEditor 
