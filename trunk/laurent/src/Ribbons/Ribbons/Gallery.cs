@@ -62,18 +62,27 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
+			this.tiles = new List<Ribbons.Tile> ();
+			
 			this.defaultTilesPerRow = 5;
 			
-			this.up = new Button ();
-			this.up.DrawBackground = true;
+			this.tileHeight = 48;
+			this.tileWidth = 64;
+			this.tileSpacing = 8;
+			
+			this.up = new Button ("\u25B2");
+			this.up.Parent = this;
+			this.up.Padding = 0;
 			this.up.Clicked += up_Clicked;
 			
-			this.down = new Button ();
-			this.down.DrawBackground = true;
+			this.down = new Button ("\u25BC");
+			this.down.Parent = this;
+			this.down.Padding = 0;
 			this.down.Clicked += down_Clicked;
 			
-			this.expand = new Button ();
-			this.expand.DrawBackground = true;
+			this.expand = new Button ("\u2193");
+			this.expand.Parent = this;
+			this.expand.Padding = 0;
 			this.expand.Clicked += expand_Clicked;
 		}
 		
@@ -125,7 +134,7 @@ namespace Ribbons
 		
 		private void down_Clicked(object Sender, EventArgs e)
 		{
-			MoveUp ();
+			MoveDown ();
 		}
 		
 		private void expand_Clicked(object Sender, EventArgs e)
@@ -155,7 +164,7 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
-			if(include_internals)
+			//if(include_internals)
 			{
 				callback (up);
 				callback (down);
@@ -197,9 +206,9 @@ namespace Ribbons
 			
 			Gdk.Rectangle btnAlloc;
 			btnAlloc.Width = btnWidth;
-			btnAlloc.X = allocation.Width - (int)BorderWidth - btnAlloc.Width;
+			btnAlloc.X = allocation.X + allocation.Width - (int)BorderWidth - btnAlloc.Width;
 			
-			btnAlloc.Y = (int)BorderWidth;
+			btnAlloc.Y = allocation.Y + (int)BorderWidth;
 			btnAlloc.Height = upReq.Height;
 			up.SizeAllocate (btnAlloc);
 			
