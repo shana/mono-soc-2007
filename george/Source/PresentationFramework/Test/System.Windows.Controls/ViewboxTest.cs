@@ -1,5 +1,8 @@
 using NUnit.Framework;
+using System.Collections;
+using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 namespace Mono.System.Windows.Controls {
@@ -8,5 +11,104 @@ namespace System.Windows.Controls {
 #endif
 	[TestFixture]
 	public class ViewboxTest {
+		#region GetVisualChild
+		[Test]
+		public void GetVisualChild() {
+			new GetVisualChildViewbox();
+		}
+
+		class GetVisualChildViewbox : Viewbox {
+			public GetVisualChildViewbox() {
+				IEnumerator logical_children = LogicalChildren;
+				Assert.IsFalse(logical_children.MoveNext(), "0");
+				Assert.AreEqual(VisualChildrenCount, 1, "1");
+				Assert.IsTrue(GetVisualChild(0) is ContainerVisual, "2");
+				try {
+					GetVisualChild(1);
+					Assert.Fail("3");
+				} catch (ArgumentOutOfRangeException) {
+				}
+				try {
+					GetVisualChild(-1);
+					Assert.Fail("4");
+				} catch (ArgumentOutOfRangeException) {
+				}
+			}
+		}
+		#endregion
+
+		#region Child
+		[Test]
+		public void Child() {
+			ChildViewbox v = new ChildViewbox();
+			ContainerVisual container_visual = v.GetVisualChild();
+			Assert.IsNull(v.Child, "1");
+			Assert.AreEqual(container_visual.Children.Count, 0, "1 1");
+			UIElement u1 = new UIElement();
+			v.Child = u1;
+			Assert.AreSame(v.Child, u1, "2");
+			UIElement u2 = new UIElement();
+			v.Child = u2;
+			Assert.AreSame(v.Child, u2, "3");
+			Assert.AreEqual(container_visual.Children.Count, 1, "4");
+			Assert.AreSame(container_visual.Children[0], u2, "5");
+			IEnumerator logical_children = v.GetLogicalChildren();
+			Assert.IsTrue(logical_children.MoveNext(), "6");
+			Assert.AreSame(logical_children.Current, u2, "7");
+			Assert.IsFalse(logical_children.MoveNext(), "8");
+		}
+
+		class ChildViewbox : Viewbox {
+			public ContainerVisual GetVisualChild() {
+				return (ContainerVisual)GetVisualChild(0);
+			}
+			public IEnumerator GetLogicalChildren() {
+				return LogicalChildren;
+			}
+		}
+		#endregion
+
+		#region Layout
+		[Test]
+		public void Layout() {
+			new LayoutViewbox();
+		}
+
+		class LayoutViewbox : Viewbox {
+			public LayoutViewbox() {
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(0, 0), "1");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(0, 0), "2");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(100, 100), "2 1");
+				Child = new UIElement();
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(0, 0), "3");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(0, 0), "3 1");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(0, 0), "4");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(0, 0), "4 1");
+				Child = new Button();
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(100, 100), "5");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(Utility.GetEmptyButtonSize(), Utility.GetEmptyButtonSize()), "6");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(100, 100), "6 1");
+				Window w = new Window();
+				FrameworkElement e = new FrameworkElement();
+				e.Width = 10;
+				e.Height = 20;
+				Width = 200;
+				Height = 100;
+				w.Content = this;
+				Child = e;
+				w.Show();
+				Assert.AreEqual(e.ActualWidth, 10, "7");
+				Assert.AreEqual(e.ActualHeight, 20, "8");
+				ContainerVisual container_visual = (ContainerVisual)GetVisualChild(0);
+				Assert.IsNotNull(container_visual.Transform, "9");
+				Assert.IsTrue(container_visual.Transform is ScaleTransform, "10");
+				ScaleTransform scale_transform = (ScaleTransform)container_visual.Transform;
+				Assert.AreEqual(scale_transform.CenterX, 0, "11");
+				Assert.AreEqual(scale_transform.CenterY, 0, "12");
+				Assert.AreEqual(scale_transform.ScaleX, 5, "13");
+				Assert.AreEqual(scale_transform.ScaleX, 5, "14");
+			}
+		}
+		#endregion
 	}
 }
