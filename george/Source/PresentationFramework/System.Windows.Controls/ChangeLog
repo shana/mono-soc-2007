@@ -1,3 +1,7 @@
+2007-07-29  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ViewBox.cs: More work.
+
 2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ViewBox.cs: Implemented VisualChildrenCount.
