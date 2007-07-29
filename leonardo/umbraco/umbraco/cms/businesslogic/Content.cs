@@ -466,27 +466,27 @@ else
 					x.AppendChild(p.ToXml(xd));
 
 			// attributes
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "id", this.Id.ToString()));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "version", this.Version.ToString()));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "id", this.Id.ToString()));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "version", this.Version.ToString()));
 			if (this.Level > 1)
-				x.Attributes.Append(XmlHelper.addAttribute(xd, "parentID", this.Parent.Id.ToString()));
+				x.Attributes.Append(XmlHelper.AddAttribute(xd, "parentID", this.Parent.Id.ToString()));
 			else
-				x.Attributes.Append(XmlHelper.addAttribute(xd, "parentID", "-1"));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "level", this.Level.ToString()));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "writerID", this.User.Id.ToString()));
+				x.Attributes.Append(XmlHelper.AddAttribute(xd, "parentID", "-1"));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "level", this.Level.ToString()));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "writerID", this.User.Id.ToString()));
 			if (this.ContentType != null)
-				x.Attributes.Append(XmlHelper.addAttribute(xd, "nodeType", this.ContentType.Id.ToString()));
-			x.Attributes.Append(XmlHelper.addAttribute(	xd, "template", "0"));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "sortOrder", this.sortOrder.ToString()));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "createDate", this.CreateDateTime.ToString("s")));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "updateDate", this.VersionDate.ToString("s")));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "nodeName", this.Text));
+				x.Attributes.Append(XmlHelper.AddAttribute(xd, "nodeType", this.ContentType.Id.ToString()));
+			x.Attributes.Append(XmlHelper.AddAttribute(	xd, "template", "0"));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "sortOrder", this.sortOrder.ToString()));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "createDate", this.CreateDateTime.ToString("s")));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "updateDate", this.VersionDate.ToString("s")));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "nodeName", this.Text));
 			if (this.Text != null)
-				x.Attributes.Append(XmlHelper.addAttribute(xd, "urlName", this.Text.Replace(" ", "").ToLower()));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "writerName", this.User.Name));
+				x.Attributes.Append(XmlHelper.AddAttribute(xd, "urlName", this.Text.Replace(" ", "").ToLower()));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "writerName", this.User.Name));
 			if (this.ContentType != null)
-				x.Attributes.Append(XmlHelper.addAttribute(xd, "nodeTypeAlias", this.ContentType.Alias));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "path", this.Path));
+				x.Attributes.Append(XmlHelper.AddAttribute(xd, "nodeTypeAlias", this.ContentType.Alias));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "path", this.Path));
 
 			if (Deep) 
 			{

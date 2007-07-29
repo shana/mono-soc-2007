@@ -19,7 +19,7 @@ namespace Umbraco.Cms.BusinessLogic.workflow
     {
         public static void GetNotifications(CMSNode Node, User user, IAction Action)
         {
-            User[] allUsers = User.getAll();
+            User[] allUsers = User.GetAll();
             foreach (User u in allUsers)
             {
                 try

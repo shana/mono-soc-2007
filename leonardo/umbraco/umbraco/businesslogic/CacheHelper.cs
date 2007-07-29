@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using System.Web.Caching;
 
 namespace Umbraco.Cms.BusinessLogic
@@ -11,12 +12,12 @@ namespace Umbraco.Cms.BusinessLogic
 		/// <summary>
 		/// This delegates stores a referenc to the method that executes the real get action
 		/// </summary>
-		public delegate TT GetCacheItemDelegate<TT>();
+		public delegate TCacheItem GetCacheItemDelegate<TCacheItem>();
 
 		/// <summary>
 		/// Gets the cache item.
 		/// </summary>
-		/// <typeparam name="TT">The type of the T.</typeparam>
+		/// <typeparam name="TCacheItem">The type of the T.</typeparam>
 		/// <param name="cacheKey">The cache key.</param>
 		/// <param name="syncLock">The sync lock.</param>
 		/// <param name="priority">The priority.</param>
@@ -25,26 +26,26 @@ namespace Umbraco.Cms.BusinessLogic
 		/// <param name="timeout">The timeout.</param>
 		/// <param name="getCacheItem">The get cache item.</param>
 		/// <returns></returns>
-		public static TT GetCacheItem<TT>(string cacheKey, object syncLock,
-			CacheItemPriority priority, CacheItemRemovedCallback refreshAction,
-			CacheDependency cacheDependency, TimeSpan timeout, GetCacheItemDelegate<TT> getCacheItem)
+		public static TCacheItem GetCacheItem<TCacheItem>(string cacheKey, object syncLock,
+		                                  CacheItemPriority priority, CacheItemRemovedCallback refreshAction,
+		                                  CacheDependency cacheDependency, TimeSpan timeout,
+		                                  GetCacheItemDelegate<TCacheItem> getCacheItem)
 		{
-			object result = System.Web.HttpRuntime.Cache.Get(cacheKey);
+			object result = HttpRuntime.Cache.Get(cacheKey);
 			if (result == null)
 			{
 				lock (syncLock)
 				{
-					result = System.Web.HttpRuntime.Cache.Get(cacheKey);
+					result = HttpRuntime.Cache.Get(cacheKey);
 					if (result == null)
 					{
 						result = getCacheItem();
-						System.Web.HttpRuntime.Cache.Add(cacheKey, result, cacheDependency,
-							DateTime.Now.Add(timeout), TimeSpan.Zero, priority, refreshAction);
+						HttpRuntime.Cache.Add(cacheKey, result, cacheDependency,
+						                      DateTime.Now.Add(timeout), TimeSpan.Zero, priority, refreshAction);
 					}
 				}
 			}
-			return (TT)result;
+			return (TCacheItem) result;
 		}
-
 	}
 }

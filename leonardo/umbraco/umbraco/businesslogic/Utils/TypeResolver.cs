@@ -6,9 +6,19 @@ using System.Reflection;
 
 namespace Umbraco.BusinessLogic.Utils
 {
+	/// <summary>
+	/// This class implements type resolution functionalities
+	/// </summary>
 	[Serializable]
 	public class TypeResolver : MarshalByRefObject
 	{
+		/// <summary>
+		/// Gets the type of the assignables from.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="path">The path.</param>
+		/// <param name="filePattern">The file pattern.</param>
+		/// <returns></returns>
 		public static string[] GetAssignablesFromType<T>(string path, string filePattern)
 		{
 			FileInfo[] fis = Array.ConvertAll<string, FileInfo>(
@@ -19,6 +29,12 @@ namespace Umbraco.BusinessLogic.Utils
 			return GetAssignablesFromType<T>(absoluteFiles);
 		}
 
+		/// <summary>
+		/// Gets the type of the assignables from.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="files">The files.</param>
+		/// <returns></returns>
 		public static string[] GetAssignablesFromType<T>(string[] files)
 		{
 			AppDomainSetup domainSetup = new AppDomainSetup();
@@ -53,6 +69,12 @@ namespace Umbraco.BusinessLogic.Utils
 			return new string[0];
 		}
 
+		/// <summary>
+		/// Gets the types.
+		/// </summary>
+		/// <param name="assignTypeFrom">The assign type from.</param>
+		/// <param name="assemblyFiles">The assembly files.</param>
+		/// <returns></returns>
 		public string[] GetTypes(Type assignTypeFrom, string[] assemblyFiles)
 		{
 			List<string> result = new List<string>();

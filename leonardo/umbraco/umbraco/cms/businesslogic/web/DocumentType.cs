@@ -206,42 +206,42 @@ namespace Umbraco.Cms.BusinessLogic.web
             // info section
             XmlElement info = xd.CreateElement("Info");
             doc.AppendChild(info);
-            info.AppendChild(XmlHelper.addTextNode(xd, "Name", Text));
-            info.AppendChild(XmlHelper.addTextNode(xd, "Alias", Alias));
-            info.AppendChild(XmlHelper.addTextNode(xd, "Icon", IconUrl));
-            info.AppendChild(XmlHelper.addTextNode(xd, "Thumbnail", Thumbnail));
-            info.AppendChild(XmlHelper.addTextNode(xd, "Description", Description));
+            info.AppendChild(XmlHelper.AddTextNode(xd, "Name", Text));
+            info.AppendChild(XmlHelper.AddTextNode(xd, "Alias", Alias));
+            info.AppendChild(XmlHelper.AddTextNode(xd, "Icon", IconUrl));
+            info.AppendChild(XmlHelper.AddTextNode(xd, "Thumbnail", Thumbnail));
+            info.AppendChild(XmlHelper.AddTextNode(xd, "Description", Description));
 
             // templates
             XmlElement allowed = xd.CreateElement("AllowedTemplates");
             foreach (template.Template t in allowedTemplates)
-                allowed.AppendChild(XmlHelper.addTextNode(xd, "Template", t.Alias));
+                allowed.AppendChild(XmlHelper.AddTextNode(xd, "Template", t.Alias));
             info.AppendChild(allowed);
             if (DefaultTemplate != 0)
                 info.AppendChild(
-                    XmlHelper.addTextNode(xd, "DefaultTemplate", new template.Template(DefaultTemplate).Alias));
+                    XmlHelper.AddTextNode(xd, "DefaultTemplate", new template.Template(DefaultTemplate).Alias));
             else
-                info.AppendChild(XmlHelper.addTextNode(xd, "DefaultTemplate", ""));
+                info.AppendChild(XmlHelper.AddTextNode(xd, "DefaultTemplate", ""));
 
             // structure
             XmlElement structure = xd.CreateElement("Structure");
             doc.AppendChild(structure);
 
             foreach (int cc in AllowedChildContentTypeIDs)
-                structure.AppendChild(XmlHelper.addTextNode(xd, "DocumentType", new DocumentType(cc).Alias));
+                structure.AppendChild(XmlHelper.AddTextNode(xd, "DocumentType", new DocumentType(cc).Alias));
 
             // generic properties
             XmlElement pts = xd.CreateElement("GenericProperties");
             foreach (PropertyType pt in PropertyTypes)
             {
                 XmlElement ptx = xd.CreateElement("GenericProperty");
-                ptx.AppendChild(XmlHelper.addTextNode(xd, "Name", pt.Name));
-                ptx.AppendChild(XmlHelper.addTextNode(xd, "Alias", pt.Alias));
-                ptx.AppendChild(XmlHelper.addTextNode(xd, "Type", pt.DataTypeDefinition.DataType.Id.ToString()));
-                ptx.AppendChild(XmlHelper.addTextNode(xd, "Tab", Tab.GetCaptionById(pt.TabId)));
-                ptx.AppendChild(XmlHelper.addTextNode(xd, "Mandatory", pt.Mandatory.ToString()));
-                ptx.AppendChild(XmlHelper.addTextNode(xd, "Validation", pt.ValidationRegExp));
-                ptx.AppendChild(XmlHelper.addCDataNode(xd, "Description", pt.Description));
+                ptx.AppendChild(XmlHelper.AddTextNode(xd, "Name", pt.Name));
+                ptx.AppendChild(XmlHelper.AddTextNode(xd, "Alias", pt.Alias));
+                ptx.AppendChild(XmlHelper.AddTextNode(xd, "Type", pt.DataTypeDefinition.DataType.Id.ToString()));
+                ptx.AppendChild(XmlHelper.AddTextNode(xd, "Tab", Tab.GetCaptionById(pt.TabId)));
+                ptx.AppendChild(XmlHelper.AddTextNode(xd, "Mandatory", pt.Mandatory.ToString()));
+                ptx.AppendChild(XmlHelper.AddTextNode(xd, "Validation", pt.ValidationRegExp));
+                ptx.AppendChild(XmlHelper.AddCDataNode(xd, "Description", pt.Description));
                 pts.AppendChild(ptx);
             }
             doc.AppendChild(pts);
@@ -251,8 +251,8 @@ namespace Umbraco.Cms.BusinessLogic.web
             foreach (TabI t in getVirtualTabs)
             {
                 XmlElement tabx = xd.CreateElement("Tab");
-                tabx.AppendChild(XmlHelper.addTextNode(xd, "Id", t.Id.ToString()));
-                tabx.AppendChild(XmlHelper.addTextNode(xd, "Caption", t.Caption));
+                tabx.AppendChild(XmlHelper.AddTextNode(xd, "Id", t.Id.ToString()));
+                tabx.AppendChild(XmlHelper.AddTextNode(xd, "Caption", t.Caption));
                 tabs.AppendChild(tabx);
             }
             doc.AppendChild(tabs);

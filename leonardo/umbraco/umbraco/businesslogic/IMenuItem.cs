@@ -23,11 +23,27 @@ namespace Umbraco.BusinessLogic.Console
 		/// <value>The text.</value>
 		string Text {get;}
 	}
-	
+
+	/// <summary>
+	/// 
+	/// </summary>
+	// TODO: understand enum and review enumeration values
 	public enum EditorBehavior {
-		Modal, 
-		External, 
-		Standard, 
+		/// <summary>
+		/// 
+		/// </summary>
+		Modal,
+		/// <summary>
+		/// 
+		/// </summary>
+		External,
+		/// <summary>
+		/// 
+		/// </summary>
+		Standard,
+		/// <summary>
+		/// 
+		/// </summary>
 		Command	
 	}
 }

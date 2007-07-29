@@ -290,8 +290,8 @@ namespace Umbraco.Cms.BusinessLogic.Member
 		{
 			XmlNode x = xd.CreateNode(XmlNodeType.Element, "node", "");
 			XmlPopulate(xd, ref x, false);
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "loginName", LoginName));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "email", Email));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "loginName", LoginName));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "email", Email));
 
 			// Save to db
 			// TODO: SQL
@@ -312,8 +312,8 @@ namespace Umbraco.Cms.BusinessLogic.Member
 		public override XmlNode ToXml(XmlDocument xd, bool Deep)
 		{
 			XmlNode x = base.ToXml(xd, Deep);
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "loginName", LoginName));
-			x.Attributes.Append(XmlHelper.addAttribute(xd, "email", Email));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "loginName", LoginName));
+			x.Attributes.Append(XmlHelper.AddAttribute(xd, "email", Email));
 			return x;
 		}
 

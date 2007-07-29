@@ -171,33 +171,115 @@ namespace Umbraco.BusinessLogic
 		}
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	// TODO: Create XML Documentation
 	public enum LogTypes
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		New,
+		/// <summary>
+		/// 
+		/// </summary>
 		Save,
+		/// <summary>
+		/// 
+		/// </summary>
 		Open,
+		/// <summary>
+		/// 
+		/// </summary>
 		Delete,
+		/// <summary>
+		/// 
+		/// </summary>
 		Publish,
+		/// <summary>
+		/// 
+		/// </summary>
 		SendToPublish,
+		/// <summary>
+		/// 
+		/// </summary>
 		UnPublish,
+		/// <summary>
+		/// 
+		/// </summary>
 		Move,
+		/// <summary>
+		/// 
+		/// </summary>
 		Copy,
+		/// <summary>
+		/// 
+		/// </summary>
 		AssignDomain,
+		/// <summary>
+		/// 
+		/// </summary>
 		PublicAccess,
+		/// <summary>
+		/// 
+		/// </summary>
 		Sort,
+		/// <summary>
+		/// 
+		/// </summary>
 		Notify,
+		/// <summary>
+		/// 
+		/// </summary>
 		Login,
+		/// <summary>
+		/// 
+		/// </summary>
 		Logout,
+		/// <summary>
+		/// 
+		/// </summary>
 		LoginFailure,
+		/// <summary>
+		/// 
+		/// </summary>
 		System,
+		/// <summary>
+		/// 
+		/// </summary>
 		Debug,
+		/// <summary>
+		/// 
+		/// </summary>
 		Error,
+		/// <summary>
+		/// 
+		/// </summary>
 		NotFound,
+		/// <summary>
+		/// 
+		/// </summary>
 		RollBack,
+		/// <summary>
+		/// 
+		/// </summary>
 		PackagerInstall,
+		/// <summary>
+		/// 
+		/// </summary>
 		PackagerUninstall,
+		/// <summary>
+		/// 
+		/// </summary>
 		Ping,
+		/// <summary>
+		/// 
+		/// </summary>
 		SendToTranslate,
+		/// <summary>
+		/// 
+		/// </summary>
 		ScheduledTask
 	}
 }
