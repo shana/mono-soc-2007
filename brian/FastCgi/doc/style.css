@@ -1,0 +1,79 @@
+body {
+    background-color: #fff;
+    color: #333;
+    font-family: lucida grande, sans-serif;
+    font-size: 11pt;
+    
+    background-image: url("mono-bg.png");
+    background-repeat: no-repeat;
+    
+    margin: 160px 12em 2em 12em;
+}
+
+html>body {
+    font-size: 0.8em;
+}
+
+a:link {
+    font-weight: bold;
+    color: #5a7ac7;
+    text-decoration: none;
+}
+
+a:visited {
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration: none;
+    color: #9f75ad;
+}
+
+a:hover {
+    font-weight: bold;
+    color: #dd6545;
+    text-decoration: underline;
+}
+
+a img {
+    border: none;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: #68892f;
+    font-family: vag rounded, vag round, arial mt rounded, arial rounded, lucida grande, myriad, andale sans, luxi sans, bitstream vera sans, tahoma, toga sans, helvetica, arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 2.25em;
+}
+
+h2 {
+    margin-top: 1.5em;
+    font-size: 1.75em;
+}
+
+h3 {
+    margin-top: 2em;
+    font-size: 1.25em;
+}
+
+h4 {
+    font-size: 1.125em;
+}
+
+h5, h6 {
+    font-size: 1em;
+}
+
+p, pre {
+    margin-top: 1.5em;
+    font-size: 1.125em;
+}
+
+pre {
+    border: 1px solid #68892f;
+    background-color: #ffffef;
+    color: #000;
+    padding: 0.2em;
+}

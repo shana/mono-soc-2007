@@ -81,6 +81,24 @@ namespace Mono.FastCgi {
 		}
 		
 		/// <summary>
+		///    Creates a unix socket for a specified path.
+		/// </summary>
+		/// <param name="path">
+		///    A <see cref="string" /> containing the path to use.
+		/// </param>
+		/// <returns>
+		///    A <see cref="Socket" /> object bound to the specified
+		///    path.
+		/// </returns>
+		/// <exception cref="System.Net.Sockets.SocketException">
+		///    An error occurred while binding the socket.
+		/// </exception>
+		public static Socket CreateUnixSocket (string path)
+		{
+			return new UnixSocket (path);
+		}
+		
+		/// <summary>
 		///    Creates a socket from a bound unmanaged socket.
 		/// </summary>
 		/// <param name="sock">
