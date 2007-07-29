@@ -10,7 +10,7 @@ namespace Sample
 		protected bool composeAvailable = false;
 		
 		protected Ribbon ribbon;
-		protected RibbonGroup group0, group1;
+		protected RibbonGroup group0, group1, group2;
 		
 		protected Label pageLabel1;
 		
@@ -49,9 +49,16 @@ namespace Sample
 			group1.Label = "I will be back";
 			group1.Child = box0;
 			
+			Gallery gallery = new Gallery ();
+			
+			group2 = new RibbonGroup ();
+			group2.Label = "Gallery";
+			group2.Child = gallery;
+			
 			HBox page0 = new HBox (false, 2);
 			page0.PackStart (group0, false, false, 0);
 			page0.PackStart (group1, false, false, 0);
+			page0.PackStart (group2, false, false, 0);
 			
 			HBox page1 = new HBox (false, 2);
 			
