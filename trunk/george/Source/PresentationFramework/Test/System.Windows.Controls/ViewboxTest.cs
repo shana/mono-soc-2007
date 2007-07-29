@@ -110,5 +110,93 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region LayoutStretchNone
+		[Test]
+		public void LayoutStretchNone() {
+			new LayoutStretchNoneViewbox();
+		}
+
+		class LayoutStretchNoneViewbox : Viewbox {
+			public LayoutStretchNoneViewbox() {
+				Stretch = Stretch.None;
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(0, 0), "1");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(0, 0), "2");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(100, 100), "2 1");
+				Child = new UIElement();
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(0, 0), "3");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(0, 0), "3 1");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(0, 0), "4");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(0, 0), "4 1");
+				Child = new Button();
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(Utility.GetEmptyButtonSize(), Utility.GetEmptyButtonSize()), "5");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(Utility.GetEmptyButtonSize(), Utility.GetEmptyButtonSize()), "6");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(Utility.GetEmptyButtonSize(), Utility.GetEmptyButtonSize()), "6 1");
+				Window w = new Window();
+				FrameworkElement e = new FrameworkElement();
+				e.Width = 10;
+				e.Height = 20;
+				Width = 200;
+				Height = 100;
+				w.Content = this;
+				Child = e;
+				w.Show();
+				Assert.AreEqual(e.ActualWidth, 10, "7");
+				Assert.AreEqual(e.ActualHeight, 20, "8");
+				ContainerVisual container_visual = (ContainerVisual)GetVisualChild(0);
+				Assert.IsNotNull(container_visual.Transform, "9");
+				Assert.IsTrue(container_visual.Transform is ScaleTransform, "10");
+				ScaleTransform scale_transform = (ScaleTransform)container_visual.Transform;
+				Assert.AreEqual(scale_transform.CenterX, 0, "11");
+				Assert.AreEqual(scale_transform.CenterY, 0, "12");
+				Assert.AreEqual(scale_transform.ScaleX, 1, "13");
+				Assert.AreEqual(scale_transform.ScaleX, 1, "14");
+			}
+		}
+		#endregion
+
+		#region LayoutStretchFill
+		[Test]
+		public void LayoutStretchFill() {
+			new LayoutStretchFillViewbox();
+		}
+
+		class LayoutStretchFillViewbox : Viewbox {
+			public LayoutStretchFillViewbox() {
+				Stretch = Stretch.Fill;
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(0, 0), "1");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(0, 0), "2");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(100, 100), "2 1");
+				Child = new UIElement();
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(0, 0), "3");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(0, 0), "3 1");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(0, 0), "4");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(0, 0), "4 1");
+				Child = new Button();
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(100, 100), "5");
+				Assert.AreEqual(MeasureOverride(new Size(double.PositiveInfinity, double.PositiveInfinity)), new Size(Utility.GetEmptyButtonSize(), Utility.GetEmptyButtonSize()), "6");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(100, 100), "6 1");
+				Window w = new Window();
+				FrameworkElement e = new FrameworkElement();
+				e.Width = 10;
+				e.Height = 20;
+				Width = 200;
+				Height = 100;
+				w.Content = this;
+				Child = e;
+				w.Show();
+				Assert.AreEqual(e.ActualWidth, 10, "7");
+				Assert.AreEqual(e.ActualHeight, 20, "8");
+				ContainerVisual container_visual = (ContainerVisual)GetVisualChild(0);
+				Assert.IsNotNull(container_visual.Transform, "9");
+				Assert.IsTrue(container_visual.Transform is ScaleTransform, "10");
+				ScaleTransform scale_transform = (ScaleTransform)container_visual.Transform;
+				Assert.AreEqual(scale_transform.CenterX, 0, "11");
+				Assert.AreEqual(scale_transform.CenterY, 0, "12");
+				Assert.AreEqual(scale_transform.ScaleX, 20, "13");
+				Assert.AreEqual(scale_transform.ScaleX, 20, "14");
+			}
+		}
+		#endregion
 	}
 }

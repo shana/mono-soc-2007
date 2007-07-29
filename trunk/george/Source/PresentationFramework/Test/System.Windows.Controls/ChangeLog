@@ -1,5 +1,9 @@
 2007-07-29  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* ViewboxTest.cs: Added more layout tests.
+
+2007-07-29  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ViewboxTest.cs: Added some tests.
 
 2007-07-28  George Giolfan  <georgegiolfan@yahoo.com>
