@@ -12,6 +12,7 @@ FCGI_CSFILES = \
 	$(srcdir)/Mono.FastCgi/Connection.cs \
 	$(srcdir)/Mono.FastCgi/Logger.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs \
+	$(srcdir)/Mono.FastCgi/SocketAbstractions/UnixSocket.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/StandardSocket.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/TcpSocket.cs

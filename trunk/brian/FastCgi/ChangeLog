@@ -1,3 +1,42 @@
+2007-07-29 Brian Nickel <brian.nickel@gmail.com>
+
+	* fastcgi-mono-server.in: 
+	* fastcgi-mono-server2.in: Read environment variables because not all
+	programs let you set command line options. It's a dirty trick, but
+	MONO_FCGI_SOCKET=tcp becomes "/socket=tcp", etc. A better solution could
+	probably be rolled into the configuration manager in the future.
+	
+	* configure.ac: Change mono required to 1.1.9. I don't know what is
+	required, so let's not make anything major mandatory just yet.
+	
+	* doc/linux/myserver.html: 
+	* doc/linux/litespeed.html: 
+	* doc/linux/lighttpd.html: 
+	* doc/linux/abyss.html: 
+	* doc/linux/apache.html: 
+	* doc/linux/nginx.html: 
+	* doc/linux/sun.html: 
+	* doc/linux/cherokee.html: 
+	* doc/linux/hiawatha.html: 
+	* doc/linux/zeus.html: 
+	* doc/linux/caudium.html: 
+	* doc/linux/ibm.html: 
+	* doc/linux/index.html: 
+	* doc/linux/roxen.html: 
+	* doc/mono-bg.png: 
+	* doc/style.css: 
+	* doc/mono-logo.png: The start of something beautiful. Documentation.
+	
+	* src/Mono.FastCgi/SocketFactory.cs: 
+	* src/Mono.FastCgi/SocketAbstractions/UnixSocket.cs: Added a Unix
+	socket.
+	
+	* src/Mono.FastCgi/Mono.FastCgi.mdp:
+	* src/Mono.FastCgi.sources: Added UnixSocket.cs.
+	
+	* src/Mono.WebServer.FastCgi/server.cs: If the socket is a pipe, set
+	"nonstop" because there is no console.
+
 2007-07-27 Brian Nickel <brian.nickel@gmail.com>
 
 	* fastcgi-mono-server.in: 

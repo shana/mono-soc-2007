@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<title>[LINUX] Installing and Configuring fastcgi-mono-server on Linux</title>
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+	</head>
+	<body>
+		<h1>Installing and Configuring <tt>fastcgi-mono-server</tt> on Linux</h1>
+		
+		<h2>Table of Contents</h2>
+		<ul>
+			<li><a href="#install">Installation Instructions</a></li>
+			<li><a href="#config">Server Specific Configuration</a>
+		</ul>
+		
+		<a name="install"></a>
+		<h2>Installation Instructions</h2>
+		
+		<p>Installation is done using GNU Autoconf. You simply have to
+		fetch the package from <a
+		href="http://mono-soc-2007.googlecode.com/svn/trunk/brian/FastCgi/">
+		Subversion</a> and use the standard commands as shown below.
+		Adjust the "<tt>--prefix</tt>" to your preferred installation
+		path.</p>
+		
+		<pre>svn co <a href="http://mono-soc-2007.googlecode.com/svn/trunk/brian/FastCgi/">http://mono-soc-2007.googlecode.com/svn/trunk/brian/FastCgi/</a> fastcgi-mono-server
+cd fastcgi-mono-server
+./autogen.sh --prefix=/usr && make && sudo make install</pre>
+		
+		<a name="config"></a>
+		<h2>Server Specific Configuration</h2>
+		<li><a href="abyss.html">Configuring Abyss Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="apache.html">Configuring Apache HTTP Server</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="caudium.html">Configuring Caudium</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="cherokee.html">Configuring Cherokee HTTP Server</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="hiawatha.html">Configuring Hiawatha</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="ibm.html">Configuring IBM HTTP Server</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="lighttpd.html">Configuring Lighttpd</a></li>
+		<li><a href="litespeed.html">Configuring LiteSpeed Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="myserver.html">Configuring MyServer</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="nginx.html">Configuring Nginx</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="roxen.html">Configuring Roxen</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="sun.html">Configuring Sun Java System Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="zeus.html">Configuring Zeus Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
+
+	</body>
+</html>

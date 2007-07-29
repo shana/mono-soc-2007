@@ -1,6 +1,62 @@
 #!/bin/sh
 
+if [ x$MONO_FCGI_SOCKET != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /socket=$MONO_FCGI_SOCKET";
+fi
+
+if [ x$MONO_FCGI_FILENAME != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /filename=$MONO_FCGI_FILENAME";
+fi
+
+if [ x$MONO_FCGI_PORT != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /port=$MONO_FCGI_PORT";
+fi
+
+if [ x$MONO_FCGI_ADDRESS != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /address=$MONO_FCGI_ADDRESS";
+fi
+
+if [ x$MONO_FCGI_ROOT != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /root=$MONO_FCGI_ROOT";
+fi
+
+if [ x$MONO_FCGI_APPCONFIGFILE != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /appconfigfile=$MONO_FCGI_APPCONFIGFILE";
+fi
+
+if [ x$MONO_FCGI_APPCONFIGDIR != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /appconfigdir=$MONO_FCGI_APPCONFIGDIR";
+fi
+
+if [ x$MONO_FCGI_APPLICATIONS != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /applications=$MONO_FCGI_APPLICATIONS";
+fi
+
+if [ x$MONO_FCGI_NONSTOP != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /nonstop=$MONO_FCGI_NONSTOP";
+fi
+
+if [ x$MONO_FCGI_VERBOSE != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /verbose=$MONO_FCGI_VERBOSE";
+fi
+
+if [ x$MONO_FCGI_MAXCONNS != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /maxconns=$MONO_FCGI_MAXCONNS";
+fi
+
+if [ x$MONO_FCGI_MAXREQS != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /maxreqs=$MONO_FCGI_MAXREQS";
+fi
+
+if [ x$MONO_FCGI_MULTIPLEX != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /multiplex=$MONO_FCGI_MULTIPLEX";
+fi
+
+if [ x$MONO_FCGI_AUTOMAPPATHS != x ]; then
+	MONO_FCGI_OPTIONS="$MONO_FCGI_OPTIONS /automappaths=$MONO_FCGI_AUTOMAPPATHS";
+fi
+
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 BINDIR=@libdir@/@PACKAGE@
-MONO_PATH="$BINDIR" /usr/bin/mono $MONO_OPTIONS "$BINDIR/fastcgi-mono-server2.exe" "$@"
+MONO_PATH="$BINDIR" /usr/bin/mono $MONO_OPTIONS "$BINDIR/fastcgi-mono-server2.exe" "$@" $MONO_FCGI_OPTIONS

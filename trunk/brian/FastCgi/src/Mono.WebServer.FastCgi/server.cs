@@ -157,17 +157,36 @@ namespace Mono.WebServer.FastCgi
 				try {
 					socket = SocketFactory.CreatePipeSocket (
 						IntPtr.Zero);
+					configmanager ["nonstop"] = "True";
 				} catch (System.Net.Sockets.SocketException){
 					Console.WriteLine (
 						"Error: Pipe socket is not bound.");
 					return 1;
 				}
 				break;
+			
+			// The FILE sockets is of the format
+			// "file[:PATH]".
 			case "file":
-				// TODO: Add file socket support.
-				Console.WriteLine (
-					"File socket support to be added.");
-				return 1;
+				if (socket_parts.Length == 2)
+					configmanager ["filename"] =
+						socket_parts [1];
+				
+				string path = (string) configmanager ["filename"];
+				
+				try {
+					socket = SocketFactory.CreateUnixSocket (
+						path);
+				} catch (System.Net.Sockets.SocketException e){
+					Console.WriteLine (
+						"Error creating the socket: {0}",
+						e.Message);
+					return 1;
+				}
+				
+				Console.WriteLine ("Listening on file: {0}",
+					path);
+				break;
 			
 			// The TCP socket is of the format
 			// "tcp[[:ADDRESS]:PORT]".

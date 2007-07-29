@@ -1,0 +1,328 @@
+<html>
+	<head>
+		<title>[LINUX] Configuring Lighttpd to use fastcgi-mono-server</title>
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+	</head>
+	<body>
+		<h1>Configuring Lighttpd to use <tt>fastcgi-mono-server</tt></h1>
+		
+		<h2>Table of Contents</h2>
+		<ul>
+			<li><a href="#intro">Introduction</a></li>
+			<li><a href="#step1">Step 1: Enabling the FastCGI Module</a></li>
+			<li><a href="#step2">Step 2: Configuring the FastCGI Module</a></li>
+			<ul>
+				<li><a href="#step2a">Part A: Configuring a Spawned/Local Server</a></li>
+				<li><a href="#step2b">Part B: Configuring a Remote Server</a></li>
+				<li><a href="#step2c">Part C: Avoiding Conflict with Other FastCGI Servers</a></li>
+			</ul>
+			<li><a href="#step3">Step 3: Adding Index Pages</a></li>
+		</ul>
+		
+		<a name="intro"></a>
+		<h2>Introduction</h2>
+		
+		<p><a href="http://www.lighttpd.net/">Lighttpd</a> (pronounced
+		"lighty") is a popular lightweight and easy to configure HTTP
+		server. Adding ASP.NET support through
+		<tt>fastcgi-mono-server</tt> is very quick and painless and can
+		be done by modifying only three files.</p>
+		
+		<h3>NOTE</h3>
+		
+		<p style="color:red">These instructions are not definitive and
+		are designed to provide basic and easy to use steps for those
+		not accustomed to <tt>fastcgi-mono-server</tt> or configuring
+		<tt>lighttpd</tt>. For more in depth information on configuring
+		FastCGI, please consult the <a
+		href="http://trac.lighttpd.net/trac/wiki/Docs%3AModFastCGI">
+		documentation provided by Lighttpd</a>.</p>
+		
+		<p>These configurations have been tested with the following
+		systems:</p>
+		
+		<ul>
+			<li><a href="http://en.opensuse.org/OpenSUSE_News/10.2-Release">OpenSuSE
+			10.2</a> (Lighttpd 1.4.13-41.1 from
+			"SUSE-Linux-10.2-Updates")</li>
+			<li><i>If you have tested an additional configuration,
+			please email me at
+			<a href="mailto:brian.nickel@gmail.com">brian.nickel@gmail.com</a>.</i></li>
+		</ul>
+		
+		<a name="step1"></a>
+		<h2>Step 1: Enabling the FastCGI Module</h2>
+		
+		<p>The server is enabled through the FastCGI module. To enable
+		the module, open <a href="file:///etc/lighttpd/modules.conf">
+		/etc/lighttpd/modules.conf</a> and search for the following
+		block:</p>
+		
+		<pre>##
+## FastCGI (mod_fastcgi)
+##
+#include "conf.d/fastcgi.conf"</pre>
+
+		<p>If you find it, you need only uncomment the <tt>include</tt>
+		line. If you don't find that line, or anything like it, simply
+		the following line to end of the file:
+		
+		<pre>include "conf.d/fastcgi.conf"</pre>
+		
+		<a name="step2"></a>
+		<h2>Step 2: Configuring the FastCGI Module</h2>
+		
+		<p>Now that the server is enabled, it takes just a handful of
+		lines to configure it.</p>
+		
+		<p>Your distribution should have included a file <a
+		href="file:///etc/lighttpd/conf.d/fastcgi.conf">
+		/etc/lighttpd/conf.d/fastcgi.conf</a> in the installation, if 
+		not, add it. This is the largest and most important part of the
+		configuration. It consists of three pieces, which will be
+		discussed in detail, and by the time you are finished the file
+		will look something like this:</p>
+		
+		<pre>server.modules += ( "mod_fastcgi" )
+
+fastcgi.server = (
+        ".aspx" => ((
+                "socket" => "/tmp/fastcgi-mono-server",
+                "bin-path" => "/usr/bin/fastcgi-mono-server",
+                "max-procs" => 1,
+                "check-local" => "disable"
+        ))
+)
+
+fastcgi.map-extensions = (
+        ".asmx"   => ".aspx",
+        ".ashx"   => ".aspx",
+        ".ascx"   => ".aspx",
+        ".soap"   => ".aspx",
+        ".rem"    => ".aspx",
+        ".asd"    => ".aspx",
+        ".cs"     => ".aspx",
+        ".config" => ".aspx",
+        ".dll"    => ".aspx"
+)</pre>
+
+		<p>So without further adu...</p>
+		
+		<a name="step2a"></a>
+		<h3>Part A: Adding the module</h3>
+		
+		<p>This file must have the following line in it, otherwise it
+		will not work:</p>
+		
+		<pre>server.modules += ( "mod_fastcgi" )</pre>
+		
+		<p>If the file was included in your distribution, it would be
+		near the very top. If not, make sure you add it. This tells
+		Lighttpd to load the module when it starts up.</p>
+		
+		
+		<a name="step2b"></a>
+		<h3>Part B: Adding the Server</h3>
+		
+		<p>The next step is to add a server for the ".aspx" extension.
+		Do a quick search for "fastcgi.server". If found, it will
+		probably look something like the following:</p>
+		
+		<pre>fastcgi.server = (
+	".php" => ((
+		"socket" => "/tmp/php-fastcgi.socket",
+		"bin-path" => "/usr/local/bin/php",
+		"bin-environment" => (
+			"PHP_FCGI_CHILDREN" => "16",
+			"PHP_FCGI_MAX_REQUESTS" => "10000"
+		)
+	))
+)</pre>
+		
+		<p>If you have it, you're going to want to add a new extension
+		to it so it looks like the following:</p>
+		
+		<pre>fastcgi.server = (
+	".php" => ((
+		"socket" => "/tmp/php-fastcgi.socket",
+		"bin-path" => "/usr/local/bin/php",
+		"bin-environment" => (
+			"PHP_FCGI_CHILDREN" => "16",
+			"PHP_FCGI_MAX_REQUESTS" => "10000"
+		)
+	))<b>,
+	".aspx" => ((
+		<i># TO BE ADDED</i>
+		"check-local" => "disable"
+	))</b>
+)</pre>
+		
+		<p>Otherwise, if it doesn't exist, just add the following
+		block:</p>
+
+		<pre>fastcgi.server = (
+	".aspx" => ((
+		<i># TO BE ADDED</i>
+		"check-local" => "disable"
+	))
+)</pre>
+
+		<p>This is the beginning of a server definition for the ".aspx"
+		extension. You will be adding implementation specific
+		settings where "<tt># TO BE ADDED</tt>". The
+		<tt>"check-local"</tt> line tells Lighttpd to send all requests
+		to the Mono server regardless of whether or not the the file
+		exists on disk.</p>
+		
+		<p>There are two recommended server implementations for the Mono
+		server. The first has Lighttpd automatically spawn the child
+		server when it starts and communicate over Unix sockets. This
+		has the advantage of being easy to set up, being secure by
+		limiting access to just Lighttpd, and having the performance
+		boost provided by Unix sockets. The second has Lighttpd
+		communicate via TCP sockets with an existing Mono server
+		somewhere on the network. This has the advantage of being able
+		to run the Mono server on an entirely different machine than
+		Lighttpd and all the performance and logistical advantages
+		associated with that.</p>
+		
+		<p>If you're just setting up a personal server or not trying
+		anything fancy, I would recommend using <a
+		href="#step2b1">automatic spawning</a>, and if you're using a
+		high bandwidth, multimachine setup, I would recommend using <a
+		href="#step2b2">TCP</a> and running the server on another
+		system.</p>
+		
+		<a name="step2b1"></a>
+		<h4>Automatically spawning a new server</h4>
+		
+		<p>Where you previously added "<tt># TO BE ADDED</tt>", replace
+		it with the following:</p>
+		
+		<pre>		"socket" => "/tmp/fastcgi-mono-server",
+		"bin-path" => "/usr/bin/fastcgi-mono-server",
+		"max-procs" => 1,</pre>
+		
+		<ul>
+			<li><p><tt>"socket"</tt> specifies the base name to use
+			for the socket files it creates. Lighttpd will check for
+			the file "/tmp/fastcgi-mono-server-0" to use for the
+			server. If the file does not exist, it will then create
+			the file and use it to spawn a new server.</p></li>
+			
+			<li><p><tt>"bin-path"</tt> specifies the path to the
+			server program, to be called when spawning a new server.
+			You can find the path on your specific system by running
+			<tt>which fastcgi-mono-server</tt>. To use ASP.NET 2.0,
+			use "/usr/bin/fastcgi-mono-server2".</p></li>
+			
+			<li><p><tt>"max-procs"</tt> specifies the maximum number
+			of servers to spawn. <span style="color:red">Because 
+			ASP.NET stores session specific objects, I am unsure of
+			how applications would react if switching from one
+			server to another, or if Lighttpd bonds a single server
+			to a client. As such, I highly recommend keeping this
+			value as "1" to avoid any conflicts.</span></p></li>
+		</ul>
+		
+		<a name="step2b2"></a>
+		<h4>Connecting to an existing server via TCP</h4>
+		
+		<p>Where you previously added "<tt># TO BE ADDED</tt>", replace
+		it with the following:</p>
+		
+		<pre>		"host" => "192.168.0.3",
+		"port" => 9000,</pre>
+		
+		<ul>
+			<li><p><tt>"host"</tt> specifies the host on which the
+			server is running. You will want to replace it with the
+			actual IP address.</p></li>
+			
+			<li><p><tt>"port"</tt> specifies the port on which the
+			server is running. For this example, the ASP.NET server
+			could have been started with the following command:</p>
+			
+				<pre>/usr/bin/fastcgi-mono-server /socket=tcp:9000</pre>
+			
+			</li>
+		</ul>
+		
+		<a name="step2c"></a>
+		<h3>Part C: Mapping Extensions</h3>
+		
+		<p>ASP.NET uses many extensions for its many different features.
+		It uses ".ashx" for handlers, ".soap" for SOAP, and you really
+		don't want anyone downloading your ".dll" files, do you?</p>
+		
+		<p>The hard way to add a new extension is to copy and paste what
+		your server configuration, replacing ".aspx" with ".asmx",
+		etc. The easy way is to add a extension map, so Lighttpd just
+		treats ".asmx" as ".aspx".</p>
+		
+		<p>As before, you are going to want to look for
+		"fastcgi.map-extensions". If found, it will
+		probably look something like the following:</p>
+		
+		<pre>fastcgi.map-extensions = ( ".php3" => ".php" )</pre>
+		
+		<p>If you have it, you're going to want to add a new extension
+		to it so it looks like the following:</p>
+		
+		<pre>fastcgi.map-extensions = (
+        ".php3" => ".php"<b>,
+        ".asmx"   => ".aspx",
+        ".ashx"   => ".aspx",
+        ".ascx"   => ".aspx",
+        ".soap"   => ".aspx",
+        ".rem"    => ".aspx",
+        ".asd"    => ".aspx",
+        ".cs"     => ".aspx",
+        ".config" => ".aspx",
+        ".dll"    => ".aspx"</b>
+)</pre>
+		
+		<p>Otherwise, if it doesn't exist, just add the following
+		block:</p>
+
+		<pre>fastcgi.map-extensions = (
+        ".asmx"   => ".aspx",
+        ".ashx"   => ".aspx",
+        ".ascx"   => ".aspx",
+        ".soap"   => ".aspx",
+        ".rem"    => ".aspx",
+        ".asd"    => ".aspx",
+        ".cs"     => ".aspx",
+        ".config" => ".aspx",
+        ".dll"    => ".aspx"
+)</pre>
+
+		<a name="step3"></a>
+		<h2>Step 3: Adding Index Pages</h2>
+		
+		<p>Once you have finished Step 2, you should have a working
+		ASP.NET server with one exception, if you look at a folder like
+		"/", you'll get a 404 error instead of "default.aspx". To fix
+		this, you need to open <a href="file:///etc/lighttpd/lighttpd.conf">
+		/etc/lighttpd/lighttpd.conf</a> and search for
+		<tt>index-file.names</tt>. You'll probably see the following
+		block:</p>
+		
+		<pre>index-file.names = (
+  "index.xhtml", "index.html", "index.htm", "default.htm", "index.php"
+)</pre>
+
+		<p>You will need to modify it so it includes "index.aspx" and
+		"default.aspx". For example,
+		
+		<pre>index-file.names = (
+  "index.xhtml", "index.html", "index.htm", "default.htm", "index.php"<b>, "default.aspx", "index.aspx"</b>
+)</pre>
+		
+		<h2>Bada Bing!</h2>
+		
+		<p>You should now have ASP.NET working with Lighttpd. Enjoy!</p>
+		
+		<p>- Brian Nickel &lt;<a href="http://kerrick.wordpress.com">http://kerrick.wordpress.com</a>&gt;</p>
+	</body>
+</html>
