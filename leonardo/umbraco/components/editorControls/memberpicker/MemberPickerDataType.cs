@@ -5,7 +5,7 @@ namespace umbraco.editorControls.memberpicker
 	/// <summary>
 	/// Summary description for MemberPickerDataType.
 	/// </summary>
-	public class MemberPickerDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class MemberPickerDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;
@@ -26,7 +26,7 @@ namespace umbraco.editorControls.memberpicker
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

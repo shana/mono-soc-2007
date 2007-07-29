@@ -2,7 +2,7 @@ using System;
 
 namespace umbraco.editorControls.textfield
 {
-	public class TextFieldDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class TextFieldDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;
@@ -23,7 +23,7 @@ namespace umbraco.editorControls.textfield
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

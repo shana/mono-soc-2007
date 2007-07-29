@@ -6,7 +6,7 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 //[Designer(typeof (TabViewDesigner)), ToolboxData("<{0}:TabView runat=server></{0}:TabView>")]
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 	public class TabView : WebControl
 	{
@@ -51,9 +51,9 @@ namespace umbraco.uicontrols
 		private void SetupClientScript()
 		{
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "TABVIEWCSS",
-														"<link rel='stylesheet' href='/umbraco_client/tabview/style.css' />");
+														"<link rel='stylesheet' href='/Umbraco_client/tabview/style.css' />");
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "TABVIEWJS",
-														"<script language='javascript' src='/umbraco_client/tabview/javascript.js'></script>");
+														"<script language='javascript' src='/Umbraco_client/tabview/javascript.js'></script>");
 
 			string strTmp = "";
 			for (int i = 1; i <= Tabs.Count; i++)

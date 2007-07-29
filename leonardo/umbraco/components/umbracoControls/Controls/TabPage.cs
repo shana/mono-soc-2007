@@ -2,7 +2,7 @@ using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 	public class TabPage : WebControl
 	{

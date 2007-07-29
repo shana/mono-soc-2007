@@ -4,7 +4,7 @@ using System.Web.UI;
 using System.Web.UI.Design;
 using System.Web.UI.WebControls;
 
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 
 	[Designer(typeof(PanelDesigner)), PersistChildren(true), ParseChildren(false),
@@ -59,7 +59,7 @@ namespace umbraco.uicontrols
 		protected override void OnLoad(EventArgs EventArguments)
 		{
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "propertypanestyles",
-														"<link rel='stylesheet' href='/umbraco_client/propertypane/style.css' />");
+														"<link rel='stylesheet' href='/Umbraco_client/propertypane/style.css' />");
 			tbl.Style.Add("width", "100%");
 		}
 
@@ -109,7 +109,7 @@ namespace umbraco.uicontrols
 				{
 				}
 				return
-					("<div style='width: 98%;background: #FFF url(http://localhost/umbraco_client/propertypane/images/propertyBackground.gif) top repeat-x;padding: 5;margin: 0;margin-top:5px;border: 1px solid #BABABA;text-align:left;'>" +
+					("<div style='width: 98%;background: #FFF url(http://localhost/Umbraco_client/propertypane/images/propertyBackground.gif) top repeat-x;padding: 5;margin: 0;margin-top:5px;border: 1px solid #BABABA;text-align:left;'>" +
 					 base.GetDesignTimeHtml() + "</div>");
 			}
 			catch (Exception ex)

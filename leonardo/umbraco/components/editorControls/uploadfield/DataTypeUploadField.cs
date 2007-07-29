@@ -5,7 +5,7 @@ namespace umbraco.editorControls.uploadfield
 	/// <summary>
 	/// Summary description for DataTypeUploadField.
 	/// </summary>
-	public class DataTypeUploadField : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class DataTypeUploadField : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;
@@ -26,7 +26,7 @@ namespace umbraco.editorControls.uploadfield
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

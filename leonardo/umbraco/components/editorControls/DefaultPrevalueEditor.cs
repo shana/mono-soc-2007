@@ -15,7 +15,7 @@ namespace umbraco.editorControls
         private DropDownList _dropdownlist;
 
         // referenced datatype
-        private cms.businesslogic.datatype.BaseDataType _datatype;
+        private Cms.BusinessLogic.datatype.BaseDataType _datatype;
         private BaseDataType _datatypeOld;
 
         private bool _isEnsured = false;
@@ -23,11 +23,11 @@ namespace umbraco.editorControls
         private bool _displayTextBox;
 
         /// <summary>
-        /// The default editor for editing the build-in pre values in umbraco
+        /// The default editor for editing the build-in pre values in Umbraco
         /// </summary>
-        /// <param name="DataType">The DataType to be parsed</param>
-        /// <param name="DisplayTextBox">Whether to use the default text box</param>
-        public DefaultPrevalueEditor(cms.businesslogic.datatype.BaseDataType DataType, bool DisplayTextBox)
+        /// <param Name="DataType">The DataType to be parsed</param>
+        /// <param Name="DisplayTextBox">Whether to use the default text box</param>
+        public DefaultPrevalueEditor(Cms.BusinessLogic.datatype.BaseDataType DataType, bool DisplayTextBox)
         {
             // state it knows its datatypedefinitionid
             _displayTextBox = DisplayTextBox;
@@ -37,10 +37,10 @@ namespace umbraco.editorControls
 
         /// <summary>
         /// For backwards compatibility, should be replaced in your extension with the constructor that
-        /// uses the BaseDataType from the cms.businesslogic.datatype namespace
+        /// uses the BaseDataType from the cms.Umbraco.Cms.BusinessLogic.datatype namespace
         /// </summary>
-        /// <param name="DataType">The DataType to be parsed (note: the BaseDataType from editorControls is obsolete)</param>
-        /// <param name="DisplayTextBox">Whether to use the default text box</param>
+        /// <param Name="DataType">The DataType to be parsed (note: the BaseDataType from editorControls is obsolete)</param>
+        /// <param Name="DisplayTextBox">Whether to use the default text box</param>
         public DefaultPrevalueEditor(BaseDataType DataType, bool DisplayTextBox)
         {
             // state it knows its datatypedefinitionid
@@ -97,7 +97,7 @@ namespace umbraco.editorControls
                         throw new ArgumentException("Datatype is not initialized");
 
                     _prevalue =
-                        SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                        Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                                 "Select [value] from cmsDataTypeprevalues where DataTypeNodeId = " +
                                                 defId).ToString();
                 }
@@ -121,7 +121,7 @@ namespace umbraco.editorControls
                         new SqlParameter("@dtdefid", defId)
                     };
                 // update prevalue
-                SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                           "update cmsDataTypePrevalues set [value] = @value where datatypeNodeId = @dtdefid",
                                           SqlParams);
             }
@@ -143,7 +143,7 @@ namespace umbraco.editorControls
 
                 bool hasPrevalue =
                     int.Parse(
-                        SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                        Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                                 "select count(id) from cmsDataTypePrevalues where dataTypeNodeId = " +
                                                defId).ToString()) > 0;
                 SqlParameter[] SqlParams = new SqlParameter[]
@@ -153,7 +153,7 @@ namespace umbraco.editorControls
                     };
                 if (!hasPrevalue)
                 {
-                    SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                               "insert into cmsDataTypePrevalues (datatypenodeid,[value],sortorder,alias) values (@dtdefid,@value,0,'')",
                                               SqlParams);
                 }
@@ -171,8 +171,8 @@ namespace umbraco.editorControls
             // save the prevalue data and get on with you life ;)
             if (_datatype != null)
                 _datatype.DBType =
-                    (cms.businesslogic.datatype.DBTypes)
-                    Enum.Parse(typeof (cms.businesslogic.datatype.DBTypes), _dropdownlist.SelectedValue, true);
+                    (Cms.BusinessLogic.datatype.DBTypes)
+                    Enum.Parse(typeof (Cms.BusinessLogic.datatype.DBTypes), _dropdownlist.SelectedValue, true);
             else if (_datatypeOld != null)
                 _datatypeOld.DBType =
                     (DBTypes)
@@ -202,7 +202,7 @@ namespace umbraco.editorControls
         public static string GetPrevalueFromId(int Id)
         {
             return
-                SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                         "Select [value] from cmsDataTypeprevalues where id = @id",
                                         new SqlParameter("@id", Id)).ToString();
         }

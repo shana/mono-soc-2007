@@ -89,7 +89,7 @@ namespace umbraco.editorControls
 
 
             base.Render(writer);
-            writer.WriteLine("<input type=\"hidden\" id=\"" + this.ClientID + "\" name=\"" + this.ClientID + "\" value=\"" + _text + "\"/>");
+            writer.WriteLine("<input type=\"hidden\" id=\"" + this.ClientID + "\" Name=\"" + this.ClientID + "\" value=\"" + _text + "\"/>");
             writer.WriteLine("<span id=\"" + this.ClientID + "holder\" style=\"border: 1px solid black; background-color: #" + _bgColor + "\"><img src=\"" + umbraco.GlobalSettings.Path + "/images/nada.gif\" width=\"15\" height=\"15\" border=\"0\" /></span>&nbsp; - ");
 
             foreach (object color in _colors)

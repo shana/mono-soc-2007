@@ -18,9 +18,9 @@ namespace umbraco.standardFormhandlers
 
 		public bool Execute(XmlNode formhandlerNode)
 		{
-			cms.businesslogic.member.Member m = cms.businesslogic.member.Member.GetCurrentMember();
+			Cms.BusinessLogic.Member.Member m = Cms.BusinessLogic.Member.Member.GetCurrentMember();
 			if (m != null)
-				cms.businesslogic.member.Member.ClearMemberFromClient(m);
+				Cms.BusinessLogic.Member.Member.ClearMemberFromClient(m);
 			return true;
 		}
 

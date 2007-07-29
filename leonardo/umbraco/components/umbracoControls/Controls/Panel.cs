@@ -5,7 +5,7 @@ using System.Web.UI;
 using System.Web.UI.Design;
 using System.Web.UI.WebControls;
 
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 	[Designer(typeof(UmbracoPanelDesigner)), PersistChildren(true), ParseChildren(false),
 	 ToolboxData("<{0}:UmbracoPanel runat=server></{0}:UmbracoPanel>")]
@@ -55,9 +55,9 @@ namespace umbraco.uicontrols
 		{
 			setupMenu();
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "PanelStyles",
-														"<link rel='stylesheet' href='/umbraco_client/panel/style.css' />");
+														"<link rel='stylesheet' href='/Umbraco_client/panel/style.css' />");
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "PanelScript",
-														"<script language='javascript' src='/umbraco_client/panel/javascript.js'></script>");
+														"<script language='javascript' src='/Umbraco_client/panel/javascript.js'></script>");
 		}
 
 		protected override void OnLoad(EventArgs EventArguments)
@@ -155,7 +155,7 @@ namespace umbraco.uicontrols
 				{
 				}
 				return
-					("<link rel='stylesheet' href='/umbraco_client/panel/style.css' /><div style='height:" + CTRLHeight + ";width:" +
+					("<link rel='stylesheet' href='/Umbraco_client/panel/style.css' /><div style='height:" + CTRLHeight + ";width:" +
 					 CTRLWidth + ";border:1px #ccc;'>" + base.GetDesignTimeHtml() + "</div>");
 			}
 			catch (Exception ex)

@@ -4,7 +4,7 @@ using System.Web.UI;
 using System.Web.UI.Design;
 using System.Web.UI.WebControls;
 
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 	[Designer(typeof(UmbracoCodeAreaDesigner)), ToolboxData("<{0}:CodeArea runat=server></{0}:CodeArea>")]
 	public class CodeArea : TextBox
@@ -23,9 +23,9 @@ namespace umbraco.uicontrols
 		protected override void OnInit(EventArgs e)
 		{
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "CodeAreaStyles",
-														"<link rel='stylesheet' href='/umbraco_client/CodeArea/style.css' />");
+														"<link rel='stylesheet' href='/Umbraco_client/CodeArea/style.css' />");
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "CodeAreaJavaScript",
-														"<script language='javascript' src='/umbraco_client/CodeArea/javascript.js'></script>");
+														"<script language='javascript' src='/Umbraco_client/CodeArea/javascript.js'></script>");
 		}
 	}
 

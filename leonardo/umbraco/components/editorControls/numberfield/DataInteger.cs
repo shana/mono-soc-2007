@@ -5,9 +5,9 @@ namespace umbraco.editorControls.numberfield
 	/// <summary>
 	/// Summary description for DataInteger.
 	/// </summary>
-	public class DataInteger : cms.businesslogic.datatype.DefaultData
+	public class DataInteger : Cms.BusinessLogic.datatype.DefaultData
 	{
-		public DataInteger(cms.businesslogic.datatype.BaseDataType DataType) : base(DataType) {}
+		public DataInteger(Cms.BusinessLogic.datatype.BaseDataType DataType) : base(DataType) {}
 
 		public override void MakeNew(int PropertyId) {
 			this.PropertyId = PropertyId;

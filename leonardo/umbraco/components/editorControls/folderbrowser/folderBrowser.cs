@@ -11,7 +11,7 @@ namespace umbraco.editorControls
 	/// </summary>
 	public class folderBrowser : System.Web.UI.WebControls.WebControl, interfaces.IDataEditor
 	{
-		private cms.businesslogic.datatype.DefaultData _data;
+		private Cms.BusinessLogic.datatype.DefaultData _data;
         public folderBrowser(umbraco.cms.businesslogic.datatype.DefaultData Data)
 		{_data = Data;}
 
@@ -44,11 +44,11 @@ namespace umbraco.editorControls
 		{
 			uploadfield.DataTypeUploadField uft = new uploadfield.DataTypeUploadField();
 		
-			cms.businesslogic.Content c = cms.businesslogic.media.Media.GetContentFromVersion(_data.Version);
-			foreach (BusinessLogic.console.IconI cc in c.Children) 
+			Cms.BusinessLogic.Content c = Cms.BusinessLogic.media.Media.GetContentFromVersion(_data.Version);
+			foreach (BusinessLogic.Console.IIcon cc in c.Children) 
 			{
-				cms.businesslogic.media.Media m = new cms.businesslogic.media.Media(cc.UniqueId);
-				foreach (cms.businesslogic.property.Property p in m.getProperties) 
+				Cms.BusinessLogic.media.Media m = new Cms.BusinessLogic.media.Media(cc.UniqueId);
+				foreach (Cms.BusinessLogic.property.Property p in m.getProperties) 
 				{
 					if (p.PropertyType.DataTypeDefinition.DataType.Id == uft.Id && p.Value.ToString() != "") 
 					{

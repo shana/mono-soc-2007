@@ -3,7 +3,7 @@ using System.Data;
 using Microsoft.ApplicationBlocks.Data;
 using System.Data.SqlClient;
 
-namespace umbraco.macroRenderings
+namespace Umbraco.macroRenderings
 {
 	/// <summary>
 	/// Summary description for content.
@@ -38,7 +38,7 @@ namespace umbraco.macroRenderings
 			string label = "";
 			if (this.Value != "") 
 			{
-				SqlDataReader pageName = SqlHelper.ExecuteReader(umbraco.GlobalSettings.DbDSN, 
+				SqlDataReader pageName = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(Umbraco.GlobalSettings.DbDSN, 
 					CommandType.Text, "select text as nodeName from umbracoNode where id = " + this.Value);
 				if (pageName.Read())
 					label = pageName.GetString(pageName.GetOrdinal("nodeName")) + "<br/>";
@@ -47,7 +47,7 @@ namespace umbraco.macroRenderings
 			writer.WriteLine("<b><span id=\"label" + this.ID + "\">" + label + "</span></b>");
 			
 			writer.WriteLine("<a href=\"javascript:saveTreepickerValue('content','" + this.ID + "');\">Choose item</a>");
-			writer.WriteLine("<input type=\"hidden\" name=\"" + this.ID + "\" value=\"" + this.Value + "\"/>");
+			writer.WriteLine("<input type=\"hidden\" Name=\"" + this.ID + "\" value=\"" + this.Value + "\"/>");
 		}
 
 	}

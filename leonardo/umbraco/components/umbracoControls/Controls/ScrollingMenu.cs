@@ -4,12 +4,12 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 	[ToolboxData("<{0}:ScrollingMenu runat=server></{0}:ScrollingMenu>")]
 	public class ScrollingMenu : WebControl
 	{
-		private string _ClientFilesPath = "/umbraco_client/scrollingmenu/";
+		private string _ClientFilesPath = "/Umbraco_client/scrollingmenu/";
 		private int extraMenuWidth = 0;
 		private string iconIds;
 		private ArrayList Icons = new ArrayList();
@@ -79,9 +79,9 @@ namespace umbraco.uicontrols
 		private void SetupClientScript()
 		{
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "SCROLLINGMENUCSS",
-														"<link rel='stylesheet' href='/umbraco_client/scrollingmenu/style.css' />");
+														"<link rel='stylesheet' href='/Umbraco_client/scrollingmenu/style.css' />");
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "SCROLLINGMENUJS",
-														"<script language='javascript' src='/umbraco_client/scrollingmenu/javascript.js'></script>");
+														"<script language='javascript' src='/Umbraco_client/scrollingmenu/javascript.js'></script>");
 		}
 
 		private Image scrollImage()

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace umbraco.macroRenderings
+namespace Umbraco.macroRenderings
 {
 	/// <summary>
 	/// Summary description for propertyTypePicker.
@@ -70,7 +70,7 @@ namespace umbraco.macroRenderings
 			}
 
 			Hashtable ht = new Hashtable();
-			foreach(cms.businesslogic.propertytype.PropertyType pt in cms.businesslogic.propertytype.PropertyType.GetAll())
+			foreach(Cms.BusinessLogic.propertytype.PropertyType pt in Cms.BusinessLogic.propertytype.PropertyType.GetAll())
 			{
 				if (!ht.ContainsKey(pt.Alias)) 
 				{

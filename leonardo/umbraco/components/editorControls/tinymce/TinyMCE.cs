@@ -91,7 +91,7 @@ namespace umbraco.editorControls.tinymce
 
 //                config.Add("theme_advanced_statusbar_location", "none");
 
-                // If the editor is used in umbraco, use umbraco's own toolbar
+                // If the editor is used in Umbraco, use Umbraco's own toolbar
                 bool onFront = false;
                 if (HttpContext.Current.Request.Path.IndexOf(GlobalSettings.Path) > -1)
                     config.Add("theme_advanced_toolbar_location", "external");
@@ -263,7 +263,7 @@ namespace umbraco.editorControls.tinymce
 
                 // clean macros and add paragraph element for tidy
                 bool removeParagraphs = false;
-                if (parsedString.Length > 16 && parsedString.ToLower().Substring(0, 17) == "|||?umbraco_macro")
+                if (parsedString.Length > 16 && parsedString.ToLower().Substring(0, 17) == "|||?Umbraco_macro")
                 {
                     removeParagraphs = true;
                     parsedString = "<p>" + parsedString + "</p>";
@@ -288,11 +288,11 @@ namespace umbraco.editorControls.tinymce
                     {
                         // TODO
                         // How to log errors? _data.NodeId does not exist?
-                        //BusinessLogic.Log.Add(BusinessLogic.LogTypes.Error, BusinessLogic.User.GetUser(0), _data.NodeId, "Error tidying txt from property: " + _data.PropertyId.ToString());
+                        //Umbraco.Cms.BusinessLogic.Log.Add(Umbraco.Cms.BusinessLogic.LogTypes.Error, Umbraco.Cms.BusinessLogic.User.GetUser(0), _data.NodeId, "Error tidying txt from property: " + _data.PropertyId.ToString());
                     }
                 }
 
-                // rescue umbraco tags
+                // rescue Umbraco tags
                 parsedString = parsedString.Replace("|||?", "<?").Replace("/|||", "/>").Replace("|*|", "\"");
 
                 // fix images
@@ -315,10 +315,10 @@ namespace umbraco.editorControls.tinymce
             base.OnLoad(e);
             try
             {
-                base.NodeId = ((cms.businesslogic.datatype.DefaultData) _data).NodeId;
-                base.VersionId = ((cms.businesslogic.datatype.DefaultData) _data).Version;
-                config.Add("umbraco_toolbar_id",
-                           ElementIdPreFix + ((cms.businesslogic.datatype.DefaultData) _data).PropertyId.ToString());
+                base.NodeId = ((Cms.BusinessLogic.datatype.DefaultData) _data).NodeId;
+                base.VersionId = ((Cms.BusinessLogic.datatype.DefaultData) _data).Version;
+                config.Add("Umbraco_toolbar_id",
+                           ElementIdPreFix + ((Cms.BusinessLogic.datatype.DefaultData) _data).PropertyId.ToString());
             }
             catch
             {
@@ -336,7 +336,7 @@ namespace umbraco.editorControls.tinymce
 
         protected override void Render(HtmlTextWriter output)
         {
-            base.JavascriptLocation = "/umbraco_client/tinymce/tiny_mce.js";
+            base.JavascriptLocation = "/Umbraco_client/tinymce/tiny_mce.js";
             base.Render(output);
         }
 
@@ -454,7 +454,7 @@ namespace umbraco.editorControls.tinymce
                                 appendValue = ", '" + cmd.Value + "'";
                             _mceButtons.Add(cmd.Priority, cmd.Command);
                             _buttons.Add(cmd.Priority,
-                                         new editorButton(cmd.Alias, ui.Text("buttons", cmd.Alias, null), cmd.Icon,
+                                         new editorButton(cmd.Alias, UI.Text("buttons", cmd.Alias, null), cmd.Icon,
                                                           "tinyMCE.execInstanceCommand('" + ClientID + "', '" +
                                                           cmd.Command + "', " + cmd.UserInterface + appendValue + ")"));
                         }

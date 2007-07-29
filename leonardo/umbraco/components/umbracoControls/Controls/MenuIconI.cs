@@ -1,4 +1,4 @@
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 	public interface MenuIconI
 	{

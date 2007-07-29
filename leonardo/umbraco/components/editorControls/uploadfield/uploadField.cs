@@ -12,12 +12,12 @@ namespace umbraco.editorControls
 	public class uploadField : System.Web.UI.HtmlControls.HtmlInputFile, interfaces.IDataEditor
 	{
 		private String _text;
-		private cms.businesslogic.datatype.DefaultData _data;
+		private Cms.BusinessLogic.datatype.DefaultData _data;
         private String _thumbnails;
 
         public uploadField(interfaces.IData Data, string ThumbnailSizes)
         {
-            _data = (cms.businesslogic.datatype.DefaultData)Data;
+            _data = (Cms.BusinessLogic.datatype.DefaultData)Data;
             _thumbnails = ThumbnailSizes;
 		}
 
@@ -72,7 +72,7 @@ namespace umbraco.editorControls
 						if (umbraco.UmbracoSettings.UploadAllowDirectories) 
 						{
 							filename = _text.Substring(_text.LastIndexOf("\\")+1, _text.Length-_text.LastIndexOf("\\")-1).ToLower();
-							// Create a new folder in the /media folder with the name /media/propertyid
+							// Create a new folder in the /media folder with the Name /media/propertyid
                             System.IO.Directory.CreateDirectory(System.Web.HttpContext.Current.Server.MapPath(umbraco.GlobalSettings.Path + "/../media/" + _data.PropertyId.ToString()));
                             _fullFilePath = System.Web.HttpContext.Current.Server.MapPath(umbraco.GlobalSettings.Path + "/../media/" + _data.PropertyId + "/" + filename);
 							this.PostedFile.SaveAs(_fullFilePath);
@@ -91,7 +91,7 @@ namespace umbraco.editorControls
                         string ext = orgExt.ToLower();
 						try 
 						{
-							cms.businesslogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoExtension").Value = ext;
+							Cms.BusinessLogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoExtension").Value = ext;
 						} 
 						catch {}
 						
@@ -101,7 +101,7 @@ namespace umbraco.editorControls
 						try 
 						{
 							System.IO.FileInfo fi = new FileInfo(_fullFilePath);
-							cms.businesslogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoBytes").Value = fi.Length.ToString();
+							Cms.BusinessLogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoBytes").Value = fi.Length.ToString();
 						} 
 						catch {}
 
@@ -120,8 +120,8 @@ namespace umbraco.editorControls
 							fs.Close();
 							try 
 							{
-								cms.businesslogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoWidth").Value = fileWidth.ToString();
-								cms.businesslogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoHeight").Value = fileHeight.ToString();
+								Cms.BusinessLogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoWidth").Value = fileWidth.ToString();
+								Cms.BusinessLogic.Content.GetContentFromVersion(_data.Version).getProperty("umbracoHeight").Value = fileHeight.ToString();
 							
 							} 
 							catch {
@@ -198,7 +198,7 @@ namespace umbraco.editorControls
 		/// <summary> 
 		/// Render this control to the output parameter specified.
 		/// </summary>
-		/// <param name="output"> The HTML writer to write out to </param>
+		/// <param Name="output"> The HTML writer to write out to </param>
 		protected override void Render(HtmlTextWriter output)
 		{
 			if (this.Text != null && this.Text != "") 
@@ -217,7 +217,7 @@ namespace umbraco.editorControls
 				} 
 				else
                     output.WriteLine("<a href=\"" + umbraco.GlobalSettings.Path + "/.." + this.Text + "\" target=\"_blank\">" + this.Text + "</a><br/>");
-				output.WriteLine("<input type=\"checkbox\" id=\"" + this.ClientID + "clear\" name=\"" + this.ClientID + "clear\" value=\"1\"/> <label for=\"" + this.ClientID + "clear\">" + ui.Text("uploadClear") + "</label><br/>");
+				output.WriteLine("<input type=\"checkbox\" id=\"" + this.ClientID + "clear\" Name=\"" + this.ClientID + "clear\" value=\"1\"/> <label for=\"" + this.ClientID + "clear\">" + UI.Text("uploadClear") + "</label><br/>");
 			}
 			base.Render(output);
 		}

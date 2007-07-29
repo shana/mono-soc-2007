@@ -5,7 +5,7 @@ namespace umbraco.editorControls.listbox
 	/// <summary>
 	/// Summary description for ColorPickerDataType.
 	/// </summary>
-	public class ListBoxDataType : cms.businesslogic.datatype.BaseDataType, interfaces.IDataType
+	public class ListBoxDataType : Cms.BusinessLogic.datatype.BaseDataType, interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;

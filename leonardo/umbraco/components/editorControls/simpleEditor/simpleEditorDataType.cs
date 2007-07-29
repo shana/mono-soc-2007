@@ -5,7 +5,7 @@ namespace umbraco.editorControls.simpleEditor
 	/// <summary>
 	/// Summary description for simpleEditorDataType.
 	/// </summary>
-	public class simpleEditorDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class simpleEditorDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;
@@ -26,7 +26,7 @@ namespace umbraco.editorControls.simpleEditor
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

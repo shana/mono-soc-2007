@@ -5,10 +5,10 @@ namespace umbraco.editorControls.wysiwyg
 	/// <summary>
 	/// Summary description for WysiwygDataType.
 	/// </summary>
-	public class WysiwygDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class WysiwygDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private editor _Editor;
-		private cms.businesslogic.datatype.DefaultData _baseData;
+		private Cms.BusinessLogic.datatype.DefaultData _baseData;
 		private interfaces.IDataPrevalue _prevalueeditor;
 
 		public override interfaces.IDataEditor DataEditor 
@@ -17,7 +17,7 @@ namespace umbraco.editorControls.wysiwyg
 			{
 				if (_Editor == null) 
 				{
-                    _Editor = new editor((cms.businesslogic.datatype.DefaultData)Data);
+                    _Editor = new editor((Cms.BusinessLogic.datatype.DefaultData)Data);
 				
 				}
 				return _Editor;
@@ -29,7 +29,7 @@ namespace umbraco.editorControls.wysiwyg
 			get 
 			{
 				if (_baseData == null)
-                    _baseData = new cms.businesslogic.datatype.DefaultData(this);
+                    _baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

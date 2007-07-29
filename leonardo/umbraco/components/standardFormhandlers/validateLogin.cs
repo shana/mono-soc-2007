@@ -21,11 +21,11 @@ namespace umbraco.standardFormhandlers
 			bool temp = false;
 			if (helper.Request("umbracoMemberLogin") != "" && helper.Request("umbracoMemberPassword") != "") 
 			{
-				cms.businesslogic.member.Member m = cms.businesslogic.member.Member.GetMemberFromLoginNameAndPassword(helper.Request("umbracoMemberLogin"), helper.Request("umbracoMemberPassword"));
+				Cms.BusinessLogic.Member.Member m = Cms.BusinessLogic.Member.Member.GetMemberFromLoginNameAndPassword(helper.Request("umbracoMemberLogin"), helper.Request("umbracoMemberPassword"));
 				if (m != null) 
 				{
 					System.Web.HttpContext.Current.Trace.Write("validateLogin", "Member found...");
-					cms.businesslogic.member.Member.AddMemberToCache(m);
+					Cms.BusinessLogic.Member.Member.AddMemberToCache(m);
 					temp = true;
 				} else
 					System.Web.HttpContext.Current.Trace.Write("validateLogin", "No member found...");

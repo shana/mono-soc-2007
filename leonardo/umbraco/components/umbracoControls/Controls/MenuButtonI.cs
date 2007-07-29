@@ -1,7 +1,7 @@
 using System;
 using System.Web.UI.WebControls;
 
-namespace umbraco.uicontrols
+namespace Umbraco.uicontrols
 {
 	public class MenuImageButton : ImageButton, MenuIconI
 	{
@@ -74,7 +74,7 @@ namespace umbraco.uicontrols
 		private void SetupClientScript()
 		{
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), "MENUICONCSS",
-														"<link rel='stylesheet' href='/umbraco_client/menuicon/style.css' />");
+														"<link rel='stylesheet' href='/Umbraco_client/menuicon/style.css' />");
 		}
 	}
 }
