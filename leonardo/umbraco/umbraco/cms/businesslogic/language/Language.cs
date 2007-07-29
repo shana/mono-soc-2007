@@ -6,14 +6,14 @@ using System.Globalization;
 
 using Microsoft.ApplicationBlocks.Data;
 
-using umbraco.cms.businesslogic.cache;
+using Umbraco.Cms.BusinessLogic.cache;
 
-namespace umbraco.cms.businesslogic.language
+namespace Umbraco.Cms.BusinessLogic.language
 {
 	/// <summary>
 	/// The language class contains methods for creating and modifing installed languages.
 	/// 
-	/// A language is used internal in the umbraco console for displaying languagespecific text and 
+	/// A language is used internal in the Umbraco console for displaying languagespecific text and 
 	/// in the public website for language/country specific representation of ex. date/time, currencies.
 	/// 
 	/// Besides by using the built in Dictionary you are able to store language specific bits and pieces of translated text
@@ -29,14 +29,14 @@ namespace umbraco.cms.businesslogic.language
 		private static string _ConnString = GlobalSettings.DbDSN;
 		private static object getLanguageSyncLock = new object();
 
-		/// <param name="id">Id of the language</param>
+		/// <param Name="id">Id of the language</param>
 		public Language(int id)
 		{
 			_id = id;
 			_cultureAlias = Cache.GetCacheItem<string>("UmbracoLanguage" + id, getLanguageSyncLock, TimeSpan.FromMinutes(60),
 				delegate
 				{
-					return SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+					return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
 						"select languageISOCode from umbracoLanguage where id = @LanguageId", new SqlParameter("@LanguageId", id)).ToString();
 				});
 
@@ -67,11 +67,11 @@ namespace umbraco.cms.businesslogic.language
 		/// <summary>
 		/// Creates a new language given the culture code - ie. da-dk  (denmark)
 		/// </summary>
-		/// <param name="CultureCode">Culturecode of the language</param>
+		/// <param Name="CultureCode">Culturecode of the language</param>
 		public static void MakeNew(string CultureCode)
 		{
 			if(new CultureInfo(CultureCode) != null)
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
 					"insert into umbracoLanguage (languageISOCode) values (@CultureCode)",
 					new SqlParameter("@CultureCode", CultureCode));
 		}
@@ -84,7 +84,7 @@ namespace umbraco.cms.businesslogic.language
 		public void Delete()
 		{
 			Cache.ClearCacheItem("UmbracoLanguage" + id);
-			SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from umbracoLanguage where id = @id",
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from umbracoLanguage where id = @id",
 				new SqlParameter("@id", id));
 		}
 
@@ -97,7 +97,7 @@ namespace umbraco.cms.businesslogic.language
 			{
 				List<Language> tmp = new List<Language>();
 
-				using(SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select id from umbracoLanguage"))
+				using(SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "select id from umbracoLanguage"))
 				{
 					while(dr.Read())
 						tmp.Add(new Language(int.Parse(dr["id"].ToString())));
@@ -112,7 +112,7 @@ namespace umbraco.cms.businesslogic.language
 			if(new CultureInfo(CultureCode) != null)
 			{
 				object sqlLangId =
-					SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+					Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
 						"select id from umbracoLanguage where languageISOCode = @CultureCode",
 						new SqlParameter("@CultureCode", CultureCode));
 				if(sqlLangId != null)
@@ -129,7 +129,7 @@ namespace umbraco.cms.businesslogic.language
 		}
 
 		/// <summary>
-		/// The id used by umbraco to identify the language
+		/// The id used by Umbraco to identify the language
 		/// </summary>
 		public int id
 		{
@@ -145,7 +145,7 @@ namespace umbraco.cms.businesslogic.language
 			set
 			{
 				_cultureAlias = value;
-				SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
 					"update umbracoLanguage set languageISOCode = @cultureAlias where id = @id", new SqlParameter("@id", id),
 					new SqlParameter("@cultureAlias", _cultureAlias));
 				updateNames();
@@ -153,7 +153,7 @@ namespace umbraco.cms.businesslogic.language
 		}
 
 		/// <summary>
-		/// The user friendly name of the language/country
+		/// The user friendly Name of the language/country
 		/// </summary>
 		public string FriendlyName
 		{

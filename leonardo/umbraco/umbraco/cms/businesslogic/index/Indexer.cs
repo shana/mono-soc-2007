@@ -6,10 +6,10 @@ using Lucene.Net.Index;
 using Lucene.Net.Documents;
 using System.Collections;
 
-namespace umbraco.cms.businesslogic.index
+namespace Umbraco.Cms.BusinessLogic.index
 {
 	/// <summary>
-	/// Indexer contains methods for populating data to the internal search of the umbraco console
+	/// Indexer contains methods for populating data to the internal search of the Umbraco console
 	/// 
 	/// 
 	/// </summary>
@@ -17,10 +17,10 @@ namespace umbraco.cms.businesslogic.index
 	{
 
 		private static string _indexDirectory = "";
-		public static string RelativeIndexDir = umbraco.GlobalSettings.StorageDirectory + "/_systemUmbracoIndexDontDelete";
+		public static string RelativeIndexDir = Umbraco.GlobalSettings.StorageDirectory + "/_systemUmbracoIndexDontDelete";
 
 		/// <summary>
-		/// The physical path to the folder where umbraco stores the files used by the Lucene searchcomponent
+		/// The physical path to the folder where Umbraco stores the files used by the Lucene searchcomponent
 		/// </summary>
 		public static string IndexDirectory 
 		{
@@ -48,7 +48,7 @@ namespace umbraco.cms.businesslogic.index
 		/// <summary>
 		/// Method for accesing the Lucene indexwriter in the internal search
 		/// </summary>
-		/// <param name="ForceRecreation">If set to true, a new index is created</param>
+		/// <param Name="ForceRecreation">If set to true, a new index is created</param>
 		/// <returns>The lucene indexwriter</returns>
 		public static IndexWriter ContentIndex(bool ForceRecreation) 
 		{
@@ -72,7 +72,7 @@ namespace umbraco.cms.businesslogic.index
 		}
 
 		/// <summary>
-		/// Method for reindexing data in all documents of umbraco, this is a performaceheavy invocation and should be
+		/// Method for reindexing data in all documents of Umbraco, this is a performaceheavy invocation and should be
 		/// used with care!
 		/// </summary>
 		public static void ReIndex() 
@@ -81,7 +81,7 @@ namespace umbraco.cms.businesslogic.index
 			IndexWriter w = ContentIndex(true);
 			w.Close();
 
-			Guid[] documents = cms.businesslogic.web.Document.getAllUniquesFromObjectType(cms.businesslogic.web.Document._objectType);
+			Guid[] documents = Cms.BusinessLogic.web.Document.getAllUniquesFromObjectType(Cms.BusinessLogic.web.Document._objectType);
 			
 			System.Web.HttpContext.Current.Application["umbIndexerTotal"] = documents.Length;
 			System.Web.HttpContext.Current.Application["umbIndexerCount"] = 0;
@@ -89,8 +89,8 @@ namespace umbraco.cms.businesslogic.index
 
 			foreach(Guid g in documents) 
 			{
-				cms.businesslogic.web.Document d = 
-				new cms.businesslogic.web.Document(g);
+				Cms.BusinessLogic.web.Document d = 
+				new Cms.BusinessLogic.web.Document(g);
 				d.Index(true);
 				System.Web.HttpContext.Current.Application.Lock();
 				System.Web.HttpContext.Current.Application["umbIndexerInfo"] = d.Text;
@@ -106,7 +106,7 @@ namespace umbraco.cms.businesslogic.index
 			RemoveNode(Id);
 
 			// Add node
-			Document d = new Document(); // Lucene document, not umbraco Document
+			Document d = new Document(); // Lucene document, not Umbraco Document
 			d.Add(new Field("Id", Id.ToString(), true, true, true));
 			d.Add(new Field("Text", Text, true, true, true));
 			d.Add(new Field("ObjectType", ObjectType.ToString(), true, true, true));
@@ -164,7 +164,7 @@ namespace umbraco.cms.businesslogic.index
 					BusinessLogic.LogTypes.Error,
 					BusinessLogic.User.GetUser(0),
 					Id,
-					"Error removing node from umbraco index: '" + ee.ToString()  + "'");
+					"Error removing node from Umbraco index: '" + ee.ToString()  + "'");
 			}
 		}
 

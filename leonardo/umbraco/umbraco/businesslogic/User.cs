@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Collections;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.BusinessLogic
+namespace Umbraco.BusinessLogic
 {
 	/// <summary>
 	/// Summary description for User.
@@ -58,7 +58,7 @@ namespace umbraco.BusinessLogic
 		{
 			_id = ID;
 
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
 				GlobalSettings.DbDSN, CommandType.Text,
 				"Select userNoConsole, userDisabled, userType,startStructureID, startMediaId, userName,userLogin,userPassword,userEmail,userDefaultPermissions, userLanguage from umbracoUser where id = @id",
 				new SqlParameter("@id", ID)))
@@ -99,7 +99,7 @@ namespace umbraco.BusinessLogic
 			set 
 			{
 				_name = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserName = @userName where id = @id", new SqlParameter("@userName", value), new SqlParameter("@id", Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserName = @userName where id = @id", new SqlParameter("@userName", value), new SqlParameter("@id", Id));
                 FlushFromCache();
             }
 		}
@@ -115,7 +115,7 @@ namespace umbraco.BusinessLogic
 			set 
 			{
 				_email = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserEmail = @email where id = @id", new SqlParameter("@id", this.Id), new SqlParameter("@email", value));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserEmail = @email where id = @id", new SqlParameter("@id", this.Id), new SqlParameter("@email", value));
                 FlushFromCache();
             }
 		}
@@ -130,7 +130,7 @@ namespace umbraco.BusinessLogic
 			}
 			set {
 				_language = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set userLanguage = @language where id = @id", new SqlParameter("@language", value), new SqlParameter("@id", Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set userLanguage = @language where id = @id", new SqlParameter("@language", value), new SqlParameter("@id", Id));
                 FlushFromCache();
             }
 	}
@@ -145,7 +145,7 @@ namespace umbraco.BusinessLogic
 			}
 			set {
 				_password = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserPassword = @pw where id = @id", new SqlParameter("@pw", value), new SqlParameter("@id", Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserPassword = @pw where id = @id", new SqlParameter("@pw", value), new SqlParameter("@id", Id));
                 FlushFromCache();
             }
 		}
@@ -158,13 +158,13 @@ namespace umbraco.BusinessLogic
                     setupUser(_id);
                 ArrayList al = new ArrayList();
 
-				using (SqlDataReader appIcons = SqlHelper.ExecuteReader(_connstring,
+				using (SqlDataReader appIcons = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connstring,
 					CommandType.Text, "select appAlias, appIcon, appname from umbracoApp app join umbracoUser2app u2a on u2a.app = app.appAlias and u2a.[user] = @userID order by app.sortOrder", new SqlParameter("@userID", this.Id)))
 				{
 					while(appIcons.Read())
 					{
 						Application tmp = new Application();
-						tmp.name = appIcons.GetString(appIcons.GetOrdinal("appName"));
+						tmp.Name = appIcons.GetString(appIcons.GetOrdinal("appName"));
 						tmp.icon = appIcons.GetString(appIcons.GetOrdinal("appIcon"));
 						tmp.alias = appIcons.GetString(appIcons.GetOrdinal("appAlias"));
 						al.Add(tmp);
@@ -189,7 +189,7 @@ namespace umbraco.BusinessLogic
 			}
 			set {
 				_loginname = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserLogin = @login where id = @id", new SqlParameter("@login", value), new SqlParameter("@id", Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"Update umbracoUser set UserLogin = @login where id = @id", new SqlParameter("@login", value), new SqlParameter("@id", Id));
                 FlushFromCache();
             }
 		}
@@ -205,7 +205,7 @@ namespace umbraco.BusinessLogic
                 consoleCheckSql = "and userNoConsole = 0 ";
 
             SqlConnection conn = new SqlConnection(GlobalSettings.DbDSN);
-            object tmp = SqlHelper.ExecuteScalar(
+            object tmp = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
                 conn,
                 CommandType.Text,
                 "select id from umbracoUser where userDisabled = 0 " + consoleCheckSql + " and userLogin = @login and userPassword = @pw", new SqlParameter("@login", lname), new SqlParameter("@pw", passw)
@@ -226,7 +226,7 @@ namespace umbraco.BusinessLogic
 			}
 			set {
 				_usertype = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,
 					@"Update umbracoUser set userType = @type where id = @id", 
 					new SqlParameter("@type", value.Id), 
 					new SqlParameter("@id", Id));
@@ -241,7 +241,7 @@ namespace umbraco.BusinessLogic
 
 			SqlConnection conn = new SqlConnection(GlobalSettings.DbDSN);
 			SqlDataReader dr;
-			dr = SqlHelper.ExecuteReader(
+			dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
 				conn,
 				CommandType.Text,
 				"Select id from umbracoUser"
@@ -262,12 +262,12 @@ namespace umbraco.BusinessLogic
 		}
 		
 		public static void MakeNew(string name, string lname, string passw, UserType ut) {
-			SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, @"
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, @"
 				insert into umbracoUser 
 				(UserType,startStructureId,startMediaId, UserName, userLogin, userPassword, userEmail,userLanguage) 
-				values (@type,-1,-1,@name,@lname,@pw,'',@lang)", 
+				values (@type,-1,-1,@Name,@lname,@pw,'',@lang)", 
 				new SqlParameter("@lang", GlobalSettings.DefaultUILanguage), 
-				new SqlParameter("@name", name), 
+				new SqlParameter("@Name", name), 
 				new SqlParameter("@lname", lname), 
 				new SqlParameter("@type", ut.Id), 
 				new SqlParameter("@pw", passw));
@@ -278,7 +278,7 @@ namespace umbraco.BusinessLogic
 			int retVal;
 			SqlConnection conn = new SqlConnection(GlobalSettings.DbDSN);
 			retVal = int.Parse(
-				SqlHelper.ExecuteScalar(
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
 				conn,
 				CommandType.Text,
 				"select id from umbracoUser where userDisabled = 0 and userNoConsole = 0 and userLogin = @login and userPassword = @pw",
@@ -294,7 +294,7 @@ namespace umbraco.BusinessLogic
 			int retVal;
 			SqlConnection conn = new SqlConnection(GlobalSettings.DbDSN);
 			retVal = int.Parse(
-				SqlHelper.ExecuteScalar(
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
 				conn,
 				CommandType.Text,
 				"select id from umbracoUser where userLogin = @login",
@@ -305,14 +305,14 @@ namespace umbraco.BusinessLogic
 		}
 
 		public void delete() {
-			SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"delete from umbracoUser where id = @id", new SqlParameter("@id", Id));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"delete from umbracoUser where id = @id", new SqlParameter("@id", Id));
             FlushFromCache();
         }
 
 		/*
 		public string GetPermissions(int NodeId) 
 		{
-			return GetPermissions(new cms.businesslogic.web.Document(NodeId).Path);
+			return GetPermissions(new cms.Umbraco.Cms.BusinessLogic.web.Document(NodeId).Path);
 		}
 		*/
 
@@ -339,7 +339,7 @@ namespace umbraco.BusinessLogic
             if (!_isInitialized)
                 setupUser(_id);
 
-			using(SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoUser2NodePermission where userId = @userId order by nodeId", new SqlParameter("@userId", this.Id)))
+			using(SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoUser2NodePermission where userId = @userId order by nodeId", new SqlParameter("@userId", this.Id)))
 			{
 				//	int currentId = -1;
 				while(dr.Read())
@@ -383,7 +383,7 @@ namespace umbraco.BusinessLogic
             if (!_isInitialized)
                 setupUser(_id);
 
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoUser2NodeNotify where userId = @userId order by nodeId", new SqlParameter("@userId", this.Id)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoUser2NodeNotify where userId = @userId order by nodeId", new SqlParameter("@userId", this.Id)))
 			{
 				while(dr.Read())
 				{
@@ -403,11 +403,11 @@ namespace umbraco.BusinessLogic
 		}
 
 		public void clearApplications() {
-			SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "delete from umbracoUser2App where [user] = @id", new SqlParameter("@id", this.Id));            		
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "delete from umbracoUser2App where [user] = @id", new SqlParameter("@id", this.Id));            		
 		}
 
 		public void addApplication(string AppAlias) {
-			SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "insert into umbracoUser2App ([user],app) values (@id, @app)", new SqlParameter("@id", this.Id), new SqlParameter("@app", AppAlias));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "insert into umbracoUser2App ([user],app) values (@id, @app)", new SqlParameter("@id", this.Id), new SqlParameter("@app", AppAlias));
 		}
 
 		public bool NoConsole 
@@ -421,7 +421,7 @@ namespace umbraco.BusinessLogic
 			set 
 			{
 				_userNoConsole = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set userNoConsole = @userNoConsole where id = @id", new SqlParameter("@id", this.Id), new SqlParameter("@userNoConsole", _userNoConsole));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set userNoConsole = @userNoConsole where id = @id", new SqlParameter("@id", this.Id), new SqlParameter("@userNoConsole", _userNoConsole));
                 FlushFromCache();
             }
 		}
@@ -437,7 +437,7 @@ namespace umbraco.BusinessLogic
 			set 
 			{
 				_userDisabled = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set userDisabled = @userDisabled where id = @id", new SqlParameter("@id", this.Id), new SqlParameter("@userDisabled", _userDisabled));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set userDisabled = @userDisabled where id = @id", new SqlParameter("@id", this.Id), new SqlParameter("@userDisabled", _userDisabled));
                 FlushFromCache();
             }
 		}
@@ -454,7 +454,7 @@ namespace umbraco.BusinessLogic
 			{
 			
 				_startnodeid = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set  startStructureId = @start where id = @id", new SqlParameter("@start", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set  startStructureId = @start where id = @id", new SqlParameter("@start", value), new SqlParameter("@id", this.Id));
                 FlushFromCache();
             }
 		}
@@ -470,7 +470,7 @@ namespace umbraco.BusinessLogic
 			{
 			
 				_startmediaid = value;
-				SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set  startMediaId = @start where id = @id", new SqlParameter("@start", value), new SqlParameter("@id", this.Id));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "update umbracoUser set  startMediaId = @start where id = @id", new SqlParameter("@start", value), new SqlParameter("@id", this.Id));
 			    FlushFromCache();
 			}
 		}

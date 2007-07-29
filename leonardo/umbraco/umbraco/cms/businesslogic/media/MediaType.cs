@@ -2,8 +2,9 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
+using SqlHelper=Umbraco.SqlHelper;
 
-namespace umbraco.cms.businesslogic.media
+namespace Umbraco.Cms.BusinessLogic.media
 {
 	/// <summary>
 	/// The Mediatype
@@ -16,7 +17,7 @@ namespace umbraco.cms.businesslogic.media
 		/// <summary>
 		/// Constructs a MediaTypeobject given the id
 		/// </summary>
-		/// <param name="id">Id of the mediatype</param>
+		/// <param Name="id">Id of the mediatype</param>
 		public MediaType(int id) : base(id)
 		{
 		}
@@ -24,7 +25,7 @@ namespace umbraco.cms.businesslogic.media
 		/// <summary>
 		/// Constructs a MediaTypeobject given the id
 		/// </summary>
-		/// <param name="id">Id of the mediatype</param>
+		/// <param Name="id">Id of the mediatype</param>
 		public MediaType(Guid id) : base(id)
 		{
 		}
@@ -40,18 +41,18 @@ namespace umbraco.cms.businesslogic.media
 		/// <summary>
 		/// Retrieve a MediaType by it's alias
 		/// </summary>
-		/// <param name="Alias">The alias of the MediaType</param>
+		/// <param Name="Alias">The alias of the MediaType</param>
 		/// <returns>The MediaType with the alias</returns>
 		public static new MediaType GetByAlias(string Alias) 
 		{
-			return new MediaType(int.Parse(SqlHelper.ExecuteScalar(_ConnString, CommandType.Text, "select nodeid from cmsContentType where alias = '" + sqlHelper.safeString(Alias) + "'").ToString()));
+			return new MediaType(int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text, "select nodeid from cmsContentType where alias = '" + SqlHelper.SafeString(Alias) + "'").ToString()));
 		}
 
 
 		private static Guid _objectType = new Guid("4ea4382b-2f5a-4c2b-9587-ae9b3cf3602e");
 
 		/// <summary>
-		/// Retrieve all MediaTypes in the umbraco installation
+		/// Retrieve all MediaTypes in the Umbraco installation
 		/// </summary>
 		new public static MediaType[] GetAll 
 		{
@@ -67,8 +68,8 @@ namespace umbraco.cms.businesslogic.media
 		/// <summary>
 		/// Create a new Mediatype
 		/// </summary>
-		/// <param name="u">The Umbraco user context</param>
-		/// <param name="Text">The name of the MediaType</param>
+		/// <param Name="u">The Umbraco user context</param>
+		/// <param Name="Text">The Name of the MediaType</param>
 		/// <returns>The new MediaType</returns>
 		public static MediaType MakeNew( BusinessLogic.User u,string Text) 
 		{

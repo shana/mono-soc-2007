@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.BusinessLogic.Actions
+namespace Umbraco.BusinessLogic.Actions
 {
 	/// <summary>
 	/// This action is invoked upon creation of a document
@@ -1265,7 +1265,7 @@ namespace umbraco.BusinessLogic.Actions
 	/// <summary>
 	/// This action is invoked when a node reloads its children
 	/// Concerns only the tree itself and thus you should not handle
-	/// this action from without umbraco.
+	/// this action from without Umbraco.
 	/// </summary>
 	public class ActionRefresh : interfaces.IAction
 	{

@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.BasePages
+namespace Umbraco.BasePages
 {
 	/// <summary>
 	/// Summary description for DialogPage.

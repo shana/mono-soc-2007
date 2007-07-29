@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
 
-namespace umbraco.controls
+namespace Umbraco.controls
 {
 	/// <summary>
 	/// Summary description for datePicker.
@@ -132,10 +132,10 @@ namespace umbraco.controls
 		{
             // Get the type
 		    Type dateType = new datePicker().GetType();
-            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopup", "<script language='javascript' src='/umbraco_client/datepicker/cal_s.js'></script>");
-            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopupHelper", "<script language='javascript' src='/umbraco_client/datepicker/cal_set_s.js'></script>");
-            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopupLang", "<script language='javascript' src='/umbraco_client/datepicker/lang/calendar-en.js'></script>");
-            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopSkin", "<link rel='stylesheet' href='/umbraco_client/datepicker/aqua/theme.css' />");
+            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopup", "<script language='javascript' src='/Umbraco_client/datepicker/cal_s.js'></script>");
+            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopupHelper", "<script language='javascript' src='/Umbraco_client/datepicker/cal_set_s.js'></script>");
+            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopupLang", "<script language='javascript' src='/Umbraco_client/datepicker/lang/calendar-en.js'></script>");
+            Page.ClientScript.RegisterClientScriptBlock(dateType, "datepickerWithPopSkin", "<link rel='stylesheet' href='/Umbraco_client/datepicker/aqua/theme.css' />");
 			base.OnInit (e);
 		}
 
@@ -143,7 +143,7 @@ namespace umbraco.controls
 		/// <summary> 
 		/// Render this control to the output parameter specified.
 		/// </summary>
-		/// <param name="output"> The HTML writer to write out to </param>
+		/// <param Name="output"> The HTML writer to write out to </param>
 		protected override void Render(HtmlTextWriter output)
 		{
 
@@ -178,9 +178,9 @@ namespace umbraco.controls
 				}
 			}
 
-			output.WriteLine("<input type=\"text\" id=\"" + this.ClientID + "\" name=\"" + this.ClientID + "\" value=\"" + dateTimeValue + "\"/>");
+			output.WriteLine("<input type=\"text\" id=\"" + this.ClientID + "\" Name=\"" + this.ClientID + "\" value=\"" + dateTimeValue + "\"/>");
 			output.WriteLine("<span id=\"" + this.ClientID + "_show_e\">" + dateTimeVisibleValue + "</span> ");
-			output.WriteLine("<img src=\"/umbraco_client/datePicker/images/calPickerIcon.png\" onMouseOver=\"this.src='/umbraco_client/datePicker/images/calPickerIconHover.png'\" onMouseOut=\"this.src='/umbraco_client/datePicker/images/calPickerIcon.png'\" id=\"" + this.ClientID + "_f_trigger_e\" style=\"cursor: pointer; border: 1px solid #CCC\" title=\"" + ui.Text("choose") + " " + ui.Text("date") + "...\" align=\"absmiddle\"/>");
+			output.WriteLine("<img src=\"/Umbraco_client/datePicker/images/calPickerIcon.png\" onMouseOver=\"this.src='/Umbraco_client/datePicker/images/calPickerIconHover.png'\" onMouseOut=\"this.src='/Umbraco_client/datePicker/images/calPickerIcon.png'\" id=\"" + this.ClientID + "_f_trigger_e\" style=\"cursor: pointer; border: 1px solid #CCC\" title=\"" + ui.Text("choose") + " " + ui.Text("date") + "...\" align=\"absmiddle\"/>");
 			output.WriteLine("<a href=\"javascript:void(0);\" onClick=\"document.forms[0]['" + this.ClientID + "'].value = ''; document.getElementById('" + this.ClientID + "_show_e').innerHTML = '" + ui.Text("noDate") + "';\">" + ui.Text("removeDate") + "</a>");
 			output.WriteLine(
                 "<script type=\"text/javascript\">\n//<![CDATA[\n" + 

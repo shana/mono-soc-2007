@@ -6,19 +6,20 @@ using System.Data.SqlTypes;
 using System.Web;
 using System.Xml;
 using Microsoft.ApplicationBlocks.Data;
-using umbraco.BusinessLogic;
-using umbraco.BusinessLogic.Actions;
-using umbraco.BusinessLogic.console;
-using umbraco.cms.businesslogic.index;
-using umbraco.cms.businesslogic.property;
-using umbraco.cms.businesslogic.relation;
-using umbraco.cms.helpers;
+using Umbraco.BusinessLogic;
+using Umbraco.BusinessLogic.Actions;
+using Umbraco.BusinessLogic.Console;
+using Umbraco.Cms.BusinessLogic.index;
+using Umbraco.Cms.BusinessLogic.property;
+using Umbraco.Cms.BusinessLogic.relation;
+using Umbraco.Cms.helpers;
+using SqlHelper=Umbraco.SqlHelper;
 
-namespace umbraco.cms.businesslogic.web
+namespace Umbraco.Cms.BusinessLogic.web
 {
     /// <summary>
     /// Document represents a webpage,
-    /// type (umbraco.cms.businesslogic.web.DocumentType)
+    /// type (Cms.Umbraco.Cms.BusinessLogic.web.DocumentType)
     /// 
     /// Pubished Documents are exposed to the runtime/the public website in a cached xml document.
     /// </summary>
@@ -49,7 +50,7 @@ namespace umbraco.cms.businesslogic.web
             get
             {
                 if (_userId == -1)
-                    _userId = User.Id;
+                    _userId = Umbraco.BusinessLogic.User.Id;
 
                 return _userId;
             }
@@ -77,20 +78,20 @@ namespace umbraco.cms.businesslogic.web
         /// this will lead to a new version of the document being created, for continuing editing of
         /// the data.
         /// </summary>
-        /// <param name="u">The usercontext under which the action are performed</param>
+        /// <param Name="u">The usercontext under which the action are performed</param>
         public void Publish(User u)
         {
             _published = true;
-            string tempVersion = Version.ToString();
+            string tempVersion = System.Version.ToString();
             Guid newVersion = createNewVersion();
 
             Log.Add(LogTypes.Publish, u, Id, "");
 
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "insert into cmsDocument (newest, nodeId, published, documentUser, versionId, Text, TemplateId) values (1," +
-                                      Id + ", 0, " + u.Id + ", '" + newVersion + "', N'" + sqlHelper.safeString(Text) +
+                                      Id + ", 0, " + u.Id + ", '" + newVersion + "', N'" + Umbraco.SqlHelper.SafeString(Text) +
                                       "', " + _template + ")");
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "update cmsDocument set published = 0 where nodeId = " + Id +
                                       " update cmsDocument set published = 1, newest = 0 where versionId = '" +
                                       tempVersion + "'");
@@ -110,15 +111,15 @@ namespace umbraco.cms.businesslogic.web
         /// Rollbacks a document to a previous version, this will create a new version of the document and copy
         /// all of the old documents data.
         /// </summary>
-        /// <param name="u">The usercontext under which the action are performed</param>
-        /// <param name="VersionId">The unique Id of the version to roll back to</param>
+        /// <param Name="u">The usercontext under which the action are performed</param>
+        /// <param Name="VersionId">The unique Id of the version to roll back to</param>
         public void RollBack(Guid VersionId, User u)
         {
             Guid newVersion = createNewVersion();
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "insert into cmsDocument (nodeId, published, documentUser, versionId, Text, TemplateId) values (" +
                                       Id +
-                                      ", 0, " + u.Id + ", '" + newVersion + "', N'" + sqlHelper.safeString(Text) + "', " +
+                                      ", 0, " + u.Id + ", '" + newVersion + "', N'" + Umbraco.SqlHelper.SafeString(Text) + "', " +
                                       _template + ")");
 
             // Get new version
@@ -147,17 +148,17 @@ namespace umbraco.cms.businesslogic.web
         /// 
         /// Envoking this method will publish the documents and all children recursive.
         /// </summary>
-        /// <param name="u">The usercontext under which the action are performed</param>
+        /// <param Name="u">The usercontext under which the action are performed</param>
         public void PublishWithSubs(User u)
         {
             _published = true;
-            string tempVersion = Version.ToString();
+            string tempVersion = System.Version.ToString();
             Guid newVersion = createNewVersion();
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "insert into cmsDocument (nodeId, published, documentUser, versionId, Text) values (" +
                                       Id + ", 0, " + u.Id +
-                                      ", '" + newVersion + "', N'" + sqlHelper.safeString(Text) + "')");
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                                      ", '" + newVersion + "', N'" + Umbraco.SqlHelper.SafeString(Text) + "')");
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "update cmsDocument set published = 0 where nodeId = " + Id +
                                       " update cmsDocument set published = 1 where versionId = '" + tempVersion + "'");
 
@@ -179,22 +180,22 @@ namespace umbraco.cms.businesslogic.web
             {
                 // Esben Carlsen: ????? value never used ?? --> needs update
                 _published = false;
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                           string.Format("update cmsDocument set published = 0 where nodeId = {0}", Id));
             }
         }
 
         public void UnPublish()
         {
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       string.Format("update cmsDocument set published = 0 where nodeId = {0}", Id));
         }
 
         /// <summary>
         /// Constructs a new document
         /// </summary>
-        /// <param name="id">Id of the document</param>
-        /// <param name="noSetup">N/A</param>
+        /// <param Name="id">Id of the document</param>
+        /// <param Name="noSetup">N/A</param>
         public Document(Guid id, bool noSetup) : base(id)
         {
         }
@@ -204,8 +205,8 @@ namespace umbraco.cms.businesslogic.web
         /// You can set an optional flag noSetup, used for optimizing for loading nodes in the tree, 
         /// therefor only data needed by the tree is initialized.
         /// </summary>
-        /// <param name="id">Id of the document</param>
-        /// <param name="noSetup">If flag are on the </param>
+        /// <param Name="id">Id of the document</param>
+        /// <param Name="noSetup">If flag are on the </param>
         public Document(int id, bool noSetup) : base(id, noSetup)
         {
         }
@@ -214,8 +215,8 @@ namespace umbraco.cms.businesslogic.web
         /// Initializes a new instance of the Document class to a specific version, used for rolling back data from a previous version
         /// of the document.
         /// </summary>
-        /// <param name="id">The id of the document</param>
-        /// <param name="Version">The version of the document</param>
+        /// <param Name="id">The id of the document</param>
+        /// <param Name="Version">The version of the document</param>
         public Document(int id, Guid Version) : base(id)
         {
             this.Version = Version;
@@ -225,7 +226,7 @@ namespace umbraco.cms.businesslogic.web
         /// <summary>
         /// Initializes a new instance of the Document class.
         /// </summary>
-        /// <param name="id">The id of the document</param>
+        /// <param Name="id">The id of the document</param>
         public Document(int id) : base(id)
         {
             setupDocument();
@@ -234,7 +235,7 @@ namespace umbraco.cms.businesslogic.web
         /// <summary>
         /// Initialize the document
         /// </summary>
-        /// <param name="id">The id of the document</param>
+        /// <param Name="id">The id of the document</param>
         public Document(Guid id) : base(id)
         {
             setupDocument();
@@ -243,7 +244,7 @@ namespace umbraco.cms.businesslogic.web
         public Document(bool OptimizedMode, int id) : base(id, true)
         {
             using (SqlDataReader dr =
-                SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
                                         @"
 Select 
 	top 1 
@@ -329,13 +330,13 @@ order by
         private void setupDocument()
         {
             SqlDataReader dr =
-                SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                         "select published, documentUser, isnull(templateId, cmsDocumentType.templateNodeId) as templateId, text, releaseDate, expireDate, updateDate from cmsDocument inner join cmsContent on cmsDocument.nodeId = cmsContent.Nodeid left join cmsDocumentType on cmsDocumentType.contentTypeNodeId = cmsContent.contentType and cmsDocumentType.IsDefault = 1 where versionId = '" +
-                                        Version + "'");
+                                        System.Version + "'");
             if (dr.Read())
             {
-                _creator = User;
-                _writer = User.GetUser(dr.GetInt32(dr.GetOrdinal("documentUser")));
+                _creator = Umbraco.BusinessLogic.User;
+                _writer = Umbraco.BusinessLogic.User.GetUser(dr.GetInt32(dr.GetOrdinal("documentUser")));
 
                 _text = dr.GetString(dr.GetOrdinal("text"));
                 if (!dr.IsDBNull(dr.GetOrdinal("templateId")))
@@ -350,7 +351,7 @@ order by
             dr.Close();
             _published =
                 (int.Parse(
-                     SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                     Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                              "select Count(published) as tmp from cmsDocument where published = 1 And nodeId = " +
                                              Id).ToString()) > 0);
         }
@@ -370,7 +371,7 @@ order by
         }
 
         /// <summary>
-        /// The name of the document, amongst other used in the nice url.
+        /// The Name of the document, amongst other used in the nice url.
         /// </summary>
         public new string Text
         {
@@ -378,7 +379,7 @@ order by
             {
                 if (_text == null || _text == "")
                     _text =
-                        SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                        Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                                 string.Format("select text from umbracoNode where id = {0}", Id)).
                             ToString();
                 return _text;
@@ -387,8 +388,8 @@ order by
             {
                 _text = value;
                 base.Text = value;
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-                                          "update cmsDocument set text = @value where versionId = '" + Version + "'",
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                                          "update cmsDocument set text = @value where versionId = '" + System.Version + "'",
                                           new SqlParameter("@value", _text));
                 CMSNode c = new CMSNode(Id);
                 c.Text = _text;
@@ -404,8 +405,8 @@ order by
             set
             {
                 _updated = value;
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-                                          "update cmsDocument set updateDate = @value where versionId = '" + Version +
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                                          "update cmsDocument set updateDate = @value where versionId = '" + System.Version +
                                           "'",
                                           new SqlParameter("@value", new SqlDateTime(value)));
             }
@@ -422,13 +423,13 @@ order by
                 _release = value;
 
                 if (_release.Year != 1 || _release.Month != 1 || _release.Day != 1)
-                    SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                               "update cmsDocument set releaseDate = @value where versionId = '" +
-                                              Version + "'",
+                                              System.Version + "'",
                                               new SqlParameter("@value", new SqlDateTime(value)));
                 else
-                    SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-                                              "update cmsDocument set releaseDate = NULL where versionId = '" + Version +
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                                              "update cmsDocument set releaseDate = NULL where versionId = '" + System.Version +
                                               "'");
             }
         }
@@ -444,13 +445,13 @@ order by
                 _expire = value;
 
                 if (_expire.Year != 1 || _expire.Month != 1 || _expire.Day != 1)
-                    SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-                                              "update cmsDocument set expireDate = @value where versionId = '" + Version +
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                                              "update cmsDocument set expireDate = @value where versionId = '" + System.Version +
                                               "'",
                                               new SqlParameter("@value", new SqlDateTime(value)));
                 else
-                    SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-                                              "update cmsDocument set expireDate = NULL where versionId = '" + Version +
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                                              "update cmsDocument set expireDate = NULL where versionId = '" + System.Version +
                                               "'");
             }
         }
@@ -471,8 +472,8 @@ order by
             set
             {
                 _template = value;
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
-                                          "update cmsDocument set templateId = @value where versionId = '" + Version +
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                                          "update cmsDocument set templateId = @value where versionId = '" + System.Version +
                                           "'",
                                           new SqlParameter("@value", _template));
             }
@@ -486,7 +487,7 @@ order by
         {
             ArrayList versions = new ArrayList();
             using (SqlDataReader dr =
-                SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
                                         "select documentUser, versionId, updateDate, text from cmsDocument where nodeId = @nodeId order by updateDate",
                                         new SqlParameter("@nodeId", Id)))
             {
@@ -496,7 +497,7 @@ order by
                         new DocumentVersionList(new Guid(dr["versionId"].ToString()),
                                                 DateTime.Parse(dr["updateDate"].ToString()),
                                                 dr["text"].ToString(),
-                                                User.GetUser(int.Parse(dr["documentUser"].ToString())));
+                                                Umbraco.BusinessLogic.User.GetUser(int.Parse(dr["documentUser"].ToString())));
                     versions.Add(dv);
                 }
             }
@@ -531,8 +532,8 @@ order by
         /// <summary>
         /// Creates a new document of the same type and copies all data from the current onto it
         /// </summary>
-        /// <param name="CopyTo">The parentid where the document should be copied to</param>
-        /// <param name="u">The usercontext under which the action are performed</param>
+        /// <param Name="CopyTo">The parentid where the document should be copied to</param>
+        /// <param Name="u">The usercontext under which the action are performed</param>
         public void Copy(int CopyTo, User u)
         {
             Copy(CopyTo, u, false);
@@ -568,10 +569,10 @@ order by
         /// <summary>
         /// Creates a new document
         /// </summary>
-        /// <param name="Name">The name (.Text property) of the document</param>
-        /// <param name="dct">The documenttype</param>
-        /// <param name="u">The usercontext under which the action are performed</param>
-        /// <param name="ParentId">The id of the parent to the document</param>
+        /// <param Name="Name">The Name (.Text property) of the document</param>
+        /// <param Name="dct">The documenttype</param>
+        /// <param Name="u">The usercontext under which the action are performed</param>
+        /// <param Name="ParentId">The id of the parent to the document</param>
         /// <returns>The newly created document</returns>
         public static Document MakeNew(string Name, DocumentType dct, User u, int ParentId)
         {
@@ -583,10 +584,10 @@ order by
             MakeNew(ParentId, _objectType, u.Id, newLevel, Name, newId);
             Document tmp = new Document(newId, true);
             tmp.CreateContent(dct);
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "insert into cmsDocument (newest, nodeId, published, documentUser, versionId, Text) values (1, " +
                                       tmp.Id + ", 0, " +
-                                      u.Id + ", '" + tmp.Version + "', N'" + sqlHelper.safeString(tmp.Text) + "')");
+                                      u.Id + ", '" + tmp.Version + "', N'" + SqlHelper.SafeString(tmp.Text) + "')");
 
             // Update the sortOrder if the parent was the root!
             if (ParentId == -1)
@@ -641,7 +642,7 @@ order by
         {
             get
             {
-                IconI[] tmp = base.Children;
+                IIcon[] tmp = base.Children;
                 Document[] retval = new Document[tmp.Length];
                 for (int i = 0; i < tmp.Length; i++) retval[i] = new Document(tmp[i].Id);
                 return retval;
@@ -653,7 +654,7 @@ order by
         /// </summary>
         public new void delete()
         {
-            Log.Add(LogTypes.Debug, User.GetUser(0), Id,
+            Log.Add(LogTypes.Debug, Umbraco.BusinessLogic.User.GetUser(0), Id,
                     string.Format("Path: {0} (contains: {1})", Path, Path.Contains(",-20,")));
 
             // Check for recyle bin
@@ -682,7 +683,7 @@ order by
                 }
 
                 Action.RunActionHandlers(this, new ActionDelete());
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "delete from cmsDocument where NodeId = " + Id);
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "delete from cmsDocument where NodeId = " + Id);
                 HttpContext.Current.Trace.Write("documentdelete", "base delete");
                 base.delete();
                 HttpContext.Current.Trace.Write("documentdelete", "after base delete");
@@ -694,7 +695,7 @@ order by
         /// 
         /// Note: use with care: this method can result in wast amount of data being deleted.
         /// </summary>
-        /// <param name="dt">The type of which documents should be deleted</param>
+        /// <param Name="dt">The type of which documents should be deleted</param>
         public static void DeleteFromType(DocumentType dt)
         {
             foreach (Content c in getContentOfContentType(dt))
@@ -711,7 +712,7 @@ order by
         /// <summary>
         /// Indexes the documents data for internal search
         /// </summary>
-        /// <param name="Optimze">If on the indexer will optimize</param>
+        /// <param Name="Optimze">If on the indexer will optimize</param>
         public void Index(bool Optimze)
         {
             try
@@ -720,11 +721,11 @@ order by
                 foreach (Property p in getProperties)
                     fields.Add(p.PropertyType.Alias, p.Value.ToString());
                 Indexer.IndexDirectory = HttpContext.Server.MapPath(Indexer.RelativeIndexDir);
-                Indexer.IndexNode(_objectType, Id, Text, User.Name, CreateDateTime, fields, Optimze);
+                Indexer.IndexNode(_objectType, Id, Text, Umbraco.BusinessLogic.User.Name, CreateDateTime, fields, Optimze);
             }
             catch (Exception ee)
             {
-                Log.Add(LogTypes.Error, User, Id,
+                Log.Add(LogTypes.Error, Umbraco.BusinessLogic.User, Id,
                         string.Format("Error indexing node: {0}", ee));
             }
         }
@@ -732,8 +733,8 @@ order by
         /// <summary>
         /// Refreshes the xml, used when publishing data on a document which already is published
         /// </summary>
-        /// <param name="xd">The source xmldocument</param>
-        /// <param name="x">The previous xmlrepresentation of the document</param>
+        /// <param Name="xd">The source xmldocument</param>
+        /// <param Name="x">The previous xmlrepresentation of the document</param>
         public void XmlNodeRefresh(XmlDocument xd, ref XmlNode x)
         {
             x.Attributes.RemoveAll();
@@ -746,7 +747,7 @@ order by
         /// <summary>
         /// Creates an xmlrepresentation of the documet and saves it to the database
         /// </summary>
-        /// <param name="xd"></param>
+        /// <param Name="xd"></param>
         public new void XmlGenerate(XmlDocument xd)
         {
             XmlNode x = xd.CreateNode(XmlNodeType.Element, "node", "");
@@ -758,7 +759,7 @@ order by
 
         private void saveXml(XmlNode x)
         {
-            SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                       @"
 if exists(select nodeId from cmsContentXml where nodeId = @nodeId)
 	update cmsContentXml set xml = @xml where nodeId = @nodeId
@@ -774,7 +775,7 @@ else
             using (SqlConnection xmlConn = new SqlConnection(GlobalSettings.DbDSN))
             {
                 xmlConn.Open();
-                xmlDoc.Load(SqlHelper.ExecuteXmlReader(xmlConn, CommandType.Text,
+                xmlDoc.Load(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteXmlReader(xmlConn, CommandType.Text,
                                                        string.Format(
                                                            "select xml from cmsContentXml where nodeID = {0}", Id)));
             }
@@ -787,8 +788,8 @@ else
         /// 
         /// Optional: Recursive get childdocuments xmlrepresentation
         /// </summary>
-        /// <param name="xd">The xmldocument</param>
-        /// <param name="Deep">Recursive add of childdocuments</param>
+        /// <param Name="xd">The xmldocument</param>
+        /// <param Name="Deep">Recursive add of childdocuments</param>
         /// <returns></returns>
         public new virtual XmlNode ToXml(XmlDocument xd, bool Deep)
         {
@@ -825,9 +826,9 @@ else
         /// <summary>
         /// Populate a documents xmlnode
         /// </summary>
-        /// <param name="xd">Xmldocument context</param>
-        /// <param name="x">The node to fill with data</param>
-        /// <param name="Deep">If true the documents childrens xmlrepresentation will be appended to the Xmlnode recursive</param>
+        /// <param Name="xd">Xmldocument context</param>
+        /// <param Name="x">The node to fill with data</param>
+        /// <param Name="Deep">If true the documents childrens xmlrepresentation will be appended to the Xmlnode recursive</param>
         public override void XmlPopulate(XmlDocument xd, ref XmlNode x, bool Deep)
         {
             foreach (Property p in getProperties)
@@ -836,7 +837,7 @@ else
 
             // attributes
             x.Attributes.Append(addAttribute(xd, "id", Id.ToString()));
-            x.Attributes.Append(addAttribute(xd, "version", Version.ToString()));
+            x.Attributes.Append(addAttribute(xd, "version", System.Version.ToString()));
             if (Level > 1)
                 x.Attributes.Append(addAttribute(xd, "parentID", Parent.Id.ToString()));
             else
@@ -900,13 +901,13 @@ else
         /// <summary>
         /// Performance tuned method for use in the tree
         /// </summary>
-        /// <param name="NodeId">The parentdocuments id</param>
+        /// <param Name="NodeId">The parentdocuments id</param>
         /// <returns></returns>
         public static Document[] GetChildrenForTree(int NodeId)
         {
             ArrayList tmp = new ArrayList();
             using (SqlDataReader dr =
-                SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
                                         @"
 create table #temp (contentId int, versionDate datetime)      
 insert into #temp
@@ -976,9 +977,9 @@ drop table #temp
         public static void RePublishAll()
         {
             XmlDocument xd = new XmlDocument();
-            SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "truncate table cmsContentXml");
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "truncate table cmsContentXml");
             SqlDataReader dr =
-                SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
                                         "select nodeId from cmsDocument where published = 1");
             while (dr.Read())
             {
@@ -988,7 +989,7 @@ drop table #temp
                 }
                 catch (Exception ee)
                 {
-                    Log.Add(LogTypes.Error, User.GetUser(0), int.Parse(dr["nodeId"].ToString()),
+                    Log.Add(LogTypes.Error, Umbraco.BusinessLogic.User.GetUser(0), int.Parse(dr["nodeId"].ToString()),
                             string.Format("Error generating xml: {0}", ee));
                 }
             }
@@ -1003,7 +1004,7 @@ drop table #temp
         {
             ArrayList docs = new ArrayList();
             SqlDataReader dr =
-                SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
                                         "select distinct nodeId from cmsDocument where newest = 1 and not expireDate is null and expireDate <= getdate()");
             while (dr.Read())
                 docs.Add(dr.GetInt32(dr.GetOrdinal("nodeId")));
@@ -1022,7 +1023,7 @@ drop table #temp
         {
             ArrayList docs = new ArrayList();
             SqlDataReader dr =
-                SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text,
                                         "select distinct nodeId, level, sortOrder from cmsDocument inner join umbracoNode on umbracoNode.id = cmsDocument.nodeId where newest = 1 and not releaseDate is null and releaseDate <= getdate() order by [level], sortOrder");
             while (dr.Read())
                 docs.Add(dr.GetInt32(dr.GetOrdinal("nodeId")));
@@ -1036,9 +1037,9 @@ drop table #temp
         /// <summary>
         /// Imports (create) a document from a xmlrepresentation of a document, used by the packager
         /// </summary>
-        /// <param name="ParentId">The id to import to</param>
-        /// <param name="Creator">Creator f the new document</param>
-        /// <param name="Source">Xmlsource</param>
+        /// <param Name="ParentId">The id to import to</param>
+        /// <param Name="Creator">Creator f the new document</param>
+        /// <param Name="Source">Xmlsource</param>
         public static void Import(int ParentId, User Creator, XmlElement Source)
         {
             Document d = MakeNew(
@@ -1051,7 +1052,7 @@ drop table #temp
             // Properties
             foreach (XmlElement n in Source.SelectNodes("data"))
             {
-                d.getProperty(n.GetAttribute("alias")).Value = xmlHelper.GetNodeValue(n);
+                d.getProperty(n.GetAttribute("alias")).Value = XmlHelper.GetNodeValue(n);
             }
 
             // Subpages
@@ -1087,7 +1088,7 @@ drop table #temp
         }
 
         /// <summary>
-        /// The name of the document in the version
+        /// The Name of the document in the version
         /// </summary>
         public string Text
         {
@@ -1105,10 +1106,10 @@ drop table #temp
         /// <summary>
         /// Initializes a new instance of the DocumentVersionList class.
         /// </summary>
-        /// <param name="Version">Unique version id</param>
-        /// <param name="Date">Version createdate</param>
-        /// <param name="Text">Version name</param>
-        /// <param name="User">Creator</param>
+        /// <param Name="Version">Unique version id</param>
+        /// <param Name="Date">Version createdate</param>
+        /// <param Name="Text">Version Name</param>
+        /// <param Name="User">Creator</param>
         public DocumentVersionList(Guid Version, DateTime Date, string Text, User User)
         {
             _version = Version;

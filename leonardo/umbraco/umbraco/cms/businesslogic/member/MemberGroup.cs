@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.member
+namespace Umbraco.Cms.BusinessLogic.Member
 {
 	/// <summary>
 	/// Membergroups are used for grouping Umbraco Members
@@ -19,7 +19,7 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Initialize a new object of the MemberGroup class
 		/// </summary>
-		/// <param name="id">Membergroup id</param>
+		/// <param Name="id">Membergroup id</param>
 		public MemberGroup(int id): base(id)
 		{
 
@@ -28,7 +28,7 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Initialize a new object of the MemberGroup class
 		/// </summary>
-		/// <param name="id">Membergroup id</param>
+		/// <param Name="id">Membergroup id</param>
 		public MemberGroup(Guid id) : base(id)
 		{
 			
@@ -40,7 +40,7 @@ namespace umbraco.cms.businesslogic.member
         public new void delete()
         {
             // delete member specific data!
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "Delete from cmsMember2MemberGroup where memberGroup = @id",
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "Delete from cmsMember2MemberGroup where memberGroup = @id",
                 new SqlParameter("@id", Id));
 
             // Delete all content and cmsnode specific data!
@@ -76,10 +76,10 @@ namespace umbraco.cms.businesslogic.member
 		}
 
 		/// <summary>
-		/// Get a membergroup by it's name
+		/// Get a membergroup by it's Name
 		/// </summary>
-		/// <param name="Name">Name of the membergroup</param>
-		/// <returns>If a MemberGroup with the given name exists, it will return this, else: null</returns>
+		/// <param Name="Name">Name of the membergroup</param>
+		/// <returns>If a MemberGroup with the given Name exists, it will return this, else: null</returns>
 		public static MemberGroup GetByName(string Name) 
 		{
 			try 
@@ -87,7 +87,7 @@ namespace umbraco.cms.businesslogic.member
 				return
 					new MemberGroup(
 						int.Parse(
-							SqlHelper.ExecuteScalar(
+							Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
 								GlobalSettings.DbDSN,
 								CommandType.Text,
 								"select id from umbracoNode where Text = @text and NodeObjectType = @objectType",
@@ -103,8 +103,8 @@ namespace umbraco.cms.businesslogic.member
 		/// <summary>
 		/// Create a new MemberGroup
 		/// </summary>
-		/// <param name="Name">The name of the MemberGroup</param>
-		/// <param name="u">The creator of the MemberGroup</param>
+		/// <param Name="Name">The Name of the MemberGroup</param>
+		/// <param Name="u">The creator of the MemberGroup</param>
 		/// <returns>The new MemberGroup</returns>
 		public static MemberGroup MakeNew(string Name, BusinessLogic.User u) 
 		{

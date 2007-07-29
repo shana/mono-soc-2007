@@ -3,13 +3,13 @@ using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
-using umbraco.cms.businesslogic.language;
+using Umbraco.Cms.BusinessLogic.language;
 
-namespace umbraco.cms.businesslogic
+namespace Umbraco.Cms.BusinessLogic
 {
     /// <summary>
     /// The Dictionary is used for storing and retrieving language translated textpieces in Umbraco. It uses
-    /// umbraco.cms.businesslogic.language.Item class as storage and can be used from the public website of umbraco
+    /// Cms.Umbraco.Cms.BusinessLogic.language.Item class as storage and can be used from the public website of Umbraco
     /// all text are cached in memory.
     /// </summary>
     public class Dictionary
@@ -24,7 +24,7 @@ namespace umbraco.cms.businesslogic
             if (!cacheIsEnsured)
             {
                 SqlDataReader dr =
-                    SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "Select id, [key] from cmsDictionary");
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text, "Select id, [key] from cmsDictionary");
 
                 while (dr.Read())
                 {
@@ -46,7 +46,7 @@ namespace umbraco.cms.businesslogic
             {
                 ArrayList tmp = new ArrayList();
                 SqlDataReader dr =
-                    SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                             "Select [Key] from cmsDictionary where parent = '" +
                                             topLevelParent.ToString() + "' order by [key]");
                 while (dr.Read())
@@ -84,7 +84,7 @@ namespace umbraco.cms.businesslogic
             public DictionaryItem(Guid id)
             {
                 string key =
-                    SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                             "Select [key] from cmsDictionary where id = @id",
                                             new SqlParameter("@id", id)).ToString();
 
@@ -100,7 +100,7 @@ namespace umbraco.cms.businesslogic
             public DictionaryItem(int id)
             {
                 string key =
-                    SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                             "Select [key] from cmsDictionary where pk = " + id.ToString()).ToString();
 
                 ensureCache();
@@ -116,7 +116,7 @@ namespace umbraco.cms.businesslogic
 
             public bool IsTopMostItem()
             {
-                return (SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                return (Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                                 "Select parent from cmsDictionary where pk = " +
                                                 id.ToString()).ToString() == topLevelParent.ToString());
             }
@@ -128,7 +128,7 @@ namespace umbraco.cms.businesslogic
                     if (_parent == null)
                     {
                         Guid parentGuid = new Guid(
-                            SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                                     "Select parent from cmsDictionary where pk = " +
                                                     id.ToString()).ToString());
                         if (parentGuid != topLevelParent)
@@ -148,7 +148,7 @@ namespace umbraco.cms.businesslogic
                 {
                     return
                         int.Parse(
-                            SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                                     "Select pk from cmsDictionary where [key] = '" + key + "'").ToString
                                 ());
                 }
@@ -161,7 +161,7 @@ namespace umbraco.cms.businesslogic
                 {
                     ArrayList tmp = new ArrayList();
                     SqlDataReader dr =
-                        SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                        Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                                 "Select [Key] from cmsDictionary where parent = '" + _uniqueId + "'");
                     while (dr.Read())
                     {
@@ -185,7 +185,7 @@ namespace umbraco.cms.businesslogic
                 get
                 {
                     return (
-                               int.Parse(SqlHelper.ExecuteScalar(_ConnString,
+                               int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString,
                                                                  CommandType.Text,
                                                                  "select count([key]) as tmp from cmsDictionary where parent = '" +
                                                                  _uniqueId.ToString() + "'").ToString()) > 0);
@@ -204,7 +204,7 @@ namespace umbraco.cms.businesslogic
                         _key = value;
 
                         DictionaryItems.Add(key, tmp);
-                        SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                        Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                                   "Update cmsDictionary set [key] = '" + value + "'");
                     }
                     else
@@ -271,7 +271,7 @@ namespace umbraco.cms.businesslogic
                 DictionaryItems.Remove(key);
 
                 // remove key from database
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                           "delete from cmsDictionary where [key] ='" + key + "'");
             }
 
@@ -280,7 +280,7 @@ namespace umbraco.cms.businesslogic
                 if (!hasKey(key))
                 {
                     Guid newId = Guid.NewGuid();
-                    SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                               "Insert into cmsDictionary (id,parent,[key]) values ('" + newId.ToString() +
                                               "','" + parentId.ToString() + "','" + key + "')");
                     DictionaryItems.Add(key, newId);

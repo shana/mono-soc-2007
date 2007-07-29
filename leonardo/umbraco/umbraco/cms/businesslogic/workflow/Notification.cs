@@ -5,12 +5,12 @@ using System.Net.Mail;
 using System.Text;
 using System.Web;
 using Microsoft.ApplicationBlocks.Data;
-using umbraco.BusinessLogic;
-using umbraco.cms.businesslogic.property;
-using umbraco.cms.businesslogic.web;
-using umbraco.interfaces;
+using Umbraco.BusinessLogic;
+using Umbraco.Cms.BusinessLogic.property;
+using Umbraco.Cms.BusinessLogic.web;
+using Umbraco.interfaces;
 
-namespace umbraco.cms.businesslogic.workflow
+namespace Umbraco.Cms.BusinessLogic.workflow
 {
     /// <summary>
     /// Summary description for Notification.
@@ -157,7 +157,7 @@ body {
 
         public static void MakeNew(User User, CMSNode Node, char ActionLetter)
         {
-            SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                       "if not exists(select userId from umbracoUser2nodeNotify where userId = @userId and nodeId = @nodeId and action = @action) insert into umbracoUser2nodeNotify (userId, nodeId, action) values (@userId, @nodeId, @action)",
                                       new SqlParameter("@userId", User.Id), new SqlParameter("@nodeId", Node.Id),
                                       new SqlParameter("@action", ActionLetter.ToString()));
@@ -166,7 +166,7 @@ body {
         public static void UpdateNotifications(User User, CMSNode Node, string Notifications)
         {
             // delete all settings on the node for this user
-            SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                       "delete from umbracoUser2NodeNotify where userId = @userId and nodeId = @nodeId",
                                       new SqlParameter("@userId", User.Id), new SqlParameter("@nodeId", Node.Id));
 

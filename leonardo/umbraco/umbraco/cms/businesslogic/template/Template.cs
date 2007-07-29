@@ -5,8 +5,9 @@ using Microsoft.ApplicationBlocks.Data;
 
 using System.Collections;
 using System.Xml;
+using SqlHelper=Umbraco.SqlHelper;
 
-namespace umbraco.cms.businesslogic.template
+namespace Umbraco.Cms.BusinessLogic.template
 {
 	/// <summary>
 	/// Summary description for Template.
@@ -95,7 +96,7 @@ namespace umbraco.cms.businesslogic.template
 
 		private void setupTemplate() 
 		{
-			SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString,CommandType.Text,"Select alias,design,master from cmsTemplate where nodeId = " + this.Id);
+			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString,CommandType.Text,"Select alias,design,master from cmsTemplate where nodeId = " + this.Id);
 			dr.Read();
 			_alias = dr["alias"].ToString();
 			_design = dr["design"].ToString();
@@ -110,7 +111,7 @@ namespace umbraco.cms.businesslogic.template
 			set 
 			{
 				_alias = value;
-				SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Update cmsTemplate set alias = @alias where NodeId = " + this.Id, new SqlParameter("@alias", _alias));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Update cmsTemplate set alias = @alias where NodeId = " + this.Id, new SqlParameter("@alias", _alias));
 			    _templateAliasesInitialized = false;
                 initTemplateAliases();
             }
@@ -127,7 +128,7 @@ namespace umbraco.cms.businesslogic.template
 			get{return _mastertemplate;}
 			set{
 				_mastertemplate = value;
-				SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Update cmsTemplate set master = " + value + " where NodeId = " + this.Id);
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Update cmsTemplate set master = " + value + " where NodeId = " + this.Id);
 			}
 		}
 
@@ -135,20 +136,20 @@ namespace umbraco.cms.businesslogic.template
 			get {return _design;}
 			set {
 			    _design = value;
-				SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Update cmsTemplate set design = '" + value.Replace("'","''") + "' where NodeId = " + this.Id);
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Update cmsTemplate set design = '" + value.Replace("'","''") + "' where NodeId = " + this.Id);
 			}
 		}
 
 		public XmlElement ToXml(XmlDocument xd) 
 		{
 			XmlElement doc = xd.CreateElement("Template");
-			doc.AppendChild(xmlHelper.addTextNode(xd, "Name", this.Text));
-			doc.AppendChild(xmlHelper.addTextNode(xd, "Alias", this.Alias));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "Name", this.Text));
+			doc.AppendChild(XmlHelper.addTextNode(xd, "Alias", this.Alias));
 			if (this.MasterTemplate != 0)
-				doc.AppendChild(xmlHelper.addTextNode(xd, "Master", new Template(this.MasterTemplate).Alias));
+				doc.AppendChild(XmlHelper.addTextNode(xd, "Master", new Template(this.MasterTemplate).Alias));
 			else
-				doc.AppendChild(xmlHelper.addTextNode(xd, "Master", ""));
-			doc.AppendChild(xmlHelper.addCDataNode(xd, "Design", this.Design));
+				doc.AppendChild(XmlHelper.addTextNode(xd, "Master", ""));
+			doc.AppendChild(XmlHelper.addCDataNode(xd, "Design", this.Design));
 
 
 			return doc;
@@ -159,7 +160,7 @@ namespace umbraco.cms.businesslogic.template
 			CMSNode n = CMSNode.MakeNew(-1,_objectType, u.Id, 1, Name, Guid.NewGuid());
 			if (Name.Length > 100)
 				Name = Name.Substring(0, 95) + "...";
-			SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Insert into cmsTemplate (NodeId, Alias, design,master) Values (" + n.Id + ",'"+ sqlHelper.safeString(Name) +"',' ',0)");
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Insert into cmsTemplate (NodeId, Alias, design,master) Values (" + n.Id + ",'"+ SqlHelper.SafeString(Name) +"',' ',0)");
 			return new Template(n.Id);
 		}
 
@@ -168,7 +169,7 @@ namespace umbraco.cms.businesslogic.template
 			try 
 			{
 				return new Template(int.Parse(
-					SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select nodeId from cmsTemplate where alias = @alias", new SqlParameter("@alias", Alias)).ToString()));
+					Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select nodeId from cmsTemplate where alias = @alias", new SqlParameter("@alias", Alias)).ToString()));
 			} 
 			catch 
 			{
@@ -222,7 +223,7 @@ namespace umbraco.cms.businesslogic.template
         }
 
 		new public void delete() {
-			SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"delete from cmsTemplate where NodeId ="+ this.Id);
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"delete from cmsTemplate where NodeId ="+ this.Id);
 			base.delete();
 		}
 

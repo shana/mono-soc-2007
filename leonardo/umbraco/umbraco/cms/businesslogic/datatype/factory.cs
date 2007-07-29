@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Web;
 
-using umbraco.BusinessLogic.Utils;
-using umbraco.interfaces;
+using Umbraco.BusinessLogic.Utils;
+using Umbraco.interfaces;
 using System.Collections.Generic;
 
-namespace umbraco.cms.businesslogic.datatype.controls
+namespace Umbraco.Cms.BusinessLogic.datatype.controls
 {
 	/// <summary>
 	/// IDataType factory, handles the registering and retrieval of IDatatypes.
@@ -34,7 +34,7 @@ namespace umbraco.cms.businesslogic.datatype.controls
 		/// <summary>
 		/// Retrieves the IDataType specified by it's unique ID
 		/// </summary>
-		/// <param name="DataTypeId">The IDataType id</param>
+		/// <param Name="DataTypeId">The IDataType id</param>
 		/// <returns></returns>
 		public IDataType DataType(Guid DataTypeId)
 		{
@@ -44,7 +44,7 @@ namespace umbraco.cms.businesslogic.datatype.controls
 		/// <summary>
 		/// Retrieves the IDataType specified by it's unique ID
 		/// </summary>
-		/// <param name="DataEditorId">The IDataType id</param>
+		/// <param Name="DataEditorId">The IDataType id</param>
 		/// <returns></returns>
 		public IDataType GetNewObject(Guid DataEditorId)
 		{

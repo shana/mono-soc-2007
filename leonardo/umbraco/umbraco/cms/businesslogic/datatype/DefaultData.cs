@@ -3,7 +3,7 @@ using Microsoft.ApplicationBlocks.Data;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace umbraco.cms.businesslogic.datatype
+namespace Umbraco.Cms.BusinessLogic.datatype
 {
 	public class DefaultData : interfaces.IData
 	{
@@ -42,16 +42,16 @@ namespace umbraco.cms.businesslogic.datatype
 				try 
 				{
 					if (value == null)
-						SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN, CommandType.Text, "update cmsPropertyData set "+ _dataType.DataFieldName +" = NULL where id = " + _propertyId);
+						Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(Umbraco.GlobalSettings.DbDSN, CommandType.Text, "update cmsPropertyData set "+ _dataType.DataFieldName +" = NULL where id = " + _propertyId);
 					else
-						SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN, CommandType.Text, "update cmsPropertyData set "+ _dataType.DataFieldName +" = @value where id = " + _propertyId, new SqlParameter("@value", value) );
+						Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(Umbraco.GlobalSettings.DbDSN, CommandType.Text, "update cmsPropertyData set "+ _dataType.DataFieldName +" = @value where id = " + _propertyId, new SqlParameter("@value", value) );
 					_value = value;
 				} 
 				catch (Exception e)
 				{
-					umbraco.BusinessLogic.Log.Add(umbraco.BusinessLogic.LogTypes.Debug, umbraco.BusinessLogic.User.GetUser(0), -1, "Error updating item: " + e.ToString());
+					Umbraco.BusinessLogic.Log.Add(Umbraco.BusinessLogic.LogTypes.Debug, Umbraco.BusinessLogic.User.GetUser(0), -1, "Error updating item: " + e.ToString());
 					if (value==null) value ="";
-					SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN, CommandType.Text, "update cmsPropertyData set "+ _dataType.DataFieldName +" = @value where id = " + _propertyId, new SqlParameter("@value", value) );
+					Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(Umbraco.GlobalSettings.DbDSN, CommandType.Text, "update cmsPropertyData set "+ _dataType.DataFieldName +" = @value where id = " + _propertyId, new SqlParameter("@value", value) );
 					_value = value;
 				}
 
@@ -61,13 +61,13 @@ namespace umbraco.cms.businesslogic.datatype
 		public virtual void MakeNew(int PropertyId)
 		{
 			// this default implementation of makenew does not do anything sínce 
-			// it uses the default datastorage of umbraco, and the row is already populated by the "property" object
+			// it uses the default datastorage of Umbraco, and the row is already populated by the "property" object
 			// If the datatype needs to have a default value, inherit this class and override this method.
 		}
 
 		public void Delete() {
 			// this default implementation of delete does not do anything sínce 
-			// it uses the default datastorage of umbraco, and the row is already deleted by the "property" object
+			// it uses the default datastorage of Umbraco, and the row is already deleted by the "property" object
 		}
 
 		public int PropertyId
@@ -78,7 +78,7 @@ namespace umbraco.cms.businesslogic.datatype
 			set
 			{
 				_propertyId = value;
-				_value = SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN, CommandType.Text,"Select " + _dataType.DataFieldName + " from cmsPropertyData where id = " + value);
+				_value = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(Umbraco.GlobalSettings.DbDSN, CommandType.Text,"Select " + _dataType.DataFieldName + " from cmsPropertyData where id = " + value);
 			}
 		}
 
@@ -86,13 +86,13 @@ namespace umbraco.cms.businesslogic.datatype
 		// solution, create a new version of the richtextholder, which does not depend on these.
 		public Guid Version {
 			get {
-				return  new Guid(SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN, CommandType.Text,"Select versionId from cmsPropertyData where id = " + PropertyId).ToString());
+				return  new Guid(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(Umbraco.GlobalSettings.DbDSN, CommandType.Text,"Select versionId from cmsPropertyData where id = " + PropertyId).ToString());
 			}
 		}
 
 		public int NodeId {
 			get {
-				return  int.Parse(SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN, CommandType.Text,"Select contentNodeid from cmsPropertyData where id = " + PropertyId).ToString());
+				return  int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(Umbraco.GlobalSettings.DbDSN, CommandType.Text,"Select contentNodeid from cmsPropertyData where id = " + PropertyId).ToString());
 			}
 		}
 		#endregion

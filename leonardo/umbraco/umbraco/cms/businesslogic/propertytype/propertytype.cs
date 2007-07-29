@@ -7,12 +7,12 @@ using System.Web.UI;
 
 using Microsoft.ApplicationBlocks.Data;
 
-using umbraco.cms.businesslogic.cache;
-using umbraco.cms.businesslogic.datatype;
-using umbraco.cms.businesslogic.language;
-using umbraco.interfaces;
+using Umbraco.Cms.BusinessLogic.cache;
+using Umbraco.Cms.BusinessLogic.datatype;
+using Umbraco.Cms.BusinessLogic.language;
+using Umbraco.interfaces;
 
-namespace umbraco.cms.businesslogic.propertytype
+namespace Umbraco.Cms.BusinessLogic.propertytype
 {
 	/// <summary>
 	/// Summary description for propertytype.
@@ -42,8 +42,8 @@ namespace umbraco.cms.businesslogic.propertytype
 
 		public PropertyType(int id)
 		{
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(_connstring, CommandType.Text,
-					"Select mandatory, DataTypeId, tabId, ContentTypeId, sortOrder, alias, name, validationRegExp, description from cmsPropertyType where id=@id",
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connstring, CommandType.Text,
+					"Select mandatory, DataTypeId, tabId, ContentTypeId, sortOrder, alias, Name, validationRegExp, description from cmsPropertyType where id=@id",
 					new SqlParameter("@id", id)))
 			{
 				if(!dr.Read())
@@ -73,7 +73,7 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_DataTypeId = value.Id;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
 					"Update cmsPropertyType set DataTypeId = " + value.Id + " where id=" + this.Id);
 			}
 		}
@@ -90,7 +90,7 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_tabId = value;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text, "Update cmsPropertyType set tabId = @tabId where id = @id",
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text, "Update cmsPropertyType set tabId = @tabId where id = @id",
 					new SqlParameter("@tabId", value), new SqlParameter("@id", this.Id));
 			}
 		}
@@ -102,7 +102,7 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_mandatory = value;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
 					"Update cmsPropertyType set mandatory = @mandatory where id = @id", new SqlParameter("@mandatory", value),
 					new SqlParameter("@id", this.Id));
 			}
@@ -115,7 +115,7 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_validationRegExp = value;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
 					"Update cmsPropertyType set validationRegExp = @validationRegExp where id = @id",
 					new SqlParameter("@validationRegExp", value), new SqlParameter("@id", this.Id));
 			}
@@ -128,7 +128,7 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_description = value;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
 					"Update cmsPropertyType set description = @description where id = @id", new SqlParameter("@description", value),
 					new SqlParameter("@id", this.Id));
 			}
@@ -141,7 +141,7 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_sortOrder = value;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
 					"Update cmsPropertyType set sortOrder = @sortOrder where id = @id", new SqlParameter("@sortOrder", value),
 					new SqlParameter("@id", this.Id));
 			}
@@ -154,7 +154,7 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_alias = value;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
 					"Update cmsPropertyType set alias = '" + value + "' where id=" + this.Id);
 			}
 		}
@@ -184,8 +184,8 @@ namespace umbraco.cms.businesslogic.propertytype
 			{
 				_name = value;
 				this.InvalidateCache();
-				SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
-					"Update cmsPropertyType set name = '" + value + "' where id=" + this.Id);
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text,
+					"Update cmsPropertyType set Name = '" + value + "' where id=" + this.Id);
 			}
 		}
 
@@ -203,8 +203,8 @@ namespace umbraco.cms.businesslogic.propertytype
 		    PropertyType pt;
 			try
 			{
-				pt = new PropertyType(int.Parse(SqlHelper.ExecuteScalar(_connstring, CommandType.Text,
-					"insert into cmsPropertyType (DataTypeId, ContentTypeId, alias, name) values (" + dt.Id + "," + ct.Id + ",'" +
+				pt = new PropertyType(int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_connstring, CommandType.Text,
+					"insert into cmsPropertyType (DataTypeId, ContentTypeId, alias, Name) values (" + dt.Id + "," + ct.Id + ",'" +
 					Alias + "','" + Name + "') Select @@Identity").ToString()));
 			}
 			finally
@@ -231,7 +231,7 @@ namespace umbraco.cms.businesslogic.propertytype
 		{
 			List<PropertyType> result = new List<PropertyType>();
 			using (SqlDataReader dr =
-				SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select id, Name from cmsPropertyType order by Name"))
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select id, Name from cmsPropertyType order by Name"))
 			{
 				while(dr.Read())
 				{
@@ -254,7 +254,7 @@ namespace umbraco.cms.businesslogic.propertytype
 				c.getProperty(this).delete();
 			}
 			// Delete PropertyType ..
-			SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text, "Delete from cmsPropertyType where id = " + this.Id);
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring, CommandType.Text, "Delete from cmsPropertyType where id = " + this.Id);
 			this.InvalidateCache();
 		}
 

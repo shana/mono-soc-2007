@@ -6,15 +6,15 @@ using System.Data.SqlClient;
 using System.Text;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.datatype
+namespace Umbraco.Cms.BusinessLogic.datatype
 {
     public class PreValues
     {
         public static SortedList GetPreValues(int DataTypeId)
         {
             SortedList retval = new SortedList();
-            SqlDataReader dr = SqlHelper.ExecuteReader(
-                umbraco.GlobalSettings.DbDSN,
+            SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
+                Umbraco.GlobalSettings.DbDSN,
                 CommandType.Text,
                 "Select id, sortorder, [value] from cmsDataTypeprevalues where DataTypeNodeId = @dataTypeId order by sortorder",
                 new SqlParameter("@dataTypeId", DataTypeId));
@@ -45,7 +45,7 @@ namespace umbraco.cms.businesslogic.datatype
             {
                 // Update sortOrder
                 int tempSortOrder =
-                    int.Parse(SqlHelper.ExecuteScalar(
+                    int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
                                   GlobalSettings.DbDSN,
                                   CommandType.Text,
                                   "select max(sortorder) from cmsDataTypePreValues where datatypenodeid = @dataTypeId",
@@ -55,10 +55,10 @@ namespace umbraco.cms.businesslogic.datatype
                 SqlParameter[] SqlParams = new SqlParameter[] {
 								new SqlParameter("@value",Value),
 								new SqlParameter("@dtdefid",DataTypeId)};
-                _id = int.Parse(SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN, CommandType.Text, "SET NOCOUNT OFF insert into cmsDataTypePrevalues (datatypenodeid,[value],sortorder,alias) values (@dtdefid,@value,0,'') select @@identity SET NOCOUNT ON", SqlParams).ToString());
+                _id = int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(Umbraco.GlobalSettings.DbDSN, CommandType.Text, "SET NOCOUNT OFF insert into cmsDataTypePrevalues (datatypenodeid,[value],sortorder,alias) values (@dtdefid,@value,0,'') select @@identity SET NOCOUNT ON", SqlParams).ToString());
             }
 
-            SqlHelper.ExecuteNonQuery(
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(
                 GlobalSettings.DbDSN,
                 CommandType.Text,
                 "update cmsDataTypePrevalues set sortorder = @sortOrder, [value] = @value where id = @id",
@@ -82,8 +82,8 @@ namespace umbraco.cms.businesslogic.datatype
 
         public PreValue(int DataTypeId, string Value)
         {
-            object id = SqlHelper.ExecuteScalar(
-                umbraco.GlobalSettings.DbDSN,
+            object id = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
+                Umbraco.GlobalSettings.DbDSN,
                 CommandType.Text,
                 "Select id from cmsDataTypeprevalues where [Value] = @value and DataTypeNodeId = @dataTypeId",
                 new SqlParameter("@dataTypeId", DataTypeId),
@@ -96,8 +96,8 @@ namespace umbraco.cms.businesslogic.datatype
 
         private void initialize()
         {
-            SqlDataReader dr = SqlHelper.ExecuteReader(
-                 umbraco.GlobalSettings.DbDSN,
+            SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
+                 Umbraco.GlobalSettings.DbDSN,
                  CommandType.Text,
                  "Select id, sortorder, [value] from cmsDataTypeprevalues where id = @id order by sortorder",
                  new SqlParameter("@id", _id));

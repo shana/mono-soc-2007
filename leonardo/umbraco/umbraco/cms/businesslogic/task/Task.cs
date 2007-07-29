@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
-using umbraco.BusinessLogic;
+using Umbraco.BusinessLogic;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.task
+namespace Umbraco.Cms.BusinessLogic.task
 {
     public class Task
     {
@@ -92,7 +92,7 @@ namespace umbraco.cms.businesslogic.task
         public Task(int TaskId)
         {
 			using (SqlDataReader dr =
-				SqlHelper.ExecuteReader(
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
 				GlobalSettings.DbDSN,
 				CommandType.Text,
 				"select taskTypeId, nodeId, parentUserId, userId, DateTime, comment from cmsTask where id = @id",
@@ -123,7 +123,7 @@ namespace umbraco.cms.businesslogic.task
             if (Id == 0)
             {
                 Id = int.Parse(
-                    SqlHelper.ExecuteScalar(
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(
                     GlobalSettings.DbDSN,
                     CommandType.Text,
                     "SET NOCOUNT ON insert into cmsTask (closed, taskTypeId, nodeId, parentUserId, userId, comment) values (@closed, @taskTypeId, @nodeId, @parentUserId, @userId, @comment) select @@IDENTITY SET NOCOUNT OFF",
@@ -136,7 +136,7 @@ namespace umbraco.cms.businesslogic.task
             }
             else
             {
-                SqlHelper.ExecuteNonQuery(
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(
                     GlobalSettings.DbDSN,
                     CommandType.Text,
                     "update cmsTask set closed = @closed, taskTypeId = @taskTypeId, nodeId = @nodeId, parentUserId = @parentUserId, userId = @userId, comment = @comment where id = @id",
@@ -157,8 +157,8 @@ namespace umbraco.cms.businesslogic.task
         /// <summary>
         /// Retrieves a collection of open tasks assigned to the user
         /// </summary>
-        /// <param name="User">The User who have the tasks assigned</param>
-        /// <param name="IncludeClosed">If true both open and closed tasks will be returned</param>
+        /// <param Name="User">The User who have the tasks assigned</param>
+        /// <param Name="IncludeClosed">If true both open and closed tasks will be returned</param>
         /// <returns>A collections of tasks</returns>
         public static Tasks GetTasks(User User, bool IncludeClosed) {
             string sql = "select id from cmsTask where userId = @userId";
@@ -167,7 +167,7 @@ namespace umbraco.cms.businesslogic.task
             sql += " order by DateTime desc";
 
             Tasks t = new Tasks();
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
 				GlobalSettings.DbDSN,
 				CommandType.Text,
 				sql,

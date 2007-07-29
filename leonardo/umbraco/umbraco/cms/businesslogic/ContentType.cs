@@ -6,12 +6,13 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Web;
 using Microsoft.ApplicationBlocks.Data;
-using umbraco.cms.businesslogic.cache;
-using umbraco.cms.businesslogic.datatype;
-using umbraco.cms.businesslogic.language;
-using umbraco.cms.businesslogic.propertytype;
+using Umbraco.Cms.BusinessLogic.cache;
+using Umbraco.Cms.BusinessLogic.datatype;
+using Umbraco.Cms.BusinessLogic.language;
+using Umbraco.Cms.BusinessLogic.propertytype;
+using SqlHelper=Umbraco.SqlHelper;
 
-namespace umbraco.cms.businesslogic
+namespace Umbraco.Cms.BusinessLogic
 {
     /// <summary>
     /// ContentTypes defines the datafields of Content objects of that type, it's similar to defining columns 
@@ -38,7 +39,7 @@ namespace umbraco.cms.businesslogic
             set
             {
                 _description = value;
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                           "update cmsContentType set description = @description where nodeId = @id",
                                           new SqlParameter("@description", value),
                                           new SqlParameter("@id", Id));
@@ -55,7 +56,7 @@ namespace umbraco.cms.businesslogic
             set
             {
                 _thumbnail = value;
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                           "update cmsContentType set thumbnail = @thumbnail where nodeId = @id",
                                           new SqlParameter("@thumbnail", value),
                                           new SqlParameter("@id", Id));
@@ -74,7 +75,7 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param Name="id"></param>
         public ContentType(int id) : base(id)
         {
             setupContentType();
@@ -83,7 +84,7 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param Name="id"></param>
         public ContentType(Guid id) : base(id)
         {
             setupContentType();
@@ -146,13 +147,13 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Initializes a ContentType object given the Alias.
         /// </summary>
-        /// <param name="Alias">Alias of the contenttype</param>
+        /// <param Name="Alias">Alias of the contenttype</param>
         /// <returns>The ContentType with the corrosponding Alias</returns>
         public static ContentType GetByAlias(string Alias)
         {
-            return new ContentType(int.Parse(SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+            return new ContentType(int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                                                      "select nodeid from cmsContentType where alias = '" +
-                                                                     sqlHelper.safeString(Alias) + "'").ToString()));
+                                                                     SqlHelper.SafeString(Alias) + "'").ToString()));
         }
 
         /// <summary>
@@ -161,7 +162,7 @@ namespace umbraco.cms.businesslogic
         protected void setupContentType()
         {
             using (SqlDataReader dr =
-                SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                         "Select Alias,icon,thumbnail,description from cmsContentType where nodeid=" + Id)
                 )
             {
@@ -222,7 +223,7 @@ namespace umbraco.cms.businesslogic
             		{
             			List<PropertyType> result = new List<PropertyType>();
             			using(SqlDataReader dr =
-            				SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+            				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
             					"select id from cmsPropertyType where contentTypeId = @ctId order by sortOrder",
             					new SqlParameter("@ctId", Id)))
             			{
@@ -248,7 +249,7 @@ namespace umbraco.cms.businesslogic
             get { return _alias; }
             set
             {
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                           "update cmsContentType set alias = '" + value + "' where nodeId = " +
                                           Id.ToString());
                 _alias = value;
@@ -268,7 +269,7 @@ namespace umbraco.cms.businesslogic
             set
             {
                 _iconurl = value;
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                           "update cmsContentType set icon='" + value + "' where nodeid = " + Id);
                 // Remove from cache
                 FlushFromCache(Id);
@@ -278,15 +279,15 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Adding a PropertyType to the ContentType, will add a new datafield/Property on all Documents of this Type.
         /// </summary>
-        /// <param name="dt">The DataTypeDefinition of the PropertyType</param>
-        /// <param name="Alias">The Alias of the PropertyType</param>
-        /// <param name="Name">The userfriendly name</param>
+        /// <param Name="dt">The DataTypeDefinition of the PropertyType</param>
+        /// <param Name="Alias">The Alias of the PropertyType</param>
+        /// <param Name="Name">The userfriendly Name</param>
         public void AddPropertyType(DataTypeDefinition dt, string Alias, string Name)
         {
             PropertyType pt = PropertyType.MakeNew(dt, this, Name, Alias);
 
             // Optimized call
-            SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                       "insert into cmsPropertyData (contentNodeId, versionId, propertyTypeId) select contentId, versionId, @propertyTypeId from cmsContent inner join cmsContentVersion on cmsContent.nodeId = cmsContentVersion.contentId where contentType = @contentTypeId",
                                       new SqlParameter("@propertyTypeId", pt.Id),
                                       new SqlParameter("@contentTypeId", Id));
@@ -303,11 +304,11 @@ namespace umbraco.cms.businesslogic
         /// editing interface more userfriendly.
         /// 
         /// </summary>
-        /// <param name="pt">The PropertyType</param>
-        /// <param name="TabId">The Id of the Tab</param>
+        /// <param Name="pt">The PropertyType</param>
+        /// <param Name="TabId">The Id of the Tab</param>
         public void SetTabOnPropertyType(PropertyType pt, int TabId)
         {
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "update cmsPropertyType set tabId = " + TabId.ToString() + " where id = " +
                                       pt.Id.ToString());
 
@@ -320,10 +321,10 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Removing a PropertyType from the associated Tab
         /// </summary>
-        /// <param name="pt">The PropertyType which should be freed from its tab</param>
+        /// <param Name="pt">The PropertyType which should be freed from its tab</param>
         public void removePropertyTypeFromTab(PropertyType pt)
         {
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "update cmsPropertyType set tabId = NULL where id = " + pt.Id.ToString());
 
             // Remove from cache
@@ -334,7 +335,7 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Creates a new Tab on the Content
         /// </summary>
-        /// <param name="Caption">Returns the Id of the new Tab</param>
+        /// <param Name="Caption">Returns the Id of the new Tab</param>
         /// <returns></returns>
         public int AddVirtualTab(string Caption)
         {
@@ -343,7 +344,7 @@ namespace umbraco.cms.businesslogic
 
             return
                 int.Parse(
-                    SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                             "Insert into cmsTab (contenttypeNodeId,text,sortorder) values (" + Id + ",'" +
                                             Caption + "',1) select @@IDENTITY").ToString());
         }
@@ -351,12 +352,12 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Helper method for getting the Tab id from a given PropertyType
         /// </summary>
-        /// <param name="pt">The PropertyType from which to get the Tab Id</param>
+        /// <param Name="pt">The PropertyType from which to get the Tab Id</param>
         /// <returns>The Id of the Tab on which the PropertyType is placed</returns>
         public static int getTabIdFromPropertyType(PropertyType pt)
         {
             object tmp =
-                SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                         "Select tabId from cmsPropertyType where id = " + pt.Id.ToString());
             if (tmp == DBNull.Value)
                 return 0;
@@ -366,12 +367,12 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Releases all PropertyTypes on tab (this does not delete the PropertyTypes) and then Deletes the Tab
         /// </summary>
-        /// <param name="id">The Id of the Tab to be deleted.</param>
+        /// <param Name="id">The Id of the Tab to be deleted.</param>
         public void DeleteVirtualTab(int id)
         {
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "Update cmsPropertyType set tabId = NULL where tabId =" + id);
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "delete from cmsTab where id =" + id);
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "delete from cmsTab where id =" + id);
 
             // Remove from cache
             FlushFromCache(Id);
@@ -385,7 +386,7 @@ namespace umbraco.cms.businesslogic
             get
             {
                 List<TabI> tmp = new List<TabI>();
-                using (SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                                                   string.Format(
                                                                       "Select Id,text from cmsTab where contenttypeNodeId = {0} order by sortOrder",
                                                                       Id)))
@@ -402,11 +403,11 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Updates the caption of the Tab
         /// </summary>
-        /// <param name="tabId">The Id of the Tab to be updated</param>
-        /// <param name="Caption">The new Caption</param>
+        /// <param Name="tabId">The Id of the Tab to be updated</param>
+        /// <param Name="Caption">The new Caption</param>
         public void SetTabName(int tabId, string Caption)
         {
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "Update  cmsTab set text = '" + Caption + "' where id = " + tabId);
 
             // Remove from cache
@@ -439,9 +440,9 @@ namespace umbraco.cms.businesslogic
             void MoveUp();
 
             /// <summary>
-            /// Method for retrieving the original, non processed name from the db
+            /// Method for retrieving the original, non processed Name from the db
             /// </summary>
-            /// <returns>The original, non processed name from the db</returns>
+            /// <returns>The original, non processed Name from the db</returns>
             string GetRawCaption();
 
             /// <summary>
@@ -464,9 +465,9 @@ namespace umbraco.cms.businesslogic
             /// <summary>
             /// 
             /// </summary>
-            /// <param name="id"></param>
-            /// <param name="caption"></param>
-            /// <param name="cType"></param>
+            /// <param Name="id"></param>
+            /// <param Name="caption"></param>
+            /// <param Name="cType"></param>
             public Tab(int id, string caption, ContentType cType)
             {
                 _id = id;
@@ -482,7 +483,7 @@ namespace umbraco.cms.businesslogic
 
                                                                using (
                                                                    SqlDataReader dr =
-                                                                       SqlHelper.ExecuteReader(_ConnString,
+                                                                       Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString,
                                                                                                CommandType.Text,
                                                                                                string.Format(
                                                                                                    "Select id from cmsPropertyType where tabid = {0} order by sortOrder",
@@ -506,7 +507,7 @@ namespace umbraco.cms.businesslogic
 
             public void Delete()
             {
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "delete from cmsTab where id = @id",
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "delete from cmsTab where id = @id",
                                           new SqlParameter("@id", Id));
             }
 
@@ -515,7 +516,7 @@ namespace umbraco.cms.businesslogic
                 try
                 {
                     string tempCaption =
-                        SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+                        Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                                                 "Select text from cmsTab where id = " + id.ToString()).ToString();
                     if (!tempCaption.StartsWith("#"))
                         return tempCaption;
@@ -543,12 +544,12 @@ namespace umbraco.cms.businesslogic
             {
                 get
                 {
-                    return int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+                    return int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
                                                              "select sortOrder from cmsTab where id = " + _id).ToString());
                 }
                 set
                 {
-                    SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text,
                                               "update cmsTab set sortOrder = " + value + " where id =" + _id);
                 }
             }
@@ -668,11 +669,11 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Retrieve a PropertyType by it's alias
         /// </summary>
-        /// <param name="alias">PropertyType alias</param>
+        /// <param Name="alias">PropertyType alias</param>
         /// <returns>The PropertyType with the given Alias</returns>
         public PropertyType getPropertyType(string alias)
         {
-			object o = SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
+			object o = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(_ConnString, CommandType.Text,
                 "Select id from cmsPropertyType where contentTypeId=@contentTypeId And Alias=@alias",
 				new SqlParameter("@contentTypeId", this.Id),
 				new SqlParameter("@alias", alias));
@@ -690,12 +691,12 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// Creates a new ContentType
         /// </summary>
-        /// <param name="NodeId">The CMSNode Id of the ContentType</param>
-        /// <param name="Alias">The Alias of the ContentType</param>
-        /// <param name="IconUrl">The Iconurl of Contents of this ContentType</param>
+        /// <param Name="NodeId">The CMSNode Id of the ContentType</param>
+        /// <param Name="Alias">The Alias of the ContentType</param>
+        /// <param Name="IconUrl">The Iconurl of Contents of this ContentType</param>
         protected static void Create(int NodeId, string Alias, string IconUrl)
         {
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                       "Insert into cmsContentType (nodeId,alias,icon) values (" + NodeId + ",'" + Alias +
                                       "','" + IconUrl + "')");
         }
@@ -716,7 +717,7 @@ namespace umbraco.cms.businesslogic
                 t.Delete();
 
             // delete contenttype entrance
-            SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "Delete from cmsContentType where NodeId = " + Id);
+            Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text, "Delete from cmsContentType where NodeId = " + Id);
 
             // delete CMSNode entrance
             base.delete();
@@ -731,7 +732,7 @@ namespace umbraco.cms.businesslogic
             get
             {
                 List<int> tmp = new List<int>();
-                using (SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                                                   "Select AllowedId from cmsContentTypeAllowedContentType where id=" +
                                                                   Id))
                 {
@@ -745,11 +746,11 @@ namespace umbraco.cms.businesslogic
             set
             {
                 // 
-                SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                           "delete from cmsContentTypeAllowedContentType where id=" + Id);
                 foreach (int i in value)
                 {
-                    SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
+                    Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString, CommandType.Text,
                                               "insert into cmsContentTypeAllowedContentType (id,AllowedId) values (" +
                                               Id + "," + i + ")");
                 }
@@ -787,7 +788,7 @@ namespace umbraco.cms.businesslogic
         {
             if (!_analyzedContentTypes.ContainsKey(ObjectType) || ForceUpdate)
             {
-                using (SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
+                using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,
                                                                   "select id from umbracoNode where nodeObjectType = @objectType",
                                                                   new SqlParameter("@objectType", ObjectType)))
                 {
@@ -811,7 +812,7 @@ namespace umbraco.cms.businesslogic
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ct"></param>
+        /// <param Name="ct"></param>
         /// <returns></returns>
         private static bool usesUmbracoDataOnly(ContentType ct)
         {

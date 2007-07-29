@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.web
+namespace Umbraco.Cms.BusinessLogic.web
 {
 	public class StylesheetProperty : CMSNode
 	{
@@ -23,7 +23,7 @@ namespace umbraco.cms.businesslogic.web
 			initProperty();
 		}
 		private  void initProperty() {
-			SqlDataReader dr = SqlHelper.ExecuteReader(_ConnString, CommandType.Text,"Select stylesheetPropertyAlias,stylesheetPropertyValue from cmsStylesheetProperty where nodeId = " + this.Id.ToString());
+			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_ConnString, CommandType.Text,"Select stylesheetPropertyAlias,stylesheetPropertyValue from cmsStylesheetProperty where nodeId = " + this.Id.ToString());
 			if (dr.Read())
 			{
 				_alias = dr["stylesheetPropertyAlias"].ToString();
@@ -43,7 +43,7 @@ namespace umbraco.cms.businesslogic.web
 		public string Alias {
 			get{return _alias;}
 			set {
-				SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"update cmsStylesheetProperty set stylesheetPropertyAlias = '"+ value.Replace("'","''")+"' where nodeId = " + this.Id);
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"update cmsStylesheetProperty set stylesheetPropertyAlias = '"+ value.Replace("'","''")+"' where nodeId = " + this.Id);
 				_alias=value;
 			}
 		}
@@ -51,7 +51,7 @@ namespace umbraco.cms.businesslogic.web
 		public string value {
 			get {return _value;}
 			set {
-				SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"update cmsStylesheetProperty set stylesheetPropertyValue = '"+ value.Replace("'","''")+"' where nodeId = " + this.Id);
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"update cmsStylesheetProperty set stylesheetPropertyValue = '"+ value.Replace("'","''")+"' where nodeId = " + this.Id);
 				_value=value;
 
 			}
@@ -59,14 +59,14 @@ namespace umbraco.cms.businesslogic.web
 
 		public static StylesheetProperty MakeNew(string Text, StyleSheet sheet, BusinessLogic.User user) {
 			CMSNode newNode = CMSNode.MakeNew(sheet.Id, moduleObjectType, user.Id, 2, Text, Guid.NewGuid());
-			SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Insert into cmsStylesheetProperty (nodeId,stylesheetPropertyAlias,stylesheetPropertyValue) values ('"+ newNode.Id +"','" + Text+ "','')");
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"Insert into cmsStylesheetProperty (nodeId,stylesheetPropertyAlias,stylesheetPropertyValue) values ('"+ newNode.Id +"','" + Text+ "','')");
 			return new StylesheetProperty(newNode.Id);
 			
 		}
 
 		new public void delete() 
 		{
-			SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"delete from cmsStylesheetProperty where nodeId = @nodeId", new SqlParameter("@nodeId", this.Id));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_ConnString,CommandType.Text,"delete from cmsStylesheetProperty where nodeId = @nodeId", new SqlParameter("@nodeId", this.Id));
 			base.delete();
 		}
 

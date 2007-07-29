@@ -6,10 +6,10 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 
-namespace umbraco.cms.businesslogic.index
+namespace Umbraco.Cms.BusinessLogic.index
 {
 	/// <summary>
-	/// Searcher is used in the internal search (autosuggestion) in the umbraco administration console
+	/// Searcher is used in the internal search (autosuggestion) in the Umbraco administration console
 	/// </summary>
 	public class searcher
 	{
@@ -17,9 +17,9 @@ namespace umbraco.cms.businesslogic.index
 		/// <summary>
 		/// Method for retrieving a list of documents where the keyword is present
 		/// </summary>
-		/// <param name="ObjectType">[not implemented] search only available for documents</param>
-		/// <param name="Keyword">The word being searched for</param>
-		/// <param name="Max">The maximum limit on results returned</param>
+		/// <param Name="ObjectType">[not implemented] search only available for documents</param>
+		/// <param Name="Keyword">The word being searched for</param>
+		/// <param Name="Max">The maximum limit on results returned</param>
 		/// <returns>A list of documentnames indexed by the id of the document</returns>
 		public static Hashtable Search(Guid ObjectType, string Keyword, int Max) 
 		{

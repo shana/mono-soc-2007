@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.cms.businesslogic.macro
+namespace Umbraco.Cms.BusinessLogic.macro
 {
 	/// <summary>
 	/// The MacroPropertyType class contains information on the assembly and class of the 
@@ -55,7 +55,7 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="Id">Identifier</param>
+		/// <param Name="Id">Identifier</param>
 		public MacroPropertyType(int Id)
 		{
 			_id = Id;
@@ -65,16 +65,16 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="Alias">The alias of the MacroPropertyType</param>
+		/// <param Name="Alias">The alias of the MacroPropertyType</param>
 		public MacroPropertyType(string Alias) 
 		{
-			_id = int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacroPropertyType where macroPropertyTypeAlias = @alias", new SqlParameter("@alias", Alias)).ToString());
+			_id = int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacroPropertyType where macroPropertyTypeAlias = @alias", new SqlParameter("@alias", Alias)).ToString());
 			setup();
 		}
 
 		private void setup() 
 		{
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select macroPropertyTypeAlias, macroPropertyTypeRenderAssembly, macroPropertyTypeRenderType, macroPropertyTypeBaseType from cmsMacroPropertyType where id = @id", new SqlParameter("@id", _id)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select macroPropertyTypeAlias, macroPropertyTypeRenderAssembly, macroPropertyTypeRenderType, macroPropertyTypeBaseType from cmsMacroPropertyType where id = @id", new SqlParameter("@id", _id)))
 			{
 				if(dr.Read())
 				{

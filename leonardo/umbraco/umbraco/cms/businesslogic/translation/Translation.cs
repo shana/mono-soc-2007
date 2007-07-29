@@ -2,13 +2,13 @@ using System;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Web;
-using umbraco.BusinessLogic;
-using umbraco.cms.businesslogic.language;
-using umbraco.cms.businesslogic.property;
-using umbraco.cms.businesslogic.task;
-using umbraco.cms.businesslogic.web;
+using Umbraco.BusinessLogic;
+using Umbraco.Cms.BusinessLogic.language;
+using Umbraco.Cms.BusinessLogic.property;
+using Umbraco.Cms.BusinessLogic.task;
+using Umbraco.Cms.BusinessLogic.web;
 
-namespace umbraco.cms.businesslogic.translation
+namespace Umbraco.Cms.BusinessLogic.translation
 {
     public class Translation
     {

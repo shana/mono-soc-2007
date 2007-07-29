@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 using System.Xml;
 
-namespace umbraco.cms.businesslogic.macro
+namespace Umbraco.Cms.BusinessLogic.macro
 {
 	/// <summary>
 	/// The macro property is used by macroes to communicate/transfer userinput to an instance of a macro.
@@ -22,13 +22,13 @@ namespace umbraco.cms.businesslogic.macro
 		bool _public;
 		string _alias;
 		string _name;
-		cms.businesslogic.macro.MacroPropertyType _type;
+		Cms.BusinessLogic.macro.MacroPropertyType _type;
 
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="Id">Id</param>
+		/// <param Name="Id">Id</param>
 		public MacroProperty(int Id)
 		{
 			_id = Id;
@@ -64,7 +64,7 @@ namespace umbraco.cms.businesslogic.macro
 		}
 
 		/// <summary>
-		/// The userfriendly name
+		/// The userfriendly Name
 		/// </summary>
 		public string Name
 		{
@@ -74,14 +74,14 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// The basetype which defines which component is used in the UI for editing content
 		/// </summary>
-		public cms.businesslogic.macro.MacroPropertyType Type 
+		public Cms.BusinessLogic.macro.MacroPropertyType Type 
 		{
 			get {return _type;}
 		}
 
 		private void setup() 
 		{
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select macroPropertyHidden, macroPropertyType, macroPropertySortOrder, macroPropertyAlias, macroPropertyName from cmsMacroProperty where id = @id", new SqlParameter("@id", _id)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select macroPropertyHidden, macroPropertyType, macroPropertySortOrder, macroPropertyAlias, macroPropertyName from cmsMacroProperty where id = @id", new SqlParameter("@id", _id)))
 			{
 				if(dr.Read())
 				{
@@ -99,22 +99,22 @@ namespace umbraco.cms.businesslogic.macro
 		/// </summary>
 		public void Delete() 
 		{
-			SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from cmsMacroProperty where id = @id", new SqlParameter("@id", this._id));
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN, CommandType.Text, "delete from cmsMacroProperty where id = @id", new SqlParameter("@id", this._id));
 		}
 
 		/// <summary>
 		/// Retrieve a Xmlrepresentation of the MacroProperty used for exporting the Macro to the package
 		/// </summary>
-		/// <param name="xd">XmlDocument context</param>
+		/// <param Name="xd">XmlDocument context</param>
 		/// <returns>A xmlrepresentation of the object</returns>
 		public XmlElement ToXml(XmlDocument xd) 
 		{
 			XmlElement doc = xd.CreateElement("property");
 
-			doc.Attributes.Append(xmlHelper.addAttribute(xd, "name", this.Name));
-			doc.Attributes.Append(xmlHelper.addAttribute(xd, "alias", this.Alias));
-			doc.Attributes.Append(xmlHelper.addAttribute(xd, "show", this.Public.ToString()));
-			doc.Attributes.Append(xmlHelper.addAttribute(xd, "propertyType", this.Type.Alias));
+			doc.Attributes.Append(XmlHelper.addAttribute(xd, "Name", this.Name));
+			doc.Attributes.Append(XmlHelper.addAttribute(xd, "alias", this.Alias));
+			doc.Attributes.Append(XmlHelper.addAttribute(xd, "show", this.Public.ToString()));
+			doc.Attributes.Append(XmlHelper.addAttribute(xd, "propertyType", this.Type.Alias));
 			
 			return doc;
 		}
@@ -124,13 +124,13 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Retieve all MacroProperties of a macro
 		/// </summary>
-		/// <param name="MacroId">Macro identifier</param>
+		/// <param Name="MacroId">Macro identifier</param>
 		/// <returns>All MacroProperties of a macro</returns>
 		public static MacroProperty[] GetProperties(int MacroId) 
 		{
-			int totalProperties = int.Parse(SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select count(*) from cmsMacroProperty where macro = @macroID", new SqlParameter("@macroID", MacroId)).ToString());
+			int totalProperties = int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select count(*) from cmsMacroProperty where macro = @macroID", new SqlParameter("@macroID", MacroId)).ToString());
 			int count = 0;
-			using (SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacroProperty where macro = @macroId order by macroPropertySortOrder", new SqlParameter("@macroId", MacroId)))
+			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select id from cmsMacroProperty where macro = @macroId order by macroPropertySortOrder", new SqlParameter("@macroId", MacroId)))
 			{
 				MacroProperty[] retval = new MacroProperty[totalProperties];
 				while(dr.Read())
@@ -145,17 +145,17 @@ namespace umbraco.cms.businesslogic.macro
 		/// <summary>
 		/// Creates a new MacroProperty on a macro
 		/// </summary>
-		/// <param name="M">The macro</param>
-		/// <param name="show">Will the editor be able to input data</param>
-		/// <param name="alias">The alias of the property</param>
-		/// <param name="name">Userfriendly MacroProperty name</param>
-		/// <param name="propertyType">The MacroPropertyType of the property</param>
+		/// <param Name="M">The macro</param>
+		/// <param Name="show">Will the editor be able to input data</param>
+		/// <param Name="alias">The alias of the property</param>
+		/// <param Name="name">Userfriendly MacroProperty Name</param>
+		/// <param Name="propertyType">The MacroPropertyType of the property</param>
 		/// <returns></returns>
 		public static MacroProperty MakeNew(Macro M, bool show, string alias, string name, MacroPropertyType propertyType) 
 		{
 			return new MacroProperty( int.Parse(
-				SqlHelper.ExecuteScalar(GlobalSettings.DbDSN,
-				CommandType.Text, "SET NOCOUNT ON; insert into cmsMacroProperty (macro, macroPropertyHidden, macropropertyAlias, macroPropertyName, macroPropertyType) values (@macro, @show, @alias, @name, @type) select @@identity as id", new SqlParameter("@macro", M.Id), new SqlParameter("@show", show), new SqlParameter("@alias", alias), new SqlParameter("@name", name), new SqlParameter("@type", propertyType.Id)).ToString()));
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN,
+				CommandType.Text, "SET NOCOUNT ON; insert into cmsMacroProperty (macro, macroPropertyHidden, macropropertyAlias, macroPropertyName, macroPropertyType) values (@macro, @show, @alias, @Name, @type) select @@identity as id", new SqlParameter("@macro", M.Id), new SqlParameter("@show", show), new SqlParameter("@alias", alias), new SqlParameter("@Name", name), new SqlParameter("@type", propertyType.Id)).ToString()));
 		}
 
 		#endregion

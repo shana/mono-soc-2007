@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 
-using umbraco.BasePages;
-using umbraco.BusinessLogic.Utils;
-using umbraco.cms.businesslogic.web;
-using umbraco.cms.businesslogic.workflow;
-using umbraco.interfaces;
+using Umbraco.BasePages;
+using Umbraco.BusinessLogic.Utils;
+using Umbraco.Cms.BusinessLogic.web;
+using Umbraco.Cms.BusinessLogic.workflow;
+using Umbraco.interfaces;
 
-namespace umbraco.BusinessLogic.Actions
+namespace Umbraco.BusinessLogic.Actions
 {
 	/// <summary>
-	/// Actions and Actionhandlers are a key concept to umbraco and a developer whom wish to apply
-	/// businessrules whenever data is changed within umbraco, by implementing the IActionHandler
-	/// interface it's possible to invoke methods (foreign to umbraco) - this can be used whenever
+	/// Actions and Actionhandlers are a key concept to Umbraco and a developer whom wish to apply
+	/// businessrules whenever data is changed within Umbraco, by implementing the IActionHandler
+	/// interface it's possible to invoke methods (foreign to Umbraco) - this can be used whenever
 	/// there is a specific rule which needs to be applied to content.
 	///
 	/// The Action class itself has responsibility for registering actions and actionhandlers,
@@ -22,7 +22,7 @@ namespace umbraco.BusinessLogic.Actions
 	/// 
 	/// An action/actionhandler will automatically be registered, using reflection 
 	/// which is enabling thirdparty developers to extend the core functionality of
-	/// umbraco without changing the codebase.
+	/// Umbraco without changing the codebase.
 	/// </summary>
 	public class Action
 	{
@@ -64,8 +64,8 @@ namespace umbraco.BusinessLogic.Actions
 		/// Whenever an action is performed upon a document/media/member, this method is executed, ensuring that 
 		/// all registered handlers will have an oppotunity to handle the action.
 		/// </summary>
-		/// <param name="d">The document being operated on</param>
-		/// <param name="action">The action triggered</param>
+		/// <param Name="d">The document being operated on</param>
+		/// <param Name="action">The action triggered</param>
 		public static void RunActionHandlers(Document d, IAction action)
 		{
 			foreach(IActionHandler ia in _actionHandlers)
@@ -77,7 +77,7 @@ namespace umbraco.BusinessLogic.Actions
 						if(a.Alias == action.Alias)
 						{
 							// Uncommented for auto publish support
-							//								System.Web.HttpContext.Current.Trace.Write("BusinessLogic.Action.RunActionHandlers", "Running " + ia.HandlerName() + " (matching action: " + a.Alias + ")");
+							//								System.Web.HttpContext.Current.Trace.Write("Umbraco.Cms.BusinessLogic.Action.RunActionHandlers", "Running " + ia.HandlerName() + " (matching action: " + a.Alias + ")");
 							ia.Execute(d, action);
 						}
 					}
@@ -94,7 +94,7 @@ namespace umbraco.BusinessLogic.Actions
 			User u;
 			try
 			{
-				u = new UmbracoEnsuredPage().getUser();
+				u = new UmbracoEnsuredPage().ValidatedUser;
 			}
 			catch
 			{
@@ -107,7 +107,7 @@ namespace umbraco.BusinessLogic.Actions
 		/// Jacascript for the contextmenu
 		/// Suggestion: this method should be moved to the presentation layer.
 		/// </summary>
-		/// <param name="language"></param>
+		/// <param Name="language"></param>
 		/// <returns>String representation</returns>
 		public string ReturnJavascript(string language)
 		{
@@ -120,7 +120,7 @@ namespace umbraco.BusinessLogic.Actions
 		/// 
 		/// Suggestion: this method should be moved to the presentation layer.
 		/// </summary>
-		/// <param name="language"></param>
+		/// <param Name="language"></param>
 		/// <returns></returns>
 		private static string findActions(string language)
 		{
