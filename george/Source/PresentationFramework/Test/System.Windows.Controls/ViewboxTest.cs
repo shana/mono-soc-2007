@@ -155,6 +155,37 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region LayoutStretchNone2
+		[Test]
+		public void LayoutStretchNone2() {
+			new LayoutStretchNone2Viewbox();
+		}
+
+		class LayoutStretchNone2Viewbox : Viewbox {
+			public LayoutStretchNone2Viewbox() {
+				Stretch = Stretch.None;
+				Child = new Button();
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(0, 0));
+			}
+		}
+		#endregion
+
+		#region LayoutStretchNone3
+		[Test]
+		public void LayoutStretchNone3() {
+			new LayoutStretchNone3Viewbox();
+		}
+
+		class LayoutStretchNone3Viewbox : Viewbox {
+			public LayoutStretchNone3Viewbox() {
+				Stretch = Stretch.None;
+				Child = new Button();
+				Assert.AreEqual(MeasureOverride(new Size(100, 100)), new Size(Utility.GetEmptyButtonSize(), Utility.GetEmptyButtonSize()), "1");
+				Assert.AreEqual(ArrangeOverride(new Size(100, 100)), new Size(Utility.GetEmptyButtonSize(), Utility.GetEmptyButtonSize()), "2");
+			}
+		}
+		#endregion
+
 		#region LayoutStretchFill
 		[Test]
 		public void LayoutStretchFill() {
@@ -195,6 +226,117 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(scale_transform.CenterY, 0, "12");
 				Assert.AreEqual(scale_transform.ScaleX, 20, "13");
 				Assert.AreEqual(scale_transform.ScaleX, 20, "14");
+			}
+		}
+		#endregion
+
+		#region ChildMeasure
+		[Test]
+		public void ChildMeasure() {
+			new ChildMeasureViewbox();
+		}
+
+		class ChildMeasureViewbox : Viewbox {
+			static Size measure_size;
+
+			public ChildMeasureViewbox() {
+				Child = new TestFrameworkElement();
+				Window w = new Window();
+				w.Content = this;
+				Width = 100;
+				Height = 200;
+				w.Show();
+				Assert.AreEqual(measure_size, new Size(double.PositiveInfinity, double.PositiveInfinity));
+			}
+
+			class TestFrameworkElement : FrameworkElement {
+				protected override Size MeasureOverride(Size availableSize) {
+					return base.MeasureOverride(measure_size = availableSize);
+				}
+			}
+		}
+		#endregion
+
+		#region ChildMeasureStretchNone
+		[Test]
+		public void ChildMeasureStretchNone() {
+			new ChildMeasureStretchNoneViewbox();
+		}
+
+		class ChildMeasureStretchNoneViewbox : Viewbox {
+			static Size measure_size;
+
+			public ChildMeasureStretchNoneViewbox() {
+				Stretch = Stretch.None;
+				Child = new TestFrameworkElement();
+				Window w = new Window();
+				w.Content = this;
+				Width = 100;
+				Height = 200;
+				w.Show();
+				Assert.AreEqual(measure_size, new Size(double.PositiveInfinity, double.PositiveInfinity));
+			}
+
+			class TestFrameworkElement : FrameworkElement {
+				protected override Size MeasureOverride(Size availableSize) {
+					return base.MeasureOverride(measure_size = availableSize);
+				}
+			}
+		}
+		#endregion
+
+		#region ChildMeasureStretchFill
+		[Test]
+		public void ChildMeasureStretchFill() {
+			new ChildMeasureStretchFillViewbox();
+		}
+
+		class ChildMeasureStretchFillViewbox : Viewbox {
+			static Size measure_size;
+
+			public ChildMeasureStretchFillViewbox() {
+				Stretch = Stretch.Fill;
+				Child = new TestFrameworkElement();
+				Window w = new Window();
+				w.Content = this;
+				Width = 100;
+				Height = 200;
+				w.Show();
+				Assert.AreEqual(measure_size, new Size(double.PositiveInfinity, double.PositiveInfinity));
+			}
+
+			class TestFrameworkElement : FrameworkElement {
+				protected override Size MeasureOverride(Size availableSize) {
+					return base.MeasureOverride(measure_size = availableSize);
+				}
+			}
+		}
+		#endregion
+
+		#region ChildMeasureStretchUniformToFill
+		[Test]
+		public void ChildMeasureStretchUniformToFill() {
+			new ChildMeasureStretchUniformToFillViewbox();
+		}
+
+		class ChildMeasureStretchUniformToFillViewbox : Viewbox {
+			static Size measure_size;
+
+			public ChildMeasureStretchUniformToFillViewbox() {
+				Stretch = Stretch.UniformToFill;
+				Child = new TestFrameworkElement();
+				Window w = new Window();
+				w.Content = this;
+				Width = 100;
+				Height = 200;
+				w.Show();
+				Assert.AreEqual(measure_size, new Size(double.PositiveInfinity, double.PositiveInfinity));
+			}
+
+			class TestFrameworkElement : FrameworkElement {
+				protected override Size MeasureOverride(Size availableSize) {
+					return base.MeasureOverride(measure_size = availableSize);
+				}
 			}
 		}
 		#endregion
