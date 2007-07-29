@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 using System.Windows.Controls;
 namespace Mono.System.Windows.Controls {
@@ -15,6 +16,11 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
+		#region Private Fields
+		ContainerVisual container_visual = new ContainerVisual();
+		UIElement child;
+		#endregion
+
 		#region Public Constructors
 		public Viewbox() {
 		}
@@ -26,7 +32,7 @@ namespace System.Windows.Controls {
 			get { return (StretchDirection)GetValue(StretchDirectionProperty); }
 			set { SetValue(StretchDirectionProperty, value); }
 		}
-		
+
 		public Stretch Stretch {
 			get { return (Stretch)GetValue(StretchProperty); }
 			set { SetValue(StretchProperty, value); }
@@ -34,11 +40,12 @@ namespace System.Windows.Controls {
 		#endregion
 
 		public override UIElement Child {
-			get { 
-				return base.Child;
-			}
+			get { return child; }
 			set {
-				base.Child = value;
+				if (child != null)
+					container_visual.Children.Remove(child);
+				child = value;
+				container_visual.Children.Add(value);
 			}
 		}
 		#endregion
@@ -46,7 +53,7 @@ namespace System.Windows.Controls {
 		#region Protected Properties
 		protected override IEnumerator LogicalChildren {
 			get {
-				return base.LogicalChildren;
+				return (child == null ? new object[] { } : new object[] { child }).GetEnumerator();
 			}
 		}
 
@@ -57,15 +64,54 @@ namespace System.Windows.Controls {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size arrangeSize) {
-			return base.ArrangeOverride(arrangeSize);
+			if (child == null)
+				return arrangeSize;
+			Size child_desired_size = child.DesiredSize;
+			child.Arrange(new Rect(new Point(0, 0), child_desired_size));
+			if (child_desired_size.Width == 0 && child_desired_size.Height == 0)
+				return child_desired_size;
+			double scale_x;
+			double scale_y;
+			switch (Stretch) {
+			case Stretch.None:
+				scale_x = scale_y = 1;
+				break;
+			case Stretch.Fill:
+				scale_x = arrangeSize.Width / child_desired_size.Width;
+				scale_y = arrangeSize.Height / child_desired_size.Height;
+				break;
+			case Stretch.Uniform:
+				scale_x = scale_y = Math.Min(arrangeSize.Width / child_desired_size.Width, arrangeSize.Height / child_desired_size.Height);
+				break;
+			default:
+				scale_x = scale_y = Math.Max(arrangeSize.Width / child_desired_size.Width, arrangeSize.Height / child_desired_size.Height);
+				break;
+			}
+			switch (StretchDirection) {
+			case StretchDirection.DownOnly:
+				if (scale_x > 1 || scale_y > 1)
+					scale_x = scale_y = 1;
+				break;
+			case StretchDirection.UpOnly:
+				if (scale_x < 1 || scale_y < 1)
+					scale_x = scale_y = 1;
+				break;
+			}
+			container_visual.Transform = new ScaleTransform(scale_x, scale_y);
+			return arrangeSize;
 		}
 
 		protected override Visual GetVisualChild(int index) {
-			return base.GetVisualChild(index);
+			if (index == 0)
+				return container_visual;
+			return base.GetVisualChild(-1);
 		}
 
 		protected override Size MeasureOverride(Size constraint) {
-			return base.MeasureOverride(constraint);
+			if (child == null)
+				return new Size(0, 0);
+			child.Measure(constraint);
+			return child.DesiredSize;
 		}
 		#endregion
 	}
