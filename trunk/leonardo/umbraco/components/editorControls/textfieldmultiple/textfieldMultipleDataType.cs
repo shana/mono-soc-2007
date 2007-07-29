@@ -2,7 +2,7 @@ using System;
 
 namespace umbraco.editorControls.textfieldmultiple
 {
-	public class textfieldMultipleDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class textfieldMultipleDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private textfield.TextFieldEditor _textFieldEditor;
 		private interfaces.IData _baseData;
@@ -29,7 +29,7 @@ namespace umbraco.editorControls.textfieldmultiple
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

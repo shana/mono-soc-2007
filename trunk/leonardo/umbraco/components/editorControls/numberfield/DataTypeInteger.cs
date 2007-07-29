@@ -5,7 +5,7 @@ namespace umbraco.editorControls.numberfield
 	/// <summary>
 	/// Summary description for IDataTypenteger.
 	/// </summary>
-	public class IDataTypenteger : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class IDataTypenteger : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;

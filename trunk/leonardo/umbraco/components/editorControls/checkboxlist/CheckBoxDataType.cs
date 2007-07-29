@@ -2,7 +2,7 @@ using System;
 
 namespace umbraco.editorControls.checkboxlist
 {
-	public class checkboxListDataType : cms.businesslogic.datatype.BaseDataType, interfaces.IDataType
+	public class checkboxListDataType : Cms.BusinessLogic.datatype.BaseDataType, interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;

@@ -19,12 +19,12 @@ namespace umbraco.editorControls.tinymce
                 Regex.Matches(html + " ", pattern, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
             foreach (Match tag in tags)
             {
-                if (tag.Value.ToLower().IndexOf("umbraco_macro") == -1)
+                if (tag.Value.ToLower().IndexOf("Umbraco_macro") == -1)
                 {
                     string cleanTag = "<img";
                     int orgWidth = 0, orgHeight = 0;
                     // gather all attributes
-                    // TODO: This should be replaced with a general helper method - but for now we'll wanna leave umbraco.dll alone for this patch
+                    // TODO: This should be replaced with a general helper method - but for now we'll wanna leave Umbraco.dll alone for this patch
                     Hashtable ht = new Hashtable();
                     MatchCollection m =
                         Regex.Matches(tag.Value.Replace(">", " >"),
@@ -121,7 +121,7 @@ namespace umbraco.editorControls.tinymce
         private static string StripSrc(string cleanTag, Hashtable ht)
         {
             string src = helper.FindAttribute(ht, "src");
-            // update orgSrc to remove umbraco reference
+            // update orgSrc to remove Umbraco reference
             if (src.IndexOf("/media/") > -1)
                 src = src.Substring(src.IndexOf("/media/"), src.Length - src.IndexOf("/media/"));
 
@@ -154,7 +154,7 @@ namespace umbraco.editorControls.tinymce
                     newWidth = (int) Math.Round((float) newHeight*(orgWidth/orgHeight));
                 }
 
-                // update orgSrc to remove umbraco reference
+                // update orgSrc to remove Umbraco reference
                 if (orgSrc.IndexOf("/media/") > -1)
                     orgSrc = orgSrc.Substring(orgSrc.IndexOf("/media/"), orgSrc.Length - orgSrc.IndexOf("/media/"));
 

@@ -71,12 +71,12 @@ namespace umbraco.editorControls
 		{
 
 			string tempTitle = "";
-			string deleteLink = " &nbsp; <a href=\"javascript:" + this.ClientID + "_clear();\" style=\"color: red\">" + ui.Text("delete") + "</a> &nbsp; ";
+			string deleteLink = " &nbsp; <a href=\"javascript:" + this.ClientID + "_clear();\" style=\"color: red\">" + UI.Text("delete") + "</a> &nbsp; ";
 			try 
 			{
 				if (this.Text != "") 
 				{
-					tempTitle = new cms.businesslogic.CMSNode(int.Parse(this.Text)).Text;
+					tempTitle = new Cms.BusinessLogic.CMSNode(int.Parse(this.Text)).Text;
 				}
 			} 
 			catch {}
@@ -93,7 +93,7 @@ namespace umbraco.editorControls
 					"\ndocument.getElementById(\"" + this.ClientID + "\").value = treePicker;" +
 					"\nif (treePicker > 0) {"+
                     "\nproxies.CMSNode.GetNodeName.func = " + this.ClientID + "_updateContentTitle;" + 
-			        "\nproxies.CMSNode.GetNodeName('" + BasePages.BasePage.umbracoUserContextID + "', treePicker);" +
+			        "\nproxies.CMSNode.GetNodeName('" + BasePages.BasePage.UmbracoUserContextID + "', treePicker);" +
 					"\n}				" +
 				"\n}"+
 			"\n}			" + 
@@ -109,7 +109,7 @@ namespace umbraco.editorControls
 			// Clear remove link if text if empty
 			if (this.Text == "")
 				deleteLink = "";
-			writer.WriteLine("<span id=\"" + this.ClientID + "_title\"><b>" + tempTitle + "</b>" + deleteLink + "</span><a href=\"javascript:" + this.ClientID + "_chooseId()\">" + ui.Text("choose") + "...</a> &nbsp; <input type=\"hidden\" id=\"" + this.ClientID + "\" name=\"" + this.ClientID + "\" value=\"" + this.Text + "\">");
+			writer.WriteLine("<span id=\"" + this.ClientID + "_title\"><b>" + tempTitle + "</b>" + deleteLink + "</span><a href=\"javascript:" + this.ClientID + "_chooseId()\">" + UI.Text("choose") + "...</a> &nbsp; <input type=\"hidden\" id=\"" + this.ClientID + "\" Name=\"" + this.ClientID + "\" value=\"" + this.Text + "\">");
 			base.Render (writer);
 		}
 		#endregion

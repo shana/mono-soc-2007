@@ -5,7 +5,7 @@ namespace umbraco.editorControls.label
 	/// <summary>
 	/// Summary description for DataTypeNoEdit.
 	/// </summary>
-	public class DataTypeNoEdit : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class DataTypeNoEdit : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 
 			private interfaces.IDataEditor _Editor;
@@ -31,7 +31,7 @@ namespace umbraco.editorControls.label
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

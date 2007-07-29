@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 
 // GPL Licensed work
-// (c) Christian Palm + umbraco crew 2005
+// (c) Christian Palm + Umbraco crew 2005
 // Kudos to Christian Palm for finally making a 
 // Tidy solution that just works
 // palmdk@gmail.com

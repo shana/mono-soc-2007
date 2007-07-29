@@ -8,10 +8,10 @@ namespace umbraco.editorControls.folderbrowser
 	/// <summary>
 	/// Summary description for DataTypeUploadField.
 	/// </summary>
-	public class DataTypeFolderBrowser: cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class DataTypeFolderBrowser: Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
-		private cms.businesslogic.datatype.DefaultData _baseData;
+		private Cms.BusinessLogic.datatype.DefaultData _baseData;
 		private interfaces.IDataPrevalue _prevalueeditor;
 
 		public override interfaces.IDataEditor DataEditor 
@@ -29,7 +29,7 @@ namespace umbraco.editorControls.folderbrowser
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

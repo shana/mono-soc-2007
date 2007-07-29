@@ -20,9 +20,9 @@ namespace umbraco.editorControls.ultraSimpleMailer
 		private DropDownList _dropdownlistMG;
 				
 		// referenced datatype
-		private cms.businesslogic.datatype.BaseDataType _datatype;
+		private Cms.BusinessLogic.datatype.BaseDataType _datatype;
 
-		public mailerConfiguratorPreValueEditor(cms.businesslogic.datatype.BaseDataType DataType) 
+		public mailerConfiguratorPreValueEditor(Cms.BusinessLogic.datatype.BaseDataType DataType) 
 		{
 			// state it knows its datatypedefinitionid
 			_datatype = DataType;
@@ -56,7 +56,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 
 
 			// Get all membergroups
-			foreach(cms.businesslogic.member.MemberGroup mg in cms.businesslogic.member.MemberGroup.GetAll)
+			foreach(Cms.BusinessLogic.Member.MemberGroup mg in Cms.BusinessLogic.Member.MemberGroup.GetAll)
 				_dropdownlistMG.Items.Add(new ListItem(mg.Text, mg.Id.ToString()));
 		}
 		
@@ -95,8 +95,8 @@ namespace umbraco.editorControls.ultraSimpleMailer
 			SqlParameter[] SqlParams = new SqlParameter[] {
 																new SqlParameter("@value",data),
 																new SqlParameter("@dtdefid",_datatype.DataTypeDefinitionId)};
-			SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN,CommandType.Text,"delete from cmsDataTypePrevalues where datatypenodeid = @dtdefid",SqlParams);
-			SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN,CommandType.Text,"insert into cmsDataTypePrevalues (datatypenodeid,[value],sortorder,alias) values (@dtdefid,@value,0,'')",SqlParams);
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN,CommandType.Text,"delete from cmsDataTypePrevalues where datatypenodeid = @dtdefid",SqlParams);
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(GlobalSettings.DbDSN,CommandType.Text,"insert into cmsDataTypePrevalues (datatypenodeid,[value],sortorder,alias) values (@dtdefid,@value,0,'')",SqlParams);
 		}
 
 		protected override void Render(HtmlTextWriter writer)
@@ -105,7 +105,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 			writer.WriteLine("<tr><th>Database datatype</th><td>");
 			_dropdownlist.RenderControl(writer);
 			writer.Write("</td></tr>");
-			writer.Write("<tr><th>Sender name:</th><td>");
+			writer.Write("<tr><th>Sender Name:</th><td>");
 			_textboxSender.RenderControl(writer);
 			writer.Write("</td></tr>");
 			writer.Write("<tr><th>Sender email:</th><td>");
@@ -122,7 +122,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 			get 
 			{
 			    object conf =
-			        SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
+			        Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text,
 			                                "select value from cmsDataTypePrevalues where datatypenodeid = @datatypenodeid",
 			                                new SqlParameter("@datatypenodeid", _datatype.DataTypeDefinitionId));
                 if (conf != null)

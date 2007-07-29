@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.ApplicationBlocks.Data;
 
-namespace umbraco.macroRenderings
+namespace Umbraco.macroRenderings
 {
 	/// <summary>
 	/// Summary description for tabPicker.
@@ -71,7 +71,7 @@ namespace umbraco.macroRenderings
 				this.SelectionMode = System.Web.UI.WebControls.ListSelectionMode.Single;
 			}
 
-			SqlDataReader dr = SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select distinct text from cmsTab order by text");
+			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select distinct text from cmsTab order by text");
 			while (dr.Read())
 			{
 				System.Web.UI.WebControls.ListItem li = new System.Web.UI.WebControls.ListItem(dr["text"].ToString(), dr["text"].ToString().ToLower());

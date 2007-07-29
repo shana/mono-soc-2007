@@ -6,16 +6,16 @@ using Microsoft.ApplicationBlocks.Data;
 namespace umbraco.editorControls
 {
 	/// <summary>
-	/// Summary description for cms.businesslogic.datatype.DefaultDataKeyValue.
+	/// Summary description for cms.Umbraco.Cms.BusinessLogic.datatype.DefaultDataKeyValue.
 	/// </summary>
-    public class DefaultDataKeyValue : cms.businesslogic.datatype.DefaultData
+    public class DefaultDataKeyValue : Cms.BusinessLogic.datatype.DefaultData
 	{
-		public DefaultDataKeyValue(cms.businesslogic.datatype.BaseDataType DataType)  : base(DataType)
+		public DefaultDataKeyValue(Cms.BusinessLogic.datatype.BaseDataType DataType)  : base(DataType)
 		{}
 		/// <summary>
 		/// Ov
 		/// </summary>
-		/// <param name="d"></param>
+		/// <param Name="d"></param>
 		/// <returns></returns>
 		
 		public override System.Xml.XmlNode ToXMl(System.Xml.XmlDocument d)
@@ -24,7 +24,7 @@ namespace umbraco.editorControls
 			string v = "";
 			try 
 			{
-				SqlDataReader dr = SqlHelper.ExecuteReader(
+				SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(
 					umbraco.GlobalSettings.DbDSN,
 					CommandType.Text,
 					"Select [value] from cmsDataTypeprevalues where id in (" + Value.ToString() +")");

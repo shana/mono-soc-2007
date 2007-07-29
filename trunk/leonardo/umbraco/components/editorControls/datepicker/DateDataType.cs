@@ -5,7 +5,7 @@ namespace umbraco.editorControls.datepicker
 	/// <summary>
 	/// Summary description for DateDataType.
 	/// </summary>
-	public class DateDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class DateDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;

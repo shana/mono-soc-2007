@@ -5,7 +5,7 @@ namespace umbraco.editorControls.yesno
 	/// <summary>
 	/// Summary description for YesNoDataType.
 	/// </summary>
-	public class YesNoDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class YesNoDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;
@@ -26,7 +26,7 @@ namespace umbraco.editorControls.yesno
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

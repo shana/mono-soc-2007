@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 
-namespace umbraco.macroRenderings
+namespace Umbraco.macroRenderings
 {
 	/// <summary>
 	/// Summary description for contentType.
@@ -74,7 +74,7 @@ namespace umbraco.macroRenderings
 
 			// This should be replaced by business logic, but right now it would cause a circular reference if
 			// umbRuntime was added as a reference to this project
-			foreach(cms.businesslogic.web.DocumentType dt in cms.businesslogic.web.DocumentType.GetAll)
+			foreach(Cms.BusinessLogic.web.DocumentType dt in Cms.BusinessLogic.web.DocumentType.GetAll)
 			{
 				System.Web.UI.WebControls.ListItem li = new System.Web.UI.WebControls.ListItem(dt.Text, dt.Id.ToString());
 				if (((string) (", "+_value+",")).IndexOf(", "+dt.Id.ToString()+",") > -1)

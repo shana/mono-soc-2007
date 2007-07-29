@@ -25,12 +25,12 @@ namespace umbraco.editorControls.tinymce
         private RegularExpressionValidator _heightValidator = new RegularExpressionValidator();
 				
 		// referenced datatype
-		private cms.businesslogic.datatype.BaseDataType _datatype;
+		private Cms.BusinessLogic.datatype.BaseDataType _datatype;
         private string _selectedButtons = "";
         private string _advancedUsers = "";
         private string _stylesheets = "";
 
-        public tinyMCEPreValueConfigurator(cms.businesslogic.datatype.BaseDataType DataType) 
+        public tinyMCEPreValueConfigurator(Cms.BusinessLogic.datatype.BaseDataType DataType) 
 		{
 			// state it knows its datatypedefinitionid
 			_datatype = DataType;
@@ -155,7 +155,7 @@ namespace umbraco.editorControls.tinymce
                 }
 
                 // add stylesheets
-                foreach (cms.businesslogic.web.StyleSheet st in cms.businesslogic.web.StyleSheet.GetAll())
+                foreach (Cms.BusinessLogic.web.StyleSheet st in Cms.BusinessLogic.web.StyleSheet.GetAll())
                 {
                     ListItem li = new ListItem(st.Text, st.Id.ToString());
                     if (("," + _stylesheets + ",").IndexOf("," + st.Id.ToString() + ",") > -1)
@@ -181,7 +181,7 @@ namespace umbraco.editorControls.tinymce
 
 		public void Save() 
 		{
-            _datatype.DBType = (cms.businesslogic.datatype.DBTypes)Enum.Parse(typeof(cms.businesslogic.datatype.DBTypes), _dropdownlist.SelectedValue, true);
+            _datatype.DBType = (Cms.BusinessLogic.datatype.DBTypes)Enum.Parse(typeof(Cms.BusinessLogic.datatype.DBTypes), _dropdownlist.SelectedValue, true);
 
 			// Generate data-string
             string data = ",";
@@ -227,8 +227,8 @@ namespace umbraco.editorControls.tinymce
 			SqlParameter[] SqlParams = new SqlParameter[] {
 																new SqlParameter("@value",data),
 																new SqlParameter("@dtdefid",_datatype.DataTypeDefinitionId)};
-			SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN,CommandType.Text,"delete from cmsDataTypePrevalues where datatypenodeid = @dtdefid",SqlParams);
-			SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN,CommandType.Text,"insert into cmsDataTypePrevalues (datatypenodeid,[value],sortorder,alias) values (@dtdefid,@value,0,'')",SqlParams);
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN,CommandType.Text,"delete from cmsDataTypePrevalues where datatypenodeid = @dtdefid",SqlParams);
+			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN,CommandType.Text,"insert into cmsDataTypePrevalues (datatypenodeid,[value],sortorder,alias) values (@dtdefid,@value,0,'')",SqlParams);
 		}
 
 		protected override void Render(HtmlTextWriter writer)
@@ -267,7 +267,7 @@ namespace umbraco.editorControls.tinymce
 			{
                 try
                 {
-                    return SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select value from cmsDataTypePrevalues where datatypenodeid = @datatypenodeid", new SqlParameter("@datatypenodeid", _datatype.DataTypeDefinitionId)).ToString();
+                    return Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(GlobalSettings.DbDSN, CommandType.Text, "select value from cmsDataTypePrevalues where datatypenodeid = @datatypenodeid", new SqlParameter("@datatypenodeid", _datatype.DataTypeDefinitionId)).ToString();
                 }
                 catch
                 {

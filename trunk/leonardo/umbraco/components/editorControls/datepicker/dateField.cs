@@ -97,7 +97,7 @@ namespace umbraco.editorControls
 		/// <summary> 
 		/// Render this control to the output parameter specified.
 		/// </summary>
-		/// <param name="output"> The HTML writer to write out to </param>
+		/// <param Name="output"> The HTML writer to write out to </param>
 		protected override void Render(HtmlTextWriter writer)
 		{
 			base.Render (writer);

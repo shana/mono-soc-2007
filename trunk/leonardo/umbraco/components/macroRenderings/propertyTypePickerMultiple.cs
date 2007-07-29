@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.macroRenderings
+namespace Umbraco.macroRenderings
 {
 	/// <summary>
 	/// Summary description for propertyTypePickerMultiple.

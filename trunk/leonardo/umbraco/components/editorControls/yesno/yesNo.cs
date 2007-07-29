@@ -57,15 +57,15 @@ namespace umbraco.editorControls
 		protected override void OnInit(EventArgs e)
 		{
 			base.OnInit (e);
-			base.Items.Add(new ListItem(ui.Text("yes"), "1"));
-			base.Items.Add(new ListItem(ui.Text("no"), "0"));
+			base.Items.Add(new ListItem(UI.Text("yes"), "1"));
+			base.Items.Add(new ListItem(UI.Text("no"), "0"));
 		}
 
 	
 		/// <summary> 
 		/// Render this control to the output parameter specified.
 		/// </summary>
-		/// <param name="output"> The HTML writer to write out to </param>
+		/// <param Name="output"> The HTML writer to write out to </param>
 		protected override void Render(HtmlTextWriter output)
 		{
 			if (Text != null) {

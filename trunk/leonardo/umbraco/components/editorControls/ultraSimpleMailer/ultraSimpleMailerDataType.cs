@@ -5,10 +5,10 @@ namespace umbraco.editorControls.ultraSimpleMailer
 	/// <summary>
 	/// Summary description for ultraSimpleMailerDataType.
 	/// </summary>
-	public class ultraSimpleMailerDataType : cms.businesslogic.datatype.BaseDataType,interfaces.IDataType
+	public class ultraSimpleMailerDataType : Cms.BusinessLogic.datatype.BaseDataType,interfaces.IDataType
 	{
 		private ultraSimpleMailerEditor _Editor;
-		private cms.businesslogic.datatype.DefaultData _baseData;
+		private Cms.BusinessLogic.datatype.DefaultData _baseData;
 		private mailerConfiguratorPreValueEditor _prevalueeditor;
 
 		public override interfaces.IDataEditor DataEditor 
@@ -29,7 +29,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 			get 
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

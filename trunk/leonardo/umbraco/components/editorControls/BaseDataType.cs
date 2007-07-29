@@ -39,7 +39,7 @@ namespace umbraco.editorControls
 			}
 			set {
 				_DBType = value;
-				 SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN,CommandType.Text,"update cmsDataType set  dbType = '" + value.ToString() + "' where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
+				 Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(umbraco.GlobalSettings.DbDSN,CommandType.Text,"update cmsDataType set  dbType = '" + value.ToString() + "' where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
 				
 			}
 		}
@@ -52,7 +52,7 @@ namespace umbraco.editorControls
 			get {
 				if (_datafield == "") 
 				{
-					string dbtypestr = SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN,CommandType.Text,"select dbType from cmsDataType where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
+					string dbtypestr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN,CommandType.Text,"select dbType from cmsDataType where nodeId = @datadefinitionid",new SqlParameter[] {new SqlParameter("@datadefinitionid",_datatypedefinitionid)}).ToString();
 					DBTypes DataTypeSQLType = (DBTypes) Enum.Parse(typeof(DBTypes),dbtypestr,true);
 					_DBType = DataTypeSQLType;
 					switch (DataTypeSQLType) 

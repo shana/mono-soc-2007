@@ -23,7 +23,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 
 		public static int GetTotalReceiptients(umbraco.cms.businesslogic.member.MemberGroup Group) 
 		{
-			return int.Parse(SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN, CommandType.Text, "select count(*) from cmsMember inner join cmsMember2memberGroup on cmsmember.nodeId = cmsMember2MemberGroup.member where memberGroup = @memberGroupId", new SqlParameter("@memberGroupId", Group.Id)).ToString());
+			return int.Parse(Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteScalar(umbraco.GlobalSettings.DbDSN, CommandType.Text, "select count(*) from cmsMember inner join cmsMember2memberGroup on cmsmember.nodeId = cmsMember2MemberGroup.member where memberGroup = @memberGroupId", new SqlParameter("@memberGroupId", Group.Id)).ToString());
 		}
 
 		public static void SendTestmail(string email, 
@@ -50,7 +50,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 			
 			// Embedded emails ;) added by DB, 2005-10-04
 
-			EmailMessage message = mailerHelper.CreateEmbeddedEmail(sb.ToString(), cms.businesslogic.web.Document.GetContentFromVersion(Property.VersionId).Id);
+			EmailMessage message = mailerHelper.CreateEmbeddedEmail(sb.ToString(), Cms.BusinessLogic.web.Document.GetContentFromVersion(Property.VersionId).Id);
             			
 			message.FromAddress = new EmailAddress(fromEmail, fromName);
 			message.ToAddresses.Add(new EmailAddress(email));
@@ -86,7 +86,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 			t.ParseWithControls(new umbraco.page(d.Id, d.Version)).RenderControl(writer);
 
 
-			EmailMessage message = mailerHelper.CreateEmbeddedEmail(sb.ToString(), cms.businesslogic.web.Document.GetContentFromVersion(Property.VersionId).Id);
+			EmailMessage message = mailerHelper.CreateEmbeddedEmail(sb.ToString(), Cms.BusinessLogic.web.Document.GetContentFromVersion(Property.VersionId).Id);
             			
 			message.FromAddress = new EmailAddress(fromEmail, fromName);
 			message.Subject = subject;
@@ -96,7 +96,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 			int counter = 0;
 			System.Text.StringBuilder sbStatus = new System.Text.StringBuilder();
 			sbStatus.Append("The Newsletter '" + d.Text + "' was starting at " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + "\n");
-			using(SqlDataReader dr = SqlHelper.ExecuteReader(umbraco.GlobalSettings.DbDSN, CommandType.Text, "select text, email from cmsMember inner join umbracoNode node on node.id = cmsMember.nodeId inner join cmsMember2memberGroup on cmsmember.nodeId = cmsMember2MemberGroup.member where memberGroup = @memberGroupId", new SqlParameter("@memberGroupId", Group.Id)))
+			using(SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(umbraco.GlobalSettings.DbDSN, CommandType.Text, "select text, email from cmsMember inner join umbracoNode node on node.id = cmsMember.nodeId inner join cmsMember2memberGroup on cmsmember.nodeId = cmsMember2MemberGroup.member where memberGroup = @memberGroupId", new SqlParameter("@memberGroupId", Group.Id)))
 			{
 				while(dr.Read())
 				{

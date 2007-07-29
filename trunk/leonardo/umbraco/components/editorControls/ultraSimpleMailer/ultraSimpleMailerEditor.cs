@@ -29,13 +29,13 @@ namespace umbraco.editorControls.ultraSimpleMailer
 
 			// init progressbar
 			pb = new umbraco.controls.progressBar();
-			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "UltraSimpleMailerJs", "<script language='javascript' src='/umbraco_client/ultraSimpleMailer/javascript.js'></script>");
+			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "UltraSimpleMailerJs", "<script language='javascript' src='/Umbraco_client/ultraSimpleMailer/javascript.js'></script>");
 			string[] config = _configuration.Split("|".ToCharArray());
-			cms.businesslogic.member.MemberGroup mg = new umbraco.cms.businesslogic.member.MemberGroup(int.Parse(config[2]));
+			Cms.BusinessLogic.Member.MemberGroup mg = new umbraco.cms.businesslogic.member.MemberGroup(int.Parse(config[2]));
 			string totalReceip = mailerLogic.GetTotalReceiptients(mg).ToString();
 			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "ultraSimpleMailerAjax", "<script language='javascript' src='webservices/ajax.js'></script><script language='javascript' src='webservices/GetJavaScriptProxy.aspx?service=progressStatus.asmx'></script><script>\nultraSimpleMailerTotalMails = " + totalReceip + ";\nvar ultraSimpleMailerId = 'ultraSimpleMailerProgress" + this._data.NodeId + "';</script>");
-			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "progressBar", "<script language='javascript' src='/umbraco_client/progressBar/javascript.js'></script>");
-			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "progressBarCss", "<LINK href=\"/umbraco_client/progressBar/style.css\" type=\"text/css\" rel=\"stylesheet\">");
+			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "progressBar", "<script language='javascript' src='/Umbraco_client/progressBar/javascript.js'></script>");
+			Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "progressBarCss", "<LINK href=\"/Umbraco_client/progressBar/style.css\" type=\"text/css\" rel=\"stylesheet\">");
 		}
 
 		protected override void Render(System.Web.UI.HtmlTextWriter writer)
@@ -43,10 +43,10 @@ namespace umbraco.editorControls.ultraSimpleMailer
 
 			// Debug - needs logic
 			string[] config = _configuration.Split("|".ToCharArray());
-			cms.businesslogic.member.MemberGroup mg = new umbraco.cms.businesslogic.member.MemberGroup(int.Parse(config[2]));
+			Cms.BusinessLogic.Member.MemberGroup mg = new umbraco.cms.businesslogic.member.MemberGroup(int.Parse(config[2]));
 
-			writer.WriteLine("<input type=\"hidden\" name=\"" + this.ClientID + "_doSend\" id=\"" + this.ClientID + "_doSend\" value=\"" + umbraco.helper.Request(this.ClientID + "_doSend") + "\" />");
-			writer.WriteLine("<input type=\"hidden\" name=\"" + this.ClientID + "_doTest\" id=\"" + this.ClientID + "_doTest\" value=\"" + umbraco.helper.Request(this.ClientID + "_doTest") + "\" />");
+			writer.WriteLine("<input type=\"hidden\" Name=\"" + this.ClientID + "_doSend\" id=\"" + this.ClientID + "_doSend\" value=\"" + umbraco.helper.Request(this.ClientID + "_doSend") + "\" />");
+			writer.WriteLine("<input type=\"hidden\" Name=\"" + this.ClientID + "_doTest\" id=\"" + this.ClientID + "_doTest\" value=\"" + umbraco.helper.Request(this.ClientID + "_doTest") + "\" />");
 
 			if (umbraco.helper.Request(this.ClientID + "_doTest") == "" && umbraco.helper.Request(this.ClientID + "_doSend") == "")
 				base.Render (writer);
@@ -60,13 +60,13 @@ namespace umbraco.editorControls.ultraSimpleMailer
 					if (umbraco.helper.Request(this.ClientID + "_doTest") != "") 
 					{
 						writer.WriteLine("<h3 style=\"margin-left: -1px;\">Send newsletter to test...</h3><br/>");
-						mailerLogic.SendTestmail(umbraco.helper.Request(this.ClientID + "_test_rcp"), new cms.businesslogic.property.Property(_data.PropertyId), config[0], config[1], true);
+						mailerLogic.SendTestmail(umbraco.helper.Request(this.ClientID + "_test_rcp"), new Cms.BusinessLogic.property.Property(_data.PropertyId), config[0], config[1], true);
 						writer.WriteLine("Test mail sent to: <b>" + umbraco.helper.Request(this.ClientID + "_test_rcp") + "</b><br/>");
 					} 
 					else 
 					{
 						writer.WriteLine("<h3 style=\"margin-left: -1px;\">Send newsletter to all...</h3><br/>");
-						mailerLogic.SendMail(mg, new cms.businesslogic.property.Property(_data.PropertyId), config[0], config[1], true);
+						mailerLogic.SendMail(mg, new Cms.BusinessLogic.property.Property(_data.PropertyId), config[0], config[1], true);
 						writer.WriteLine("Sent...<br/>");
 
 						}
@@ -76,8 +76,8 @@ namespace umbraco.editorControls.ultraSimpleMailer
 					if (umbraco.helper.Request(this.ClientID + "_doTest") != "")  
 					{
 						writer.WriteLine("<h3 style=\"margin-left: -1px;\">Send newsletter to test...</h3><br/>");
-						writer.WriteLine("Send test to: <input type=\"text\" name=\"" + this.ClientID + "_test_rcp\" id=\"" + this.ClientID + "_test_rcp\"/>");
-						writer.WriteLine("<input type=\"submit\" name=\"" + this.ClientID + "_sendButton\" class=\"guiInputButton\" value=\"Send\"/>");
+						writer.WriteLine("Send test to: <input type=\"text\" Name=\"" + this.ClientID + "_test_rcp\" id=\"" + this.ClientID + "_test_rcp\"/>");
+						writer.WriteLine("<input type=\"submit\" Name=\"" + this.ClientID + "_sendButton\" class=\"guiInputButton\" value=\"Send\"/>");
 					}
 					else 
 					{
@@ -100,7 +100,7 @@ namespace umbraco.editorControls.ultraSimpleMailer
 						"<div id=\"ultraSimpleMailerFormDiv\">");
 						writer.WriteLine("<h3 style=\"margin-left: -1px;\">Send newsletter to all...</h3><br/>");
 						writer.WriteLine("Please confirm that you want to send this message to <b>" + mailerLogic.GetTotalReceiptients(mg).ToString() + "</b> recipients<br/>");
-						writer.WriteLine("<input type=\"checkbox\" name=\"" + this.ClientID + "_sendButton\" id=\"" + this.ClientID + "_sendButton\" value=\"1\"/> Yes<br/>");
+						writer.WriteLine("<input type=\"checkbox\" Name=\"" + this.ClientID + "_sendButton\" id=\"" + this.ClientID + "_sendButton\" value=\"1\"/> Yes<br/>");
 						writer.WriteLine("<input style=\"margin-left: -10px;\" type=\"button\" onClick=\"if (document.getElementById('" + this.ClientID + "_sendButton').checked) {ultraSimpleMailerDoSend('" + this.ClientID + "');} else {alert('Please confirm');}\" value=\"Send\"/>");
 						writer.WriteLine("</div>");
 					}
@@ -126,14 +126,14 @@ namespace umbraco.editorControls.ultraSimpleMailer
 				// Add the two new buttons
 				MenuIconI menuItemSend = new MenuIconClass();						
 				menuItemSend.OnClickCommand = "ultraSimpleMailer_doSend('" + this.ClientID + "')";
-				menuItemSend.ImageURL = "/umbraco_client/ultraSimpleMailer/images/newsletterSend.gif";
+				menuItemSend.ImageURL = "/Umbraco_client/ultraSimpleMailer/images/newsletterSend.gif";
 				menuItemSend.AltText = "Send newsletter to all";
 				menuItemSend.ID = "sendToAll";
 				buttons.Insert(0, menuItemSend);
 				
 				MenuIconI menuItemTest = new MenuIconClass();						
 				menuItemTest.OnClickCommand = "ultraSimpleMailer_doSendTest('" + this.ClientID + "')";
-				menuItemTest.ImageURL = "/umbraco_client/ultraSimpleMailer/images/newsletterSendTest.gif";
+				menuItemTest.ImageURL = "/Umbraco_client/ultraSimpleMailer/images/newsletterSendTest.gif";
 				menuItemTest.AltText = "Test newsletter by sending to a mail address you specify";
 				menuItemTest.ID = "sendToTest";
 				buttons.Insert(1, menuItemTest);

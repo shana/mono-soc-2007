@@ -26,10 +26,14 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\umbraco\presentation\bin\</OutputPath>
@@ -104,8 +108,8 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\umbraco\businesslogic\umbraco.businesslogic.csproj">
-      <Name>umbraco.businesslogic</Name>
+    <ProjectReference Include="..\..\umbraco\businesslogic\Umbraco.BusinessLogic.csproj">
+      <Name>Umbraco.BusinessLogic</Name>
       <Project>{E469A9CE-1BEC-423F-AC44-713CD72457EA}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
@@ -117,11 +121,6 @@
     <ProjectReference Include="..\..\umbraco\interfaces\umbraco.interfaces.csproj">
       <Name>umbraco.interfaces</Name>
       <Project>{511F6D8D-7717-440A-9A57-A507E9A8B27F}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\..\umbraco\presentation\umbraco.presentation.csproj">
-      <Name>umbraco.presentation</Name>
-      <Project>{651E1350-91B6-44B7-BD60-7207006D7003}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
     <ProjectReference Include="..\umbracoControls\Controls\umbraco.uicontrols.csproj">

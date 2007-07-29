@@ -15,7 +15,7 @@ namespace umbraco.editorControls.tinymce.webcontrol
 {
     internal class TinyMCE : WebControl, IPostBackDataHandler
     {
-        private string _javascriptLocation = "/umbraco_client/tinymce";
+        private string _javascriptLocation = "/Umbraco_client/tinymce";
         private string _coreFile = "/tiny_mce.js";
         private int _rows = 13;
         private int _cols = 60;
@@ -98,7 +98,7 @@ namespace umbraco.editorControls.tinymce.webcontrol
         /// <summary>
         /// Draws the editor
         /// </summary>
-        /// <param name="outWriter">The writer to draw the editor to</param>
+        /// <param Name="outWriter">The writer to draw the editor to</param>
         protected override void Render(HtmlTextWriter writer)
         {
             writer.WriteLine("<!-- tinyMCE -->\n");
@@ -125,10 +125,10 @@ namespace umbraco.editorControls.tinymce.webcontrol
             writer.WriteLine("<!-- /tinyMCE -->\n");
 
             if (Cols > 0)
-                writer.Write("<textarea class=\"tinymce" + UniqueID +  "\" id=\"" + UniqueID + "\" name=\"" + UniqueID + "\" cols=\"" + Cols + "\" rows=\"" +
+                writer.Write("<textarea class=\"tinymce" + UniqueID +  "\" id=\"" + UniqueID + "\" Name=\"" + UniqueID + "\" cols=\"" + Cols + "\" rows=\"" +
                              Rows + "\" style=\"width: 100%\">\n");
             else
-                writer.Write("<textarea class=\"tinymce" + UniqueID + "\" id=\"" + UniqueID + "\" name=\"" + UniqueID + "\">\n");
+                writer.Write("<textarea class=\"tinymce" + UniqueID + "\" id=\"" + UniqueID + "\" Name=\"" + UniqueID + "\">\n");
 
 
             // if the document exists, parse it for macros
@@ -157,7 +157,7 @@ namespace umbraco.editorControls.tinymce.webcontrol
                     string orgSrc = tag.Groups["mediaString"].Value;
 
                     // gather all attributes
-                    // TODO: This should be replaced with a general helper method - but for now we'll wanna leave umbraco.dll alone for this patch
+                    // TODO: This should be replaced with a general helper method - but for now we'll wanna leave Umbraco.dll alone for this patch
                     Hashtable ht = new Hashtable();
                     MatchCollection m =
                         Regex.Matches(tag.Value.Replace(">", " >"),
@@ -240,7 +240,7 @@ namespace umbraco.editorControls.tinymce.webcontrol
 
         private string getIdFromSource(string src, string localMediaPath)
         {
-            // important - remove out the umbraco path + media!
+            // important - remove out the Umbraco path + media!
             src = src.Replace(localMediaPath, "");
 
             string _id = "";
@@ -353,7 +353,7 @@ namespace umbraco.editorControls.tinymce.webcontrol
         /// <summary>
         /// Event for text change.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param Name="e"></param>
         protected virtual void OnTextChanged(EventArgs e)
         {
             if (Events != null)
@@ -369,8 +369,8 @@ namespace umbraco.editorControls.tinymce.webcontrol
         /// <summary>
         /// Called when a postback occurs on the page the control is placed at
         /// </summary>
-        /// <param name="postDataKey">The key of the editor data</param>
-        /// <param name="postCollection">All the posted data</param>
+        /// <param Name="postDataKey">The key of the editor data</param>
+        /// <param Name="postCollection">All the posted data</param>
         /// <returns></returns>
         bool IPostBackDataHandler.LoadPostData(string postDataKey, NameValueCollection postCollection)
         {

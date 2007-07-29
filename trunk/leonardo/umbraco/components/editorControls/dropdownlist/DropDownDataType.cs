@@ -5,7 +5,7 @@ namespace umbraco.editorControls.dropdownlist
 	/// <summary>
 	/// Summary description for ColorPickerDataType.
 	/// </summary>
-	public class DropdownListDataType : cms.businesslogic.datatype.BaseDataType, interfaces.IDataType
+	public class DropdownListDataType : Cms.BusinessLogic.datatype.BaseDataType, interfaces.IDataType
 	{
 		private interfaces.IDataEditor _Editor;
 		private interfaces.IData _baseData;

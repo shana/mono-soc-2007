@@ -5,7 +5,7 @@ namespace umbraco.editorControls.dictionaryPicker
 	/// <summary>
 	/// Summary description for dictionaryPickerDataType.
 	/// </summary>
-	public class dictionaryPickerDataType : cms.businesslogic.datatype.BaseDataType, interfaces.IDataType
+	public class dictionaryPickerDataType : Cms.BusinessLogic.datatype.BaseDataType, interfaces.IDataType
 	{
 
 		private interfaces.IDataEditor _Editor;
@@ -25,7 +25,7 @@ namespace umbraco.editorControls.dictionaryPicker
 			get
 			{
 				if (_baseData == null)
-					_baseData = new cms.businesslogic.datatype.DefaultData(this);
+					_baseData = new Cms.BusinessLogic.datatype.DefaultData(this);
 				return _baseData;
 			}
 		}

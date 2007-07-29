@@ -3,7 +3,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.ComponentModel;
 
-namespace umbraco.macroRenderings
+namespace Umbraco.macroRenderings
 {
 	/// <summary>
 	/// Generates a radiolist of yes and no for boolean fields
@@ -46,7 +46,7 @@ namespace umbraco.macroRenderings
 		/// <summary> 
 		/// Render this control to the output parameter specified.
 		/// </summary>
-		/// <param name="output"> The HTML writer to write out to </param>
+		/// <param Name="output"> The HTML writer to write out to </param>
 		protected override void Render(HtmlTextWriter output)
 		{
 			if (_value != null) 

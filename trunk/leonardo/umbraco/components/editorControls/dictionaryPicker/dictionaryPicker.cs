@@ -83,7 +83,7 @@ namespace umbraco.editorControls.dictionaryPicker
 			{
 				// Find associated domain
 				int languageId = 0;
-                cms.businesslogic.web.Domain[] domains = library.GetCurrentDomains(((umbraco.cms.businesslogic.datatype.DefaultData)_data).NodeId);
+                Cms.BusinessLogic.web.Domain[] domains = library.GetCurrentDomains(((umbraco.cms.businesslogic.datatype.DefaultData)_data).NodeId);
 				if (domains != null) 
 					if (domains.Length > -1) 
 						languageId = domains[0].Language.id;
@@ -96,9 +96,9 @@ namespace umbraco.editorControls.dictionaryPicker
 
 		private void addDictionaries(string indent, string key, int language) 
 		{
-			cms.businesslogic.Dictionary.DictionaryItem di = new cms.businesslogic.Dictionary.DictionaryItem(key);
+			Cms.BusinessLogic.Dictionary.DictionaryItem di = new Cms.BusinessLogic.Dictionary.DictionaryItem(key);
 
-			foreach(cms.businesslogic.Dictionary.DictionaryItem item in di.Children) 
+			foreach(Cms.BusinessLogic.Dictionary.DictionaryItem item in di.Children) 
 			{
 				ListItem li;
 				if (language != 0)

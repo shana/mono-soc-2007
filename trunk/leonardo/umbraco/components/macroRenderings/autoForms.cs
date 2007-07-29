@@ -1,6 +1,6 @@
 using System;
 
-namespace umbraco.macroRenderings
+namespace Umbraco.macroRenderings
 {
 	/// <summary>
 	/// Summary description for autoForms.
@@ -18,7 +18,7 @@ namespace umbraco.macroRenderings
 
 		protected override void Render(System.Web.UI.HtmlTextWriter writer)
 		{
-			writer.WriteLine("<input type=\"hidden\" name=\"" + this.ID + "\" value=\"" + this.Value + "\"/>");
+			writer.WriteLine("<input type=\"hidden\" Name=\"" + this.ID + "\" value=\"" + this.Value + "\"/>");
 		}
 
 		#region IMacroGuiRendering Members

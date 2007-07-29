@@ -47,7 +47,7 @@ namespace umbraco.editorControls
 			foreach (string key in _prevalues.Keys) {
 				this.Items.Add(new ListItem(_prevalues[key].ToString(),key));						
 			}
-			base.Items.Insert(0, new ListItem(ui.Text("choose") + "...",""));
+			base.Items.Insert(0, new ListItem(UI.Text("choose") + "...",""));
 			try 
 			{
 				if (!Page.IsPostBack)

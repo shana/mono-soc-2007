@@ -5,9 +5,9 @@ namespace umbraco.editorControls.datepicker
 	/// <summary>
 	/// Summary description for DateData.
 	/// </summary>
-	public class DateData : cms.businesslogic.datatype.DefaultData
+	public class DateData : Cms.BusinessLogic.datatype.DefaultData
 	{
-		public DateData(cms.businesslogic.datatype.BaseDataType DataType) : base(DataType) {}
+		public DateData(Cms.BusinessLogic.datatype.BaseDataType DataType) : base(DataType) {}
 
 		public override System.Xml.XmlNode ToXMl(System.Xml.XmlDocument d)
 		{

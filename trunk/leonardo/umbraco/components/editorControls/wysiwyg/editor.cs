@@ -25,9 +25,9 @@ namespace umbraco.editorControls.wysiwyg
 
         private bool _browserIsCompatible = false;
 
-        private cms.businesslogic.datatype.DefaultData _data;
+        private Cms.BusinessLogic.datatype.DefaultData _data;
 
-        public editor(cms.businesslogic.datatype.DefaultData Data)
+        public editor(Cms.BusinessLogic.datatype.DefaultData Data)
         {
             _data = Data;
 
@@ -64,7 +64,7 @@ namespace umbraco.editorControls.wysiwyg
                 _text = " " + value + " ";
                 if (_text.Trim() != "")
                 {
-                    // Check for umbraco tags
+                    // Check for Umbraco tags
                     string pattern = @"[^'](<\?UMBRACO_MACRO\W*[^>]*/>)[^']";
                     MatchCollection tags =
                         Regex.Matches(_text, pattern, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
@@ -102,7 +102,7 @@ namespace umbraco.editorControls.wysiwyg
             set
             {
                 base.Value = " " + value + " ";
-                // Check for umbraco tags
+                // Check for Umbraco tags
                 string pattern = @"[^'](<\?UMBRACO_MACRO\W*[^>]*/>)[^']";
                 MatchCollection tags =
                     Regex.Matches(base.Value + " ", pattern,
@@ -126,12 +126,12 @@ namespace umbraco.editorControls.wysiwyg
                 Regex.Matches(html + " ", pattern, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
             foreach (Match tag in tags)
             {
-                if (tag.Value.ToLower().IndexOf("umbraco_macro") == -1)
+                if (tag.Value.ToLower().IndexOf("Umbraco_macro") == -1)
                 {
                     string cleanTag = "<img";
 
                     // gather all attributes
-                    // TODO: This should be replaced with a general helper method - but for now we'll wanna leave umbraco.dll alone for this patch
+                    // TODO: This should be replaced with a general helper method - but for now we'll wanna leave Umbraco.dll alone for this patch
                     Hashtable ht = new Hashtable();
                     MatchCollection m =
                         Regex.Matches(tag.Value.Replace(">", " >"),
@@ -292,7 +292,7 @@ namespace umbraco.editorControls.wysiwyg
 
                 // clean macros and add paragraph element for tidy
                 bool removeParagraphs = false;
-                if (_text.Length > 15 && _text.ToLower().Substring(0, 17) == "|||?umbraco_macro")
+                if (_text.Length > 15 && _text.ToLower().Substring(0, 17) == "|||?Umbraco_macro")
                 {
                     removeParagraphs = true;
                     _text = "<p>" + _text + "</p>";
@@ -318,7 +318,7 @@ namespace umbraco.editorControls.wysiwyg
                                 "Error tidying txt from property: " + _data.PropertyId.ToString());
                 }
 
-                // rescue umbraco tags
+                // rescue Umbraco tags
                 _text = _text.Replace("|||?", "<?").Replace("/|||", "/>").Replace("|*|", "\"");
 
                 // if text is an empty parargraph, make it all empty
@@ -326,7 +326,7 @@ namespace umbraco.editorControls.wysiwyg
                     _text = "";
             }
 
-            // cms.businesslogic.Content.GetContentFromVersion(_version).getProperty(_alias).Value = Text;
+            // cms.Umbraco.Cms.BusinessLogic.Content.GetContentFromVersion(_version).getProperty(_alias).Value = Text;
 
             _data.Value = Text;
         }
@@ -408,80 +408,80 @@ namespace umbraco.editorControls.wysiwyg
                     // Link, Anchor
                     // Insert: Image, macro, table, formular
                     _buttons.Add(
-                        new editorButton("html", ui.Text("buttons", "htmlEdit", null),
+                        new editorButton("html", UI.Text("buttons", "htmlEdit", null),
                                          GlobalSettings.Path + "/images/editor/html.gif", "viewHTML('" + ClientID + "')"));
                     _buttons.Add("split");
                     _buttons.Add(
-                        new editorButton("showstyles", ui.Text("buttons", "styleShow", null) + " (CTRL+SHIFT+V)",
+                        new editorButton("showstyles", UI.Text("buttons", "styleShow", null) + " (CTRL+SHIFT+V)",
                                          GlobalSettings.Path + "/images/editor/showStyles.gif",
                                          "umbracoShowStyles('" + ClientID + "')"));
                     _buttons.Add("split");
                     _buttons.Add(
-                        new editorButton("bold", ui.Text("buttons", "bold", null) + " (CTRL+B)",
+                        new editorButton("bold", UI.Text("buttons", "bold", null) + " (CTRL+B)",
                                          GlobalSettings.Path + "/images/editor/bold.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'bold', '')"));
                     _buttons.Add(
-                        new editorButton("italic", ui.Text("buttons", "italic", null) + " (CTRL+I)",
+                        new editorButton("italic", UI.Text("buttons", "italic", null) + " (CTRL+I)",
                                          GlobalSettings.Path + "/images/editor/italic.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'italic', '')"));
                     _buttons.Add(
-                        new editorButton("graphicheadline", ui.Text("buttons", "graphicHeadline", null) + "(CTRL+B)",
+                        new editorButton("graphicheadline", UI.Text("buttons", "graphicHeadline", null) + "(CTRL+B)",
                                          GlobalSettings.Path + "/images/editor/umbracoTextGen.gif",
                                          "umbracoTextGen('" + ClientID + "')"));
                     _buttons.Add("split");
                     _buttons.Add(
-                        new editorButton("justifyleft", ui.Text("buttons", "justifyLeft", null),
+                        new editorButton("justifyleft", UI.Text("buttons", "justifyLeft", null),
                                          GlobalSettings.Path + "/images/editor/left.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'justifyleft', '')"));
                     _buttons.Add(
-                        new editorButton("justifycenter", ui.Text("buttons", "justifyCenter", null),
+                        new editorButton("justifycenter", UI.Text("buttons", "justifyCenter", null),
                                          GlobalSettings.Path + "/images/editor/center.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'justifycenter', '')"));
                     _buttons.Add(
-                        new editorButton("justifyright", ui.Text("buttons", "justifyRight", null),
+                        new editorButton("justifyright", UI.Text("buttons", "justifyRight", null),
                                          GlobalSettings.Path + "/images/editor/right.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'justifyright', '')"));
                     _buttons.Add("split");
                     _buttons.Add(
-                        new editorButton("listBullet", ui.Text("buttons", "listBullet", null),
+                        new editorButton("listBullet", UI.Text("buttons", "listBullet", null),
                                          GlobalSettings.Path + "/images/editor/bullist.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'insertUnorderedList', '')"));
                     _buttons.Add(
-                        new editorButton("listNumeric", ui.Text("buttons", "listNumeric", null),
+                        new editorButton("listNumeric", UI.Text("buttons", "listNumeric", null),
                                          GlobalSettings.Path + "/images/editor/numlist.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'insertOrderedList', '')"));
                     _buttons.Add(
-                        new editorButton("deindent", ui.Text("buttons", "deindent", null),
+                        new editorButton("deindent", UI.Text("buttons", "deindent", null),
                                          GlobalSettings.Path + "/images/editor/deindent.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'Outdent', '')"));
                     _buttons.Add(
-                        new editorButton("indent", ui.Text("buttons", "indent", null),
+                        new editorButton("indent", UI.Text("buttons", "indent", null),
                                          GlobalSettings.Path + "/images/editor/inindent.gif",
                                          "umbracoEditorCommand('" + ClientID + "', 'Indent', '')"));
                     _buttons.Add("split");
                     _buttons.Add(
-                        new editorButton("linkInsert", ui.Text("buttons", "linkInsert", null),
+                        new editorButton("linkInsert", UI.Text("buttons", "linkInsert", null),
                                          GlobalSettings.Path + "/images/editor/link.gif",
                                          "umbracoLink('" + ClientID + "')"));
                     _buttons.Add(
-                        new editorButton("linkLocal", ui.Text("buttons", "linkLocal", null),
+                        new editorButton("linkLocal", UI.Text("buttons", "linkLocal", null),
                                          GlobalSettings.Path + "/images/editor/anchor.gif",
                                          "umbracoAnchor('" + ClientID + "')"));
                     _buttons.Add("split");
                     _buttons.Add(
-                        new editorButton("pictureInsert", ui.Text("buttons", "pictureInsert", null),
+                        new editorButton("pictureInsert", UI.Text("buttons", "pictureInsert", null),
                                          GlobalSettings.Path + "/images/editor/image.gif",
                                          "umbracoImage('" + ClientID + "')"));
                     _buttons.Add(
-                        new editorButton("macroInsert", ui.Text("buttons", "macroInsert", null),
+                        new editorButton("macroInsert", UI.Text("buttons", "macroInsert", null),
                                          GlobalSettings.Path + "/images/editor/insMacro.gif",
                                          "umbracoInsertMacro('" + ClientID + "', '" + GlobalSettings.Path + "')"));
                     _buttons.Add(
-                        new editorButton("tableInsert", ui.Text("buttons", "tableInsert", null),
+                        new editorButton("tableInsert", UI.Text("buttons", "tableInsert", null),
                                          GlobalSettings.Path + "/images/editor/instable.gif",
                                          "umbracoInsertTable('" + ClientID + "', '" + GlobalSettings.Path + "')"));
                     _buttons.Add(
-                        new editorButton("formFieldInsert", ui.Text("buttons", "formFieldInsert", null),
+                        new editorButton("formFieldInsert", UI.Text("buttons", "formFieldInsert", null),
                                          GlobalSettings.Path + "/images/editor/form.gif",
                                          "umbracoInsertForm('" + ClientID + "', '" + GlobalSettings.Path + "')"));
 
@@ -519,18 +519,18 @@ namespace umbraco.editorControls.wysiwyg
         /// <summary> 
         /// Render this control to the output parameter specified.
         /// </summary>
-        /// <param name="output"> The HTML writer to write out to </param>
+        /// <param Name="output"> The HTML writer to write out to </param>
         protected override void Render(HtmlTextWriter output)
         {
             if (_browserIsCompatible)
             {
                 base.Render(output);
-                output.Write("<iframe name=\"" + ClientID + "_holder\" id=\"" + ClientID +
+                output.Write("<iframe Name=\"" + ClientID + "_holder\" id=\"" + ClientID +
                              "_holder\" style=\"border: 0px; width: 100%; height: 100%\" frameborder=\"0\" src=\"" +
                              GlobalSettings.Path + "/richTextHolder.aspx?nodeId=" + _data.NodeId.ToString() +
                              "&versionId=" + _data.Version.ToString() + "&propertyId=" + _data.PropertyId.ToString() +
                              "\"></iframe>");
-                output.Write("<input type=\"hidden\" name=\"" + ClientID + "_source\" value=\"\">");
+                output.Write("<input type=\"hidden\" Name=\"" + ClientID + "_source\" value=\"\">");
                 output.Write("<script>\nfunction umbracoRichTextSave" + ClientID + "() {\nif (document.frames[\"" +
                              ClientID + "_holder\"].document.getElementById(\"holder\")) document.getElementById(\"" +
                              ClientID + "\").value = document.frames[\"" + ClientID +
@@ -539,11 +539,11 @@ namespace umbraco.editorControls.wysiwyg
             }
             else
             {
-                output.WriteLine("<textarea name=\"" + ClientID + "\" style=\"width: 100%; height: 95%\">" +
+                output.WriteLine("<textarea Name=\"" + ClientID + "\" style=\"width: 100%; height: 95%\">" +
                                  HttpContext.Current.Server.HtmlEncode(_data.Value.ToString()) +
                                  "</textarea>");
                 output.WriteLine(
-                    "<p class=\"guiDialogTiny\"><i>(Unfortunately WYSIWYG editing is only supported in Internet Explorer on Windows. <a href=\"http://umbraco.org/various/cross-platform.aspx\" target=\"_blank\">More info</a>)</i></p>");
+                    "<p class=\"guiDialogTiny\"><i>(Unfortunately WYSIWYG editing is only supported in Internet Explorer on Windows. <a href=\"http://Umbraco.org/various/cross-platform.aspx\" target=\"_blank\">More info</a>)</i></p>");
             }
         }
     }
