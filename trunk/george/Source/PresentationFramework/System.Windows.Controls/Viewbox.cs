@@ -111,7 +111,10 @@ namespace System.Windows.Controls {
 			if (child == null)
 				return new Size(0, 0);
 			child.Measure(constraint);
-			return child.DesiredSize;
+			Size child_desired_size = child.DesiredSize;
+			if (child_desired_size.Width == 0 && child_desired_size.Height == 0)
+				return child_desired_size;
+			return new Size(double.IsPositiveInfinity(constraint.Width) ? child.DesiredSize.Width : constraint.Width, double.IsPositiveInfinity(constraint.Height) ? child.DesiredSize.Height : constraint.Height);
 		}
 		#endregion
 	}
