@@ -98,7 +98,12 @@ namespace System.Windows.Controls {
 				break;
 			}
 			container_visual.Transform = new ScaleTransform(scale_x, scale_y);
-			return arrangeSize;
+			switch (Stretch) {
+			case Stretch.None:
+				return child_desired_size;
+			default:
+				return arrangeSize;
+			}
 		}
 
 		protected override Visual GetVisualChild(int index) {
@@ -110,11 +115,16 @@ namespace System.Windows.Controls {
 		protected override Size MeasureOverride(Size constraint) {
 			if (child == null)
 				return new Size(0, 0);
-			child.Measure(constraint);
+			child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 			Size child_desired_size = child.DesiredSize;
-			if (child_desired_size.Width == 0 && child_desired_size.Height == 0)
+			switch (Stretch) {
+			case Stretch.None:
 				return child_desired_size;
-			return new Size(double.IsPositiveInfinity(constraint.Width) ? child.DesiredSize.Width : constraint.Width, double.IsPositiveInfinity(constraint.Height) ? child.DesiredSize.Height : constraint.Height);
+			default:
+				if (child_desired_size.Width == 0 && child_desired_size.Height == 0)
+					return child_desired_size;
+				return new Size(double.IsPositiveInfinity(constraint.Width) ? child.DesiredSize.Width : constraint.Width, double.IsPositiveInfinity(constraint.Height) ? child.DesiredSize.Height : constraint.Height);
+			}
 		}
 		#endregion
 	}
