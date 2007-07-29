@@ -63,7 +63,7 @@ namespace Ribbons
 			Label = null;
 			HeightRequest = 90;
 			
-			expandButton = new Button ("+");
+			expandButton = new Button ("\u21F2");
 			expandButton.Padding = 0;
 			expandButton.Visible = false;
 			expandButton.Parent = this;
