@@ -8,38 +8,71 @@ namespace Umbraco
 	/// </summary>
 	public class XmlHelper
 	{
+		/// <summary>
+		/// Imports the XML node from text.
+		/// </summary>
+		/// <param name="text">The text.</param>
+		/// <param name="xmlDoc">The XML doc.</param>
+		/// <returns></returns>
 		public static XmlNode ImportXmlNodeFromText (string text, ref XmlDocument xmlDoc) 
 		{
 			xmlDoc.LoadXml(text);
 			return xmlDoc.FirstChild;
 		}
 
-		public static XmlAttribute addAttribute(XmlDocument Xd, string Name, string Value) 
+
+		/// <summary>
+		/// Adds the attribute.
+		/// </summary>
+		/// <param name="xmlDocument">The XML document.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static XmlAttribute AddAttribute(XmlDocument xmlDocument, string name, string value) 
 		{
-			XmlAttribute temp = Xd.CreateAttribute(Name);
-			temp.Value = Value;
+			XmlAttribute temp = xmlDocument.CreateAttribute(name);
+			temp.Value = value;
+			return temp;
+		}
+		/// <summary>
+		/// Adds the text node.
+		/// </summary>
+		/// <param name="xmlDocument">The XML document.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static XmlNode AddTextNode(XmlDocument xmlDocument, string name, string value) 
+		{
+			XmlNode temp = xmlDocument.CreateNode(XmlNodeType.Element, name, string.Empty);
+			temp.AppendChild(xmlDocument.CreateTextNode(value));
 			return temp;
 		}
 
-		public static XmlNode addTextNode(XmlDocument Xd, string Name, string Value) 
+		/// <summary>
+		/// Adds the C data node.
+		/// </summary>
+		/// <param name="xmlDocument">The XML document.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static XmlNode AddCDataNode(XmlDocument xmlDocument, string name, string value) 
 		{
-			XmlNode temp = Xd.CreateNode(XmlNodeType.Element, Name, "");
-			temp.AppendChild(Xd.CreateTextNode(Value));
+			XmlNode temp = xmlDocument.CreateNode(XmlNodeType.Element, name, string.Empty);
+			temp.AppendChild(xmlDocument.CreateCDataSection(value));
 			return temp;
 		}
 
-		public static XmlNode addCDataNode(XmlDocument Xd, string Name, string Value) 
-		{
-			XmlNode temp = Xd.CreateNode(XmlNodeType.Element, Name, "");
-			temp.AppendChild(Xd.CreateCDataSection(Value));
-			return temp;
-		}
 
-		public static string GetNodeValue(XmlNode n) 
+		/// <summary>
+		/// Gets the node value.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
+		public static string GetNodeValue(XmlNode node) 
 		{
-			if (n == null || n.FirstChild == null)
+			if (node == null || node.FirstChild == null)
 				return string.Empty;
-			return n.FirstChild.Value;
+			return node.FirstChild.Value;
 		}
 	}
 }

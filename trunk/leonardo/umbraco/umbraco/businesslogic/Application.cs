@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
-using Microsoft.ApplicationBlocks.Data;
 
 namespace Umbraco.BusinessLogic
 {
@@ -22,52 +21,69 @@ namespace Umbraco.BusinessLogic
 		public Application()
 		{
 		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Application"/> class.
 		/// </summary>
 		/// <param Name="name">The Name.</param>
 		/// <param Name="alias">The alias.</param>
 		/// <param Name="icon">The icon.</param>
-		public Application(string name,string alias, string icon)
+		public Application(string name, string alias, string icon)
 		{
-			this.Name = name;
-			this.alias = alias;
-			this.icon = icon;
+			Name = name;
+			Alias = alias;
+			Icon = icon;
 		}
 
 		/// <summary>
 		/// Gets or sets the Name.
 		/// </summary>
 		/// <value>The Name.</value>
-		public string Name 
+		public string Name
 		{
-			get {return _name;}
-			set {_name = value;}
+			get { return _name; }
+			set { _name = value; }
 		}
 
-		public string alias 
+		/// <summary>
+		/// Gets or sets the alias.
+		/// </summary>
+		/// <value>The alias.</value>
+		public string Alias
 		{
-			get {return _alias;}
-			set {_alias = value;}
+			get { return _alias; }
+			set { _alias = value; }
 		}
 
-		public string icon 
+		/// <summary>
+		/// Gets or sets the icon.
+		/// </summary>
+		/// <value>The icon.</value>
+		public string Icon
 		{
-			get {return _icon;}
-			set {_icon = value;}
+			get { return _icon; }
+			set { _icon = value; }
 		}
 
-		public static Application[] getAll() {
+		/// <summary>
+		/// Gets all.
+		/// </summary>
+		/// <returns></returns>
+		public static Application[] GetAll()
+		{
 			// TODO: SQL
-			SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connString,CommandType.Text,"Select appAlias, appIcon, appName from umbracoApp");
+			SqlDataReader dr =
+				Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connString, CommandType.Text,
+				                                                         "Select appAlias, appIcon, appName from umbracoApp");
 			ArrayList tmp = new ArrayList();
 
-			while (dr.Read()) {
-				tmp.Add(new Application(dr["appName"].ToString(),dr["appAlias"].ToString(), dr["appIcon"].ToString()));
+			while (dr.Read())
+			{
+				tmp.Add(new Application(dr["appName"].ToString(), dr["appAlias"].ToString(), dr["appIcon"].ToString()));
 			}
 			dr.Close();
 			Application[] retval = new Application[tmp.Count];
-			for (int i = 0;i<tmp.Count;i++) retval[i] = (Application) tmp[i];
+			for (int i = 0; i < tmp.Count; i++) retval[i] = (Application) tmp[i];
 			return retval;
 		}
 	}

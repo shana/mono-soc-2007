@@ -143,13 +143,13 @@ namespace Umbraco.Cms.BusinessLogic.template
 		public XmlElement ToXml(XmlDocument xd) 
 		{
 			XmlElement doc = xd.CreateElement("Template");
-			doc.AppendChild(XmlHelper.addTextNode(xd, "Name", this.Text));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "Alias", this.Alias));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "Name", this.Text));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "Alias", this.Alias));
 			if (this.MasterTemplate != 0)
-				doc.AppendChild(XmlHelper.addTextNode(xd, "Master", new Template(this.MasterTemplate).Alias));
+				doc.AppendChild(XmlHelper.AddTextNode(xd, "Master", new Template(this.MasterTemplate).Alias));
 			else
-				doc.AppendChild(XmlHelper.addTextNode(xd, "Master", ""));
-			doc.AppendChild(XmlHelper.addCDataNode(xd, "Design", this.Design));
+				doc.AppendChild(XmlHelper.AddTextNode(xd, "Master", ""));
+			doc.AppendChild(XmlHelper.AddCDataNode(xd, "Design", this.Design));
 
 
 			return doc;

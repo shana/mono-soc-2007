@@ -26,12 +26,21 @@ namespace Umbraco.BusinessLogic
 		private static object getUserTypeSyncLock = new object();
 		private static object getAllUserTypeSyncLock = new object();
 
+		/// <summary>
+		/// Gets or sets the alias.
+		/// </summary>
+		/// <value>The alias.</value>
 		public string Alias
 		{
 			get { return _alias; }
 			set { _alias = value; }
 		}
 
+		/// <summary>
+		/// Gets the type of the user.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <returns></returns>
 		public static UserType GetUserType(int id)
 		{
 			return CacheHelper.GetCacheItem<UserType>(string.Format("UmbracoUserType{0}", id),
@@ -39,6 +48,10 @@ namespace Umbraco.BusinessLogic
 				delegate { return new UserType(id); });
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UserType"/> class.
+		/// </summary>
+		/// <param name="id">The id.</param>
 		public UserType(int id)
 		{
 			_id = id;
@@ -55,13 +68,23 @@ namespace Umbraco.BusinessLogic
 			}
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UserType"/> class.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <param name="name">The name.</param>
 		public UserType(int id, string name)
 		{
 			_id = id;
 			_name = name;
 		}
 
-		public static UserType[] getAll
+
+		/// <summary>
+		/// Gets all.
+		/// </summary>
+		/// <value>All.</value>
+		public static UserType[] All
 		{
 			get
 			{
@@ -70,8 +93,7 @@ namespace Umbraco.BusinessLogic
 					delegate
 					{
 						List<UserType> tmp = new List<UserType>();
-						using (SqlDataReader dr =
-							Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connstring, CommandType.Text, "select id, UserTypeName from umbracoUserType"))
+						using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connstring, CommandType.Text, "select id, UserTypeName from umbracoUserType"))
 						{
 							while (dr.Read())
 							{
@@ -83,16 +105,28 @@ namespace Umbraco.BusinessLogic
 			}
 		}
 
+		/// <summary>
+		/// Gets the name.
+		/// </summary>
+		/// <value>The name.</value>
 		public string Name
 		{
 			get { return _name; }
 		}
 
+		/// <summary>
+		/// Gets the id.
+		/// </summary>
+		/// <value>The id.</value>
 		public int Id
 		{
 			get { return _id; }
 		}
 
+		/// <summary>
+		/// Gets the default permissions.
+		/// </summary>
+		/// <value>The default permissions.</value>
 		public string DefaultPermissions
 		{
 			get { return _defaultPermissions; }

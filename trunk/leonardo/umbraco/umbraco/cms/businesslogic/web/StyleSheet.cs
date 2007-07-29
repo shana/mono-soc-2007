@@ -131,9 +131,9 @@ namespace Umbraco.Cms.BusinessLogic.web
 		public XmlElement ToXml(XmlDocument xd) 
 		{
 			XmlElement doc = xd.CreateElement("Stylesheet");
-			doc.AppendChild(XmlHelper.addTextNode(xd, "Name", this.Text));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "FileName", this.Filename));
-			doc.AppendChild(XmlHelper.addCDataNode(xd, "Content", this.Content));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "Name", this.Text));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "FileName", this.Filename));
+			doc.AppendChild(XmlHelper.AddCDataNode(xd, "Content", this.Content));
 
 			if (this.Properties.Length > 0) 
 			{
@@ -141,9 +141,9 @@ namespace Umbraco.Cms.BusinessLogic.web
 				foreach(StylesheetProperty sp in this.Properties) 
 				{
 					XmlElement prop = xd.CreateElement("Property");
-					prop.AppendChild(XmlHelper.addTextNode(xd, "Name", sp.Text));
-					prop.AppendChild(XmlHelper.addTextNode(xd, "Alias", sp.Alias));
-					prop.AppendChild(XmlHelper.addTextNode(xd, "Value", sp.value));
+					prop.AppendChild(XmlHelper.AddTextNode(xd, "Name", sp.Text));
+					prop.AppendChild(XmlHelper.AddTextNode(xd, "Alias", sp.Alias));
+					prop.AppendChild(XmlHelper.AddTextNode(xd, "Value", sp.value));
 					props.AppendChild(prop);
 				}
 				doc.AppendChild(props);

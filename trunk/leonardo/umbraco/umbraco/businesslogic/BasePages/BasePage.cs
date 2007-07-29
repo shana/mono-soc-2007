@@ -18,10 +18,11 @@ namespace Umbraco.BasePages
 
 		// ticks per minute 600,000,000 
 		private static long _ticksPrMinute = 600000000;
-		private static int _umbracoTimeOutInMinutes = GlobalSettings.TimeOutInMinutes;
-		protected string UmbracoPath = GlobalSettings.Path;
-		protected int uid = 0;
-		protected long timeout = 0;
+		private static int _umbracoTimeOutInMinutes = GlobalSettings.TimeoutInMinutes;
+
+		private string umbracoPath = GlobalSettings.Path;
+		private int uniqueID = 0;
+		private long timeout = 0;
 
 		private bool overrideClientTarget = true;
 
@@ -43,12 +44,12 @@ namespace Umbraco.BasePages
 		{
 			if ((UmbracoUserContextID != ""))
 			{
-				uid = GetUserId(UmbracoUserContextID);
+				uniqueID = GetUserId(UmbracoUserContextID);
 				timeout = GetTimeout(UmbracoUserContextID);
 
 				if (timeout > DateTime.Now.Ticks)
 				{
-					_user = BusinessLogic.User.GetUser(uid);
+					_user = BusinessLogic.User.GetUser(uniqueID);
 					_userisValidated = true;
 					UpdateLogin();
 				}
@@ -239,10 +240,46 @@ namespace Umbraco.BasePages
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [override client target].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [override client target]; otherwise, <c>false</c>.
+		/// </value>
 		public bool OverrideClientTarget
 		{
 			get { return overrideClientTarget; }
 			set { overrideClientTarget = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the umbraco path.
+		/// </summary>
+		/// <value>The umbraco path.</value>
+		public string UmbracoPath
+		{
+			get { return umbracoPath; }
+			set { umbracoPath = value; }
+		}
+		
+		/// <summary>
+		/// Gets or sets the unique id.
+		/// </summary>
+		/// <value>The unique id.</value>
+		public int UniqueId
+		{
+			get { return uniqueID; }
+			set { uniqueID = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the timeout.
+		/// </summary>
+		/// <value>The timeout.</value>
+		public long Timeout
+		{
+			get { return timeout; }
+			set { timeout = value; }
 		}
 
 		/// <summary>

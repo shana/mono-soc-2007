@@ -34,27 +34,49 @@ namespace Umbraco.BusinessLogic
 		private Hashtable _notifications = new Hashtable();
 		private bool _notificationsInitialized = false;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="User"/> class.
+		/// </summary>
+		/// <param name="ID">The ID.</param>
 		public User(int ID)
 		{
-			setupUser(ID);
+			SetupUser(ID);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="User"/> class.
+		/// </summary>
+		/// <param name="ID">The ID.</param>
+		/// <param name="noSetup">if set to <c>true</c> [no setup].</param>
         public User(int ID, bool noSetup)
         {
             _id = ID;
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="User"/> class.
+		/// </summary>
+		/// <param name="Login">The login.</param>
+		/// <param name="Password">The password.</param>
 	    public User(string Login, string Password)
 		{			
-			setupUser(getUserId(Login, Password));
+			SetupUser(GetUserId(Login, Password));
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="User"/> class.
+		/// </summary>
+		/// <param name="Login">The login.</param>
 		public User(string Login) 
 		{
-			setupUser(getUserId(Login));
+			SetupUser(GetUserId(Login));
 		}
 
-		private void setupUser(int ID)
+		/// <summary>
+		/// Setups the user.
+		/// </summary>
+		/// <param name="ID">The ID.</param>
+		private void SetupUser(int ID)
 		{
 			_id = ID;
 
@@ -88,12 +110,16 @@ namespace Umbraco.BusinessLogic
         {
         }
 
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>The name.</value>
 		public string Name 
 		{
 			get
 			{
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
 			    return _name;
 			}
 			set 
@@ -104,12 +130,16 @@ namespace Umbraco.BusinessLogic
             }
 		}
 
+		/// <summary>
+		/// Gets or sets the email.
+		/// </summary>
+		/// <value>The email.</value>
 		public string Email
 		{
 			get
 			{
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _email;
 			}
 			set 
@@ -120,12 +150,16 @@ namespace Umbraco.BusinessLogic
             }
 		}
 
+		/// <summary>
+		/// Gets or sets the language.
+		/// </summary>
+		/// <value>The language.</value>
 		public string Language 
 		{
 			get
 			{
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _language;
 			}
 			set {
@@ -135,12 +169,16 @@ namespace Umbraco.BusinessLogic
             }
 	}
 
+	/// <summary>
+	/// Gets or sets the password.
+	/// </summary>
+	/// <value>The password.</value>
 		public string Password 
 		{
 			get
 			{
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _password;
 			}
 			set {
@@ -150,12 +188,16 @@ namespace Umbraco.BusinessLogic
             }
 		}
 		static string  _connstring = GlobalSettings.DbDSN;
-		
+
+		/// <summary>
+		/// Gets the applications.
+		/// </summary>
+		/// <value>The applications.</value>
 		public Application[] Applications 
 		{
 			get{
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 ArrayList al = new ArrayList();
 
 				using (SqlDataReader appIcons = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(_connstring,
@@ -165,8 +207,8 @@ namespace Umbraco.BusinessLogic
 					{
 						Application tmp = new Application();
 						tmp.Name = appIcons.GetString(appIcons.GetOrdinal("appName"));
-						tmp.icon = appIcons.GetString(appIcons.GetOrdinal("appIcon"));
-						tmp.alias = appIcons.GetString(appIcons.GetOrdinal("appAlias"));
+						tmp.Icon = appIcons.GetString(appIcons.GetOrdinal("appIcon"));
+						tmp.Alias = appIcons.GetString(appIcons.GetOrdinal("appAlias"));
 						al.Add(tmp);
 					}
 				}
@@ -180,11 +222,15 @@ namespace Umbraco.BusinessLogic
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the name of the login.
+		/// </summary>
+		/// <value>The name of the login.</value>
 		public string LoginName {
 			get
 			{
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _loginname;
 			}
 			set {
@@ -194,11 +240,24 @@ namespace Umbraco.BusinessLogic
             }
 		}
 
-		public static bool validateCredentials(string lname, string passw) {
-            return validateCredentials(lname, passw, true);
+		/// <summary>
+		/// Validates the credentials.
+		/// </summary>
+		/// <param name="lname">The lname.</param>
+		/// <param name="passw">The passw.</param>
+		/// <returns></returns>
+		public static bool ValidateCredentials(string lname, string passw) {
+            return ValidateCredentials(lname, passw, true);
 		}
 
-        public static bool validateCredentials(string lname, string passw, bool checkForUmbracoConsoleAccess)
+		/// <summary>
+		/// Validates the credentials.
+		/// </summary>
+		/// <param name="lname">The lname.</param>
+		/// <param name="passw">The passw.</param>
+		/// <param name="checkForUmbracoConsoleAccess">if set to <c>true</c> [check for umbraco console access].</param>
+		/// <returns></returns>
+        public static bool ValidateCredentials(string lname, string passw, bool checkForUmbracoConsoleAccess)
         {
             string consoleCheckSql = "";
             if (checkForUmbracoConsoleAccess)
@@ -217,11 +276,15 @@ namespace Umbraco.BusinessLogic
             return (tmp != null);
         }
 
+		/// <summary>
+		/// Gets or sets the type of the user.
+		/// </summary>
+		/// <value>The type of the user.</value>
 		public UserType UserType {
 			get
 			{
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _usertype;
 			}
 			set {
@@ -236,7 +299,12 @@ namespace Umbraco.BusinessLogic
 
 
 		// statics
-		public static User[] getAll() {
+		/// <summary>
+		/// Gets all.
+		/// </summary>
+		/// <returns></returns>
+		// TODO: Find out what it gets
+		public static User[] GetAll() {
 			System.Collections.ArrayList tmpContainer = new System.Collections.ArrayList();
 
 			SqlConnection conn = new SqlConnection(GlobalSettings.DbDSN);
@@ -260,7 +328,14 @@ namespace Umbraco.BusinessLogic
 			}
 			return retVal;
 		}
-		
+
+		/// <summary>
+		/// Makes the new.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="lname">The lname.</param>
+		/// <param name="passw">The passw.</param>
+		/// <param name="ut">The ut.</param>
 		public static void MakeNew(string name, string lname, string passw, UserType ut) {
 			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, @"
 				insert into umbracoUser 
@@ -272,8 +347,14 @@ namespace Umbraco.BusinessLogic
 				new SqlParameter("@type", ut.Id), 
 				new SqlParameter("@pw", passw));
 		}
-			
-		private static int getUserId(string lname, string passw) 
+
+		/// <summary>
+		/// Gets the user id.
+		/// </summary>
+		/// <param name="lname">The lname.</param>
+		/// <param name="passw">The passw.</param>
+		/// <returns></returns>
+		private static int GetUserId(string lname, string passw) 
 		{
 			int retVal;
 			SqlConnection conn = new SqlConnection(GlobalSettings.DbDSN);
@@ -288,8 +369,13 @@ namespace Umbraco.BusinessLogic
 				);
 			return retVal;
 		}
-					
-		private static int getUserId(string lname) 
+
+		/// <summary>
+		/// Gets the user id.
+		/// </summary>
+		/// <param name="lname">The lname.</param>
+		/// <returns></returns>
+		private static int GetUserId(string lname) 
 		{
 			int retVal;
 			SqlConnection conn = new SqlConnection(GlobalSettings.DbDSN);
@@ -304,26 +390,27 @@ namespace Umbraco.BusinessLogic
 			return retVal;
 		}
 
-		public void delete() {
+		/// <summary>
+		/// Deletes this instance.
+		/// </summary>
+		public void Delete() {
 			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text,"delete from umbracoUser where id = @id", new SqlParameter("@id", Id));
             FlushFromCache();
         }
 
-		/*
-		public string GetPermissions(int NodeId) 
-		{
-			return GetPermissions(new cms.Umbraco.Cms.BusinessLogic.web.Document(NodeId).Path);
-		}
-		*/
-
+		/// <summary>
+		/// Gets the permissions.
+		/// </summary>
+		/// <param name="Path">The path.</param>
+		/// <returns></returns>
 		public string GetPermissions(string Path) 
 		{
             if (!_isInitialized)
-                setupUser(_id);
+                SetupUser(_id);
             string cruds = UserType.DefaultPermissions;
 
 			if (!_crudsInitialized)
-				initCruds();
+				InitializeCruds();
 
 			foreach(string nodeId in Path.Split(',')) 
 			{
@@ -334,10 +421,13 @@ namespace Umbraco.BusinessLogic
 			return cruds;
 		}
 
-		public void initCruds() 
+		/// <summary>
+		/// Initializes the cruds.
+		/// </summary>
+		public void InitializeCruds() 
 		{
             if (!_isInitialized)
-                setupUser(_id);
+                SetupUser(_id);
 
 			using(SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoUser2NodePermission where userId = @userId order by nodeId", new SqlParameter("@userId", this.Id)))
 			{
@@ -353,12 +443,17 @@ namespace Umbraco.BusinessLogic
 			_crudsInitialized = true;
 		}
 
+		/// <summary>
+		/// Gets the notifications.
+		/// </summary>
+		/// <param name="Path">The path.</param>
+		/// <returns></returns>
 		public string GetNotifications(string Path) 
 		{
             string notifications = "";
 
 			if (!_notificationsInitialized)
-				initNotifications();
+				InitializeNotifications();
 
 			foreach(string nodeId in Path.Split(',')) 
 			{
@@ -378,10 +473,13 @@ namespace Umbraco.BusinessLogic
             _notifications.Clear();
         }
 
-		public void initNotifications() 
+		/// <summary>
+		/// Inits the notifications.
+		/// </summary>
+		public void InitializeNotifications() 
 		{
             if (!_isInitialized)
-                setupUser(_id);
+                SetupUser(_id);
 
 			using (SqlDataReader dr = Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteReader(GlobalSettings.DbDSN, CommandType.Text, "select * from umbracoUser2NodeNotify where userId = @userId order by nodeId", new SqlParameter("@userId", this.Id)))
 			{
@@ -397,25 +495,40 @@ namespace Umbraco.BusinessLogic
 			_notificationsInitialized = true;
 		}
 
+		/// <summary>
+		/// Gets the id.
+		/// </summary>
+		/// <value>The id.</value>
 		public int Id 
 		{
 			get {return _id;}
 		}
 
-		public void clearApplications() {
+		/// <summary>
+		/// Clears the applications.
+		/// </summary>
+		public void ClearApplications() {
 			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "delete from umbracoUser2App where [user] = @id", new SqlParameter("@id", this.Id));            		
 		}
 
-		public void addApplication(string AppAlias) {
+		/// <summary>
+		/// Adds the application.
+		/// </summary>
+		/// <param name="AppAlias">The app alias.</param>
+		public void AddApplication(string AppAlias) {
 			Microsoft.ApplicationBlocks.Data.SqlHelper.ExecuteNonQuery(_connstring,CommandType.Text, "insert into umbracoUser2App ([user],app) values (@id, @app)", new SqlParameter("@id", this.Id), new SqlParameter("@app", AppAlias));
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [no console].
+		/// </summary>
+		/// <value><c>true</c> if [no console]; otherwise, <c>false</c>.</value>
 		public bool NoConsole 
 		{
             get
             {
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _userNoConsole;
             }
 			set 
@@ -426,12 +539,16 @@ namespace Umbraco.BusinessLogic
             }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="User"/> is disabled.
+		/// </summary>
+		/// <value><c>true</c> if disabled; otherwise, <c>false</c>.</value>
 		public bool Disabled 
 		{
             get
             {
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _userDisabled;
             }
 			set 
@@ -442,12 +559,16 @@ namespace Umbraco.BusinessLogic
             }
 		}
 
+		/// <summary>
+		/// Gets or sets the start node id.
+		/// </summary>
+		/// <value>The start node id.</value>
 		public int StartNodeId 
 		{
             get
             {
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _startnodeid;
             }
 			set 
@@ -458,12 +579,16 @@ namespace Umbraco.BusinessLogic
                 FlushFromCache();
             }
 		}
+		/// <summary>
+		/// Gets or sets the start media id.
+		/// </summary>
+		/// <value>The start media id.</value>
 		public int StartMediaId 
 		{
             get
             {
                 if (!_isInitialized)
-                    setupUser(_id);
+                    SetupUser(_id);
                 return _startmediaid;
             }
 			set 
@@ -475,12 +600,20 @@ namespace Umbraco.BusinessLogic
 			}
 		}
 
+		/// <summary>
+		/// Flushes from cache.
+		/// </summary>
         protected void FlushFromCache()
         {
             if (System.Web.HttpRuntime.Cache[string.Format("UmbracoUser{0}", Id.ToString())] != null)
                 System.Web.HttpRuntime.Cache.Remove(string.Format("UmbracoUser{0}", Id.ToString()));
         }
 
+		/// <summary>
+		/// Gets the user.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <returns></returns>
         public static User GetUser(int id)
         {
             if (System.Web.HttpRuntime.Cache[string.Format("UmbracoUser{0}", id.ToString())] == null)

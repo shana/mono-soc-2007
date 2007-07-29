@@ -212,13 +212,13 @@ namespace Umbraco.Cms.BusinessLogic.macro
 			XmlElement doc = xd.CreateElement("macro");
 
 			// info section
-			doc.AppendChild(XmlHelper.addTextNode(xd, "Name", this.Name));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "alias", this.Alias));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "scriptType", this.Type));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "scriptAssembly", this.Assembly));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "xslt", this.Xslt));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "useInEditor", this.UseInEditor.ToString()));
-			doc.AppendChild(XmlHelper.addTextNode(xd, "refreshRate", this.RefreshRate.ToString()));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "Name", this.Name));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "alias", this.Alias));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "scriptType", this.Type));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "scriptAssembly", this.Assembly));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "xslt", this.Xslt));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "useInEditor", this.UseInEditor.ToString()));
+			doc.AppendChild(XmlHelper.AddTextNode(xd, "refreshRate", this.RefreshRate.ToString()));
 
 			// properties
 			XmlElement props = xd.CreateElement("properties");

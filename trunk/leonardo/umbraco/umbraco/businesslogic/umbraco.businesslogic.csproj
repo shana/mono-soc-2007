@@ -108,9 +108,6 @@
     <Compile Include="BasePages\BasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="BasePages\DialogPage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="BasePages\UmbracoBasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
