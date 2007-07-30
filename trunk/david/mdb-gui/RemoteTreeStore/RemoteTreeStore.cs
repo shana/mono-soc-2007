@@ -26,6 +26,11 @@ namespace Mono.Debugger.Frontend
 			this.rootNode = new RemoteTreeNode(this, null);
 		}
 		
+		public RemoteTreeNode GetNode(int[] path)
+		{
+			return GetNode(new RemoteTreePath(path));
+		}
+		
 		public RemoteTreeNode GetNode(RemoteTreePath path)
 		{
 			RemoteTreeNode current = RootNode;

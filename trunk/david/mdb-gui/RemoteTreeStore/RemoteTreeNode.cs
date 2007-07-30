@@ -38,7 +38,7 @@ namespace Mono.Debugger.Frontend
 					// This is the root node
 					throw new Exception("Root node does not have an index");
 				} else {
-					if (Parent.GetChild(myIndexHint) == this) {
+					if (Parent.ChildCount > myIndexHint && Parent.GetChild(myIndexHint) == this) {
 						return myIndexHint;
 					} else {
 						myIndexHint = Parent.childs.IndexOf(this);
@@ -70,11 +70,13 @@ namespace Mono.Debugger.Frontend
 		}
 		
 		/// <summary> Insert a new node so that it is located at the given index </summary>
-		public void InsertNode(int index)
+		public RemoteTreeNode InsertNode(int index)
 		{
 			remoteTreeStore.AddModification(new RemoteTreeModification.InsertNode(this.Path, index));
 			
-			childs.Insert(index, new RemoteTreeNode(remoteTreeStore, this));
+			RemoteTreeNode newNode = new RemoteTreeNode(remoteTreeStore, this);
+			childs.Insert(index, newNode);
+			return newNode;
 		}
 		
 		/// <summary> Remove this node </summary>
@@ -111,34 +113,35 @@ namespace Mono.Debugger.Frontend
 		}
 		
 		/// <summary> Insert a node and set its values </summary>
-		public void InsertNode(int index, params object[] values)
+		public RemoteTreeNode InsertNode(int index, params object[] values)
 		{
-			InsertNode(index);
+			RemoteTreeNode newNode = InsertNode(index);
 			GetChild(index).SetValues(values);
+			return newNode;
 		}
 		
 		/// <summary> Add a node at the end </summary>
-		public void AppendNode()
+		public RemoteTreeNode AppendNode()
 		{
-			InsertNode(childs.Count);
+			return InsertNode(childs.Count);
 		}
 		
 		/// <summary> Add a node at the end and set its values </summary>
-		public void AppendNode(params object[] values)
+		public RemoteTreeNode AppendNode(params object[] values)
 		{
-			InsertNode(childs.Count, values);
+			return InsertNode(childs.Count, values);
 		}
 		
 		/// <summary> Add a node at the start </summary>
-		public void PrependNode()
+		public RemoteTreeNode PrependNode()
 		{
-			InsertNode(0);
+			return InsertNode(0);
 		}
 		
 		/// <summary> Add a node at the start and set its values </summary>
-		public void PrependNode(params object[] values)
+		public RemoteTreeNode PrependNode(params object[] values)
 		{
-			InsertNode(0, values);
+			return InsertNode(0, values);
 		}
 		
 		/// <summary> Set all values of this node </summary>

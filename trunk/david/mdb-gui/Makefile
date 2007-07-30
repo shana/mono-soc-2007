@@ -13,6 +13,7 @@ SRCS = \
 	MdbGui.cs \
 	Pixmaps.cs \
 	Pads/*.cs \
+	Pads/Stores/*.cs \
 	TreeModel/*.cs \
 	RemoteTreeStore/*.cs \
 
