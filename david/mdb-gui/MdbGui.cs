@@ -101,19 +101,19 @@ namespace Mono.Debugger.Frontend
 			gxml.Autoconnect(this);
 			
 			// Load icons
-			toolbuttonRun.IconWidget = new Image(Pixmaps.DebugStart);
+			toolbuttonRun.IconWidget = Pixmaps.DebugStart.GetImage();
 			toolbuttonRun.IconWidget.Show();
-			toolbuttonStop.IconWidget = new Image(Pixmaps.DebugStopProcess);
+			toolbuttonStop.IconWidget = Pixmaps.DebugStopProcess.GetImage();
 			toolbuttonStop.IconWidget.Show();
-			toolbuttonContinue.IconWidget = new Image(Pixmaps.DebugContinue);
+			toolbuttonContinue.IconWidget = Pixmaps.DebugContinue.GetImage();
 			toolbuttonContinue.IconWidget.Show();
-			toolbuttonStepIn.IconWidget = new Image(Pixmaps.DebugStepInto);
+			toolbuttonStepIn.IconWidget = Pixmaps.DebugStepInto.GetImage();
 			toolbuttonStepIn.IconWidget.Show();
-			toolbuttonStepOver.IconWidget = new Image(Pixmaps.DebugStepOver);
+			toolbuttonStepOver.IconWidget = Pixmaps.DebugStepOver.GetImage();
 			toolbuttonStepOver.IconWidget.Show();
-			toolbuttonStepOut.IconWidget = new Image(Pixmaps.DebugStepOut);
+			toolbuttonStepOut.IconWidget = Pixmaps.DebugStepOut.GetImage();
 			toolbuttonStepOut.IconWidget.Show();
-			toolbuttonBreakpoint.IconWidget = new Image(Pixmaps.Breakpoint);
+			toolbuttonBreakpoint.IconWidget = Pixmaps.Breakpoint.GetImage();
 			toolbuttonBreakpoint.IconWidget.Show();
 			
 			// Default source view

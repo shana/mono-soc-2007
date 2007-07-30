@@ -11,6 +11,7 @@ REFS = \
 SRCS = \
 	ExceptionWindow.cs \
 	MdbGui.cs \
+	PixmapRef.cs \
 	Pixmaps.cs \
 	Pads/*.cs \
 	Pads/Stores/*.cs \

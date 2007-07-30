@@ -8,7 +8,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 		string error;
 		
 		public override Gdk.Pixbuf Image {
-			get { return Pixmaps.Error; }
+			get { return Pixmaps.Error.GetPixbuf(); }
 		}
 		
 		public override string Name {

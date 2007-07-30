@@ -26,7 +26,7 @@ namespace Mono.Debugger.Frontend
 			Glade.XML gxml = new Glade.XML("gui.glade", "exceptionWindow", null);
 			gxml.Autoconnect(this);
 			
-			image.Pixbuf = Pixmaps.Exception;
+			image.Pixbuf = Pixmaps.Exception.GetPixbuf();
 			
 			if (args.Type == TargetEventType.UnhandledException) {
 				buttonContinue.Visible = false;
