@@ -18,7 +18,7 @@ namespace Mono.Debugger.Frontend
 		
 		public LocalsPad(MdbGui mdbGui): base(mdbGui, LocalsStore.ColumnTypes)
 		{
-			this.remoteStore = new LocalsStore(mdbGui.Interpreter);
+			this.remoteStore = mdbGui.DebuggerService.LocalsStore;
 			
 			AddImageTextColumn("Name", LocalsStore.ColumnImage, LocalsStore.ColumnName);
 			AddTextColumn("Value", LocalsStore.ColumnValue);

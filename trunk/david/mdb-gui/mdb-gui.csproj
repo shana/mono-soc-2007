@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebuggerService.cs" />
     <Compile Include="ExceptionWindow.cs" />
     <Compile Include="MdbGui.cs" />
     <Compile Include="Pads\BreakpointsPad.cs" />

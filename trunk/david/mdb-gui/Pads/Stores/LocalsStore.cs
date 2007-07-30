@@ -9,6 +9,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class LocalsStore: RemoteTreeStore
 	{
+		DebuggerService debuggerService;
 		Interpreter interpreter;
 		
 		AbstractVariable rootVariable;
@@ -31,8 +32,9 @@ namespace Mono.Debugger.Frontend
 			typeof(string)
 		};
 		
-		public LocalsStore(Interpreter interpreter)
+		public LocalsStore(DebuggerService debuggerService, Interpreter interpreter)
 		{
+			this.debuggerService = debuggerService;
 			this.interpreter = interpreter;
 			this.rootVariable = new LocalVariablesRoot(interpreter);
 			this.RootNode.SetValue(ColumnUpdateChilds, true);

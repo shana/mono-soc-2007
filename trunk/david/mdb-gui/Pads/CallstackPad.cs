@@ -18,7 +18,7 @@ namespace Mono.Debugger.Frontend
 		
 		public CallstackPad(MdbGui mdbGui): base(mdbGui, CallstackStore.ColumnTypes)
 		{
-			this.remoteStore = new CallstackStore(mdbGui.Interpreter);
+			this.remoteStore = mdbGui.DebuggerService.CallstackStore;
 			
 			AddImageColumn(String.Empty, CallstackStore.ColumnSelected);
 			AddTextColumn("#", CallstackStore.ColumnLevel);

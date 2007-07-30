@@ -9,6 +9,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class BreakpointsStore: RemoteTreeStore
 	{
+		DebuggerService debuggerService;
 		Interpreter interpreter;
 		
 		Hashtable breakpointToTreeNode = new Hashtable();
@@ -31,8 +32,9 @@ namespace Mono.Debugger.Frontend
 			typeof(string)
 		};
 		
-		public BreakpointsStore(Interpreter interpreter)
+		public BreakpointsStore(DebuggerService debuggerService, Interpreter interpreter)
 		{
+			this.debuggerService = debuggerService;
 			this.interpreter = interpreter;
 		}
 		
