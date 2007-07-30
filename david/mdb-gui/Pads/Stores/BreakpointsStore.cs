@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 using Mono.Debugger;
 using Mono.Debugger.Languages;
@@ -9,6 +10,8 @@ namespace Mono.Debugger.Frontend
 	public class BreakpointsStore: RemoteTreeStore
 	{
 		Interpreter interpreter;
+		
+		Hashtable breakpointToTreeNode = new Hashtable();
 		
 		public const int ColumnImage       = 0;
 		public const int ColumnID          = 1;
@@ -31,22 +34,47 @@ namespace Mono.Debugger.Frontend
 			this.interpreter = interpreter;
 		}
 		
+		void UpdateBreakpoint(SourceBreakpoint breakpoint)
+		{
+			RemoteTreeNode node = (RemoteTreeNode)breakpointToTreeNode[breakpoint];
+
+			if (node == null) {
+				node = RootNode.AppendNode();
+				breakpointToTreeNode.Add(breakpoint, node);
+			}
+			
+			node.SetValue(ColumnImage, breakpoint.IsEnabled && breakpoint.IsActivated ? Pixmaps.Breakpoint : Pixmaps.BreakpointDisabled);
+			node.SetValue(ColumnID, breakpoint.Index);
+			node.SetValue(ColumnEnabled, breakpoint.IsEnabled ? "Yes" : "No");
+			node.SetValue(ColumnActivated, breakpoint.IsActivated ? "Yes" : "No");
+			node.SetValue(ColumnThreadGroup, breakpoint.ThreadGroup != null ? breakpoint.ThreadGroup.Name : "global");
+			node.SetValue(ColumnLocation, breakpoint.Name);
+		}
+		
+		void RemoveBreakpoint(SourceBreakpoint breakpoint)
+		{
+			RemoteTreeNode node = (RemoteTreeNode)breakpointToTreeNode[breakpoint];
+			
+			if (node != null) {
+				node.Remove();
+			}
+			
+			breakpointToTreeNode.Remove(breakpoint);
+		}
+		
 		public void UpdateTree()
 		{
-			Event[] events = interpreter.Session.Events;
+			Hashtable breakpointsToRemove = (Hashtable)breakpointToTreeNode.Clone();
 			
-			RootNode.Clear();
-			
-			foreach (Event handle in events) {
+			foreach (Event handle in interpreter.Session.Events) {
 				if (handle is SourceBreakpoint) {
-					RemoteTreeNode node = RootNode.AppendNode();
-					node.SetValue(ColumnImage, handle.IsEnabled && handle.IsActivated ? Pixmaps.Breakpoint : Pixmaps.BreakpointDisabled);
-					node.SetValue(ColumnID, handle.Index);
-					node.SetValue(ColumnEnabled, handle.IsEnabled ? "Yes" : "No");
-					node.SetValue(ColumnActivated, handle.IsActivated ? "Yes" : "No");
-					node.SetValue(ColumnThreadGroup, handle.ThreadGroup != null ? handle.ThreadGroup.Name : "global");
-					node.SetValue(ColumnLocation, handle.Name);
+					UpdateBreakpoint((SourceBreakpoint)handle);
+					breakpointsToRemove.Remove(handle); // Ok if not in the table
 				}
+			}
+			
+			foreach (SourceBreakpoint breakpoint in breakpointsToRemove.Keys) {
+				RemoveBreakpoint(breakpoint);
 			}
 		}
 	}
