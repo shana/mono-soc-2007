@@ -600,5 +600,319 @@ namespace System.Windows.Controls {
 			}
 		}
 		#endregion
+
+		#region ImageStretchDirectionUpOnly
+		[Test]
+		public void ImageStretchDirectionUpOnly() {
+			new ImageStretchDirectionUpOnlyViewbox();
+		}
+
+		class ImageStretchDirectionUpOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchDirectionUpOnlyViewbox() {
+				StretchDirection = StretchDirection.UpOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter, new Size(100, 200), "1");
+				Assert.AreEqual(arrange_result.Width, 100, "2");
+				Assert.AreEqual(arrange_result.Height, 61.764705882352942, "2 1");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(100, 61.764705882352942), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
+
+		#region ImageStretchNoneStretchDirectionUpOnly
+		[Test]
+		public void ImageStretchNoneStretchDirectionUpOnly() {
+			new ImageStretchNoneStretchDirectionUpOnlyViewbox();
+		}
+
+		class ImageStretchNoneStretchDirectionUpOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchNoneStretchDirectionUpOnlyViewbox() {
+				StretchDirection = StretchDirection.UpOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Stretch = Stretch.None;
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter, new Size(100, 200), "1");
+				Assert.AreEqual(arrange_result, new Size(34, 21), "2");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(34, 21), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
+
+		#region ImageStretchFillStretchDirectionUpOnly
+		[Test]
+		public void ImageStretchFillStretchDirectionUpOnly() {
+			new ImageStretchFillStretchDirectionUpOnlyViewbox();
+		}
+
+		class ImageStretchFillStretchDirectionUpOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchFillStretchDirectionUpOnlyViewbox() {
+				StretchDirection = StretchDirection.UpOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Stretch = Stretch.Fill;
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter, new Size(100, 200), "1");
+				Assert.AreEqual(arrange_result, new Size(100, 200), "2");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(100, 200), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
+
+		#region ImageStretchUniformToFillStretchDirectionUpOnly
+		[Test]
+		public void ImageStretchUniformToFillStretchDirectionUpOnly() {
+			new ImageStretchUniformToFillStretchDirectionUpOnlyViewbox();
+		}
+
+		class ImageStretchUniformToFillStretchDirectionUpOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchUniformToFillStretchDirectionUpOnlyViewbox() {
+				StretchDirection = StretchDirection.UpOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Stretch = Stretch.UniformToFill;
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter.Width, 323.8095238095238, "1");
+				Assert.AreEqual(arrange_parameter.Height, 200, "1 1");
+				Assert.AreEqual(arrange_result, new Size(323.8095238095238, 200), "2");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(323.8095238095238, 200), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
+
+		#region ImageStretchDirectionDownOnly
+		[Test]
+		public void ImageStretchDirectionDownOnly() {
+			new ImageStretchDirectionDownOnlyViewbox();
+		}
+
+		class ImageStretchDirectionDownOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchDirectionDownOnlyViewbox() {
+				StretchDirection = StretchDirection.DownOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter, new Size(100, 200), "1");
+				Assert.AreEqual(arrange_result.Width, 34, "2");
+				Assert.AreEqual(arrange_result.Height, 21, "2 1");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(34, 21), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
+
+		#region ImageStretchNoneStretchDirectionDownOnly
+		[Test]
+		public void ImageStretchNoneStretchDirectionDownOnly() {
+			new ImageStretchNoneStretchDirectionDownOnlyViewbox();
+		}
+
+		class ImageStretchNoneStretchDirectionDownOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchNoneStretchDirectionDownOnlyViewbox() {
+				StretchDirection = StretchDirection.DownOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Stretch = Stretch.None;
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter, new Size(100, 200), "1");
+				Assert.AreEqual(arrange_result, new Size(34, 21), "2");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(34, 21), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
+
+		#region ImageStretchFillStretchDirectionDownOnly
+		[Test]
+		public void ImageStretchFillStretchDirectionDownOnly() {
+			new ImageStretchFillStretchDirectionDownOnlyViewbox();
+		}
+
+		class ImageStretchFillStretchDirectionDownOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchFillStretchDirectionDownOnlyViewbox() {
+				StretchDirection = StretchDirection.DownOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Stretch = Stretch.Fill;
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter, new Size(100, 200), "1");
+				Assert.AreEqual(arrange_result, new Size(34, 21), "2");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(34, 21), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
+
+		#region ImageStretchUniformToFillStretchDirectionDownOnly
+		[Test]
+		public void ImageStretchUniformToFillStretchDirectionDownOnly() {
+			new ImageStretchUniformToFillStretchDirectionDownOnlyViewbox();
+		}
+
+		class ImageStretchUniformToFillStretchDirectionDownOnlyViewbox : Viewbox {
+			Size arrange_parameter;
+			Size arrange_result;
+			Size measure_parameter;
+			Size measure_result;
+
+			public ImageStretchUniformToFillStretchDirectionDownOnlyViewbox() {
+				StretchDirection = StretchDirection.DownOnly;
+				global::System.Windows.Controls.Image image = new global::System.Windows.Controls.Image();
+				image.Source = new BitmapImage(new Uri("Test.png", UriKind.Relative));
+				Stretch = Stretch.UniformToFill;
+				Child = image;
+				MaxWidth = 100;
+				MaxHeight = 200;
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Assert.AreEqual(arrange_parameter.Width, 100, "1");
+				Assert.AreEqual(arrange_parameter.Height, 200, "1 1");
+				Assert.AreEqual(arrange_result, new Size(34, 21), "2");
+				Assert.AreEqual(measure_parameter, new Size(100, 200), "3");
+				Assert.AreEqual(measure_result, new Size(34, 21), "4");
+			}
+
+			protected override Size ArrangeOverride(Size arrangeSize) {
+				return arrange_result = base.ArrangeOverride(arrange_parameter = arrangeSize);
+			}
+
+			protected override Size MeasureOverride(Size constraint) {
+				return measure_result = base.MeasureOverride(measure_parameter = constraint);
+			}
+		}
+		#endregion
 	}
 }
