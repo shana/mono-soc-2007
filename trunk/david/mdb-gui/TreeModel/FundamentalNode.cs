@@ -12,7 +12,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 		TargetFundamentalObject obj;
 		
 		public override Gdk.Pixbuf Image {
-			get { return Pixmaps.PublicField; }
+			get { return Pixmaps.PublicField.GetPixbuf(); }
 		}
 		
 		public override string Name {
