@@ -14,6 +14,7 @@ SRCS = \
 	Pixmaps.cs \
 	Pads/*.cs \
 	TreeModel/*.cs \
+	RemoteTreeStore/*.cs \
 
 
 all: mdb-gui.exe TestApp.exe
