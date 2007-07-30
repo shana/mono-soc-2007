@@ -33,20 +33,43 @@ using Mono.Cecil.Cil;
 using Gendarme.Framework;
 
 namespace Gendarme.Rules.Smells {
-	
-	//SUGGESTION: You *may* want offer a discount if the method is overloaded with a
-	//subset of parameters.
 	//SUGGESTION: Setting all required properties in a constructor isn't
 	//uncommon.
 	//SUGGESTION: Different value for public / private / protected methods *may*
 	//be useful.
 	public class DetectLongParameterListRule : IMethodRule {
 
-		public const int MaxParameters = 10;
+		public const int MaxParameters = 6;
+
+		private bool IsOverloaded (MethodDefinition method) 
+		{
+			if (method.DeclaringType is TypeDefinition) {
+				TypeDefinition type = (TypeDefinition) method.DeclaringType;
+				return type.Methods.GetMethod (method.Name).Length > 1;
+			}
+			return false;
+		}
+
+		private MethodReference GetShortestOverloaded (MethodDefinition method) 
+		{
+			if (method.DeclaringType is TypeDefinition) {
+				TypeDefinition type = (TypeDefinition) method.DeclaringType;
+				MethodReference shortestOverloaded = (MethodReference) method;
+				foreach (MethodReference overloadedMethod in type.Methods.GetMethod (method.Name)) {
+					if (overloadedMethod.Parameters.Count < shortestOverloaded.Parameters.Count)
+						shortestOverloaded = overloadedMethod;
+				}
+				return shortestOverloaded;
+			}
+			return method;
+		}
 
 		private bool HasLongParameterList (MethodDefinition method) 
 		{
-			return method.Parameters.Count >= MaxParameters;
+			if (IsOverloaded (method)) 
+				return GetShortestOverloaded (method).Parameters.Count >= MaxParameters;
+			else 
+				return method.Parameters.Count >= MaxParameters;
 		}
 
 		public MessageCollection CheckMethod (MethodDefinition method, Runner runner) 
