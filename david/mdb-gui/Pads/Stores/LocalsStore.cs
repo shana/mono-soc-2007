@@ -11,7 +11,7 @@ namespace Mono.Debugger.Frontend
 	{
 		Interpreter interpreter;
 		
-		AbstractNode rootNode;
+		AbstractVariable rootVariable;
 		
 		public const int ColumnReference    = 0;
 		public const int ColumnFullName     = 1;
@@ -34,13 +34,13 @@ namespace Mono.Debugger.Frontend
 		public LocalsStore(Interpreter interpreter)
 		{
 			this.interpreter = interpreter;
-			this.rootNode = new LocalsRootNode(interpreter);
+			this.rootVariable = new LocalVariablesRoot(interpreter);
 			this.RootNode.SetValue(ColumnUpdateChilds, true);
 		}
 		
 		public void UpdateTree()
 		{
-			UpdateNodeRecursive(RootNode, rootNode);
+			UpdateNodeRecursive(RootNode, rootVariable);
 		}
 		
 		public void ExpandNode(RemoteTreeNodeRef nodeRef)
@@ -50,7 +50,7 @@ namespace Mono.Debugger.Frontend
 			// There might be a race condition and the node might have been just removed
 			if (node != null) {
 				node.SetValue(ColumnUpdateChilds, true);
-				UpdateNodeRecursive(node, (AbstractNode)node.Tag);
+				UpdateNodeRecursive(node, (AbstractVariable)node.Tag);
 			}
 		}
 		
@@ -64,7 +64,7 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		void UpdateNodeRecursive(RemoteTreeNode node, AbstractNode variable)
+		void UpdateNodeRecursive(RemoteTreeNode node, AbstractVariable variable)
 		{
 			// Get full name of the node
 			string fullNamePrefix;
@@ -96,11 +96,11 @@ namespace Mono.Debugger.Frontend
 				}
 			} else {
 				// Update childs
-				AbstractNode[] variables;
+				AbstractVariable[] variables;
 				try {
-					variables = ((AbstractNode)node.Tag).ChildNodes;
+					variables = ((AbstractVariable)node.Tag).ChildNodes;
 				} catch {
-					variables = new AbstractNode[] { new ErrorNode(String.Empty, "Can not get child nodes") };
+					variables = new AbstractVariable[] { new ErrorVariable(String.Empty, "Can not get child nodes") };
 				}
 				
 				Console.WriteLine("{0} current nodes, {1} new variables", node.ChildCount, variables.Length);

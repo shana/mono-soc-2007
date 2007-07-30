@@ -2,7 +2,7 @@ using System;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public class NullNode: AbstractNode
+	public class NullVariable: AbstractVariable
 	{
 		string name;
 		
@@ -18,7 +18,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 			get { return "null"; }
 		}
 		
-		public NullNode(string name)
+		public NullVariable(string name)
 		{
 			this.name = name;
 		}

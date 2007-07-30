@@ -6,7 +6,7 @@ using Mono.Debugger.Languages;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public class ClassNode: AbstractNode
+	public class ClassVariable: AbstractVariable
 	{
 		string name;
 		StackFrame stackFrame;
@@ -32,24 +32,24 @@ namespace Mono.Debugger.Frontend.TreeModel
 			get { return true; }
 		}
 		
-		public override AbstractNode[] ChildNodes {
+		public override AbstractVariable[] ChildNodes {
 			get { return GetChildNodes(); }
 		}
 		
-		public ClassNode(string name, StackFrame stackFrame, TargetClassObject obj)
+		public ClassVariable(string name, StackFrame stackFrame, TargetClassObject obj)
 		{
 			this.name = name;
 			this.stackFrame = stackFrame;
 			this.obj = obj;
 		}
 		
-		AbstractNode[] GetChildNodes()
+		AbstractVariable[] GetChildNodes()
 		{
 			ArrayList nodes = new ArrayList();
 			
 			TargetClassObject parent = obj.GetParentObject(stackFrame.Thread);
 			if (parent != null && parent.Type != parent.Type.Language.ObjectType) {
-				nodes.Add(new ClassNode("<Base class>", stackFrame, parent));
+				nodes.Add(new ClassVariable("<Base class>", stackFrame, parent));
 			}
 			
 			if (obj.Type.StaticFields.Length > 0) {
@@ -58,30 +58,30 @@ namespace Mono.Debugger.Frontend.TreeModel
 			
 			nodes.AddRange(FieldsToNodes(obj.Type.Fields));
 			
-			return (AbstractNode[])nodes.ToArray(typeof(AbstractNode));
+			return (AbstractVariable[])nodes.ToArray(typeof(AbstractVariable));
 		}
 		
-		AbstractNode[] FieldsToNodes(TargetFieldInfo[] fields)
+		AbstractVariable[] FieldsToNodes(TargetFieldInfo[] fields)
 		{
 			ArrayList nodes = new ArrayList();
 			
 			foreach(TargetFieldInfo field in fields) {
-				AbstractNode node;
+				AbstractVariable node;
 				try {
 					TargetObject fobj = obj.GetField(stackFrame.Thread, field);
-					node = NodeFactory.Create(field.Name, fobj, stackFrame);
+					node = VariableFactory.Create(field.Name, fobj, stackFrame);
 				} catch {
-					node = new ErrorNode(field.Name, "Can not get field value");
+					node = new ErrorVariable(field.Name, "Can not get field value");
 				}
 				nodes.Add(node);
 			}
 			
-			return (AbstractNode[])nodes.ToArray(typeof(AbstractNode));
+			return (AbstractVariable[])nodes.ToArray(typeof(AbstractVariable));
 		}
 		
-		class StaticMembers: AbstractNode
+		class StaticMembers: AbstractVariable
 		{
-			ClassNode parentNode;
+			ClassVariable parentNode;
 			
 			public override string Name {
 				get { return "<Static members>"; }
@@ -91,13 +91,13 @@ namespace Mono.Debugger.Frontend.TreeModel
 				get { return true; }
 			}
 			
-			public override AbstractNode[] ChildNodes {
+			public override AbstractVariable[] ChildNodes {
 				get {
 					return parentNode.FieldsToNodes(parentNode.obj.Type.StaticFields);
 				}
 			}
 			
-			public StaticMembers(ClassNode parentNode)
+			public StaticMembers(ClassVariable parentNode)
 			{
 				this.parentNode = parentNode;
 			}

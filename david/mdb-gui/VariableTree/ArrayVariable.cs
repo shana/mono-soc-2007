@@ -6,13 +6,13 @@ using Mono.Debugger.Languages;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public class ArrayNode: AbstractNode
+	public class ArrayVariable: AbstractVariable
 	{
 		string name;
 		StackFrame stackFrame;
 		TargetArrayObject obj;
 		
-		ArraySubsetNode universalSubset;
+		ArraySubsetVariable universalSubset;
 		
 		public override PixmapRef Image {
 			get { return Pixmaps.PublicClass; }
@@ -34,17 +34,17 @@ namespace Mono.Debugger.Frontend.TreeModel
 			get { return universalSubset.HasChildNodes; }
 		}
 		
-		public override AbstractNode[] ChildNodes {
+		public override AbstractVariable[] ChildNodes {
 			get { return universalSubset.ChildNodes; }
 		}
 		
-		public ArrayNode(string name, StackFrame stackFrame, TargetArrayObject obj)
+		public ArrayVariable(string name, StackFrame stackFrame, TargetArrayObject obj)
 		{
 			this.name = name;
 			this.stackFrame = stackFrame;
 			this.obj = obj;
 			
-			universalSubset = new ArraySubsetNode(stackFrame, obj, new int[0]);
+			universalSubset = new ArraySubsetVariable(stackFrame, obj, new int[0]);
 		}
 	}
 }
