@@ -103,16 +103,16 @@
     <Compile Include="RemoteTreeStore\RemoteTreePath.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeStore.cs" />
     <Compile Include="SourceView.cs" />
-    <Compile Include="TreeModel\AbstractNode.cs" />
-    <Compile Include="TreeModel\ArrayNode.cs" />
-    <Compile Include="TreeModel\ArraySubsetNode.cs" />
-    <Compile Include="TreeModel\ClassNode.cs" />
-    <Compile Include="TreeModel\EnumNode.cs" />
-    <Compile Include="TreeModel\ErrorNode.cs" />
-    <Compile Include="TreeModel\FundamentalNode.cs" />
-    <Compile Include="TreeModel\LocalsRootNode.cs" />
-    <Compile Include="TreeModel\NodeFactory.cs" />
-    <Compile Include="TreeModel\NullNode.cs" />
+    <Compile Include="VariableTree\AbstractVariable.cs" />
+    <Compile Include="VariableTree\ArraySubsetVariable.cs" />
+    <Compile Include="VariableTree\ArrayVariable.cs" />
+    <Compile Include="VariableTree\ClassVariable.cs" />
+    <Compile Include="VariableTree\EnumVariable.cs" />
+    <Compile Include="VariableTree\ErrorVariable.cs" />
+    <Compile Include="VariableTree\FundamentalVariable.cs" />
+    <Compile Include="VariableTree\LocalVariablesRoot.cs" />
+    <Compile Include="VariableTree\NullVariable.cs" />
+    <Compile Include="VariableTree\VariableFactory.cs" />
     <EmbeddedResource Include="pixmaps\*" />
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +120,6 @@
     <Folder Include="RemoteTreeStore" />
     <Folder Include="Pads" />
     <Folder Include="pixmaps" />
-    <Folder Include="TreeModel" />
+    <Folder Include="VariableTree" />
   </ItemGroup>
 </Project>

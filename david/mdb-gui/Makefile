@@ -16,7 +16,7 @@ SRCS = \
 	SourceView.cs \
 	Pads/*.cs \
 	Pads/Stores/*.cs \
-	TreeModel/*.cs \
+	VariableTree/*.cs \
 	RemoteTreeStore/*.cs \
 
 
