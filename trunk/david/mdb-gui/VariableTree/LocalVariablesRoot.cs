@@ -6,7 +6,7 @@ using Mono.Debugger.Languages;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public class LocalsRootNode: AbstractNode
+	public class LocalVariablesRoot: AbstractVariable
 	{
 		Interpreter interpreter;
 		
@@ -26,16 +26,16 @@ namespace Mono.Debugger.Frontend.TreeModel
 			get { return true; }
 		}
 		
-		public override AbstractNode[] ChildNodes {
+		public override AbstractVariable[] ChildNodes {
 			get { return GetChilds(); }
 		}
 		
-		public LocalsRootNode(Interpreter interpreter)
+		public LocalVariablesRoot(Interpreter interpreter)
 		{
 			this.interpreter = interpreter;
 		}
 		
-		AbstractNode[] GetChilds()
+		AbstractVariable[] GetChilds()
 		{
 			ArrayList rootVariables = new ArrayList();
 			
@@ -44,22 +44,22 @@ namespace Mono.Debugger.Frontend.TreeModel
 			try {
 				currentFrame = interpreter.CurrentThread.GetBacktrace().CurrentFrame;
 			} catch {
-				return new AbstractNode[0];
+				return new AbstractVariable[0];
 			}
 			
 			foreach (TargetVariable variable in currentFrame.Method.Parameters) {
-				rootVariables.Add(NodeFactory.Create(variable, currentFrame));
+				rootVariables.Add(VariableFactory.Create(variable, currentFrame));
 			}
 				
 			foreach (TargetVariable variable in currentFrame.Locals) {
-				rootVariables.Add(NodeFactory.Create(variable, currentFrame));
+				rootVariables.Add(VariableFactory.Create(variable, currentFrame));
 			}
 			
 			if (currentFrame.Method.HasThis) {
-				rootVariables.Add(NodeFactory.Create(currentFrame.Method.This, currentFrame));
+				rootVariables.Add(VariableFactory.Create(currentFrame.Method.This, currentFrame));
 			}
 			
-			return (AbstractNode[])rootVariables.ToArray(typeof(AbstractNode));
+			return (AbstractVariable[])rootVariables.ToArray(typeof(AbstractVariable));
 		}
 	}
 }

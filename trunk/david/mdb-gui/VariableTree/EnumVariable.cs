@@ -7,7 +7,7 @@ using Mono.Debugger.Languages;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public class EnumNode: AbstractNode
+	public class EnumVariable: AbstractVariable
 	{
 		string name;
 		StackFrame stackFrame;
@@ -33,7 +33,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 			}
 		}
 		
-		public EnumNode(string name, StackFrame stackFrame, TargetEnumObject obj)
+		public EnumVariable(string name, StackFrame stackFrame, TargetEnumObject obj)
 		{
 			this.name = name;
 			this.stackFrame = stackFrame;

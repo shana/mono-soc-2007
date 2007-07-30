@@ -9,7 +9,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 	/// <summary>
 	/// Represent a subset of array elements
 	/// </summary>
-	public class ArraySubsetNode: AbstractNode
+	public class ArraySubsetVariable: AbstractVariable
 	{
 		const int SubsetOptimalSize = 20;
 		const int SubsetMaximalSize = 32;
@@ -59,13 +59,13 @@ namespace Mono.Debugger.Frontend.TreeModel
 			}
 		}
 		
-		public override AbstractNode[] ChildNodes {
+		public override AbstractVariable[] ChildNodes {
 			get {
 				return GetChildNodes();
 			}
 		}
 		
-		public ArraySubsetNode(StackFrame stackFrame, TargetArrayObject obj, int[] indicesPefix, int startIndex, int endIndex)
+		public ArraySubsetVariable(StackFrame stackFrame, TargetArrayObject obj, int[] indicesPefix, int startIndex, int endIndex)
 		{
 			this.stackFrame = stackFrame;
 			this.obj = obj;
@@ -82,14 +82,14 @@ namespace Mono.Debugger.Frontend.TreeModel
 			//upperBound = int.MaxValue;
 		}
 		
-		public ArraySubsetNode(StackFrame stackFrame, TargetArrayObject obj, int[] indicesPefix)
+		public ArraySubsetVariable(StackFrame stackFrame, TargetArrayObject obj, int[] indicesPefix)
 			: this(stackFrame, obj, indicesPefix, 0, 0)
 		{
 			this.startIndex = lowerBound;
 			this.endIndex = upperBound;
 		}
 		
-		AbstractNode GetChildNode(int index)
+		AbstractVariable GetChildNode(int index)
 		{
 			int[] newIndices = new int[dimension + 1];
 			indicesPefix.CopyTo(newIndices, 0);
@@ -101,12 +101,12 @@ namespace Mono.Debugger.Frontend.TreeModel
 				try {
 					element = obj.GetElement(stackFrame.Thread, newIndices);
 				} catch {
-					return new ErrorNode(IndicesToString(newIndices), "Can not get array element");
+					return new ErrorVariable(IndicesToString(newIndices), "Can not get array element");
 				}
-				return NodeFactory.Create(IndicesToString(newIndices), element, stackFrame);
+				return VariableFactory.Create(IndicesToString(newIndices), element, stackFrame);
 			} else {
 				// Create a subset for the next dimension
-				return new ArraySubsetNode(stackFrame, obj, newIndices);
+				return new ArraySubsetVariable(stackFrame, obj, newIndices);
 			}
 		}
 		
@@ -124,12 +124,12 @@ namespace Mono.Debugger.Frontend.TreeModel
 			return sb.ToString();
 		}
 		
-		AbstractNode[] GetChildNodes()
+		AbstractVariable[] GetChildNodes()
 		{
 			long childCount = (long)endIndex - (long)startIndex + 1;
 			if (childCount <= SubsetMaximalSize) {
 				// Return array of all childs
-				AbstractNode[] childs = new AbstractNode[childCount];
+				AbstractVariable[] childs = new AbstractVariable[childCount];
 				for(int i = 0; i < childCount; i++) {
 					childs[i] = GetChildNode(startIndex + i);
 				}
@@ -151,11 +151,11 @@ namespace Mono.Debugger.Frontend.TreeModel
 				}
 				
 				// Return the smaller groups
-				AbstractNode[] childs = new AbstractNode[groupCount];
+				AbstractVariable[] childs = new AbstractVariable[groupCount];
 				for(int i = 0; i < groupCount; i++) {
 					long start = startIndex + i * groupSize;
 					long end = System.Math.Min(upperBound, start + groupSize - 1);
-					childs[i] = new ArraySubsetNode(stackFrame, obj, indicesPefix, (int)start, (int)end);
+					childs[i] = new ArraySubsetVariable(stackFrame, obj, indicesPefix, (int)start, (int)end);
 				}
 				return childs;
 			}

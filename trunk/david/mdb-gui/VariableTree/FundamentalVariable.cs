@@ -5,7 +5,7 @@ using Mono.Debugger.Languages;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public class FundamentalNode: AbstractNode
+	public class FundamentalVariable: AbstractVariable
 	{
 		string name;
 		StackFrame stackFrame;
@@ -31,7 +31,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 			}
 		}
 		
-		public FundamentalNode(string name, StackFrame stackFrame, TargetFundamentalObject obj)
+		public FundamentalVariable(string name, StackFrame stackFrame, TargetFundamentalObject obj)
 		{
 			this.name = name;
 			this.stackFrame = stackFrame;

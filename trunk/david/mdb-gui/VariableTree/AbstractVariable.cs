@@ -2,7 +2,7 @@ using System;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public abstract class AbstractNode
+	public abstract class AbstractVariable
 	{
 		public virtual PixmapRef Image {
 			get { return null; }
@@ -24,8 +24,8 @@ namespace Mono.Debugger.Frontend.TreeModel
 			get { return false; }
 		}
 		
-		public virtual AbstractNode[] ChildNodes {
-			get { return new AbstractNode[0]; }
+		public virtual AbstractVariable[] ChildNodes {
+			get { return new AbstractVariable[0]; }
 		}
 	}
 }

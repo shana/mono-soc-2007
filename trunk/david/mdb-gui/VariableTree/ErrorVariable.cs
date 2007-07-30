@@ -2,7 +2,7 @@ using System;
 
 namespace Mono.Debugger.Frontend.TreeModel
 {
-	public class ErrorNode: AbstractNode
+	public class ErrorVariable: AbstractVariable
 	{
 		string name;
 		string error;
@@ -19,7 +19,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 			get { return String.Format("<error: {0}>", error); }
 		}
 		
-		public ErrorNode(string name, string error)
+		public ErrorVariable(string name, string error)
 		{
 			this.name = name;
 			this.error = error;
