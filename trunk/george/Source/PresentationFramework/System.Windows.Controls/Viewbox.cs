@@ -101,8 +101,10 @@ namespace System.Windows.Controls {
 			switch (Stretch) {
 			case Stretch.None:
 				return child_desired_size;
-			default:
+			case Stretch.Fill:
 				return arrangeSize;
+			default:
+				return new Size(child_desired_size.Width * scale_x, child_desired_size.Height * scale_y);
 			}
 		}
 
@@ -120,10 +122,28 @@ namespace System.Windows.Controls {
 			switch (Stretch) {
 			case Stretch.None:
 				return child_desired_size;
-			default:
+			case Stretch.Fill:
 				if (child_desired_size.Width == 0 && child_desired_size.Height == 0)
 					return child_desired_size;
 				return new Size(double.IsPositiveInfinity(constraint.Width) ? child.DesiredSize.Width : constraint.Width, double.IsPositiveInfinity(constraint.Height) ? child.DesiredSize.Height : constraint.Height);
+			default:
+				double scale_x = child_desired_size.Width == 0 ? double.NaN : double.IsPositiveInfinity(constraint.Width) ? double.NaN : constraint.Width / child_desired_size.Width;
+				double scale_y = child_desired_size.Height == 0 ? double.NaN : double.IsPositiveInfinity(constraint.Height) ? double.NaN : constraint.Height / child_desired_size.Height;
+				double scale;
+				if (double.IsNaN(scale_x))
+					if (double.IsNaN(scale_y))
+						scale = 1;
+					else
+						scale = scale_y;
+				else
+					if (double.IsNaN(scale_y))
+						scale = scale_x;
+					else
+						if (Stretch == Stretch.Uniform)
+							scale = Math.Min(scale_x, scale_y);
+						else
+							scale = Math.Max(scale_x, scale_y);
+				return new Size(child_desired_size.Width * scale, child_desired_size.Height * scale);
 			}
 		}
 		#endregion
