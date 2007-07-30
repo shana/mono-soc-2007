@@ -36,6 +36,10 @@ namespace Mono.Debugger.Frontend
 				}
 				if (mod is RemoteTreeModification.UpdateNode) {
 					RemoteTreeModification.UpdateNode updateMod = (RemoteTreeModification.UpdateNode)mod;
+					// Igonre the root node
+					if (updateMod.NodePath.IsRoot) {
+						continue;
+					}
 					TreeIter it;
 					gtkStore.GetIter(out it, new TreePath(updateMod.NodePath.Indices));
 					object value = updateMod.Value;

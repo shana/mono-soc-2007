@@ -11,14 +11,18 @@ namespace Mono.Debugger.Frontend
 	{
 		Interpreter interpreter;
 		
-		public const int ColumnFullName = 0;
-		public const int ColumnImage    = 1;
-		public const int ColumnName     = 2;
-		public const int ColumnValue    = 3;
-		public const int ColumnType     = 4;
+		AbstractNode rootNode;
+		
+		public const int ColumnFullName     = 0;
+		public const int ColumnUpdateChilds = 1;
+		public const int ColumnImage        = 2;
+		public const int ColumnName         = 3;
+		public const int ColumnValue        = 4;
+		public const int ColumnType         = 5;
 		
 		public static Type[] ColumnTypes = new Type[] {
 			typeof(string),
+			typeof(bool),
 			typeof(Gdk.Pixbuf),
 			typeof(string),
 			typeof(string),
@@ -28,37 +32,25 @@ namespace Mono.Debugger.Frontend
 		public LocalsStore(Interpreter interpreter)
 		{
 			this.interpreter = interpreter;
+			this.rootNode = new LocalsRootNode(interpreter);
+			this.RootNode.SetValue(ColumnUpdateChilds, true);
 		}
 		
 		public void UpdateTree()
 		{
+			UpdateNodeRecursive(RootNode, rootNode);
 		}
 		
-		AbstractNode[] GetRootVariables()
+		public void ExpandNode(RemoteTreePath path)
 		{
-			ArrayList rootVariables = new ArrayList();
-			
-			StackFrame currentFrame;
-			
-			try {
-				currentFrame = interpreter.CurrentThread.GetBacktrace().CurrentFrame;
-			} catch {
-				return new AbstractNode[0];
-			}
-			
-			foreach (TargetVariable variable in currentFrame.Method.Parameters) {
-				rootVariables.Add(NodeFactory.Create(variable, currentFrame));
-			}
-				
-			foreach (TargetVariable variable in currentFrame.Locals) {
-				rootVariables.Add(NodeFactory.Create(variable, currentFrame));
-			}
-			
-			if (currentFrame.Method.HasThis) {
-				rootVariables.Add(NodeFactory.Create(currentFrame.Method.This, currentFrame));
-			}
-			
-			return (AbstractNode[])rootVariables.ToArray(typeof(AbstractNode));
+			RemoteTreeNode node = GetNode(path);
+			node.SetValue(ColumnUpdateChilds, true);
+			UpdateNodeRecursive(node, (AbstractNode)node.Tag);
+		}
+		
+		public void CollapseNode(RemoteTreePath path)
+		{
+			GetNode(path).SetValue(ColumnUpdateChilds, false);
 		}
 		
 		void UpdateNodeRecursive(RemoteTreeNode node, AbstractNode variable)
@@ -81,10 +73,11 @@ namespace Mono.Debugger.Frontend
 			node.SetValue(ColumnType, variable.Type);
 			
 			// Recursively update the childs of this node
+			bool updateChilds = node.GetValue(ColumnUpdateChilds) != null && (bool)node.GetValue(ColumnUpdateChilds);
 			if (!variable.HasChildNodes) {
 				// Does not have childs
 				node.Clear();
-			} if (!updateChilds) {
+			} else if (!updateChilds) {
 				// Has childs but do not update them
 				if (node.ChildCount == 0) {
 					// Placeholder so that the item is expandable
@@ -99,11 +92,12 @@ namespace Mono.Debugger.Frontend
 					variables = new AbstractNode[] { new ErrorNode(String.Empty, "Can not get child nodes") };
 				}
 				
+				Console.WriteLine("{0} current nodes, {1} new variables", node.ChildCount, variables.Length);
+				
 				// Iterate over the current tree nodes and update them
 				// Try to do it with minimal number of changes to the tree
-				for(int i = 0; i < node.ChildCount; i++) {
-					RemoteTreeNode childNode = node.GetChild(i);
-					string childNodeName = (string)childNode.GetValue(ColumnName);
+				for(int i = 0; i < node.ChildCount; /* no-op */ ) {
+					string childNodeName = (string)node.GetChild(i).GetValue(ColumnName);
 					
 					// Update 'i'th node to 'i'th variable
 					
@@ -116,21 +110,23 @@ namespace Mono.Debugger.Frontend
 							break;
 						}
 					}
+					Console.WriteLine("Looking for variable '{0}': index = {1}", childNodeName, varIndex);
 					
 					// Not found - remove this node
 					if (varIndex == -1) {
-						childNode.Remove();
+						node.GetChild(i).Remove();
 						continue;
 					}
 					
 					// Insert the variables before the match
-					for(int j = i; j < varIndex; j++) {
-						RemoteTreeNode newNode = childNode.InsertNode(j);
-						UpdateNodeRecursive(newNode, variables[j]);
+					while(i < varIndex) {
+						UpdateNodeRecursive(node.InsertNode(i), variables[i]);
+						i++;
 					}
 					
 					// Update the match
-					UpdateNodeRecursive(childNode, variables[varIndex]);
+					UpdateNodeRecursive(node.GetChild(i), variables[i]);
+					i++;
 				}
 				
 				// Add any variables left over
