@@ -91,7 +91,7 @@ namespace Mono.Debugger.Frontend
 				foreach (Process process in interpreter.Processes) {
 					foreach (Thread thread in process.GetThreads()) {
 						UpdateThread(thread);
-						threadsToRemove.Remove(thread);
+						threadsToRemove.Remove(thread); // Ok if not in the table
 					}
 				}
 			}
