@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Collections;
 using System.Reflection;
 
 using Mono.Cecil;
@@ -59,6 +60,10 @@ namespace Test.Rules.Performance {
 			Console.WriteLine ("Welcome to the foo program {0}", Assembly.GetExecutingAssembly ().GetName ().Version);
 		}
 
+		public void MethodWithUnusedParameters (IEnumerable enumerable, int x) 
+		{
+			Console.WriteLine ("Method with unused parameters");
+		}
 
 		[TestFixtureSetUp]
 		public void FixtureSetUp () 
@@ -92,6 +97,15 @@ namespace Test.Rules.Performance {
 			method = GetMethodForTest ("PrintBannerWithoutParameters");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void MethodWithUnusedParametersTest () 
+		{
+			method = GetMethodForTest ("MethodWithUnusedParameters");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
 		}
 
 		private MethodDefinition GetMethodForTest (string methodName) 
