@@ -89,7 +89,7 @@ namespace Test.Rules.Performance {
 		[Test]
 		public void PrintBannerWithoutParametersTest () 
 		{
-			method = GetMethodForTest ("PrintBannerWithoutParameter");
+			method = GetMethodForTest ("PrintBannerWithoutParameters");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
