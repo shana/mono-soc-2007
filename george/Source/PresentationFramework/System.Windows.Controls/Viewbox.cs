@@ -98,14 +98,7 @@ namespace System.Windows.Controls {
 				break;
 			}
 			container_visual.Transform = new ScaleTransform(scale_x, scale_y);
-			switch (Stretch) {
-			case Stretch.None:
-				return child_desired_size;
-			case Stretch.Fill:
-				return arrangeSize;
-			default:
-				return new Size(child_desired_size.Width * scale_x, child_desired_size.Height * scale_y);
-			}
+			return new Size(child_desired_size.Width * scale_x, child_desired_size.Height * scale_y);
 		}
 
 		protected override Visual GetVisualChild(int index) {
@@ -125,7 +118,22 @@ namespace System.Windows.Controls {
 			case Stretch.Fill:
 				if (child_desired_size.Width == 0 && child_desired_size.Height == 0)
 					return child_desired_size;
-				return new Size(double.IsPositiveInfinity(constraint.Width) ? child.DesiredSize.Width : constraint.Width, double.IsPositiveInfinity(constraint.Height) ? child.DesiredSize.Height : constraint.Height);
+				Size result = new Size(double.IsPositiveInfinity(constraint.Width) ? child_desired_size.Width : constraint.Width, double.IsPositiveInfinity(constraint.Height) ? child_desired_size.Height : constraint.Height);
+				switch (StretchDirection) {
+				case StretchDirection.DownOnly:
+					if (result.Width > child_desired_size.Width)
+						result.Width = child_desired_size.Width;
+					if (result.Height > child_desired_size.Height)
+						result.Height = child_desired_size.Height;
+					break;
+				case StretchDirection.UpOnly:
+					if (result.Width < child_desired_size.Width)
+						result.Width = child_desired_size.Width;
+					if (result.Height < child_desired_size.Height)
+						result.Height = child_desired_size.Height;
+					break;
+				}
+				return result;
 			default:
 				double scale_x = child_desired_size.Width == 0 ? double.NaN : double.IsPositiveInfinity(constraint.Width) ? double.NaN : constraint.Width / child_desired_size.Width;
 				double scale_y = child_desired_size.Height == 0 ? double.NaN : double.IsPositiveInfinity(constraint.Height) ? double.NaN : constraint.Height / child_desired_size.Height;
@@ -143,6 +151,16 @@ namespace System.Windows.Controls {
 							scale = Math.Min(scale_x, scale_y);
 						else
 							scale = Math.Max(scale_x, scale_y);
+				switch (StretchDirection) {
+				case StretchDirection.DownOnly:
+					if (scale > 1)
+						scale = 1;
+					break;
+				case StretchDirection.UpOnly:
+					if (scale < 1)
+						scale = 1;
+					break;
+				}
 				return new Size(child_desired_size.Width * scale, child_desired_size.Height * scale);
 			}
 		}
