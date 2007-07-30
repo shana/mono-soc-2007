@@ -4,7 +4,7 @@ namespace Mono.Debugger.Frontend.TreeModel
 {
 	public abstract class AbstractNode
 	{
-		public virtual Gdk.Pixbuf Image {
+		public virtual PixmapRef Image {
 			get { return null; }
 		}
 		
