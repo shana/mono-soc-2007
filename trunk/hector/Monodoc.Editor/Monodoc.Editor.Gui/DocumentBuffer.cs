@@ -63,7 +63,7 @@ public class DocumentBuffer : TextBuffer {
 			} else if (DocumentUtils.TagEndsHere (lastPrevious, previousIter, startIter) && lastPrevious.Editable) {
 				#if DEBUG
 				Console.WriteLine ("DEBUG: Inserting text at end of editable region.");
-				Console.WriteLine ("DEBUG: Tag Name: {0} Char: {1}", last_last.Name, previousIter.Char);
+				Console.WriteLine ("DEBUG: Tag Name: {0} Char: {1}", lastPrevious.Name, previousIter.Char);
 				#endif
 
 				ApplyTag (lastPrevious, startIter, endIter);
@@ -78,10 +78,9 @@ public class DocumentBuffer : TextBuffer {
 			Console.WriteLine ("DEBUG: Zero length range.");
 		Console.WriteLine ("DEBUG: Start Offset: {0} Char: {1}", startIter.Offset, startIter.Char);
 		Console.WriteLine ("DEBUG: End Offset: {0} Char: {1}", endIter.Offset, endIter.Char);
-
+		
 		int startOffset = startIter.Offset;
-		int endOffset = endIter.Offset;
-
+		
 		TextTag last = DocumentUtils.GetLastTag (startIter);
 		bool startsRegion = startIter.BeginsTag (last);
 		bool endsRegion = !endIter.HasTag (last);
