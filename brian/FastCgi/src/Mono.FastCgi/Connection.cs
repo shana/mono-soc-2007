@@ -163,13 +163,14 @@ namespace Mono.FastCgi {
 				
 				try {
 					record = new Record (socket, receive_buffer);
-				} catch (ArgumentException) {
+				} catch (ArgumentException e) {
 					// An argument exception in the
 					// constructor indicated that the socket
 					// did not contain a complete and valid
 					// record. We take this to mean that the
 					// socket is dead and abort.
-					StopRun ("Incomplete record.");
+					StopRun ("Incomplete record (" +
+						e.Message.Split ('\r', '\n') [0] + ")");
 					Stop ();
 					return;
 				}

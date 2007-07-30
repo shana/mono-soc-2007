@@ -207,6 +207,14 @@
 		</Description>
 	</Setting>
 	
+	<Setting Name="logfile" AppSetting="FastCgiLogFile"
+		Type="String" ConsoleVisible="True">
+		<Description>
+			<para>Specifies a file to log events to.</para>
+		</Description>
+	</Setting>
+	
+	<!--
 	<Setting Name="editconfig" Type="Bool" ConsoleVisible="True">
 		<Description>
 			<para>Adds a configuration application to the server.
@@ -251,4 +259,5 @@
 			<para>To use this argument, "editconfig" must be set.</para>
 		</Description>
 	</Setting>
+	-->
 </ConfigurationManager>

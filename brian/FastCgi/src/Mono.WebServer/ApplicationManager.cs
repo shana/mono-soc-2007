@@ -274,13 +274,14 @@ namespace Mono.WebServer
 				while (parts < vSplit.Length &&
 					parts < rSplit.Length &&
 					vSplit [vSplit.Length - parts - 1] ==
-					rSplit [rSplit.Length - parts - 1])
-					parts ++;
+					rSplit [rSplit.Length - parts - 1] &&
+					! new DirectoryInfo (Path.Combine (realPath, "bin")).Exists
+				)
+					realPath = string.Join (sep.ToString (),
+						rSplit, 0, rSplit.Length - (++parts)) + sep;
 					
 				topVPath = string.Join ("/", vSplit, 0,
 					vSplit.Length - parts) + "/";
-				realPath = string.Join (sep.ToString (),
-					rSplit, 0, rSplit.Length - parts) + sep;
 			}
 			
 			VPathToHost bestMatch = null;

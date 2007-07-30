@@ -12,9 +12,9 @@
 			<li><a href="#step1">Step 1: Enabling the FastCGI Module</a></li>
 			<li><a href="#step2">Step 2: Configuring the FastCGI Module</a></li>
 			<ul>
-				<li><a href="#step2a">Part A: Configuring a Spawned/Local Server</a></li>
-				<li><a href="#step2b">Part B: Configuring a Remote Server</a></li>
-				<li><a href="#step2c">Part C: Avoiding Conflict with Other FastCGI Servers</a></li>
+				<li><a href="#step2a">Part A: Adding the Module</a></li>
+				<li><a href="#step2b">Part B: Adding the Server</a></li>
+				<li><a href="#step2c">Part C: Mapping Extensions</a></li>
 			</ul>
 			<li><a href="#step3">Step 3: Adding Index Pages</a></li>
 		</ul>
@@ -29,14 +29,6 @@
 		be done by modifying only three files.</p>
 		
 		<h3>NOTE</h3>
-		
-		<p style="color:red">These instructions are not definitive and
-		are designed to provide basic and easy to use steps for those
-		not accustomed to <tt>fastcgi-mono-server</tt> or configuring
-		<tt>lighttpd</tt>. For more in depth information on configuring
-		FastCGI, please consult the <a
-		href="http://trac.lighttpd.net/trac/wiki/Docs%3AModFastCGI">
-		documentation provided by Lighttpd</a>.</p>
 		
 		<p>These configurations have been tested with the following
 		systems:</p>
@@ -97,6 +89,7 @@ fastcgi.server = (
 fastcgi.map-extensions = (
         ".asmx"   => ".aspx",
         ".ashx"   => ".aspx",
+        ".asax"   => ".aspx",
         ".ascx"   => ".aspx",
         ".soap"   => ".aspx",
         ".rem"    => ".aspx",
@@ -109,7 +102,7 @@ fastcgi.map-extensions = (
 		<p>So without further adu...</p>
 		
 		<a name="step2a"></a>
-		<h3>Part A: Adding the module</h3>
+		<h3>Part A: Adding the Module</h3>
 		
 		<p>This file must have the following line in it, otherwise it
 		will not work:</p>
@@ -273,6 +266,7 @@ fastcgi.map-extensions = (
         ".php3" => ".php"<b>,
         ".asmx"   => ".aspx",
         ".ashx"   => ".aspx",
+        ".asax"   => ".aspx",
         ".ascx"   => ".aspx",
         ".soap"   => ".aspx",
         ".rem"    => ".aspx",
@@ -288,6 +282,7 @@ fastcgi.map-extensions = (
 		<pre>fastcgi.map-extensions = (
         ".asmx"   => ".aspx",
         ".ashx"   => ".aspx",
+        ".asax"   => ".aspx",
         ".ascx"   => ".aspx",
         ".soap"   => ".aspx",
         ".rem"    => ".aspx",

@@ -69,9 +69,15 @@ namespace Mono.FastCgi {
 		
 		unsafe public override int Receive (byte [] buffer, int size, sock.SocketFlags flags)
 		{
+			if (!connected)
+				return 0;
+			
 			int value;
 			fixed (byte* ptr = buffer)
 				value = recv (socket, ptr, size, (int) flags);
+			
+			if (value != size)
+				connected = false;
 			
 			if (value >= 0)
 				return value;
@@ -81,9 +87,15 @@ namespace Mono.FastCgi {
 		
 		unsafe public override int Send (byte [] data, int size, sock.SocketFlags flags)
 		{
+			if (!connected)
+				return 0;
+			
 			int value;
 			fixed (byte* ptr = data)
 				value = send (socket, ptr, size, (int) flags);
+			
+			if (value != size)
+				connected = false;
 			
 			if (value >= 0)
 				return value;

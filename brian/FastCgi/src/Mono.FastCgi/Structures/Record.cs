@@ -237,14 +237,19 @@ namespace Mono.FastCgi {
 			byte[] header_buffer = (buffer != null && buffer.Length
 				> 8) ? buffer : new byte [HeaderSize];
 			byte   padding_length;
+			int    bytes_read;
 			
 			// Read the 8 byte record header. If 8 bytes aren't
 			// read, the stream is corrupted and an exception is
 			// thrown.
-			if (socket.Receive (header_buffer, 8,
-				System.Net.Sockets.SocketFlags.None) < HeaderSize)
+			bytes_read = socket.Receive (header_buffer, HeaderSize,
+				System.Net.Sockets.SocketFlags.None);
+			
+			if (bytes_read < HeaderSize)
 				throw new ArgumentException (
-					"Socket does not contain sufficient data.",
+					"Incomplete header. Expected " +
+						HeaderSize + ", got " +
+						bytes_read,
 					"socket");
 			
 			// Read the values from the data.
@@ -262,11 +267,13 @@ namespace Mono.FastCgi {
 			
 			// Read the record data, and throw an exception if the
 			// complete data cannot be read.
-			if (total_length > 0 && socket.Receive (data,
-				total_length,
-				System.Net.Sockets.SocketFlags.None) < total_length)
+			if (total_length > 0 && (bytes_read = socket.Receive (
+				data, total_length,
+				System.Net.Sockets.SocketFlags.None)) < total_length)
 				throw new ArgumentException (
-					"Socket does not contain sufficient data.",
+					"Incomplete body. Expected " +
+						total_length + ", got " +
+						bytes_read,
 					"socket");
 		}
 		
