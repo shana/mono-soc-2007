@@ -81,6 +81,6 @@ namespace Mono.Debugger.Frontend
 			return column;
 		}
 		
-		public abstract void UpdateDisplay();
+		public abstract void ReceiveUpdates();
 	}
 }

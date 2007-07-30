@@ -89,7 +89,6 @@ namespace Mono.Debugger.Frontend
 				int line = this.Buffer.GetIterAtMark(this.Buffer.InsertMark).Line + 1;
 				
 				mdbGui.DebuggerService.ToggleBreakpoint(currentlyLoadedSourceFile, line);
-				mdbGui.UpdateGUI();
 			} else {
 				Console.WriteLine("Error - no source file loaded");
 			}

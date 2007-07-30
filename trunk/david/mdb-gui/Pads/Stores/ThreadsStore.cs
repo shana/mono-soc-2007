@@ -44,6 +44,7 @@ namespace Mono.Debugger.Frontend
 		{
 			try {
 				interpreter.CurrentThread = interpreter.GetThread(id);
+				debuggerService.NotifyStateChange();
 			} catch {
 				// There might be a race condition and the thread might have just terminated
 				Console.WriteLine("Failed to select thread {0}", id);

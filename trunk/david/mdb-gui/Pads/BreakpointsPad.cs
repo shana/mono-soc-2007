@@ -36,9 +36,8 @@ namespace Mono.Debugger.Frontend
 			int id = (int)GtkStore.GetValue(it, BreakpointsStore.ColumnID);
 		}
 		
-		public override void UpdateDisplay()
+		public override void ReceiveUpdates()
 		{
-			remoteStore.UpdateTree();
 			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 		}
 	}

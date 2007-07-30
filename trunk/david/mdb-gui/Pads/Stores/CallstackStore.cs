@@ -40,6 +40,7 @@ namespace Mono.Debugger.Frontend
 			    interpreter.CurrentThread.GetBacktrace().Frames.Length > index) {
 				
 				interpreter.CurrentThread.GetBacktrace().CurrentFrameIndex = index;
+				debuggerService.NotifyStateChange();
 			}
 		}
 		

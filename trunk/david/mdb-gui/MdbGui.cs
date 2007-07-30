@@ -48,9 +48,6 @@ namespace Mono.Debugger.Frontend
 		
 		public void GuiInit()
 		{
-			// Redirected output to TextView
-			GLib.Timeout.Add(100, UpdateConsoleOut);
-			
 			// Load XML file
 			Glade.XML gxml = new Glade.XML("gui.glade", "mainWindow", null);
 			gxml.Autoconnect(this);
@@ -90,6 +87,10 @@ namespace Mono.Debugger.Frontend
 			viewportBreakpoints.Add(breakpointsPad);
 			
 			consoleIn.GrabFocus();
+			
+			// Regularly update the GUI
+			ReceiveGUIUpdates();
+			GLib.Timeout.Add(50, ReceiveGUIUpdates);
 		}
 		
 		public MdbGui(string[] args) 
@@ -98,24 +99,8 @@ namespace Mono.Debugger.Frontend
 			
 			debuggerService = new DebuggerService(args);
 			GuiInit();
-			UpdateGUI();
 			
 			Application.Run();
-		}
-		
-		/// <summary> Add any new output to the TextView </summary>
-		bool UpdateConsoleOut()
-		{
-			string newOutput = debuggerService.GetNewConsoleOutput();
-			if (newOutput.Length > 0) {
-				// Append new text
-				consoleOut.Buffer.Text += newOutput;
-				
-				// Scroll the window to the end
-				TextMark endMark = consoleOut.Buffer.CreateMark(null, consoleOut.Buffer.EndIter, false);
-				consoleOut.ScrollToMark(endMark, 0, false, 0, 0);
-			}
-			return true;
 		}
 		
 		protected void OnMainWindow_delete_event(object o, DeleteEventArgs e) 
@@ -128,37 +113,31 @@ namespace Mono.Debugger.Frontend
 		public void OnToolbuttonRun_clicked(object o, EventArgs e) 
 		{
 			debuggerService.Run();
-			UpdateGUI();
 		}
 		
 		public void OnToolbuttonStop_clicked(object o, EventArgs e) 
 		{
 			debuggerService.Stop();
-			UpdateGUI();
 		}
 		
 		public void OnToolbuttonContinue_clicked(object o, EventArgs e) 
 		{
 			debuggerService.Continue();
-			UpdateGUI();
 		}
 		
 		public void OnToolbuttonStepIn_clicked(object o, EventArgs e) 
 		{
 			debuggerService.StepIn();
-			UpdateGUI();
 		}
 		
 		public void OnToolbuttonStepOver_clicked(object o, EventArgs e) 
 		{
 			debuggerService.StepOver();
-			UpdateGUI();
 		}
 		
 		public void OnToolbuttonStepOut_clicked(object o, EventArgs e) 
 		{
 			debuggerService.StepOut();
-			UpdateGUI();
 		}
 		
 		public void OnToolbuttonBreakpoint_clicked(object o, EventArgs e) 
@@ -173,16 +152,34 @@ namespace Mono.Debugger.Frontend
 			consoleIn.Text = String.Empty;
 		}
 		
-		public void UpdateGUI()
+		bool ReceiveGUIUpdates()
 		{
-			// Update pads - roughly the fastest ones first
-			threadPad.UpdateDisplay();
-			callstackPad.UpdateDisplay();
-			localsPad.UpdateDisplay();
-			breakpointsPad.UpdateDisplay();
+			UpdateConsoleOut();
+			
+			// Update pads
+			breakpointsPad.ReceiveUpdates();
+			callstackPad.ReceiveUpdates();
+			localsPad.ReceiveUpdates();
+			threadPad.ReceiveUpdates();
 			
 			// Update the source view
 			sourceView.UpdateDisplay();
+			
+			return true;
+		}
+		
+		/// <summary> Add any new output to the TextView </summary>
+		void UpdateConsoleOut()
+		{
+			string newOutput = debuggerService.GetNewConsoleOutput();
+			if (newOutput.Length > 0) {
+				// Append new text
+				consoleOut.Buffer.Text += newOutput;
+				
+				// Scroll the window to the end
+				TextMark endMark = consoleOut.Buffer.CreateMark(null, consoleOut.Buffer.EndIter, false);
+				consoleOut.ScrollToMark(endMark, 0, false, 0, 0);
+			}
 		}
 	}
 	
