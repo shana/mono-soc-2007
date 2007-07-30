@@ -99,6 +99,7 @@
     <Compile Include="RemoteTreeStore\GtkTreeStoreUpdater.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeModification.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeNode.cs" />
+    <Compile Include="RemoteTreeStore\RemoteTreeNodeRef.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreePath.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeStore.cs" />
     <Compile Include="TreeModel\AbstractNode.cs" />

@@ -31,18 +31,27 @@ namespace Mono.Debugger.Frontend
 		
 		protected void TestCollapseRow(object o, TestCollapseRowArgs args)
 		{
+			// Remove from the expandedNodes table
 			string fullName = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnFullName);
 			if (expandedNodes.ContainsKey(fullName)) {
 				expandedNodes.Remove(fullName);
 			}
-			remoteStore.CollapseNode(new RemoteTreePath(args.Path.Indices));
+			
+			// Notify remote store
+			RemoteTreeNodeRef nodeRef = (RemoteTreeNodeRef)GtkStore.GetValue(args.Iter, LocalsStore.ColumnReference);
+			remoteStore.CollapseNode(nodeRef);
 		}
 		
 		protected void TestExpandRow(object o, TestExpandRowArgs args)
 		{
+			// Add to the expandedNodes table
 			string fullName = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnFullName);
 			expandedNodes[fullName] = null; // No value, just insert the key
-			remoteStore.ExpandNode(new RemoteTreePath(args.Path.Indices));
+			
+			// Notify remote store
+			RemoteTreeNodeRef nodeRef = (RemoteTreeNodeRef)GtkStore.GetValue(args.Iter, LocalsStore.ColumnReference);
+			remoteStore.ExpandNode(nodeRef);
+			
 			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 			
 			TreeIter it;

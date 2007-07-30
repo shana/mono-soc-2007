@@ -13,14 +13,16 @@ namespace Mono.Debugger.Frontend
 		
 		AbstractNode rootNode;
 		
-		public const int ColumnFullName     = 0;
-		public const int ColumnUpdateChilds = 1;
-		public const int ColumnImage        = 2;
-		public const int ColumnName         = 3;
-		public const int ColumnValue        = 4;
-		public const int ColumnType         = 5;
+		public const int ColumnReference    = 0;
+		public const int ColumnFullName     = 1;
+		public const int ColumnUpdateChilds = 2;
+		public const int ColumnImage        = 3;
+		public const int ColumnName         = 4;
+		public const int ColumnValue        = 5;
+		public const int ColumnType         = 6;
 		
 		public static Type[] ColumnTypes = new Type[] {
+			typeof(RemoteTreeNodeRef),
 			typeof(string),
 			typeof(bool),
 			typeof(Gdk.Pixbuf),
@@ -41,16 +43,25 @@ namespace Mono.Debugger.Frontend
 			UpdateNodeRecursive(RootNode, rootNode);
 		}
 		
-		public void ExpandNode(RemoteTreePath path)
+		public void ExpandNode(RemoteTreeNodeRef nodeRef)
 		{
-			RemoteTreeNode node = GetNode(path);
-			node.SetValue(ColumnUpdateChilds, true);
-			UpdateNodeRecursive(node, (AbstractNode)node.Tag);
+			RemoteTreeNode node = GetNode(nodeRef);
+			
+			// There might be a race condition and the node might have been just removed
+			if (node != null) {
+				node.SetValue(ColumnUpdateChilds, true);
+				UpdateNodeRecursive(node, (AbstractNode)node.Tag);
+			}
 		}
 		
-		public void CollapseNode(RemoteTreePath path)
+		public void CollapseNode(RemoteTreeNodeRef nodeRef)
 		{
-			GetNode(path).SetValue(ColumnUpdateChilds, false);
+			RemoteTreeNode node = GetNode(nodeRef);
+			
+			// There might be a race condition and the node might have been just removed
+			if (node != null) {
+				node.SetValue(ColumnUpdateChilds, false);
+			}
 		}
 		
 		void UpdateNodeRecursive(RemoteTreeNode node, AbstractNode variable)
