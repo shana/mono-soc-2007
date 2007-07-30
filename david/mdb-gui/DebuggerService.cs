@@ -81,6 +81,8 @@ namespace Mono.Debugger.Frontend
 			if (interpreter.Options.StartTarget) {
 				interpreter.Start ();
 			}
+			
+			NotifyStateChange();
 		}
 		
 		public string GetNewConsoleOutput()
@@ -108,6 +110,7 @@ namespace Mono.Debugger.Frontend
 			if (parser.IsComplete()){
 				parser.Execute();
 				parser.Reset();
+				NotifyStateChange();
 			}
 		}
 		
@@ -115,15 +118,17 @@ namespace Mono.Debugger.Frontend
 		{
 			if (interpreter.HasCurrentProcess) {
 				new KillCommand().Execute(engine);
+				NotifyStateChange();
 			}
 		}
 		
 		public void Run() 
 		{
-			if (interpreter.HasTarget) {
-				Console.WriteLine("Error - alredy running");
-			} else {
+			if (!interpreter.HasTarget) {
 				new RunCommand().Execute(engine);
+				NotifyStateChange();
+			} else {
+				Console.WriteLine("Error - alredy running");
 			}
 		}
 		
@@ -131,6 +136,7 @@ namespace Mono.Debugger.Frontend
 		{
 			if (interpreter.HasCurrentProcess) {
 				new KillCommand().Execute(engine);
+				NotifyStateChange();
 			} else {
 				Console.WriteLine("Error - nothing to stop");
 			}
@@ -140,6 +146,7 @@ namespace Mono.Debugger.Frontend
 		{
 			if (interpreter.HasCurrentThread) {
 				new ContinueCommand().Execute(engine);
+				NotifyStateChange();
 			} else {
 				Console.WriteLine("Error - no current thread");
 			}
@@ -149,6 +156,7 @@ namespace Mono.Debugger.Frontend
 		{
 			if (interpreter.HasCurrentThread) {
 				new StepCommand().Execute(engine);
+				NotifyStateChange();
 			} else {
 				Console.WriteLine("Error - no current thread");
 			}
@@ -158,6 +166,7 @@ namespace Mono.Debugger.Frontend
 		{
 			if (interpreter.HasCurrentThread) {
 				new NextCommand().Execute(engine);
+				NotifyStateChange();
 			} else {
 				Console.WriteLine("Error - no current thread");
 			}
@@ -167,6 +176,7 @@ namespace Mono.Debugger.Frontend
 		{
 			if (interpreter.HasCurrentThread) {
 				new FinishCommand().Execute(engine);
+				NotifyStateChange();
 			} else {
 				Console.WriteLine("Error - no current thread");
 			}
@@ -209,6 +219,7 @@ namespace Mono.Debugger.Frontend
 					    location.Line == line) {
 						
 						interpreter.Session.DeleteEvent(breakpoint);
+						breakpointsStore.UpdateTree();
 						return;
 					}
 				}
@@ -223,7 +234,17 @@ namespace Mono.Debugger.Frontend
 					newBreakpoint.Activate(interpreter.CurrentThread);
 				} catch {
 				}
+				breakpointsStore.UpdateTree();
+				return;
 			}
+		}
+		
+		public void NotifyStateChange()
+		{
+			threadsStore.UpdateTree();
+			callstackStore.UpdateTree();
+			localsStore.UpdateTree();
+			breakpointsStore.UpdateTree();
 		}
 	}
 }

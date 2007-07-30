@@ -32,12 +32,10 @@ namespace Mono.Debugger.Frontend
 		void RowActivated(object sender, RowActivatedArgs args)
 		{
 			remoteStore.SelectFrame(args.Path.Indices[0]);
-			MdbGui.UpdateGUI();
 		}
 		
-		public override void UpdateDisplay()
+		public override void ReceiveUpdates()
 		{
-			remoteStore.UpdateTree();
 			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 		}
 	}

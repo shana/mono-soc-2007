@@ -36,12 +36,10 @@ namespace Mono.Debugger.Frontend
 			GtkStore.GetIter(out it, args.Path);
 			int id = (int)GtkStore.GetValue(it, ThreadsStore.ColumnID);
 			remoteStore.SelectThread(id);
-			MdbGui.UpdateGUI();
 		}
 		
-		public override void UpdateDisplay()
+		public override void ReceiveUpdates()
 		{
-			remoteStore.UpdateTree();
 			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 		}
 	}

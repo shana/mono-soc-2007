@@ -83,9 +83,8 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		public override void UpdateDisplay()
+		public override void ReceiveUpdates()
 		{
-			remoteStore.UpdateTree();
 			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 			
 			int childCount = GtkStore.IterNChildren();
