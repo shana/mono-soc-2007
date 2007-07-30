@@ -8,6 +8,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class CallstackStore: RemoteTreeStore
 	{
+		DebuggerService debuggerService;
 		Interpreter interpreter;
 		
 		public const int ColumnReference = 0;
@@ -26,8 +27,9 @@ namespace Mono.Debugger.Frontend
 			typeof(string)
 		};
 		
-		public CallstackStore(Interpreter interpreter)
+		public CallstackStore(DebuggerService debuggerService, Interpreter interpreter)
 		{
+			this.debuggerService = debuggerService;
 			this.interpreter = interpreter;
 		}
 		

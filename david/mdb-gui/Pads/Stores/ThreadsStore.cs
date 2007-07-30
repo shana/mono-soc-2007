@@ -9,6 +9,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class ThreadsStore: RemoteTreeStore
 	{
+		DebuggerService debuggerService;
 		Interpreter interpreter;
 		
 		Hashtable threadToTreeNode = new Hashtable();
@@ -33,8 +34,9 @@ namespace Mono.Debugger.Frontend
 			typeof(string)
 		};
 		
-		public ThreadsStore(Interpreter interpreter)
+		public ThreadsStore(DebuggerService debuggerService, Interpreter interpreter)
 		{
+			this.debuggerService = debuggerService;
 			this.interpreter = interpreter;
 		}
 		

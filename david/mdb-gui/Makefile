@@ -10,6 +10,7 @@ REFS = \
 
 SRCS = \
 	ExceptionWindow.cs \
+	DebuggerService.cs \
 	MdbGui.cs \
 	PixmapRef.cs \
 	Pixmaps.cs \

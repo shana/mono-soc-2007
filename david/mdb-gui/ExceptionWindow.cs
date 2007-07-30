@@ -9,7 +9,7 @@ namespace Mono.Debugger.Frontend
 {
 	public class ExceptionWindow
 	{
-		MdbGui mdbGui;
+		DebuggerService debuggerService;
 		
 		[Widget] protected Window exceptionWindow;
 		[Widget] protected Image image;
@@ -19,9 +19,9 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected Button buttonContinue;
 		[Widget] protected Button buttonTerminate;
 		
-		public ExceptionWindow(MdbGui mdbGui, Thread thread, TargetEventArgs args)
+		public ExceptionWindow(DebuggerService debuggerService, Thread thread, TargetEventArgs args)
 		{
-			this.mdbGui = mdbGui;
+			this.debuggerService = debuggerService;
 			
 			Glade.XML gxml = new Glade.XML("gui.glade", "exceptionWindow", null);
 			gxml.Autoconnect(this);
@@ -62,13 +62,13 @@ namespace Mono.Debugger.Frontend
 		protected void OnButtonContinue_clicked(object o, EventArgs e)
 		{
 			exceptionWindow.Destroy();
-			mdbGui.OnToolbuttonContinue_clicked(o, e);
+			debuggerService.Continue();
 		}
 		
 		protected void OnButtonTerminate_clicked(object o, EventArgs e)
 		{
 			exceptionWindow.Destroy();
-			mdbGui.OnToolbuttonStop_clicked(o, e);
+			debuggerService.Stop();
 		}
 	}
 }
