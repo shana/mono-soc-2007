@@ -17,6 +17,12 @@ namespace Mono.Debugger.Frontend
 			get { return indices; }
 		}
 		
+		public bool IsRoot {
+			get {
+				return indices.Length == 0;
+			}
+		}
+		
 		public RemoteTreePath(int[] indices)
 		{
 			this.indices = indices;

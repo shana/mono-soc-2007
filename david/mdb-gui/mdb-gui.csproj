@@ -108,6 +108,7 @@
     <Compile Include="TreeModel\EnumNode.cs" />
     <Compile Include="TreeModel\ErrorNode.cs" />
     <Compile Include="TreeModel\FundamentalNode.cs" />
+    <Compile Include="TreeModel\LocalsRootNode.cs" />
     <Compile Include="TreeModel\NodeFactory.cs" />
     <Compile Include="TreeModel\NullNode.cs" />
     <EmbeddedResource Include="pixmaps\*" />

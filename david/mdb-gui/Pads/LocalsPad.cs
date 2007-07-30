@@ -35,14 +35,19 @@ namespace Mono.Debugger.Frontend
 			if (expandedNodes.ContainsKey(fullName)) {
 				expandedNodes.Remove(fullName);
 			}
+			remoteStore.CollapseNode(new RemoteTreePath(args.Path.Indices));
 		}
 		
 		protected void TestExpandRow(object o, TestExpandRowArgs args)
 		{
 			string fullName = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnFullName);
 			expandedNodes[fullName] = null; // No value, just insert the key
-			int childCount = remoteStore.ExpandNode(new RemoteTreePath(args.Path.Indices));
+			remoteStore.ExpandNode(new RemoteTreePath(args.Path.Indices));
 			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
+			
+			TreeIter it;
+			GtkStore.GetIter(out it, args.Path);
+			int childCount = GtkStore.IterNChildren(it);
 			if (childCount == 0) {
 				args.RetVal = true;  // Cancel expanding
 			} else {
