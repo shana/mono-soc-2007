@@ -1,5 +1,9 @@
 2007-07-30  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* ViewBox.cs: Fixed StretchDirection handling.
+
+2007-07-30  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ViewBox.cs: Some more fixes.
 
 2007-07-29  George Giolfan  <georgegiolfan@yahoo.com>
