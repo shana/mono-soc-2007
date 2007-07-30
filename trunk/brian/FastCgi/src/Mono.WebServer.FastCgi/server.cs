@@ -133,6 +133,18 @@ namespace Mono.WebServer.FastCgi
 				return 1;
 			}
 			
+			try {
+				string log_file = (string)
+					configmanager ["logfile"];
+				
+				if (log_file != null)
+					Logger.Open (log_file);
+			} catch (Exception e) {
+				Console.WriteLine ("Error opening log file: {0}",
+					e.Message);
+				Console.WriteLine ("Events will not be logged.");
+			}
+			
 			// Send the trace to the console.
 			Trace.Listeners.Add (
 				new TextWriterTraceListener (Console.Out));
@@ -167,6 +179,7 @@ namespace Mono.WebServer.FastCgi
 			
 			// The FILE sockets is of the format
 			// "file[:PATH]".
+			case "unix":
 			case "file":
 				if (socket_parts.Length == 2)
 					configmanager ["filename"] =

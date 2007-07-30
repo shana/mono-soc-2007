@@ -1,3 +1,32 @@
+2007-07-30 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/linux/lighttpd.html: Tidied up. Removed disclaimer. Added missing
+	extension.
+	
+	* src/Mono.FastCgi/Structures/Record.cs: Provide better messages in
+	exceptions.
+	
+	* src/Mono.FastCgi/Connection.cs: Give the message from the exception if
+	the record fails.
+	
+	* src/Mono.FastCgi/Logger.cs: Use better open method for files. Flush
+	every time for now.
+	
+	* src/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: Don't
+	send/recv if not connected, and mark as disconnected if sent bytes !=
+	expected bytes. Was getting some weird results with Lighttpd when
+	cancelling a bunch of requests in a row.
+	
+	* src/Mono.WebServer.FastCgi/ConfigurationManager.xml: Add support for
+	log file. Comment out unused features.
+
+	* src/Mono.WebServer.FastCgi/server.cs: Add "unix" socket. Accidentally
+	specified "file" instead. Added support for log file.
+	
+	* src/Mono.WebServer/ApplicationManager.cs: Stop looking for
+	subdirectories when creating a application if the app contains a "bin"
+	directory.
+
 2007-07-29 Brian Nickel <brian.nickel@gmail.com>
 
 	* fastcgi-mono-server.in: 

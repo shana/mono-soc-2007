@@ -81,7 +81,7 @@ namespace Mono.FastCgi {
 		/// <summary>
 		///    Contains the bitwise combined log levels to write.
 		/// </summary>
-		private LogLevel level;
+		private LogLevel level = LogLevel.All;
 		
 		/// <summary>
 		///    Contains the lock object to use on the writer.
@@ -151,8 +151,9 @@ namespace Mono.FastCgi {
 			
 			lock (logger.write_lock) {
 				Close ();
-				FileInfo info = new FileInfo (path);
-				Stream stream = info.OpenWrite ();
+				Stream stream = File.Open (path,
+					FileMode.Append, FileAccess.Write,
+					FileShare.ReadWrite);
 				stream.Seek (0, SeekOrigin.End);
 				logger.writer = new StreamWriter (stream);
 			}
@@ -259,6 +260,7 @@ namespace Mono.FastCgi {
 			
 			lock (logger.write_lock) {
 				logger.writer.WriteLine (text);
+				logger.writer.Flush ();
 			}
 		}
 		
