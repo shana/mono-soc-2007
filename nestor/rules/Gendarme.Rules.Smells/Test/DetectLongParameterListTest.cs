@@ -66,6 +66,10 @@ namespace Test.Rules.Smells {
 		{
 		}
 
+		public void MethodWithoutLongParameterList (int x, char c, object obj, bool j, string f) 
+		{
+		}
+
 		public void MethodWithLongParameterList (int x, char c, object obj, bool j, string f, float z, double u, short s, int v, string[] array)
 		{
 		}
@@ -75,6 +79,18 @@ namespace Test.Rules.Smells {
 		}
 
 		public void OverloadedMethod (int x) 
+		{
+		}
+
+		public void OverloadedMethod (int x, char c, object obj, bool j, string f, float z, double u, short s, int v, string[] array) 
+		{
+		}
+
+		public void OtherOverloaded (int x, char c, object obj, bool j, string f, float z, double u)
+		{
+		}
+
+		public void OtherOverloaded (int x, char c, object obj, bool j, string f, float z, double u, short s)
 		{
 		}
 
@@ -97,6 +113,14 @@ namespace Test.Rules.Smells {
 		}
 
 		[Test]
+		public void MethodWithoutLongParameterList () 
+		{
+			method = GetMethodForTest ("MethodWithoutLongParameterList", Type.EmptyTypes);
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
 		public void OverloadedMethodTest () 
 		{
 			method = GetMethodForTest ("OverloadedMethod", Type.EmptyTypes);
@@ -110,6 +134,32 @@ namespace Test.Rules.Smells {
 			method = GetMethodForTest ("OverloadedMethod", new Type[] {typeof (int)});
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void LongOverloadedMethodWithLittleOverloadTest () 
+		{
+			method = GetMethodForTest ("OverloadedMethod", new Type[] {typeof (int), typeof (char), typeof (object), typeof (bool), typeof (string), typeof (float), typeof (double), typeof (short), typeof (int), typeof (string[])});
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void LongOverloadedMethodWithoutLittleOverloadTest () 
+		{
+			method = GetMethodForTest ("OtherOverloaded", new Type[] {typeof (int), typeof (char), typeof (object), typeof (bool), typeof (string), typeof (float), typeof (double)});
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void OtherLongOverloadedMethodWithoutLittleOverloadTest () 
+		{
+			method = GetMethodForTest ("OtherOverloaded", new Type[] {typeof (int), typeof (char), typeof (object), typeof (bool), typeof (string), typeof (float), typeof (double), typeof (short)});
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
 		}
 	}
 }
