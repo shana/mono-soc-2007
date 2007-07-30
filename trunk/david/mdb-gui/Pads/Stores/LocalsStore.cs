@@ -10,15 +10,13 @@ namespace Mono.Debugger.Frontend
 	{
 		Interpreter interpreter;
 		
-		public const int ColumnNode     = 0;
-		public const int ColumnID       = 1;
-		public const int ColumnImage    = 2;
-		public const int ColumnName     = 3;
-		public const int ColumnValue    = 4;
-		public const int ColumnType     = 5;
+		public const int ColumnFullName = 0;
+		public const int ColumnImage    = 1;
+		public const int ColumnName     = 2;
+		public const int ColumnValue    = 3;
+		public const int ColumnType     = 4;
 		
 		public static Type[] ColumnTypes = new Type[] {
-			typeof(AbstractNode),
 			typeof(string),
 			typeof(Gdk.Pixbuf),
 			typeof(string),
@@ -66,13 +64,13 @@ namespace Mono.Debugger.Frontend
 			if (treeNode == RootNode) {
 				idPrefix = String.Empty;
 			} else {
-				idPrefix = (string)treeNode.GetValue(ColumnID) + ".";
+				idPrefix = (string)treeNode.GetValue(ColumnFullName) + ".";
 			}
 			string id = idPrefix + node.Name;
 			
 			RemoteTreeNode newNode = treeNode.AppendNode();
-			newNode.SetValue(ColumnNode, node);
-			newNode.SetValue(ColumnID, id);
+			newNode.Tag = node;
+			newNode.SetValue(ColumnFullName, id);
 			newNode.SetValue(ColumnImage, node.Image);
 			newNode.SetValue(ColumnName, node.Name);
 			newNode.SetValue(ColumnValue, node.Value);
@@ -94,10 +92,9 @@ namespace Mono.Debugger.Frontend
 			treeNode.Clear();
 			
 			// Add childs
-			AbstractNode node = (AbstractNode)treeNode.GetValue(ColumnNode);
 			AbstractNode[] childs;
 			try {
-				childs = node.ChildNodes;
+				childs = ((AbstractNode)treeNode.Tag).ChildNodes;
 			} catch {
 				AppendNode(treeNode, new ErrorNode(String.Empty, "Can not get child nodes"));
 				return 1;

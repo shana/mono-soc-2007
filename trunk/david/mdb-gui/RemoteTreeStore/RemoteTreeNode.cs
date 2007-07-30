@@ -12,6 +12,7 @@ namespace Mono.Debugger.Frontend
 		RemoteTreeNode parent;
 		ArrayList values = new ArrayList();
 		ArrayList childs = new ArrayList();
+		object tag;
 		
 		public RemoteTreeStore RemoteTreeStore {
 			get { return remoteTreeStore; }
@@ -27,6 +28,14 @@ namespace Mono.Debugger.Frontend
 		
 		public int ChildCount {
 			get { return childs.Count; }
+		}
+		
+		/// <summary>
+		/// User defined value associated with this node.  It is not remoted.
+		/// </summary>
+		public object Tag {
+			get { return tag; }
+			set { tag = value; }
 		}
 		
 		int myIndexHint = 0;

@@ -55,7 +55,13 @@ namespace Mono.Debugger.Frontend
 			
 			public override string ToString()
 			{
-				return string.Format("[UpdateNode NodePath={0} ColumnIndex={1} Value={2}]", this.NodePath, this.ColumnIndex, this.Value);
+				string val;
+				if (this.Value is string) {
+					val = "\"" + this.Value + "\"";
+				} else {
+					val = this.Value.ToString();
+				}
+				return string.Format("[UpdateNode NodePath={0} ColumnIndex={1} Value={2}]", this.NodePath, this.ColumnIndex, val);
 			}
 		}
 	}
