@@ -33,5 +33,11 @@ public class DocumentUndoManager {
 			return redo_stack.Count > 0;
 		}
 	}
+	
+	public DocumentBuffer Buffer {
+		get {
+			return buffer;
+		}
+	}
 }
 }
