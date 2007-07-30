@@ -10,7 +10,7 @@ namespace Mono.Debugger.Frontend
 	{
 		RemoteTreeStore remoteTreeStore;
 		RemoteTreeNode parent;
-		object[] values;
+		ArrayList values = new ArrayList();
 		ArrayList childs = new ArrayList();
 		
 		public RemoteTreeStore RemoteTreeStore {
@@ -21,7 +21,7 @@ namespace Mono.Debugger.Frontend
 			get { return parent; }
 		}
 		
-		public object[] Values {
+		public ArrayList Values {
 			get { return values; }
 		}
 		
@@ -66,7 +66,6 @@ namespace Mono.Debugger.Frontend
 		{
 			this.remoteTreeStore = remoteTreeStore;
 			this.parent = parent;
-			this.values = new object[remoteTreeStore.ColumnTypes.Length];
 		}
 		
 		/// <summary> Insert a new node so that it is located at the given index </summary>
@@ -99,7 +98,10 @@ namespace Mono.Debugger.Frontend
 			
 			remoteTreeStore.AddModification(new RemoteTreeModification.UpdateNode(this.Path, columnIndex, newValue));
 			
-			values[columnIndex] = newValue;
+			while(columnIndex >= Values.Count) {
+				Values.Add(null);
+			}
+			Values[columnIndex] = newValue;
 		}
 		
 		// Convenience methods:
@@ -113,7 +115,11 @@ namespace Mono.Debugger.Frontend
 		/// <summary> Get a value in the given column </summary>
 		public object GetValue(int columnIndex)
 		{
-			return this.Values[columnIndex];
+			if (columnIndex >= this.Values.Count) {
+				return null;
+			} else {
+				return this.Values[columnIndex];
+			}
 		}
 		
 		/// <summary> Insert a node and set its values </summary>
@@ -148,14 +154,10 @@ namespace Mono.Debugger.Frontend
 			return InsertNode(0, values);
 		}
 		
-		/// <summary> Set all values of this node </summary>
+		/// <summary> Set values of this node </summary>
 		public void SetValues(params object[] newValues)
 		{
-			if (newValues.Length != this.Values.Length) {
-				throw new ArgumentException(String.Format("Incorrect number of values, {0} seen, {1} expected.", newValues.Length, this.Values.Length));
-			}
-			
-			for(int i = 0; i < this.Values.Length; i++) {
+			for(int i = 0; i < newValues.Length; i++) {
 				SetValue(i, newValues[i]);
 			}
 		}
