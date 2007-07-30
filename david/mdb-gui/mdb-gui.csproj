@@ -87,7 +87,12 @@
     <Compile Include="MdbGui.cs" />
     <Compile Include="Pads\BreakpointsPad.cs" />
     <Compile Include="Pads\CallstackPad.cs" />
+    <Compile Include="Pads\DebuggerPad.cs" />
     <Compile Include="Pads\LocalsPad.cs" />
+    <Compile Include="Pads\Stores\BreakpointsStore.cs" />
+    <Compile Include="Pads\Stores\CallstackStore.cs" />
+    <Compile Include="Pads\Stores\LocalsStore.cs" />
+    <Compile Include="Pads\Stores\ThreadsStore.cs" />
     <Compile Include="Pads\ThreadPad.cs" />
     <Compile Include="Pixmaps.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeModification.cs" />
@@ -106,6 +111,7 @@
     <EmbeddedResource Include="pixmaps\*" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Pads\Stores" />
     <Folder Include="RemoteTreeStore" />
     <Folder Include="Pads" />
     <Folder Include="pixmaps" />
