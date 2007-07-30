@@ -8,21 +8,15 @@ namespace Mono.Debugger.Frontend
 	/// </summary>
 	public class RemoteTreeStore
 	{
-		Type[] columnTypes;
 		RemoteTreeNode rootNode;
 		ArrayList modifications = new ArrayList();
-		
-		public Type[] ColumnTypes {
-			get { return columnTypes; }
-		}
 		
 		public RemoteTreeNode RootNode {
 			get { return rootNode; }
 		}
 		
-		public RemoteTreeStore(params Type[] columnTypes)
+		public RemoteTreeStore()
 		{
-			this.columnTypes = columnTypes;
 			this.rootNode = new RemoteTreeNode(this, null);
 		}
 		

@@ -16,7 +16,7 @@ namespace Mono.Debugger.Frontend
 		public const int ColumnName = 3;
 		public const int ColumnSource = 4;
 		
-		public new static Type[] ColumnTypes = new Type[] {
+		public static Type[] ColumnTypes = new Type[] {
 			typeof (Gdk.Pixbuf),
 			typeof (string),
 			typeof (string),
@@ -24,7 +24,7 @@ namespace Mono.Debugger.Frontend
 			typeof (string)
 		};
 		
-		public CallstackStore(Interpreter interpreter): base(ColumnTypes)
+		public CallstackStore(Interpreter interpreter)
 		{
 			this.interpreter = interpreter;
 		}
