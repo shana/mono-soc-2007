@@ -95,6 +95,7 @@
     <Compile Include="Pads\Stores\ThreadsStore.cs" />
     <Compile Include="Pads\ThreadPad.cs" />
     <Compile Include="Pixmaps.cs" />
+    <Compile Include="RemoteTreeStore\GtkTreeStoreUpdater.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeModification.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeNode.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreePath.cs" />
