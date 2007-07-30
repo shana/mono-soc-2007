@@ -46,19 +46,14 @@ namespace Mono.Debugger.Frontend
 		}
 		
 		/// <summary>
-		/// Get a list of modifications done to the tree
+		/// Get a list of modifications done to the tree.  Calling of this methods
+		/// results in clearing of the list.
 		/// </summary>
 		public RemoteTreeModification[] GetModifications()
 		{
-			return (RemoteTreeModification[])modifications.ToArray(typeof(RemoteTreeModification));
-		}
-		
-		/// <summary>
-		/// Clear the list of modifications.  This does not change the tree.
-		/// </summary>
-		public void ClearModifications()
-		{
+			RemoteTreeModification[] mods = (RemoteTreeModification[])modifications.ToArray(typeof(RemoteTreeModification));
 			modifications.Clear();
+			return mods;
 		}
 	}
 }

@@ -8,13 +8,18 @@ namespace Mono.Debugger.Frontend
 		[Serializable]
 		public class InsertNode: RemoteTreeModification
 		{
-			public RemoteTreePath PartenNodePath;
+			public RemoteTreePath ParentNodePath;
 			public int NodeIndex;
 			
-			public InsertNode(RemoteTreePath partenNodePath, int nodeIndex)
+			public InsertNode(RemoteTreePath parentNodePath, int nodeIndex)
 			{
-				this.PartenNodePath = partenNodePath;
+				this.ParentNodePath = parentNodePath;
 				this.NodeIndex = nodeIndex;
+			}
+			
+			public override string ToString()
+			{
+				return string.Format("[InsertNode ParentNodePath={0} NodeIndex={1}]", this.ParentNodePath, this.NodeIndex);
 			}
 		}
 		
@@ -26,6 +31,11 @@ namespace Mono.Debugger.Frontend
 			public RemoveNode(RemoteTreePath nodePath)
 			{
 				this.NodePath = nodePath;
+			}
+			
+			public override string ToString()
+			{
+				return string.Format("[RemoveNode NodePath={0}]", this.NodePath);
 			}
 		}
 		
@@ -41,6 +51,11 @@ namespace Mono.Debugger.Frontend
 				this.NodePath = nodePath;
 				this.ColumnIndex = columnIndex;
 				this.Value = value;
+			}
+			
+			public override string ToString()
+			{
+				return string.Format("[UpdateNode NodePath={0} ColumnIndex={1} Value={2}]", this.NodePath, this.ColumnIndex, this.Value);
 			}
 		}
 	}

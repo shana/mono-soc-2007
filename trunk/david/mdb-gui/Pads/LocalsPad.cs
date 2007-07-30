@@ -42,6 +42,7 @@ namespace Mono.Debugger.Frontend
 			string id = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnID);
 			expandedNodes[id] = null; // No value, just insert the key
 			int childCount = remoteStore.ExpandNode(new RemoteTreePath(args.Path.Indices));
+			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 			if (childCount == 0) {
 				args.RetVal = true;  // Cancel expanding
 			} else {
@@ -51,9 +52,9 @@ namespace Mono.Debugger.Frontend
 		
 		protected void RowExpanded(object o, RowExpandedArgs args)
 		{
-			string id = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnID);
-			
-			int childCount = GtkStore.IterNChildren(args.Iter);
+			TreeIter it;
+			GtkStore.GetIter(out it, args.Path);
+			int childCount = GtkStore.IterNChildren(it);
 			for(int i = 0; i < childCount; i++) {
 				TreePath childPath = args.Path.Copy();
 				childPath.AppendIndex(i);
@@ -71,6 +72,20 @@ namespace Mono.Debugger.Frontend
 		public override void UpdateDisplay()
 		{
 			remoteStore.UpdateTree();
+			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
+			
+			int childCount = GtkStore.IterNChildren();
+			for(int i = 0; i < childCount; i++) {
+				TreePath childPath = new TreePath(new int[] {i});
+				
+				TreeIter childIter;
+				GtkStore.GetIter(out childIter, childPath);
+				string childId = (string)GtkStore.GetValue(childIter, LocalsStore.ColumnID);
+				// This node was expanded in the past - expand it
+				if (expandedNodes.ContainsKey(childId)) {
+					GtkTree.ExpandRow(childPath, false);
+				}
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace Mono.Debugger.Frontend
 {
@@ -27,6 +28,17 @@ namespace Mono.Debugger.Frontend
 			Array.Copy(indices, newPath, indices.Length);
 			newPath[indices.Length] = index;
 			return new RemoteTreePath(newPath);
+		}
+		
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("Root");
+			foreach(int i in indices) {
+				sb.Append(':');
+				sb.Append(i);
+			}
+			return sb.ToString();
 		}
 	}
 }

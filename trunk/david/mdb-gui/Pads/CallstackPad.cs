@@ -38,6 +38,7 @@ namespace Mono.Debugger.Frontend
 		public override void UpdateDisplay()
 		{
 			remoteStore.UpdateTree();
+			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 		}
 	}
 }

@@ -79,8 +79,8 @@ namespace Mono.Debugger.Frontend
 			writer.AutoFlush = true;
 			writerField.SetValue(Report.ReportWriter, writer);
 			// Redirect the console
-			Console.SetOut(writer);
-			Console.SetError(writer);
+			//Console.SetOut(writer);
+			//Console.SetError(writer);
 			
 			interpreter = new GuiInterpreter(this, is_interactive, config, options);
 			engine = interpreter.DebuggerEngine;

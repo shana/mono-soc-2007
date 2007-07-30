@@ -88,14 +88,18 @@ namespace Mono.Debugger.Frontend
 		}
 		
 		/// <summary> Set one of the values in this node </summary>
-		public void SetValue(int columnIndex, object value)
+		public void SetValue(int columnIndex, object newValue)
 		{
-			// Do the change only if the value is different
-			if (!value.Equals(GetValue(columnIndex))) {
-				remoteTreeStore.AddModification(new RemoteTreeModification.UpdateNode(this.Path, columnIndex, value));
-				
-				values[columnIndex] = value;
+			// Do not change if the value is same
+			object oldValue = GetValue(columnIndex);
+			if ((newValue == null && oldValue == null) || 
+			    (newValue != null && oldValue != null && newValue.Equals(oldValue))) {
+				return;
 			}
+			
+			remoteTreeStore.AddModification(new RemoteTreeModification.UpdateNode(this.Path, columnIndex, newValue));
+			
+			values[columnIndex] = newValue;
 		}
 		
 		// Convenience methods:
