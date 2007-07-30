@@ -11,6 +11,8 @@ namespace Mono.Debugger.Frontend
 		RemoteTreeNode rootNode;
 		ArrayList modifications = new ArrayList();
 		
+		Hashtable referenceToNode = new Hashtable();
+		
 		public RemoteTreeNode RootNode {
 			get { return rootNode; }
 		}
@@ -34,9 +36,32 @@ namespace Mono.Debugger.Frontend
 			return current;
 		}
 		
+		public RemoteTreeNode GetNode(RemoteTreeNodeRef reference)
+		{
+			if (referenceToNode.Contains(reference)) {
+				return (RemoteTreeNode)referenceToNode[reference];
+			} else {
+				return null;
+			}
+		}
+		
 		internal void AddModification(RemoteTreeModification modification)
 		{
 			modifications.Add(modification);
+		}
+		
+		internal void NotifyNodeAdded(RemoteTreeNode node)
+		{
+			referenceToNode.Add(node.Reference, node);
+		}
+		
+		internal void NotifyNodeRemoved(RemoteTreeNode node)
+		{
+			referenceToNode.Remove(node.Reference);
+			
+			for(int i = 0; i < node.ChildCount; i++) {
+				NotifyNodeRemoved(node.GetChild(i));
+			}
 		}
 		
 		/// <summary>

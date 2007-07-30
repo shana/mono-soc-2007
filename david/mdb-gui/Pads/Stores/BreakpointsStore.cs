@@ -13,20 +13,22 @@ namespace Mono.Debugger.Frontend
 		
 		Hashtable breakpointToTreeNode = new Hashtable();
 		
-		public const int ColumnImage       = 0;
-		public const int ColumnID          = 1;
-		public const int ColumnEnabled     = 2;
-		public const int ColumnActivated   = 3;
-		public const int ColumnThreadGroup = 4;
-		public const int ColumnLocation    = 5;
+		public const int ColumnReference   = 0;
+		public const int ColumnImage       = 1;
+		public const int ColumnID          = 2;
+		public const int ColumnEnabled     = 3;
+		public const int ColumnActivated   = 4;
+		public const int ColumnThreadGroup = 5;
+		public const int ColumnLocation    = 6;
 		
 		public static Type[] ColumnTypes = new Type[] {
-			typeof (Gdk.Pixbuf),
-			typeof (int),
-			typeof (string),
-			typeof (string),
-			typeof (string),
-			typeof (string)
+			typeof(RemoteTreeNodeRef),
+			typeof(Gdk.Pixbuf),
+			typeof(int),
+			typeof(string),
+			typeof(string),
+			typeof(string),
+			typeof(string)
 		};
 		
 		public BreakpointsStore(Interpreter interpreter)

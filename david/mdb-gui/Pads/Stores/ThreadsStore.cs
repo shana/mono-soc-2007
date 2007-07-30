@@ -13,22 +13,24 @@ namespace Mono.Debugger.Frontend
 		
 		Hashtable threadToTreeNode = new Hashtable();
 		
-		public const int ColumnSelected = 0;
-		public const int ColumnID       = 1;
-		public const int ColumnPID      = 2;
-		public const int ColumnTID      = 3;
-		public const int ColumnName     = 4;
-		public const int ColumnState    = 5;
-		public const int ColumnLocation = 6;
+		public const int ColumnReference = 0;
+		public const int ColumnSelected  = 1;
+		public const int ColumnID        = 2;
+		public const int ColumnPID       = 3;
+		public const int ColumnTID       = 4;
+		public const int ColumnName      = 5;
+		public const int ColumnState     = 6;
+		public const int ColumnLocation  = 7;
 		
 		public static Type[] ColumnTypes = new Type[] {
-			typeof (Gdk.Pixbuf),
-			typeof (int),
-			typeof (int),
-			typeof (string),
-			typeof (string),
-			typeof (string),
-			typeof (string)
+			typeof(RemoteTreeNodeRef),
+			typeof(Gdk.Pixbuf),
+			typeof(int),
+			typeof(int),
+			typeof(string),
+			typeof(string),
+			typeof(string),
+			typeof(string)
 		};
 		
 		public ThreadsStore(Interpreter interpreter)
@@ -38,7 +40,12 @@ namespace Mono.Debugger.Frontend
 		
 		public void SelectThread(int id)
 		{
-			interpreter.CurrentThread = interpreter.GetThread(id);
+			try {
+				interpreter.CurrentThread = interpreter.GetThread(id);
+			} catch {
+				// There might be a race condition and the thread might have just terminated
+				Console.WriteLine("Failed to select thread {0}", id);
+			}
 		}
 		
 		void UpdateThread (Thread thread)

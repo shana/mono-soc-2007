@@ -6,6 +6,9 @@ namespace Mono.Debugger.Frontend
 	/// <summary>
 	/// A node of RemoteTreeStore
 	/// </summary>
+	/// <remarks>
+	/// The column 0 always hold the reference to the node.
+	/// </remarks>
 	public class RemoteTreeNode
 	{
 		RemoteTreeStore remoteTreeStore;
@@ -22,8 +25,8 @@ namespace Mono.Debugger.Frontend
 			get { return parent; }
 		}
 		
-		public ArrayList Values {
-			get { return values; }
+		public RemoteTreeNodeRef Reference {
+			get { return (RemoteTreeNodeRef)GetValue(0); }
 		}
 		
 		public int ChildCount {
@@ -84,6 +87,9 @@ namespace Mono.Debugger.Frontend
 			
 			RemoteTreeNode newNode = new RemoteTreeNode(remoteTreeStore, this);
 			childs.Insert(index, newNode);
+			// Must create the reference only once the node is in the tree so that we can get the path
+			newNode.SetValue(0, new RemoteTreeNodeRef());
+			remoteTreeStore.NotifyNodeAdded(newNode);
 			return newNode;
 		}
 		
@@ -93,11 +99,16 @@ namespace Mono.Debugger.Frontend
 			remoteTreeStore.AddModification(new RemoteTreeModification.RemoveNode(this.Path));
 			
 			parent.childs.RemoveAt(MyIndex);
+			remoteTreeStore.NotifyNodeRemoved(this);
 		}
 		
 		/// <summary> Set one of the values in this node </summary>
 		public void SetValue(int columnIndex, object newValue)
 		{
+			if (columnIndex == 0 && !(newValue is RemoteTreeNodeRef)) {
+				throw new ArgumentException("Can not set value.  Column 0 is reserved for reference.");
+			}
+			
 			// Do not change if the value is same
 			object oldValue = GetValue(columnIndex);
 			if ((newValue == null && oldValue == null) || 
@@ -107,10 +118,10 @@ namespace Mono.Debugger.Frontend
 			
 			remoteTreeStore.AddModification(new RemoteTreeModification.UpdateNode(this.Path, columnIndex, newValue));
 			
-			while(columnIndex >= Values.Count) {
-				Values.Add(null);
+			while(columnIndex >= values.Count) {
+				values.Add(null);
 			}
-			Values[columnIndex] = newValue;
+			values[columnIndex] = newValue;
 		}
 		
 		// Convenience methods:
@@ -124,10 +135,10 @@ namespace Mono.Debugger.Frontend
 		/// <summary> Get a value in the given column </summary>
 		public object GetValue(int columnIndex)
 		{
-			if (columnIndex >= this.Values.Count) {
+			if (columnIndex >= values.Count) {
 				return null;
 			} else {
-				return this.Values[columnIndex];
+				return values[columnIndex];
 			}
 		}
 		

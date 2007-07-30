@@ -10,18 +10,20 @@ namespace Mono.Debugger.Frontend
 	{
 		Interpreter interpreter;
 		
-		public const int ColumnSelected = 0;
-		public const int ColumnLevel = 1;
-		public const int ColumnAddress = 2;
-		public const int ColumnName = 3;
-		public const int ColumnSource = 4;
+		public const int ColumnReference = 0;
+		public const int ColumnSelected  = 1;
+		public const int ColumnLevel     = 2;
+		public const int ColumnAddress   = 3;
+		public const int ColumnName      = 4;
+		public const int ColumnSource    = 5;
 		
 		public static Type[] ColumnTypes = new Type[] {
-			typeof (Gdk.Pixbuf),
-			typeof (string),
-			typeof (string),
-			typeof (string),
-			typeof (string)
+			typeof(RemoteTreeNodeRef),
+			typeof(Gdk.Pixbuf),
+			typeof(string),
+			typeof(string),
+			typeof(string),
+			typeof(string)
 		};
 		
 		public CallstackStore(Interpreter interpreter)
