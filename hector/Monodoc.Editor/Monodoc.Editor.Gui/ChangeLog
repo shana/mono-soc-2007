@@ -1,5 +1,12 @@
 2007-07-29  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs, Utils.cs: Removed local definition of
+	  TagEndsHere and now it references it from DocumentUtils. Moved
+	  definitions of AddString and AddNewline.
+	* DocumentUndoManager.cs: Added Buffer accesor.
+
+2007-07-29  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBuffer.cs: Minor Changes.
 
 2007-07-24  Hector E. Gomez M. <hectoregm@gmail.com> 

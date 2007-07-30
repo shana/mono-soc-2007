@@ -70,7 +70,7 @@ public class DocumentBufferArchiver {
 			
 			foreach (TextTag tag in beginTags) {
 				#if DEBUG
-				Console.WriteLine ("Begin Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
+				Console.WriteLine ("Begin Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", DocumentUtils.TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
 				#endif
 				
 				docTag = tag as DocumentTag;
@@ -100,7 +100,7 @@ public class DocumentBufferArchiver {
 			
 			foreach (TextTag tag in endTags) {
 				#if DEBUG
-				Console.WriteLine ("End Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
+				Console.WriteLine ("End Tags: {0} Begins: {1} Ends: {2}", tag.Name, currentIter.BeginsTag (tag) ? "True" : "False", DocumentUtils.TagEndsHere (tag, currentIter, nextIter)? "True" : "False");
 				#endif
 				
 				docTag = tag as DocumentTag;
@@ -450,19 +450,6 @@ public class DocumentBufferArchiver {
 		return insertAt.Offset;
 	}
 	
-	private static int AddString (TextBuffer buffer, int offset, string data, string suffix)
-	{
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		TextTag tag = tagTable.Lookup ("format" + suffix);
-		
-		if (tag == null)
-			tag = tagTable.CreateDynamicTag ("format" + suffix);
-		buffer.InsertWithTags (ref insertAt, data, tag);
-		
-		return insertAt.Offset;
-	}
-
 	private static void AddString (TextBuffer buffer, ref TextIter insertAt, string data, string suffix)
 	{
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
@@ -471,14 +458,6 @@ public class DocumentBufferArchiver {
 		if (tag == null)
 			tag = tagTable.CreateDynamicTag ("format" + suffix);
 		buffer.InsertWithTags (ref insertAt, data, tag);
-	}
-	
-	private static int AddNewLine (TextBuffer buffer, int offset, string suffix)
-	{
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		AddNewLine (buffer, ref insertAt, suffix);
-		
-		return insertAt.Offset;
 	}
 	
 	private static void AddNewLine (TextBuffer buffer, ref TextIter insertAt, string suffix)
@@ -503,7 +482,7 @@ public class DocumentBufferArchiver {
 		
 		return insertAt.Offset;
 	}
-
+	
 	private static void AddPadding (TextBuffer buffer, ref TextIter insertAt, string suffix)
 	{
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
@@ -698,11 +677,6 @@ public class DocumentBufferArchiver {
 		#endif
 	}
 	
-	private static bool TagEndsHere (TextTag tag, TextIter currentIter, TextIter nextIter)
-	{
-		return (currentIter.HasTag (tag) && !nextIter.HasTag (tag));
-	}
-	
 	private static void GetArrays (TextIter currentIter, TextIter nextIter, ArrayList beginTags, ArrayList endTags)
 	{
 		TextTag [] tags = currentIter.Tags;
@@ -712,7 +686,7 @@ public class DocumentBufferArchiver {
 		if (currentIter.BeginsTag (last))
 			GetBeginTags (currentIter, tags, beginTags);
 			
-		if (TagEndsHere (last, currentIter, nextIter))
+		if (DocumentUtils.TagEndsHere (last, currentIter, nextIter))
 			GetEndTags (currentIter, nextIter, tags, endTags);
 	}
 
@@ -730,7 +704,7 @@ public class DocumentBufferArchiver {
 	{
 		Array.Reverse (tagArray);
 		foreach (TextTag tag in tagArray) {
-			if (!TagEndsHere (tag, currentIter, nextIter))
+			if (!DocumentUtils.TagEndsHere (tag, currentIter, nextIter))
 				continue;
 
 			endTags.Add (tag);
