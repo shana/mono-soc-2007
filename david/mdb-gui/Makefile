@@ -13,6 +13,7 @@ SRCS = \
 	MdbGui.cs \
 	PixmapRef.cs \
 	Pixmaps.cs \
+	SourceView.cs \
 	Pads/*.cs \
 	Pads/Stores/*.cs \
 	TreeModel/*.cs \

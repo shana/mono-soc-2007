@@ -31,18 +31,19 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected ToolButton toolbuttonStepOut;
 		[Widget] protected ToolButton toolbuttonBreakpoint;
 		
+		[Widget] protected Viewport viewportSourceView;
 		[Widget] protected Viewport viewportLocalVariables;
 		[Widget] protected Viewport viewportCallstack;
 		[Widget] protected Viewport viewportThreads;
 		[Widget] protected Viewport viewportBreakpoints;
 		
-		[Widget] protected TextView sourceView;
 		[Widget] protected Entry consoleIn;
 		[Widget] protected TextView consoleOut;
 		
 		MemoryStream reporterOutput;
 		int reporterOutputReadLength = 0;
 		
+		SourceView sourceView;
 		LocalsPad localsPad;
 		CallstackPad callstackPad;
 		ThreadPad threadPad;
@@ -116,17 +117,13 @@ namespace Mono.Debugger.Frontend
 			toolbuttonBreakpoint.IconWidget = Pixmaps.Breakpoint.GetImage();
 			toolbuttonBreakpoint.IconWidget.Show();
 			
-			// Default source view
-			TextTag currentLineTag = new TextTag("currentLine");
-			currentLineTag.Background = "yellow";
-			sourceView.Buffer.TagTable.Add(currentLineTag);
-			TextTag breakpointTag = new TextTag("breakpoint");
-			breakpointTag.Background = "red";
-			sourceView.Buffer.TagTable.Add(breakpointTag);
-			TextTag disabledBreakpointTag = new TextTag("disabledBreakpoint");
-			disabledBreakpointTag.Background = "gray";
-			sourceView.Buffer.TagTable.Add(disabledBreakpointTag);
-			sourceView.Buffer.Text = "No source file";
+			// Source code view
+			sourceView = new SourceView(this);
+			ScrolledWindow scrolledWindow = new ScrolledWindow();
+			scrolledWindow.Add(sourceView);
+			viewportSourceView.Add(scrolledWindow);
+			scrolledWindow.Show();
+			sourceView.Show();
 			
 			// Load pads
 			callstackPad = new CallstackPad(this);
@@ -247,39 +244,7 @@ namespace Mono.Debugger.Frontend
 		
 		public void OnToolbuttonBreakpoint_clicked(object o, EventArgs e) 
 		{
-			// Toggle breakpoint at current location
-			if (currentlyLoadedSourceFile != null) {
-				int line = sourceView.Buffer.GetIterAtMark(sourceView.Buffer.InsertMark).Line + 1;
-				
-				// Try to find a breakpoint at current location
-				foreach (Event breakpoint in interpreter.Session.Events) {
-					if (breakpoint is SourceBreakpoint) {
-						SourceLocation location = ((SourceBreakpoint)breakpoint).Location;
-						if (location != null &&
-						    location.FileName == currentlyLoadedSourceFile &&
-						    location.Line == line) {
-							
-							interpreter.Session.DeleteEvent(breakpoint);
-							UpdateGUI();
-							return;
-						}
-					}
-				}
-				
-				// Add breakpoint at current location
-				if (interpreter.HasTarget && interpreter.HasCurrentThread) {
-					try {
-						SourceLocation newLocation;
-						ExpressionParser.ParseLocation(interpreter.CurrentThread, line.ToString(), out newLocation);
-						Event newBreakpoint = interpreter.Session.InsertBreakpoint(ThreadGroup.Global, newLocation);
-						newBreakpoint.Activate(interpreter.CurrentThread);
-					} catch {
-					}
-				}
-				UpdateGUI();
-			} else {
-				Console.WriteLine("Error - no source file loaded");
-			}
+			sourceView.ToggleBreakpoint();
 		}
 		
 		/// <summary> Execute entered command </summary>
@@ -308,67 +273,10 @@ namespace Mono.Debugger.Frontend
 			breakpointsPad.UpdateDisplay();
 			
 			// Update the source view
-			UpdateSourceView();
+			sourceView.UpdateDisplay();
 		}
 		
-		string currentlyLoadedSourceFile;
 		
-		public void UpdateSourceView()
-		{
-			// Try to get the filename for current location
-			StackFrame currentFrame = null;
-			string filename = null;
-			try {
-				currentFrame = interpreter.CurrentThread.GetBacktrace().CurrentFrame;
-				filename = currentFrame.SourceAddress.Location.FileName;
-			} catch {
-			}
-			if (filename == null) {
-				sourceView.Buffer.Text = "No source code";
-				currentlyLoadedSourceFile = null;
-				return;
-			}
-			
-			// Load the source file if neccessary
-			if (currentlyLoadedSourceFile != filename) {
-				SourceBuffer buffer = interpreter.ReadFile(currentFrame.SourceAddress.Location.FileName);
-				string[] sourceCode = buffer.Contents;
-				sourceView.Buffer.Text = string.Join("\n", sourceCode);
-				currentlyLoadedSourceFile = filename;
-			}
-			
-			// Remove all current tags
-			TextIter bufferBegin, bufferEnd;
-			sourceView.Buffer.GetBounds(out bufferBegin, out bufferEnd);
-			sourceView.Buffer.RemoveAllTags(bufferBegin, bufferEnd);
-			
-			// Add tag to show current line
-			int currentLine = currentFrame.SourceAddress.Location.Line;
-			TextIter currentLineIter = AddSourceViewTag("currentLine", currentLine);
-			
-			// Add tags for breakpoints
-			foreach (Event handle in interpreter.Session.Events) {
-				if (handle is SourceBreakpoint) {
-					SourceLocation location = ((SourceBreakpoint)handle).Location;
-					// If it is current line, do not retag it
-					if (location != null && location.Line != currentLine) {
-						AddSourceViewTag(handle.IsEnabled && handle.IsActivated ? "breakpoint" : "disabledBreakpoint", location.Line);
-					}
-				}
-			}
-			
-			// Scroll to current line
-			TextMark mark = sourceView.Buffer.CreateMark(null, currentLineIter, false);
-			sourceView.ScrollToMark(mark, 0, false, 0, 0);
-		}
-		
-		TextIter AddSourceViewTag(string tag, int line)
-		{
-			TextIter begin = sourceView.Buffer.GetIterAtLine(line - 1);
-			TextIter end   = sourceView.Buffer.GetIterAtLine(line);
-			sourceView.Buffer.ApplyTag(tag, begin, end);
-			return begin;
-		}
 	}
 	
 	public class GuiInterpreter: Interpreter

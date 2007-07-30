@@ -102,6 +102,7 @@
     <Compile Include="RemoteTreeStore\RemoteTreeNodeRef.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreePath.cs" />
     <Compile Include="RemoteTreeStore\RemoteTreeStore.cs" />
+    <Compile Include="SourceView.cs" />
     <Compile Include="TreeModel\AbstractNode.cs" />
     <Compile Include="TreeModel\ArrayNode.cs" />
     <Compile Include="TreeModel\ArraySubsetNode.cs" />
