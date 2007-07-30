@@ -38,7 +38,12 @@ namespace Mono.Debugger.Frontend
 					RemoteTreeModification.UpdateNode updateMod = (RemoteTreeModification.UpdateNode)mod;
 					TreeIter it;
 					gtkStore.GetIter(out it, new TreePath(updateMod.NodePath.Indices));
-					gtkStore.SetValue(it, updateMod.ColumnIndex, updateMod.Value);
+					object value = updateMod.Value;
+					// If it is image, dereference it
+					if (value is PixmapRef) {
+						value = ((PixmapRef)value).GetPixbuf();
+					}
+					gtkStore.SetValue(it, updateMod.ColumnIndex, value);
 				}
 			}
 		}

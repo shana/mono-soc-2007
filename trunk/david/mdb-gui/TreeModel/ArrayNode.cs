@@ -14,8 +14,8 @@ namespace Mono.Debugger.Frontend.TreeModel
 		
 		ArraySubsetNode universalSubset;
 		
-		public override Gdk.Pixbuf Image {
-			get { return Pixmaps.PublicClass.GetPixbuf(); }
+		public override PixmapRef Image {
+			get { return Pixmaps.PublicClass; }
 		}
 		
 		public override string Name {

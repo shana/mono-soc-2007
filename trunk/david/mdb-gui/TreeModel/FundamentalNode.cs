@@ -11,8 +11,8 @@ namespace Mono.Debugger.Frontend.TreeModel
 		StackFrame stackFrame;
 		TargetFundamentalObject obj;
 		
-		public override Gdk.Pixbuf Image {
-			get { return Pixmaps.PublicField.GetPixbuf(); }
+		public override PixmapRef Image {
+			get { return Pixmaps.PublicField; }
 		}
 		
 		public override string Name {

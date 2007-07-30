@@ -15,8 +15,8 @@ namespace Mono.Debugger.Frontend.TreeModel
 		
 		string value;
 		
-		public override Gdk.Pixbuf Image {
-			get { return Pixmaps.PublicEnum.GetPixbuf(); }
+		public override PixmapRef Image {
+			get { return Pixmaps.PublicEnum; }
 		}
 		
 		public override string Name {
