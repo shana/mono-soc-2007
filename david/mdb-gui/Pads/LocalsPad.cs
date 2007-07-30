@@ -31,16 +31,16 @@ namespace Mono.Debugger.Frontend
 		
 		protected void TestCollapseRow(object o, TestCollapseRowArgs args)
 		{
-			string id = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnID);
-			if (expandedNodes.ContainsKey(id)) {
-				expandedNodes.Remove(id);
+			string fullName = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnFullName);
+			if (expandedNodes.ContainsKey(fullName)) {
+				expandedNodes.Remove(fullName);
 			}
 		}
 		
 		protected void TestExpandRow(object o, TestExpandRowArgs args)
 		{
-			string id = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnID);
-			expandedNodes[id] = null; // No value, just insert the key
+			string fullName = (string)GtkStore.GetValue(args.Iter, LocalsStore.ColumnFullName);
+			expandedNodes[fullName] = null; // No value, just insert the key
 			int childCount = remoteStore.ExpandNode(new RemoteTreePath(args.Path.Indices));
 			GtkTreeStoreUpdater.Update(remoteStore, GtkStore);
 			if (childCount == 0) {
@@ -61,9 +61,9 @@ namespace Mono.Debugger.Frontend
 				
 				TreeIter childIter;
 				GtkStore.GetIter(out childIter, childPath);
-				string childId = (string)GtkStore.GetValue(childIter, LocalsStore.ColumnID);
+				string childFullName = (string)GtkStore.GetValue(childIter, LocalsStore.ColumnFullName);
 				// This node was expanded in the past - expand it
-				if (expandedNodes.ContainsKey(childId)) {
+				if (expandedNodes.ContainsKey(childFullName)) {
 					GtkTree.ExpandRow(childPath, false);
 				}
 			}
@@ -80,9 +80,9 @@ namespace Mono.Debugger.Frontend
 				
 				TreeIter childIter;
 				GtkStore.GetIter(out childIter, childPath);
-				string childId = (string)GtkStore.GetValue(childIter, LocalsStore.ColumnID);
+				string childFullName = (string)GtkStore.GetValue(childIter, LocalsStore.ColumnFullName);
 				// This node was expanded in the past - expand it
-				if (expandedNodes.ContainsKey(childId)) {
+				if (expandedNodes.ContainsKey(childFullName)) {
 					GtkTree.ExpandRow(childPath, false);
 				}
 			}

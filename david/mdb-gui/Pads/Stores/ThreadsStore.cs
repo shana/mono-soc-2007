@@ -11,7 +11,7 @@ namespace Mono.Debugger.Frontend
 	{
 		Interpreter interpreter;
 		
-		Hashtable threadRows = new Hashtable();
+		Hashtable threadToTreeNode = new Hashtable();
 		
 		public const int ColumnSelected = 0;
 		public const int ColumnID       = 1;
@@ -43,11 +43,11 @@ namespace Mono.Debugger.Frontend
 		
 		void UpdateThread (Thread thread)
 		{
-			RemoteTreeNode node = (RemoteTreeNode)threadRows[thread];
+			RemoteTreeNode node = (RemoteTreeNode)threadToTreeNode[thread];
 
 			if (node == null) {
 				node = RootNode.AppendNode();
-				threadRows.Add(thread, node);
+				threadToTreeNode.Add(thread, node);
 			}
 			
 			bool current = interpreter.HasCurrentThread && interpreter.CurrentThread.ID == thread.ID;
@@ -74,18 +74,18 @@ namespace Mono.Debugger.Frontend
 		
 		void RemoveThread (Thread thread)
 		{
-			RemoteTreeNode node = (RemoteTreeNode)threadRows[thread];
+			RemoteTreeNode node = (RemoteTreeNode)threadToTreeNode[thread];
 			
 			if (node != null) {
 				node.Remove();
 			}
 			
-			threadRows.Remove(thread);
+			threadToTreeNode.Remove(thread);
 		}
 		
 		public void UpdateTree()
 		{
-			Hashtable threadsToRemove = (Hashtable)threadRows.Clone();
+			Hashtable threadsToRemove = (Hashtable)threadToTreeNode.Clone();
 			
 			if (interpreter.HasTarget) {
 				foreach (Process process in interpreter.Processes) {
