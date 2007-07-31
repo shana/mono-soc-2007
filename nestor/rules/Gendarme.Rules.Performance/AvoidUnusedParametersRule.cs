@@ -48,23 +48,25 @@ namespace Gendarme.Rules.Performance {
 			return false;
 		}
 
-		private bool ContainsDelegateInstructionFor (MethodBody body, MethodDefinition method) 
+		private bool ContainsDelegateInstructionFor (MethodDefinition method, MethodDefinition delegateMethod) 
 		{
-			string instructionName = "ldftn";
-			foreach (Instruction instruction in body.Instructions) {
-				if (String.Compare (instruction.OpCode.Name, instructionName) == 0) {
-					return instruction.Operand.Equals (method);
+			if (method.HasBody) {
+				string instructionName = "ldftn";
+				foreach (Instruction instruction in method.Body.Instructions) {
+					if (String.Compare (instruction.OpCode.Name, instructionName) == 0) {
+						return instruction.Operand.Equals (delegateMethod);
+					}
 				}
 			}
 			return false;
 		}
 
-		private bool IsDelegate (MethodDefinition delegatemethod) 
+		private bool IsReferencedByDelegate (MethodDefinition delegateMethod) 
 		{
-			if (delegatemethod.DeclaringType is TypeDefinition) {
-				TypeDefinition type = (TypeDefinition) delegatemethod.DeclaringType;	
+			if (delegateMethod.DeclaringType is TypeDefinition) {
+				TypeDefinition type = (TypeDefinition) delegateMethod.DeclaringType;	
 				foreach (MethodDefinition method in type.Methods) {
-					if (method.HasBody && ContainsDelegateInstructionFor (method.Body, delegatemethod)) {
+					if (ContainsDelegateInstructionFor (method, delegateMethod)) {
 						return true;
 					}
 				}
@@ -75,7 +77,7 @@ namespace Gendarme.Rules.Performance {
 		private bool IsExaminable (MethodDefinition method) 
 		{
 			return !(method.IsAbstract || method.IsVirtual || method.Overrides.Count != 0 
-				|| method.PInvokeInfo != null || IsDelegate (method));
+				|| method.PInvokeInfo != null || IsReferencedByDelegate (method));
 		}
 
 		private ICollection GetUnusedParameters (MethodDefinition method) 
