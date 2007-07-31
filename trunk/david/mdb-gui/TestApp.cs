@@ -11,6 +11,7 @@ class TestApp
 	
 	public static void Fun1()
 	{
+		while(true) {}
 		object obj = new object();
 		Fun2();
 	}

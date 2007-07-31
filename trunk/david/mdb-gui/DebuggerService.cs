@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace Mono.Debugger.Frontend
 {
@@ -114,72 +115,75 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
+		void ExecuteCommand(Command command)
+		{
+			try {
+				command.Execute(engine);
+			} catch(ThreadAbortException) {
+			} catch(ScriptingException ex) {
+				interpreter.Error(ex);
+			} catch(TargetException ex) {
+				interpreter.Error(ex);
+			} catch(Exception ex) {
+				interpreter.Error("Caught exception while executing command {0}: {1}", engine, ex);
+			}
+		}
+		
 		public void Terminate() 
 		{
 			if (interpreter.HasCurrentProcess) {
-				new KillCommand().Execute(engine);
-				NotifyStateChange();
+				Stop();
 			}
 		}
 		
 		public void Run() 
 		{
-			if (!interpreter.HasTarget) {
-				new RunCommand().Execute(engine);
+			if (!interpreter.HasCurrentProcess) {
+				RunCommand runCommand = new RunCommand();
+				ExecuteCommand(runCommand);
 				NotifyStateChange();
 			} else {
-				Console.WriteLine("Error - alredy running");
+				interpreter.Error("The process is alredy running");
 			}
 		}
 		
 		public void Stop() 
 		{
-			if (interpreter.HasCurrentProcess) {
-				new KillCommand().Execute(engine);
-				NotifyStateChange();
-			} else {
-				Console.WriteLine("Error - nothing to stop");
-			}
+			KillCommand killCommand = new KillCommand();
+			ExecuteCommand(killCommand);
+			NotifyStateChange();
 		}
 		
 		public void Continue() 
 		{
-			if (interpreter.HasCurrentThread) {
-				new ContinueCommand().Execute(engine);
-				NotifyStateChange();
-			} else {
-				Console.WriteLine("Error - no current thread");
-			}
+			ContinueCommand continueCommand = new ContinueCommand();
+			continueCommand.InBackground = true;
+			ExecuteCommand(continueCommand);
+			NotifyStateChange();
 		}
 		
 		public void StepIn() 
 		{
-			if (interpreter.HasCurrentThread) {
-				new StepCommand().Execute(engine);
-				NotifyStateChange();
-			} else {
-				Console.WriteLine("Error - no current thread");
-			}
+			StepCommand stepCommand = new StepCommand();
+			stepCommand.InBackground = true;
+			ExecuteCommand(stepCommand);
+			NotifyStateChange();
 		}
 		
 		public void StepOver() 
 		{
-			if (interpreter.HasCurrentThread) {
-				new NextCommand().Execute(engine);
-				NotifyStateChange();
-			} else {
-				Console.WriteLine("Error - no current thread");
-			}
+			NextCommand nextCommand = new NextCommand();
+			nextCommand.InBackground = true;
+			ExecuteCommand(nextCommand);
+			NotifyStateChange();
 		}
 		
 		public void StepOut() 
 		{
-			if (interpreter.HasCurrentThread) {
-				new FinishCommand().Execute(engine);
-				NotifyStateChange();
-			} else {
-				Console.WriteLine("Error - no current thread");
-			}
+			FinishCommand finishCommand = new FinishCommand();
+			finishCommand.InBackground = true;
+			ExecuteCommand(finishCommand);
+			NotifyStateChange();
 		}
 		
 		public string GetCurrentFilename()
