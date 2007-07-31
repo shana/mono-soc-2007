@@ -21,7 +21,17 @@
         <property name="MemberName">vbox</property>
         <property name="BorderWidth">2</property>
         <child>
-          <placeholder />
+          <widget class="Gtk.VBox" id="vboxContent">
+            <property name="MemberName" />
+            <property name="Spacing">6</property>
+            <child>
+              <placeholder />
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">0</property>
+            <property name="AutoSize">False</property>
+          </packing>
         </child>
       </widget>
     </child>

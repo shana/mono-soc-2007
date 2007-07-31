@@ -25,7 +25,8 @@
 
 using Gtk;
 using System;
-using System.Collections.Generic;using MonoDevelop.Database.Sql;
+using System.Collections.Generic;
+using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Components
 {
@@ -33,12 +34,15 @@ namespace MonoDevelop.Database.Components
 	{
 		private SelectColumnWidget selecter;
 		
-		public SelectColumnDialog (bool showCheckBoxes)
+		public SelectColumnDialog (bool showCheckBoxes, ColumnSchemaCollection columns)
 		{
 			this.Build();
 			
 			selecter = new SelectColumnWidget (showCheckBoxes);
-			//FIXME: vbox.PackStart (selecter, true, true, 0);
+			selecter.Initialize (columns);
+			vboxContent.PackStart (selecter, true, true, 0);
+			
+			ShowAll ();
 		}
 		
 		public ColumnSchema SelectedColumn {
@@ -47,11 +51,6 @@ namespace MonoDevelop.Database.Components
 		
 		public IEnumerable<ColumnSchema> CheckedColumns {
 			get { return selecter.CheckedColumns; }
-		}
-		
-		public void Initialize (ColumnSchemaCollection columns)
-		{
-			selecter.Initialize (columns);
 		}
 
 		protected virtual void CancelClicked (object sender, System.EventArgs e)

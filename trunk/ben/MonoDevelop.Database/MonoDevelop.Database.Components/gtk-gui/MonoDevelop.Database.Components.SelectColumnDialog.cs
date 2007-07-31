@@ -13,6 +13,8 @@ namespace MonoDevelop.Database.Components {
     
     public partial class SelectColumnDialog {
         
+        private Gtk.VBox vboxContent;
+        
         private Gtk.Button buttonCancel;
         
         private Gtk.Button buttonOk;
@@ -31,12 +33,19 @@ namespace MonoDevelop.Database.Components {
             Gtk.VBox w1 = this.VBox;
             w1.Name = "Dialog_Vbox";
             w1.BorderWidth = ((uint)(2));
+            // Container child Dialog_Vbox.Gtk.Box+BoxChild
+            this.vboxContent = new Gtk.VBox();
+            this.vboxContent.Name = "vboxContent";
+            this.vboxContent.Spacing = 6;
+            w1.Add(this.vboxContent);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
+            w2.Position = 0;
             // Internal child MonoDevelop.Database.Components.SelectColumnDialog.ActionArea
-            Gtk.HButtonBox w2 = this.ActionArea;
-            w2.Name = "dialog1_ActionArea";
-            w2.Spacing = 6;
-            w2.BorderWidth = ((uint)(5));
-            w2.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            Gtk.HButtonBox w3 = this.ActionArea;
+            w3.Name = "dialog1_ActionArea";
+            w3.Spacing = 6;
+            w3.BorderWidth = ((uint)(5));
+            w3.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonCancel = new Gtk.Button();
             this.buttonCancel.CanDefault = true;
@@ -46,9 +55,9 @@ namespace MonoDevelop.Database.Components {
             this.buttonCancel.UseUnderline = true;
             this.buttonCancel.Label = "gtk-cancel";
             this.AddActionWidget(this.buttonCancel, -6);
-            Gtk.ButtonBox.ButtonBoxChild w3 = ((Gtk.ButtonBox.ButtonBoxChild)(w2[this.buttonCancel]));
-            w3.Expand = false;
-            w3.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonCancel]));
+            w4.Expand = false;
+            w4.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
             this.buttonOk.CanDefault = true;
@@ -58,10 +67,10 @@ namespace MonoDevelop.Database.Components {
             this.buttonOk.UseUnderline = true;
             this.buttonOk.Label = "gtk-ok";
             this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(w2[this.buttonOk]));
-            w4.Position = 1;
-            w4.Expand = false;
-            w4.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w5 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonOk]));
+            w5.Position = 1;
+            w5.Expand = false;
+            w5.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
