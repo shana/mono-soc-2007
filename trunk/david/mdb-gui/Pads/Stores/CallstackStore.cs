@@ -44,7 +44,7 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
-		public void UpdateTree()
+		public void UpdateTree(ref bool abort)
 		{
 			StackFrame[] callstack;
 			int currentFrameIndex;
@@ -69,6 +69,7 @@ namespace Mono.Debugger.Frontend
 			
 			// Update the values of the rows (in reverse order)
 			for (int i = callstack.Length - 1; i >= 0; i--) {
+				if (abort) return;
 				StackFrame frame = callstack[i];
 				
 				// Get the name

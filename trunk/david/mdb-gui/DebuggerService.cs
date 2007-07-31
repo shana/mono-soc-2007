@@ -109,14 +109,19 @@ namespace Mono.Debugger.Frontend
 		{
 			parser.Append(command);
 			if (parser.IsComplete()){
+				AbortBackgroudThread();
+				
 				parser.Execute();
 				parser.Reset();
+				
 				NotifyStateChange();
 			}
 		}
 		
 		void ExecuteCommand(Command command)
 		{
+			AbortBackgroudThread();
+			
 			try {
 				command.Execute(engine);
 			} catch(ThreadAbortException) {
@@ -127,6 +132,8 @@ namespace Mono.Debugger.Frontend
 			} catch(Exception ex) {
 				interpreter.Error("Caught exception while executing command {0}: {1}", engine, ex);
 			}
+			
+			NotifyStateChange();
 		}
 		
 		public void Terminate() 
@@ -141,7 +148,6 @@ namespace Mono.Debugger.Frontend
 			if (!interpreter.HasCurrentProcess) {
 				RunCommand runCommand = new RunCommand();
 				ExecuteCommand(runCommand);
-				NotifyStateChange();
 			} else {
 				interpreter.Error("The process is alredy running");
 			}
@@ -151,7 +157,6 @@ namespace Mono.Debugger.Frontend
 		{
 			KillCommand killCommand = new KillCommand();
 			ExecuteCommand(killCommand);
-			NotifyStateChange();
 		}
 		
 		public void Continue() 
@@ -159,7 +164,6 @@ namespace Mono.Debugger.Frontend
 			ContinueCommand continueCommand = new ContinueCommand();
 			continueCommand.InBackground = true;
 			ExecuteCommand(continueCommand);
-			NotifyStateChange();
 		}
 		
 		public void StepIn() 
@@ -167,7 +171,6 @@ namespace Mono.Debugger.Frontend
 			StepCommand stepCommand = new StepCommand();
 			stepCommand.InBackground = true;
 			ExecuteCommand(stepCommand);
-			NotifyStateChange();
 		}
 		
 		public void StepOver() 
@@ -175,7 +178,6 @@ namespace Mono.Debugger.Frontend
 			NextCommand nextCommand = new NextCommand();
 			nextCommand.InBackground = true;
 			ExecuteCommand(nextCommand);
-			NotifyStateChange();
 		}
 		
 		public void StepOut() 
@@ -183,7 +185,6 @@ namespace Mono.Debugger.Frontend
 			FinishCommand finishCommand = new FinishCommand();
 			finishCommand.InBackground = true;
 			ExecuteCommand(finishCommand);
-			NotifyStateChange();
 		}
 		
 		public string GetCurrentFilename()
@@ -243,12 +244,32 @@ namespace Mono.Debugger.Frontend
 			}
 		}
 		
+		
+		System.Threading.Thread backgroundThread;
+		bool abortBackgroundThread;
+		
 		public void NotifyStateChange()
 		{
-			threadsStore.UpdateTree();
-			callstackStore.UpdateTree();
-			localsStore.UpdateTree();
-			breakpointsStore.UpdateTree();
+			AbortBackgroudThread();
+			abortBackgroundThread = false; // Reset flag
+			backgroundThread = new System.Threading.Thread(new ThreadStart(UpdateStoresInBackground));
+			backgroundThread.Start();
+		}
+		
+		void UpdateStoresInBackground()
+		{
+			threadsStore.UpdateTree(ref abortBackgroundThread);
+			callstackStore.UpdateTree(ref abortBackgroundThread);
+			localsStore.UpdateTree(ref abortBackgroundThread);
+			breakpointsStore.UpdateTree(ref abortBackgroundThread);
+		}
+		
+		void AbortBackgroudThread()
+		{
+			abortBackgroundThread = true;
+			if (backgroundThread != null) {
+				backgroundThread.Join();
+			}
 		}
 	}
 }

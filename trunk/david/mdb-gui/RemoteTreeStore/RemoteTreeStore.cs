@@ -47,7 +47,9 @@ namespace Mono.Debugger.Frontend
 		
 		internal void AddModification(RemoteTreeModification modification)
 		{
-			modifications.Add(modification);
+			lock(modifications) {
+				modifications.Add(modification);
+			}
 		}
 		
 		internal void NotifyNodeAdded(RemoteTreeNode node)
@@ -70,9 +72,11 @@ namespace Mono.Debugger.Frontend
 		/// </summary>
 		public RemoteTreeModification[] GetModifications()
 		{
-			RemoteTreeModification[] mods = (RemoteTreeModification[])modifications.ToArray(typeof(RemoteTreeModification));
-			modifications.Clear();
-			return mods;
+			lock(modifications) {
+				RemoteTreeModification[] mods = (RemoteTreeModification[])modifications.ToArray(typeof(RemoteTreeModification));
+				modifications.Clear();
+				return mods;
+			}
 		}
 	}
 }

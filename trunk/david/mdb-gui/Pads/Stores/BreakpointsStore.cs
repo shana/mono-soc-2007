@@ -71,9 +71,16 @@ namespace Mono.Debugger.Frontend
 		
 		public void UpdateTree()
 		{
+			bool abort = false;
+			UpdateTree(ref abort);
+		}
+		
+		public void UpdateTree(ref bool abort)
+		{
 			Hashtable breakpointsToRemove = (Hashtable)breakpointToTreeNode.Clone();
 			
 			foreach (Event handle in interpreter.Session.Events) {
+				if (abort) return;
 				if (handle is SourceBreakpoint) {
 					UpdateBreakpoint((SourceBreakpoint)handle);
 					breakpointsToRemove.Remove(handle); // Ok if not in the table
