@@ -13,6 +13,10 @@ namespace MonoDevelop.Database.Designer {
     
     public partial class PreviewDialog {
         
+        private Gtk.VBox vboxContent;
+        
+        private MonoDevelop.Database.Components.SqlEditorWidget sqleditorwidget1;
+        
         private Gtk.Button buttonCancel;
         
         private Gtk.Button buttonOk;
@@ -21,18 +25,36 @@ namespace MonoDevelop.Database.Designer {
             Stetic.Gui.Initialize();
             // Widget MonoDevelop.Database.Designer.PreviewDialog
             this.Name = "MonoDevelop.Database.Designer.PreviewDialog";
-            this.WindowPosition = ((Gtk.WindowPosition)(4));
+            this.Title = Mono.Unix.Catalog.GetString("Preview");
+            this.TypeHint = ((Gdk.WindowTypeHint)(1));
+            this.WindowPosition = ((Gtk.WindowPosition)(1));
+            this.SkipTaskbarHint = true;
             this.HasSeparator = false;
             // Internal child MonoDevelop.Database.Designer.PreviewDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
             w1.BorderWidth = ((uint)(2));
+            // Container child dialog1_VBox.Gtk.Box+BoxChild
+            this.vboxContent = new Gtk.VBox();
+            this.vboxContent.Name = "vboxContent";
+            this.vboxContent.Spacing = 6;
+            // Container child vboxContent.Gtk.Box+BoxChild
+            this.sqleditorwidget1 = new MonoDevelop.Database.Components.SqlEditorWidget();
+            this.sqleditorwidget1.Events = ((Gdk.EventMask)(256));
+            this.sqleditorwidget1.Name = "sqleditorwidget1";
+            this.sqleditorwidget1.Editable = false;
+            this.vboxContent.Add(this.sqleditorwidget1);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vboxContent[this.sqleditorwidget1]));
+            w2.Position = 0;
+            w1.Add(this.vboxContent);
+            Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
+            w3.Position = 0;
             // Internal child MonoDevelop.Database.Designer.PreviewDialog.ActionArea
-            Gtk.HButtonBox w2 = this.ActionArea;
-            w2.Name = "dialog1_ActionArea";
-            w2.Spacing = 6;
-            w2.BorderWidth = ((uint)(5));
-            w2.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            Gtk.HButtonBox w4 = this.ActionArea;
+            w4.Name = "dialog1_ActionArea";
+            w4.Spacing = 6;
+            w4.BorderWidth = ((uint)(5));
+            w4.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonCancel = new Gtk.Button();
             this.buttonCancel.CanDefault = true;
@@ -42,9 +64,9 @@ namespace MonoDevelop.Database.Designer {
             this.buttonCancel.UseUnderline = true;
             this.buttonCancel.Label = "gtk-cancel";
             this.AddActionWidget(this.buttonCancel, -6);
-            Gtk.ButtonBox.ButtonBoxChild w3 = ((Gtk.ButtonBox.ButtonBoxChild)(w2[this.buttonCancel]));
-            w3.Expand = false;
-            w3.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w5 = ((Gtk.ButtonBox.ButtonBoxChild)(w4[this.buttonCancel]));
+            w5.Expand = false;
+            w5.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
             this.buttonOk.CanDefault = true;
@@ -54,16 +76,18 @@ namespace MonoDevelop.Database.Designer {
             this.buttonOk.UseUnderline = true;
             this.buttonOk.Label = "gtk-ok";
             this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(w2[this.buttonOk]));
-            w4.Position = 1;
-            w4.Expand = false;
-            w4.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w6 = ((Gtk.ButtonBox.ButtonBoxChild)(w4[this.buttonOk]));
+            w6.Position = 1;
+            w6.Expand = false;
+            w6.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 400;
-            this.DefaultHeight = 300;
+            this.DefaultWidth = 528;
+            this.DefaultHeight = 382;
             this.Show();
+            this.buttonCancel.Clicked += new System.EventHandler(this.CancelClicked);
+            this.buttonOk.Clicked += new System.EventHandler(this.OkClicked);
         }
     }
 }

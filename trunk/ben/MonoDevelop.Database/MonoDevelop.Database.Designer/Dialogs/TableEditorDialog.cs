@@ -41,6 +41,7 @@ namespace MonoDevelop.Database.Designer
 		
 		private ISchemaProvider schemaProvider;
 		private TableSchema table;
+		private TableSchema originalTable;
 		private ColumnSchemaCollection columns;
 		private ConstraintSchemaCollection constraints;
 		private IndexSchemaCollection indexes;
@@ -63,7 +64,11 @@ namespace MonoDevelop.Database.Designer
 				throw new ArgumentNullException ("table");
 			
 			this.schemaProvider = schemaProvider;
-			this.table = table;
+			this.originalTable = table;
+			if (create)
+				this.table = table;
+			else
+				this.table = table.Clone () as TableSchema;
 			this.create = create;
 			
 			this.Build();
@@ -75,26 +80,38 @@ namespace MonoDevelop.Database.Designer
 			
 			notebook = new Notebook ();
 			vboxContent.PackStart (notebook, true, true, 0);
-
-			columnEditor = new ColumnsEditorWidget (schemaProvider);
-			constraintEditor = new ConstraintsEditorWidget (schemaProvider);
-			indexEditor = new IndicesEditorWidget (schemaProvider);
-			triggerEditor = new TriggersEditorWidget (schemaProvider);
-			commentEditor = new CommentEditorWidget ();
 			
-			//TODO: only append if supported
+			columnEditor = new ColumnsEditorWidget (schemaProvider, create);
+			columnEditor.ContentChanged += new EventHandler (OnContentChanged);
 			notebook.AppendPage (columnEditor, new Label (GettextCatalog.GetString ("Columns")));
-			notebook.AppendPage (constraintEditor, new Label (GettextCatalog.GetString ("Constraints")));
-			notebook.AppendPage (indexEditor, new Label (GettextCatalog.GetString ("Indexes")));
-			notebook.AppendPage (triggerEditor, new Label (GettextCatalog.GetString ("Triggers")));
-			notebook.AppendPage (commentEditor, new Label (GettextCatalog.GetString ("Comment")));
-			notebook.ShowAll ();
-			notebook.Page = 0;
 			
+			if (MetaDataService.IsApplied (schemaProvider, typeof (PrimaryKeyConstraintMetaDataAttribute),
+				typeof (ForeignKeyConstraintMetaDataAttribute), typeof (CheckConstraintMetaDataAttribute),
+				typeof (UniqueConstraintMetaDataAttribute))) {
+				constraintEditor = new ConstraintsEditorWidget (schemaProvider);
+				constraintEditor.ContentChanged += new EventHandler (OnContentChanged);
+				notebook.AppendPage (constraintEditor, new Label (GettextCatalog.GetString ("Constraints")));
+			}
+
+			//TODO:
+			//indexEditor = new IndicesEditorWidget (schemaProvider);
+			//notebook.AppendPage (indexEditor, new Label (GettextCatalog.GetString ("Indexes")));
+			
+			if (MetaDataService.IsApplied (schemaProvider, typeof (TriggerMetaDataAttribute))) {
+				triggerEditor = new TriggersEditorWidget (schemaProvider);
+				triggerEditor.ContentChanged += new EventHandler (OnContentChanged);
+				notebook.AppendPage (triggerEditor, new Label (GettextCatalog.GetString ("Triggers")));
+			}
+			
+			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.Comment)) {
+				commentEditor = new CommentEditorWidget ();
+				notebook.AppendPage (commentEditor, new Label (GettextCatalog.GetString ("Comment")));
+			}
+
+			notebook.Page = 0;
+
 			entryName.Text = table.Name;
 			
-			commentEditor.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.Comment);
-
 			dataTypes = schemaProvider.GetDataTypes ();
 			
 			WaitDialog.ShowDialog ("Loading table data ...");
@@ -110,12 +127,10 @@ namespace MonoDevelop.Database.Designer
 			triggers = table.Triggers;
 			//TODO: indexex
 			indexes = new IndexSchemaCollection ();
-			
-			Runtime.LoggingService.Debug ("COLUMNS.COUNT = " + columns.Count);
-			
-//			foreach (ColumnSchema col in columns) {
-//				int dummy = col.Constraints.Count; //get column constraints
-//			}
+
+			foreach (ColumnSchema col in columns) {				
+				int dummy = col.Constraints.Count; //get column constraints
+			}
 
 			Services.DispatchService.GuiDispatch (delegate () {
 				InitializeGui ();
@@ -151,6 +166,16 @@ namespace MonoDevelop.Database.Designer
 				entryName.Text = table.Name;
 			else
 				table.Name = entryName.Text;
+		}
+		
+		protected virtual void OnContentChanged (object sender, EventArgs args)
+		{
+			bool val = columnEditor.Validate () &&
+				(constraintEditor != null && constraintEditor.Validate ()) &&
+				(triggerEditor != null && triggerEditor.Validate ());
+			//TODO: validate indexEditor
+			
+			buttonOk.Sensitive = val;
 		}
 	}
 }

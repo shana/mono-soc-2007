@@ -45,6 +45,9 @@ namespace MonoDevelop.Database.Designer
 		private ISchemaProvider schemaProvider;
 		private ViewSchema view;
 		
+		private CommentEditorWidget commentEditor;
+		private SqlEditorWidget sqlEditor;
+		
 		public ViewEditorDialog (ISchemaProvider schemaProvider, ViewSchema view, bool create)
 		{
 			if (schemaProvider == null)
@@ -64,16 +67,58 @@ namespace MonoDevelop.Database.Designer
 				Title = GettextCatalog.GetString ("Alter View");
 			
 			notebook = new Notebook ();
+
+			sqlEditor = new SqlEditorWidget ();
+			sqlEditor.TextChanged += new EventHandler (SqlChanged);
+			notebook.AppendPage (sqlEditor, new Label (GettextCatalog.GetString ("Definition")));
+			
+			if (MetaDataService.IsViewMetaDataSupported (schemaProvider, ViewMetaData.Comment)) {
+				commentEditor = new CommentEditorWidget ();
+				notebook.AppendPage (commentEditor, new Label (GettextCatalog.GetString ("Comment")));
+			}
+
+			notebook.Page = 0;
+
+			entryName.Text = view.Name;
+			if (!create) {
+				sqlEditor.Text = view.Definition;
+				commentEditor.Comment = view.Comment;
+			}
+
 			vboxContent.PackStart (notebook, true, true, 0);
 			vboxContent.ShowAll ();
 		}
 
 		protected virtual void CancelClicked (object sender, System.EventArgs e)
 		{
+			Respond (ResponseType.Cancel);
+			Hide ();
 		}
 
 		protected virtual void OkClicked (object sender, System.EventArgs e)
 		{
+			view.Name = entryName.Text;
+			view.Definition = sqlEditor.Text;
+			view.Comment = commentEditor.Comment;
+			
+			Respond (ResponseType.Ok);
+			Hide ();
+		}
+
+		protected virtual void NameChanged (object sender, System.EventArgs e)
+		{
+			CheckState ();
+		}
+		
+		protected virtual void SqlChanged (object sender, EventArgs e)
+		{
+			CheckState ();
+		}
+		
+		private void CheckState ()
+		{
+			buttonOk.Sensitive = entryName.Text.Length > 0 && sqlEditor.Text.Length > 0;
+			//TODO: check for duplicate name
 		}
 	}
 }

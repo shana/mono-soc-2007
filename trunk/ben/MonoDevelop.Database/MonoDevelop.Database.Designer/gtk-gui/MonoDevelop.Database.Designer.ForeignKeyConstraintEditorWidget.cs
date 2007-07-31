@@ -11,13 +11,13 @@
 namespace MonoDevelop.Database.Designer {
     
     
-    public partial class ConstraintsEditorWidget {
+    public partial class ForeignKeyConstraintEditorWidget {
         
         protected virtual void Build() {
             Stetic.Gui.Initialize();
-            // Widget MonoDevelop.Database.Designer.ConstraintsEditorWidget
+            // Widget MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget
             Stetic.BinContainer.Attach(this);
-            this.Name = "MonoDevelop.Database.Designer.ConstraintsEditorWidget";
+            this.Name = "MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget";
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }

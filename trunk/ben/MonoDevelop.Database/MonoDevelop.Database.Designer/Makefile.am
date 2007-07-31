@@ -19,23 +19,32 @@ FILES =  \
 	Dialogs/UserEditorDialog.cs \
 	Dialogs/ViewEditorDialog.cs \
 	gtk-gui/generated.cs \
+	gtk-gui/MonoDevelop.Database.Designer.CheckConstraintEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.ColumnsEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.CommentEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.ConstraintsEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.CreateDatabaseDialog.cs \
+	gtk-gui/MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.IndicesEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.PreviewDialog.cs \
+	gtk-gui/MonoDevelop.Database.Designer.PrimaryKeyConstraintEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.ProcedureEditorDialog.cs \
 	gtk-gui/MonoDevelop.Database.Designer.TableEditorDialog.cs \
 	gtk-gui/MonoDevelop.Database.Designer.TriggersEditorWidget.cs \
+	gtk-gui/MonoDevelop.Database.Designer.UniqueConstraintEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Designer.UserEditorDialog.cs \
 	gtk-gui/MonoDevelop.Database.Designer.ViewEditorDialog.cs \
 	MonoDevelop.Database.Designer.addin.xml \
+	Widgets/CheckConstraintEditorWidget.cs \
 	Widgets/ColumnsEditorWidget.cs \
 	Widgets/CommentEditorWidget.cs \
 	Widgets/ConstraintsEditorWidget.cs \
+	Widgets/ForeignKeyConstraintEditorWidget.cs \
 	Widgets/IndicesEditorWidget.cs \
-	Widgets/TriggersEditorWidget.cs
+	Widgets/PrimaryKeyConstraintEditorWidget.cs \
+	Widgets/SelectColumnConstraintWidget.cs \
+	Widgets/TriggersEditorWidget.cs \
+	Widgets/UniqueConstraintEditorWidget.cs
 
 ADDIN = MonoDevelop.Database.Designer.addin.xml
 

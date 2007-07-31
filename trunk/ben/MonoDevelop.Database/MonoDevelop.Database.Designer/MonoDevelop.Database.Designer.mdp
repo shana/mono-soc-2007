@@ -41,6 +41,15 @@
     <File name="./gtk-gui/MonoDevelop.Database.Designer.PreviewDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialogs/UserEditorDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Designer.UserEditorDialog.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/SelectColumnConstraintWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/ForeignKeyConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/CheckConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.CheckConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/PrimaryKeyConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.PrimaryKeyConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Widgets/UniqueConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
+    <File name="./gtk-gui/MonoDevelop.Database.Designer.UniqueConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -78,6 +87,11 @@
       <Widget>MonoDevelop.Database.Designer.ConstraintsEditorWidget</Widget>
       <Widget>MonoDevelop.Database.Designer.IndicesEditorWidget</Widget>
       <Widget>MonoDevelop.Database.Designer.CommentEditorWidget</Widget>
+      <Widget>MonoDevelop.Database.Designer.SelectColumnConstraintWidget</Widget>
+      <Widget>MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget</Widget>
+      <Widget>MonoDevelop.Database.Designer.CheckConstraintEditorWidget</Widget>
+      <Widget>MonoDevelop.Database.Designer.PrimaryKeyConstraintEditorWidget</Widget>
+      <Widget>MonoDevelop.Database.Designer.UniqueConstraintEditorWidget</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
 </Project>

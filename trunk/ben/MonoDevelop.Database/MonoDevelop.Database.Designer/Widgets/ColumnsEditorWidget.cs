@@ -31,12 +31,13 @@ using System.Collections.Generic;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Components;
 
 namespace MonoDevelop.Database.Designer
 {
 	public partial class ColumnsEditorWidget : Gtk.Bin
 	{
-		public EventHandler ContentChanged;
+		public event EventHandler ContentChanged;
 		
 		private ListStore storeColumns;
 		private ListStore storeTypes;
@@ -47,14 +48,14 @@ namespace MonoDevelop.Database.Designer
 		private const int colLengthIndex = 3;
 		private const int colNullableIndex = 4;
 		private const int colCommentIndex = 5;
-		private const int colObjectIndex = 6;
+		private const int colObjIndex = 6;
 		
 		private ColumnSchemaCollection columns;
 		private ConstraintSchemaCollection constraints;
 		private DataTypeSchemaCollection dataTypes;
 		private ISchemaProvider schemaProvider;
 		
-		public ColumnsEditorWidget (ISchemaProvider schemaProvider)
+		public ColumnsEditorWidget (ISchemaProvider schemaProvider, bool create)
 		{
 			if (schemaProvider == null)
 				throw new ArgumentNullException ("schemaProvider");
@@ -126,7 +127,7 @@ namespace MonoDevelop.Database.Designer
 			colNullable.AddAttribute (nullableRenderer, "active", colNullableIndex);
 			colComment.AddAttribute (commentRenderer, "text", colCommentIndex);
 
-			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.PrimaryKeyConstraints))
+			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.PrimaryKeyConstraint))
 				treeColumns.AppendColumn (colPK);
 			treeColumns.AppendColumn (colName);
 			treeColumns.AppendColumn (colType);
@@ -142,6 +143,12 @@ namespace MonoDevelop.Database.Designer
 			treeColumns.HeadersVisible = true;
 			treeColumns.EnableGridLines = TreeViewGridLines.Both;
 			treeColumns.EnableSearch = false;
+			
+			if (!create) {
+				buttonAdd.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanAppendColumn);
+				buttonRemove.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanRemoveColumn);
+				buttonUp.Sensitive = buttonDown.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanRemoveColumn);
+			}
 
 			ShowAll ();
 		}
@@ -164,22 +171,9 @@ namespace MonoDevelop.Database.Designer
 				storeTypes.AppendValues (dataType.Name, storeTypes);
 		}
 		
-		public bool ValidateContent ()
-		{
-			//TODO: validate col types
-			return false;
-		}
-		
 		private void AppendColumnSchema (ColumnSchema column)
 		{
-			bool pk = false;
-			
-//			pk = column.Constraints.GetConstraintWithColumn (column.Name, ConstraintType.PrimaryKey) != null;
-//			fk = column.Constraints.GetConstraintWithColumn (column.Name, ConstraintType.ForeignKey) != null;
-//			
-//			pk |= constraints.GetConstraintWithColumn (column.Name, ConstraintType.PrimaryKey) != null;
-//			fk |= constraints.GetConstraintWithColumn (column.Name, ConstraintType.ForeignKey) != null;
-			
+			bool pk = column.Constraints.GetConstraintWithColumn (column.Name, ConstraintType.PrimaryKey) != null;
 			storeColumns.AppendValues (pk, column.Name, column.DataTypeName, column.Length.ToString (), column.IsNullable, column.Comment, column);
 		}
 
@@ -199,7 +193,7 @@ namespace MonoDevelop.Database.Designer
 		{
 			TreeIter iter;
 			if (treeColumns.Selection.GetSelected (out iter)) {
-				ColumnSchema column = storeColumns.GetValue (iter, colObjectIndex) as ColumnSchema;
+				ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
 				
 				//TODO: also check for attached constraints
 				
@@ -219,6 +213,7 @@ namespace MonoDevelop.Database.Designer
 			if (storeColumns.GetIterFromString (out iter, args.Path)) {
 	 			bool val = (bool) storeColumns.GetValue (iter, colPKIndex);
 	 			storeColumns.SetValue (iter, colPKIndex, !val);
+				EmitContentChanged ();
 	 		}
 		}
 		
@@ -227,7 +222,10 @@ namespace MonoDevelop.Database.Designer
 	 		TreeIter iter;
 			if (storeColumns.GetIterFromString (out iter, args.Path)) {
 	 			bool val = (bool) storeColumns.GetValue (iter, colNullableIndex);
+				ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
 	 			storeColumns.SetValue (iter, colNullableIndex, !val);
+				column.IsNullable = !val;
+				EmitContentChanged ();
 	 		}
 		}
 		
@@ -237,6 +235,9 @@ namespace MonoDevelop.Database.Designer
 			if (storeColumns.GetIterFromString (out iter, args.Path)) {
 				if (!string.IsNullOrEmpty (args.NewText)) {
 					storeColumns.SetValue (iter, colNameIndex, args.NewText);
+					ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
+					column.Name = args.NewText;
+					EmitContentChanged ();
 				} else {
 					string oldText = storeColumns.GetValue (iter, colNameIndex) as string;
 					(sender as CellRendererText).Text = oldText;
@@ -250,6 +251,9 @@ namespace MonoDevelop.Database.Designer
 			if (storeColumns.GetIterFromString (out iter, args.Path)) {
 				if (!string.IsNullOrEmpty (args.NewText)) {
 					storeColumns.SetValue (iter, colTypeIndex, args.NewText);
+					ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
+					column.DataTypeName = args.NewText;
+					EmitContentChanged ();
 				} else {
 					string oldText = storeColumns.GetValue (iter, colTypeIndex) as string;
 					(sender as CellRendererText).Text = oldText;
@@ -264,6 +268,9 @@ namespace MonoDevelop.Database.Designer
 				int len;
 				if (!string.IsNullOrEmpty (args.NewText) && int.TryParse (args.NewText, out len)) {
 					storeColumns.SetValue (iter, colLengthIndex, args.NewText);
+					ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
+					column.Length = int.Parse (args.NewText);
+					EmitContentChanged ();
 				} else {
 					string oldText = storeColumns.GetValue (iter, colLengthIndex) as string;
 					(sender as CellRendererText).Text = oldText;
@@ -274,8 +281,12 @@ namespace MonoDevelop.Database.Designer
 		private void CommentEdited (object sender, EditedArgs args)
 		{
 			TreeIter iter;
-			if (storeColumns.GetIterFromString (out iter, args.Path))
+			if (storeColumns.GetIterFromString (out iter, args.Path)) {
 				storeColumns.SetValue (iter, colCommentIndex, args.NewText);
+				ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
+				column.Comment = args.NewText;
+				EmitContentChanged ();
+			}
 		}
 
 		protected virtual void DownClicked (object sender, EventArgs e)
@@ -327,7 +338,36 @@ namespace MonoDevelop.Database.Designer
 				if (!columns.Contains (name))
 					return name;
 			} while (true);
-			return null;
+		}
+		
+		protected virtual void EmitContentChanged ()
+		{
+			if (ContentChanged != null)
+				ContentChanged (this, EventArgs.Empty);
+		}
+		
+		public virtual bool Validate ()
+		{
+			TreeIter iter;
+			if (storeColumns.GetIterFirst (out iter)) {
+				do {
+					string name = storeColumns.GetValue (iter, colNameIndex) as string;
+					string type = storeColumns.GetValue (iter, colTypeIndex) as string;
+					int len = int.Parse (storeColumns.GetValue (iter, colLengthIndex) as string);
+					
+					if (name == null || type == null)
+						return false;
+					
+					DataTypeSchema dt = schemaProvider.GetDataType (type);
+					if (dt == null)
+						return false;
+					
+					if (!dt.LengthRange.IsInRange (len))
+						return false;
+				} while (storeColumns.IterNext (ref iter));
+				return true;
+			}
+			return false;
 		}
 	}
 }

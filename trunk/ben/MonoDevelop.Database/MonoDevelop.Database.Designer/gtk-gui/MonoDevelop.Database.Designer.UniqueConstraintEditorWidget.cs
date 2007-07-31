@@ -11,13 +11,13 @@
 namespace MonoDevelop.Database.Designer {
     
     
-    public partial class TriggersEditorWidget {
+    public partial class UniqueConstraintEditorWidget {
         
         private Gtk.HBox hbox;
         
-        private Gtk.ScrolledWindow windowTriggers;
+        private Gtk.ScrolledWindow windowUnique;
         
-        private Gtk.TreeView listTriggers;
+        private Gtk.TreeView listUnique;
         
         private Gtk.VButtonBox vbuttonbox;
         
@@ -27,27 +27,27 @@ namespace MonoDevelop.Database.Designer {
         
         protected virtual void Build() {
             Stetic.Gui.Initialize();
-            // Widget MonoDevelop.Database.Designer.TriggersEditorWidget
+            // Widget MonoDevelop.Database.Designer.UniqueConstraintEditorWidget
             Stetic.BinContainer.Attach(this);
-            this.Name = "MonoDevelop.Database.Designer.TriggersEditorWidget";
-            // Container child MonoDevelop.Database.Designer.TriggersEditorWidget.Gtk.Container+ContainerChild
+            this.Name = "MonoDevelop.Database.Designer.UniqueConstraintEditorWidget";
+            // Container child MonoDevelop.Database.Designer.UniqueConstraintEditorWidget.Gtk.Container+ContainerChild
             this.hbox = new Gtk.HBox();
             this.hbox.Name = "hbox";
             this.hbox.Spacing = 6;
             // Container child hbox.Gtk.Box+BoxChild
-            this.windowTriggers = new Gtk.ScrolledWindow();
-            this.windowTriggers.CanFocus = true;
-            this.windowTriggers.Name = "windowTriggers";
-            this.windowTriggers.VscrollbarPolicy = ((Gtk.PolicyType)(1));
-            this.windowTriggers.HscrollbarPolicy = ((Gtk.PolicyType)(1));
-            this.windowTriggers.ShadowType = ((Gtk.ShadowType)(1));
-            // Container child windowTriggers.Gtk.Container+ContainerChild
-            this.listTriggers = new Gtk.TreeView();
-            this.listTriggers.CanFocus = true;
-            this.listTriggers.Name = "listTriggers";
-            this.windowTriggers.Add(this.listTriggers);
-            this.hbox.Add(this.windowTriggers);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox[this.windowTriggers]));
+            this.windowUnique = new Gtk.ScrolledWindow();
+            this.windowUnique.CanFocus = true;
+            this.windowUnique.Name = "windowUnique";
+            this.windowUnique.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowUnique.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowUnique.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child windowUnique.Gtk.Container+ContainerChild
+            this.listUnique = new Gtk.TreeView();
+            this.listUnique.CanFocus = true;
+            this.listUnique.Name = "listUnique";
+            this.windowUnique.Add(this.listUnique);
+            this.hbox.Add(this.windowUnique);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox[this.windowUnique]));
             w2.Position = 0;
             // Container child hbox.Gtk.Box+BoxChild
             this.vbuttonbox = new Gtk.VButtonBox();
@@ -88,6 +88,8 @@ namespace MonoDevelop.Database.Designer {
                 this.Child.ShowAll();
             }
             this.Show();
+            this.buttonAdd.Clicked += new System.EventHandler(this.AddClicked);
+            this.buttonRemove.Clicked += new System.EventHandler(this.RemoveClicked);
         }
     }
 }
