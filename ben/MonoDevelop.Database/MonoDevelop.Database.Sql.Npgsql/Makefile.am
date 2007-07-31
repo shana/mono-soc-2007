@@ -4,6 +4,7 @@ REFS =  \
 	-pkg:gtk-sharp-2.0 \
 	-pkg:monodevelop \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
+	-r:../MonoDevelop.Database.Designer/bin/Debug/MonoDevelop.Database.Designer.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:Npgsql \
 	-r:System \
@@ -13,6 +14,7 @@ FILES =  \
 	NpgsqlConnectionProvider.cs \
 	NpgsqlDbFactory.cs \
 	NpgsqlDialect.cs \
+	NpgsqlGuiProvider.cs \
 	NpgsqlPooledDbConnection.cs \
 	NpgsqlSchemaProvider.cs
 

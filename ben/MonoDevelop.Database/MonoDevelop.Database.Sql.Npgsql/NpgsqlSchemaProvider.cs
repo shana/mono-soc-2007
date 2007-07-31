@@ -31,6 +31,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Npgsql;
+using MonoDevelop.Core;
 namespace MonoDevelop.Database.Sql
 {
 	public class NpgsqlSchemaProvider : AbstractSchemaProvider
@@ -38,53 +39,6 @@ using Npgsql;
 		public NpgsqlSchemaProvider (IConnectionPool connectionPool)
 			: base (connectionPool)
 		{
-		}
-		
-		public override bool SupportsSchemaOperation (SchemaOperation operation)
-		{
-			switch (operation.Operation) {
-			case OperationMetaData.Select:
-				switch (operation.Schema) {
-				case SchemaMetaData.Table:
-				case SchemaMetaData.Column:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Procedure:
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Parameter:
-				case SchemaMetaData.User:
-				case SchemaMetaData.Trigger:
-				case SchemaMetaData.Aggregate:
-				case SchemaMetaData.Group:
-				case SchemaMetaData.Language:
-				case SchemaMetaData.Operator:
-				case SchemaMetaData.Role:
-				case SchemaMetaData.Rule:
-				case SchemaMetaData.DataType:
-				case SchemaMetaData.Sequence:
-					return true;
-				default:
-					return false;
-				}
-			case OperationMetaData.Create:
-			case OperationMetaData.Drop:
-			case OperationMetaData.Rename:
-			case OperationMetaData.Alter:
-				switch (operation.Schema) {
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Table:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Trigger:
-				case SchemaMetaData.User:
-					return true;
-				case SchemaMetaData.View:
-					return operation.Operation != OperationMetaData.Alter;
-				default:
-					return false;
-				}
-			default:
-				return false;
-			}
 		}
 
 		public override TableSchemaCollection GetTables ()
@@ -455,8 +409,8 @@ using Npgsql;
 						user.Name = r.GetString (0);
 						user.UserId = String.Format ("{0}", r.GetValue (1));
 						user.Expires = r.IsDBNull (6) ? DateTime.MinValue : r.GetDateTime (6);
-						user.Options["createdb"] = r.GetBoolean (2);
-						user.Options["createuser"] = r.GetBoolean (3);
+						//user.Options["createdb"] = r.GetBoolean (2);
+						//user.Options["createuser"] = r.GetBoolean (3);
 						user.Password = r.GetString (5);
 						
 						StringBuilder sb = new StringBuilder ();
@@ -466,10 +420,10 @@ using Npgsql;
 						sb.AppendFormat ("  WITH SYSID {0}", user.UserId);
 						if (user.Password != "********")
 							sb.AppendFormat (" ENCRYPTED PASSWORD {0}", user.Password);
-						sb.AppendFormat (((bool) user.Options["createdb"]) ?
-							" CREATEDB" : " NOCREATEDB");
-						sb.AppendFormat (((bool) user.Options["createuser"]) ?
-							" CREATEUSER" : " NOCREATEUSER");
+						//sb.AppendFormat (((bool) user.Options["createdb"]) ?
+						//	" CREATEDB" : " NOCREATEDB");
+						//sb.AppendFormat (((bool) user.Options["createuser"]) ?
+						//	" CREATEUSER" : " NOCREATEUSER");
 						if (user.Expires != DateTime.MinValue)
 							sb.AppendFormat (" VALID UNTIL {0}", user.Expires);
 						sb.Append (";");
@@ -518,7 +472,99 @@ using Npgsql;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createtable.html
 		public override void CreateTable (TableSchema table)
 		{
-			throw new NotImplementedException ();
+			StringBuilder sb = new StringBuilder ();
+			
+			sb.Append ("CREATE TABLE ");
+			sb.Append (table.Name);
+			sb.Append (" (");
+
+			bool first = true;
+			foreach (ColumnSchema column in table.Columns) {
+				if (first)
+					first = false;
+				else
+					sb.Append ("," + Environment.NewLine);
+				
+				sb.Append (column.Name);
+				sb.Append (' ');
+				sb.Append (column.DataType.ToString ());
+				
+				if (!column.IsNullable)
+					sb.Append (" NOT NULL");
+				
+				if (column.HasDefaultValue) {
+					sb.Append (" DEFAULT ");
+					if (column.DefaultValue == null)
+						sb.Append ("NULL");
+					else
+						sb.Append (column.DefaultValue);
+				}
+				
+				foreach (ConstraintSchema constraint in column.Constraints)
+					sb.Append (GetConstraintString (constraint, false));
+			}
+
+			foreach (ConstraintSchema constraint in table.Constraints) {
+				sb.Append ("," + Environment.NewLine);
+				sb.Append (GetConstraintString (constraint, true));
+			}
+			
+			sb.Append (")");
+			
+			if (table.TableSpaceName != null) {
+				sb.Append (" TABLESPACE ");
+				sb.Append (table.TableSpaceName);
+			}
+			
+			string sql = sb.ToString ();
+			Runtime.LoggingService.Error (sql);
+			
+//			IPooledDbConnection conn = connectionPool.Request ();
+//			IDbCommand command = conn.CreateCommand (sql);
+//			using (command)
+//				conn.ExecuteNonQuery (command);
+//			conn.Release ();
+		}
+					
+		protected virtual string GetConstraintString (ConstraintSchema constraint, bool isTableConstraint)
+		{
+			StringBuilder sb = new StringBuilder ();
+			sb.Append ("CONSTRAINT ");
+			sb.Append (constraint.Name);
+			sb.Append (' ');
+			
+			switch (constraint.ConstraintType) {
+			case ConstraintType.PrimaryKey:
+				sb.Append ("PRIMARY KEY ");
+				if (isTableConstraint)
+					sb.Append (GetColumnsString (constraint.Columns, true));
+				break;
+			case ConstraintType.Unique:
+				sb.Append ("UNIQUE ");
+				if (isTableConstraint)
+					sb.Append (GetColumnsString (constraint.Columns, true));
+				break;
+			case ConstraintType.ForeignKey:
+				sb.Append ("FOREIGN KEY ");
+				sb.Append (GetColumnsString (constraint.Columns, true));
+				sb.Append (" REFERENCES ");
+				
+				ForeignKeyConstraintSchema fk = constraint as ForeignKeyConstraintSchema;
+				sb.Append (fk.ReferenceTable);
+				sb.Append (' ');
+				if (fk.ReferenceColumns != null)
+					sb.Append (GetColumnsString (fk.ReferenceColumns, true));
+				break;
+			case ConstraintType.Check:
+				sb.Append ("CHECK (");
+				sb.Append ((constraint as CheckConstraintSchema).Source);
+				sb.Append (")");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
+			return sb.ToString ();
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createview.html
@@ -529,7 +575,7 @@ using Npgsql;
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createindex.html
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createconstraint.html
-		public override void CreateConstraint (ConstraintSchema constraint)
+		public override void CreateIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -559,7 +605,7 @@ using Npgsql;
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-alterindex.html
-		public override void AlterConstraint (ConstraintSchema constraint)
+		public override void AlterIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -579,87 +625,52 @@ using Npgsql;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-dropdatabase.html
 		public override void DropDatabase (DatabaseSchema database)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP DATABASE IF EXISTS " + database.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP DATABASE IF EXISTS " + database.Name + ";");
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-droptable.html
 		public override void DropTable (TableSchema table)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP TABLE IF EXISTS " + table.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP TABLE IF EXISTS " + table.Name + ";");
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-dropview.html
 		public override void DropView (ViewSchema view)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP VIEW IF EXISTS " + view.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP VIEW IF EXISTS " + view.Name + ";");
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-dropindex.html
-		public override void DropConstraint (ConstraintSchema constraint)
+		public override void DropIndex (IndexSchema index)
 		{
-//			if (constraint is IndexConstraintSchema) {
-//				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
-//				
-//				IPooledDbConnection conn = connectionPool.Request ();
-//				IDbCommand command = conn.CreateCommand ("DROP INDEX IF EXISTS " + constraint.Name + " ON " + indexConstraint.TableName + ";");
-//				using (command)
-//					command.ExecuteNonQuery ();
-//				conn.Release ();
-//			}
+			ExecuteNonQuery ("DROP INDEX IF EXISTS " + index.Name + " ON " + index.TableName + ";");
 		}
 		
 		//http://www.postgresql.org/docs/8.2/interactive/sql-droptrigger.html
 		public override void DropTrigger (TriggerSchema trigger)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP TRIGGER IF EXISTS " + trigger.Name + " ON " + trigger.TableName + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP TRIGGER IF EXISTS " + trigger.Name + " ON " + trigger.TableName + ";");
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-dropuser.html
 		public override void DropUser (UserSchema user)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP USER IF EXISTS " + user.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP USER IF EXISTS " + user.Name + ";");
 		}
 		
 		//http://www.postgresql.org/docs/8.2/interactive/sql-alterdatabase.html
 		public override void RenameDatabase (DatabaseSchema database, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("ALTER DATABASE " + database.Name + " RENAME TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("ALTER DATABASE " + database.Name + " RENAME TO " + name + ";");
 			
+			connectionPool.ConnectionContext.ConnectionSettings.Database = name;
 			database.Name = name;
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-altertable.html
 		public override void RenameTable (TableSchema table, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("ALTER TABLE " + table.Name + " RENAME TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("ALTER TABLE " + table.Name + " RENAME TO " + name + ";");
 			
 			table.Name = name;
 		}
@@ -667,31 +678,16 @@ using Npgsql;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-altertable.html
 		public override void RenameView (ViewSchema view, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
 			//this is no copy paste error, it really is "ALTER TABLE"
-			IDbCommand command = conn.CreateCommand ("ALTER TABLE " + view.Name + " RENAME TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("ALTER TABLE " + view.Name + " RENAME TO " + name + ";");
 			
 			view.Name = name;
-		}
-
-		public override void RenameConstraint (ConstraintSchema constraint, string name)
-		{
-			DropConstraint (constraint);
-			constraint.Name = name;
-			CreateConstraint (constraint);
 		}
 		
 		//http://www.postgresql.org/docs/8.2/interactive/sql-altertrigger.html
 		public override void RenameTrigger (TriggerSchema trigger, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("ALTER TRIGGER " + trigger.Name + " ON " + trigger.TableName + " RENAME TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("ALTER TRIGGER " + trigger.Name + " ON " + trigger.TableName + " RENAME TO " + name + ";");
 			
 			trigger.Name = name;
 		}
@@ -699,11 +695,7 @@ using Npgsql;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-alteruser.html
 		public override void RenameUser (UserSchema user, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("ALTER USER " + user.Name + " RENAME TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("ALTER USER " + user.Name + " RENAME TO " + name + ";");
 			
 			user.Name = name;
 		}
