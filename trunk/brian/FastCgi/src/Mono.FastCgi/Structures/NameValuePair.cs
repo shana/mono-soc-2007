@@ -142,6 +142,10 @@ namespace Mono.FastCgi {
 			// Read the value.
 			this.value = enc.GetString (data, index, value_length);
 			index += value_length;
+			
+			Logger.Write (LogLevel.Notice,
+				"Read Parameter ({0}={1})",
+				this.name, this.value);
 		}
 		
 		#endregion

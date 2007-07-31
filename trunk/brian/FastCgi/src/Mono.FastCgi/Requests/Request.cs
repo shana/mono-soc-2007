@@ -209,6 +209,113 @@ namespace Mono.FastCgi {
 		
 		
 		
+		#region Request Details
+		
+		/// <summary>
+		///    Contains the host name, after <see cref="HostName" /> is
+		///    called.
+		/// </summary>
+		private string vhost = null;
+		
+		/// <summary>
+		///    Contains the port number, after <see cref="PortNumber" />
+		///    is called.
+		/// </summary>
+		private int port = -1;
+		
+		/// <summary>
+		///    Contains the path, after <see cref="Path" /> is called.
+		/// </summary>
+		private string path = null;
+		
+		/// <summary>
+		///    Contains the physical path, after <see
+		///    cref="PhysicalPath" /> is called.
+		/// </summary>
+		private string rpath = null;
+		
+		/// <summary>
+		///    Gets the host name used to make the request handled by
+		///    the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="string" /> containing the host name used to
+		///    make the request handled by the current instance.
+		/// </value>
+		public string HostName {
+			get {
+				if (vhost == null)
+					vhost = GetParameter ("HTTP_HOST");
+				
+				return vhost;
+			}
+		}
+		
+		/// <summary>
+		///    Gets the port number used to make the request handled by
+		///    the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="int" /> containing the port number used to
+		///    make the request handled by the current instance.
+		/// </value>
+		public int PortNumber {
+			get {
+				if (port < 0)
+					port = int.Parse (GetParameter (
+							"SERVER_PORT"));
+				
+				return port;
+			}
+		}
+		
+		/// <summary>
+		///    Gets the virtual path used to make the request handled by
+		///    the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="string" /> containing the virtual path used
+		///    to make the request handled by the current instance.
+		/// </value>
+		public string Path {
+			get {
+				// It takes different strokes to move the world.
+				
+				//if (path == null)
+				//	path = GetParameter ("PATH_INFO");
+				
+				if (path == null)
+					path = GetParameter ("SCRIPT_NAME");
+				
+				return path;
+			}
+		}
+		
+		/// <summary>
+		///    Gets the physical path mapped to by the current instance.
+		/// </summary>
+		/// <value>
+		///    A <see cref="string" /> containing the physical path
+		///    mapped to by current instance.
+		/// </value>
+		public string PhysicalPath {
+			get {
+				// It takes different strokes to move the world.
+				
+				//if (rpath == null)
+				//	rpath = GetParameter ("PATH_TRANSLATED");
+				
+				if (rpath == null)
+					rpath = GetParameter ("SCRIPT_FILENAME");
+				
+				return rpath;
+			}
+		}
+		
+		#endregion
+		
+		
+		
 		#region Parameter Handling
 		
 		/// <summary>

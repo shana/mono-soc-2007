@@ -251,7 +251,7 @@ namespace Mono.WebServer.FastCgi
 				
 			default:
 				Console.WriteLine (
-					"Error in argument \"socket\". \"{0}\" cannot be converted to an IP address.",
+					"Error in argument \"socket\". \"{0}\" is not a supported type. Use \"pipe\", \"tcp\" or \"unix\".",
 					socket_parts [0]);
 				return 1;
 			}

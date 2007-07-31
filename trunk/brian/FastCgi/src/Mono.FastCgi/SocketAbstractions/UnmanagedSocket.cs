@@ -1,6 +1,6 @@
 //
-// SocketAbstractions/StandardSocket.cs: Provides a wrapper around a standard
-// .NET socket.
+// SocketAbstractions/UnmanagedSocket.cs: Provides a wrapper around an unmanaged
+// socket.
 //
 // Author:
 //   Brian Nickel (brian.nickel@gmail.com)
@@ -45,10 +45,12 @@ namespace Mono.FastCgi {
 		unsafe public UnmanagedSocket (IntPtr socket)
 		{
 			if (!supports_libc)
-				throw new NotSupportedException ("Unmanaged sockets not supported.");
+				throw new NotSupportedException (
+					"Unmanaged sockets not supported.");
 			
 			if ((int) socket < 0)
-				throw new ArgumentException ("Invalid socket.", "socket");
+				throw new ArgumentException ("Invalid socket.",
+					"socket");
 			
 			byte [] address = new byte [1024];
 			int size = 1024;
@@ -67,7 +69,8 @@ namespace Mono.FastCgi {
 				throw new sock.SocketException ();
 		}
 		
-		unsafe public override int Receive (byte [] buffer, int size, sock.SocketFlags flags)
+		unsafe public override int Receive (byte [] buffer, int size,
+		                                    sock.SocketFlags flags)
 		{
 			if (!connected)
 				return 0;
@@ -85,7 +88,8 @@ namespace Mono.FastCgi {
 			throw new sock.SocketException ();
 		}
 		
-		unsafe public override int Send (byte [] data, int size, sock.SocketFlags flags)
+		unsafe public override int Send (byte [] data, int size,
+		                                 sock.SocketFlags flags)
 		{
 			if (!connected)
 				return 0;
@@ -106,7 +110,8 @@ namespace Mono.FastCgi {
 		public override bool Blocking {
 			get {return blocking;}
 			set {
-				long ret = Syscall.fcntl((int) socket, FcntlCommand.F_GETFL, 0L);
+				long ret = Syscall.fcntl ((int) socket,
+					FcntlCommand.F_GETFL, 0L);
 				if (ret == -1)
 					throw new sock.SocketException ();
 				
@@ -116,7 +121,8 @@ namespace Mono.FastCgi {
 				else
 					ret &= ~O_NONBLOCK;
 				
-				ret = Syscall.fcntl((int) socket, FcntlCommand.F_SETFL, ret);
+				ret = Syscall.fcntl ((int) socket,
+					FcntlCommand.F_SETFL, ret);
 				
 				blocking = value;
 			}
@@ -156,16 +162,20 @@ namespace Mono.FastCgi {
 		unsafe extern static int shutdown (IntPtr s, int how);
 		
 		[DllImport ("libc", SetLastError=true, EntryPoint="send")]
-		unsafe extern static int send (IntPtr s, byte *buffer, int len, int flags);
+		unsafe extern static int send (IntPtr s, byte *buffer, int len,
+		                               int flags);
 		
 		[DllImport ("libc", SetLastError=true, EntryPoint="recv")]
-		unsafe extern static int recv (IntPtr s, byte *buffer, int len, int flags);
+		unsafe extern static int recv (IntPtr s, byte *buffer, int len,
+		                               int flags);
 		
 		[DllImport ("libc", SetLastError=true, EntryPoint="accept")]
-		unsafe extern static IntPtr accept (IntPtr s, byte *addr, ref int addrlen);
+		unsafe extern static IntPtr accept (IntPtr s, byte *addr,
+		                                    ref int addrlen);
 		
 		[DllImport("libc", SetLastError=true, EntryPoint="getsockname")]
-		unsafe static extern int getsockname(IntPtr s, byte *addr, ref int namelen);
+		unsafe static extern int getsockname(IntPtr s, byte *addr,
+		                                     ref int namelen);
 		
 		[DllImport ("libc", SetLastError=true, EntryPoint="listen")]
 		unsafe extern static int listen (IntPtr s, int count);
@@ -191,7 +201,8 @@ namespace Mono.FastCgi {
 				byte[] address = new byte [1024];
 				int size = 1024;
 				fixed (byte* ptr = address)
-					accepted = accept (socket, ptr, ref size);
+					accepted = accept (socket, ptr,
+						ref size);
 				
 				completed = true;
 				callback (this);
@@ -220,7 +231,8 @@ namespace Mono.FastCgi {
 		{
 			try {
 				string os = "";
-				using (Stream st = File.OpenRead ("/proc/sys/kernel/ostype")) {
+				using (Stream st = File.OpenRead (
+					"/proc/sys/kernel/ostype")) {
 					StreamReader sr = new StreamReader (st);
 					os = sr.ReadToEnd ();
 				}
