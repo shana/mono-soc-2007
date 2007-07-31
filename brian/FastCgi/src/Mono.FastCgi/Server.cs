@@ -412,7 +412,7 @@ namespace Mono.FastCgi {
 				
 				if (pairs.ContainsKey (key)) {
 					Logger.Write (LogLevel.Warning,
-						"Server.GetValues: Duplicate name, '{0}', encountered.",
+						"Duplicate param discarded ({0})",
 						key);
 					continue;
 				}
@@ -445,7 +445,7 @@ namespace Mono.FastCgi {
 				
 				if (value == null) {
 					Logger.Write (LogLevel.Warning,
-						"Server.GetValues: Unknown name, '{0}', encountered.",
+						"Unknown value ignored ({0})",
 						key);
 					continue;
 				}

@@ -564,7 +564,13 @@ namespace Mono.FastCgi {
 			for (int i = 0; i < padding_size; i ++)
 				data [8 + body_length + i] = 0;
 			
-			socket.Send (data, total_size, System.Net.Sockets.SocketFlags.None);
+			Logger.Write (LogLevel.Notice,
+				"Record sent ({0}, {1}, {2})",
+				Type, RequestID,
+				body_length);
+			
+			socket.Send (data, total_size,
+				System.Net.Sockets.SocketFlags.None);
 		}
 		
 		#endregion

@@ -178,10 +178,9 @@ namespace Mono.FastCgi {
 				Request request = GetRequest (record.RequestID);
 				
 				Logger.Write (LogLevel.Notice,
-					" Record received ({0}, {1}, {2}) [{3}]",
+					"Record received ({0}, {1}, {2})",
 					record.Type, record.RequestID,
-					record.BodyLength,
-					request == null ? "NEW" : "EXISTING");
+					record.BodyLength);
 				
 				switch (record.Type) {
 					

@@ -1,3 +1,35 @@
+2007-07-31 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/linux/cherokee.html: Added documentation.
+	
+	* doc/linux/index.html: Updated for changes.
+	
+	* src/Mono.FastCgi/Structures/Record.cs: Log the sending of the record.
+	
+	* src/Mono.FastCgi/Structures/NameValuePair.cs: Log params as they are
+	parsed.
+	
+	* src/Mono.FastCgi/Connection.cs: Tweek the logging of received records
+	not to include whether the request is new or not.
+	
+	* src/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: Trivial
+	formatting.
+	
+	* src/Mono.FastCgi/Server.cs: Reformat logging a bit.
+	
+	* src/Mono.FastCgi/Requests/Request.cs: Include common features of a
+	request (Host, Port, Path, Physical Path). This could be used in the
+	future to handle irregularities in clients.
+	
+	* src/Mono.WebServer.FastCgi/Responder.cs: Wrap new properties in
+	Mono.FastCgi.Request.
+	
+	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Use new properties in
+	Mono.WebServer.FastCgi.Responder.
+	
+	* src/Mono.WebServer.FastCgi/server.cs: Correct the error message for
+	bad socket types.
+
 2007-07-30 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/linux/lighttpd.html: Tidied up. Removed disclaimer. Added missing

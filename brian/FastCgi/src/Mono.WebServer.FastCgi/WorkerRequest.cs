@@ -128,7 +128,7 @@ namespace Mono.WebServer.FastCgi
 		public override int GetLocalPort ()
 		{
 			try {
-				return int.Parse (responder.GetParameter ("SERVER_PORT"));
+				return responder.PortNumber;
 			} catch {
 				return 0;
 			}
@@ -187,6 +187,9 @@ namespace Mono.WebServer.FastCgi
 
 		public override void SendStatus (int statusCode, string statusDescription)
 		{
+			if (statusCode == 200)
+				return;
+			
 			string line = string.Format ("{0} {1} {2}\r\n", GetHttpVersion (), statusCode, statusDescription);
 			responder.SendOutput (line, HeaderEncoding);
 		}
@@ -214,7 +217,7 @@ namespace Mono.WebServer.FastCgi
 
 		public override string GetFilePath ()
 		{
-			return responder.GetParameter ("SCRIPT_NAME");
+			return responder.Path;
 		}
 		
 		public override string GetUnknownRequestHeader (string name)

@@ -51,19 +51,15 @@ namespace Mono.WebServer.FastCgi
 			//SendOutputText ("Content-type: text/plain\r\n\r\n");
 			//SendOutputText ("Output:\r\n");
 			
-			string vhost = request.GetParameter ("HTTP_HOST");
-			int    port  = int.Parse (request.GetParameter ("SERVER_PORT"));
-			string path  = request.GetParameter ("SCRIPT_NAME");
-			string rpath = request.GetParameter ("SCRIPT_FILENAME");
-			//foreach (string key in request.GetParameters ().Keys) {
-			//	Console.WriteLine ("{0}={1}", key, request.GetParameter (key));
-			//}
-			ApplicationHost host = Server.GetApplicationForPath (vhost, port, path, rpath);
+			ApplicationHost host = Server.GetApplicationForPath (
+				request.HostName, request.PortNumber,
+				request.Path, request.PhysicalPath);
 			
 			try {
 				host.ProcessRequest (this);
 			} catch (Exception e) {
-				Logger.Write (LogLevel.Error, "ERROR PROCESSING REQUEST: " + e);
+				Logger.Write (LogLevel.Error,
+					"ERROR PROCESSING REQUEST: " + e);
 				return -1;
 			}
 			
@@ -110,6 +106,22 @@ namespace Mono.WebServer.FastCgi
 		
 		public bool IsConnected {
 			get {return request.IsConnected;}
+		}
+		
+		public string HostName {
+			get {return request.HostName;}
+		}
+		
+		public int PortNumber {
+			get {return request.PortNumber;}
+		}
+		
+		public string Path {
+			get {return request.Path;}
+		}
+		
+		public string PhysicalPath {
+			get {return request.PhysicalPath;}
 		}
 	}
 }
