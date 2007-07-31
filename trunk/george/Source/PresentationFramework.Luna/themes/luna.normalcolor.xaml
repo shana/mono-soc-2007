@@ -215,6 +215,18 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
 	</Style>
 
 	<!-- Skipped. -->
+	<Style x:Key="{x:Type mono_system_windows_controls:ContentControl}"
+           TargetType="{x:Type mono_system_windows_controls:ContentControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type mono_system_windows_controls:ContentControl}">
+                    <ContentPresenter/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+	<!-- Skipped. -->
     <Style x:Key="ExpanderHeaderFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>

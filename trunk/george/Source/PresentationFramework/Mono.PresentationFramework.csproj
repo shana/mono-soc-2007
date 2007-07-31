@@ -74,6 +74,7 @@
     <Compile Include="System.Windows.Controls\ContextMenuEventHandler.cs" />
     <Compile Include="System.Windows.Controls\ContextMenuEventArgs.cs" />
     <Compile Include="System.Windows.Controls\ColumnDefinitionCollection.cs" />
+    <Compile Include="System.Windows.Controls\ContentControl.cs" />
     <Compile Include="System.Windows.Controls\GroupBox.cs" />
     <Compile Include="System.Windows.Controls\HeaderedContentControl.cs" />
     <Compile Include="System.Windows.Controls\Image.cs" />
