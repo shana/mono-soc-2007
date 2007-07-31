@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using Mono.Cecil;
 using NUnit.Framework;
@@ -37,6 +38,22 @@ using Gendarme.Rules.Performance;
 
 namespace Test.Rules.Performance {
 
+	public abstract class AbstractClass {
+		public abstract void AbstractMethod (int x);
+	}
+
+	public class VirtualClass {
+		public virtual void VirtualMethod (int x) 
+		{
+		}
+	}
+
+	public class OverrideClass : VirtualClass {
+		public override void VirtualMethod (int x) 
+		{
+		}
+	}
+	
 	[TestFixture]
 	public class AvoidUnusedParametersTest {
 		
@@ -64,7 +81,10 @@ namespace Test.Rules.Performance {
 		{
 			Console.WriteLine ("Method with unused parameters");
 		}
-
+		
+		[DllImport ("libc.so")]
+		private static extern double cos (double x);
+		
 		[TestFixtureSetUp]
 		public void FixtureSetUp () 
 		{
@@ -105,7 +125,37 @@ namespace Test.Rules.Performance {
 			method = GetMethodForTest ("MethodWithUnusedParameters");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
-			Assert.AreEqual (1, messageCollection.Count);
+			Assert.AreEqual (2, messageCollection.Count);
+		}
+		
+		[Test]
+		public void AbstractMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Performance.AbstractClass", "AbstractMethod");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void VirtualMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Performance.VirtualClass", "VirtualMethod");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		public void OverrideMethodTest () 
+		{
+			method = GetMethodForTestFrom ("Test.Rules.Performance.OverrideClass", "VirtualMethod");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		public void ExternMethodTest () 
+		{
+			method = GetMethodForTest ("cos");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
 		}
 
 		private MethodDefinition GetMethodForTest (string methodName) 
@@ -124,7 +174,5 @@ namespace Test.Rules.Performance {
 			}
 			return null;
 		}
-
-
 	}
 }
