@@ -15,15 +15,17 @@ namespace Mono.Debugger.Frontend
 		Hashtable breakpointToTreeNode = new Hashtable();
 		
 		public const int ColumnReference   = 0;
-		public const int ColumnImage       = 1;
-		public const int ColumnID          = 2;
-		public const int ColumnEnabled     = 3;
-		public const int ColumnActivated   = 4;
-		public const int ColumnThreadGroup = 5;
-		public const int ColumnLocation    = 6;
+		public const int ColumnLocation    = 1;
+		public const int ColumnImage       = 2;
+		public const int ColumnID          = 3;
+		public const int ColumnEnabled     = 4;
+		public const int ColumnActivated   = 5;
+		public const int ColumnThreadGroup = 6;
+		public const int ColumnName        = 7;
 		
 		public static Type[] ColumnTypes = new Type[] {
 			typeof(RemoteTreeNodeRef),
+			typeof(SourceCodeLocation),
 			typeof(Gdk.Pixbuf),
 			typeof(int),
 			typeof(string),
@@ -47,12 +49,13 @@ namespace Mono.Debugger.Frontend
 				breakpointToTreeNode.Add(breakpoint, node);
 			}
 			
+			node.SetValue(ColumnLocation, new SourceCodeLocation(breakpoint.Location));
 			node.SetValue(ColumnImage, breakpoint.IsEnabled && breakpoint.IsActivated ? Pixmaps.Breakpoint : Pixmaps.BreakpointDisabled);
 			node.SetValue(ColumnID, breakpoint.Index);
 			node.SetValue(ColumnEnabled, breakpoint.IsEnabled ? "Yes" : "No");
 			node.SetValue(ColumnActivated, breakpoint.IsActivated ? "Yes" : "No");
 			node.SetValue(ColumnThreadGroup, breakpoint.ThreadGroup != null ? breakpoint.ThreadGroup.Name : "global");
-			node.SetValue(ColumnLocation, breakpoint.Name);
+			node.SetValue(ColumnName, breakpoint.Name);
 		}
 		
 		void RemoveBreakpoint(SourceBreakpoint breakpoint)

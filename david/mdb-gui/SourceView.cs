@@ -30,10 +30,10 @@ namespace Mono.Debugger.Frontend
 			this.Buffer.TagTable.Add(disabledBreakpointTag);
 			
 			
-			UpdateDisplay();
+			UpdateDisplay(new SourceCodeLocation[0]);
 		}
 		
-		public void UpdateDisplay()
+		public void UpdateDisplay(SourceCodeLocation[] breakpoints)
 		{
 			string filename = mdbGui.DebuggerService.GetCurrentFilename();
 			if (filename == null) {
@@ -58,16 +58,15 @@ namespace Mono.Debugger.Frontend
 			int currentLine = mdbGui.DebuggerService.GetCurrentLine();
 			TextIter currentLineIter = AddSourceViewTag("currentLine", currentLine);
 			
-//			// Add tags for breakpoints
-//			foreach (Event handle in interpreter.Session.Events) {
-//				if (handle is SourceBreakpoint) {
-//					SourceLocation location = ((SourceBreakpoint)handle).Location;
-//					// If it is current line, do not retag it
-//					if (location != null && location.Line != currentLine) {
-//						AddSourceViewTag(handle.IsEnabled && handle.IsActivated ? "breakpoint" : "disabledBreakpoint", location.Line);
-//					}
-//				}
-//			}
+			// Add tags for breakpoints
+			foreach (SourceCodeLocation breakpoint in breakpoints) {
+				if (breakpoint.Filename == currentlyLoadedSourceFile) {
+					// If it is current line, do not retag it
+					if (breakpoint.Line != currentLine) {
+						AddSourceViewTag("breakpoint", breakpoint.Line);
+					}
+				}
+			}
 			
 			// Scroll to current line
 			TextMark mark = this.Buffer.CreateMark(null, currentLineIter, false);
