@@ -5,6 +5,7 @@ REFS =  \
 	-pkg:monodevelop \
 	-r:../../contrib/MySql.Data.dll \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
+	-r:../MonoDevelop.Database.Designer/bin/Debug/MonoDevelop.Database.Designer.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:System \
 	-r:System.Data
@@ -13,6 +14,7 @@ FILES =  \
 	MySqlConnectionProvider.cs \
 	MySqlDbFactory.cs \
 	MySqlDialect.cs \
+	MySqlGuiProvider.cs \
 	MySqlPooledDbConnection.cs \
 	MySqlSchemaProvider.cs
 

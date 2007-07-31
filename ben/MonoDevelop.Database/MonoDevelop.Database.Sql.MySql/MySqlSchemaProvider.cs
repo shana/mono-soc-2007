@@ -33,6 +33,7 @@ using System.Text.RegularExpressions;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using MonoDevelop.Core;
 namespace MonoDevelop.Database.Sql
 {
 	public class MySqlSchemaProvider : AbstractSchemaProvider
@@ -40,54 +41,6 @@ using System.Collections.Generic;
 		public MySqlSchemaProvider (IConnectionPool connectionPool)
 			: base (connectionPool)
 		{
-		}
-
-		public override bool SupportsSchemaOperation (SchemaOperation operation)
-		{
-			switch (operation.Operation) {
-			case OperationMetaData.Select:
-				switch (operation.Schema) {
-				case SchemaMetaData.Table:
-				case SchemaMetaData.Column:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Procedure:
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Parameter:
-				case SchemaMetaData.User:
-				case SchemaMetaData.Trigger:
-					return true;
-				default:
-					return false;
-				}
-			case OperationMetaData.Create:
-			case OperationMetaData.Drop:
-			case OperationMetaData.Rename:
-				switch (operation.Schema) {
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Table:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Procedure:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Trigger:
-				case SchemaMetaData.User:
-					return true;
-				default:
-					return false;
-				}
-			case OperationMetaData.Alter:
-				switch (operation.Schema) {
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Table:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Procedure:
-					return true;
-				default:
-					return false;
-				}
-			default:
-				return false;
-			}
 		}
 		
 		public override DatabaseSchemaCollection GetDatabases ()
@@ -525,23 +478,129 @@ using System.Collections.Generic;
 		//http://dev.mysql.com/doc/refman/5.1/en/create-table.html
 		public override void CreateTable (TableSchema table)
 		{
-			throw new NotImplementedException ();
+			StringBuilder sb = new StringBuilder ();
+			sb.Append ("CREATE TABLE ");
+			sb.Append (table.Name);
+			sb.Append (' ');
+			
+			bool first = true;
+			foreach (ColumnSchema column in table.Columns) {
+				if (first)
+					first = false;
+				else
+					sb.Append ("," + Environment.NewLine);
+				
+				sb.Append (column.Name);
+				sb.Append (' ');
+				sb.Append (column.DataType.ToString ());
+				
+				if (!column.IsNullable)
+					sb.Append (" NOT NULL");
+				if (column.HasDefaultValue) {
+					sb.Append (" DEFAULT ");
+					if (column.DefaultValue == null)
+						sb.Append ("NULL");
+					else
+						sb.Append (column.DefaultValue);
+				}
+				//TODO: AUTO_INCREMENT
+				
+				foreach (ConstraintSchema constraint in column.Constraints) {
+					switch (constraint.ConstraintType) {
+					case ConstraintType.Unique:
+						sb.Append ("UNIQUE");
+						break;
+					case ConstraintType.PrimaryKey:
+						sb.Append ("PRIMARY KEY");
+						break;
+					default:
+						throw new NotImplementedException ();
+					}
+				}
+				
+				if (column.Comment != null) {
+					sb.Append (" COMMENT '");
+					sb.Append (column.Comment);
+					sb.Append ("'");
+				}
+			}
+			
+			foreach (ConstraintSchema constraint in table.Constraints) {
+				sb.Append ("," + Environment.NewLine);
+				sb.Append (GetConstraintString (constraint));
+			}
+			
+			if (table.TableSpaceName != null) {
+				sb.Append (", TABLESPACE ");
+				sb.Append (table.TableSpaceName);
+				sb.Append (" STORAGE DISK");
+			}
+			
+			sb.Append (";");
+
+			Runtime.LoggingService.Error (sb.ToString ());
+			
+//			IPooledDbConnection conn = connectionPool.Request ();
+//			IDbCommand command = conn.CreateCommand (sb.ToString ());
+//			using (command)
+//				conn.ExecuteNonQuery (command);
+//			conn.Release ();
+			
+			foreach (TriggerSchema trigger in table.Triggers)
+				CreateTrigger (trigger);
+		}
+		
+		protected virtual string GetConstraintString (ConstraintSchema constraint)
+		{
+			if (constraint.ConstraintType == ConstraintType.Check)
+				return String.Format ("CHECK ({0})", (constraint as CheckConstraintSchema).Source);
+			
+			StringBuilder sb = new StringBuilder ();
+			sb.Append ("CONSTRAINT ");
+			sb.Append (constraint.Name);
+			sb.Append (' ');
+
+			switch (constraint.ConstraintType) {
+			case ConstraintType.PrimaryKey:
+				sb.Append ("PRIMARY KEY ");
+				sb.Append (GetColumnsString (constraint.Columns, true));
+				break;
+			case ConstraintType.Unique:
+				sb.Append ("UNIQUE ");
+				sb.Append (GetColumnsString (constraint.Columns, true));
+				break;
+			case ConstraintType.ForeignKey:
+				sb.Append ("FOREIGN KEY ");
+				sb.Append (GetColumnsString (constraint.Columns, true));
+				sb.Append (" REFERENCES ");
+				
+				ForeignKeyConstraintSchema fk = constraint as ForeignKeyConstraintSchema;
+				sb.Append (fk.ReferenceTable);
+				sb.Append (' ');
+				if (fk.ReferenceColumns != null)
+					sb.Append (GetColumnsString (fk.ReferenceColumns, true));
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
+			return sb.ToString ();
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-view.html
 		public override void CreateView (ViewSchema view)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery (view.Definition);
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-procedure.html
 		public override void CreateProcedure (ProcedureSchema procedure)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery (procedure.Definition);
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-index.html
-		public override void CreateConstraint (ConstraintSchema constraint)
+		public override void CreateIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -549,7 +608,40 @@ using System.Collections.Generic;
 		//http://dev.mysql.com/doc/refman/5.1/en/create-trigger.html
 		public override void CreateTrigger (TriggerSchema trigger)
 		{
-			throw new NotImplementedException ();
+			StringBuilder sb = new StringBuilder ();
+			
+			sb.Append ("CREATE TRIGGER ");
+			sb.Append (trigger.Name);
+			if (trigger.TriggerType == TriggerType.Before)
+				sb.Append (" BEFORE ");
+			else
+				sb.Append (" AFTER ");
+			
+			switch (trigger.TriggerEvent) {
+			case TriggerEvent.Delete:
+				sb.Append ("DELETE");
+				break;
+			case TriggerEvent.Insert:
+				sb.Append ("INSERT");
+				break;
+			case TriggerEvent.Update:
+				sb.Append ("UPDATE");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
+			sb.Append (" ON ");
+			sb.Append (trigger.TableName);
+			sb.Append (" FOR EACH ROW ");
+			sb.Append (trigger.Source);
+			sb.Append (";");
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (sb.ToString ());
+			using (command)
+				conn.ExecuteNonQuery (command);
+			conn.Release ();
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-user.html
@@ -573,109 +665,70 @@ using System.Collections.Generic;
 		//http://dev.mysql.com/doc/refman/5.1/en/alter-view.html
 		public override void AlterView (ViewSchema view)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery (view.Definition);
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/alter-procedure.html
 		public override void AlterProcedure (ProcedureSchema procedure)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery (procedure.Definition);
 		}
 		
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-database.html
 		public override void DropDatabase (DatabaseSchema database)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP DATABASE IF EXISTS " + database.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP DATABASE IF EXISTS " + database.Name + ";");
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-table.html
 		public override void DropTable (TableSchema table)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP TABLE IF EXISTS " + table.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP TABLE IF EXISTS " + table.Name + ";");
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-view.html
 		public override void DropView (ViewSchema view)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP VIEW IF EXISTS " + view.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP VIEW IF EXISTS " + view.Name + ";");
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-procedure.html
 		public override void DropProcedure (ProcedureSchema procedure)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP PROCEDURE IF EXISTS " + procedure.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP PROCEDURE IF EXISTS " + procedure.Name + ";");
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-index.html
-		public override void DropConstraint (ConstraintSchema constraint)
+		public override void DropIndex (IndexSchema index)
 		{
-//			if (constraint is IndexConstraintSchema) {
-//				IndexConstraintSchema indexConstraint = constraint as IndexConstraintSchema;
-//				
-//				IPooledDbConnection conn = connectionPool.Request ();
-//				IDbCommand command = conn.CreateCommand ("DROP INDEX " + constraint.Name + " ON " + indexConstraint.TableName + ";");
-//				using (command)
-//					command.ExecuteNonQuery ();
-//				conn.Release ();
-//			}
+			ExecuteNonQuery ("DROP INDEX " + index.Name + " ON " + index.TableName + ";");
 		}
 		
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-trigger.html
 		public override void DropTrigger (TriggerSchema trigger)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP TRIGGER IF EXISTS " + trigger.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP TRIGGER IF EXISTS " + trigger.Name + ";");
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/drop-user.html
 		public override void DropUser (UserSchema user)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP USER " + user.Name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP USER " + user.Name + ";");
 		}
 		
 		//http://dev.mysql.com/doc/refman/5.1/en/rename-database.html
 		public override void RenameDatabase (DatabaseSchema database, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("RENAME DATABASE " + database.Name + " TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("RENAME DATABASE " + database.Name + " TO " + name + ";");
 			
+			connectionPool.ConnectionContext.ConnectionSettings.Database = name;
 			database.Name = name;
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/rename-table.html
 		public override void RenameTable (TableSchema table, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("RENAME TABLE " + table.Name + " TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("RENAME TABLE " + table.Name + " TO " + name + ";");
 			
 			table.Name = name;
 		}
@@ -683,45 +736,16 @@ using System.Collections.Generic;
 		//http://dev.mysql.com/doc/refman/5.1/en/rename-table.html
 		public override void RenameView (ViewSchema view, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
 			//this is no copy paste error, it really is "RENAME TABLE"
-			IDbCommand command = conn.CreateCommand ("RENAME TABLE " + view.Name + " TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("RENAME TABLE " + view.Name + " TO " + name + ";");
 			
 			view.Name = name;
-		}
-
-		public override void RenameProcedure (ProcedureSchema procedure, string name)
-		{
-			DropProcedure (procedure);
-			procedure.Name = name;
-			CreateProcedure (procedure);
-		}
-
-		public override void RenameConstraint (ConstraintSchema constraint, string name)
-		{
-			DropConstraint (constraint);
-			constraint.Name = name;
-			CreateConstraint (constraint);
-		}
-		
-		public override void RenameTrigger (TriggerSchema trigger, string name)
-		{
-			DropTrigger (trigger);
-			trigger.Name = name;
-			CreateTrigger (trigger);
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/rename-user.html
 		public override void RenameUser (UserSchema user, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("RENAME USER " + user.Name + " TO " + name + ";");
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("RENAME USER " + user.Name + " TO " + name + ";");
 			
 			user.Name = name;
 		}
