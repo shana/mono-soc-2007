@@ -35,5 +35,10 @@ namespace MonoDevelop.Database.Sql
 			: base (true)
 		{
 		}
+		
+		public DatabaseSchemaCollection (DatabaseSchemaCollection collection)
+			: base (collection, true)
+		{
+		}
 	}
 }

@@ -32,54 +32,68 @@ namespace MonoDevelop.Database.Sql
 {
 	public class SequenceSchema : AbstractSchema
 	{
-		protected string minValue = String.Empty;
-		protected string maxValue = String.Empty;
-		protected string currentValue = String.Empty;
-		protected string increment = String.Empty;
+		protected string minValue;
+		protected string maxValue;
+		protected string currentValue;
+		protected string increment;
 		
 		public SequenceSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
 		}
 		
+		public SequenceSchema (SequenceSchema seq)
+			: base (seq)
+		{
+			this.minValue = seq.minValue;
+			this.maxValue = seq.maxValue;
+			this.currentValue = seq.currentValue;
+			this.increment = seq.increment;
+		}
+		
 		public string MinValue {
-			get {
-				return minValue;
-			}
+			get { return minValue; }
 			set {
-				minValue = value;
-				OnChanged();
+				if (minValue != value) {
+					minValue = value;
+					OnChanged();
+				}
 			}
 		}
 		
 		public string MaxValue {
-			get {
-				return maxValue;
-			}
+			get { return maxValue; }
 			set {
-				maxValue = value;
-				OnChanged();
+				if (maxValue != value) {
+					maxValue = value;
+					OnChanged();
+				}
 			}
 		}
 		
 		public string CurrentValue {
-			get {
-				return currentValue;
-			}
+			get { return currentValue; }
 			set {
-				currentValue = value;
-				OnChanged();
+				if (currentValue != value) {
+					currentValue = value;
+					OnChanged();
+				}
 			}
 		}
 		
 		public string Increment {
-			get {
-				return increment;
-			}
+			get { return increment; }
 			set {
-				increment = value;
-				OnChanged();
+				if (increment != value) {
+					increment = value;
+					OnChanged();
+				}
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new SequenceSchema (this);
 		}
 	}
 }

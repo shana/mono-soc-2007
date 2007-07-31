@@ -40,6 +40,13 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public IndexSchema (IndexSchema index)
+			: base (index)
+		{
+			this.tableName = index.tableName;
+			this.sortType = index.sortType;
+		}
+		
 		public string TableName {
 			get { return tableName; }
 			set {
@@ -58,6 +65,11 @@ namespace MonoDevelop.Database.Sql
 					OnChanged ();
 				}
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new IndexSchema (this);
 		}
 	}
 }

@@ -39,9 +39,20 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public CheckConstraintSchema (CheckConstraintSchema constraint)
+			: base (constraint)
+		{
+			source = constraint.source;
+		}
+		
 		public string Source {
 			get { return source; }
 			set { source = value; }
+		}
+		
+		public override object Clone ()
+		{
+			return new CheckConstraintSchema (this);
 		}
 	}
 }

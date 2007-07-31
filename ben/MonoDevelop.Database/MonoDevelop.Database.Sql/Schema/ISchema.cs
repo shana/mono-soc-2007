@@ -31,7 +31,7 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface ISchema
+	public interface ISchema : ICloneable
 	{
 		/// <summary>
 		/// Event fired when the object is changed.

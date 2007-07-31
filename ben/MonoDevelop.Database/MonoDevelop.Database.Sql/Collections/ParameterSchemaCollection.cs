@@ -35,5 +35,10 @@ namespace MonoDevelop.Database.Sql
 			: base (false) //not sorted, parameter order is important
 		{
 		}
+		
+		public ParameterSchemaCollection (ParameterSchemaCollection collection)
+			: base (collection, false)
+		{
+		}
 	}
 }

@@ -39,6 +39,19 @@ namespace MonoDevelop.Database.Sql
 			return obj.GetType ().GetCustomAttributes (attributeType, true).Length > 0;
 		}
 		
+		public static bool IsApplied (object obj, params Type[] attributeTypes)
+		{
+			if (obj == null)
+				throw new ArgumentNullException ("obj");
+			if (attributeTypes == null)
+				throw new ArgumentNullException ("attributeTypes");
+			
+			foreach (Type type in attributeTypes)
+				if (obj.GetType ().GetCustomAttributes (type, true).Length > 0)
+					return true;
+			return false;
+		}
+		
 		public static ConnectionSettingsMetaDataAttribute GetConnectionSettingsMetaData (object obj)
 		{
 			if (obj == null)
@@ -182,26 +195,14 @@ namespace MonoDevelop.Database.Sql
 			return false;
 		}
 		
-		public static bool IsOperationMetaDataSupported (object obj, OperationMetaData meta)
+		public static bool IsDatabaseMetaDataSupported (object obj, DatabaseMetaData meta)
 		{
 			if (obj == null)
 				throw new ArgumentNullException ("obj");
 			
-			object[] attributes = obj.GetType ().GetCustomAttributes (typeof (OperationMetaDataAttribute), true);
-			foreach (OperationMetaDataAttribute attrib in attributes)
-				if ((attrib.OperationMetaData & meta) == meta)
-					return true;
-			return false;
-		}
-		
-		public static bool IsSchemaMetaDataSupported (object obj, SchemaMetaData meta)
-		{
-			if (obj == null)
-				throw new ArgumentNullException ("obj");
-			
-			object[] attributes = obj.GetType ().GetCustomAttributes (typeof (SchemaMetaDataAttribute), true);
-			foreach (SchemaMetaDataAttribute attrib in attributes)
-				if ((attrib.SchemaMetaData & meta) == meta)
+			object[] attributes = obj.GetType ().GetCustomAttributes (typeof (DatabaseMetaDataAttribute), true);
+			foreach (DatabaseMetaDataAttribute attrib in attributes)
+				if ((attrib.DatabaseMetaData & meta) == meta)
 					return true;
 			return false;
 		}

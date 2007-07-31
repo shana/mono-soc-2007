@@ -53,6 +53,22 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public DataTypeSchema (DataTypeSchema dt)
+			: base (dt)
+		{
+			this.isComplex = dt.isComplex;
+			this.isNullable = dt.isNullable;
+			this.isAutoincrementable = dt.isAutoincrementable;
+			this.isFixedLength = dt.isFixedLength;
+			this.category = dt.category;
+			this.dataType = dt.dataType;
+			this.createFormat = dt.createFormat;
+			this.createParameters = dt.createParameters;
+			this.lengthRange = new Range (dt.lengthRange);
+			this.precisionRange = new Range (dt.precisionRange);
+			this.scaleRange = new Range (dt.scaleRange);
+		}
+		
 		public DataTypeCategory DataTypeCategory {
 			get { return category; }
 			set {
@@ -180,6 +196,11 @@ namespace MonoDevelop.Database.Sql
 					throw new NotImplementedException();
 				}
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new DataTypeSchema (this);
 		}
 	}
 }

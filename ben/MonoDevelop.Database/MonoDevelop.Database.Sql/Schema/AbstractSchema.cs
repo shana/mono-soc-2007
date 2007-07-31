@@ -36,14 +36,12 @@ namespace MonoDevelop.Database.Sql
 	{
 		public event EventHandler Changed;
 		
-		protected string name = null;
-		protected string ownerName = null;
-		protected string comment = null;
-		protected string definition = null;
-		protected string schema = null;
-		protected ISchemaProvider provider = null;
-		
-		protected Hashtable options;
+		protected string name;
+		protected string ownerName;
+		protected string comment;
+		protected string definition;
+		protected string schema;
+		protected ISchemaProvider provider;
 		
 		protected AbstractSchema (ISchemaProvider schemaProvider)
 		{
@@ -51,6 +49,19 @@ namespace MonoDevelop.Database.Sql
 				throw new ArgumentNullException ("schemaProvider");
 			
 			this.provider = schemaProvider;
+		}
+		
+		protected AbstractSchema (AbstractSchema schema)
+		{
+			if (schema == null)
+				throw new ArgumentNullException ("schema");
+			
+			this.provider = schema.provider;
+			this.name = schema.name;
+			this.ownerName = schema.ownerName;
+			this.comment = schema.comment;
+			this.definition = schema.definition;
+			this.schema = schema.schema;
 		}
 		
 		public virtual string Name {
@@ -123,9 +134,7 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public ISchemaProvider SchemaProvider {
-			get {
-				return provider;
-			}
+			get { return provider; }
 		}
 		
 		public virtual string OwnerName {
@@ -152,15 +161,6 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public virtual Hashtable Options {
-			get {
-				if (options == null)
-					options = new Hashtable ();
-				
-				return options;
-			}
-		}
-		
 		public virtual void OnChanged()
 		{
 			if (Changed != null)
@@ -170,5 +170,7 @@ namespace MonoDevelop.Database.Sql
 		public virtual void Refresh()
 		{
 		}
+		
+		public abstract object Clone ();
 	}
 }

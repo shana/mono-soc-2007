@@ -36,6 +36,11 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public ConstraintSchemaCollection (ConstraintSchemaCollection collection)
+			: base (collection, true)
+		{
+		}
+		
 		public ConstraintSchema GetConstraintWithColumn (string columnName, ConstraintType type)
 		{
 			foreach (ConstraintSchema item in List) {

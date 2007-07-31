@@ -39,10 +39,22 @@ namespace MonoDevelop.Database.Sql
 		protected TriggerEvent triggerEvent;
 		protected int position;
 		protected bool isActive;
+		protected string source;
 		
 		public TriggerSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+		}
+		
+		public TriggerSchema (TriggerSchema trigger)
+			: base (trigger)
+		{
+			tableName = trigger.tableName;
+			triggerType = trigger.triggerType;
+			triggerEvent = trigger.triggerEvent;
+			position = trigger.position;
+			isActive = trigger.isActive;
+			source = trigger.source;
 		}
 		
 		public string TableName {
@@ -93,6 +105,21 @@ namespace MonoDevelop.Database.Sql
 					OnChanged ();
 				}
 			}
+		}
+		
+		public string Source {
+			get { return source; }
+			set {
+				if (source != value) {
+					source = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public override object Clone ()
+		{
+			return new TriggerSchema (this);
 		}
 	}
 }

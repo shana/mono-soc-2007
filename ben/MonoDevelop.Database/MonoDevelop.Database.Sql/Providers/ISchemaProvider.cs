@@ -34,10 +34,6 @@ namespace MonoDevelop.Database.Sql
 	public interface ISchemaProvider
 	{
 		IConnectionPool ConnectionPool { get; }
-		
-		bool SupportsSchemaOperation (OperationMetaData operation, SchemaMetaData schema);
-
-		bool SupportsSchemaOperation (SchemaOperation operation);
 
 		DatabaseSchemaCollection GetDatabases ();
 
@@ -73,7 +69,7 @@ namespace MonoDevelop.Database.Sql
 		void CreateTable (TableSchema table);
 		void CreateView (ViewSchema view);
 		void CreateProcedure (ProcedureSchema procedure);
-		void CreateConstraint (ConstraintSchema constraint);
+		void CreateIndex (IndexSchema index);
 		void CreateTrigger (TriggerSchema trigger);
 		void CreateUser (UserSchema user);
 		
@@ -81,7 +77,7 @@ namespace MonoDevelop.Database.Sql
 		void AlterTable (TableSchema table);
 		void AlterView (ViewSchema view);
 		void AlterProcedure (ProcedureSchema procedure);
-		void AlterConstraint (ConstraintSchema constraint);
+		void AlterIndex (IndexSchema index);
 		void AlterTrigger (TriggerSchema trigger);
 		void AlterUser (UserSchema user);
 		
@@ -89,7 +85,7 @@ namespace MonoDevelop.Database.Sql
 		void DropTable (TableSchema table);
 		void DropView (ViewSchema view);
 		void DropProcedure (ProcedureSchema procedure);
-		void DropConstraint (ConstraintSchema constraint);
+		void DropIndex (IndexSchema index);
 		void DropTrigger (TriggerSchema trigger);
 		void DropUser (UserSchema user);
 
@@ -97,8 +93,20 @@ namespace MonoDevelop.Database.Sql
 		void RenameTable (TableSchema table, string name);
 		void RenameView (ViewSchema view, string name);
 		void RenameProcedure (ProcedureSchema procedure, string name);
-		void RenameConstraint (ConstraintSchema constraint, string name);
+		void RenameIndex (IndexSchema index, string name);
 		void RenameTrigger (TriggerSchema trigger, string name);
 		void RenameUser (UserSchema user, string name);
+		
+		DatabaseSchema GetNewDatabaseSchema (string name);
+		TableSchema GetNewTableSchema (string name);
+		ViewSchema GetNewViewSchema (string name);
+		ProcedureSchema GetNewProcedureSchema (string name);
+		ColumnSchema GetNewColumnSchema (string name);
+		ParameterSchema GetNewParameterSchema (string name);
+		CheckConstraintSchema GetNewCheckConstraintSchema (string name);
+		UniqueConstraintSchema GetNewUniqueConstraintSchema (string name);
+		PrimaryKeyConstraintSchema GetNewPrimaryKeyConstraintSchema (string name);
+		ForeignKeyConstraintSchema GetNewForeignKeyConstraintSchema (string name);
+		UserSchema GetNewUserSchema (string name);
 	}
 }

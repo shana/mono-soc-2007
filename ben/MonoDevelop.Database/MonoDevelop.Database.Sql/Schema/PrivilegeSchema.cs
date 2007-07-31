@@ -40,14 +40,25 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public PrivilegeSchema (PrivilegeSchema priv)
+			: base (priv)
+		{
+			this.canGrant = priv.canGrant;
+		}
+		
 		public bool CanGrant {
-			get {
-				return canGrant;
-			}
+			get { return canGrant; }
 			set {
-				canGrant = value;
-				OnChanged();
+				if (canGrant != value) {
+					canGrant = value;
+					OnChanged();
+				}
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new PrivilegeSchema (this);
 		}
 	}
 }

@@ -30,6 +30,11 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum TableMetaData
 	{
+		Create,
+		Alter,
+		Drop,
+		Rename,
+		
 		Name,
 		TableSpaceName,
 		Owner,
@@ -38,11 +43,15 @@ namespace MonoDevelop.Database.Sql
 		Schema,
 		IsSystem,
 		Columns,
-		PrimaryKeyConstraints,
-		ForeignKeyConstraints,
-		CheckConstraints,
-		UniqueConstraints,
-		Triggers
+		PrimaryKeyConstraint,
+		ForeignKeyConstraint,
+		CheckConstraint,
+		UniqueConstraint,
+		Triggers,
+		
+		CanAppendColumn,
+		CanInsertColumn,
+		CanRemoveColumn
 	}
 
 	[AttributeUsage (AttributeTargets.Class)]

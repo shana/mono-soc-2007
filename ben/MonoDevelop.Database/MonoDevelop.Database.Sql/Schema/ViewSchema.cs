@@ -41,20 +41,32 @@ namespace MonoDevelop.Database.Sql
 			: base (schemaProvider)
 		{
 		}
+		
+		public ViewSchema (ViewSchema view)
+			: base (view)
+		{
+			this.isSystemView = view.isSystemView;
+			this.statement = view.statement;
+			this.columns = new ColumnSchemaCollection (view.columns);
+		}
 
 		public bool IsSystemView {
 			get { return isSystemView; }
 			set {
-				isSystemView = value;
-				OnChanged();
+				if (isSystemView != value) {
+					isSystemView = value;
+					OnChanged();
+				}
 			}
 		}
 		
 		public string Statement {
 			get { return statement; }
 			set {
-				statement = value;
-				OnChanged();
+				if (statement != value) {
+					statement = value;
+					OnChanged();
+				}
 			}
 		}
 		
@@ -75,6 +87,11 @@ namespace MonoDevelop.Database.Sql
 		public override void Refresh()
 		{
 			definition = null;
+		}
+		
+		public override object Clone ()
+		{
+			return new ViewSchema (this);
 		}
 	}
 }

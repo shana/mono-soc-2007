@@ -32,20 +32,22 @@ namespace MonoDevelop.Database.Sql
 {
 	public class OperatorSchema : AbstractSchema
 	{
-		protected string leftDataType = String.Empty;
-		protected string rightDataType = String.Empty;
+		protected string leftDataType = null;
+		protected string rightDataType = null;
 		
 		public OperatorSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
 		}
 		
-		public override string Name {
-			get {
-				return name;
-			}
+		public OperatorSchema (OperatorSchema op)
+			: base (op)
+		{
+			this.leftDataType = op.leftDataType;
+			this.rightDataType = op.rightDataType;
 		}
 		
+		//TODO: 
 		public DataTypeSchema LeftDataType {
 			get {
 				throw new NotImplementedException();
@@ -56,6 +58,11 @@ namespace MonoDevelop.Database.Sql
 				else
 					leftDataType = String.Empty;
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new OperatorSchema (this);
 		}
 	}
 }

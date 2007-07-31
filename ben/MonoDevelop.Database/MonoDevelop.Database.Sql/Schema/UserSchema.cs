@@ -33,8 +33,8 @@ namespace MonoDevelop.Database.Sql
 {
 	public class UserSchema : AbstractSchema
 	{
-		protected string userId = String.Empty;
-		protected string password = String.Empty;
+		protected string userId;
+		protected string password;
 		protected DateTime expires = DateTime.MinValue;
 		
 		//TODO: list of allowed hosts?
@@ -44,6 +44,14 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public UserSchema (UserSchema user)
+			: base (user)
+		{
+			this.userId = user.userId;
+			this.password = user.password;
+			this.expires = user.expires;
+		}
+		
 		public virtual ICollection<RoleSchema> Roles {
 			get {
 				throw new NotImplementedException();
@@ -51,30 +59,38 @@ namespace MonoDevelop.Database.Sql
 		}
 		
 		public virtual string UserId {
-			get {
-				return userId;
-			}
+			get { return userId; }
 			set {
-				userId = value;
+				if (userId != value) {
+					userId = value;
+					OnChanged ();
+				}
 			}
 		}
 		
 		public virtual string Password {
-			get {
-				return password;
-			}
+			get { return password; }
 			set {
-				password = value;
+				if (password != value) {
+					password = value;
+					OnChanged ();
+				}
 			}
 		}
 		
 		public virtual DateTime Expires {
-			get {
-				return expires;
-			}
+			get { return expires; }
 			set {
-				expires = value;
+				if (expires != value) {
+					expires = value;
+					OnChanged ();
+				}
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new UserSchema (this);
 		}
 	}
 }

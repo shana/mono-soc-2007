@@ -38,6 +38,11 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public GroupSchema (GroupSchema schema)
+			: base (schema)
+		{
+		}
+		
 		public UserSchema Users {
 			get {
 				throw new NotImplementedException ();
@@ -48,6 +53,11 @@ namespace MonoDevelop.Database.Sql
 			get {
 				throw new NotImplementedException ();
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new GroupSchema (this);
 		}
 	}
 }

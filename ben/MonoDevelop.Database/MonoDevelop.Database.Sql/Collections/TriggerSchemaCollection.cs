@@ -35,5 +35,10 @@ namespace MonoDevelop.Database.Sql
 			: base (true)
 		{
 		}
+		
+		public TriggerSchemaCollection (TriggerSchemaCollection collection)
+			: base (collection, true)
+		{
+		}
 	}
 }

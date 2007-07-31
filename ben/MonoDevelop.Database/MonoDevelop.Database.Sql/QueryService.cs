@@ -40,6 +40,18 @@ namespace MonoDevelop.Database.Sql
 
 	public static class QueryService
 	{
+		public static void RaiseException (Exception exception)
+		{
+			Services.MessageService.ShowError (exception);
+			Runtime.LoggingService.Error ((object)"Database Exception", exception);
+		}
+		
+		public static void RaiseException (string message, Exception exception)
+		{
+			Services.MessageService.ShowError (exception, message);
+			Runtime.LoggingService.Error ((object)"Database Exception", exception);
+		}
+		
 		//TODO: show errors
 		public static void EnsureConnection (DatabaseConnectionContext context, DatabaseConnectionContextCallback callback, object state)
 		{

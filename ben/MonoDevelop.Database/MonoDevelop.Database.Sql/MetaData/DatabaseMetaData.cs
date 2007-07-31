@@ -1,6 +1,6 @@
-﻿//
+//
 // Authors:
-//   Ben Motmans  <ben.motmans@gmail.com>
+//	Ben Motmans  <ben.motmans@gmail.com>
 //
 // Copyright (c) 2007 Ben Motmans
 //
@@ -24,21 +24,30 @@
 //
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public sealed class DataTypeSchemaCollection : SortedCollectionBase<DataTypeSchema>
+	[Flags]
+	public enum DatabaseMetaData
 	{
-		public DataTypeSchemaCollection ()
-			: base (true)
+		Create,
+		Alter,
+		Drop,
+		Rename
+	}
+
+	[AttributeUsage (AttributeTargets.Class)]
+	public sealed class DatabaseMetaDataAttribute : Attribute
+	{
+		private DatabaseMetaData meta;
+		
+		public DatabaseMetaDataAttribute (DatabaseMetaData meta)
 		{
+			this.meta = meta;
 		}
 		
-		public DataTypeSchemaCollection (DataTypeSchemaCollection collection)
-			: base (collection, true)
-		{
+		public DatabaseMetaData DatabaseMetaData {
+			get { return meta; }
 		}
 	}
 }

@@ -35,5 +35,10 @@ namespace MonoDevelop.Database.Sql
 			: base (false) //not sorted, column order is important
 		{
 		}
+		
+		public ColumnSchemaCollection (ColumnSchemaCollection collection)
+			: base (collection, false)
+		{
+		}
 	}
 }

@@ -38,5 +38,15 @@ namespace MonoDevelop.Database.Sql
 			: base (schemaProvider)
 		{
 		}
+		
+		public DatabaseSchema (DatabaseSchema schema)
+			: base (schema)
+		{
+		}
+		
+		public override object Clone ()
+		{
+			return new DatabaseSchema (this);
+		}
 	}
 }
