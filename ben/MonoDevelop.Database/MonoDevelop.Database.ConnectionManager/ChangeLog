@@ -1,3 +1,7 @@
+2007-07-31  Ben Motmans <ben.motmans@gmail.com>
+
+	* NodeBuilders/*.cs: Make use of the GuiProvider to show Gui dialogs
+
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
 	* NodeBuilders/ProceduresNodeBuilder.cs, NodeBuilders/TablesNodeBuilder.cs,

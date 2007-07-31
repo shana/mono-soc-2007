@@ -133,14 +133,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnCreateView ()
 		{
 			BaseNode node = CurrentNode.DataItem as BaseNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
 			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
-			ViewSchema view = new ViewSchema (schemaProvider);
-			view.Name = "New View";
+			ViewSchema view = schemaProvider.GetNewViewSchema ("NewView");
 
-			ViewEditorDialog dlg = new ViewEditorDialog (schemaProvider, view, true);
-			if (dlg.Run () == (int)ResponseType.Ok)
+			if (fac.GuiProvider.ShowViewEditorDialog (schemaProvider, view, true))
 				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateViewThreaded), new object[] {schemaProvider, view, node} as object);
-			dlg.Destroy ();
 		}
 		
 		private void OnCreateViewThreaded (object state)
@@ -159,7 +157,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.View);
+			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Create);
 		}
 	}
 }

@@ -135,13 +135,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnCreateTable ()
 		{
 			BaseNode node = CurrentNode.DataItem as BaseNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
 			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
-			TableSchema table = new TableSchema (schemaProvider, "NewTable");
+			TableSchema table = schemaProvider.GetNewTableSchema ("NewTable");
 
-			TableEditorDialog dlg = new TableEditorDialog (schemaProvider, table, true);
-			if (dlg.Run () == (int)ResponseType.Ok)
+			if (fac.GuiProvider.ShowTableEditorDialog (schemaProvider, table, true))
 				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateTableThreaded), new object[] {schemaProvider, table, node} as object);
-			dlg.Destroy ();
 		}
 		
 		private void OnCreateTableThreaded (object state)
@@ -161,7 +160,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.Table);
+			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Create);
 		}
 	}
 }

@@ -69,7 +69,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			label = GettextCatalog.GetString ("Procedures");
-			icon = Context.GetIcon ("md-db-procedures");
+			icon = Context.GetIcon ("md-db-procedure");
 			
 			BaseNode node = (BaseNode) dataObject;
 			node.RefreshEvent += RefreshHandler;
@@ -134,14 +134,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnCreateProcedure ()
 		{
 			BaseNode node = CurrentNode.DataItem as BaseNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
 			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
-			ProcedureSchema proc = new ProcedureSchema (schemaProvider);
-			proc.Name = "New Procedure";
+			ProcedureSchema proc = schemaProvider.GetNewProcedureSchema ("NewProcedure");
 
-			ProcedureEditorDialog dlg = new ProcedureEditorDialog (schemaProvider, proc, true);
-			if (dlg.Run () == (int)ResponseType.Ok)
+			if (fac.GuiProvider.ShowProcedureEditorDialog (schemaProvider, proc, true))
 				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateProcedureThreaded), new object[] {schemaProvider, proc, node} as object);
-			dlg.Destroy ();
 		}
 		
 		private void OnCreateProcedureThreaded (object state)
@@ -160,7 +158,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.Procedure);
+			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Create);
 		}
 	}
 }
