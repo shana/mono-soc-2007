@@ -23,7 +23,6 @@
 // THE SOFTWARE.
 //
 
-using Gtk;
 using System;
 using System.Data;
 using System.Collections.Generic;
@@ -38,6 +37,7 @@ using MonoDevelop.Ide.Gui.Dialogs;
 	{
 		private ISqlDialect dialect;
 		private IConnectionProvider connectionProvider;
+		private IGuiProvider guiProvider;
 		
 		public string Identifier {
 			get { return "Mono.Data.Sqlite"; }
@@ -63,6 +63,14 @@ using MonoDevelop.Ide.Gui.Dialogs;
 			}
 		}
 		
+		public IGuiProvider GuiProvider {
+			get {
+				if (guiProvider == null)
+					guiProvider = new SqliteGuiProvider ();
+				return guiProvider;
+			}
+		}
+		
 		public IConnectionPool CreateConnectionPool (DatabaseConnectionContext context)
 		{
 			return new DefaultConnectionPool (this, ConnectionProvider, context);
@@ -80,48 +88,6 @@ using MonoDevelop.Ide.Gui.Dialogs;
 			settings.MaxPoolSize = 5;
 			
 			return settings;
-		}
-		
-		public bool ShowSelectDatabaseDialog (bool create, out string database)
-		{
-			FileChooserDialog dlg = null;
-			if (create) {
-				dlg = new FileChooserDialog (
-					GettextCatalog.GetString ("Save Database"), null, FileChooserAction.Save,
-					"gtk-cancel", ResponseType.Cancel,
-					"gtk-save", ResponseType.Accept
-				);
-			} else {
-				dlg = new FileChooserDialog (
-					GettextCatalog.GetString ("Open Database"), null, FileChooserAction.Open,
-					"gtk-cancel", ResponseType.Cancel,
-					"gtk-open", ResponseType.Accept
-				);
-			}
-			dlg.SelectMultiple = false;
-			dlg.LocalOnly = true;
-			dlg.Modal = true;
-			
-			FileFilter filter = new FileFilter ();
-			filter.AddMimeType ("application/x-sqlite2");
-			filter.AddMimeType ("application/x-sqlite3");
-			filter.AddPattern ("*.db");
-			filter.Name = GettextCatalog.GetString ("SQLite databases");
-			FileFilter filterAll = new FileFilter ();
-			filterAll.AddPattern ("*");
-			filterAll.Name = GettextCatalog.GetString ("All files");
-			dlg.AddFilter (filter);
-			dlg.AddFilter (filterAll);
-
-			if (dlg.Run () == (int)ResponseType.Accept) {
-				database = dlg.Filename;
-				dlg.Destroy ();
-				return true;
-			} else {
-				dlg.Destroy ();
-				database = null;
-				return false;
-			}
 		}
 	}
 }
