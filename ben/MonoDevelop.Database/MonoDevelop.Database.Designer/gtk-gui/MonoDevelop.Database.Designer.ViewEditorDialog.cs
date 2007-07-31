@@ -91,6 +91,7 @@ namespace MonoDevelop.Database.Designer {
             w7.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
+            this.buttonOk.Sensitive = false;
             this.buttonOk.CanDefault = true;
             this.buttonOk.CanFocus = true;
             this.buttonOk.Name = "buttonOk";
@@ -108,6 +109,7 @@ namespace MonoDevelop.Database.Designer {
             this.DefaultWidth = 512;
             this.DefaultHeight = 383;
             this.Show();
+            this.entryName.Changed += new System.EventHandler(this.NameChanged);
             this.buttonCancel.Clicked += new System.EventHandler(this.CancelClicked);
             this.buttonOk.Clicked += new System.EventHandler(this.OkClicked);
         }

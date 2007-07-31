@@ -68,5 +68,17 @@ namespace MonoDevelop.Database.Designer
 			vboxContent.PackStart (notebook, true, true, 0);
 			vboxContent.ShowAll ();
 		}
+
+		protected virtual void OkClicked (object sender, System.EventArgs e)
+		{
+		}
+
+		protected virtual void CancelClicked (object sender, System.EventArgs e)
+		{
+		}
+
+		protected virtual void NameChanged (object sender, System.EventArgs e)
+		{
+		}
 	}
 }

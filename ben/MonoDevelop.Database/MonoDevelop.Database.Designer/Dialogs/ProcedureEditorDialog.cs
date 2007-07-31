@@ -45,6 +45,9 @@ namespace MonoDevelop.Database.Designer
 		private ISchemaProvider schemaProvider;
 		private ProcedureSchema procedure;
 		
+		private CommentEditorWidget commentEditor;
+		private SqlEditorWidget sqlEditor;
+		
 		public ProcedureEditorDialog (ISchemaProvider schemaProvider, ProcedureSchema procedure, bool create)
 		{
 			if (schemaProvider == null)
@@ -64,8 +67,56 @@ namespace MonoDevelop.Database.Designer
 				Title = GettextCatalog.GetString ("Alter Procedure");
 			
 			notebook = new Notebook ();
+
+			sqlEditor = new SqlEditorWidget ();
+			sqlEditor.TextChanged += new EventHandler (SqlChanged);
+			notebook.AppendPage (sqlEditor, new Label (GettextCatalog.GetString ("Definition")));
+			
+			if (MetaDataService.IsProcedureMetaDataSupported (schemaProvider, ProcedureMetaData.Comment)) {
+				commentEditor = new CommentEditorWidget ();
+				notebook.AppendPage (commentEditor, new Label (GettextCatalog.GetString ("Comment")));
+			}
+
+			entryName.Text = procedure.Name;
+			if (!create) {
+				sqlEditor.Text = procedure.Definition;
+				commentEditor.Comment = procedure.Comment;
+			}
+			
 			vboxContent.PackStart (notebook, true, true, 0);
 			vboxContent.ShowAll ();
+		}
+
+		protected virtual void OkClicked (object sender, EventArgs e)
+		{
+			procedure.Name = entryName.Text;
+			procedure.Definition = sqlEditor.Text;
+			procedure.Comment = commentEditor.Comment;
+			
+			Respond (ResponseType.Ok);
+			Hide ();
+		}
+
+		protected virtual void CancelClicked (object sender, EventArgs e)
+		{
+			Respond (ResponseType.Cancel);
+			Hide ();
+		}
+
+		protected virtual void NameChanged (object sender, EventArgs e)
+		{
+			CheckState ();
+		}
+		
+		protected virtual void SqlChanged (object sender, EventArgs e)
+		{
+			CheckState ();
+		}
+		
+		private void CheckState ()
+		{
+			buttonOk.Sensitive = entryName.Text.Length > 0 && sqlEditor.Text.Length > 0;
+			//TODO: check for duplicate name
 		}
 	}
 }

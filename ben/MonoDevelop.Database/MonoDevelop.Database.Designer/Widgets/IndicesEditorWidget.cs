@@ -31,11 +31,14 @@ using System.Collections.Generic;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Database.Sql;
+using MonoDevelop.Database.Components;
 
 namespace MonoDevelop.Database.Designer
 {
 	public partial class IndicesEditorWidget : Gtk.Bin
 	{
+		public event EventHandler ContentChanged;
+		
 		private ISchemaProvider schemaProvider;
 		
 		public IndicesEditorWidget(ISchemaProvider schemaProvider)
@@ -46,6 +49,11 @@ namespace MonoDevelop.Database.Designer
 			this.schemaProvider = schemaProvider;
 
 			this.Build();
+		}
+		
+		public virtual bool Validate ()
+		{
+			return false;
 		}
 	}
 }

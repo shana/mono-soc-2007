@@ -41,5 +41,13 @@ namespace MonoDevelop.Database.Designer
 		{
 			this.Build();
 		}
+
+		protected virtual void CancelClicked (object sender, System.EventArgs e)
+		{
+		}
+
+		protected virtual void OkClicked (object sender, System.EventArgs e)
+		{
+		}
 	}
 }

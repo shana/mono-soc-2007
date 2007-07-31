@@ -83,7 +83,7 @@ namespace MonoDevelop.Database.Designer
 			IDbFactory fac = context.DbFactory;
 			
 			string database = null;
-			if (fac.ShowSelectDatabaseDialog (true, out database))
+			if (fac.GuiProvider.ShowSelectDatabaseDialog (true, out database))
 				entryDatabase.Text = database;
 		}
 
