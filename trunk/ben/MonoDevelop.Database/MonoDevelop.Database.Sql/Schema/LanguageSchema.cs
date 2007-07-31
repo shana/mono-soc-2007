@@ -32,11 +32,17 @@ namespace MonoDevelop.Database.Sql
 {
 	public class LanguageSchema : AbstractSchema
 	{
-		protected string handler = String.Empty;
+		protected string handler = null;
 		
 		public LanguageSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+		}
+		
+		public LanguageSchema (LanguageSchema lang)
+			: base (lang)
+		{
+			this.handler = lang.handler;
 		}
 		
 		public ProcedureSchema Handler {
@@ -47,6 +53,11 @@ namespace MonoDevelop.Database.Sql
 			set {
 				handler = value.FullName;
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new LanguageSchema (this);
 		}
 	}
 }

@@ -32,13 +32,21 @@ namespace MonoDevelop.Database.Sql
 {
 	public class ParameterSchema : AbstractSchema
 	{
-		protected string dataType = String.Empty;
+		protected string dataType;
 		protected ParameterType paramType;
 		protected int position;
 		
 		public ParameterSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+		}
+		
+		public ParameterSchema (ParameterSchema param)
+			: base (param)
+		{
+			this.dataType = param.dataType;
+			this.paramType = param.paramType;
+			this.position = param.position;
 		}
 		
 		public DataTypeSchema DataType {
@@ -73,6 +81,11 @@ namespace MonoDevelop.Database.Sql
 					OnChanged();
 				}
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new ParameterSchema (this);
 		}
 	}
 }

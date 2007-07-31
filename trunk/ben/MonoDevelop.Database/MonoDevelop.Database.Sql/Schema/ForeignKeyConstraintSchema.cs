@@ -42,6 +42,13 @@ namespace MonoDevelop.Database.Sql
 			referenceColumns = new ColumnSchemaCollection ();
 		}
 		
+		public ForeignKeyConstraintSchema (ForeignKeyConstraintSchema constraint)
+			: base (constraint)
+		{
+			referenceTable = constraint.referenceTable;
+			referenceColumns = new ColumnSchemaCollection (constraint.referenceColumns);
+		}
+		
 		public TableSchema ReferenceTable {
 			get { throw new NotImplementedException(); }
 			set {
@@ -57,6 +64,11 @@ namespace MonoDevelop.Database.Sql
 		
 		public ColumnSchemaCollection ReferenceColumns {
 			get { return referenceColumns; }
+		}
+		
+		public override object Clone ()
+		{
+			return new ForeignKeyConstraintSchema (this);
 		}
 	}
 }

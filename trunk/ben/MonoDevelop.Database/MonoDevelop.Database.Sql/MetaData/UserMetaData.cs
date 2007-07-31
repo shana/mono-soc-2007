@@ -30,6 +30,11 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum UserMetaData
 	{
+		Create,
+		Alter,
+		Drop,
+		Rename,
+		
 		Name,
 		Owner,
 		Comment,

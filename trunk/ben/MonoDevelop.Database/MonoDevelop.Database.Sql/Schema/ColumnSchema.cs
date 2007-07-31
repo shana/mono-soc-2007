@@ -47,6 +47,27 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public ColumnSchema (ISchemaProvider schemaProvider, string name)
+			: base (schemaProvider)
+		{
+			constraints = new ConstraintSchemaCollection ();
+			Name = name;
+		}
+		
+		public ColumnSchema (ColumnSchema column)
+			: base (column)
+		{
+			dataType = column.dataType;
+			hasDefaultValue = column.hasDefaultValue;
+			defaultValue = column.defaultValue;
+			nullable = column.nullable;
+			length = column.length;
+			precision = column.precision;
+			scale = column.scale;
+			position = column.position;
+			constraints = new ConstraintSchemaCollection (column.constraints);
+		}
+		
 		public DataTypeSchema DataType {
 			get { return SchemaProvider.GetDataType (dataType); }
 		}
@@ -133,8 +154,8 @@ namespace MonoDevelop.Database.Sql
 		
 		public ConstraintSchemaCollection Constraints {
 			get {
-				//if (constraints == null)
-				//	constraints = provider.GetTableConstraints(this);
+				if (constraints == null)
+					constraints = provider.GetColumnConstraints (null, this); //FIXME
 				return constraints;
 			}
 		}
@@ -142,6 +163,11 @@ namespace MonoDevelop.Database.Sql
 		public override void Refresh()
 		{
 			constraints = null;
+		}
+		
+		public override object Clone ()
+		{
+			return new ColumnSchema (this);
 		}
 	}
 }

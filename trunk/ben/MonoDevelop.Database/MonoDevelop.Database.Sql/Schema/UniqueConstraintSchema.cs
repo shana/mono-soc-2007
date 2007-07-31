@@ -36,5 +36,15 @@ namespace MonoDevelop.Database.Sql
 			: base (schemaProvider, ConstraintType.Unique)
 		{
 		}
+		
+		public UniqueConstraintSchema (UniqueConstraintSchema constraint)
+			: base (constraint)
+		{
+		}
+		
+		public override object Clone ()
+		{
+			return new UniqueConstraintSchema (this);
+		}
 	}
 }

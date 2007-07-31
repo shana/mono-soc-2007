@@ -34,12 +34,20 @@ namespace MonoDevelop.Database.Sql
 	public class ProcedureSchema : AbstractSchema
 	{
 		protected ParameterSchemaCollection parameters;
-		protected string language = String.Empty;
+		protected string language;
 		protected bool isSystemProcedure = false;
 		
 		public ProcedureSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+		}
+		
+		public ProcedureSchema (ProcedureSchema proc)
+			: base (proc)
+		{
+			this.parameters = new ParameterSchemaCollection (parameters);
+			this.language = proc.language;
+			this.isSystemProcedure = proc.isSystemProcedure;
 		}
 		
 		public ParameterSchemaCollection Parameters {
@@ -81,6 +89,11 @@ namespace MonoDevelop.Database.Sql
 					OnChanged ();
 				}
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new ProcedureSchema (this);
 		}
 	}
 }

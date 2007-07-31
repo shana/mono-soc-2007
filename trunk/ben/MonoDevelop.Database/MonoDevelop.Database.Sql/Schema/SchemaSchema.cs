@@ -32,8 +32,14 @@ namespace MonoDevelop.Database.Sql
 {
 	public class SchemaSchema : AbstractSchema
 	{
+		//TODO:
 		public SchemaSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
+		{
+		}
+		
+		public SchemaSchema (SchemaSchema schema)
+			: base (schema)
 		{
 		}
 		
@@ -43,6 +49,11 @@ namespace MonoDevelop.Database.Sql
 			}
 			set {
 			}
+		}
+		
+		public override object Clone ()
+		{
+			return new SchemaSchema (this);
 		}
 	}
 }

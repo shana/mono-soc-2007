@@ -80,14 +80,13 @@ FILES =  \
 	MetaData/CheckConstraintMetaData.cs \
 	MetaData/ColumnMetaData.cs \
 	MetaData/ConnectionSettingsMetaData.cs \
+	MetaData/DatabaseMetaData.cs \
 	MetaData/DataTypeMetaData.cs \
 	MetaData/ForeignKeyConstraintMetaData.cs \
 	MetaData/MetaDataService.cs \
-	MetaData/OperationMetaData.cs \
 	MetaData/ParameterMetaData.cs \
 	MetaData/PrimaryKeyConstraintMetaData.cs \
 	MetaData/ProcedureMetaData.cs \
-	MetaData/SchemaMetaData.cs \
 	MetaData/TableMetaData.cs \
 	MetaData/TriggerMetaData.cs \
 	MetaData/UniqueConstraintMetaData.cs \
@@ -96,8 +95,8 @@ FILES =  \
 	Providers/AbstractConnectionProvider.cs \
 	Providers/AbstractSchemaProvider.cs \
 	Providers/IConnectionProvider.cs \
+	Providers/IGuiProvider.cs \
 	Providers/ISchemaProvider.cs \
-	Providers/SchemaOperation.cs \
 	QueryService.cs \
 	Schema/AbstractSchema.cs \
 	Schema/AggregateSchema.cs \

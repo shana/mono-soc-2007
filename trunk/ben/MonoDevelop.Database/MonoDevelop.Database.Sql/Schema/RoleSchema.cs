@@ -39,5 +39,15 @@ namespace MonoDevelop.Database.Sql
 			: base (schemaProvider)
 		{
 		}
+		
+		public RoleSchema (RoleSchema role)
+			: base (role)
+		{
+		}
+		
+		public override object Clone ()
+		{
+			return new RoleSchema (this);
+		}
 	}
 }

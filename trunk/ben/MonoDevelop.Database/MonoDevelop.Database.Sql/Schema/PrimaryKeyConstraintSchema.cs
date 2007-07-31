@@ -36,5 +36,15 @@ namespace MonoDevelop.Database.Sql
 			: base (schemaProvider, ConstraintType.PrimaryKey)
 		{
 		}
+		
+		public PrimaryKeyConstraintSchema (PrimaryKeyConstraintSchema constraint)
+			: base (constraint)
+		{
+		}
+		
+		public override object Clone ()
+		{
+			return new PrimaryKeyConstraintSchema (this);
+		}
 	}
 }

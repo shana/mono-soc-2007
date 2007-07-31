@@ -41,6 +41,16 @@ namespace MonoDevelop.Database.Sql
 			this.sort = sort;
 		}
 		
+		protected SortedCollectionBase (SortedCollectionBase<T> collection, bool sort)
+			: this (sort)
+		{
+			if (collection == null)
+				return;
+			
+			foreach (T item in collection)
+				Add ((T)item.Clone ());
+		}
+		
 		public T this [int index] {
 			get { return (T)List[index]; }
 			set { List[index] = value; }

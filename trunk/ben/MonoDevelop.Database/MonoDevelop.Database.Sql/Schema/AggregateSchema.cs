@@ -37,9 +37,19 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
+		public AggregateSchema (AggregateSchema schema)
+			: base (schema)
+		{
+		}
+		
 		public override string ToString()
 		{
 			return Name + "()";
+		}
+		
+		public override object Clone ()
+		{
+			return new AggregateSchema (this);
 		}
 	}
 }

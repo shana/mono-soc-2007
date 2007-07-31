@@ -33,7 +33,7 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public class ConstraintSchema : AbstractSchema
+	public abstract class ConstraintSchema : AbstractSchema
 	{
 		protected ColumnSchemaCollection columns;
 		protected bool isColumnConstraint;
@@ -44,6 +44,13 @@ namespace MonoDevelop.Database.Sql
 		{
 			columns = new ColumnSchemaCollection ();
 			this.constraintType = constraintType;
+		}
+		
+		protected ConstraintSchema (ConstraintSchema constraint)
+			: base (constraint)
+		{
+			isColumnConstraint = constraint.isColumnConstraint;
+			constraintType = constraint.constraintType;
 		}		
 		public ColumnSchemaCollection Columns {
 			get { return columns; }

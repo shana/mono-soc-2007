@@ -36,5 +36,15 @@ namespace MonoDevelop.Database.Sql
 			: base (schemaProvider)
 		{
 		}
+		
+		public RuleSchema (RuleSchema rule)
+			: base (rule)
+		{
+		}
+		
+		public override object Clone ()
+		{
+			return new RuleSchema (this);
+		}
 	}
 }

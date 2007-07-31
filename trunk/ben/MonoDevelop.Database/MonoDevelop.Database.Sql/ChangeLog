@@ -1,3 +1,14 @@
+2007-07-31  Ben Motmans <ben.motmans@gmail.com>
+
+	* QueryService.cs: Added a global method to raise database exceptions
+	* Providers/IGuiProvider.cs, IDbFactory.cs: Moved all Gui operations
+	in a separate Gui provider
+	* Providers/ISchemaProvider.cs, Providers/AbstractSchemaProvider.cs: 
+	Methods to create new schema objects
+	* MetaData/*.cs: Added more metadata flags
+	* Collections/*.cs: Added a copy constructor
+	* Schema/*.cs: Added a copy constructor and implemented IClonable 
+
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
 	* Schema/TableSchema.cs: added additional constructor that initializes all properties

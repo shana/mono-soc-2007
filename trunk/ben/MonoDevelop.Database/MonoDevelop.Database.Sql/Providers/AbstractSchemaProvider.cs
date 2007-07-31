@@ -26,6 +26,7 @@
 //
 
 using System;
+using System.Text;
 using System.Data;
 using System.Data.Common;
 using System.Collections.Generic;
@@ -74,16 +75,6 @@ namespace MonoDevelop.Database.Sql
 		
 		public IConnectionPool ConnectionPool {
 			get { return connectionPool; }
-		}
-		
-		public virtual bool SupportsSchemaOperation (OperationMetaData operation, SchemaMetaData schema)
-		{
-			return SupportsSchemaOperation (new SchemaOperation (operation, schema));
-		}
-		
-		public virtual bool SupportsSchemaOperation (SchemaOperation operation)
-		{
-			return false;
 		}
 		
 		public virtual DatabaseSchemaCollection GetDatabases ()
@@ -478,7 +469,7 @@ namespace MonoDevelop.Database.Sql
 			throw new NotImplementedException ();
 		}
 
-		public virtual void CreateConstraint (ConstraintSchema constraint)
+		public virtual void CreateIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -513,7 +504,7 @@ namespace MonoDevelop.Database.Sql
 			throw new NotImplementedException ();
 		}
 
-		public virtual void AlterConstraint (ConstraintSchema constraint)
+		public virtual void AlterIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -548,7 +539,7 @@ namespace MonoDevelop.Database.Sql
 			throw new NotImplementedException ();
 		}
 
-		public virtual void DropConstraint (ConstraintSchema constraint)
+		public virtual void DropIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -583,7 +574,7 @@ namespace MonoDevelop.Database.Sql
 			throw new NotImplementedException ();
 		}
 
-		public virtual void RenameConstraint (ConstraintSchema constraint, string name)
+		public virtual void RenameIndex (IndexSchema index, string name)
 		{
 			throw new NotImplementedException ();
 		}
@@ -596,6 +587,81 @@ namespace MonoDevelop.Database.Sql
 		public virtual void RenameUser (UserSchema user, string name)
 		{
 			throw new NotImplementedException ();
+		}
+		
+		public virtual DatabaseSchema GetNewDatabaseSchema (string name)
+		{
+			DatabaseSchema schema = new DatabaseSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual TableSchema GetNewTableSchema (string name)
+		{
+			TableSchema schema = new TableSchema (this, name);
+			return schema;
+		}
+
+		public virtual ViewSchema GetNewViewSchema (string name)
+		{
+			ViewSchema schema = new ViewSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual ProcedureSchema GetNewProcedureSchema (string name)
+		{
+			ProcedureSchema schema = new ProcedureSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual ColumnSchema GetNewColumnSchema (string name)
+		{
+			ColumnSchema schema = new ColumnSchema (this, name);
+			return schema;
+		}
+	
+		public virtual ParameterSchema GetNewParameterSchema (string name)
+		{
+			ParameterSchema schema = new ParameterSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual CheckConstraintSchema GetNewCheckConstraintSchema (string name)
+		{
+			CheckConstraintSchema schema = new CheckConstraintSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual UniqueConstraintSchema GetNewUniqueConstraintSchema (string name)
+		{
+			UniqueConstraintSchema schema = new UniqueConstraintSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual PrimaryKeyConstraintSchema GetNewPrimaryKeyConstraintSchema (string name)
+		{
+			PrimaryKeyConstraintSchema schema = new PrimaryKeyConstraintSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual ForeignKeyConstraintSchema GetNewForeignKeyConstraintSchema (string name)
+		{
+			ForeignKeyConstraintSchema schema = new ForeignKeyConstraintSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+
+		public virtual UserSchema GetNewUserSchema (string name)
+		{
+			UserSchema schema = new UserSchema (this);
+			schema.Name = name;
+			return schema;
 		}
 		
 		protected int GetCheckedInt32 (IDataReader reader, int field)
@@ -652,6 +718,39 @@ namespace MonoDevelop.Database.Sql
 			} catch {
 				return false;
 			}
+		}
+		
+		protected virtual string GetColumnsString (ColumnSchemaCollection columns, bool includeParens)
+		{
+			StringBuilder sb = new StringBuilder ();
+			bool first = true;
+			if (includeParens)
+				sb.Append ("(");
+			foreach (ColumnSchema column in columns) {
+				if (first)
+					first = false;
+				else
+					sb.Append (",");
+				sb.Append (column.Name);
+			}
+			if (includeParens)
+				sb.Append (")");
+			return sb.ToString ();
+		}
+		
+		protected virtual int ExecuteNonQuery (string sql)
+		{
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (sql);
+			int result = 0;
+			try {
+				using (command)
+					result = conn.ExecuteNonQuery (command);
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+			}
+			conn.Release ();
+			return result;
 		}
 	}
 }

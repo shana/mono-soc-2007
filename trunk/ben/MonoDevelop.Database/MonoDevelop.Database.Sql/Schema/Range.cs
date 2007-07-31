@@ -50,6 +50,11 @@ using System;
 			this.defaultValue = defaultValue;
 		}
 		
+		public Range (Range range)
+			: this (range.Min, range.Max, range.Default)
+		{
+		}
+		
 		public int Min {
 			get { return min; }
 			set {

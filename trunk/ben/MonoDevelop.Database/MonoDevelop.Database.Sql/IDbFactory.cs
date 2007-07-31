@@ -38,13 +38,13 @@ namespace MonoDevelop.Database.Sql
 		ISqlDialect Dialect { get; }
 		
 		IConnectionProvider ConnectionProvider { get; }
+		
+		IGuiProvider GuiProvider { get; }
 
 		DatabaseConnectionSettings GetDefaultConnectionSettings ();
 
 		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
 		
 		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
-		
-		bool ShowSelectDatabaseDialog (bool create, out string database);
 	}
 }

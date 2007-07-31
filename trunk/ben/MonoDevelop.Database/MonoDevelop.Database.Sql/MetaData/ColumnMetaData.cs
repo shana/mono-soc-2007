@@ -42,9 +42,9 @@ namespace MonoDevelop.Database.Sql
 		Precision,
 		Scale,
 		Position,
-		PrimaryKeyConstraints,
-		ForeignKeyConstraints,
-		CheckConstraints,
+		PrimaryKeyConstraint,
+		ForeignKeyConstraint,
+		CheckConstraint,
 		UniqueConstraint
 	}
 	

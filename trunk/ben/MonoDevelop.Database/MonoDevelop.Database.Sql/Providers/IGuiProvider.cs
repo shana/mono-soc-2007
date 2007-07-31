@@ -1,6 +1,6 @@
 //
 // Authors:
-//	Ben Motmans  <ben.motmans@gmail.com>
+//    Ben Motmans  <ben.motmans@gmail.com>
 //
 // Copyright (c) 2007 Ben Motmans
 //
@@ -10,10 +10,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,27 +29,16 @@ using System.Collections.Generic;
 
 namespace MonoDevelop.Database.Sql
 {
-	public class SchemaOperation
+	public interface IGuiProvider
 	{
-		protected OperationMetaData operation;
-		protected SchemaMetaData schema;
+		bool ShowSelectDatabaseDialog (bool create, out string database);
+	
+		bool ShowTableEditorDialog (ISchemaProvider schemaProvider, TableSchema table, bool create);
 		
-		protected SchemaOperation ()
-		{
-		}
+		bool ShowViewEditorDialog (ISchemaProvider schemaProvider, ViewSchema view, bool create);
 		
-		public SchemaOperation (OperationMetaData operation, SchemaMetaData schema)
-		{
-			this.operation = operation;
-			this.schema = schema;
-		}
+		bool ShowProcedureEditorDialog (ISchemaProvider schemaProvider, ProcedureSchema procedure, bool create);
 		
-		public OperationMetaData Operation {
-			get { return operation; }
-		}
-		
-		public SchemaMetaData Schema {
-			get { return schema; }
-		}
+		bool ShowUserEditorDialog (ISchemaProvider schemaProvider, UserSchema user, bool create);
 	}
 }

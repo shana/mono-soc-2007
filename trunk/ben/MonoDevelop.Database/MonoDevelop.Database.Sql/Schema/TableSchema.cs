@@ -60,6 +60,16 @@ namespace MonoDevelop.Database.Sql
 			triggers = new TriggerSchemaCollection ();
 		}
 		
+		public TableSchema (TableSchema table)
+			: base (table)
+		{
+			isSystemTable = table.isSystemTable;
+			tableSpaceName = table.tableSpaceName;
+			columns = new ColumnSchemaCollection (table.columns);
+			constraints = new ConstraintSchemaCollection (table.constraints);
+			triggers = new TriggerSchemaCollection (table.triggers);
+		}
+		
 		/// <summary>
 		/// Is this table part of the database core
 		/// </summary>
@@ -134,6 +144,11 @@ namespace MonoDevelop.Database.Sql
 			constraints = null;
 			triggers = null;
 			definition = null;
+		}
+		
+		public override object Clone ()
+		{
+			return new TableSchema (this);
 		}
 	}
 }
