@@ -84,7 +84,18 @@ namespace Test.Rules.Performance {
 		
 		[DllImport ("libc.so")]
 		private static extern double cos (double x);
-		
+
+		public delegate void DelegateMethod (int x);
+		public void DelegateMethodImpl (int x) 
+		{
+		}
+
+		public event DelegateMethod DelegateMethodHandler;
+
+		public void ADelegateMethodHandler (int x) 
+		{
+		}
+
 		[TestFixtureSetUp]
 		public void FixtureSetUp () 
 		{
@@ -144,19 +155,40 @@ namespace Test.Rules.Performance {
 			Assert.IsNull (messageCollection);
 		}
 
+		[Test]
 		public void OverrideMethodTest () 
 		{
 			method = GetMethodForTestFrom ("Test.Rules.Performance.OverrideClass", "VirtualMethod");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
-
+		
+		[Test]
 		public void ExternMethodTest () 
 		{
 			method = GetMethodForTest ("cos");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
+
+		[Test]
+		public void DelegateMethodTest () 
+		{
+			DelegateMethod aDelegate = new DelegateMethod (DelegateMethodImpl);
+			method = GetMethodForTest ("DelegateMethodImpl");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void EventTest () 
+		{
+			DelegateMethodHandler += new DelegateMethod (ADelegateMethodHandler);
+			method = GetMethodForTest ("ADelegateMethodHandler");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		} 
+
 
 		private MethodDefinition GetMethodForTest (string methodName) 
 		{
