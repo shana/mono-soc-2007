@@ -244,7 +244,7 @@ namespace MonoDevelop.Database.Components
 			IDbFactory fac = DbFactoryService.GetDbFactory (settingsCopy.ProviderIdentifier);
 			
 			string database = null;
-			if (fac.ShowSelectDatabaseDialog (false, out database)) {
+			if (fac.GuiProvider.ShowSelectDatabaseDialog (false, out database)) {
 				if (isDatabaseListEmpty)
 					storeDatabases.Clear (); //clear the fake node
 				isDatabaseListEmpty = false;

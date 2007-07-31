@@ -1,3 +1,9 @@
+2007-07-31  Ben Motmans <ben.motmans@gmail.com>
+
+	* Widgets/SelectColumnWidget.cs: various bugfixes
+	* Widgets/SqlEditorWidget.cs: Added a addin based context menu and added
+	ExportToFile and ImportFromFile commands
+
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
 	* Dialogs/DatabaseConnectionSettingsDialog.cs: Various improvements and bugfixes

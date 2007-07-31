@@ -33,11 +33,16 @@ namespace MonoDevelop.Database.Components
 {
 	public class SelectColumnWidget : ScrolledWindow
 	{
-		private TreeView list;
-		private ListStore store;
+		public event EventHandler ColumnToggled;
+		
+		protected TreeView list;
+		protected ListStore store;
+		
+		private ColumnSchemaCollection columns;
 
-		private const int columnSelected = 0;
-		private const int columnObj = 1;
+		protected const int columnSelected = 0;
+		protected const int columnName = 1;
+		protected const int columnObj = 2;
 		
 		public SelectColumnWidget ()
 			: this (true)
@@ -46,37 +51,45 @@ namespace MonoDevelop.Database.Components
 		
 		public SelectColumnWidget (bool showCheckBoxes)
 		{
-			store = new ListStore (typeof (bool), typeof (string), typeof (ColumnSchema));
-			list = new TreeView (store);
+			InitializeStore ();
 			
+			list = new TreeView (store);
+			list.HeadersVisible = true;
+			
+			InitializeColumns (showCheckBoxes);
+			
+			this.Add (list);
+		}
+		
+		protected virtual void InitializeStore ()
+		{
+			store = new ListStore (typeof (bool), typeof (string), typeof (ColumnSchema));
+		}
+		
+		protected virtual void InitializeColumns (bool showCheckBoxes)
+		{
 			TreeViewColumn col = new TreeViewColumn ();
+			col.Title = GettextCatalog.GetString ("Column");
 
 			if (showCheckBoxes) {
 				CellRendererToggle toggleRenderer = new CellRendererToggle ();
 				toggleRenderer.Activatable = true;
 				toggleRenderer.Toggled += new ToggledHandler (ItemToggled);
 				col.PackStart (toggleRenderer, false);
+				col.AddAttribute (toggleRenderer, "active", columnSelected);
 			}
-			
-			CellRendererPixbuf pixbufRenderer = new CellRendererPixbuf ();
-			col.PackStart (pixbufRenderer, false);
-			col.AddAttribute (pixbufRenderer, "active", 0);
 
 			CellRendererText textRenderer = new CellRendererText ();
 			col.PackStart (textRenderer, true);
-			col.AddAttribute (textRenderer, "text", 1);
-
-			col.SetCellDataFunc (textRenderer, new CellLayoutDataFunc (TextDataFunc));
-			col.SetCellDataFunc (pixbufRenderer, new CellLayoutDataFunc (PixbufDataFunc));
+			col.AddAttribute (textRenderer, "text", columnName);
 
 			list.AppendColumn (col);
-			list.HeadersVisible = false;
-			
-			this.Add (list);
 		}
 		
 		public void Initialize (ColumnSchemaCollection columns)
 		{
+			this.columns = columns;
+			
 			foreach (ColumnSchema column in columns)
 				store.AppendValues (false, column.Name, column);
 			
@@ -89,9 +102,14 @@ namespace MonoDevelop.Database.Components
 			ColumnSchemaCollection columns = sender as ColumnSchemaCollection;
 			int index = columns.IndexOf (args.Item);
 			TreeIter iter = store.Insert (index);
-			store.SetValue (iter, 0, false);
-			store.SetValue (iter, 1, args.Item.Name);
-			store.SetValue (iter, 2, args.Item);
+			SetColumnValues (iter, args.Item);
+		}
+		
+		protected virtual void SetColumnValues (TreeIter iter, ColumnSchema column)
+		{
+			store.SetValue (iter, columnSelected, false);
+			store.SetValue (iter, columnName, column.Name);
+			store.SetValue (iter, columnObj, column);
 		}
 		
 		protected virtual void ColumnRemoved (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
@@ -99,7 +117,7 @@ namespace MonoDevelop.Database.Components
 			TreeIter iter;
 			if (store.GetIterFirst (out iter)) {
 				do {
-					object obj = store.GetValue (iter, 2);
+					object obj = store.GetValue (iter, columnObj);
 					if (obj == args.Item) {
 						store.Remove (ref iter);
 						return;
@@ -112,7 +130,7 @@ namespace MonoDevelop.Database.Components
 			get {
 				TreeIter iter;
 				if (list.Selection.GetSelected (out iter))
-					return store.GetValue (iter, 2) as ColumnSchema;
+					return store.GetValue (iter, columnObj) as ColumnSchema;
 				return null;
 			}
 		}
@@ -139,6 +157,34 @@ namespace MonoDevelop.Database.Components
 		{
 			SetSelectState (false);
 		}
+		
+		public void Select (string column)
+		{
+			if (column == null)
+				throw new ArgumentNullException ("column");
+			
+			ColumnSchema col = columns.Search (column);
+			if (col != null)
+				Select (col);
+		}
+		
+		public void Select (ColumnSchema column)
+		{
+			if (column == null)
+				throw new ArgumentNullException ("column");
+			
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					ColumnSchema col = store.GetValue (iter, columnObj) as ColumnSchema;
+					if (column == col) {
+						store.SetValue (iter, columnSelected, true);
+						return;
+					}
+				} while (store.IterNext (ref iter));
+			}	
+		}
+
 		private void SetSelectState (bool state)
 		{
 			TreeIter iter;
@@ -149,25 +195,15 @@ namespace MonoDevelop.Database.Components
 			}	
 		}
 		
-		private void TextDataFunc (CellLayout layout, CellRenderer cell, TreeModel model, TreeIter iter)
-		{
-			CellRendererText textRenderer = cell as CellRendererText;
-			ColumnSchema schema = model.GetValue (iter, columnObj) as ColumnSchema;
-			textRenderer.Text = schema.Name;
-		}
-		
-		private void PixbufDataFunc (CellLayout layout, CellRenderer cell, TreeModel model, TreeIter iter)
-		{
-			CellRendererPixbuf pixbufRenderer = cell as CellRendererPixbuf;
-			pixbufRenderer.Pixbuf = MonoDevelop.Core.Gui.Services.Resources.GetIcon ("md-db-column");
-		}
-		
 		private void ItemToggled (object sender, ToggledArgs args)
 		{
 	 		TreeIter iter;
 			if (store.GetIterFromString (out iter, args.Path)) {
 	 			bool val = (bool) store.GetValue (iter, columnSelected);
 	 			store.SetValue (iter, columnSelected, !val);
+				
+				if (ColumnToggled != null)
+					ColumnToggled (this, EventArgs.Empty);
 	 		}
 		}
 	}

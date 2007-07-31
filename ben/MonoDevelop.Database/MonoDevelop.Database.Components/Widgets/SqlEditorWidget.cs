@@ -26,16 +26,21 @@
 using Gtk;
 using GtkSourceView;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Components;
+using MonoDevelop.Components.Commands;
 using MonoDevelop.Database.Sql;
 
 namespace MonoDevelop.Database.Components
 {
 	public partial class SqlEditorWidget : Bin
 	{
+		public event EventHandler TextChanged;
+		
 		private SourceView sourceView;
 		
 		public SqlEditorWidget()
@@ -49,8 +54,27 @@ namespace MonoDevelop.Database.Components
 			sourceView = new SourceView (buf);
 			sourceView.ShowLineNumbers = true;
 			
+			sourceView.Buffer.Changed += new EventHandler (BufferChanged);
+			sourceView.PopulatePopup += new PopulatePopupHandler (OnPopulatePopup);
+			
 			Add (sourceView);
 			ShowAll ();
+		}
+		
+		[GLib.ConnectBefore]
+		protected virtual void OnPopulatePopup (object sender, PopulatePopupArgs args)
+		{
+			Menu menu = IdeApp.CommandService.CreateMenu ("/SharpDevelop/Components/SqlEditor/ContextMenu");
+			int pos=2; //after undo and redo
+			foreach (Widget w in menu.Children)
+				args.Menu.Insert (w, pos++);
+			menu.Destroy ();
+		}
+		
+		private void BufferChanged (object sender, EventArgs args)
+		{
+			if (TextChanged != null)
+				TextChanged (this, EventArgs.Empty);
 		}
 		
 		public string Text {
@@ -66,6 +90,79 @@ namespace MonoDevelop.Database.Components
 		public bool Editable {
 			get { return sourceView.Editable; }
 			set { sourceView.Editable = false; }
+		}
+		
+		[CommandHandler (SqlEditorCommands.ImportFromFile)]
+		protected void OnImportFromFile ()
+		{
+			FileChooserDialog dlg = new FileChooserDialog (
+				GettextCatalog.GetString ("Import From File"), null, FileChooserAction.Open,
+				"gtk-cancel", ResponseType.Cancel,
+				"gtk-open", ResponseType.Accept
+			);
+			dlg.SelectMultiple = false;
+			dlg.LocalOnly = true;
+			dlg.Modal = true;
+			
+			FileFilter filter = new FileFilter ();
+			filter.AddPattern ("*.sql");
+			filter.Name = GettextCatalog.GetString ("SQL files");
+			FileFilter filterAll = new FileFilter ();
+			filterAll.AddPattern ("*");
+			filterAll.Name = GettextCatalog.GetString ("All files");
+			dlg.AddFilter (filter);
+			dlg.AddFilter (filterAll);
+
+			if (dlg.Run () == (int)ResponseType.Accept) {
+				using (FileStream stream = File.Open (dlg.Filename, FileMode.Open)) {
+					using (StreamReader reader = new StreamReader (stream)) {
+						Text = reader.ReadToEnd ();
+					}
+				}
+			}
+			dlg.Destroy ();
+		}
+		
+		[CommandHandler (SqlEditorCommands.ExportToFile)]
+		protected void OnExportToFile ()
+		{
+			FileChooserDialog dlg = new FileChooserDialog (
+				GettextCatalog.GetString ("Export To File"), null, FileChooserAction.Save,
+				"gtk-cancel", ResponseType.Cancel,
+				"gtk-save", ResponseType.Accept
+			);
+			
+			dlg.SelectMultiple = false;
+			dlg.LocalOnly = true;
+			dlg.Modal = true;
+			
+			FileFilter filter = new FileFilter ();
+			filter.AddPattern ("*.sql");
+			filter.Name = GettextCatalog.GetString ("SQL files");
+			dlg.AddFilter (filter);
+
+			if (dlg.Run () == (int)ResponseType.Accept) {
+				if (File.Exists (dlg.Filename)) {
+					bool overwrite = Services.MessageService.AskQuestion (
+						GettextCatalog.GetString ("Are you sure you want to overwrite the file '{0}'?", dlg.Filename), 
+						GettextCatalog.GetString ("Overwrite?"));
+					if (overwrite) {
+						using (FileStream stream = File.Open (dlg.Filename, FileMode.Create)) {
+							using (StreamWriter writer = new StreamWriter (stream)) {
+								writer.Write (Text);
+								writer.Flush ();
+							}
+						}
+					}
+				}
+			}
+			dlg.Destroy ();
+		}
+		
+		[CommandUpdateHandler (SqlEditorCommands.ImportFromFile)]
+		protected void OnUpdateExportToFile (CommandInfo info)
+		{
+			info.Enabled = Text.Length > 0;
 		}
 	}
 }

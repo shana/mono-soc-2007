@@ -26,6 +26,10 @@
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
+	<ExtensionPoint path = "/SharpDevelop/Components/SqlEditor/ContextMenu">
+		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+	</ExtensionPoint>
+	
 	<Extension path = "/SharpDevelop/Commands">
 		<Command id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsText"
 			_label = "Display content as text"/>
@@ -35,6 +39,13 @@
 			_label = "Display content as xml tree"/>
 		<Command id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsImage"
 			_label = "Display content as image"/>
+			
+		<Command id = "MonoDevelop.Database.Components.SqlEditorCommands.ImportFromFile"
+			_label = "Import From File"
+			icon = "gtk-open"/>
+		<Command id = "MonoDevelop.Database.Components.SqlEditorCommands.ExportToFile"
+			_label = "Export To File"
+			icon = "gtk-save"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Components/DataGrid/ContextMenu">
@@ -42,5 +53,11 @@
 		<CommandItem id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsXmlText"/>
 		<CommandItem id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsXmlTree"/>
 		<CommandItem id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsImage"/>
+	</Extension>
+	
+	<Extension path = "/SharpDevelop/Components/SqlEditor/ContextMenu">
+		<CommandItem id = "MonoDevelop.Database.Components.SqlEditorCommands.ImportFromFile"/>
+		<CommandItem id = "MonoDevelop.Database.Components.SqlEditorCommands.ExportToFile"/>
+		<SeparatorItem />
 	</Extension>
 </Addin>
