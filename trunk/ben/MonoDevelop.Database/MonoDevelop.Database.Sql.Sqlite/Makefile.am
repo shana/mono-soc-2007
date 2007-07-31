@@ -5,6 +5,7 @@ REFS =  \
 	-pkg:monodevelop \
 	-r:../../contrib/Mono.Data.Sqlite.dll \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
+	-r:../MonoDevelop.Database.Designer/bin/Debug/MonoDevelop.Database.Designer.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:Mono.Data \
 	-r:System \
@@ -14,6 +15,7 @@ FILES =  \
 	SqliteConnectionProvider.cs \
 	SqliteDbFactory.cs \
 	SqliteDialect.cs \
+	SqliteGuiProvider.cs \
 	SqlitePooledDbConnection.cs \
 	SqliteSchemaProvider.cs
 

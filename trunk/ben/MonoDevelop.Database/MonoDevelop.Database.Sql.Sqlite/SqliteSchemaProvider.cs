@@ -37,49 +37,15 @@ namespace MonoDevelop.Database.Sql
 {
 	// see: http://www.sqlite.org/faq.html
 	// http://www.sqlite.org/google-talk-slides/page-021.html
-	[TableMetaData (TableMetaData.Name | TableMetaData.Schema | TableMetaData.Columns | TableMetaData.Definition | TableMetaData.Triggers | TableMetaData.IsSystem | TableMetaData.PrimaryKeyConstraints | TableMetaData.CheckConstraints | TableMetaData.UniqueConstraints)]
-	[ViewMetaData (ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
-	[TableColumnMetaData (ColumnMetaData.Name | ColumnMetaData.Definition | ColumnMetaData.Schema | ColumnMetaData.DataType | ColumnMetaData.DefaultValue | ColumnMetaData.Nullable | ColumnMetaData.Position | ColumnMetaData.PrimaryKeyConstraints | ColumnMetaData.CheckConstraints | ColumnMetaData.UniqueConstraint)]
+	[DatabaseMetaData (DatabaseMetaData.Create | DatabaseMetaData.Drop)]
+	[TableMetaData (TableMetaData.Create | TableMetaData.Alter | TableMetaData.Drop | TableMetaData.Rename | TableMetaData.Name | TableMetaData.Schema | TableMetaData.Columns | TableMetaData.Definition | TableMetaData.Triggers | TableMetaData.IsSystem | TableMetaData.PrimaryKeyConstraint | TableMetaData.CheckConstraint | TableMetaData.UniqueConstraint | TableMetaData.CanAppendColumn)]
+	[ViewMetaData (ViewMetaData.Create | ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
+	[TableColumnMetaData (ColumnMetaData.Name | ColumnMetaData.Definition | ColumnMetaData.Schema | ColumnMetaData.DataType | ColumnMetaData.DefaultValue | ColumnMetaData.Nullable | ColumnMetaData.Position | ColumnMetaData.PrimaryKeyConstraint | ColumnMetaData.CheckConstraint | ColumnMetaData.UniqueConstraint)]
 	public class SqliteSchemaProvider : AbstractSchemaProvider
 	{
 		public SqliteSchemaProvider (IConnectionPool connectionPool)
 			: base (connectionPool)
 		{
-		}
-		
-		public override bool SupportsSchemaOperation (SchemaOperation operation)
-		{
-			switch (operation.Operation) {
-			case OperationMetaData.Select:
-				switch (operation.Schema) {
-				case SchemaMetaData.Table:
-				case SchemaMetaData.Column:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Trigger:
-					return true;
-				default:
-					return false;
-				}
-			case OperationMetaData.Create:
-			case OperationMetaData.Drop:
-			case OperationMetaData.Rename:
-				switch (operation.Schema) {
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Table:
-				case SchemaMetaData.Column:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Trigger:
-					return true;
-				default:
-					return false;
-				}
-			case OperationMetaData.Alter:
-				return operation.Schema == SchemaMetaData.Table;
-			default:
-				return false;
-			}
 		}
 
 		public override TableSchemaCollection GetTables ()
@@ -171,7 +137,7 @@ namespace MonoDevelop.Database.Sql
 			return GetConstraints (table, null);
 		}
 		
-		public virtual ConstraintSchemaCollection GetColumnConstraints (TableSchema table, ColumnSchema column)
+		public override ConstraintSchemaCollection GetColumnConstraints (TableSchema table, ColumnSchema column)
 		{
 			return GetConstraints (table, column);
 		}
@@ -303,7 +269,7 @@ namespace MonoDevelop.Database.Sql
 			foreach (ColumnSchema column in table.Columns) {
 				sb.Append (column.Name);
 				sb.Append (' ');
-				sb.Append (column.DataTypeName); //FIXME: scale, pres, ...
+				sb.Append (column.DataType.ToString ());
 				
 				if (!column.IsNullable)
 					sb.Append (" NOT NULL");
@@ -372,11 +338,15 @@ namespace MonoDevelop.Database.Sql
 		//http://www.sqlite.org/lang_createview.html
 		public override void CreateView (ViewSchema view)
 		{
-			throw new NotImplementedException ();
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (view.Definition);
+			using (command)
+				conn.ExecuteNonQuery (command);
+			conn.Release ();
 		}
 
 		//http://www.sqlite.org/lang_createindex.html
-		public override void CreateConstraint (ConstraintSchema constraint)
+		public override void CreateIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -403,76 +373,33 @@ namespace MonoDevelop.Database.Sql
 		//http://www.sqlite.org/lang_droptable.html
 		public override void DropTable (TableSchema table)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP TABLE IF EXISTS " + table.Name);
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP TABLE IF EXISTS " + table.Name);
 		}
 
 		//http://www.sqlite.org/lang_dropview.html
 		public override void DropView (ViewSchema view)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP VIEW IF EXISTS " + view.Name);
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP VIEW IF EXISTS " + view.Name);
 		}
 
 		//http://www.sqlite.org/lang_dropindex.html
-		public override void DropConstraint (ConstraintSchema constraint)
+		public override void DropIndex (IndexSchema index)
 		{
-//			if (constraint is IndexConstraintSchema) {
-//				IPooledDbConnection conn = connectionPool.Request ();
-//				IDbCommand command = conn.CreateCommand ("DROP INDEX IF EXISTS " + constraint.Name);
-//				using (command)
-//					command.ExecuteNonQuery ();
-//				conn.Release ();
-//			}
+			ExecuteNonQuery ("DROP INDEX IF EXISTS " + index.Name);
 		}
 		
 		//http://www.sqlite.org/lang_droptrigger.html
 		public override void DropTrigger (TriggerSchema trigger)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("DROP TRIGGER IF EXISTS " + trigger.Name);
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("DROP TRIGGER IF EXISTS " + trigger.Name);
 		}
 
 		//http://www.sqlite.org/lang_altertable.html
 		public override void RenameTable (TableSchema table, string name)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("ALTER TABLE " + table.Name + " RENAME TO " + name);
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("ALTER TABLE " + table.Name + " RENAME TO " + name);
 			
 			table.Name = name;
-		}
-
-		public override void RenameView (ViewSchema view, string name)
-		{
-			DropView (view);
-			view.Name = name;
-			CreateView (view);
-		}
-
-		public override void RenameConstraint (ConstraintSchema constraint, string name)
-		{
-			DropConstraint (constraint);
-			constraint.Name = name;
-			CreateConstraint (constraint);
-		}
-		
-		public override void RenameTrigger (TriggerSchema trigger, string name)
-		{
-			DropTrigger (trigger);
-			trigger.Name = name;
-			CreateTrigger (trigger);
 		}
 	}
 }

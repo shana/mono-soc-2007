@@ -1,3 +1,8 @@
+2007-07-31  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqliteDbFactory.cs, SqliteGuiProvider.cs: Added a GuiProvider
+	* SqliteSchemaProvider.cs: small api changes
+
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqliteDbFactory.cs: Added support for a save database dialog
