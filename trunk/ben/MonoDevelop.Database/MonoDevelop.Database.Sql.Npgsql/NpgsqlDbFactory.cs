@@ -23,7 +23,6 @@
 // THE SOFTWARE.
 //
 
-using Gtk;
 using System;
 using System.Data;
 using System.Collections.Generic;
@@ -37,6 +36,7 @@ using MonoDevelop.Database.Components;
 	{
 		private ISqlDialect dialect;
 		private IConnectionProvider connectionProvider;
+		private IGuiProvider guiProvider;
 		
 		public string Identifier {
 			get { return "Npgsql"; }
@@ -62,6 +62,14 @@ using MonoDevelop.Database.Components;
 			}
 		}
 		
+		public IGuiProvider GuiProvider {
+			get {
+				if (guiProvider == null)
+					guiProvider = new NpgsqlGuiProvider ();
+				return guiProvider;
+			}
+		}
+		
 		public IConnectionPool CreateConnectionPool (DatabaseConnectionContext context)
 		{
 			return new DefaultConnectionPool (this, ConnectionProvider, context);
@@ -82,12 +90,6 @@ using MonoDevelop.Database.Components;
 			settings.MaxPoolSize = 5;
 			
 			return settings;
-		}
-		
-		public bool ShowSelectDatabaseDialog (bool create, out string database)
-		{
-			database = null;
-			return false;
 		}
 	}
 }

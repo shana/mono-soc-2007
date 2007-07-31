@@ -1,3 +1,8 @@
+2007-07-31  Ben Motmans <ben.motmans@gmail.com>
+
+	* NpgsqlDbFactory.cs, NpgsqlGuiProvider.cs: Added a GuiProvider
+	* NpgsqlSchemaProvider.cs: Implemented CreateTable
+
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
 	* NpgsqlSchemaProvider.cs, NpgsqlDbFactory.cs: improved metadata support

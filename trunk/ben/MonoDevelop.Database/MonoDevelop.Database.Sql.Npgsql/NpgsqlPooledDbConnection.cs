@@ -48,7 +48,7 @@ namespace MonoDevelop.Database.Sql
 					try {
 						adapter.Fill (set);
 					} catch (Exception e) {
-						//TODO: warn user
+						QueryService.RaiseException (e);
 					}
 				}
 			}
@@ -66,7 +66,7 @@ namespace MonoDevelop.Database.Sql
 					try {
 						adapter.Fill (table);
 					} catch (Exception e) {
-						//TODO: warn user
+						QueryService.RaiseException (e);
 					}
 				}
 			}
