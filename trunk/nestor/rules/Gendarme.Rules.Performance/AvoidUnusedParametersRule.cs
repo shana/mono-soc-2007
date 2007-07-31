@@ -48,9 +48,34 @@ namespace Gendarme.Rules.Performance {
 			return false;
 		}
 
+		private bool ContainsDelegateInstructionFor (MethodBody body, MethodDefinition method) 
+		{
+			string instructionName = "ldftn";
+			foreach (Instruction instruction in body.Instructions) {
+				if (String.Compare (instruction.OpCode.Name, instructionName) == 0) {
+					return instruction.Operand.Equals (method);
+				}
+			}
+			return false;
+		}
+
+		private bool IsDelegate (MethodDefinition delegatemethod) 
+		{
+			if (delegatemethod.DeclaringType is TypeDefinition) {
+				TypeDefinition type = (TypeDefinition) delegatemethod.DeclaringType;	
+				foreach (MethodDefinition method in type.Methods) {
+					if (method.HasBody && ContainsDelegateInstructionFor (method.Body, delegatemethod)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		private bool IsExaminable (MethodDefinition method) 
 		{
-			return !(method.IsAbstract || method.IsVirtual || method.Overrides.Count != 0 || method.PInvokeInfo != null);
+			return !(method.IsAbstract || method.IsVirtual || method.Overrides.Count != 0 
+				|| method.PInvokeInfo != null || IsDelegate (method));
 		}
 
 		private ICollection GetUnusedParameters (MethodDefinition method) 
