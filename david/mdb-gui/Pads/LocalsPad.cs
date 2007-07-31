@@ -77,7 +77,7 @@ namespace Mono.Debugger.Frontend
 				GtkStore.GetIter(out childIter, childPath);
 				string childFullName = (string)GtkStore.GetValue(childIter, LocalsStore.ColumnFullName);
 				// This node was expanded in the past - expand it
-				if (expandedNodes.ContainsKey(childFullName)) {
+				if (childFullName != null && expandedNodes.ContainsKey(childFullName)) {
 					GtkTree.ExpandRow(childPath, false);
 				}
 			}

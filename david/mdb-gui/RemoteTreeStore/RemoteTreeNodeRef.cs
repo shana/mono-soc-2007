@@ -26,5 +26,18 @@ namespace Mono.Debugger.Frontend
 		{
 			return string.Format("[RemoteTreeNodeRef Id={0}]", this.id);
 		}
+		
+		public override int GetHashCode()
+		{
+			return id.GetHashCode();
+		}
+		
+		public override bool Equals(object obj)
+		{
+			if (!(obj is RemoteTreeNodeRef)) return false; 
+			RemoteTreeNodeRef myRemoteTreeNodeRef = (RemoteTreeNodeRef)obj;
+			return this.id == myRemoteTreeNodeRef.id;
+		}
+		
 	}
 }
