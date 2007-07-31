@@ -40,9 +40,9 @@ namespace Mono.Debugger.Frontend
 			this.RootNode.SetValue(ColumnUpdateChilds, true);
 		}
 		
-		public void UpdateTree()
+		public void UpdateTree(ref bool abort)
 		{
-			UpdateNodeRecursive(RootNode, rootVariable);
+			UpdateNodeRecursive(RootNode, rootVariable, ref abort);
 		}
 		
 		public void ExpandNode(RemoteTreeNodeRef nodeRef)
@@ -67,6 +67,12 @@ namespace Mono.Debugger.Frontend
 		}
 		
 		void UpdateNodeRecursive(RemoteTreeNode node, AbstractVariable variable)
+		{
+			bool abort = false;
+			UpdateNodeRecursive(node, variable, ref abort);
+		}
+		
+		void UpdateNodeRecursive(RemoteTreeNode node, AbstractVariable variable, ref bool abort)
 		{
 			// Get full name of the node
 			string fullNamePrefix;
@@ -110,6 +116,7 @@ namespace Mono.Debugger.Frontend
 				// Iterate over the current tree nodes and update them
 				// Try to do it with minimal number of changes to the tree
 				for(int i = 0; i < node.ChildCount; /* no-op */ ) {
+					if (abort) return;
 					string childNodeName = (string)node.GetChild(i).GetValue(ColumnName);
 					
 					// Update 'i'th node to 'i'th variable
@@ -133,19 +140,19 @@ namespace Mono.Debugger.Frontend
 					
 					// Insert the variables before the match
 					while(i < varIndex) {
-						UpdateNodeRecursive(node.InsertNode(i), variables[i]);
+						UpdateNodeRecursive(node.InsertNode(i), variables[i], ref abort);
 						i++;
 					}
 					
 					// Update the match
-					UpdateNodeRecursive(node.GetChild(i), variables[i]);
+					UpdateNodeRecursive(node.GetChild(i), variables[i], ref abort);
 					i++;
 				}
 				
 				// Add any variables left over
 				for(int i = node.ChildCount; i < variables.Length; i++) {
 					RemoteTreeNode newNode = node.AppendNode();
-					UpdateNodeRecursive(newNode, variables[i]);
+					UpdateNodeRecursive(newNode, variables[i], ref abort);
 				}
 			}
 		}

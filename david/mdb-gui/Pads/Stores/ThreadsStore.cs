@@ -93,12 +93,13 @@ namespace Mono.Debugger.Frontend
 			threadToTreeNode.Remove(thread);
 		}
 		
-		public void UpdateTree()
+		public void UpdateTree(ref bool abort)
 		{
 			Hashtable threadsToRemove = (Hashtable)threadToTreeNode.Clone();
 			
 			if (interpreter.HasTarget) {
 				foreach (Process process in interpreter.Processes) {
+					if (abort) return;
 					foreach (Thread thread in process.GetThreads()) {
 						UpdateThread(thread);
 						threadsToRemove.Remove(thread); // Ok if not in the table
