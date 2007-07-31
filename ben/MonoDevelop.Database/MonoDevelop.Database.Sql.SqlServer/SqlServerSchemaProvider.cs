@@ -32,6 +32,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
+using MonoDevelop.Core;
 namespace MonoDevelop.Database.Sql
 {
 	// see:
@@ -41,46 +42,6 @@ using System.Collections.Generic;
 		public SqlServerSchemaProvider (IConnectionPool connectionPool)
 			: base (connectionPool)
 		{
-	}
-		
-		public override bool SupportsSchemaOperation (SchemaOperation operation)
-		{
-			switch (operation.Operation) {
-			case OperationMetaData.Select:
-				switch (operation.Schema) {
-				case SchemaMetaData.Table:
-				case SchemaMetaData.Column:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Procedure:
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Parameter:
-				case SchemaMetaData.User:
-				case SchemaMetaData.Trigger:
-				case SchemaMetaData.DataType:
-				case SchemaMetaData.Sequence:
-					return true;
-				default:
-					return false;
-				}
-			case OperationMetaData.Create:
-			case OperationMetaData.Drop:
-			case OperationMetaData.Rename:
-			case OperationMetaData.Alter:
-				switch (operation.Schema) {
-				case SchemaMetaData.Database:
-				case SchemaMetaData.Table:
-				case SchemaMetaData.View:
-				case SchemaMetaData.Procedure:
-				case SchemaMetaData.Constraint:
-				case SchemaMetaData.Trigger:
-					return true;
-				default:
-					return false;
-				}
-			default:
-				return false;
-			}
 		}
 		
 		public override DatabaseSchemaCollection GetDatabases ()
@@ -503,7 +464,7 @@ using System.Collections.Generic;
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa258259(SQL.80).aspx
-		public override void CreateConstraint (ConstraintSchema constraint)
+		public override void CreateIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -538,7 +499,7 @@ using System.Collections.Generic;
 			throw new NotImplementedException ();
 		}
 
-		public override void AlterConstraint (ConstraintSchema constraint)
+		public override void AlterIndex (IndexSchema index)
 		{
 			throw new NotImplementedException ();
 		}
@@ -554,76 +515,84 @@ using System.Collections.Generic;
 			throw new NotImplementedException ();
 		}
 		
-		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
+		//http://msdn2.microsoft.com/en-us/library/aa258843(SQL.80).aspx
 		public override void DropDatabase (DatabaseSchema database)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery ("DROP DATABASE " + database.Name);
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa258841(SQL.80).aspx
 		public override void DropTable (TableSchema table)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery ("DROP TABLE " + table.Name);
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa258835(SQL.80).aspx
 		public override void DropView (ViewSchema view)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery ("DROP VIEW " + view.Name);
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa258830(SQL.80).aspx
 		public override void DropProcedure (ProcedureSchema procedure)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery ("DROP PROCEDURE " + procedure.Name);
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
-		public override void DropConstraint (ConstraintSchema constraint)
+		public override void DropIndex (IndexSchema index)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery ("DROP INDEX '" + index.TableName + "." + index.Name + "'");
 		}
 		
 		//http://msdn2.microsoft.com/en-us/library/aa258846(SQL.80).aspx
 		public override void DropTrigger (TriggerSchema trigger)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery ("DROP TRIGGER " + trigger.Name);
 		}
 		
 		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
 		public override void RenameDatabase (DatabaseSchema database, string name)
 		{
 			Rename (database.Name, name, "DATABASE");
+			
+			database.Name = name;
+			connectionPool.ConnectionContext.ConnectionSettings.Database = name;
 		}
 
 		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
 		public override void RenameTable (TableSchema table, string name)
 		{
 			Rename (table.Name, name, "OBJECT");
+			table.Name = name;
 		}
 
 		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
 		public override void RenameView (ViewSchema view, string name)
 		{
 			Rename (view.Name, name, "OBJECT");
+			view.Name = name;
 		}
 
 		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
 		public override void RenameProcedure (ProcedureSchema procedure, string name)
 		{
 			Rename (procedure.Name, name, "OBJECT");
+			procedure.Name = name;
 		}
 
 		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
-		public override void RenameConstraint (ConstraintSchema constraint, string name)
+		public override void RenameIndex (IndexSchema index, string name)
 		{
-			Rename (constraint.Name, name, "INDEX");
+			Rename (index.Name, name, "INDEX");
+			index.Name = name;
 		}
 		
 		//http://msdn2.microsoft.com/en-US/library/aa238878(SQL.80).aspx
 		public override void RenameTrigger (TriggerSchema trigger, string name)
 		{
 			Rename (trigger.Name, name, "OBJECT");
+			trigger.Name = name;
 		}
 		
 		protected string GetTableDefinition (TableSchema table)
