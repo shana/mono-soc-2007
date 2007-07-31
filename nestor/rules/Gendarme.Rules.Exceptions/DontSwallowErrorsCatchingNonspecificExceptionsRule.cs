@@ -56,7 +56,7 @@ namespace Gendarme.Rules.Exceptions {
 		private bool ThrowsGeneralException (ExceptionHandler exceptionHandler) 
 		{
 			for (Instruction currentInstruction = exceptionHandler.HandlerStart; currentInstruction != exceptionHandler.HandlerEnd; currentInstruction = currentInstruction.Next) {
-				if (currentInstruction.OpCode.Name.Equals ("rethrow"))
+				if (currentInstruction.OpCode.Code == Code.Rethrow)
 					return true;
 			}
 			return false;

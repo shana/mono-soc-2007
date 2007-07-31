@@ -51,9 +51,8 @@ namespace Gendarme.Rules.Performance {
 		private bool ContainsDelegateInstructionFor (MethodDefinition method, MethodDefinition delegateMethod) 
 		{
 			if (method.HasBody) {
-				string instructionName = "ldftn";
 				foreach (Instruction instruction in method.Body.Instructions) {
-					if (String.Compare (instruction.OpCode.Name, instructionName) == 0) {
+					if (instruction.OpCode.Code == Code.Ldftn) {
 						return instruction.Operand.Equals (delegateMethod);
 					}
 				}
