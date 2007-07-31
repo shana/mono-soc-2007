@@ -80,10 +80,15 @@ namespace MonoDevelop.Database.ConnectionManager
 		private void BuildChildNodesThreaded (object state)
 		{
 			NodeState nodeState = state as NodeState;
-			
-			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
-			
-			//TODO: build columns + params
+			ISchemaProvider schemaProvider = nodeState.ConnectionContext.SchemaProvider;
+
+			if (MetaDataService.IsApplied (schemaProvider, typeof (ParameterMetaDataAttribute))) {
+				ProcedureSchema procedure = (nodeState.DataObject as ProcedureNode).Procedure;
+				Services.DispatchService.GuiDispatch (delegate {
+					nodeState.TreeBuilder.AddChild (new ParametersNode (nodeState.ConnectionContext, procedure));
+					nodeState.TreeBuilder.Expanded = true;
+				});
+			}
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -117,7 +122,20 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.AlterProcedure)]
 		protected void OnAlterProcedure ()
 		{
+			ProcedureNode node = CurrentNode.DataItem as ProcedureNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
+			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
 			
+			if (fac.GuiProvider.ShowProcedureEditorDialog (schemaProvider, node.Procedure, false))
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnAlterProcedureThreaded), CurrentNode.DataItem);
+		}
+		
+		private void OnAlterProcedureThreaded (object state)
+		{
+			ProcedureNode node = (ProcedureNode)state;
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
+			
+			provider.AlterProcedure (node.Procedure);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.DropProcedure)]
@@ -150,21 +168,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.Procedure);
+			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.Procedure);
+			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterProcedure)]
 		protected void OnUpdateAlterProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.Procedure);
+			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Alter);
 		}
 	}
 }

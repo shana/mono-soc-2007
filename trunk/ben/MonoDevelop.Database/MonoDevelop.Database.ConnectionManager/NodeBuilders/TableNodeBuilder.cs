@@ -87,28 +87,29 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			NodeState nodeState = state as NodeState;
 			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
-			
-			if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Column))
+		
+			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute)))
 				Services.DispatchService.GuiDispatch (delegate {
 					TableSchema table = (nodeState.DataObject as TableNode).Table;
 					nodeState.TreeBuilder.AddChild (new ColumnsNode (nodeState.ConnectionContext, table));
 				});
 			
-			if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Rule))
-				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new RulesNode (nodeState.ConnectionContext));
-				});
-			
-			if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Constraint))
+			if (MetaDataService.IsApplied (provider, typeof (CheckConstraintMetaDataAttribute))
+				|| MetaDataService.IsApplied (provider, typeof (ForeignKeyConstraintMetaDataAttribute))
+				|| MetaDataService.IsApplied (provider, typeof (PrimaryKeyConstraintMetaDataAttribute))
+				|| MetaDataService.IsApplied (provider, typeof (UniqueConstraintMetaDataAttribute))
+			)
 				Services.DispatchService.GuiDispatch (delegate {
 					TableSchema table = (nodeState.DataObject as TableNode).Table;
 					nodeState.TreeBuilder.AddChild (new ConstraintsNode (nodeState.ConnectionContext, table));
 				});
 			
-			if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Trigger))
-				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new TriggersNode (nodeState.ConnectionContext));
-				});
+//			if (MetaDataService.IsApplied (provider, typeof (TriggerMetaDataAttribute)))
+//				Services.DispatchService.GuiDispatch (delegate {
+//					nodeState.TreeBuilder.AddChild (new TriggersNode (nodeState.ConnectionContext));
+//				});
+			
+			//TODO: rules
 			
 			Services.DispatchService.GuiDispatch (delegate {
 				nodeState.TreeBuilder.Expanded = true;
@@ -173,9 +174,10 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.SelectColumns)]
 		protected void OnSelectColumnsCommand ()
 		{
-			SelectColumnDialog dlg = new SelectColumnDialog (true);
+			TableNode node = (TableNode)CurrentNode.DataItem;
+			
+			SelectColumnDialog dlg = new SelectColumnDialog (true, node.Table.Columns);
 			if (dlg.Run () == (int)Gtk.ResponseType.Ok) {
-				TableNode node = (TableNode)CurrentNode.DataItem;
 				IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
 				List<IdentifierExpression> cols = new List<IdentifierExpression> ();
 				foreach (ColumnSchema schema in dlg.CheckedColumns)
@@ -252,14 +254,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 			
 			provider.DropTable (node.Table);
-		}
-		
-		private void OnDropTableCallback (IPooledDbConnection connection, int result, object state)
-		{
-			Services.DispatchService.GuiDispatch (delegate () {
-				IdeApp.Workbench.StatusBar.SetMessage (GettextCatalog.GetString ("Table dropped"));
-				OnRefresh ();
-			});
+			Services.DispatchService.GuiDispatch (delegate () { OnRefresh (); });
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
@@ -276,14 +271,19 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnAlterTable ()
 		{
 			TableNode node = CurrentNode.DataItem as TableNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
 			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
 			
-			TableEditorDialog dlg = new TableEditorDialog (schemaProvider, node.Table, false);
-			if (dlg.Run () == (int)ResponseType.Ok) {
-				schemaProvider.AlterTable (node.Table);
-				node.Refresh ();
-			}
-			dlg.Destroy ();
+			if (fac.GuiProvider.ShowTableEditorDialog (schemaProvider, node.Table, false))
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnAlterTableThreaded), CurrentNode.DataItem);
+		}
+		
+		private void OnAlterTableThreaded (object state)
+		{
+			TableNode node = (TableNode)state;
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
+			
+			provider.AlterTable (node.Table);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Rename)]
@@ -296,21 +296,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.Table);
+			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.Table);
+			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterTable)]
 		protected void OnUpdateAlterTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.Table);
+			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Alter);
 		}
 	}
 }

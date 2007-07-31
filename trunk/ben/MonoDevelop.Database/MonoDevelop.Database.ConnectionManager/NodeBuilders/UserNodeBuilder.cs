@@ -96,7 +96,20 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.AlterUser)]
 		protected void OnAlterUser ()
 		{
+			UserNode node = CurrentNode.DataItem as UserNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
+			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
 			
+			if (fac.GuiProvider.ShowUserEditorDialog (schemaProvider, node.User, false))
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnAlterUserThreaded), CurrentNode.DataItem);
+		}
+		
+		private void OnAlterUserThreaded (object state)
+		{
+			UserNode node = (UserNode)state;
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
+			
+			provider.AlterUser (node.User);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.DropUser)]
@@ -129,21 +142,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.User);
+			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.User);
+			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterUser)]
 		protected void OnUpdateAlterUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.User);
+			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Alter);
 		}
 	}
 }

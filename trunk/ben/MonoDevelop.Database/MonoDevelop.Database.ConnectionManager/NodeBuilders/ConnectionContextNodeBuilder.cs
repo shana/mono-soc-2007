@@ -103,38 +103,20 @@ namespace MonoDevelop.Database.ConnectionManager
 			nodeState.TreeBuilder.Update ();
 			if (connected) {
 				ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Table))
+
+				if (MetaDataService.IsApplied (provider, typeof (TableMetaDataAttribute)))
 					nodeState.TreeBuilder.AddChild (new TablesNode (nodeState.ConnectionContext));
 
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.View))
+				if (MetaDataService.IsApplied (provider, typeof (ViewMetaDataAttribute)))
 					nodeState.TreeBuilder.AddChild (new ViewsNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Procedure))
+				if (MetaDataService.IsApplied (provider, typeof (ProcedureMetaDataAttribute)))
 					nodeState.TreeBuilder.AddChild (new ProceduresNode (nodeState.ConnectionContext));
-				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Aggregate))
-					nodeState.TreeBuilder.AddChild (new AggregatesNode (nodeState.ConnectionContext));
-				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Group))
-					nodeState.TreeBuilder.AddChild (new GroupsNode (nodeState.ConnectionContext));
-				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Language))
-					nodeState.TreeBuilder.AddChild (new LanguagesNode (nodeState.ConnectionContext));
-				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Operator))
-					nodeState.TreeBuilder.AddChild (new OperatorsNode (nodeState.ConnectionContext));
-				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Role))
-					nodeState.TreeBuilder.AddChild (new RolesNode (nodeState.ConnectionContext));
-				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.Sequence))
-					nodeState.TreeBuilder.AddChild (new SequencesNode (nodeState.ConnectionContext));
-				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.User))
+
+				if (MetaDataService.IsApplied (provider, typeof (UserMetaDataAttribute)))
 					nodeState.TreeBuilder.AddChild (new UsersNode (nodeState.ConnectionContext));
 				
-				if (provider.SupportsSchemaOperation (OperationMetaData.Select, SchemaMetaData.DataType))
-					nodeState.TreeBuilder.AddChild (new TypesNode (nodeState.ConnectionContext));
+				//TODO: custom datatypes, sequences, roles, operators, languages, groups and aggregates
 				
 				nodeState.TreeBuilder.Expanded = true;
 			}
@@ -206,14 +188,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.Database);
+			info.Enabled = MetaDataService.IsDatabaseMetaDataSupported (context.SchemaProvider, DatabaseMetaData.Drop);
 		}
 
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterDatabase)]
 		protected void OnUpdateAlterDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.Database);
+			info.Enabled = MetaDataService.IsDatabaseMetaDataSupported (context.SchemaProvider, DatabaseMetaData.Alter);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.RenameDatabase)]
@@ -226,7 +208,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateRenameDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = context.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.Database);
+			info.Enabled = MetaDataService.IsDatabaseMetaDataSupported (context.SchemaProvider, DatabaseMetaData.Rename);
 		}
 	}
 }

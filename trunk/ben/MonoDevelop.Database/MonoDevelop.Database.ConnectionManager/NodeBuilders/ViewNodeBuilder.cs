@@ -83,7 +83,13 @@ namespace MonoDevelop.Database.ConnectionManager
 			NodeState nodeState = state as NodeState;
 			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
 			
-			//TODO: build columns
+			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute))) {
+				ViewSchema view = (nodeState.DataObject as ViewNode).View;
+				Services.DispatchService.GuiDispatch (delegate {
+					nodeState.TreeBuilder.AddChild (new ColumnsNode (nodeState.ConnectionContext, view));
+					nodeState.TreeBuilder.Expanded = true;
+				});
+			}
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -120,7 +126,20 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.AlterView)]
 		protected void OnAlterView ()
 		{
+			ViewNode node = CurrentNode.DataItem as ViewNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
+			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
 			
+			if (fac.GuiProvider.ShowViewEditorDialog (schemaProvider, node.View, false))
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnAlterViewThreaded), CurrentNode.DataItem);
+		}
+		
+		private void OnAlterViewThreaded (object state)
+		{
+			ViewNode node = (ViewNode)state;
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
+			
+			provider.AlterView (node.View);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.DropView)]
@@ -153,21 +172,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Drop, SchemaMetaData.View);
+			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Rename, SchemaMetaData.View);
+			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterView)]
 		protected void OnUpdateAlterView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Alter, SchemaMetaData.View);
+			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Alter);
 		}
 	}
 }

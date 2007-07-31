@@ -129,14 +129,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnCreateUser ()
 		{
 			BaseNode node = CurrentNode.DataItem as BaseNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
 			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
-			UserSchema user = new UserSchema (schemaProvider);
-			user.Name = "New User";
+			UserSchema user = schemaProvider.GetNewUserSchema ("NewUser");
 
-			UserEditorDialog dlg = new UserEditorDialog (schemaProvider, user, true);
-			if (dlg.Run () == (int)ResponseType.Ok)
+			if (fac.GuiProvider.ShowUserEditorDialog (schemaProvider, user, true))
 				ThreadPool.QueueUserWorkItem (new WaitCallback (OnCreateUserThreaded), new object[] {schemaProvider, user, node} as object);
-			dlg.Destroy ();
 		}
 		
 		private void OnCreateUserThreaded (object state)
@@ -155,7 +153,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = node.ConnectionContext.SchemaProvider.SupportsSchemaOperation (OperationMetaData.Create, SchemaMetaData.User);
+			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Create);
 		}
 	}
 }
