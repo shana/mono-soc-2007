@@ -24,7 +24,7 @@ namespace Mono.Debugger.Frontend
 			AddTextColumn("Enabled", BreakpointsStore.ColumnEnabled);
 			AddTextColumn("Activated", BreakpointsStore.ColumnActivated);
 			AddTextColumn("Thread group", BreakpointsStore.ColumnThreadGroup);
-			AddTextColumn("Location", BreakpointsStore.ColumnLocation);
+			AddTextColumn("Location", BreakpointsStore.ColumnName);
 			
 			this.GtkTree.RowActivated += new RowActivatedHandler(RowActivated);
 		}
@@ -34,6 +34,21 @@ namespace Mono.Debugger.Frontend
 			TreeIter it;
 			GtkStore.GetIter(out it, args.Path);
 			int id = (int)GtkStore.GetValue(it, BreakpointsStore.ColumnID);
+		}
+		
+		public SourceCodeLocation[] GetBreakpoints()
+		{
+			ArrayList breakpoints = new ArrayList();
+			
+			int count = GtkStore.IterNChildren();
+			for(int i = 0; i < count; i++) {
+				TreeIter childIter;
+				GtkStore.IterNthChild(out childIter, i);
+				SourceCodeLocation bpLocation = (SourceCodeLocation)GtkStore.GetValue(childIter, BreakpointsStore.ColumnLocation);
+				breakpoints.Add(bpLocation);
+			}
+			
+			return (SourceCodeLocation[])breakpoints.ToArray(typeof(SourceCodeLocation));
 		}
 		
 		public override void ReceiveUpdates()

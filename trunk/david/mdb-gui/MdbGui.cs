@@ -163,7 +163,7 @@ namespace Mono.Debugger.Frontend
 			threadPad.ReceiveUpdates();
 			
 			// Update the source view
-			sourceView.UpdateDisplay();
+			sourceView.UpdateDisplay(breakpointsPad.GetBreakpoints());
 			
 			return true;
 		}

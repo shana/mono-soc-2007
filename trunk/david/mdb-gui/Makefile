@@ -15,6 +15,7 @@ SRCS = \
 	PixmapRef.cs \
 	Pixmaps.cs \
 	SourceView.cs \
+	SourceCodeLocation.cs \
 	Pads/*.cs \
 	Pads/Stores/*.cs \
 	VariableTree/*.cs \
