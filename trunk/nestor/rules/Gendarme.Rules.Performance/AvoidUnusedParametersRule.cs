@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Collections;
 
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -47,24 +48,29 @@ namespace Gendarme.Rules.Performance {
 			return false;
 		}
 
-		private bool ContainsUnusedParameters (MethodDefinition method) 
+		private bool IsExaminable (MethodDefinition method) 
 		{
-			if (method.HasBody) {
+			return !(method.IsAbstract || method.IsVirtual || method.Overrides.Count != 0 || method.PInvokeInfo != null);
+		}
+
+		private ICollection GetUnusedParameters (MethodDefinition method) 
+		{
+			ArrayList unusedParameters = new ArrayList ();
+			if (IsExaminable (method)) {
 				for (int index = 0; index < method.Parameters.Count; index++) {
 					if (!UseParameter (index + 1, method))
-						return true;
+						unusedParameters.Add (method.Parameters[index]);
 				}
-				return false;
 			}
-			return false;
+			return unusedParameters;
 		}
 	
 		public MessageCollection CheckMethod (MethodDefinition method, Runner runner)
 		{
 			MessageCollection messageCollection = new MessageCollection ();
-			if (ContainsUnusedParameters (method)) {
+			foreach (ParameterDefinition parameter in GetUnusedParameters (method)) {
 				Location location = new Location (method.DeclaringType.Name, method.Name, 0);
-				Message message = new Message ("The method should avoid unused parameters.",location, MessageType.Error);
+				Message message = new Message (String.Format ("The parameter {0} is never used.", parameter.Name),location, MessageType.Error);
 				messageCollection.Add (message);
 			}
 			if (messageCollection.Count == 0)
