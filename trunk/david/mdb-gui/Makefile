@@ -5,6 +5,7 @@ PIXMAPS = `echo pixmaps/* | sed -r 's|pixmaps/([^ ]*)|-resource:pixmaps/\1,Mono.
 
 REFS = \
 	-r:$(MONODIR)/lib/mono/1.0/mdb.exe \
+	-r:$(MONODIR)/lib/mono/1.0/System.Runtime.Remoting.dll \
 	-r:$(MONODIR)/lib/mono/mono-debugger/Mono.Debugger.dll \
 	-r:$(MONODIR)/lib/mono/mono-debugger/Mono.Debugger.Backend.dll \
 

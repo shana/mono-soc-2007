@@ -6,7 +6,7 @@ namespace Mono.Debugger.Frontend
 	/// <summary>
 	/// A tree store designed to be mantained in one process and shown in other.
 	/// </summary>
-	public class RemoteTreeStore
+	public class RemoteTreeStore: MarshalByRefObject
 	{
 		RemoteTreeNode rootNode;
 		ArrayList modifications = new ArrayList();

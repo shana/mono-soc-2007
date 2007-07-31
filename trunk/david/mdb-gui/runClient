@@ -1,0 +1,5 @@
+#!/bin/sh
+export MONODIR=`echo \`which mono\` | sed 's|bin/mono||'`
+export MONO_PATH=.:${MONODIR}/lib/mono/1.0/:${MONODIR}/lib/mono/mono-debugger/:${MONO_PATH}
+
+mono --debug mdb-gui.exe --connect tcp://localhost:28004/DebuggerService

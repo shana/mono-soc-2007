@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
 using System.Text;
 
 using Glade;
@@ -43,7 +46,27 @@ namespace Mono.Debugger.Frontend
 		
 		public static void Main(string[] args)
 		{
-			new MdbGui(args);
+			if (args.Length >= 2 && args[0] == "--listen") {
+				int port = int.Parse(args[1]);
+				string[] newArgs = new string[args.Length - 2];
+				Array.Copy(
+					args, 2,
+					newArgs, 0,
+					newArgs.Length
+				);
+				DebuggerService debuggerService = new DebuggerService(newArgs);
+				
+				ChannelServices.RegisterChannel(new TcpChannel(port));
+				RemotingServices.Marshal(debuggerService, "DebuggerService");
+			} else if (args.Length >= 2 && args[0] == "--connect") {
+				string url = args[1];
+				
+				ChannelServices.RegisterChannel(new TcpChannel());
+				DebuggerService debuggerService = (DebuggerService)Activator.GetObject(typeof(DebuggerService), url);
+				new MdbGui(debuggerService);
+			} else {
+				new MdbGui(new DebuggerService(args));
+			}
 		}
 		
 		public void GuiInit()
@@ -93,13 +116,12 @@ namespace Mono.Debugger.Frontend
 			GLib.Timeout.Add(50, ReceiveGUIUpdates);
 		}
 		
-		public MdbGui(string[] args) 
+		public MdbGui(DebuggerService debuggerService) 
 		{
+			this.debuggerService = debuggerService;
+			
 			Application.Init();
-			
-			debuggerService = new DebuggerService(args);
 			GuiInit();
-			
 			Application.Run();
 		}
 		
