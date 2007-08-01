@@ -11,7 +11,7 @@ REFS =  \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll \
 	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
-	-r:$(top_srcdir)/contrib/Mono.Data.Sqlite.dll \
+	-r:$(top_srcdir)/Extras/MonoDevelop.Database/libs/Mono.Data.Sqlite.dll \
 	-r:Mono.Data \
 	-r:System \
 	-r:System.Data
@@ -32,7 +32,7 @@ BUILD_SQLITE_FILES = $(addprefix $(ADDIN_BUILD)/, $(notdir $(SQLITE_FILES)))
 
 ADDIN = MonoDevelop.Database.Sql.Sqlite.addin.xml
 
-all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
+all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN) $(BUILD_SQLITE_FILES)
 
 $(ADDIN_BUILD)/$(ADDIN): $(srcdir)/$(ADDIN)
 	mkdir -p $(ADDIN_BUILD)
