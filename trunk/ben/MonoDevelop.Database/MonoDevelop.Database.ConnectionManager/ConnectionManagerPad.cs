@@ -41,11 +41,6 @@ namespace MonoDevelop.Database.ConnectionManager
 	{
 		public ConnectionManagerPad ()
 		{
-			if (!ConnectionContextService.IsInitialized) {
-				
-				string configFile = Path.Combine (Runtime.Properties.ConfigDirectory, "MonoDevelop.Database.ConnectionManager.xml");
-				ConnectionContextService.Initialize (configFile);
-			}
 		}
 		
 		public override void Initialize (NodeBuilder[] builders, TreePadOption[] options)

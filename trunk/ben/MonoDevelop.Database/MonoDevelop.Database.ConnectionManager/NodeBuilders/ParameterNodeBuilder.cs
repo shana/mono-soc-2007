@@ -61,7 +61,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			ParameterSchema parameter = dataObject as ParameterSchema;
 			
-			label = parameter.Name;
+			label = parameter.Name + " (" + parameter.ParameterType.ToString () + ")";
 			icon = Context.GetIcon ("md-db-column");
 			//TODO: icon based on column type
 		}

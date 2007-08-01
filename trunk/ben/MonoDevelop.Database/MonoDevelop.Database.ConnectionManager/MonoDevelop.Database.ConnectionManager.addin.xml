@@ -5,20 +5,20 @@
 	copyright	= "MIT X11"
 	url		= "http://www.monodevelop.com"
 	description	= "Database ConnectionManager Module"
-	version		= "0.14.0">
+	version		= "0.15.0">
     
 	<Runtime>
 		<Import assembly="MonoDevelop.Database.ConnectionManager.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Core" version="0.14.0"/>
-		<Addin id="Core.Gui" version="0.14.0"/>
-		<Addin id="Ide" version="0.14.0"/>
-		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
-		<Addin id="Database.Components" version="0.14.0"/>
-		<Addin id="Database.Query" version="0.14.0"/>
-		<Addin id="Database.Designer" version="0.14.0"/>
+		<Addin id="Core" version="0.15.0"/>
+		<Addin id="Core.Gui" version="0.15.0"/>
+		<Addin id="Ide" version="0.15.0"/>
+		<Addin id="Database.Sql" version="0.15.0"/>
+		<Addin id="Database.Components" version="0.15.0"/>
+		<Addin id="Database.Query" version="0.15.0"/>
+		<Addin id="Database.Designer" version="0.15.0"/>
 	</Dependencies>
 	
 	<Extension path = "/SharpDevelop/Workbench/Pads">
@@ -56,113 +56,114 @@
 		<ContextPad id = "ConnectionManagerPad"/>
 	</Extension>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/AggregatesNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/AggregatesNode" name = "Aggregates context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ColumnsNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ColumnsNode" name = "Columns context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ColumnNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ColumnNode" name = "Column context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode" name = "Connections context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionNode" name = "Connection context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintNode" name = "Constraint context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode" name = "Constraints context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/GroupsNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/GroupsNode" name = "Groups context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/LanguagesNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/LanguagesNode" name = "Languages context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/OperatorsNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/OperatorsNode" name = "Operators context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ParameterNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ParameterNode" name = "Parameter context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ParametersNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ParametersNode" name = "Parameters context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProcedureNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProcedureNode" name = "Procedure context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProceduresNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProceduresNode" name = "Procedures context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/RolesNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/RolesNode" name = "Roles context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/RulesNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/RulesNode" name = "Rules context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/SequencesNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/SequencesNode" name = "Sequences context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TableNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TableNode" name = "Table context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TablesNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TablesNode" name = "Tables context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TriggerNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TriggerNode" name = "Trigger context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TriggersNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TriggersNode" name = "Triggers context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TypesNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TypesNode" name = "Types context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UserNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UserNode" name = "User context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UsersNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UsersNode" name = "Users context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewNode" name = "View context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewsNode">
+	<ExtensionPoint path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewsNode" name = "Views context menu">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
-	
+
 	<Extension path = "/SharpDevelop/Commands">
-		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AddConnection"
-			defaultHandler = "MonoDevelop.Database.ConnectionManager.AddConnectionHandler"
+		<Category _name = "Database" id = "Database">
+		
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AddConnection" 
 			_label = "Add Connection"
 			icon = "gtk-add"/>
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EditConnection"
@@ -192,9 +193,11 @@
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"
 			_label = "Re_name"
 			shortcut = "F2"/>
+		<!--
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RenameDatabase"
 			_label = "Rename Database">
-			
+		-->
+
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateDatabase"
 			_label = "Create Database"
 			icon = "gtk-add"/>
@@ -238,7 +241,7 @@
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AlterUser"
 			_label = "Alter User"
 			icon = "gtk-edit"/>
-
+		
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropDatabase"
 			_label = "Drop Database"
 			icon = "gtk-remove"/>
@@ -260,6 +263,7 @@
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropUser"
 			_label = "Drop User"
 			icon = "gtk-remove"/>
+		</Category>
 	</Extension>
 
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode">
@@ -269,71 +273,71 @@
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DisconnectConnection"/>
-		<SeparatorItem />
+		<SeparatorItem id = "DisconnectSeparator"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RenameDatabase"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EditConnection"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RemoveConnection"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropDatabase"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TablesNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateTable"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewsNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateView"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProceduresNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateProcedure"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/UsersNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateUser"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConstraintsNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateConstraint"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TriggersNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.CreateTrigger"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/TableNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectAll"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectColumns"/>
-		<SeparatorItem />
+		<SeparatorItem id = "SelectSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AlterTable"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EmptyTable"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropTable"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ViewNode">
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.SelectAll"/>
-		<SeparatorItem />
+		<SeparatorItem id = "SelectSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AlterView"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropView"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
@@ -341,7 +345,7 @@
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AlterProcedure"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropProcedure"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
@@ -349,7 +353,7 @@
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AlterUser"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropUser"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
@@ -357,7 +361,7 @@
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AlterTrigger"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropTrigger"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 	
@@ -365,7 +369,7 @@
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.AlterConstraint"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropConstraint"/>
-		<SeparatorItem />
+		<SeparatorItem id = "RefreshSeparator" />
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"/>
 	</Extension>
 </Addin>

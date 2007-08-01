@@ -261,19 +261,19 @@ namespace MonoDevelop.Database.ConnectionManager
 	
 	public class ConstraintsNode : BaseNode
 	{
-		protected TableSchema table;
+		protected ISchema schema;
 		
-		public ConstraintsNode (DatabaseConnectionContext context, TableSchema table)
+		public ConstraintsNode (DatabaseConnectionContext context, ISchema schema)
 			: base (context)
 		{
-			if (table == null)
-				throw new ArgumentNullException ("table");
+			if (schema == null)
+				throw new ArgumentNullException ("schema");
 			
-			this.table = table;
+			this.schema = schema;
 		}
 		
-		public TableSchema Table {
-			get { return table; }
+		public ISchema Schema {
+			get { return schema; }
 		}
 	}
 	

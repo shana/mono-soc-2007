@@ -49,7 +49,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Procedures/ConnectionManagerPad/ContextMenu/ProcedureNode"; }
+			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ProcedureNode"; }
 		}
 		
 		public override Type CommandHandlerType {

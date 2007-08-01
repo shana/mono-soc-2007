@@ -104,10 +104,10 @@ namespace MonoDevelop.Database.ConnectionManager
 					nodeState.TreeBuilder.AddChild (new ConstraintsNode (nodeState.ConnectionContext, table));
 				});
 			
-//			if (MetaDataService.IsApplied (provider, typeof (TriggerMetaDataAttribute)))
-//				Services.DispatchService.GuiDispatch (delegate {
-//					nodeState.TreeBuilder.AddChild (new TriggersNode (nodeState.ConnectionContext));
-//				});
+			if (MetaDataService.IsApplied (provider, typeof (TriggerMetaDataAttribute)))
+				Services.DispatchService.GuiDispatch (delegate {
+					nodeState.TreeBuilder.AddChild (new TriggersNode (nodeState.ConnectionContext));
+				});
 			
 			//TODO: rules
 			
@@ -174,21 +174,32 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.SelectColumns)]
 		protected void OnSelectColumnsCommand ()
 		{
-			TableNode node = (TableNode)CurrentNode.DataItem;
+			ThreadPool.QueueUserWorkItem (new WaitCallback (OnSelectColumnsCommandGetColumns), CurrentNode.DataItem);
+		}
+		
+		private void OnSelectColumnsCommandGetColumns (object state)
+		{
+			TableNode node = (TableNode)state;
 			
-			SelectColumnDialog dlg = new SelectColumnDialog (true, node.Table.Columns);
-			if (dlg.Run () == (int)Gtk.ResponseType.Ok) {
-				IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
-				List<IdentifierExpression> cols = new List<IdentifierExpression> ();
-				foreach (ColumnSchema schema in dlg.CheckedColumns)
-					cols.Add (new IdentifierExpression (schema.Name));
-				
-				SelectStatement sel = new SelectStatement (new FromTableClause (tableId), cols);
+			ColumnSchemaCollection columns = node.Table.Columns; //this can invoke the schema provider, so it must be in bg thread
+			
+			Services.DispatchService.GuiDispatch (delegate () {
+				SelectColumnDialog dlg = new SelectColumnDialog (true, columns);
+				if (dlg.Run () == (int)Gtk.ResponseType.Ok) {
+					IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
+					List<IdentifierExpression> cols = new List<IdentifierExpression> ();
+					foreach (ColumnSchema schema in dlg.CheckedColumns)
+						cols.Add (new IdentifierExpression (schema.Name));
+					
+					SelectStatement sel = new SelectStatement (new FromTableClause (tableId), cols);
 
-				IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
-				IDbCommand command = conn.CreateCommand (sel);
-				conn.ExecuteTableAsync (command, new ExecuteCallback<DataTable> (OnSelectCommandThreaded), null);
-			}
+					IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
+					IDbCommand command = conn.CreateCommand (sel);
+					
+					conn.ExecuteTableAsync (command, new ExecuteCallback<DataTable> (OnSelectCommandThreaded), null);
+				}
+				dlg.Destroy ();
+			});
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.SelectAll)]
@@ -218,13 +229,18 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnEmptyTable ()
 		{
 			TableNode node = (TableNode)CurrentNode.DataItem;
-			
-			IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
-			DeleteStatement del = new DeleteStatement (new FromTableClause (tableId));
-			
-			IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
-			IDbCommand command = conn.CreateCommand (del);
-			conn.ExecuteNonQueryAsync (command, new ExecuteCallback<int> (OnEmptyTableCallback), null);
+
+			if (Services.MessageService.AskQuestion (
+				GettextCatalog.GetString ("Are you sure you want to empty table '{0}'", node.Table.Name),
+				GettextCatalog.GetString ("Empty Table")
+			)) {
+				IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
+				DeleteStatement del = new DeleteStatement (new FromTableClause (tableId));
+				
+				IPooledDbConnection conn = node.ConnectionContext.ConnectionPool.Request ();
+				IDbCommand command = conn.CreateCommand (del);
+				conn.ExecuteNonQueryAsync (command, new ExecuteCallback<int> (OnEmptyTableCallback), null);
+			}
 		}
 		
 		private void OnEmptyTableCallback (IPooledDbConnection connection, int result, object state)
