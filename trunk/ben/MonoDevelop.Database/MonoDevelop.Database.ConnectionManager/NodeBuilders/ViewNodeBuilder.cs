@@ -57,6 +57,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			get { return typeof (ViewNodeCommandHandler); }
 		}
 		
+		public override void GetNodeAttributes (ITreeNavigator treeNavigator, object dataObject, ref NodeAttributes attributes)
+		{
+			attributes |= NodeAttributes.AllowRename;
+		}
+		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			return GettextCatalog.GetString ("View");
@@ -72,22 +77,19 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			ViewNode node = dataObject as ViewNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
+			ViewNode node = state as ViewNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 			
 			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute))) {
-				ViewSchema view = (nodeState.DataObject as ViewNode).View;
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new ColumnsNode (nodeState.ConnectionContext, view));
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (new ColumnsNode (node.ConnectionContext, node.View));
+					builder.Expanded = true;
 				});
 			}
 		}
@@ -107,10 +109,30 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void RenameItem (string newName)
 		{
-			//TODO: check if a view with the same name already exists
-			ViewNode node = CurrentNode.DataItem as ViewNode;
+			ViewNode node = (ViewNode)CurrentNode.DataItem;
+			if (node.View.Name != newName)
+				ThreadPool.QueueUserWorkItem (new WaitCallback (RenameItemThreaded), new object[]{ node, newName });
+		}
+		
+		private void RenameItemThreaded (object state)
+		{
+			object[] objs = state as object[];
 			
-			node.View.Name = newName;
+			ViewNode node = objs[0] as ViewNode;
+			string newName = objs[1] as string;
+			ISchemaProvider provider = node.View.SchemaProvider;
+			
+			if (provider.IsValidName (newName)) {
+				provider.RenameView (node.View, newName);
+			} else {
+				Services.DispatchService.GuiDispatch (delegate () {
+					Services.MessageService.ShowError (String.Format (
+						"Unable to rename view '{0}' to '{1}'!",
+						node.View.Name, newName
+					));
+				});
+			}
+			node.Refresh ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Refresh)]

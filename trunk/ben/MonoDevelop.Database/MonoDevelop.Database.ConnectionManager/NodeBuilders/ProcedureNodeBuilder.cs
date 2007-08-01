@@ -56,6 +56,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			get { return typeof (ProcedureNodeCommandHandler); }
 		}
 		
+		public override void GetNodeAttributes (ITreeNavigator treeNavigator, object dataObject, ref NodeAttributes attributes)
+		{
+			attributes |= NodeAttributes.AllowRename;
+		}		
+		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			return GettextCatalog.GetString ("Procedure");
@@ -71,22 +76,19 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			ProcedureNode node = dataObject as ProcedureNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			ISchemaProvider schemaProvider = nodeState.ConnectionContext.SchemaProvider;
+			ProcedureNode node = state as ProcedureNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
+			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
 
 			if (MetaDataService.IsApplied (schemaProvider, typeof (ParameterMetaDataAttribute))) {
-				ProcedureSchema procedure = (nodeState.DataObject as ProcedureNode).Procedure;
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new ParametersNode (nodeState.ConnectionContext, procedure));
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (new ParametersNode (node.ConnectionContext, node.Procedure));
+					builder.Expanded = true;
 				});
 			}
 		}
@@ -106,7 +108,30 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void RenameItem (string newName)
 		{
+			ProcedureNode node = (ProcedureNode)CurrentNode.DataItem;
+			if (node.Procedure.Name != newName)
+				ThreadPool.QueueUserWorkItem (new WaitCallback (RenameItemThreaded), new object[]{ node, newName });
+		}
+		
+		private void RenameItemThreaded (object state)
+		{
+			object[] objs = state as object[];
 			
+			ProcedureNode node = objs[0] as ProcedureNode;
+			string newName = objs[1] as string;
+			ISchemaProvider provider = node.Procedure.SchemaProvider;
+			
+			if (provider.IsValidName (newName)) {
+				provider.RenameProcedure (node.Procedure, newName);
+			} else {
+				Services.DispatchService.GuiDispatch (delegate () {
+					Services.MessageService.ShowError (String.Format (
+						"Unable to rename procedure '{0}' to '{1}'!",
+						node.Procedure.Name, newName
+					));
+				});
+			}
+			node.Refresh ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Refresh)]

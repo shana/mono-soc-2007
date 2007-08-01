@@ -62,6 +62,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			get { return typeof (TableNodeCommandHandler); }
 		}
 		
+		public override void GetNodeAttributes (ITreeNavigator treeNavigator, object dataObject, ref NodeAttributes attributes)
+		{
+			attributes |= NodeAttributes.AllowRename;
+		}
+		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			return GettextCatalog.GetString ("Table");
@@ -77,21 +82,18 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			TableNode node = dataObject as TableNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
+			TableNode node = state as TableNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 		
 			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute)))
 				Services.DispatchService.GuiDispatch (delegate {
-					TableSchema table = (nodeState.DataObject as TableNode).Table;
-					nodeState.TreeBuilder.AddChild (new ColumnsNode (nodeState.ConnectionContext, table));
+					builder.AddChild (new ColumnsNode (node.ConnectionContext, node.Table));
 				});
 			
 			if (MetaDataService.IsApplied (provider, typeof (CheckConstraintMetaDataAttribute))
@@ -100,19 +102,18 @@ namespace MonoDevelop.Database.ConnectionManager
 				|| MetaDataService.IsApplied (provider, typeof (UniqueConstraintMetaDataAttribute))
 			)
 				Services.DispatchService.GuiDispatch (delegate {
-					TableSchema table = (nodeState.DataObject as TableNode).Table;
-					nodeState.TreeBuilder.AddChild (new ConstraintsNode (nodeState.ConnectionContext, table));
+					builder.AddChild (new ConstraintsNode (node.ConnectionContext, node.Table));
 				});
 			
 			if (MetaDataService.IsApplied (provider, typeof (TriggerMetaDataAttribute)))
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new TriggersNode (nodeState.ConnectionContext));
+					builder.AddChild (new TriggersNode (node.ConnectionContext));
 				});
 			
 			//TODO: rules
 			
 			Services.DispatchService.GuiDispatch (delegate {
-				nodeState.TreeBuilder.Expanded = true;
+				builder.Expanded = true;
 			});
 		}
 		
@@ -137,20 +138,28 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void RenameItem (string newName)
 		{
 			TableNode node = (TableNode)CurrentNode.DataItem;
-			if (node.Table.Name != newName) {
-				
-			}
+			if (node.Table.Name != newName)
+				ThreadPool.QueueUserWorkItem (new WaitCallback (RenameItemThreaded), new object[]{ node, newName });
 		}
 		
 		private void RenameItemThreaded (object state)
 		{
 			object[] objs = state as object[];
 			
-			ISchemaProvider provider = objs[0] as ISchemaProvider;
-			TableNode node = objs[1] as TableNode;
-			string newName = objs[2] as string;
+			TableNode node = objs[0] as TableNode;
+			string newName = objs[1] as string;
+			ISchemaProvider provider = node.Table.SchemaProvider;
 			
-			provider.RenameTable (node.Table, newName);
+			if (provider.IsValidName (newName)) {
+				provider.RenameTable (node.Table, newName);
+			} else {
+				Services.DispatchService.GuiDispatch (delegate () {
+					Services.MessageService.ShowError (String.Format (
+						"Unable to rename table '{0}' to '{1}'!",
+						node.Table.Name, newName
+					));
+				});
+			}
 			node.Refresh ();
 		}
 		

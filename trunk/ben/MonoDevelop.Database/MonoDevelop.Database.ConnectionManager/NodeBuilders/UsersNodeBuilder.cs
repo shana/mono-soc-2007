@@ -77,20 +77,19 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			BaseNode node = dataObject as BaseNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			UserSchemaCollection users = nodeState.ConnectionContext.SchemaProvider.GetUsers ();
+			BaseNode node = state as BaseNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
+			
+			UserSchemaCollection users = node.ConnectionContext.SchemaProvider.GetUsers ();
 			foreach (UserSchema user in users) {
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new UserNode (nodeState.ConnectionContext, user));
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (new UserNode (node.ConnectionContext, user));
+					builder.Expanded = true;
 				});
 			}
 		}
@@ -102,7 +101,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void OnRefreshEvent (object sender, EventArgs args)
 		{
-			ITreeBuilder builder = Context.GetTreeBuilder ();
+			ITreeBuilder builder = Context.GetTreeBuilder (sender);
 			
 			if (builder != null)
 				builder.UpdateChildren ();

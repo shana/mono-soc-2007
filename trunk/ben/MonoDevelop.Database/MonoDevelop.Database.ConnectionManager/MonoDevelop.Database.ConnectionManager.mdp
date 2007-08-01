@@ -32,7 +32,6 @@
     <File name="./NodeBuilders/ColumnNodeBuilder.cs" subtype="Code" buildaction="Compile" />
     <File name="./NodeBuilders/ColumnsNodeBuilder.cs" subtype="Code" buildaction="Compile" />
     <File name="./NodeBuilders/ConstraintNodeBuilder.cs" subtype="Code" buildaction="Compile" />
-    <File name="./NodeState.cs" subtype="Code" buildaction="Compile" />
     <File name="./NodeBuilders/AggregatesNodeBuilder.cs" subtype="Code" buildaction="Compile" />
     <File name="./NodeBuilders/GroupsNodeBuilder.cs" subtype="Code" buildaction="Compile" />
     <File name="./NodeBuilders/LanguagesNodeBuilder.cs" subtype="Code" buildaction="Compile" />
