@@ -63,6 +63,7 @@
     <Compile Include="System.Windows.Controls.Primitives\RepeatButton.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ToggleButton.cs" />
     <Compile Include="System.Windows.Controls.Primitives\Track.cs" />
+    <Compile Include="System.Windows.Controls.Primitives\UniformGrid.cs" />
     <Compile Include="System.Windows.Controls\BooleanToVisibilityConverter.cs" />
     <Compile Include="System.Windows.Controls\Border.cs" />
     <Compile Include="System.Windows.Controls\Button.cs" />
