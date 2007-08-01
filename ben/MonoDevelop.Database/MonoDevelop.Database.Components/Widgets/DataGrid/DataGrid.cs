@@ -63,7 +63,7 @@ namespace MonoDevelop.Database.Components
 		{
 			this.Build ();
 			
-			grid.EnableGridLines = TreeViewGridLines.Both;
+			//Gtk# 2.10: grid.EnableGridLines = TreeViewGridLines.Both;
 			grid.ButtonPressEvent += new ButtonPressEventHandler (ButtonPressed);
 
 			contentRenderers = new Dictionary<Type, IDataGridContentRenderer> ();

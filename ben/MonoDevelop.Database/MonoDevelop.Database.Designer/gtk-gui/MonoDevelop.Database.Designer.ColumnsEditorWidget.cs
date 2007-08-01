@@ -58,6 +58,7 @@ namespace MonoDevelop.Database.Designer {
             this.treeColumns = new Gtk.TreeView();
             this.treeColumns.CanFocus = true;
             this.treeColumns.Name = "treeColumns";
+            this.treeColumns.HeadersClickable = true;
             this.scrolledwindowLeft.Add(this.treeColumns);
             this.vboxLeft.Add(this.scrolledwindowLeft);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vboxLeft[this.scrolledwindowLeft]));

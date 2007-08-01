@@ -5,7 +5,8 @@
     <target-gtk-version>2.10.0</target-gtk-version>
   </configuration>
   <import>
-    <widget-library name="../../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll" />
+    <widget-library name="../../../../build/AddIns/MonoDevelop.Ide.dll" />
+    <widget-library name="../../../../build/AddIns/MonoDevelop.Components.dll" />
     <widget-library name="../bin/Debug/MonoDevelop.Database.Designer.dll" internal="true" />
   </import>
   <widget class="Gtk.Bin" id="MonoDevelop.Database.Designer.TriggersEditorWidget" design-size="422 300">

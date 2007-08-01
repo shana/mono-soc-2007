@@ -60,6 +60,7 @@ namespace MonoDevelop.Database.Designer {
             this.listTriggers = new Gtk.TreeView();
             this.listTriggers.CanFocus = true;
             this.listTriggers.Name = "listTriggers";
+            this.listTriggers.HeadersClickable = true;
             this.windowTriggers.Add(this.listTriggers);
             this.hbox.Add(this.windowTriggers);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox[this.windowTriggers]));

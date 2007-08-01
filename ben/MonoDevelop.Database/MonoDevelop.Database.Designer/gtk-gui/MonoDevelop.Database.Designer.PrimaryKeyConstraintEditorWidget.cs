@@ -54,6 +54,7 @@ namespace MonoDevelop.Database.Designer {
             this.listPK = new Gtk.TreeView();
             this.listPK.CanFocus = true;
             this.listPK.Name = "listPK";
+            this.listPK.HeadersClickable = true;
             this.windowPK.Add(this.listPK);
             this.vbox3.Add(this.windowPK);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vbox3[this.windowPK]));
