@@ -69,6 +69,7 @@ namespace MonoDevelop.Database.Query
 			vbox.BorderWidth = 6;
 
 			sqlEditor = new SqlEditorWidget ();
+			sqlEditor.TextChanged += new EventHandler (SqlChanged);
 			
 			Toolbar toolbar = new Toolbar ();
 			toolbar.ToolbarStyle = ToolbarStyle.BothHoriz;
@@ -198,8 +199,9 @@ namespace MonoDevelop.Database.Query
 
 			Services.DispatchService.GuiDispatch (delegate () {
 				notebook.ShowAll ();
-				SetQueryState (false, GettextCatalog.GetPluralString ("Query executed ({0} result table)",
-					"Query executed ({0} result tables)", result.Tables.Count));
+				string msg = GettextCatalog.GetPluralString ("Query executed ({0} result table)",
+					"Query executed ({0} result tables)", result.Tables.Count);
+				SetQueryState (false, String.Format (msg, result.Tables.Count));
 			});
 			
 			if (stoppedQueries.Contains (state)) {
@@ -246,7 +248,7 @@ namespace MonoDevelop.Database.Query
 		
 		private void ExecuteClicked (object sender, EventArgs e)
 		{
-			SetQueryState (true, "Executing query");
+			SetQueryState (true, GettextCatalog.GetString ("Executing query"));
 			ExecuteQuery ();
 		}
 		
@@ -260,7 +262,7 @@ namespace MonoDevelop.Database.Query
 		
 		private void StopClicked (object sender, EventArgs e)
 		{
-			SetQueryState (false, "Query execute cancelled");
+			SetQueryState (false, GettextCatalog.GetString ("Query execute cancelled"));
 			
 			//since we can't abort a threadpool task, each task is assigned a unique state
 			//when stop is pressed, the state is added to the list of results that need
@@ -321,9 +323,14 @@ namespace MonoDevelop.Database.Query
 			buttonExecute.Sensitive = true;
 		}
 		
+		private void SqlChanged (object sender, EventArgs args)
+		{
+			buttonExecute.Sensitive = sqlEditor.Text.Length > 0;
+		}
+		
 		private void SetQueryState (bool exec, string msg)
 		{
-			buttonExecute.Sensitive = !exec;
+			buttonExecute.Sensitive = !exec && sqlEditor.Text.Length > 0;
 			buttonStop.Sensitive = exec;
 			buttonClear.Sensitive = !exec;
 			sqlEditor.Editable = !exec;
