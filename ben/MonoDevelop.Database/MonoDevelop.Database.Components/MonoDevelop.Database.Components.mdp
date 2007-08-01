@@ -18,7 +18,6 @@
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialogs/SelectColumnDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Components.SelectColumnDialog.cs" subtype="Code" buildaction="Compile" />
-    <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./Widgets/ProjectDirectoryComboBox.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/SelectColumnWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/SelectSchemaWidget.cs" subtype="Code" buildaction="Compile" />
@@ -89,7 +88,7 @@
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
-    <ResourcesVar Name="REFS" />
+    <ResourcesVar Sync="True" Name="RES" />
     <OthersVar />
     <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
     <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />
