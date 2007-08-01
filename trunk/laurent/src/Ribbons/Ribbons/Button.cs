@@ -394,7 +394,7 @@ namespace Ribbons
 			this.QueueDraw ();
 			
 			if(dropDownMenu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
-			{Console.WriteLine("foo");
+			{
 				Popup ();
 			}
 			

@@ -7,7 +7,7 @@ namespace Ribbons
 	public class Gallery : Container
 	{
 		private int tileWidth, tileHeight;
-		private List<Tile> tiles;
+		private List<Widget> tiles;
 		private Button up, down, expand;
 		private int defaultTilesPerRow;
 		private int tileSpacing;
@@ -62,9 +62,11 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
-			this.tiles = new List<Ribbons.Tile> ();
+			this.tiles = new List<Widget> ();
 			
 			this.defaultTilesPerRow = 5;
+			this.firstDisplayedTileIndex = 0;
+			this.lastDisplayedTileIndex = -1;
 			
 			this.tileHeight = 48;
 			this.tileWidth = 64;
@@ -88,14 +90,14 @@ namespace Ribbons
 		
 		/// <summary>Adds a tile before all existing tiles.</summary>
 		/// <param name="t">The tile to add.</param>
-		public void PrependTile (Tile t)
+		public void PrependTile (Widget t)
 		{
 			InsertTile (t, 0);
 		}
 		
 		/// <summary>Adds a tile after all existing tiles.</summary>
 		/// <param name="t">The tile to add.</param>
-		public void AppendTile (Tile t)
+		public void AppendTile (Widget t)
 		{
 			InsertTile (t, -1);
 		}
@@ -103,7 +105,7 @@ namespace Ribbons
 		/// <summary>Inserts a tile at the specified location.</summary>
 		/// <param name="t">The tile to add.</param>
 		/// <param name="TileIndex">The index (starting at 0) at which the tile must be inserted, or -1 to insert the tile after all existing tiles.</param>
-		public void InsertTile (Tile t, int TileIndex)
+		public void InsertTile (Widget t, int TileIndex)
 		{
 			if(TileIndex == -1 || TileIndex == tiles.Count)
 			{
@@ -122,7 +124,7 @@ namespace Ribbons
 		/// <param name="TileIndex">Index of the tile to remove.</param>
 		public void RemoveTile (int TileIndex)
 		{
-			tiles[TileIndex].Parent = null;
+			tiles[TileIndex].Unparent ();
 			
 			tiles.RemoveAt (TileIndex);
 		}
@@ -171,7 +173,9 @@ namespace Ribbons
 				callback (expand);
 			}
 			
-			for(int i = firstDisplayedTileIndex ; i < lastDisplayedTileIndex ; ++i)
+			callback (tiles[0]);
+			
+			for(int i = firstDisplayedTileIndex ; i <= lastDisplayedTileIndex ; ++i)
 			{
 				callback (tiles[i]);
 			}
@@ -188,7 +192,7 @@ namespace Ribbons
 			btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
 			int btnHeight = upReq.Height + downReq.Height + expandReq.Height;
 			
-			requisition.Width = btnWidth + 2 * (int)BorderWidth;
+			requisition.Width = btnWidth + tiles.Count * tileWidth + (tiles.Count + 1) * tileSpacing + 2 * (int)BorderWidth;
 			requisition.Height = Math.Max (tileHeight + 2*tileSpacing, btnHeight) + 2 * (int)BorderWidth;
 			
 			if(WidthRequest != -1) requisition.Width = WidthRequest;
@@ -233,6 +237,7 @@ namespace Ribbons
 			tileAlloc.Width = tileWidth;
 			
 			int maxTiles = (tilesAlloc.Width + tileSpacing) / (tileWidth + tileSpacing);
+			Console.WriteLine ("Max tiles: " + maxTiles);
 			
 			if(firstDisplayedTileIndex == -1)
 			{
@@ -253,16 +258,18 @@ namespace Ribbons
 				lastDisplayedTileIndex = tiles.Count - 1;
 			}
 			
+			Console.WriteLine ("First: " + firstDisplayedTileIndex);
+			Console.WriteLine ("Last: " + lastDisplayedTileIndex);
 			for(int tileIndex = firstDisplayedTileIndex ; tileIndex <= lastDisplayedTileIndex ; ++tileIndex)
 			{
-				Tile t = tiles[tileIndex];
+				Widget t = tiles[tileIndex];
 				
-				t.HeightRequest = tileHeight;
-				t.WidthRequest = tileWidth;
 				t.SizeRequest ();
 				
 				t.SizeAllocate (tileAlloc);
+				Console.WriteLine(tileAlloc);
 				tileAlloc.X += tileAlloc.Width + tileSpacing;
+				Console.WriteLine(tileAlloc);
 			}
 		}
 	}
