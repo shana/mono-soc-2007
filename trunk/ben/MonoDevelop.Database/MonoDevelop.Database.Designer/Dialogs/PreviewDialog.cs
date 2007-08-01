@@ -37,17 +37,33 @@ namespace MonoDevelop.Database.Designer
 {
 	public partial class PreviewDialog : Gtk.Dialog
 	{
-		public PreviewDialog()
+		public PreviewDialog (string sql)
 		{
 			this.Build();
+			
+			sqlEditor.TextChanged += new EventHandler (SqlChanged);
+		}
+		
+		public string Text {
+			get { return sqlEditor.Text; }
+			set { sqlEditor.Text = value; }
 		}
 
-		protected virtual void CancelClicked (object sender, System.EventArgs e)
+		protected virtual void CancelClicked (object sender, EventArgs e)
 		{
+			Respond (ResponseType.Cancel);
+			Destroy ();
 		}
 
-		protected virtual void OkClicked (object sender, System.EventArgs e)
+		protected virtual void OkClicked (object sender, EventArgs e)
 		{
+			Respond (ResponseType.Ok);
+			Destroy ();
+		}
+		
+		protected virtual void SqlChanged (object sender, EventArgs e)
+		{
+			buttonOk.Sensitive = sqlEditor.Text.Length > 0;
 		}
 	}
 }

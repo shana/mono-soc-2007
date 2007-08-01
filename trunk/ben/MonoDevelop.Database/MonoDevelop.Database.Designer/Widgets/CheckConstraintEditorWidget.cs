@@ -73,6 +73,9 @@ namespace MonoDevelop.Database.Designer
 			
 			listCheck.Model = store;
 			
+			columns.ItemAdded += new SortedCollectionItemEventHandler<ColumnSchema> (OnColumnAdded);
+			columns.ItemRemoved += new SortedCollectionItemEventHandler<ColumnSchema> (OnColumnRemoved);
+			
 			//TODO: add/remove columns on events
 			
 			TreeViewColumn colName = new TreeViewColumn ();
@@ -227,6 +230,26 @@ namespace MonoDevelop.Database.Designer
 		{
 			if (ContentChanged != null)
 				ContentChanged (this, EventArgs.Empty);
+		}
+		
+		private void OnColumnAdded (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
+		{
+			storeColumns.AppendValues (args.Item.Name);
+		}
+		
+		private void OnColumnRemoved (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
+		{
+			TreeIter iter;
+			if (storeColumns.GetIterFirst (out iter)) {
+				do {
+					string name = storeColumns.GetValue (iter, 0) as string;
+					
+					if (name == args.Item.Name) {
+						storeColumns.Remove (ref iter);
+						return;
+					}
+				} while (storeColumns.IterNext (ref iter));
+			}
 		}
 		
 		public virtual bool Validate ()

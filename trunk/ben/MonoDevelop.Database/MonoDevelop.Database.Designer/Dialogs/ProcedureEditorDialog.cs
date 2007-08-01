@@ -79,7 +79,7 @@ namespace MonoDevelop.Database.Designer
 
 			entryName.Text = procedure.Name;
 			if (!create) {
-				sqlEditor.Text = procedure.Definition;
+				sqlEditor.Text = schemaProvider.GetProcedureAlterStatement (procedure);
 				commentEditor.Comment = procedure.Comment;
 			}
 			

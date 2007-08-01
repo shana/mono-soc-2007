@@ -1,3 +1,15 @@
+2007-08-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* Widgets/UniqueConstraintEditorWidget.cs: implemented Add and Remove button clicks
+	* Widgets/TriggersEditorWidget.cs: Add and initialize implementation
+	* Widgets/ColumnsEditorWidget.cs: better visualisation of database capabilities
+	* Widgets/CheckConstraintEditorWidget.cs: implemented Add and Remove button clicks
+	* Dialogs/TableEditorDialog.cs: create a clone when altering the table and various
+	small bugfixes
+	* Dialogs/ProcedureEditorDialog.cs, Dialogs/ViewEditorDialog.cs: show the alter
+	statement instead of the create statement when the dialog is in alter mode
+	* Dialogs/PreviewDialog.cs: Added a SqlEditor widget
+
 2007-07-31  Ben Motmans <ben.motmans@gmail.com>
 
 	* Dialogs/TableEditorDialog.cs: various improvements

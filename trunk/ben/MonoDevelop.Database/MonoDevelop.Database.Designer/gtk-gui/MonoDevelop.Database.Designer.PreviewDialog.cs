@@ -15,7 +15,7 @@ namespace MonoDevelop.Database.Designer {
         
         private Gtk.VBox vboxContent;
         
-        private MonoDevelop.Database.Components.SqlEditorWidget sqleditorwidget1;
+        private MonoDevelop.Database.Components.SqlEditorWidget sqlEditor;
         
         private Gtk.Button buttonCancel;
         
@@ -39,12 +39,12 @@ namespace MonoDevelop.Database.Designer {
             this.vboxContent.Name = "vboxContent";
             this.vboxContent.Spacing = 6;
             // Container child vboxContent.Gtk.Box+BoxChild
-            this.sqleditorwidget1 = new MonoDevelop.Database.Components.SqlEditorWidget();
-            this.sqleditorwidget1.Events = ((Gdk.EventMask)(256));
-            this.sqleditorwidget1.Name = "sqleditorwidget1";
-            this.sqleditorwidget1.Editable = false;
-            this.vboxContent.Add(this.sqleditorwidget1);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vboxContent[this.sqleditorwidget1]));
+            this.sqlEditor = new MonoDevelop.Database.Components.SqlEditorWidget();
+            this.sqlEditor.Events = ((Gdk.EventMask)(256));
+            this.sqlEditor.Name = "sqlEditor";
+            this.sqlEditor.Editable = false;
+            this.vboxContent.Add(this.sqlEditor);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vboxContent[this.sqlEditor]));
             w2.Position = 0;
             w1.Add(this.vboxContent);
             Gtk.Box.BoxChild w3 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
@@ -69,6 +69,7 @@ namespace MonoDevelop.Database.Designer {
             w5.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
+            this.buttonOk.Sensitive = false;
             this.buttonOk.CanDefault = true;
             this.buttonOk.CanFocus = true;
             this.buttonOk.Name = "buttonOk";
