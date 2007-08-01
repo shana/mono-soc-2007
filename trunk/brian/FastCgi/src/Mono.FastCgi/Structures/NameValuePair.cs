@@ -28,7 +28,11 @@
 
 using System;
 using System.Text;
+#if NET_2_0
+using System.Collections.Generic;
+#else
 using System.Collections;
+#endif
 
 namespace Mono.FastCgi {
 	/// <summary>
@@ -204,27 +208,46 @@ namespace Mono.FastCgi {
 		
 		/// <summary>
 		///    Reads FastCGI name/value pairs from memory and stores
-		///    them as a <see cref="IDictionary" />.
+		///    them as a
+		#if NET_2_0
+		///    <see cref="T:System.Collections.Generic.IDictionary&lt;string,string&gt;" />.
+		#else
+		///    <see cref="IDictionary" />.
+		#endif
 		/// </summary>
 		/// <param name="data">
 		///    A <see cref="byte[]" /> containing a collection of
 		///    FastCGI name/value pairs.
 		/// </param>
 		/// <returns>
-		///    A <see cref="IDictionary" /> object containing the name
-		///    value pairs read from <paramref name="data" />.
+		#if NET_2_0
+		///    A <see cref="T:System.Collections.Generic.IDictionary&lt;string,string&gt;" />
+		#else
+		///    A <see cref="IDictionary" />
+		#endif
+		///    object containing the name/value pairs read from
+		///     <paramref name="data" />.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
 		///    <paramref name="data" /> is <see langword="null" />.
 		/// </exception>
+		#if NET_2_0
+		public static IDictionary<string,string> FromData (byte [] data)
+		#else
 		public static IDictionary FromData (byte [] data)
+		#endif
 		{
 			if (data == null)
 				throw new ArgumentNullException ("data");
 			
 			// Specialized.NameValueCollection would probably be
 			// better, but it doesn't implement IDictionary.
+			#if NET_2_0
+			Dictionary<string,string> pairs =
+				new Dictionary<string,string> ();
+			#else
 			Hashtable pairs = new Hashtable ();
+			#endif
 			int index = 0;
 			
 			// Loop through the array, reading pairs at a specified
@@ -246,11 +269,21 @@ namespace Mono.FastCgi {
 		}
 		
 		/// <summary>
-		///    Reads name/value pairs from a <see cref="IDictionary" />
+		///    Reads name/value pairs from a
+		#if NET_2_0
+		///    <see cref="T:System.Collections.Generic.IDictionary&lt;string,string&gt;" />
+		#else
+		///    <see cref="IDictionary" />
+		#endif
 		///    and stores them as FastCGI name/value pairs.
 		/// </summary>
 		/// <param name="pairs">
-		///    A <see cref="IDictionary" /> containing string pairs.
+		#if NET_2_0
+		///    A <see cref="T:System.Collections.Generic.IDictionary&lt;string,string&gt;" />
+		#else
+		///    A <see cref="IDictionary" />
+		#endif
+		///    containing string pairs.
 		/// </param>
 		/// <returns>
 		///    A <see cref="byte[]" /> containing FastCGI name/value
@@ -263,7 +296,11 @@ namespace Mono.FastCgi {
 		///    <paramref name="pairs" /> contains a name or value not of
 		///    type <see cref="string" />.
 		/// </exception>
+		#if NET_2_0
+		public static byte [] GetData (IDictionary<string,string> pairs)
+		#else
 		public static byte [] GetData (IDictionary pairs)
+		#endif
 		{
 			if (pairs == null)
 				throw new ArgumentNullException ("pairs");
@@ -275,7 +312,12 @@ namespace Mono.FastCgi {
 			// contents of "pairs".
 			
 			int total_size = 0;
+			
+			#if NET_2_0
+			foreach (string key in pairs.Keys)
+			#else
 			foreach (object key in pairs.Keys)
+			#endif
 			{
 				string name = key as string;
 				string value = pairs [key] as string;
@@ -299,7 +341,12 @@ namespace Mono.FastCgi {
 			
 			// Fill the data array with the data.
 			int index = 0;
+			
+			#if NET_2_0
+			foreach (string key in pairs.Keys)
+			#else
 			foreach (object key in pairs.Keys)
+			#endif
 			{
 				string name = key as string;
 				string value = pairs [key] as string;

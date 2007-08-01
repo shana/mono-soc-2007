@@ -28,7 +28,11 @@
 
 using System;
 using System.Threading;
+#if NET_2_0
+using System.Collections.Generic;
+#else
 using System.Collections;
+#endif
 using System.Globalization;
 
 namespace Mono.FastCgi {
@@ -42,7 +46,11 @@ namespace Mono.FastCgi {
 		/// <summary>
 		///    Contains a list of the current connections.
 		/// </summary>
+		#if NET_2_0
+		private List<Connection> connections = new List<Connection> ();
+		#else
 		private ArrayList connections = new ArrayList ();
+		#endif
 		
 		/// <summary>
 		///    Contains the socket to listen on.
@@ -340,7 +348,12 @@ namespace Mono.FastCgi {
 
 			started = false;
 			listen_socket.Close ();
+			#if NET_2_0
+			foreach (Connection c in new List<Connection> (
+				connections)) {
+			#else
 			foreach (Connection c in new ArrayList (connections)) {
+			#endif
 				EndConnection (c);
 			}
 			
@@ -385,9 +398,22 @@ namespace Mono.FastCgi {
 		///    Gets name/value pairs for server variables.
 		/// </summary>
 		/// <param name="names">
-		///    A <see cref="IEnumerable" /> object containing FastCGI
-		///    server variable names.
+		#if NET_2_0
+		///    A <see cref="T:System.Collections.Generic.IEnumerable&lt;string&gt;" />
+		#else
+		///    A <see cref="IEnumerable" />
+		#endif
+		///    object containing FastCGI server variable names.
 		/// </param>
+		/// <returns>
+		#if NET_2_0
+		///    A <see cref="T:System.Collections.Generic.IDictionary&lt;string,string&gt;" />
+		#else
+		///    A <see cref="IDictionary" />
+		#endif
+		///    object containing the server variables used by the
+		///    current instance.
+		/// </returns>
 		/// <remarks>
 		///    <para>A FastCGI client can at any time request
 		///    information on a collection of server variables. It
@@ -402,13 +428,24 @@ namespace Mono.FastCgi {
 		/// <exception cref="ArgumentException">
 		///    <paramref name="names" /> contains a non-string value.
 		/// </exception>
+		#if NET_2_0
+		public IDictionary<string,string> GetValues (IEnumerable<string>
+		                                             names)
+		#else
 		public IDictionary GetValues (IEnumerable names)
+		#endif
 		{
 			if (names == null)
 				throw new ArgumentNullException ("names");
 			
+			#if NET_2_0
+			Dictionary<string,string> pairs =
+				new Dictionary<string,string> ();
+			foreach (string key in names) {
+			#else
 			Hashtable pairs = new Hashtable ();
 			foreach (object key in names) {
+			#endif
 				
 				if (pairs.ContainsKey (key)) {
 					Logger.Write (LogLevel.Warning,

@@ -35,7 +35,7 @@ namespace Mono.FastCgi {
 	/// </summary>
 	public abstract class Socket
 	{
-		/// <seealso cref="System.Net.Sockets.Socket.Close" />.
+		/// <seealso cref="System.Net.Sockets.Socket.Close()" />.
 		public abstract void Close ();
 		
 		/// <seealso cref="System.Net.Sockets.Socket.Receive(byte[],int,int,System.Net.Sockets.SocketFlags)" />.
@@ -50,7 +50,7 @@ namespace Mono.FastCgi {
 		/// <seealso cref="System.Net.Sockets.Socket.Listen" />.
 		public abstract void Listen (int backlog);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.BeginAccept" />.
+		/// <seealso cref="System.Net.Sockets.Socket.BeginAccept(AsyncCallback,object)" />.
 		public abstract IAsyncResult BeginAccept (AsyncCallback callback, object state);
 		
 		/// <seealso cref="System.Net.Sockets.Socket.EndAccept(IAsyncResult)" />.

@@ -17,7 +17,7 @@ FCGI_CSFILES = \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/StandardSocket.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/TcpSocket.cs
 
-FCGI_DEPS = $(WEB_CSFILES)
+FCGI_DEPS = $(FCGI_CSFILES)
 
 FCGI_FLAGS = /unsafe /r:Mono.Posix
 

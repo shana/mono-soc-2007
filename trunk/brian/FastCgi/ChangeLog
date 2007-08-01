@@ -1,3 +1,33 @@
+2007-08-01 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/linux/cherokee.html: Trivial change.
+	
+	* src/Mono.FastCgi/Structures/Record.cs: Remove "using
+	System.Collections" as it doesn't.
+	
+	* src/Mono.FastCgi/Structures/NameValuePair.cs: Use generics when
+	targetting .NET 2.0.
+	
+	* src/Mono.FastCgi/Connection.cs: Use generics when targetting .NET 2.0.
+	
+	* src/Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs: Update
+	docs to avoid warning when targetting 2.0.
+	
+	* src/Mono.FastCgi/Mono.FastCgi.mdp: Target 2.0.
+	
+	* src/Mono.FastCgi/Server.cs: Use generics when targetting .NET 2.0.
+	
+	* src/Mono.FastCgi/Requests/Request.cs: Use generics when targetting
+	.NET 2.0.
+	
+	* src/Mono.FastCgi/Requests/ResponderRequest.cs: Remove "using
+	System.Collections" as it doesn't.
+	
+	* src/Mono.FastCgi.sources: Correct FCGI_DEPS. Wasn't pointing to
+	correct files.
+	
+	* src/Makefile.am: Define "NET_2_0" for Mono.FastCgi2.dll
+
 2007-07-31 Brian Nickel <brian.nickel@gmail.com>
 
 	* src/Mono.FastCgi/Structures/Record.cs: It ends up I've been doing Send
