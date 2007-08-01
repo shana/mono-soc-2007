@@ -125,7 +125,7 @@ using MonoDevelop.Core;
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					while (r.Read()) {
-						ColumnSchema column = new ColumnSchema (this);
+						ColumnSchema column = new ColumnSchema (this, table);
 						
 						column.Name = r.GetString (2);
 						column.DataTypeName = r.GetString (3);
@@ -134,11 +134,11 @@ using MonoDevelop.Core;
 						column.OwnerName = table.OwnerName;
 						column.SchemaName = table.SchemaName;
 						column.IsNullable = r.GetValue (7).ToString () == "0" ? true : false;
-						column.Length = r.GetInt32 (4);
-						column.Precision = r.IsDBNull (5) ? 0 : r.GetInt32 (5);
-						column.Scale = r.IsDBNull (6) ? 0 : r.GetInt32 (6);
+						column.DataType.LengthRange.Default = r.GetInt32 (4);
+						column.DataType.PrecisionRange.Default = r.IsDBNull (5) ? 0 : r.GetInt32 (5);
+						column.DataType.ScaleRange.Default = r.IsDBNull (6) ? 0 : r.GetInt32 (6);
 						column.Definition = String.Concat (column.Name, " ", column.DataTypeName, " ",
-							column.Length > 0 ? "(" + column.Length + ")" : "",
+							column.DataType.LengthRange.Default > 0 ? "(" + column.DataType.LengthRange.Default + ")" : "",
 							column.IsNullable ? " NULL" : " NOT NULL");
 						//TODO: append " DEFAULT ..." if column.Default.Length > 0
 
@@ -202,7 +202,7 @@ using MonoDevelop.Core;
 			using (command) {
 				using (IDataReader r = command.ExecuteReader()) {
 					for (int i = 0; i < r.FieldCount; i++) {
-						ColumnSchema column = new ColumnSchema (this);
+						ColumnSchema column = new ColumnSchema (this, view);
 						
 						column.Name = r.GetName(i);
 						column.DataTypeName = r.GetDataTypeName(i);
@@ -593,6 +593,16 @@ using MonoDevelop.Core;
 		{
 			Rename (trigger.Name, name, "OBJECT");
 			trigger.Name = name;
+		}
+		
+		public override string GetViewAlterStatement (ViewSchema view)
+		{
+			return String.Concat ("DROP VIEW ", view.Name, "; ", Environment.NewLine, view.Definition); 
+		}
+		
+		public override string GetProcedureAlterStatement (ProcedureSchema procedure)
+		{
+			return String.Concat ("DROP PROCEDURE ", procedure.Name, "; ", Environment.NewLine, procedure.Definition);
 		}
 		
 		protected string GetTableDefinition (TableSchema table)
