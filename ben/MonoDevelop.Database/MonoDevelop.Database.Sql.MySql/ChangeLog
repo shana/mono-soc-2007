@@ -1,3 +1,7 @@
+2007-08-02  Ben Motmans <ben.motmans@gmail.com>
+
+	* MySqlSchemaProvider.cs: also create triggers in the create table method
+
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>
 
 	* MySqlSchemaProvider.cs: Catch exceptions and notify the user and various
