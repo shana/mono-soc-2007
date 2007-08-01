@@ -8,8 +8,9 @@ REFS =  \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Core.Gui.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.Gui.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
-	-r:$(top_builddir)/Extras/MonoDevelop.Database/MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll \
 	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
 	-r:Mono.Posix \
 	-r:System \
@@ -37,7 +38,6 @@ FILES =  \
 	gtk-gui/MonoDevelop.Database.Components.ShowTextDialog.cs \
 	gtk-gui/MonoDevelop.Database.Components.SqlEditorWidget.cs \
 	gtk-gui/MonoDevelop.Database.Components.WaitDialog.cs \
-	MonoDevelop.Database.Components.addin.xml \
 	Widgets/CellRendererTypeCombo.cs \
 	Widgets/ColumnMappingWidget.cs \
 	Widgets/DatabaseConnectionContextComboBox.cs \

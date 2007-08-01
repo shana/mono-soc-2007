@@ -7,15 +7,14 @@ REFS =  \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
-	-r:$(top_builddir)/Extras/MonoDevelop.Database/MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
-	-r:$(top_builddir)/Extras/MonoDevelop.Database/MonoDevelop.Database.Designer/bin/Debug/MonoDevelop.Database.Designer.dll \
-	-r:$(top_builddir)/Extras/MonoDevelop.Database/MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll \
 	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
 	-r:System \
 	-r:System.Data
 
 FILES =  \
-	MonoDevelop.Database.Sql.SqlServer.addin.xml \
 	SqlServerConnectionProvider.cs \
 	SqlServerDbFactory.cs \
 	SqlServerDialect.cs \
