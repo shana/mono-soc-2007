@@ -37,12 +37,28 @@ namespace Gendarme.Rules.Performance {
 
 	public class AvoidUnusedParametersRule : IMethodRule {
 		
-		private bool UseParameter (int parameterIndex, MethodDefinition method) 
+		private bool UseParameter (ParameterDefinition parameter, MethodDefinition method) 
 		{
 			foreach (Instruction instruction in method.Body.Instructions) {
-				string instructionName = "ldarg." + parameterIndex;
-				if (String.Compare (instruction.OpCode.Name, instructionName) == 0) {
-					return true;
+				switch (instruction.OpCode.Code) {
+					case Code.Ldarg_1:
+						if (method.Parameters.IndexOf (parameter) == 0)
+							return true;
+						break;
+					case Code.Ldarg_2:
+						if (method.Parameters.IndexOf (parameter) == 1)
+							return true;
+						break;
+					case Code.Ldarg_3:
+						if (method.Parameters.IndexOf (parameter) == 2)
+							return true;
+						break;
+					case Code.Ldarg_S:
+						if (instruction.Operand == parameter)
+							return true;
+						break;
+					default:
+						break;
 				}
 			}
 			return false;
@@ -86,9 +102,9 @@ namespace Gendarme.Rules.Performance {
 		{
 			ArrayList unusedParameters = new ArrayList ();
 			if (IsExaminable (method)) {
-				for (int index = 0; index < method.Parameters.Count; index++) {
-					if (!UseParameter (index + 1, method))
-						unusedParameters.Add (method.Parameters[index]);
+				foreach (ParameterDefinition parameter in method.Parameters) {
+					if (!UseParameter (parameter, method))
+						unusedParameters.Add (parameter);
 				}
 			}
 			return unusedParameters;

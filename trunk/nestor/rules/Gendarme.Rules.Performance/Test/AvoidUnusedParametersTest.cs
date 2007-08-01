@@ -81,6 +81,15 @@ namespace Test.Rules.Performance {
 		{
 			Console.WriteLine ("Method with unused parameters");
 		}
+
+		public void MethodWith5UsedParameters (int x, IEnumerable enumerable, string foo, char c, float f) 
+		{
+			Console.WriteLine (f);
+			Console.WriteLine (c);
+			Console.WriteLine (foo);
+			Console.WriteLine (enumerable);
+			Console.WriteLine (x);
+		}
 		
 		[DllImport ("libc.so")]
 		private static extern double cos (double x);
@@ -189,6 +198,13 @@ namespace Test.Rules.Performance {
 			Assert.IsNull (messageCollection);
 		} 
 
+		[Test]
+		public void MethodWith5UsedParametersTest () 
+		{
+			method = GetMethodForTest ("MethodWith5UsedParameters");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
 
 		private MethodDefinition GetMethodForTest (string methodName) 
 		{
