@@ -145,14 +145,18 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void OnCreateTableThreaded (object state)
 		{
-			Runtime.LoggingService.Error ("OnCreateTableThreaded");
 			object[] objs = state as object[];
 			
 			ISchemaProvider provider = objs[0] as ISchemaProvider;
 			TableSchema table = objs[1] as TableSchema;
 			BaseNode node = objs[2] as BaseNode;
 			
-			provider.CreateTable (table);
+			string sql = table.Definition;
+			
+			IPooledDbConnection conn = provider.ConnectionPool.Request ();
+			conn.ExecuteNonQuery (sql);
+			conn.Release ();
+			
 			node.Refresh ();
 		}
 		

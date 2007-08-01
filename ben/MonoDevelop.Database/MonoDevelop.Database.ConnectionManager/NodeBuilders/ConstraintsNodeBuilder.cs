@@ -86,7 +86,13 @@ namespace MonoDevelop.Database.ConnectionManager
 			NodeState nodeState = state as NodeState;
 			ConstraintsNode node = nodeState.DataObject as ConstraintsNode;
 			
-			ConstraintSchemaCollection constraints = nodeState.ConnectionContext.SchemaProvider.GetTableConstraints (node.Table);
+			ConstraintSchemaCollection constraints = null;
+			if (node.Schema is TableSchema) {
+				constraints = (node.Schema as TableSchema).Constraints;
+			} else if (node.Schema is ColumnSchema) {
+				constraints = (node.Schema as ColumnSchema).Constraints;
+			}
+
 			if (constraints == null)
 				return;
 			

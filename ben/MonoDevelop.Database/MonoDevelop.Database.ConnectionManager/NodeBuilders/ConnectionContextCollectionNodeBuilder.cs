@@ -124,6 +124,27 @@ namespace MonoDevelop.Database.ConnectionManager
 			dlg.Destroy ();
 		}
 		
+		[CommandUpdateHandler (ConnectionManagerCommands.CreateDatabase)]
+		protected void OnUpdateCreateDatabase (CommandInfo info)
+		{
+			info.Enabled = DbFactoryService.DbFactoryCount > 0;
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.AddConnection)]
+		protected void OnAddConnection ()
+		{
+			DatabaseConnectionSettingsDialog dlg = new DatabaseConnectionSettingsDialog ();
+			if (dlg.Run () == (int)ResponseType.Ok)
+				ConnectionContextService.AddDatabaseConnectionContext (dlg.ConnectionSettings);
+			dlg.Destroy ();
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.AddConnection)]
+		protected void OnUpdateAddConnection (CommandInfo info)
+		{
+			info.Enabled = DbFactoryService.DbFactoryCount > 0;
+		}
+		
 		private void OnCreateDatabaseThreaded (object state)
 		{
 			DatabaseConnectionContext context = state as DatabaseConnectionContext;

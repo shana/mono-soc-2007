@@ -1,3 +1,12 @@
+2007-08-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* NodeBuilders/TableNodeBuilder.cs: use a bg thread Select* methods
+	* NodeBuilders/ConstraintsNodeBuilder.cs, NodeBuilders/ColumnNodeBuilder.cs: added support for column constraints
+	* ConnectionManagerCommands.cs, NodeBuilders/ConnectionContextCollectionNodeBuilder.cs:
+	moved AddConnection command into the nodebuilder
+	* ConnectionManagerPad.cs: ConnectionContextService is now automatically initialized
+	* MonoDevelop.Database.ConnectionManager.addin.xml: commented out a command since it caused problems
+
 2007-07-31  Ben Motmans <ben.motmans@gmail.com>
 
 	* NodeBuilders/*.cs: Make use of the GuiProvider to show Gui dialogs

@@ -77,15 +77,4 @@ namespace MonoDevelop.Database.ConnectionManager
 		DropUser,
 		DropTrigger
 	}
-	
-	public class AddConnectionHandler : CommandHandler
-	{
-		protected override void Run ()
-		{
-			DatabaseConnectionSettingsDialog dlg = new DatabaseConnectionSettingsDialog ();
-			if (dlg.Run () == (int)ResponseType.Ok)
-				ConnectionContextService.AddDatabaseConnectionContext (dlg.ConnectionSettings);
-			dlg.Destroy ();
-		}
-	}
 }

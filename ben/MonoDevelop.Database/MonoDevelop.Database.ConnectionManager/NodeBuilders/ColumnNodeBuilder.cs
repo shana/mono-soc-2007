@@ -68,11 +68,32 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
+			TableNode node = dataObject as TableNode;
+			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
+			
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+		}
+		
+		private void BuildChildNodesThreaded (object state)
+		{
+			NodeState nodeState = state as NodeState;
+			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
+
+			if (MetaDataService.IsApplied (provider, typeof (CheckConstraintMetaDataAttribute))
+				|| MetaDataService.IsApplied (provider, typeof (ForeignKeyConstraintMetaDataAttribute))
+				|| MetaDataService.IsApplied (provider, typeof (PrimaryKeyConstraintMetaDataAttribute))
+				|| MetaDataService.IsApplied (provider, typeof (UniqueConstraintMetaDataAttribute))
+			)
+				Services.DispatchService.GuiDispatch (delegate {
+					ColumnSchema column = (nodeState.DataObject as ColumnNode).Column;
+					nodeState.TreeBuilder.AddChild (new ConstraintsNode (nodeState.ConnectionContext, column));
+					nodeState.TreeBuilder.Expanded = true;
+				});
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return false;
+			return true;
 		}
 	}
 }
