@@ -22,6 +22,8 @@ FILES =  \
 	SqlServerPooledDbConnection.cs \
 	SqlServerSchemaProvider.cs
 
+RES = MonoDevelop.Database.Sql.SqlServer.addin.xml
+
 ADDIN = MonoDevelop.Database.Sql.SqlServer.addin.xml
 
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)

@@ -68,7 +68,10 @@ FILES =  \
 	Widgets/SelectSchemaWidget.cs \
 	Widgets/SqlEditorWidget.cs
 
-RES = gtk-gui/gui.stetic
+RES =  \
+	gtk-gui/gui.stetic \
+	gtk-gui/objects.xml \
+	MonoDevelop.Database.Components.addin.xml
 
 ADDIN = MonoDevelop.Database.Components.addin.xml
 
@@ -91,6 +94,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
-EXTRA_DIST = MonoDevelop.Database.Components.addin.xml $(RES)
+EXTRA_DIST =
 
 include $(top_srcdir)/Makefile.include

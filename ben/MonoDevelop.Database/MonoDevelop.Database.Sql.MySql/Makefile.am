@@ -26,6 +26,8 @@ FILES =  \
 MYSQL_FILES = \
 	libs/MySql.Data.dll
 
+RES = MonoDevelop.Database.Sql.MySql.addin.xml
+
 SRC_MYSQL_FILES = $(addprefix $(srcdir)/../, $(MYSQL_FILES))
 BUILD_MYSQL_FILES = $(addprefix $(ADDIN_BUILD)/, $(notdir $(MYSQL_FILES)))
 
@@ -54,8 +56,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN) $(SRC_MYSQL_FILES)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb $(BUILD_MYSQL_FILES)
-EXTRA_DIST =  \
-	$(SRC_MYSQL_FILES) \
-	MonoDevelop.Database.Sql.MySql.addin.xml
+EXTRA_DIST = $(SRC_MYSQL_FILES)
 
 include $(top_srcdir)/Makefile.include

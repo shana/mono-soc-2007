@@ -49,6 +49,8 @@ FILES =  \
 	NodeBuilders/ViewsNodeBuilder.cs \
 	NodeState.cs
 
+RES = MonoDevelop.Database.ConnectionManager.addin.xml
+
 ADDIN = MonoDevelop.Database.ConnectionManager.addin.xml
 
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
@@ -70,6 +72,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
-EXTRA_DIST = MonoDevelop.Database.ConnectionManager.addin.xml
+EXTRA_DIST =
 
 include $(top_srcdir)/Makefile.include

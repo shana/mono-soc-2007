@@ -24,6 +24,8 @@ FILES =  \
 	SqlitePooledDbConnection.cs \
 	SqliteSchemaProvider.cs
 
+RES = MonoDevelop.Database.Sql.Sqlite.addin.xml
+
 SQLITE_FILES = \
 	libs/Mono.Data.Sqlite.dll
 
@@ -55,8 +57,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN) $(SRC_SQLITE_FILES)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb $(BUILD_SQLITE_FILES)
-EXTRA_DIST =  \
-	$(SRC_SQLITE_FILES) \
-	MonoDevelop.Database.Sql.Sqlite.addin.xml
+EXTRA_DIST = $(SRC_SQLITE_FILES)
 
 include $(top_srcdir)/Makefile.include
