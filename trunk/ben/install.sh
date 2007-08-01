@@ -5,8 +5,8 @@ rm -rf $DIR
 mkdir -p $DIR
 echo $DIR
 
-cp ./contrib/QuickGraph.dll $DIR/
-cp ./contrib/Mono.Data.Sqlite.dll $DIR/
+
+cp -f ./contrib/Mono.Data.Sqlite.dll $DIR/
 
 find ./MonoDevelop.Database -type f -iname "*.dll" -or -iname "*.addin.xml" | while read a; do
 	cp -f "$a" $DIR
@@ -30,3 +30,4 @@ rm $DIR/MonoDevelop.Database.Sql.Sybase.dll
 rm $DIR/MonoDevelop.Database.Visualization.dll
 rm $DIR/MonoDevelop.Database.Project.dll
 rm $DIR/MonoDevelop.Database.GlueGenerator.dll
+rm $DIR/QuickGraph.dll
