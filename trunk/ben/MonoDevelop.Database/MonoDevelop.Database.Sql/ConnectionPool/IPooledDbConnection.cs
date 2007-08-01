@@ -48,6 +48,12 @@ namespace MonoDevelop.Database.Sql
 		
 		IDbCommand CreateStoredProcedure (string sql);
 		
+		int ExecuteNonQuery (string sql);
+		object ExecuteScalar (string sql);
+		IDataReader ExecuteReader (string sql);
+		DataSet ExecuteSet (string sql);
+		DataTable ExecuteTable (string sql);
+		
 		int ExecuteNonQuery (IDbCommand command);
 		object ExecuteScalar (IDbCommand command);
 		IDataReader ExecuteReader (IDbCommand command);

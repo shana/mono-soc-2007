@@ -1,17 +1,17 @@
-<Addin	id		= "MonoDevelop.Database.Sql"
+<Addin	id		= "Database.Sql"
 	namespace	= "MonoDevelop"
 	name		= "Mono Data Sql"
 	author		= "Christian Hergert, Ben Motmans"
 	copyright	= "MIT X11"
 	url		= "http://www.monodevelop.com"
 	description	= "Database Module"
-	version		= "0.14.0">
+	version		= "0.15.0">
     
 	<Runtime>
 		<Import assembly="MonoDevelop.Database.Sql.dll"/>
 	</Runtime>
 	
-	<ExtensionPoint path = "/Mono/Data/Sql" name = "Mono database providers">
+	<ExtensionPoint path = "/MonoDevelop/Database/Sql" name = "MonoDevelop database providers">
 		<Description>MonoDevelop database factory addins.</Description>
 		<ExtensionNode name="Class" type="MonoDevelop.Database.Sql.DbFactoryCodon" />
 	</ExtensionPoint>

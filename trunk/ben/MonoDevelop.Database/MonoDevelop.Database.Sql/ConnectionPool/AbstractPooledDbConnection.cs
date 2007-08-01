@@ -119,12 +119,72 @@ namespace MonoDevelop.Database.Sql
 			return command;
 		}
 		
+		public virtual int ExecuteNonQuery (string sql)
+		{
+			if (String.IsNullOrEmpty (sql))
+				throw new ArgumentNullException ("sql");
+			
+			int result = -1;
+			using (IDbCommand command = CreateCommand (sql))
+				result = ExecuteNonQuery (command);
+			return result;
+		}
+
+		public virtual object ExecuteScalar (string sql)
+		{
+			if (String.IsNullOrEmpty (sql))
+				throw new ArgumentNullException ("sql");
+			
+			object result = null;
+			using (IDbCommand command = CreateCommand (sql))
+				result = ExecuteScalar (command);
+			return result;
+		}
+
+		public virtual IDataReader ExecuteReader (string sql)
+		{
+			if (String.IsNullOrEmpty (sql))
+				throw new ArgumentNullException ("sql");
+			
+			IDataReader result = null;
+			using (IDbCommand command = CreateCommand (sql))
+				result = ExecuteReader (command);
+			return result;
+		}
+		
+		public virtual DataSet ExecuteSet (string sql)
+		{
+			if (String.IsNullOrEmpty (sql))
+				throw new ArgumentNullException ("sql");
+			
+			DataSet result = null;
+			using (IDbCommand command = CreateCommand (sql))
+				result = ExecuteSet (command);
+			return result;
+		}
+
+		public virtual DataTable ExecuteTable (string sql)
+		{
+			if (String.IsNullOrEmpty (sql))
+				throw new ArgumentNullException ("sql");
+			
+			DataTable result = null;
+			using (IDbCommand command = CreateCommand (sql))
+				result = ExecuteTable (command);
+			return result;
+		}
+		
 		public virtual int ExecuteNonQuery (IDbCommand command)
 		{
 			if (command == null)
 				throw new ArgumentNullException ("command");
-			
-			return command.ExecuteNonQuery ();
+
+			try {
+				return command.ExecuteNonQuery ();
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+				return -1;
+			}
 		}
 
 		public virtual object ExecuteScalar (IDbCommand command)
@@ -132,7 +192,12 @@ namespace MonoDevelop.Database.Sql
 			if (command == null)
 				throw new ArgumentNullException ("command");
 
-			return command.ExecuteScalar ();
+			try {
+				return command.ExecuteScalar ();
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+				return null;
+			}
 		}
 
 		public virtual IDataReader ExecuteReader (IDbCommand command)
@@ -140,7 +205,12 @@ namespace MonoDevelop.Database.Sql
 			if (command == null)
 				throw new ArgumentNullException ("command");
 
-			return command.ExecuteReader ();
+			try {
+				return command.ExecuteReader ();
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+				return null;
+			}
 		}
 
 		public abstract DataSet ExecuteSet (IDbCommand command);

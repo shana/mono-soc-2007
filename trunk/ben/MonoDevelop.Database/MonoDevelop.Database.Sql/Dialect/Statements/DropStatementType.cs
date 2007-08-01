@@ -33,6 +33,8 @@ namespace MonoDevelop.Database.Sql
 	{
 		Database,
 		Table,
-		Index
+		Index,
+		View,
+		Procedure
 	}
 }

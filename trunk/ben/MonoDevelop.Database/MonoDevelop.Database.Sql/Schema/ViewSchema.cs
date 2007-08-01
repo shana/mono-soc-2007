@@ -91,7 +91,12 @@ namespace MonoDevelop.Database.Sql
 		
 		public override object Clone ()
 		{
-			return new ViewSchema (this);
+			ViewSchema clone = new ViewSchema (this);
+			if (clone.columns != null) {
+				foreach (ColumnSchema column in clone.columns)
+					column.Parent = clone;
+			}
+			return clone;
 		}
 	}
 }

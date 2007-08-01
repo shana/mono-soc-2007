@@ -97,16 +97,22 @@ namespace MonoDevelop.Database.Sql
 		void RenameTrigger (TriggerSchema trigger, string name);
 		void RenameUser (UserSchema user, string name);
 		
+		string GetTableCreateStatement (TableSchema table);
+		string GetTableAlterStatement (TableSchema table);
+		string GetViewAlterStatement (ViewSchema view);
+		string GetProcedureAlterStatement (ProcedureSchema procedure);
+		
 		DatabaseSchema GetNewDatabaseSchema (string name);
 		TableSchema GetNewTableSchema (string name);
 		ViewSchema GetNewViewSchema (string name);
 		ProcedureSchema GetNewProcedureSchema (string name);
-		ColumnSchema GetNewColumnSchema (string name);
+		ColumnSchema GetNewColumnSchema (string name, ISchema parent);
 		ParameterSchema GetNewParameterSchema (string name);
 		CheckConstraintSchema GetNewCheckConstraintSchema (string name);
 		UniqueConstraintSchema GetNewUniqueConstraintSchema (string name);
 		PrimaryKeyConstraintSchema GetNewPrimaryKeyConstraintSchema (string name);
 		ForeignKeyConstraintSchema GetNewForeignKeyConstraintSchema (string name);
 		UserSchema GetNewUserSchema (string name);
+		TriggerSchema GetNewTriggerSchema (string name);
 	}
 }
