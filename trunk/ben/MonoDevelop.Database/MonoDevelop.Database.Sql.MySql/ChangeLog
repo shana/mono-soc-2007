@@ -1,3 +1,8 @@
+2007-08-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* MySqlSchemaProvider.cs: Catch exceptions and notify the user and various
+	small bugfixes
+
 2007-07-31  Ben Motmans <ben.motmans@gmail.com>
 
 	* MySqlDbFactory.cs, MySqlGuiProvider.cs: Added a GuiProvider

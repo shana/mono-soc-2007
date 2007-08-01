@@ -36,6 +36,16 @@ using System.Collections.Generic;
 using MonoDevelop.Core;
 namespace MonoDevelop.Database.Sql
 {
+	[DatabaseMetaData (DatabaseMetaData.Create | DatabaseMetaData.Alter | DatabaseMetaData.Drop | DatabaseMetaData.Rename)]
+	[TableMetaData (TableMetaData.Create | TableMetaData.Alter | TableMetaData.Drop | TableMetaData.Rename | TableMetaData.Name | TableMetaData.Schema | TableMetaData.Columns | TableMetaData.Definition | TableMetaData.Triggers | TableMetaData.IsSystem | TableMetaData.PrimaryKeyConstraint | TableMetaData.CheckConstraint | TableMetaData.UniqueConstraint | TableMetaData.ForeignKeyConstraint | TableMetaData.CanAppendColumn)]
+	[ViewMetaData (ViewMetaData.Create | ViewMetaData.Alter | ViewMetaData.Drop | ViewMetaData.Rename | ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
+	[ProcedureMetaData (ProcedureMetaData.Create | ProcedureMetaData.Alter | ProcedureMetaData.Drop | ProcedureMetaData.Rename | ProcedureMetaData.Name | ProcedureMetaData.Schema | ProcedureMetaData.Definition)]
+	[TableColumnMetaData (ColumnMetaData.Name | ColumnMetaData.Definition | ColumnMetaData.Schema | ColumnMetaData.DataType | ColumnMetaData.DefaultValue | ColumnMetaData.Nullable | ColumnMetaData.Position | ColumnMetaData.PrimaryKeyConstraint | ColumnMetaData.CheckConstraint | ColumnMetaData.UniqueConstraint | ColumnMetaData.ForeignKeyConstraint)]
+	[ParameterMetaData (ParameterMetaData.Name | ParameterMetaData.DataType | ParameterMetaData.Direction)]   
+	[PrimaryKeyConstraintMetaData (PrimaryKeyConstraintMetaData.Name | PrimaryKeyConstraintMetaData.Columns | PrimaryKeyConstraintMetaData.IsColumnConstraint)]
+	[CheckConstraintMetaData (CheckConstraintMetaData.Name | CheckConstraintMetaData.Columns | CheckConstraintMetaData.IsColumnConstraint | CheckConstraintMetaData.Source)]
+	[UniqueConstraintMetaData (UniqueConstraintMetaData.Name | UniqueConstraintMetaData.Columns | UniqueConstraintMetaData.IsColumnConstraint)]
+	[TriggerMetaData (TriggerMetaData.Name | TriggerMetaData.TableName | TriggerMetaData.TriggerType | TriggerMetaData.TriggerEvent | TriggerMetaData.Position | TriggerMetaData.IsActive | TriggerMetaData.Source | TriggerMetaData.Create | TriggerMetaData.Alter | TriggerMetaData.Drop | TriggerMetaData.Rename)]
 	public class MySqlSchemaProvider : AbstractSchemaProvider
 	{
 		public MySqlSchemaProvider (IConnectionPool connectionPool)
@@ -49,16 +59,20 @@ using MonoDevelop.Core;
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SHOW DATABASES;");
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						DatabaseSchema db = new DatabaseSchema (this);
-						db.Name = r.GetString (0);
-						databases.Add (db);
-						
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							DatabaseSchema db = new DatabaseSchema (this);
+							db.Name = r.GetString (0);
+							databases.Add (db);
+							
+						}
+						r.Close ();
 					}
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -73,51 +87,59 @@ using MonoDevelop.Core;
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SHOW TABLES;");
-			using (command) {
-				if (GetMainVersion (command) >= 5) {
-					//in mysql 5.x we can use an sql query to provide the comment
-					command.CommandText = "SELECT TABLE_NAME, TABLE_SCHEMA, TABLE_TYPE, TABLE_COMMENT FROM `information_schema`.`TABLES` "
-						+ "WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='"
-						+ command.Connection.Database
-						+ "' ORDER BY TABLE_NAME;";
-					using (IDataReader r = command.ExecuteReader()) {
-						while (r.Read ()) {
-							TableSchema table = new TableSchema (this);
-		
-							table.Name = r.GetString (0);
-							//table.OwnerName = command.Connection.Database;
-							table.Comment = r.GetString (3);
-							
-							IPooledDbConnection conn2 = connectionPool.Request ();
-							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
-							using (command2)
-								table.Definition = command2.ExecuteScalar () as string;
-							conn2.Release ();
-							
-							tables.Add (table);
+			try {
+				using (command) {
+					if (GetMainVersion (command) >= 5) {
+						//in mysql 5.x we can use an sql query to provide the comment
+						command.CommandText = "SELECT TABLE_NAME, TABLE_SCHEMA, TABLE_TYPE, TABLE_COMMENT FROM `information_schema`.`TABLES` "
+							+ "WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='"
+							+ command.Connection.Database
+							+ "' ORDER BY TABLE_NAME;";
+						using (IDataReader r = command.ExecuteReader()) {
+							while (r.Read ()) {
+								TableSchema table = new TableSchema (this);
+			
+								table.Name = r.GetString (0);
+								table.SchemaName = r.GetString (1);
+								table.Comment = r.IsDBNull (3) ? null : r.GetString (3);
+								
+								IPooledDbConnection conn2 = connectionPool.Request ();
+								IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
+								using (IDataReader r2 = command2.ExecuteReader()) {
+									r2.Read ();
+									table.Definition = r2.GetString (1);
+								}
+								conn2.Release ();
+								
+								tables.Add (table);
+							}
+							r.Close ();
 						}
-						r.Close ();
-					}
-				} else {
-					//use the default command for mysql 4.x and 3.23
-					using (IDataReader r = command.ExecuteReader()) {
-						while (r.Read ()) {
-							TableSchema table = new TableSchema (this);
-		
-							table.Name = r.GetString (0);
-							//table.OwnerName = command.Connection.Database;
-							
-							IPooledDbConnection conn2 = connectionPool.Request ();
-							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
-							using (command2)
-								table.Definition = command2.ExecuteScalar () as string;
-							conn2.Release ();
-							
-							tables.Add (table);
+					} else {
+						//use the default command for mysql 4.x and 3.23
+						using (IDataReader r = command.ExecuteReader()) {
+							while (r.Read ()) {
+								TableSchema table = new TableSchema (this);
+			
+								table.Name = r.GetString (0);
+								table.SchemaName = command.Connection.Database;
+								
+								IPooledDbConnection conn2 = connectionPool.Request ();
+								IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + table.Name + "`;");
+								using (IDataReader r2 = command2.ExecuteReader()) {
+									r2.Read ();
+									table.Definition = r2.GetString (1);
+								}
+								conn2.Release ();
+								
+								tables.Add (table);
+							}
+							r.Close ();
 						}
-						r.Close ();
 					}
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -130,22 +152,26 @@ using MonoDevelop.Core;
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", table.Name));
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ColumnSchema column = new ColumnSchema (this);
-		
-						column.Name = r.GetString (0);
-						column.DataTypeName = r.GetString (1);
-						column.IsNullable = r.IsDBNull (2);
-						column.DefaultValue = r.GetString (4);
-						column.Comment = r.GetString (5);
-						column.OwnerName = table.Name;
-		
-						columns.Add (column);
-					}
-					r.Close ();
-				};
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							ColumnSchema column = new ColumnSchema (this, table);
+
+							column.Name = r.GetString (0);
+							column.DataTypeName = r.GetString (1);
+							column.IsNullable = String.Compare (r.GetString (2), "YES", true) == 0;
+							column.DefaultValue = r.IsDBNull (4) ? null : r.GetString (4);
+							//TODO: if r.GetString (5) constains "auto_increment"
+							column.OwnerName = table.Name;
+			
+							columns.Add (column);
+						}
+						r.Close ();
+					};
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -163,26 +189,32 @@ using MonoDevelop.Core;
 				+ ConnectionPool.ConnectionContext.ConnectionSettings.Database +
 				"' ORDER BY TABLE_NAME"
 			);
-			using (command) {
-				if (GetMainVersion (command) >= 5) {
-					using (IDataReader r = command.ExecuteReader()) {
-						while (r.Read ()) {
-							ViewSchema view = new ViewSchema (this);
-		
-							view.Name = r.GetString (0);
-							view.OwnerName = r.GetString (1);
-							
-							IPooledDbConnection conn2 = connectionPool.Request ();
-							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + view.Name + "`;");
-							using (command2)
-								view.Definition = command2.ExecuteScalar () as string;
-							conn2.Release ();
-							
-							views.Add (view);
+			try {
+				using (command) {
+					if (GetMainVersion (command) >= 5) {
+						using (IDataReader r = command.ExecuteReader()) {
+							while (r.Read ()) {
+								ViewSchema view = new ViewSchema (this);
+			
+								view.Name = r.GetString (0);
+								view.OwnerName = r.GetString (1);
+								
+								IPooledDbConnection conn2 = connectionPool.Request ();
+								IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE TABLE `" + view.Name + "`;");
+								using (IDataReader r2 = command2.ExecuteReader()) {
+									r2.Read ();
+									view.Definition = r2.GetString (1);
+								}
+								conn2.Release ();
+								
+								views.Add (view);
+							}
+							r.Close ();
 						}
-						r.Close ();
-					}
-				} //else: do nothing, since views are only supported since mysql 5.x
+					} //else: do nothing, since views are only supported since mysql 5.x
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -194,23 +226,27 @@ using MonoDevelop.Core;
 			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", view.Name));
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ColumnSchema column = new ColumnSchema (this);
-		
-						column.Name = r.GetString (0);
-						column.DataTypeName = r.GetString (1);
-						column.IsNullable = r.IsDBNull (2);
-						column.DefaultValue = r.GetString (4);
-						column.Comment = r.GetString (5);
-						column.OwnerName = view.Name;
-		
-						columns.Add (column);
-					}
-					r.Close ();
-				};
+				IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", view.Name));
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							ColumnSchema column = new ColumnSchema (this, view);
+			
+							column.Name = r.GetString (0);
+							column.DataTypeName = r.GetString (1);
+							column.IsNullable = r.IsDBNull (2);
+							column.DefaultValue = r.GetString (4);
+							column.Comment = r.GetString (5);
+							column.OwnerName = view.Name;
+			
+							columns.Add (column);
+						}
+						r.Close ();
+					};
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -228,74 +264,89 @@ using MonoDevelop.Core;
 				+ ConnectionPool.ConnectionContext.ConnectionSettings.Database +
 				"' ORDER BY ROUTINE_NAME"
 			);
-			
-			using (command) {
-				if (GetMainVersion (command) >= 5) {
-				    	using (IDataReader r = command.ExecuteReader()) {
-				    		while (r.Read ()) {
-				    			ProcedureSchema procedure = new ProcedureSchema (this);
-				    			
-				    			procedure.Name = r.GetString (0);
-				    			procedure.OwnerName = r.GetString (1);
-				    			procedure.IsSystemProcedure = r.GetString (2).ToLower ().Contains ("system");
-							
-							IPooledDbConnection conn2 = connectionPool.Request ();
-							IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE PROCEDURE `" + procedure.Name + "`;");
-							using (command2)
-								procedure.Definition = command2.ExecuteScalar () as string;
-				    			conn2.Release ();
-							
-				    			procedures.Add (procedure);
-				    		}
-						r.Close ();
-					}
-				} //else: do nothing, since procedures are only supported since mysql 5.x
+			try {
+				using (command) {
+					if (GetMainVersion (command) >= 5) {
+					    	using (IDataReader r = command.ExecuteReader()) {
+					    		while (r.Read ()) {
+					    			ProcedureSchema procedure = new ProcedureSchema (this);
+					    			
+					    			procedure.Name = r.GetString (0);
+					    			procedure.OwnerName = r.GetString (1);
+					    			procedure.IsSystemProcedure = r.GetString (2).ToLower ().Contains ("system");
+								
+								IPooledDbConnection conn2 = connectionPool.Request ();
+								IDbCommand command2 = conn2.CreateCommand ("SHOW CREATE PROCEDURE `" + procedure.Name + "`;");
+								using (IDataReader r2 = command2.ExecuteReader()) {
+									r2.Read ();
+									procedure.Definition = r2.GetString (2);
+								}
+					    			conn2.Release ();
+								
+					    			procedures.Add (procedure);
+					    		}
+							r.Close ();
+						}
+					} //else: do nothing, since procedures are only supported since mysql 5.x
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
 			return procedures;
 		}
-//
-//		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
-//		{
-//			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
-//			
-//			IPooledDbConnection conn = connectionPool.Request ();
-//			IDbCommand command = conn.CreateCommand (
-//				"SELECT param_list FROM mysql.proc where name = '" + procedure.Name + "'"
-//			);
-//			
-//			using (command) {
-//				if (GetMainVersion (command) >= 5) {
-//				    	using (IDataReader r = command.ExecuteReader()) {
-//				    		while (r.Read ()) {
-//				    			if (r.IsDBNull (0))
-//				    				continue;
-//				
-//				    			string[] field = Encoding.ASCII.GetString ((byte[])r.GetValue (0)).Split (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-//				    			foreach (string chunk in field) {
-//				    				ColumnSchema column = new ColumnSchema (this);
-//				    				
-//				    				string[] tmp = chunk.TrimStart (new char[] { ' ' }).Split (new char[] { ' ' });
-//				    				column.Name = tmp[0];
-//				    				column.OwnerName = procedure.Name;
-//								column.DataTypeName = tmp[1];
-//				    				
-//				    				columns.Add (column);
-//				    			}
-//				    		}
-//						r.Close ();
-//					}
-//				} //else: do nothing, since procedures are only supported since mysql 5.x
-//			}
-//			conn.Release ();
-//			
-//			return columns;
-//		}
 		
 		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
-			throw new NotImplementedException ();
+			ParameterSchemaCollection parameters = new ParameterSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (
+				"SELECT param_list FROM mysql.proc where name = '" + procedure.Name + "'"
+			);
+			try {
+				using (command) {
+					if (GetMainVersion (command) >= 5) {
+					    	using (IDataReader r = command.ExecuteReader()) {
+					    		while (r.Read ()) {
+					    			if (r.IsDBNull (0))
+					    				continue;
+					
+					    			string[] field = Encoding.ASCII.GetString ((byte[])r.GetValue (0)).Split (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+					    			foreach (string chunk in field) {
+									ParameterSchema param = new ParameterSchema (this);
+									param.Definition = chunk;
+					    				
+									string[] tmp = chunk.TrimStart (new char[] { ' ' }).Split (new char[] { ' ' });
+									int nameIndex = 0;
+									if (String.Compare (tmp[0], "OUT", true) == 0) {
+										nameIndex = 1;
+										param.ParameterType = ParameterType.Out;
+									} else if (String.Compare (tmp[0], "INOUT", true) == 0) {
+										nameIndex = 1;
+										param.ParameterType = ParameterType.InOut;
+									} else {
+										param.ParameterType = ParameterType.In;
+									}
+
+					    				param.Name = tmp[nameIndex];
+					    				param.OwnerName = procedure.Name;
+									param.DataTypeName = tmp[nameIndex + 1];
+					    				
+					    				parameters.Add (param);
+					    			}
+					    		}
+							r.Close ();
+						}
+					} //else: do nothing, since procedures are only supported since mysql 5.x
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+			}
+			conn.Release ();
+			
+			return parameters;
 		}
 
 		private static Regex constraintRegex = new Regex (@"`([\w ]+)`", RegexOptions.Compiled);
@@ -304,25 +355,70 @@ using MonoDevelop.Core;
 			ConstraintSchemaCollection constraints = new ConstraintSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("SHOW TABLE STATUS FROM `" + table.OwnerName + "`;");
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					string[] chunks = ((string)r["Comment"]).Split (';');
+			IDbCommand command = conn.CreateCommand ("SHOW TABLE STATUS FROM `" + table.SchemaName + "`;");
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							string[] chunks = ((string)r["Comment"]).Split (';');
 
-					//the values we are looking for are in the format (`table`) REFER `database\table2` (`table2`)
-					foreach (string chunk in chunks) {
-						if (constraintRegex.IsMatch (chunk)) {
-							MatchCollection matches = constraintRegex.Matches (chunk);
-	
-							ForeignKeyConstraintSchema constraint = new ForeignKeyConstraintSchema (this);
-							constraint.ReferenceTableName = matches[1].Groups[1].ToString ();
-							constraint.Name = matches[0].Groups[1].ToString ();
+							//the values we are looking for are in the format (`table`) REFER `database\table2` (`table2`)
+							foreach (string chunk in chunks) {
+								if (constraintRegex.IsMatch (chunk)) {
+									MatchCollection matches = constraintRegex.Matches (chunk);
+			
+									ForeignKeyConstraintSchema constraint = new ForeignKeyConstraintSchema (this);
+									constraint.ReferenceTableName = matches[1].Groups[1].ToString ();
+									constraint.Name = matches[0].Groups[1].ToString ();
+
+									constraints.Add (constraint);
+								}
+							}
+						}
+						r.Close ();
+					}
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+			}
+			conn.Release ();
+
+			return constraints;
+		}
+		
+		public override ConstraintSchemaCollection GetColumnConstraints (TableSchema table, ColumnSchema column)
+		{
+			ConstraintSchemaCollection constraints = new ConstraintSchemaCollection ();
+			
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (String.Format ("DESCRIBE {0}", table.Name));
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							if (r.IsDBNull (3) || String.Compare (r.GetString (0), column.Name, true) != 0)
+								continue;
+							
+							string key = r.GetString (3).ToUpper ();
+							
+							ConstraintSchema constraint = null;
+							if (key.Contains ("PRI")) {
+								constraint = GetNewPrimaryKeyConstraintSchema ("pk_" + column.Name);
+							} else if (key.Contains ("UNI")) {
+								constraint = GetNewUniqueConstraintSchema ("uni_" + column.Name);
+							} else {
+								continue;
+							}
+							constraint.IsColumnConstraint = true;
+							constraint.OwnerName = r.GetString (0);
 
 							constraints.Add (constraint);
 						}
-					}
-					r.Close ();
+						r.Close ();
+					};
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -335,17 +431,21 @@ using MonoDevelop.Core;
 
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SELECT DISTINCT user from mysql.user where user != '';");
-			using (command) {
-				using (IDataReader r = command.ExecuteReader ()) {
-					while (r.Read ()) {
-						UserSchema user = new UserSchema (this);
-						user.Name = r.GetString (0);
-	
-						users.Add (user);
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader ()) {
+						while (r.Read ()) {
+							UserSchema user = new UserSchema (this);
+							user.Name = r.GetString (0);
+		
+							users.Add (user);
+						}
+		
+						r.Close ();
 					}
-	
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -468,15 +568,11 @@ using MonoDevelop.Core;
 		//http://dev.mysql.com/doc/refman/5.1/en/create-database.html
 		public override void CreateDatabase (DatabaseSchema database)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("CREATE DATABASE " + database.Name);
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("CREATE DATABASE " + database.Name);
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-table.html
-		public override void CreateTable (TableSchema table)
+		public override string GetTableCreateStatement (TableSchema table)
 		{
 			StringBuilder sb = new StringBuilder ();
 			sb.Append ("CREATE TABLE ");
@@ -492,7 +588,7 @@ using MonoDevelop.Core;
 				
 				sb.Append (column.Name);
 				sb.Append (' ');
-				sb.Append (column.DataType.ToString ());
+				sb.Append (column.DataType.GetCreateString (column));
 				
 				if (!column.IsNullable)
 					sb.Append (" NOT NULL");
@@ -538,16 +634,11 @@ using MonoDevelop.Core;
 			
 			sb.Append (";");
 
-			Runtime.LoggingService.Error (sb.ToString ());
+			return sb.ToString ();
 			
-//			IPooledDbConnection conn = connectionPool.Request ();
-//			IDbCommand command = conn.CreateCommand (sb.ToString ());
-//			using (command)
-//				conn.ExecuteNonQuery (command);
-//			conn.Release ();
-			
-			foreach (TriggerSchema trigger in table.Triggers)
-				CreateTrigger (trigger);
+			//TODO:
+			//foreach (TriggerSchema trigger in table.Triggers)
+			//	CreateTrigger (trigger);
 		}
 		
 		protected virtual string GetConstraintString (ConstraintSchema constraint)
@@ -637,11 +728,7 @@ using MonoDevelop.Core;
 			sb.Append (trigger.Source);
 			sb.Append (";");
 			
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand (sb.ToString ());
-			using (command)
-				conn.ExecuteNonQuery (command);
-			conn.Release ();
+			ExecuteNonQuery (sb.ToString ());
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-user.html
@@ -750,6 +837,16 @@ using MonoDevelop.Core;
 			user.Name = name;
 		}
 		
+		public override string GetViewAlterStatement (ViewSchema view)
+		{
+			return String.Concat ("DROP VIEW IF EXISTS ", view.Name, "; ", Environment.NewLine, view.Definition); 
+		}
+		
+		public override string GetProcedureAlterStatement (ProcedureSchema procedure)
+		{
+			return String.Concat ("DROP PROCEDURE IF EXISTS ", procedure.Name, "; ", Environment.NewLine, procedure.Definition);
+		}
+		
 		private int GetMainVersion (IDbCommand command)
 		{
 			string str = (command.Connection as MySqlConnection).ServerVersion;
@@ -763,18 +860,20 @@ using MonoDevelop.Core;
 		{
 			int parenOpen = str.IndexOf ('(');
 			int parenClose = str.IndexOf (')');
-			int commaPos = str.IndexOf (',', parenOpen);
-			
+			int commaPos = -1;
+			if (parenOpen > 0)
+				commaPos = str.IndexOf (',', parenOpen);
+
 			if (parenOpen > 0) {
 				type = str.Substring (0, parenOpen).Trim ();
 				
 				string lengthString = null;
 				if (commaPos > 0) {
-					lengthString = str.Substring (parenOpen + 1, commaPos - parenOpen);
-					string scaleString = str.Substring (commaPos + 1, parenClose - commaPos).Trim ();
+					lengthString = str.Substring (parenOpen + 1, commaPos - parenOpen - 1);
+					string scaleString = str.Substring (commaPos + 1, parenClose - commaPos - 1).Trim ();
 					int.TryParse (scaleString, out scale);
 				} else {
-					lengthString = str.Substring (parenOpen + 1, parenClose - parenOpen);
+					lengthString = str.Substring (parenOpen + 1, parenClose - parenOpen - 1);
 					scale = 0;
 				}
 				int.TryParse (lengthString, out length);
