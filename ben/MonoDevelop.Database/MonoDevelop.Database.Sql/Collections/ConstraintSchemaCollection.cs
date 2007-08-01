@@ -41,16 +41,11 @@ namespace MonoDevelop.Database.Sql
 		{
 		}
 		
-		public ConstraintSchema GetConstraintWithColumn (string columnName, ConstraintType type)
+		public ConstraintSchema GetConstraint (ConstraintType type)
 		{
 			foreach (ConstraintSchema item in List) {
-				if (item.ConstraintType != type)
-					continue;
-				
-				foreach (ColumnSchema column in item.Columns) {
-					if (column.Name == columnName)
-						return item;
-				}
+				if (item.ConstraintType == type)
+					return item;
 			}
 			return null;
 		}

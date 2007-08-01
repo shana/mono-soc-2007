@@ -82,11 +82,15 @@ namespace MonoDevelop.Database.Sql
 			DatabaseSchemaCollection collection = new DatabaseSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: name
-			DataTable dt = conn.GetSchema (databasesCollectionString);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetDatabase (row));
+			try {
+				//restrictions: name
+				DataTable dt = conn.GetSchema (databasesCollectionString);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetDatabase (row));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			
 			conn.Release ();
@@ -106,11 +110,15 @@ namespace MonoDevelop.Database.Sql
 			TableSchemaCollection collection = new TableSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, table, table type
-			DataTable dt = conn.GetSchema (tablesCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetTable (row));
+			try {
+				//restrictions: database, schema, table, table type
+				DataTable dt = conn.GetSchema (tablesCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetTable (row));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -134,10 +142,14 @@ namespace MonoDevelop.Database.Sql
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			//restrictions: database, schema, table, column
-			DataTable dt = conn.GetSchema (tableColumnsCollectionString, null, table.SchemaName, table.Name);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetTableColumn (row, table));
+			try {
+				DataTable dt = conn.GetSchema (tableColumnsCollectionString, null, table.SchemaName, table.Name);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetTableColumn (row, table));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -146,7 +158,7 @@ namespace MonoDevelop.Database.Sql
 		
 		protected virtual ColumnSchema GetTableColumn (DataRow row, TableSchema table)
 		{
-			ColumnSchema schema = new ColumnSchema (this);
+			ColumnSchema schema = new ColumnSchema (this, table);
 
 			schema.SchemaName = table.SchemaName;
 			schema.Name = GetRowString (row, tableColumnItemStrings[0]);
@@ -154,9 +166,9 @@ namespace MonoDevelop.Database.Sql
 			schema.HasDefaultValue = GetRowBool (row, tableColumnItemStrings[2]);
 			schema.IsNullable = GetRowBool (row, tableColumnItemStrings[3]);
 			schema.Position = GetRowInt (row, tableColumnItemStrings[4]);
-			schema.Precision = GetRowInt (row, tableColumnItemStrings[5]);
-			schema.Scale = GetRowInt (row, tableColumnItemStrings[6]);
 			schema.DataTypeName = GetRowString (row, tableColumnItemStrings[7]);
+			schema.DataType.ScaleRange.Default = GetRowInt (row, tableColumnItemStrings[6]);
+			schema.DataType.PrecisionRange.Default = GetRowInt (row, tableColumnItemStrings[5]);
 			
 			return schema;
 		}
@@ -166,11 +178,15 @@ namespace MonoDevelop.Database.Sql
 			ViewSchemaCollection collection = new ViewSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, table
-			DataTable dt = conn.GetSchema (viewsCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetView (row));
+			try {
+				//restrictions: database, schema, table
+				DataTable dt = conn.GetSchema (viewsCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetView (row));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -193,11 +209,15 @@ namespace MonoDevelop.Database.Sql
 			ColumnSchemaCollection collection = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, table, column
-			DataTable dt = conn.GetSchema (viewColumnsCollectionString, null, view.SchemaName, view.Name);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetViewColumn (row, view));
+			try {
+				//restrictions: database, schema, table, column
+				DataTable dt = conn.GetSchema (viewColumnsCollectionString, null, view.SchemaName, view.Name);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetViewColumn (row, view));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -206,7 +226,7 @@ namespace MonoDevelop.Database.Sql
 		
 		protected virtual ColumnSchema GetViewColumn (DataRow row, ViewSchema view)
 		{
-			ColumnSchema schema = new ColumnSchema (this);
+			ColumnSchema schema = new ColumnSchema (this, view);
 			
 			schema.SchemaName = view.SchemaName;
 			schema.Name = GetRowString (row, viewColumnItemStrings[0]);
@@ -219,11 +239,15 @@ namespace MonoDevelop.Database.Sql
 			ProcedureSchemaCollection collection = new ProcedureSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, name, type
-			DataTable dt = conn.GetSchema (proceduresCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetProcedure (row));
+			try {
+				//restrictions: database, schema, name, type
+				DataTable dt = conn.GetSchema (proceduresCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetProcedure (row));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -245,11 +269,15 @@ namespace MonoDevelop.Database.Sql
 			ParameterSchemaCollection collection = new ParameterSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, name, type, parameter
-			DataTable dt = conn.GetSchema (procedureParametersCollectionString, null, procedure.SchemaName, procedure.Name);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetProcedureParameter (row, procedure));
+			try {
+				//restrictions: database, schema, name, type, parameter
+				DataTable dt = conn.GetSchema (procedureParametersCollectionString, null, procedure.SchemaName, procedure.Name);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetProcedureParameter (row, procedure));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -278,11 +306,15 @@ namespace MonoDevelop.Database.Sql
 			ConstraintSchemaCollection collection = new ConstraintSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, table, name
-			DataTable dt = conn.GetSchema (foreignKeysCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetTableConstraint (row, table));
+			try {
+				//restrictions: database, schema, table, name
+				DataTable dt = conn.GetSchema (foreignKeysCollectionString, null, connectionPool.ConnectionContext.ConnectionSettings.Database);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetTableConstraint (row, table));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -299,11 +331,15 @@ namespace MonoDevelop.Database.Sql
 			ColumnSchemaCollection collection = new ColumnSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, table, ConstraintName, column
-			DataTable dt = conn.GetSchema (indexColumnsCollectionString, null, table.SchemaName, table.Name, index.Name);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetTableIndexColumn (row, table, index));
+			try {
+				//restrictions: database, schema, table, ConstraintName, column
+				DataTable dt = conn.GetSchema (indexColumnsCollectionString, null, table.SchemaName, table.Name, index.Name);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetTableIndexColumn (row, table, index));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -312,7 +348,7 @@ namespace MonoDevelop.Database.Sql
 		
 		protected virtual ColumnSchema GetTableIndexColumn (DataRow row, TableSchema table, IndexSchema index)
 		{
-			ColumnSchema schema = new ColumnSchema (this);
+			ColumnSchema schema = new ColumnSchema (this, table);
 			
 			return schema;
 		}
@@ -322,11 +358,15 @@ namespace MonoDevelop.Database.Sql
 			IndexSchemaCollection collection = new IndexSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, table, name
-			DataTable dt = conn.GetSchema (indexesCollectionString, null, table.SchemaName, table.Name);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetTableIndex (row, table));
+			try {
+				//restrictions: database, schema, table, name
+				DataTable dt = conn.GetSchema (indexesCollectionString, null, table.SchemaName, table.Name);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetTableIndex (row, table));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -350,13 +390,16 @@ namespace MonoDevelop.Database.Sql
 			UserSchemaCollection collection = new UserSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: name
-			DataTable dt = conn.GetSchema (usersCollectionString);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetUser (row));
+			try {
+				//restrictions: name
+				DataTable dt = conn.GetSchema (usersCollectionString);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetUser (row));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
-			
 			conn.Release ();
 			
 			return collection;
@@ -374,11 +417,15 @@ namespace MonoDevelop.Database.Sql
 			DataTypeSchemaCollection collection = new DataTypeSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: name
-			DataTable dt = conn.GetSchema (dataTypesCollectionString);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetDataType (row));
+			try {
+				//restrictions: name
+				DataTable dt = conn.GetSchema (dataTypesCollectionString);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetDataType (row));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			
 			conn.Release ();
@@ -416,10 +463,14 @@ namespace MonoDevelop.Database.Sql
 			
 			DataTypeSchema schema = null;
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: name
-			DataTable dt = conn.GetSchema (dataTypesCollectionString, name);
-			if (dt.Rows.Count > 0)
-				schema = GetDataType (dt.Rows[0]);
+			try {
+				//restrictions: name
+				DataTable dt = conn.GetSchema (dataTypesCollectionString, name);
+				if (dt.Rows.Count > 0)
+					schema = GetDataType (dt.Rows[0]);
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+			}
 			conn.Release ();
 			
 			return schema;
@@ -430,11 +481,15 @@ namespace MonoDevelop.Database.Sql
 			TriggerSchemaCollection collection = new TriggerSchemaCollection ();
 			
 			IPooledDbConnection conn = connectionPool.Request ();
-			//restrictions: database, schema, name, EventObjectTable
-			DataTable dt = conn.GetSchema (triggersCollectionString, null, table.SchemaName, null, table.Name);
-			for (int r = 0; r < dt.Rows.Count; r++) {
-				DataRow row = dt.Rows[r];
-				collection.Add (GetTableTrigger (row, table));
+			try {
+				//restrictions: database, schema, name, EventObjectTable
+				DataTable dt = conn.GetSchema (triggersCollectionString, null, table.SchemaName, null, table.Name);
+				for (int r = 0; r < dt.Rows.Count; r++) {
+					DataRow row = dt.Rows[r];
+					collection.Add (GetTableTrigger (row, table));
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -456,7 +511,8 @@ namespace MonoDevelop.Database.Sql
 
 		public virtual void CreateTable (TableSchema table)
 		{
-			throw new NotImplementedException ();
+			string sql = GetTableCreateStatement (table);
+			ExecuteNonQuery (sql);
 		}
 
 		public virtual void CreateView (ViewSchema view)
@@ -616,9 +672,9 @@ namespace MonoDevelop.Database.Sql
 			return schema;
 		}
 
-		public virtual ColumnSchema GetNewColumnSchema (string name)
+		public virtual ColumnSchema GetNewColumnSchema (string name, ISchema parent)
 		{
-			ColumnSchema schema = new ColumnSchema (this, name);
+			ColumnSchema schema = new ColumnSchema (this, parent, name);
 			return schema;
 		}
 	
@@ -662,6 +718,33 @@ namespace MonoDevelop.Database.Sql
 			UserSchema schema = new UserSchema (this);
 			schema.Name = name;
 			return schema;
+		}
+		
+		public virtual TriggerSchema GetNewTriggerSchema (string name)
+		{
+			TriggerSchema schema = new TriggerSchema (this);
+			schema.Name = name;
+			return schema;
+		}
+		
+		public virtual string GetTableCreateStatement (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual string GetTableAlterStatement (TableSchema table)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual string GetViewAlterStatement (ViewSchema view)
+		{
+			throw new NotImplementedException ();
+		}
+		
+		public virtual string GetProcedureAlterStatement (ProcedureSchema procedure)
+		{
+			throw new NotImplementedException ();
 		}
 		
 		protected int GetCheckedInt32 (IDataReader reader, int field)
@@ -741,14 +824,7 @@ namespace MonoDevelop.Database.Sql
 		protected virtual int ExecuteNonQuery (string sql)
 		{
 			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand (sql);
-			int result = 0;
-			try {
-				using (command)
-					result = conn.ExecuteNonQuery (command);
-			} catch (Exception e) {
-				QueryService.RaiseException (e);
-			}
+			int result = conn.ExecuteNonQuery (sql);
 			conn.Release ();
 			return result;
 		}

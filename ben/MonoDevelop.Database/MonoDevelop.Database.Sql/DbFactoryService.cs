@@ -27,6 +27,7 @@ using System;
 using System.Data;
 using System.Collections.Generic;
 using Mono.Addins;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Sql
 {
@@ -37,15 +38,21 @@ namespace MonoDevelop.Database.Sql
 		static DbFactoryService ()
 		{
 			factories = new Dictionary<string, IDbFactory> ();
-			foreach (DbFactoryCodon codon in AddinManager.GetExtensionNodes ("/Mono/Data/Sql")) {
+			foreach (DbFactoryCodon codon in AddinManager.GetExtensionNodes ("/MonoDevelop/Database/Sql")) {
 				IDbFactory fac = codon.DbFactory;
-				if (fac != null)
+				if (fac != null) {
 					factories.Add (fac.Identifier, fac);
+					Runtime.LoggingService.Debug ("DB FACTORY: " + fac.Identifier);
+				}
 			}
 		}
 
 		public static IEnumerable<IDbFactory> DbFactories {
 			get { return factories.Values; }
+		}
+		
+		public static int DbFactoryCount {
+			get { return factories.Count; }
 		}
 		
 		public static IDbFactory GetDbFactory (string id)

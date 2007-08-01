@@ -135,42 +135,53 @@ namespace MonoDevelop.Database.Sql
 			StringBuilder sb = new StringBuilder ();
 			
 			sb.Append ("SELECT ");
-			int columnCount = statement.Columns.Count;
-			for (int i=0; i<columnCount; i++) {
-				sb.Append (GetSql (statement.Columns[i]));
-				sb.Append (i == (columnCount - 1) ? ", " : "");
+			bool first = true;
+			foreach (IdentifierExpression expr in statement.Columns) {
+				if (first)
+					first = false;
+				else
+					sb.Append (',');
+				
+				sb.Append (GetSql (expr));
 			}
 			
+			sb.Append (' ');
 			sb.Append (Environment.NewLine);
 			sb.Append (GetSql (statement.From));
 			
 			if (statement.Where != null) {
 				sb.Append (GetSql (statement.Where));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
 			if (statement.OrderBy != null) {
 				sb.Append (GetSql (statement.OrderBy));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
 			if (statement.GroupBy != null) {
 				sb.Append (GetSql (statement.GroupBy));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
 			if (statement.Having != null) {
 				sb.Append (GetSql (statement.Having));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
 			if (statement.Union != null) {
 				sb.Append (GetSql (statement.Union));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
 			if (statement.Join != null) {
 				sb.Append (GetSql (statement.Join));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
@@ -225,6 +236,7 @@ namespace MonoDevelop.Database.Sql
 			
 			sb.Append ("UPDATE ");
 			sb.Append (GetSql (statement.Identifier));
+			sb.Append (' ');
 			sb.Append (Environment.NewLine);
 			
 			sb.Append ("SET ");
@@ -238,6 +250,7 @@ namespace MonoDevelop.Database.Sql
 			
 			if (statement.Where != null) {
 				sb.Append (GetSql (statement.Where));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
@@ -254,6 +267,7 @@ namespace MonoDevelop.Database.Sql
 			
 			if (statement.Where != null) {
 				sb.Append (GetSql (statement.Where));
+				sb.Append (' ');
 				sb.Append (Environment.NewLine);
 			}
 			
@@ -276,6 +290,12 @@ namespace MonoDevelop.Database.Sql
 					break;
 				case DropStatementType.Index:
 					sb.Append ("INDEX ");
+					break;
+				case DropStatementType.Procedure:
+					sb.Append ("PROCEDURE ");
+					break;
+				case DropStatementType.View:
+					sb.Append ("VIEW ");
 					break;
 			}
 			

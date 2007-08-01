@@ -32,40 +32,48 @@ namespace MonoDevelop.Database.Sql
 {
 	public class ColumnSchema : AbstractSchema
 	{
+		protected ISchema parent;
 		protected string dataType = String.Empty;
 		protected bool hasDefaultValue;
 		protected string defaultValue;
 		protected bool nullable;
-		protected int length = 0;
-		protected int precision = 0;
-		protected int scale = 0;
 		protected int position = 0;
 		protected ConstraintSchemaCollection constraints;
 		
-		public ColumnSchema (ISchemaProvider schemaProvider)
+		public ColumnSchema (ISchemaProvider schemaProvider, ISchema parent)
 			: base (schemaProvider)
 		{
+			this.parent = parent;
 		}
 		
-		public ColumnSchema (ISchemaProvider schemaProvider, string name)
+		public ColumnSchema (ISchemaProvider schemaProvider, ISchema parent, string name)
 			: base (schemaProvider)
 		{
-			constraints = new ConstraintSchemaCollection ();
-			Name = name;
+			this.constraints = new ConstraintSchemaCollection ();
+			this.parent = parent;
+			this.name = name;
 		}
 		
 		public ColumnSchema (ColumnSchema column)
 			: base (column)
 		{
+			parent = column.parent; //do not clone, this would create an infinite loop
 			dataType = column.dataType;
 			hasDefaultValue = column.hasDefaultValue;
 			defaultValue = column.defaultValue;
 			nullable = column.nullable;
-			length = column.length;
-			precision = column.precision;
-			scale = column.scale;
 			position = column.position;
 			constraints = new ConstraintSchemaCollection (column.constraints);
+		}
+		
+		public ISchema Parent {
+			get { return parent; }
+			set {
+				if (parent != value) {
+					parent = value;
+					OnChanged ();
+				}
+			}
 		}
 		
 		public DataTypeSchema DataType {
@@ -112,36 +120,6 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public virtual int Length {
-			get { return length; }
-			set {
-				if (length != value) {
-					length = value;
-					OnChanged();
-				}
-			}
-		}
-		
-		public virtual int Precision {
-			get { return precision; }
-			set {
-				if (precision != value) {
-					precision = value;
-					OnChanged();
-				}
-			}
-		}
-		
-		public virtual int Scale {
-			get { return scale; }
-			set {
-				if (scale != value) {
-					scale = value;
-					OnChanged();
-				}
-			}
-		}
-		
 		public virtual int Position {
 			get { return position; }
 			set {
@@ -155,7 +133,7 @@ namespace MonoDevelop.Database.Sql
 		public ConstraintSchemaCollection Constraints {
 			get {
 				if (constraints == null)
-					constraints = provider.GetColumnConstraints (null, this); //FIXME
+					constraints = provider.GetColumnConstraints (parent as TableSchema, this);
 				return constraints;
 			}
 		}

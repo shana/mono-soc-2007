@@ -51,6 +51,9 @@ namespace MonoDevelop.Database.Sql
 		public DataTypeSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+			lengthRange = new Range (0);
+			precisionRange = new Range (0);
+			scaleRange = new Range (0);
 		}
 		
 		public DataTypeSchema (DataTypeSchema dt)
@@ -195,6 +198,38 @@ namespace MonoDevelop.Database.Sql
 					// TODO: Get complex columns from the provider
 					throw new NotImplementedException();
 				}
+			}
+		}
+		
+		public virtual string GetCreateString (ColumnSchema column)
+		{
+			if (createFormat == null) {
+				return name;
+			} else {
+				if (createParameters != null) {
+					string[] parameters = createParameters.Split (',');
+					string[] chunks = new string[parameters.Length];
+					
+					int index=0;
+					foreach (string param in parameters) {
+						string chunk = param.ToLower ().Trim ();
+						
+						if (chunk.Contains ("length") || chunk.Contains ("size")) {
+							chunks[index] = column.DataType.LengthRange.Default.ToString ();
+						} else if (chunk.Contains ("scale")) {
+							chunks[index] = column.DataType.ScaleRange.Default.ToString ();
+						} else if (chunk.Contains ("precision")) {
+							chunks[index] = column.DataType.PrecisionRange.Default.ToString ();
+						} else {
+							chunks[index] = String.Empty;
+						}
+						index++;
+					}
+					
+					return String.Format (System.Globalization.CultureInfo.InvariantCulture, createFormat, chunks);
+				}
+				
+				return createFormat;
 			}
 		}
 		

@@ -41,7 +41,13 @@ namespace MonoDevelop.Database.Sql
 		Owner,
 		Comment,
 		Definition,
-		Schema
+		Schema,
+		TableName,
+		TriggerType,
+		TriggerEvent,
+		Position,
+		IsActive,
+		Source
 	}
 
 	[AttributeUsage (AttributeTargets.Class)]

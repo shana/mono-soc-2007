@@ -148,7 +148,12 @@ namespace MonoDevelop.Database.Sql
 		
 		public override object Clone ()
 		{
-			return new TableSchema (this);
+			TableSchema clone = new TableSchema (this);
+			if (clone.columns != null) {
+				foreach (ColumnSchema column in clone.columns)
+					column.Parent = clone;
+			}
+			return clone;
 		}
 	}
 }

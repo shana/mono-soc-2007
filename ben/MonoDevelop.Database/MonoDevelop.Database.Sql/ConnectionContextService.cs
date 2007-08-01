@@ -27,9 +27,11 @@
 
 using System;
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using Mono.Addins;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Sql
 {
@@ -43,20 +45,11 @@ namespace MonoDevelop.Database.Sql
 		private static DatabaseConnectionContextCollection contexts;
 		
 		private static string configFile = null;
-		
-		private static bool isInitialized;
 
-		public static bool IsInitialized {
-			get { return isInitialized; }
-		}
-		
-		public static string ConfigFile {
-			get { return configFile; }
-			internal set {
-				if (value == null)
-					throw new ArgumentNullException ("ConfigFile");
-				configFile = value;
-			}
+		static ConnectionContextService ()
+		{
+			string configFile = Path.Combine (Runtime.Properties.ConfigDirectory, "MonoDevelop.Database.ConnectionManager.xml");
+			Initialize (configFile);
 		}
 		
 		public static DatabaseConnectionContextCollection DatabaseConnections {
@@ -107,35 +100,43 @@ namespace MonoDevelop.Database.Sql
 				ConnectionContextEdited (null, new DatabaseConnectionContextEventArgs (context));
 		}
 		
-		public static void Initialize (string configFile)
+		internal static void Initialize (string configFile)
 		{
-			if (configFile == null)
-				throw new ArgumentNullException ("configFile");
-			
-			if (!isInitialized) {
-				ConfigFile = configFile;
-
-				DatabaseConnectionSettingsCollection connections = null;
-				if (File.Exists (configFile)) {
-					try {
-						using (FileStream fs = File.OpenRead (configFile)) {
-							XmlSerializer serializer = new XmlSerializer (typeof (DatabaseConnectionSettingsCollection));
-							connections = (DatabaseConnectionSettingsCollection) serializer.Deserialize (fs);
-						}
-					} catch {
-						//TODO: log
-						//Runtime.LoggingService.Error (GettextCatalog.GetString ("Unable to load stored SQL connection information."));
-						File.Delete (configFile);
+			DatabaseConnectionSettingsCollection connections = null;
+			if (File.Exists (configFile)) {
+				try {
+					using (FileStream fs = File.OpenRead (configFile)) {
+						XmlSerializer serializer = new XmlSerializer (typeof (DatabaseConnectionSettingsCollection));
+						connections = (DatabaseConnectionSettingsCollection) serializer.Deserialize (fs);
 					}
+				} catch {
+					Runtime.LoggingService.Error (GettextCatalog.GetString ("Unable to load stored SQL connection information."));
+					File.Delete (configFile);
+				}
+			}
+			
+			contexts = new DatabaseConnectionContextCollection ();
+			if (connections != null) {
+				StringBuilder sb = new StringBuilder ();
+				foreach (DatabaseConnectionSettings settings in connections) {
+					IDbFactory fac = DbFactoryService.GetDbFactory (settings);
+					if (fac == null) {
+						sb.Append ("Error: unable to load database provider '");
+						sb.Append (settings.ProviderIdentifier);
+						sb.Append ("' for connection '");
+						sb.Append (settings.Name);
+						sb.Append ("'");
+						sb.Append (Environment.NewLine);
+						continue;
+					}
+					
+					contexts.Add (new DatabaseConnectionContext (settings));
 				}
 				
-				contexts = new DatabaseConnectionContextCollection ();
-				if (connections != null) {
-					foreach (DatabaseConnectionSettings settings in connections)
-						contexts.Add (new DatabaseConnectionContext (settings));
+				if (sb.Length > 0) {
+					Exception ex = new Exception (sb.ToString ());
+					QueryService.RaiseException (ex);
 				}
-				
-				isInitialized = true;
 			}
 		}
 
