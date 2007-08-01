@@ -50,6 +50,14 @@ namespace MonoDevelop.Database.Sql
 			return null;
 		}
 		
+		public IEnumerable<ConstraintSchema> GetConstraints (ConstraintType type)
+		{
+			foreach (ConstraintSchema item in List) {
+				if (item.ConstraintType == type)
+					yield return item;
+			}
+		}
+		
 		public ConstraintSchema GetConstraintWithColumn (string columnName)
 		{
 			foreach (ConstraintSchema item in List) {
