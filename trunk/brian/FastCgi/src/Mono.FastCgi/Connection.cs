@@ -162,15 +162,10 @@ namespace Mono.FastCgi {
 				Record record;
 				
 				try {
-					record = new Record (socket, receive_buffer);
-				} catch (ArgumentException e) {
-					// An argument exception in the
-					// constructor indicated that the socket
-					// did not contain a complete and valid
-					// record. We take this to mean that the
-					// socket is dead and abort.
-					StopRun ("Incomplete record (" +
-						e.Message.Split ('\r', '\n') [0] + ")");
+					record = new Record (socket,
+						receive_buffer);
+				} catch (System.Net.Sockets.SocketException) {
+					StopRun ("Failed to receive record.");
 					Stop ();
 					return;
 				}
@@ -396,9 +391,14 @@ namespace Mono.FastCgi {
 		{
 			if (IsConnected)
 				lock (send_lock) {
-					new Record (1, type, requestID, bodyData,
-						bodyIndex, bodyLength).Send (
-							socket, send_buffer);
+					try {
+						new Record (1, type, requestID,
+						bodyData, bodyIndex,
+							bodyLength).Send (
+								socket,
+								send_buffer);
+					} catch (System.Net.Sockets.SocketException) {
+					}
 				}
 		}
 		

@@ -61,14 +61,14 @@ namespace Mono.FastCgi {
 			socket.Close ();
 		}
 		
-		public override int Receive (byte [] buffer, int size, System.Net.Sockets.SocketFlags flags)
+		public override int Receive (byte [] buffer, int offset, int size, System.Net.Sockets.SocketFlags flags)
 		{
-			return socket.Receive (buffer, size, flags);
+			return socket.Receive (buffer, offset, size, flags);
 		}
 		
-		public override int Send (byte [] data, int size, System.Net.Sockets.SocketFlags flags)
+		public override int Send (byte [] data, int offset, int size, System.Net.Sockets.SocketFlags flags)
 		{
-			return socket.Send (data, size, flags);
+			return socket.Send (data, offset, size, flags);
 		}
 		
 		public override bool Blocking {

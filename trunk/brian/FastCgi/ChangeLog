@@ -1,5 +1,23 @@
 2007-07-31 Brian Nickel <brian.nickel@gmail.com>
 
+	* src/Mono.FastCgi/Structures/Record.cs: It ends up I've been doing Send
+	and Receive badly. I should keep sending and keep receiving until the
+	full body of content has been transmitted. This completely resolves some
+	issues I was having when sending and receiving huge files.
+	
+	* src/Mono.FastCgi/Connection.cs: Update for new exceptions.
+	
+	* src/Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs: Modify
+	Send/Receive methods.
+	
+	* src/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: Implement new
+	Send/Receive methods.
+	
+	* src/Mono.FastCgi/SocketAbstractions/StandardSocket.cs: Implement new
+	Send/Receive methods.
+
+2007-07-31 Brian Nickel <brian.nickel@gmail.com>
+
 	* doc/linux/cherokee.html: Added documentation.
 	
 	* doc/linux/index.html: Updated for changes.

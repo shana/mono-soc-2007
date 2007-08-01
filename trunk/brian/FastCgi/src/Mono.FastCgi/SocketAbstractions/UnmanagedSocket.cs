@@ -69,7 +69,8 @@ namespace Mono.FastCgi {
 				throw new sock.SocketException ();
 		}
 		
-		unsafe public override int Receive (byte [] buffer, int size,
+		unsafe public override int Receive (byte [] buffer, int offset,
+		                                    int size,
 		                                    sock.SocketFlags flags)
 		{
 			if (!connected)
@@ -77,18 +78,17 @@ namespace Mono.FastCgi {
 			
 			int value;
 			fixed (byte* ptr = buffer)
-				value = recv (socket, ptr, size, (int) flags);
-			
-			if (value != size)
-				connected = false;
+				value = recv (socket, ptr + offset, size, (int) flags);
 			
 			if (value >= 0)
 				return value;
 			
+			connected = false;
 			throw new sock.SocketException ();
 		}
 		
-		unsafe public override int Send (byte [] data, int size,
+		unsafe public override int Send (byte [] data, int offset,
+		                                 int size,
 		                                 sock.SocketFlags flags)
 		{
 			if (!connected)
@@ -96,14 +96,13 @@ namespace Mono.FastCgi {
 			
 			int value;
 			fixed (byte* ptr = data)
-				value = send (socket, ptr, size, (int) flags);
-			
-			if (value != size)
-				connected = false;
+				value = send (socket, ptr + offset, size,
+					(int) flags);
 			
 			if (value >= 0)
 				return value;
 			
+			connected = false;
 			throw new sock.SocketException ();
 		}
 		
