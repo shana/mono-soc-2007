@@ -114,7 +114,6 @@ namespace MonoDevelop.Database.Components {
             // Container child tableGeneral.Gtk.Table+TableChild
             this.entryName = new Gtk.Entry();
             this.entryName.CanDefault = true;
-            this.entryName.HasDefault = true;
             this.entryName.CanFocus = true;
             this.entryName.Name = "entryName";
             this.entryName.IsEditable = true;
@@ -467,6 +466,7 @@ namespace MonoDevelop.Database.Components {
             }
             this.DefaultWidth = 606;
             this.DefaultHeight = 351;
+            this.entryName.HasDefault = true;
             this.Show();
             this.spinPort.Changed += new System.EventHandler(this.PortChanged);
             this.entryPassword.Changed += new System.EventHandler(this.PasswordChanged);

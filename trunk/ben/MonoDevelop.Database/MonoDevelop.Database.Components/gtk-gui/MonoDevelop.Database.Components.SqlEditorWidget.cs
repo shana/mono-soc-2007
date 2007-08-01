@@ -13,11 +13,21 @@ namespace MonoDevelop.Database.Components {
     
     public partial class SqlEditorWidget {
         
+        private Gtk.ScrolledWindow scrolledwindow;
+        
         protected virtual void Build() {
             Stetic.Gui.Initialize();
             // Widget MonoDevelop.Database.Components.SqlEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Components.SqlEditorWidget";
+            // Container child MonoDevelop.Database.Components.SqlEditorWidget.Gtk.Container+ContainerChild
+            this.scrolledwindow = new Gtk.ScrolledWindow();
+            this.scrolledwindow.CanFocus = true;
+            this.scrolledwindow.Name = "scrolledwindow";
+            this.scrolledwindow.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.scrolledwindow.ShadowType = ((Gtk.ShadowType)(1));
+            this.Add(this.scrolledwindow);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }

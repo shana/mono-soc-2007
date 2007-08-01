@@ -13,7 +13,13 @@ namespace MonoDevelop.Database.Components {
     
     public partial class SelectColumnDialog {
         
-        private Gtk.VBox vboxContent;
+        private Gtk.HBox hboxContent;
+        
+        private Gtk.VButtonBox vbuttonbox1;
+        
+        private Gtk.Button buttonSelectAll;
+        
+        private Gtk.Button buttonDeselectAll;
         
         private Gtk.Button buttonCancel;
         
@@ -34,19 +40,51 @@ namespace MonoDevelop.Database.Components {
             w1.Name = "Dialog_Vbox";
             w1.BorderWidth = ((uint)(2));
             // Container child Dialog_Vbox.Gtk.Box+BoxChild
-            this.vboxContent = new Gtk.VBox();
-            this.vboxContent.Name = "vboxContent";
-            this.vboxContent.Spacing = 6;
-            w1.Add(this.vboxContent);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
-            w2.Position = 0;
+            this.hboxContent = new Gtk.HBox();
+            this.hboxContent.Name = "hboxContent";
+            this.hboxContent.Spacing = 6;
+            // Container child hboxContent.Gtk.Box+BoxChild
+            this.vbuttonbox1 = new Gtk.VButtonBox();
+            this.vbuttonbox1.Name = "vbuttonbox1";
+            this.vbuttonbox1.Spacing = 6;
+            this.vbuttonbox1.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
+            // Container child vbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
+            this.buttonSelectAll = new Gtk.Button();
+            this.buttonSelectAll.CanFocus = true;
+            this.buttonSelectAll.Name = "buttonSelectAll";
+            this.buttonSelectAll.UseUnderline = true;
+            this.buttonSelectAll.Label = Mono.Unix.Catalog.GetString("Select All");
+            this.vbuttonbox1.Add(this.buttonSelectAll);
+            Gtk.ButtonBox.ButtonBoxChild w2 = ((Gtk.ButtonBox.ButtonBoxChild)(this.vbuttonbox1[this.buttonSelectAll]));
+            w2.Expand = false;
+            w2.Fill = false;
+            // Container child vbuttonbox1.Gtk.ButtonBox+ButtonBoxChild
+            this.buttonDeselectAll = new Gtk.Button();
+            this.buttonDeselectAll.CanFocus = true;
+            this.buttonDeselectAll.Name = "buttonDeselectAll";
+            this.buttonDeselectAll.UseUnderline = true;
+            this.buttonDeselectAll.Label = Mono.Unix.Catalog.GetString("Deselect All");
+            this.vbuttonbox1.Add(this.buttonDeselectAll);
+            Gtk.ButtonBox.ButtonBoxChild w3 = ((Gtk.ButtonBox.ButtonBoxChild)(this.vbuttonbox1[this.buttonDeselectAll]));
+            w3.Position = 1;
+            w3.Expand = false;
+            w3.Fill = false;
+            this.hboxContent.Add(this.vbuttonbox1);
+            Gtk.Box.BoxChild w4 = ((Gtk.Box.BoxChild)(this.hboxContent[this.vbuttonbox1]));
+            w4.PackType = ((Gtk.PackType)(1));
+            w4.Position = 1;
+            w4.Expand = false;
+            w4.Fill = false;
+            w1.Add(this.hboxContent);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(w1[this.hboxContent]));
+            w5.Position = 0;
             // Internal child MonoDevelop.Database.Components.SelectColumnDialog.ActionArea
-            Gtk.HButtonBox w3 = this.ActionArea;
-            w3.Name = "dialog1_ActionArea";
-            w3.Spacing = 6;
-            w3.BorderWidth = ((uint)(5));
-            w3.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
-            // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
+            Gtk.HButtonBox w6 = this.ActionArea;
+            w6.Name = "GtkDialog_ActionArea";
+            w6.Spacing = 6;
+            w6.BorderWidth = ((uint)(5));
+            w6.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            // Container child GtkDialog_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonCancel = new Gtk.Button();
             this.buttonCancel.CanDefault = true;
             this.buttonCancel.CanFocus = true;
@@ -55,11 +93,12 @@ namespace MonoDevelop.Database.Components {
             this.buttonCancel.UseUnderline = true;
             this.buttonCancel.Label = "gtk-cancel";
             this.AddActionWidget(this.buttonCancel, -6);
-            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonCancel]));
-            w4.Expand = false;
-            w4.Fill = false;
-            // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
+            Gtk.ButtonBox.ButtonBoxChild w7 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.buttonCancel]));
+            w7.Expand = false;
+            w7.Fill = false;
+            // Container child GtkDialog_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
+            this.buttonOk.Sensitive = false;
             this.buttonOk.CanDefault = true;
             this.buttonOk.CanFocus = true;
             this.buttonOk.Name = "buttonOk";
@@ -67,18 +106,18 @@ namespace MonoDevelop.Database.Components {
             this.buttonOk.UseUnderline = true;
             this.buttonOk.Label = "gtk-ok";
             this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w5 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonOk]));
-            w5.Position = 1;
-            w5.Expand = false;
-            w5.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w8 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.buttonOk]));
+            w8.Position = 1;
+            w8.Expand = false;
+            w8.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.DefaultWidth = 400;
             this.DefaultHeight = 300;
             this.Show();
-            this.buttonCancel.Clicked += new System.EventHandler(this.CancelClicked);
-            this.buttonOk.Clicked += new System.EventHandler(this.OkClicked);
+            this.buttonSelectAll.Clicked += new System.EventHandler(this.SelectAllClicked);
+            this.buttonDeselectAll.Clicked += new System.EventHandler(this.DeselectAllClicked);
         }
     }
 }

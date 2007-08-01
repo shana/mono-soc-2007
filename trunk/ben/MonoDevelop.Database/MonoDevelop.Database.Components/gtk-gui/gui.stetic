@@ -2,6 +2,7 @@
 <stetic-interface>
   <configuration>
     <images-root-path>../</images-root-path>
+    <target-gtk-version>2.10.0</target-gtk-version>
   </configuration>
   <import>
     <widget-library name="../bin/Debug/MonoDevelop.Database.Components.dll" internal="true" />
@@ -21,22 +22,68 @@
         <property name="MemberName">vbox</property>
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.VBox" id="vboxContent">
+          <widget class="Gtk.HBox" id="hboxContent">
             <property name="MemberName" />
             <property name="Spacing">6</property>
             <child>
               <placeholder />
             </child>
+            <child>
+              <widget class="Gtk.VButtonBox" id="vbuttonbox1">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <property name="Size">2</property>
+                <property name="LayoutStyle">Start</property>
+                <child>
+                  <widget class="Gtk.Button" id="buttonSelectAll">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextOnly</property>
+                    <property name="Label" translatable="yes">Select All</property>
+                    <property name="UseUnderline">True</property>
+                    <property name="IsDialogButton">False</property>
+                    <signal name="Clicked" handler="SelectAllClicked" />
+                  </widget>
+                  <packing>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="buttonDeselectAll">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextOnly</property>
+                    <property name="Label" translatable="yes">Deselect All</property>
+                    <property name="UseUnderline">True</property>
+                    <property name="IsDialogButton">False</property>
+                    <signal name="Clicked" handler="DeselectAllClicked" />
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="PackType">End</property>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">0</property>
-            <property name="AutoSize">False</property>
+            <property name="AutoSize">True</property>
           </packing>
         </child>
       </widget>
     </child>
     <child internal-child="ActionArea">
-      <widget class="Gtk.HButtonBox" id="dialog1_ActionArea">
+      <widget class="Gtk.HButtonBox" id="GtkDialog_ActionArea">
         <property name="MemberName" />
         <property name="Spacing">6</property>
         <property name="BorderWidth">5</property>
@@ -52,7 +99,6 @@
             <property name="StockId">gtk-cancel</property>
             <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
-            <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
           </widget>
           <packing>
@@ -63,6 +109,7 @@
         <child>
           <widget class="Gtk.Button" id="buttonOk">
             <property name="MemberName" />
+            <property name="Sensitive">False</property>
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
             <property name="UseStock">True</property>
@@ -70,7 +117,6 @@
             <property name="StockId">gtk-ok</property>
             <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
-            <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
           </widget>
           <packing>
@@ -99,7 +145,7 @@
             <child>
               <widget class="Gtk.TreeView" id="grid">
                 <property name="MemberName" />
-                <property name="HasDefault">True</property>
+                <property name="CanDefault">True</property>
                 <property name="CanFocus">True</property>
                 <property name="EnableSearch">False</property>
                 <property name="HeadersClickable">True</property>
@@ -1119,7 +1165,22 @@
   <widget class="Gtk.Bin" id="MonoDevelop.Database.Components.SqlEditorWidget" design-size="300 300">
     <property name="MemberName" />
     <child>
-      <placeholder />
+      <widget class="Gtk.ScrolledWindow" id="scrolledwindow">
+        <property name="MemberName" />
+        <property name="CanFocus">True</property>
+        <property name="VscrollbarPolicy">Automatic</property>
+        <property name="HscrollbarPolicy">Automatic</property>
+        <property name="ShadowType">In</property>
+        <child>
+          <widget class="Gtk.Viewport" id="GtkViewport">
+            <property name="MemberName" />
+            <property name="ShadowType">None</property>
+            <child>
+              <placeholder />
+            </child>
+          </widget>
+        </child>
+      </widget>
     </child>
   </widget>
 </stetic-interface>

@@ -148,6 +148,20 @@ namespace MonoDevelop.Database.Components
 			}
 		}
 		
+		public bool IsColumnChecked {
+			get {
+				TreeIter iter;
+				if (store.GetIterFirst (out iter)) {
+					do {
+						bool chk = (bool)store.GetValue (iter, columnSelected);
+						if (chk)
+							return true;
+					} while (store.IterNext (ref iter));
+				}
+				return false;
+			}
+		}
+		
 		public void SelectAll ()
 		{
 			SetSelectState (true);
@@ -179,6 +193,7 @@ namespace MonoDevelop.Database.Components
 					ColumnSchema col = store.GetValue (iter, columnObj) as ColumnSchema;
 					if (column == col) {
 						store.SetValue (iter, columnSelected, true);
+						OnColumnToggled ();
 						return;
 					}
 				} while (store.IterNext (ref iter));
@@ -192,7 +207,8 @@ namespace MonoDevelop.Database.Components
 				do {
 					store.SetValue (iter, columnSelected, state);
 				} while (store.IterNext (ref iter));
-			}	
+			}
+			OnColumnToggled ();
 		}
 		
 		private void ItemToggled (object sender, ToggledArgs args)
@@ -202,9 +218,14 @@ namespace MonoDevelop.Database.Components
 	 			bool val = (bool) store.GetValue (iter, columnSelected);
 	 			store.SetValue (iter, columnSelected, !val);
 				
-				if (ColumnToggled != null)
-					ColumnToggled (this, EventArgs.Empty);
+				OnColumnToggled ();
 	 		}
+		}
+		
+		protected virtual void OnColumnToggled ()
+		{
+			if (ColumnToggled != null)
+				ColumnToggled (this, EventArgs.Empty);
 		}
 	}
 }

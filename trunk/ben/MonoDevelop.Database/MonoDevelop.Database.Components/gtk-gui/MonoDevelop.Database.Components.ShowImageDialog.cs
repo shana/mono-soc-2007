@@ -64,7 +64,7 @@ namespace MonoDevelop.Database.Components {
             // Container child hboxError.Gtk.Box+BoxChild
             this.image = new Gtk.Image();
             this.image.Name = "image";
-            this.image.Pixbuf = Stetic.IconLoader.LoadIcon("gtk-dialog-error", 16);
+            this.image.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-dialog-error", Gtk.IconSize.Menu, 16);
             this.hboxError.Add(this.image);
             Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.hboxError[this.image]));
             w6.Position = 0;
