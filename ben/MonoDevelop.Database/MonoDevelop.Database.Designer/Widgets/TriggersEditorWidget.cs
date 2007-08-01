@@ -40,6 +40,8 @@ namespace MonoDevelop.Database.Designer
 		public event EventHandler ContentChanged;
 		
 		private ISchemaProvider schemaProvider;
+		private TableSchema table;
+		private TriggerSchemaCollection triggers;
 		
 		private ListStore store;
 		private ListStore storeTypes;
@@ -62,10 +64,14 @@ namespace MonoDevelop.Database.Designer
 			
 			this.Build();
 			
+			sqlEditor.Editable = false;
+			sqlEditor.TextChanged += new EventHandler (SourceChanged);
+			
 			store = new ListStore (typeof (string), typeof (string), typeof (string), typeof (string), typeof (bool), typeof (string), typeof (object));
 			storeTypes = new ListStore (typeof (string));
 			storeEvents = new ListStore (typeof (string));
 			listTriggers.Model = store;
+			listTriggers.Selection.Changed += new EventHandler (OnSelectionChanged);
 			
 			foreach (string name in Enum.GetNames (typeof (TriggerType)))
 			         storeTypes.AppendValues (name);
@@ -141,13 +147,53 @@ namespace MonoDevelop.Database.Designer
 			
 			ShowAll ();
 		}
+		
+		public void Initialize (TableSchema table, TriggerSchemaCollection triggers)
+		{
+			if (table == null)
+				throw new ArgumentNullException ("table");
+			if (triggers == null)
+				throw new ArgumentNullException ("triggers");
+
+			this.table = table;
+			this.triggers = triggers;
+			
+			foreach (TriggerSchema trigger in triggers)
+				AddTrigger (trigger);
+		}
 
 		protected virtual void RemoveClicked (object sender, System.EventArgs e)
 		{
+			TreeIter iter;
+			if (listTriggers.Selection.GetSelected (out iter)) {
+				TriggerSchema trigger = store.GetValue (iter, colObjIndex) as TriggerSchema;
+				
+				if (Services.MessageService.AskQuestion (
+					GettextCatalog.GetString ("Are you sure you want to remove trigger '{0}'?", trigger.Name),
+					GettextCatalog.GetString ("Remove Trigger")
+				)) {
+					store.Remove (ref iter);
+					triggers.Remove (trigger);
+				}
+			}
 		}
 
-		protected virtual void AddClicked (object sender, System.EventArgs e)
+		protected virtual void AddClicked (object sender, EventArgs e)
 		{
+			TriggerSchema trigger = schemaProvider.GetNewTriggerSchema ("trigger_" + table.Name);
+			trigger.TableName = table.Name;
+			int index = 1;
+			while (triggers.Contains (trigger.Name))
+				trigger.Name = "trigger_" + table.Name + (index++); 
+			triggers.Add (trigger);
+			AddTrigger (trigger);
+		}
+		
+		private void AddTrigger (TriggerSchema trigger)
+		{
+			store.AppendValues (trigger.Name, trigger.TriggerType.ToString (),
+				trigger.TriggerEvent.ToString (), trigger.Position.ToString (),
+				trigger.IsActive, trigger.Comment, trigger);
 		}
 		
 		private void NameEdited (object sender, EditedArgs args)
@@ -160,6 +206,33 @@ namespace MonoDevelop.Database.Designer
 					string oldText = store.GetValue (iter, colNameIndex) as string;
 					(sender as CellRendererText).Text = oldText;
 				}
+			}
+		}
+		
+		protected virtual void OnSelectionChanged (object sender, EventArgs e)
+		{
+			TreeIter iter;
+			if (listTriggers.Selection.GetSelected (out iter)) {
+				buttonRemove.Sensitive = true;
+				sqlEditor.Editable = true;
+				
+				TriggerSchema trigger = store.GetValue (iter, colObjIndex) as TriggerSchema;
+				
+				sqlEditor.Text = trigger.Source;
+				
+			} else {
+				buttonRemove.Sensitive = false;
+				sqlEditor.Editable = false;
+				sqlEditor.Text = String.Empty;
+			}
+		}
+		
+		private void SourceChanged (object sender, EventArgs args)
+		{
+			TreeIter iter;
+			if (listTriggers.Selection.GetSelected (out iter)) {
+				TriggerSchema trigger = store.GetValue (iter, colObjIndex) as TriggerSchema;
+				trigger.Source = sqlEditor.Text;
 			}
 		}
 		

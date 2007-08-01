@@ -47,7 +47,7 @@ namespace MonoDevelop.Database.Designer
 		private IndexSchemaCollection indexes;
 		private TriggerSchemaCollection triggers;
 		private DataTypeSchemaCollection dataTypes;
-		
+
 		private Notebook notebook;
 
 		private ColumnsEditorWidget columnEditor;
@@ -65,10 +65,7 @@ namespace MonoDevelop.Database.Designer
 			
 			this.schemaProvider = schemaProvider;
 			this.originalTable = table;
-			if (create)
-				this.table = table;
-			else
-				this.table = table.Clone () as TableSchema;
+			this.table = table;
 			this.create = create;
 			
 			this.Build();
@@ -85,6 +82,7 @@ namespace MonoDevelop.Database.Designer
 			columnEditor.ContentChanged += new EventHandler (OnContentChanged);
 			notebook.AppendPage (columnEditor, new Label (GettextCatalog.GetString ("Columns")));
 			
+			//TODO: there is a diff between col and table constraints
 			if (MetaDataService.IsApplied (schemaProvider, typeof (PrimaryKeyConstraintMetaDataAttribute),
 				typeof (ForeignKeyConstraintMetaDataAttribute), typeof (CheckConstraintMetaDataAttribute),
 				typeof (UniqueConstraintMetaDataAttribute))) {
@@ -110,10 +108,8 @@ namespace MonoDevelop.Database.Designer
 
 			notebook.Page = 0;
 
-			entryName.Text = table.Name;
-			
-			dataTypes = schemaProvider.GetDataTypes ();
-			
+			entryName.Text = originalTable.Name;
+
 			WaitDialog.ShowDialog ("Loading table data ...");
 			notebook.Sensitive = false;
 			ThreadPool.QueueUserWorkItem (new WaitCallback (InitializeThreaded));
@@ -122,15 +118,29 @@ namespace MonoDevelop.Database.Designer
 		
 		private void InitializeThreaded (object state)
 		{
-			columns = table.Columns;
-			constraints = table.Constraints;
-			triggers = table.Triggers;
-			//TODO: indexex
+			dataTypes = schemaProvider.GetDataTypes ();
+			columns = originalTable.Columns;
+			constraints = originalTable.Constraints;
+			triggers = originalTable.Triggers;
+			//TODO: indices
 			indexes = new IndexSchemaCollection ();
+			
+			Runtime.LoggingService.Error ("TABLE " + originalTable.Name);
+			Runtime.LoggingService.Error ("   columns = " + columns.Count);
+			Runtime.LoggingService.Error ("   constraints = " + constraints.Count);
 
+			try {
 			foreach (ColumnSchema col in columns) {				
 				int dummy = col.Constraints.Count; //get column constraints
+				Runtime.LoggingService.Error ("CONSTRAINTS " + col.Name + " " + dummy);
 			}
+			} catch (Exception ee) {
+				Runtime.LoggingService.Error (ee);
+				Runtime.LoggingService.Error (ee.StackTrace);
+			}
+
+			if (!create) //make a duplicate if we are going to alter the table
+				this.table = originalTable.Clone () as TableSchema;
 
 			Services.DispatchService.GuiDispatch (delegate () {
 				InitializeGui ();
@@ -141,9 +151,15 @@ namespace MonoDevelop.Database.Designer
 		{
 			notebook.Sensitive = true;
 			WaitDialog.HideDialog ();
-
-			columnEditor.Initialize (columns, constraints, dataTypes);
-			constraintEditor.Initialize (columns, constraints, dataTypes);
+			
+			Runtime.LoggingService.Error ("TED: InitializeGui");
+			
+			columnEditor.Initialize (table, columns, constraints, dataTypes);
+			if (constraintEditor != null)
+				constraintEditor.Initialize (columns, constraints, dataTypes);
+			if (triggerEditor != null)
+				triggerEditor.Initialize (table, triggers);
+			Runtime.LoggingService.Error ("TED: InitializeGui 2");
 		}
 
 		protected virtual void CancelClicked (object sender, System.EventArgs e)
@@ -154,10 +170,26 @@ namespace MonoDevelop.Database.Designer
 
 		protected virtual void OkClicked (object sender, System.EventArgs e)
 		{
-			//TODO: validate
+			if (create)
+				table.Definition = schemaProvider.GetTableCreateStatement (table);
+			else
+				table.Definition = schemaProvider.GetTableAlterStatement (table);
 			
-			Respond (ResponseType.Ok);
-			Hide ();
+			Runtime.LoggingService.Error ("===", table.Definition);
+			
+			if (checkPreview.Active) {
+				PreviewDialog dlg = new PreviewDialog (table.Definition);
+				if (dlg.Run () == (int)ResponseType.Ok) {
+					table.Definition = dlg.Text;
+					
+					Respond (ResponseType.Ok);
+					Hide ();
+				}
+				dlg.Destroy ();
+			} else {
+				Respond (ResponseType.Ok);
+				Hide ();
+			}
 		}
 
 		protected virtual void NameChanged (object sender, System.EventArgs e)

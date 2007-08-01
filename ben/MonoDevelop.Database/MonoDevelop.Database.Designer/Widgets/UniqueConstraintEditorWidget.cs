@@ -66,10 +66,28 @@ namespace MonoDevelop.Database.Designer
 
 		protected virtual void AddClicked (object sender, EventArgs e)
 		{
+			CheckConstraintSchema check = schemaProvider.GetNewCheckConstraintSchema ("check_new");
+			int index = 1;
+			while (constraints.Contains (check.Name))
+				check.Name = "check_new" + (index++); 
+			constraints.Add (check);
+			AddConstraint (check);
 		}
 
 		protected virtual void RemoveClicked (object sender, EventArgs e)
 		{
+			TreeIter iter;
+			if (listUnique.Selection.GetSelected (out iter)) {
+				UniqueConstraintSchema uni = store.GetValue (iter, colObjIndex) as UniqueConstraintSchema;
+				
+				if (Services.MessageService.AskQuestion (
+					GettextCatalog.GetString ("Are you sure you want to remove constraint '{0}'?", uni.Name),
+					GettextCatalog.GetString ("Remove Constraint")
+				)) {
+					store.Remove (ref iter);
+					constraints.Remove (uni);
+				}
+			}
 		}
 		
 		public virtual bool Validate ()

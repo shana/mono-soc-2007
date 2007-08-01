@@ -62,10 +62,12 @@ namespace MonoDevelop.Database.Designer
 			this.Build();
 			
 			notebook = new Notebook ();
+			Add (notebook);
 		}
 		
 		public void Initialize (ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
 		{
+			Runtime.LoggingService.Error ("COEW: Initialize");
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
 			if (constraints == null)
@@ -73,20 +75,19 @@ namespace MonoDevelop.Database.Designer
 
 			this.columns = columns;
 			this.constraints = constraints;
-			
-			bool append = false;
+
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.PrimaryKeyConstraint)) {
 				//not for column constraints, since they are already editable in the column editor
 				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, columns, constraints);
 				pkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (checkEditor, new Label (GettextCatalog.GetString ("Primary Key")));
-				append = true;
 			}
 			
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.ForeignKeyConstraint)
 				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.ForeignKeyConstraint)) {
+				fkEditor = new ForeignKeyConstraintEditorWidget ();
 				fkEditor.ContentChanged += new EventHandler (OnContentChanged);
-				append = true;
+				notebook.AppendPage (fkEditor, new Label (GettextCatalog.GetString ("Foreign Key")));
 			}
 			
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CheckConstraint)
@@ -94,20 +95,18 @@ namespace MonoDevelop.Database.Designer
 				checkEditor = new CheckConstraintEditorWidget (schemaProvider, columns, constraints);
 				checkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (checkEditor, new Label (GettextCatalog.GetString ("Check")));
-				append = true;
 			}
 			
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.UniqueConstraint)
 				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.UniqueConstraint)) {
+				uniqueEditor = new UniqueConstraintEditorWidget (schemaProvider, columns, constraints);
 				uniqueEditor.ContentChanged += new EventHandler (OnContentChanged);
-				append = true;
+				notebook.AppendPage (uniqueEditor, new Label (GettextCatalog.GetString ("Unique")));
 			}
-				
-			if (!append)
-				Add (new Label (GettextCatalog.GetString ("Constraints not supported")));
-			else
-				Add (notebook);
+
 			ShowAll ();
+			
+			Runtime.LoggingService.Error ("COEW: Initialize 2");
 		}
 		
 		private void OnContentChanged (object sender, EventArgs args)

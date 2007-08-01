@@ -54,6 +54,7 @@ namespace MonoDevelop.Database.Designer
 		private ConstraintSchemaCollection constraints;
 		private DataTypeSchemaCollection dataTypes;
 		private ISchemaProvider schemaProvider;
+		private TableSchema table;
 		
 		public ColumnsEditorWidget (ISchemaProvider schemaProvider, bool create)
 		{
@@ -147,19 +148,25 @@ namespace MonoDevelop.Database.Designer
 			if (!create) {
 				buttonAdd.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanAppendColumn);
 				buttonRemove.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanRemoveColumn);
-				buttonUp.Sensitive = buttonDown.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanRemoveColumn);
+				buttonUp.Sensitive = buttonDown.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanInsertColumn);
 			}
 
 			ShowAll ();
 		}
 		
-		public void Initialize (ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
+		public void Initialize (TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
 		{
+			Runtime.LoggingService.Error ("CEW: Initialize");
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
 			if (constraints == null)
 				throw new ArgumentNullException ("constraints");
+			if (table == null)
+				throw new ArgumentNullException ("table");
+			if (dataTypes == null)
+				throw new ArgumentNullException ("dataTypes");
 
+			this.table = table;
 			this.columns = columns;
 			this.constraints = constraints;
 			this.dataTypes = dataTypes;
@@ -169,18 +176,21 @@ namespace MonoDevelop.Database.Designer
 			
 			foreach (DataTypeSchema dataType in dataTypes)
 				storeTypes.AppendValues (dataType.Name, storeTypes);
+			Runtime.LoggingService.Error ("CEW: Initialize 2");
 		}
 		
 		private void AppendColumnSchema (ColumnSchema column)
 		{
-			bool pk = column.Constraints.GetConstraintWithColumn (column.Name, ConstraintType.PrimaryKey) != null;
-			storeColumns.AppendValues (pk, column.Name, column.DataTypeName, column.Length.ToString (), column.IsNullable, column.Comment, column);
+			bool pk = column.Constraints.GetConstraint (ConstraintType.PrimaryKey) != null;
+			storeColumns.AppendValues (pk, column.Name, column.DataType.Name, column.DataType.LengthRange.Default.ToString (), column.IsNullable, column.Comment, column);
 		}
 
 		protected virtual void AddClicked (object sender, EventArgs e)
 		{
-			ColumnSchema column = new ColumnSchema (schemaProvider);
-			column.Name = CreateColumnName ();
+			ColumnSchema column = schemaProvider.GetNewColumnSchema ("column", table);
+			int index = 1;
+			while (columns.Contains (column.Name))
+				column.Name = "column" + (index++); 
 			TreeIter iter;
 			if (storeTypes.GetIterFirst (out iter))
 				column.DataTypeName = storeTypes.GetValue (iter, 0) as string;
@@ -269,7 +279,7 @@ namespace MonoDevelop.Database.Designer
 				if (!string.IsNullOrEmpty (args.NewText) && int.TryParse (args.NewText, out len)) {
 					storeColumns.SetValue (iter, colLengthIndex, args.NewText);
 					ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
-					column.Length = int.Parse (args.NewText);
+					column.DataType.LengthRange.Default = int.Parse (args.NewText);
 					EmitContentChanged ();
 				} else {
 					string oldText = storeColumns.GetValue (iter, colLengthIndex) as string;
@@ -312,32 +322,22 @@ namespace MonoDevelop.Database.Designer
 		private void OnSelectionChanged (object sender, EventArgs e)
 		{
 			TreeIter iter;
-			bool sel = false;
-			bool next = false;
-			bool prev = false;
+			bool sel = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanRemoveColumn);
+			bool next = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanInsertColumn);
+			bool prev = next;
 			
 			if (treeColumns.Selection.GetSelected (out iter)) {
 				TreePath path = storeColumns.GetPath (iter);
 				int index = path.Indices[0];
 				
-				sel = true;
-				prev = index > 0;
-				next = storeColumns.IterNext (ref iter);
+				sel &= true;
+				prev &= index > 0;
+				next &= storeColumns.IterNext (ref iter);
 			}
 			
 			buttonUp.Sensitive = prev;
 			buttonDown.Sensitive = next;
 			buttonRemove.Sensitive = sel;
-		}
-		
-		private string CreateColumnName ()
-		{
-			int counter = 1;
-			do {
-				string name = "column" + (counter++);
-				if (!columns.Contains (name))
-					return name;
-			} while (true);
 		}
 		
 		protected virtual void EmitContentChanged ()

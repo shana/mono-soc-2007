@@ -109,6 +109,7 @@ namespace MonoDevelop.Database.Designer {
             w8.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
+            this.buttonOk.Sensitive = false;
             this.buttonOk.CanDefault = true;
             this.buttonOk.CanFocus = true;
             this.buttonOk.Name = "buttonOk";

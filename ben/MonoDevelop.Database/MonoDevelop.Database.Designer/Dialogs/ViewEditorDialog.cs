@@ -81,7 +81,7 @@ namespace MonoDevelop.Database.Designer
 
 			entryName.Text = view.Name;
 			if (!create) {
-				sqlEditor.Text = view.Definition;
+				sqlEditor.Text = schemaProvider.GetViewAlterStatement (view);
 				commentEditor.Comment = view.Comment;
 			}
 
