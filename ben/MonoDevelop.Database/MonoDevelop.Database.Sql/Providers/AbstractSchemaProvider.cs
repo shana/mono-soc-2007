@@ -747,6 +747,11 @@ namespace MonoDevelop.Database.Sql
 			throw new NotImplementedException ();
 		}
 		
+		public virtual bool IsValidName (string name)
+		{
+			return true;
+		}
+		
 		protected int GetCheckedInt32 (IDataReader reader, int field)
 		{
 			if (reader.IsDBNull (field))

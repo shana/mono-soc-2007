@@ -30,6 +30,8 @@ namespace MonoDevelop.Database.Sql
 {
 	public sealed class DatabaseConnectionContext
 	{
+		public event EventHandler RefreshEvent;
+		
 		private bool temp;
 		private DatabaseConnectionSettings connectionSettings;
 		
@@ -89,6 +91,12 @@ namespace MonoDevelop.Database.Sql
 		
 		public bool HasSchemaProvider {
 			get { return schemaProvider != null; }
+		}
+		
+		public void Refresh ()
+		{
+			if (RefreshEvent != null)
+				RefreshEvent (this, EventArgs.Empty);
 		}
 	}
 }

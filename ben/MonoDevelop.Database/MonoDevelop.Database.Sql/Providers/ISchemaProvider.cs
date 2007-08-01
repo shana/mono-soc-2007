@@ -114,5 +114,7 @@ namespace MonoDevelop.Database.Sql
 		ForeignKeyConstraintSchema GetNewForeignKeyConstraintSchema (string name);
 		UserSchema GetNewUserSchema (string name);
 		TriggerSchema GetNewTriggerSchema (string name);
+		
+		bool IsValidName (string name);
 	}
 }
