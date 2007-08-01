@@ -41,17 +41,41 @@ namespace Gendarme.Rules.Performance {
 		{
 			foreach (Instruction instruction in method.Body.Instructions) {
 				switch (instruction.OpCode.Code) {
+					case Code.Ldarg_0:
+						if (method.IsStatic) {
+							if (method.Parameters.IndexOf (parameter) == 0)
+								return true;
+						}
+						break;
 					case Code.Ldarg_1:
-						if (method.Parameters.IndexOf (parameter) == 0)
-							return true;
+						if (method.IsStatic) {
+							if (method.Parameters.IndexOf (parameter) == 1)
+								return true;
+						}
+						else {
+							if (method.Parameters.IndexOf (parameter) == 0)
+								return true;
+						}
 						break;
 					case Code.Ldarg_2:
-						if (method.Parameters.IndexOf (parameter) == 1)
-							return true;
+						if (method.IsStatic) {
+							if (method.Parameters.IndexOf (parameter) == 2)
+								return true;
+						}
+						else {
+							if (method.Parameters.IndexOf (parameter) == 1)
+								return true;
+						}
 						break;
 					case Code.Ldarg_3:
-						if (method.Parameters.IndexOf (parameter) == 2)
-							return true;
+						if (method.IsStatic) {
+							if (method.Parameters.IndexOf (parameter) == 3)
+								return true;
+						}
+						else {
+							if (method.Parameters.IndexOf (parameter) == 2)
+								return true;
+						}
 						break;
 					case Code.Ldarg_S:
 						if (instruction.Operand.Equals (parameter))

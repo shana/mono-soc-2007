@@ -90,6 +90,29 @@ namespace Test.Rules.Performance {
 			Console.WriteLine (enumerable);
 			Console.WriteLine (x);
 		}
+
+		public static void StaticMethodWithUnusedParameters (int x, string foo) 
+		{
+		}
+
+		public static void StaticMethodWithUsedParameters (int x, string foo) 
+		{
+			Console.WriteLine (x);
+			Console.WriteLine (foo);
+		}
+
+		public static void StaticMethodWith5UsedParameters (int x, string foo, IEnumerable enumerable, char c, float f) 
+		{
+			Console.WriteLine (f);
+			Console.WriteLine (c);
+			Console.WriteLine (foo);
+			Console.WriteLine (enumerable);
+			Console.WriteLine (x);
+		}
+
+		public static void StaticMethodWith5UnusedParameters (int x, string foo, IEnumerable enumerable, char c, float f)
+		{
+		}
 		
 		[DllImport ("libc.so")]
 		private static extern double cos (double x);
@@ -206,6 +229,40 @@ namespace Test.Rules.Performance {
 			Assert.IsNull (messageCollection);
 		}
 
+		[Test]
+		public void StaticMethodWithUnusedParametersTest () 
+		{
+			method = GetMethodForTest ("StaticMethodWithUnusedParameters");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (2, messageCollection.Count);
+		}
+
+		[Test]
+		public void StaticMethodWithUsedParametersTest () 
+		{
+			method = GetMethodForTest ("StaticMethodWithUsedParameters");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void StaticMethodWith5UsedParametersTest () 
+		{
+			method = GetMethodForTest ("StaticMethodWith5UsedParameters");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+		
+		[Test]
+		public void StaticMethodWith5UnusedParametersTest () 
+		{
+			method = GetMethodForTest ("StaticMethodWith5UnusedParameters");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (5, messageCollection.Count);
+		}
+	
 		private MethodDefinition GetMethodForTest (string methodName) 
 		{
 			return GetMethodForTestFrom ("Test.Rules.Performance.AvoidUnusedParametersTest", methodName);
