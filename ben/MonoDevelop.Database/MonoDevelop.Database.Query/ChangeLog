@@ -1,3 +1,8 @@
+2007-08-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlQueryView.cs: Use correct strings when showing results and don't allow
+	the execute button to be clicked when no statement is entered
+
 2007-07-25  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqlQueryView.cs: Show query results in the same view using a VPaned

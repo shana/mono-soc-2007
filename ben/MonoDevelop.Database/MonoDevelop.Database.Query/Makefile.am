@@ -1,10 +1,10 @@
 ADDIN_BUILD = $(top_builddir)/build/AddIns/MonoDevelop.Database
 ASSEMBLY = $(ADDIN_BUILD)/MonoDevelop.Database.Query.dll
 REFS =  \
-	-pkg:glade-sharp-2.0 \
-	-pkg:glib-sharp-2.0 \
-	-pkg:gtk-sharp-2.0 \
-	-pkg:gtksourceview-sharp-2.0 \
+	$(GLADE_SHARP_LIBS) \
+	$(GLIB_SHARP_LIBS) \
+	$(GTK_SHARP_LIBS) \
+	$(GTKSOURCEVIEW_SHARP_LIBS) \
 	-pkg:monodevelop \
 	-r:../../contrib/Mono.Addins.dll \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
