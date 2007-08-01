@@ -12,7 +12,11 @@
     <signals />
   </object>
   <object type="MonoDevelop.Database.Components.SelectColumnWidget" palette-category="widget" allow-children="false" base-type="Gtk.ScrolledWindow">
-    <itemgroups />
+    <itemgroups>
+      <itemgroup label="SelectColumnWidget Properties">
+        <property name="SingleSelect" />
+      </itemgroup>
+    </itemgroups>
     <signals>
       <itemgroup label="SelectColumnWidget Signals">
         <signal name="ColumnToggled" />

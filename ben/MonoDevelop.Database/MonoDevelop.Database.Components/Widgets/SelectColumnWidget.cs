@@ -44,6 +44,8 @@ namespace MonoDevelop.Database.Components
 		protected const int columnName = 1;
 		protected const int columnObj = 2;
 		
+		private bool singleSelect;
+		
 		public SelectColumnWidget ()
 			: this (true)
 		{
@@ -59,6 +61,15 @@ namespace MonoDevelop.Database.Components
 			InitializeColumns (showCheckBoxes);
 			
 			this.Add (list);
+		}
+		
+		public bool SingleSelect {
+			get { return singleSelect; }
+			set {
+				singleSelect = value;
+				if (value)
+					DeselectAll ();
+			}
 		}
 		
 		protected virtual void InitializeStore ()
@@ -195,6 +206,9 @@ namespace MonoDevelop.Database.Components
 						store.SetValue (iter, columnSelected, true);
 						OnColumnToggled ();
 						return;
+					} else {
+						if (singleSelect)
+							store.SetValue (iter, columnSelected, false);
 					}
 				} while (store.IterNext (ref iter));
 			}	
@@ -217,9 +231,26 @@ namespace MonoDevelop.Database.Components
 			if (store.GetIterFromString (out iter, args.Path)) {
 	 			bool val = (bool) store.GetValue (iter, columnSelected);
 	 			store.SetValue (iter, columnSelected, !val);
-				
+				CheckSingleSelect (store.GetValue (iter, columnObj) as ColumnSchema);
 				OnColumnToggled ();
 	 		}
+		}
+		
+		private void CheckSingleSelect (ColumnSchema column)
+		{
+			if (!singleSelect)
+				return;
+			
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					object obj = store.GetValue (iter, columnObj);
+					if (obj != column) {
+						store.SetValue (iter, columnSelected, false);
+						return;
+					}
+				} while (store.IterNext (ref iter));
+			}
 		}
 		
 		protected virtual void OnColumnToggled ()
