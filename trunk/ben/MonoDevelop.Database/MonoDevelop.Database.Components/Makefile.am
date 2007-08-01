@@ -4,10 +4,13 @@ REFS =  \
 	$(GLIB_SHARP_LIBS) \
 	$(GTK_SHARP_LIBS) \
 	$(GTKSOURCEVIEW_SHARP_LIBS) \
-	-pkg:gtk-dotnet-2.0 \
-	-pkg:monodevelop \
-	-r:../../../contrib/Mono.Addins.dll \
-	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Core.Gui.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
+	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
+	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
+	-r:$(top_builddir)/Extras/MonoDevelop.Database/MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
+	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
 	-r:Mono.Posix \
 	-r:System \
 	-r:System.Data \
