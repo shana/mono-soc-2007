@@ -85,14 +85,14 @@ namespace Test.Rules.Performance {
 		[DllImport ("libc.so")]
 		private static extern double cos (double x);
 
-		public delegate void DelegateMethod (int x);
-		public void DelegateMethodImpl (int x) 
+		public delegate void SimpleCallback (int x);
+		public void SimpleCallbackImpl (int x) 
 		{
 		}
 
-		public event DelegateMethod DelegateMethodHandler;
-
-		public void ADelegateMethodHandler (int x) 
+		public delegate void SimpleEventHandler (int x);
+		public event SimpleEventHandler SimpleEvent;
+		public void OnSimpleEvent (int x) 
 		{
 		}
 
@@ -174,8 +174,8 @@ namespace Test.Rules.Performance {
 		[Test]
 		public void DelegateMethodTest () 
 		{
-			DelegateMethod aDelegate = new DelegateMethod (DelegateMethodImpl);
-			method = GetMethodForTest ("DelegateMethodImpl");
+			SimpleCallback callback = new SimpleCallback (SimpleCallbackImpl);
+			method = GetMethodForTest ("SimpleCallbackImpl");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
@@ -183,8 +183,8 @@ namespace Test.Rules.Performance {
 		[Test]
 		public void EventTest () 
 		{
-			DelegateMethodHandler += new DelegateMethod (ADelegateMethodHandler);
-			method = GetMethodForTest ("ADelegateMethodHandler");
+			SimpleEvent += new SimpleEventHandler (OnSimpleEvent);
+			method = GetMethodForTest ("OnSimpleEvent");
 			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		} 
