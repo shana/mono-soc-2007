@@ -18,6 +18,7 @@ cd ..
 
 cd contrib
 svn cat https://mono-soc-2007.googlecode.com/svn/trunk/ben/contrib/MySql.Data.dll > MySql.Data.dll
+svn cat https://mono-soc-2007.googlecode.com/svn/trunk/ben/contrib/Mono.Data.Sqlite.dll > Mono.Data.Sqlite.dll
 svn cat https://mono-soc-2007.googlecode.com/svn/trunk/ben/contrib/FirebirdSql.Data.Firebird.dll > FirebirdSql.Data.Firebird.dll
 svn cat https://mono-soc-2007.googlecode.com/svn/trunk/ben/contrib/FirebirdSql.Data.Firebird.license.txt > FirebirdSql.Data.Firebird.license.txt
 
