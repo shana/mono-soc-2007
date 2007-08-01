@@ -1,3 +1,7 @@
+2007-08-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/TestUtils.cs: Added unit test for TagEndsHere static method.
+
 2007-07-31  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Test/TestDocumentBufferArchiver.cs: Minor whitespace change.
