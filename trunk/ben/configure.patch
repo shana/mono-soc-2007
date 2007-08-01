@@ -1,6 +1,6 @@
 Index: configure.in
 ===================================================================
---- configure.in	(revision 82283)
+--- configure.in	(revision 83179)
 +++ configure.in	(working copy)
 @@ -180,121 +180,29 @@
  
@@ -160,9 +160,12 @@ Index: configure.in
  Extras/NUnit/Makefile
  Extras/VersionControl/Diff/Makefile
  Extras/VersionControl/DiffWidget/Makefile
-@@ -506,14 +421,12 @@
+@@ -505,16 +420,14 @@
+ echo "   * C# compiler = $CSC"
+ echo "   * Mozilla home: $MOZILLA_HOME"
  echo "   * mono-debugger: $enable_debugger"
- echo "   * MonoQuery support: $enable_monoquery"
+-echo "   * MonoQuery support: $enable_monoquery"
++echo "   * MonoDevelop.Database support: $enable_database"
  
 -if test "x$enable_monoquery" = "xyes"; then
 +if test "x$enable_database" = "xyes"; then
