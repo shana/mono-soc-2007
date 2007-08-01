@@ -104,6 +104,7 @@ namespace MonoDevelop.Database.Designer {
             this.columnSelecter.VscrollbarPolicy = ((Gtk.PolicyType)(1));
             this.columnSelecter.HscrollbarPolicy = ((Gtk.PolicyType)(1));
             this.columnSelecter.ShadowType = ((Gtk.ShadowType)(1));
+            this.columnSelecter.SingleSelect = false;
             this.hpaned.Add(this.columnSelecter);
             this.Add(this.hpaned);
             if ((this.Child != null)) {

@@ -50,10 +50,11 @@ namespace MonoDevelop.Database.Designer
 		private const int colNameIndex = 0;
 		private const int colTypeIndex = 1;
 		private const int colEventIndex = 2;
-		private const int colPositionIndex = 3;
-		private const int colActiveIndex = 4;
-		private const int colCommentIndex = 5;
-		private const int colObjIndex = 6;
+		private const int colFireTypeIndex = 3;
+		private const int colPositionIndex = 4;
+		private const int colActiveIndex = 5;
+		private const int colCommentIndex = 6;
+		private const int colObjIndex = 7;
 		
 		public TriggersEditorWidget (ISchemaProvider schemaProvider)
 		{
@@ -67,7 +68,7 @@ namespace MonoDevelop.Database.Designer
 			sqlEditor.Editable = false;
 			sqlEditor.TextChanged += new EventHandler (SourceChanged);
 			
-			store = new ListStore (typeof (string), typeof (string), typeof (string), typeof (string), typeof (bool), typeof (string), typeof (object));
+			store = new ListStore (typeof (string), typeof (string), typeof (string), typeof (bool), typeof (string), typeof (bool), typeof (string), typeof (object));
 			storeTypes = new ListStore (typeof (string));
 			storeEvents = new ListStore (typeof (string));
 			listTriggers.Model = store;
@@ -81,6 +82,7 @@ namespace MonoDevelop.Database.Designer
 			TreeViewColumn colName = new TreeViewColumn ();
 			TreeViewColumn colType = new TreeViewColumn ();
 			TreeViewColumn colEvent = new TreeViewColumn ();
+			TreeViewColumn colFireType = new TreeViewColumn ();
 			TreeViewColumn colPosition = new TreeViewColumn ();
 			TreeViewColumn colActive = new TreeViewColumn ();
 			TreeViewColumn colComment = new TreeViewColumn ();
@@ -88,6 +90,7 @@ namespace MonoDevelop.Database.Designer
 			colName.Title = GettextCatalog.GetString ("Name");
 			colType.Title = GettextCatalog.GetString ("Type");
 			colEvent.Title = GettextCatalog.GetString ("Event");
+			colFireType.Title = GettextCatalog.GetString ("Each Row");
 			colPosition.Title = GettextCatalog.GetString ("Position");
 			colActive.Title = GettextCatalog.GetString ("Active");
 			colComment.Title = GettextCatalog.GetString ("Comment");
@@ -98,6 +101,7 @@ namespace MonoDevelop.Database.Designer
 			CellRendererText nameRenderer = new CellRendererText ();
 			CellRendererCombo typeRenderer = new CellRendererCombo ();
 			CellRendererCombo eventRenderer = new CellRendererCombo ();
+			CellRendererToggle fireTypeRenderer = new CellRendererToggle ();
 			CellRendererText positionRenderer = new CellRendererText ();
 			CellRendererToggle activeRenderer = new CellRendererToggle ();
 			CellRendererText commentRenderer = new CellRendererText ();
@@ -115,6 +119,9 @@ namespace MonoDevelop.Database.Designer
 			eventRenderer.Editable = true;
 			eventRenderer.Edited += new EditedHandler (EventEdited);
 			
+			fireTypeRenderer.Activatable = true;
+			fireTypeRenderer.Toggled += new ToggledHandler (FireTypeToggled);
+			
 			positionRenderer.Editable = true;
 			positionRenderer.Edited += new EditedHandler (PositionEdited);
 			
@@ -127,6 +134,7 @@ namespace MonoDevelop.Database.Designer
 			colName.PackStart (nameRenderer, true);
 			colType.PackStart (typeRenderer, true);
 			colEvent.PackStart (eventRenderer, true);
+			colFireType.PackStart (fireTypeRenderer, true);
 			colPosition.PackStart (positionRenderer, true);
 			colActive.PackStart (activeRenderer, true);
 			colComment.PackStart (commentRenderer, true);
@@ -134,6 +142,7 @@ namespace MonoDevelop.Database.Designer
 			colName.AddAttribute (nameRenderer, "text", colNameIndex);
 			colType.AddAttribute (typeRenderer, "text", colTypeIndex);
 			colEvent.AddAttribute (eventRenderer, "text", colEventIndex);
+			colFireType.AddAttribute (fireTypeRenderer, "active", colFireTypeIndex);
 			colPosition.AddAttribute (positionRenderer, "text", colPositionIndex);
 			colActive.AddAttribute (activeRenderer, "active", colActiveIndex);
 			colComment.AddAttribute (commentRenderer, "text", colCommentIndex);
@@ -141,6 +150,7 @@ namespace MonoDevelop.Database.Designer
 			listTriggers.AppendColumn (colName);
 			listTriggers.AppendColumn (colType);
 			listTriggers.AppendColumn (colEvent);
+			listTriggers.AppendColumn (colFireType);
 			listTriggers.AppendColumn (colPosition);
 			listTriggers.AppendColumn (colActive);
 			listTriggers.AppendColumn (colComment);
@@ -192,8 +202,8 @@ namespace MonoDevelop.Database.Designer
 		private void AddTrigger (TriggerSchema trigger)
 		{
 			store.AppendValues (trigger.Name, trigger.TriggerType.ToString (),
-				trigger.TriggerEvent.ToString (), trigger.Position.ToString (),
-				trigger.IsActive, trigger.Comment, trigger);
+				trigger.TriggerEvent.ToString (), trigger.TriggerFireType == TriggerFireType.ForEachRow,
+				trigger.Position.ToString (), trigger.IsActive, trigger.Comment, trigger);
 		}
 		
 		private void NameEdited (object sender, EditedArgs args)
@@ -278,6 +288,15 @@ namespace MonoDevelop.Database.Designer
 					(sender as CellRendererText).Text = oldText;
 				}
 			}
+		}
+		
+		private void FireTypeToggled (object sender, ToggledArgs args)
+		{
+	 		TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+	 			bool val = (bool) store.GetValue (iter, colFireTypeIndex);
+	 			store.SetValue (iter, colFireTypeIndex, !val);
+	 		}
 		}
 		
 		private void ActiveToggled (object sender, ToggledArgs args)
