@@ -48,26 +48,29 @@ namespace Gendarme.Rules.Performance {
 			return false;
 		}
 
-		private bool ContainsDelegateInstructionFor (MethodDefinition method, MethodDefinition delegateMethod) 
+		private bool ContainsReferenceDelegateInstructionFor (MethodDefinition method, MethodDefinition delegateMethod) 
 		{
 			if (method.HasBody) {
 				foreach (Instruction instruction in method.Body.Instructions) {
-					if (instruction.OpCode.Code == Code.Ldftn) {
+					if (instruction.OpCode.Code == Code.Ldftn) 
 						return instruction.Operand.Equals (delegateMethod);
-					}
 				}
 			}
 			return false;
 		}
-
+		
 		private bool IsReferencedByDelegate (MethodDefinition delegateMethod) 
 		{
 			if (delegateMethod.DeclaringType is TypeDefinition) {
 				TypeDefinition type = (TypeDefinition) delegateMethod.DeclaringType;	
 				foreach (MethodDefinition method in type.Methods) {
-					if (ContainsDelegateInstructionFor (method, delegateMethod)) {
+					if (ContainsReferenceDelegateInstructionFor (method, delegateMethod)) 
 						return true;
-					}
+				}
+
+				foreach (MethodDefinition method in type.Constructors) {
+					if (ContainsReferenceDelegateInstructionFor (method, delegateMethod))
+						return true;
 				}
 			}
 			return false;
