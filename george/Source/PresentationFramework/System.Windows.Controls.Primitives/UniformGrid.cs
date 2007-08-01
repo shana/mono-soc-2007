@@ -1,4 +1,5 @@
 #if Implementation
+using System;
 using System.Windows;
 namespace Mono.System.Windows.Controls.Primitives {
 #else
@@ -39,17 +40,63 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size finalSize) {
-			return base.ArrangeOverride(finalSize);
+			int children_count = Children.Count;
+			if (children_count == 0)
+				return finalSize;
+
+			int actual_columns;
+			int actual_first_column;
+			int actual_rows;
+			ComputeActualParameters(children_count, out actual_columns, out actual_first_column, out actual_rows);
+
+			double child_width = finalSize.Width / actual_columns;
+			double child_height = finalSize.Height / actual_rows;
+			for (int child_index = 0; child_index < children_count; child_index++) {
+				int left;
+				int top = Math.DivRem(child_index + actual_first_column, actual_columns, out left);
+				Children[child_index].Arrange(new Rect(left * child_width, top * child_height, child_width, child_height));
+			}
+			return finalSize;
 		}
 
 		protected override Size MeasureOverride(Size availableSize) {
-			return base.MeasureOverride(availableSize);
+			int children_count = Children.Count;
+			if (children_count == 0)
+				return new Size(0, 0);
+
+			int actual_columns;
+			int actual_first_column;
+			int actual_rows;
+			ComputeActualParameters(children_count, out actual_columns, out actual_first_column, out actual_rows);
+
+			Size child_measure_size = new Size(double.IsPositiveInfinity(availableSize.Width) ? double.PositiveInfinity : availableSize.Width / actual_columns, double.IsPositiveInfinity(availableSize.Height) ? double.PositiveInfinity : availableSize.Height / actual_rows);
+			foreach (UIElement child in Children)
+				child.Measure(child_measure_size);
+			return new Size(0, 0);
 		}
 		#endregion
 
 		#region Private Methods
 		static bool ValidateNonNegativeInteger(object value) {
 			return (int)value >= 0;
+		}
+
+		void ComputeActualParameters(int childrenCount, out int actualColumns, out int actualFirstColumn, out int actualRows) {
+			actualColumns = Columns;
+			actualFirstColumn = FirstColumn;
+			actualRows = Rows;
+			if (actualColumns == 0) {
+				actualFirstColumn = 0;
+				if (actualRows == 0)
+					actualColumns = actualRows = (int)Math.Ceiling(Math.Sqrt(childrenCount));
+				else
+					actualColumns = (int)Math.Ceiling((decimal)childrenCount / actualRows);
+			} else {
+				if (actualFirstColumn >= actualColumns)
+					actualFirstColumn = 0;
+				if (actualRows == 0)
+					actualRows = (int)Math.Ceiling((decimal)(childrenCount + actualFirstColumn) / actualColumns);
+			}
 		}
 		#endregion
 	}
