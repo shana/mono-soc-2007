@@ -275,7 +275,7 @@
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DisconnectConnection"/>
 		<SeparatorItem id = "DisconnectSeparator"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>
-		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RenameDatabase"/>
+		<!--<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RenameDatabase"/>-->
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.EditConnection"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.RemoveConnection"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DropDatabase"/>
