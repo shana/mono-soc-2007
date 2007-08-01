@@ -1,5 +1,8 @@
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>
 
+	* NodeBuilders/*.cs: no longer uses the NodeState object but Context.GetTreeBuilder
+	to get the ITreeBuilder for a specific node
+
 	* NodeBuilders/TableNodeBuilder.cs: use a bg thread Select* methods
 	* NodeBuilders/ConstraintsNodeBuilder.cs, NodeBuilders/ColumnNodeBuilder.cs: added support for column constraints
 	* ConnectionManagerCommands.cs, NodeBuilders/ConnectionContextCollectionNodeBuilder.cs:

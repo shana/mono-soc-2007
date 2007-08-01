@@ -57,6 +57,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			get { return typeof (UserNodeCommandHandler); }
 		}
 		
+		public override void GetNodeAttributes (ITreeNavigator treeNavigator, object dataObject, ref NodeAttributes attributes)
+		{
+			attributes |= NodeAttributes.AllowRename;
+		}
+		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			return GettextCatalog.GetString ("User");
@@ -81,6 +86,34 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override DragOperation CanDragNode ()
 		{
 			return DragOperation.None;
+		}
+		
+		public override void RenameItem (string newName)
+		{
+			UserNode node = (UserNode)CurrentNode.DataItem;
+			if (node.User.Name != newName)
+				ThreadPool.QueueUserWorkItem (new WaitCallback (RenameItemThreaded), new object[]{ node, newName });
+		}
+		
+		private void RenameItemThreaded (object state)
+		{
+			object[] objs = state as object[];
+			
+			UserNode node = objs[0] as UserNode;
+			string newName = objs[1] as string;
+			ISchemaProvider provider = node.User.SchemaProvider;
+			
+			if (provider.IsValidName (newName)) {
+				provider.RenameUser (node.User, newName);
+			} else {
+				Services.DispatchService.GuiDispatch (delegate () {
+					Services.MessageService.ShowError (String.Format (
+						"Unable to rename user '{0}' to '{1}'!",
+						node.User.Name, newName
+					));
+				});
+			}
+			node.Refresh ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Refresh)]

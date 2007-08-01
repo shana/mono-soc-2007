@@ -75,25 +75,20 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			BaseNode node = dataObject as BaseNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			ParametersNode node = nodeState.DataObject as ParametersNode;
+			ParametersNode node = state as ParametersNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
 
-			ParameterSchemaCollection parameters = nodeState.ConnectionContext.SchemaProvider.GetProcedureParameters (node.Procedure);
-			if (parameters == null)
-				return;
+			ParameterSchemaCollection parameters = node.ConnectionContext.SchemaProvider.GetProcedureParameters (node.Procedure);
 			
 			foreach (ParameterSchema parameter in parameters) {
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (parameter);
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (parameter);
+					builder.Expanded = true;
 				});
 			}
 		}

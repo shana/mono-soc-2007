@@ -77,24 +77,23 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			BaseNode node = dataObject as BaseNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
-			ViewSchemaCollection views = nodeState.ConnectionContext.SchemaProvider.GetViews ();
+			BaseNode node = state as BaseNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
+
+			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
+			ViewSchemaCollection views = node.ConnectionContext.SchemaProvider.GetViews ();
 			foreach (ViewSchema view in views) {
 				if (view.IsSystemView && !showSystemObjects)
 					continue;
 				
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new ViewNode (nodeState.ConnectionContext, view));
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (new ViewNode (node.ConnectionContext, view));
+					builder.Expanded = true;
 				});
 			}
 		}
@@ -106,7 +105,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		private void OnRefreshEvent (object sender, EventArgs args)
 		{
-			ITreeBuilder builder = Context.GetTreeBuilder ();
+			ITreeBuilder builder = Context.GetTreeBuilder (sender);
 			
 			if (builder != null)
 				builder.UpdateChildren ();

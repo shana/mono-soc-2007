@@ -46,8 +46,7 @@ FILES =  \
 	NodeBuilders/UserNodeBuilder.cs \
 	NodeBuilders/UsersNodeBuilder.cs \
 	NodeBuilders/ViewNodeBuilder.cs \
-	NodeBuilders/ViewsNodeBuilder.cs \
-	NodeState.cs
+	NodeBuilders/ViewsNodeBuilder.cs
 
 RES = MonoDevelop.Database.ConnectionManager.addin.xml
 

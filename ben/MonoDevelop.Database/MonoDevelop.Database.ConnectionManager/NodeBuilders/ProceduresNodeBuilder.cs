@@ -77,25 +77,23 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			BaseNode node = dataObject as BaseNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
+			BaseNode node = state as BaseNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
 			
-			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
-			ProcedureSchemaCollection procedures = nodeState.ConnectionContext.SchemaProvider.GetProcedures ();
+			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
+			ProcedureSchemaCollection procedures = node.ConnectionContext.SchemaProvider.GetProcedures ();
 			foreach (ProcedureSchema procedure in procedures) {
 				if (procedure.IsSystemProcedure && !showSystemObjects)
 					continue;
 				
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new ProcedureNode (nodeState.ConnectionContext, procedure));
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (new ProcedureNode (node.ConnectionContext, procedure));
+					builder.Expanded = true;
 				});
 			}
 		}

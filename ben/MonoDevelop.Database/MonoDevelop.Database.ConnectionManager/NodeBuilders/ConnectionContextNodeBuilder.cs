@@ -32,6 +32,7 @@ using System.Threading;
 using MonoDevelop.Database.Sql;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Database.Query;
 using MonoDevelop.Database.Components;
@@ -41,9 +42,12 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ConnectionContextNodeBuilder : TypeNodeBuilder
 	{
+		private EventHandler RefreshHandler;		
+		
 		public ConnectionContextNodeBuilder ()
 			: base ()
 		{
+			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
@@ -58,6 +62,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			get { return typeof (ConnectionContextCommandHandler); }
 		}
 		
+		public override void GetNodeAttributes (ITreeNavigator treeNavigator, object dataObject, ref NodeAttributes attributes)
+		{
+			attributes |= NodeAttributes.AllowRename;
+		}
+		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
 			return GettextCatalog.GetString ("Database Connections");
@@ -66,6 +75,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			DatabaseConnectionContext context = dataObject as DatabaseConnectionContext;
+			context.RefreshEvent += RefreshHandler;
 			
 			label = context.ConnectionSettings.Name;
 			if (context.HasConnectionPool) {
@@ -83,42 +93,37 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			DatabaseConnectionContext context = dataObject as DatabaseConnectionContext;
-			NodeState nodeState = new NodeState (builder, context, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			
-			QueryService.EnsureConnection (nodeState.ConnectionContext, new DatabaseConnectionContextCallback (BuildChildNodesGui), state);
+			QueryService.EnsureConnection (state as DatabaseConnectionContext, new DatabaseConnectionContextCallback (BuildChildNodesGui), state);
 		}
 		
 		private void BuildChildNodesGui (DatabaseConnectionContext context, bool connected, object state)
 		{
-			NodeState nodeState = state as NodeState;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
 			
-			nodeState.TreeBuilder.Update ();
+			builder.Update ();
 			if (connected) {
-				ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
+				ISchemaProvider provider = context.SchemaProvider;
 
 				if (MetaDataService.IsApplied (provider, typeof (TableMetaDataAttribute)))
-					nodeState.TreeBuilder.AddChild (new TablesNode (nodeState.ConnectionContext));
+					builder.AddChild (new TablesNode (context));
 
 				if (MetaDataService.IsApplied (provider, typeof (ViewMetaDataAttribute)))
-					nodeState.TreeBuilder.AddChild (new ViewsNode (nodeState.ConnectionContext));
+					builder.AddChild (new ViewsNode (context));
 				
 				if (MetaDataService.IsApplied (provider, typeof (ProcedureMetaDataAttribute)))
-					nodeState.TreeBuilder.AddChild (new ProceduresNode (nodeState.ConnectionContext));
+					builder.AddChild (new ProceduresNode (context));
 
 				if (MetaDataService.IsApplied (provider, typeof (UserMetaDataAttribute)))
-					nodeState.TreeBuilder.AddChild (new UsersNode (nodeState.ConnectionContext));
+					builder.AddChild (new UsersNode (context));
 				
 				//TODO: custom datatypes, sequences, roles, operators, languages, groups and aggregates
 				
-				nodeState.TreeBuilder.Expanded = true;
+				builder.Expanded = true;
 			}
 		}
 		
@@ -126,10 +131,31 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			return true;
 		}
+		
+		private void OnRefreshEvent (object sender, EventArgs args)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (sender);
+			builder.Update ();
+		}
 	}
 	
 	public class ConnectionContextCommandHandler : NodeCommandHandler
 	{
+		public override void RenameItem (string newName)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			if (context.ConnectionSettings.Name != newName) {
+				if (ConnectionContextService.DatabaseConnections.Contains (newName)) {
+					Services.MessageService.ShowError (String.Format (
+						"Unable to rename connection '{0}' to '{1}'! (duplicate name)",
+						context.ConnectionSettings.Name, newName
+					));
+				} else {
+					context.ConnectionSettings.Name = newName;
+				}
+			}
+		}
+		
 		[CommandHandler (ConnectionManagerCommands.RemoveConnection)]
 		protected void OnRemoveConnection ()
 		{
@@ -158,7 +184,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnRefreshConnection ()
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			//TODO: refresh
+			context.Refresh ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.DisconnectConnection)]
@@ -177,11 +203,10 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Query)]
 		protected void OnQueryCommand ()
 		{
-//			SqlQueryView sql = new SqlQueryView ();
-//			sql.Connection = (DbProviderBase) CurrentNode.DataItem;
-//			IdeApp.Workbench.OpenDocument (sql, true);
-//			
-//			CurrentNode.MoveToParent ();
+			SqlQueryView view = new SqlQueryView ();
+			view.SelectedConnectionContext = (DatabaseConnectionContext) CurrentNode.DataItem;
+
+			IdeApp.Workbench.OpenDocument (view, true);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.DropDatabase)]

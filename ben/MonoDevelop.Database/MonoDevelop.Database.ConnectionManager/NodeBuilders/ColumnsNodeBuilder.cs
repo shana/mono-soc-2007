@@ -75,23 +75,20 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			BaseNode node = dataObject as BaseNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			ColumnsNode node = nodeState.DataObject as ColumnsNode;
+			ColumnsNode node = state as ColumnsNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
 			ISchema schema = node.Schema;
 			
 			ColumnSchemaCollection columns = null;
 			if (schema is TableSchema)
-				columns = nodeState.ConnectionContext.SchemaProvider.GetTableColumns (schema as TableSchema);
+				columns = node.ConnectionContext.SchemaProvider.GetTableColumns (schema as TableSchema);
 			else if (schema is ViewSchema)
-				columns = nodeState.ConnectionContext.SchemaProvider.GetViewColumns (schema as ViewSchema);
+				columns = node.ConnectionContext.SchemaProvider.GetViewColumns (schema as ViewSchema);
 			//else if (schema is ProcedureSchema)
 			//	columns = nodeState.ConnectionContext.SchemaProvider.GetProcedureColumns (schema as ProcedureSchema);
 			
@@ -100,12 +97,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			foreach (ColumnSchema column in columns) {
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (column);
-					//nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (column);
 				});
 			}
 			Services.DispatchService.GuiDispatch (delegate {
-				nodeState.TreeBuilder.Expanded = true;
+				builder.Expanded = true;
 			});
 		}
 		

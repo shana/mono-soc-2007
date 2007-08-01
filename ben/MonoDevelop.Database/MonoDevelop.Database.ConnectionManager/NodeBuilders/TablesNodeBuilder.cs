@@ -78,25 +78,23 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			BaseNode node = dataObject as BaseNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			bool showSystemObjects = (bool)nodeState.TreeBuilder.Options["ShowSystemObjects"];
-			TableSchemaCollection tables = nodeState.ConnectionContext.SchemaProvider.GetTables ();
+			BaseNode node = state as BaseNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
+			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
+			TableSchemaCollection tables = node.ConnectionContext.SchemaProvider.GetTables ();
 			
 			foreach (TableSchema table in tables) {
 				if (table.IsSystemTable && !showSystemObjects)
 					continue;
 				
 				Services.DispatchService.GuiDispatch (delegate {
-					nodeState.TreeBuilder.AddChild (new TableNode (nodeState.ConnectionContext, table));
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (new TableNode (node.ConnectionContext, table));
+					builder.Expanded = true;
 				});
 			}
 		}

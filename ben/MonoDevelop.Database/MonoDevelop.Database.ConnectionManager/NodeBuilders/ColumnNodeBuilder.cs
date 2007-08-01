@@ -68,16 +68,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			TableNode node = dataObject as TableNode;
-			NodeState nodeState = new NodeState (builder, node.ConnectionContext, dataObject);
-			
-			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), nodeState);
+			ThreadPool.QueueUserWorkItem (new WaitCallback (BuildChildNodesThreaded), dataObject);
 		}
 		
 		private void BuildChildNodesThreaded (object state)
 		{
-			NodeState nodeState = state as NodeState;
-			ISchemaProvider provider = nodeState.ConnectionContext.SchemaProvider;
+			ColumnNode node = state as ColumnNode;
+			ITreeBuilder builder = Context.GetTreeBuilder (state);
+			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 
 			if (MetaDataService.IsApplied (provider, typeof (CheckConstraintMetaDataAttribute))
 				|| MetaDataService.IsApplied (provider, typeof (ForeignKeyConstraintMetaDataAttribute))
@@ -85,9 +83,8 @@ namespace MonoDevelop.Database.ConnectionManager
 				|| MetaDataService.IsApplied (provider, typeof (UniqueConstraintMetaDataAttribute))
 			)
 				Services.DispatchService.GuiDispatch (delegate {
-					ColumnSchema column = (nodeState.DataObject as ColumnNode).Column;
-					nodeState.TreeBuilder.AddChild (new ConstraintsNode (nodeState.ConnectionContext, column));
-					nodeState.TreeBuilder.Expanded = true;
+					builder.AddChild (new ConstraintsNode (node.ConnectionContext, node.Column));
+					builder.Expanded = true;
 				});
 		}
 		
