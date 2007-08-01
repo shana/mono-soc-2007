@@ -50,6 +50,9 @@ namespace Sample
 			group1.Child = box0;
 			
 			Gallery gallery = new Gallery ();
+			gallery.AppendTile (new SampleTile (new Color (1, 0, 0), new Color (0, 1, 0)));
+			//gallery.AppendTile (new SampleTile (new Color (0.5, 0.5, 0), new Color (0, 0, 1)));
+			//gallery.AppendTile (new Button("ok"));
 			
 			group2 = new RibbonGroup ();
 			group2.Label = "Gallery";
