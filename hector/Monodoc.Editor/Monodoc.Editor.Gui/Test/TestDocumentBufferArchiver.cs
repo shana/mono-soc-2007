@@ -42,7 +42,7 @@ public class TestDocumentBufferArchiver {
 		
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
-		        TextBuffer buffer = editor.Buffer;
+			TextBuffer buffer = editor.Buffer;
 			
 			MonoDocument document = new MonoDocument (file);
 			filename = Path.GetFileName (file);

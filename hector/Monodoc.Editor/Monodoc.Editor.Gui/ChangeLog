@@ -1,3 +1,9 @@
+2007-07-31  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/TestDocumentBufferArchiver.cs: Minor whitespace change.
+	* Test/TestUtils.cs, Monodoc.Editor.Gui.mdp: Added TestUtils.cs that is
+	  a unit test for the helper classes in Utils.cs
+
 2007-07-29  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* DocumentBufferArchiver.cs, Utils.cs: Removed local definition of
