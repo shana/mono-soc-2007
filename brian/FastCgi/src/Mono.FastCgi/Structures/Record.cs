@@ -237,20 +237,9 @@ namespace Mono.FastCgi {
 			byte[] header_buffer = (buffer != null && buffer.Length
 				> 8) ? buffer : new byte [HeaderSize];
 			byte   padding_length;
-			int    bytes_read;
 			
-			// Read the 8 byte record header. If 8 bytes aren't
-			// read, the stream is corrupted and an exception is
-			// thrown.
-			bytes_read = socket.Receive (header_buffer, HeaderSize,
-				System.Net.Sockets.SocketFlags.None);
-			
-			if (bytes_read < HeaderSize)
-				throw new ArgumentException (
-					"Incomplete header. Expected " +
-						HeaderSize + ", got " +
-						bytes_read,
-					"socket");
+			// Read the 8 byte record header.
+			ReceiveAll (socket, header_buffer, HeaderSize);
 			
 			// Read the values from the data.
 			version        = header_buffer [0];
@@ -267,14 +256,8 @@ namespace Mono.FastCgi {
 			
 			// Read the record data, and throw an exception if the
 			// complete data cannot be read.
-			if (total_length > 0 && (bytes_read = socket.Receive (
-				data, total_length,
-				System.Net.Sockets.SocketFlags.None)) < total_length)
-				throw new ArgumentException (
-					"Incomplete body. Expected " +
-						total_length + ", got " +
-						bytes_read,
-					"socket");
+			if (total_length > 0)
+				ReceiveAll (socket, data, total_length);
 		}
 		
 		/// <summary>
@@ -569,8 +552,7 @@ namespace Mono.FastCgi {
 				Type, RequestID,
 				body_length);
 			
-			socket.Send (data, total_size,
-				System.Net.Sockets.SocketFlags.None);
+			SendAll (socket, data, total_size);
 		}
 		
 		#endregion
@@ -598,6 +580,38 @@ namespace Mono.FastCgi {
 			value = (ushort) (value << 8);
 			value += array [arrayIndex + 1];
 			return value;
+		}
+		
+		#endregion
+		
+		
+		
+		#region Private Static Methods
+		
+		private static void ReceiveAll (Socket socket, byte [] data, int length)
+		{
+			if (length <= 0)
+				return;
+			
+			int total = 0;
+			while (total < length) {
+				total += socket.Receive (data, total,
+					length - total,
+					System.Net.Sockets.SocketFlags.None);
+			}
+		}
+		
+		private static void SendAll (Socket socket, byte [] data, int length)
+		{
+			if (length <= 0)
+				return;
+			
+			int total = 0;
+			while (total < length) {
+				total += socket.Send (data, total,
+					length - total,
+					System.Net.Sockets.SocketFlags.None);
+			}
 		}
 		
 		#endregion

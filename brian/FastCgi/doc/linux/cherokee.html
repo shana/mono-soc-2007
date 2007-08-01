@@ -5,6 +5,93 @@
 	</head>
 	<body>
 		<h1>Configuring Cherokee HTTP Server to use <tt>fastcgi-mono-server</tt></h1>
-		<p style="color:red">TO BE ADDED</p>
+		
+		<h2>Table of Contents</h2>
+		<ul>
+			<li><a href="#intro">Introduction</a></li>
+			<li><a href="#step1">Step 1: Setting Up the Handler</a></li>
+			<li><a href="#step2">Step 2: Adding Index Pages</a></li>
+		</ul>
+		
+		<a name="intro"></a>
+		<h2>Introduction</h2>
+		
+		<p><a href="http://www.cherokee-project.com/">Cherokee HTTP
+		Server</a> is a very fast, flexible and easy to configure Web
+		Server. Adding ASP.NET support through
+		<tt>fastcgi-mono-server</tt> is very simple and requires
+		modification of only one file.</p>
+		
+		<h3>NOTE</h3>
+		
+		<p style="color:red">As late as Cherokee 0.5.6, the FastCGI
+		extension fails to send and empty Record when the request
+		contains no input. <tt>fastcgi-mono-server</tt> does not
+		currently work around this. <b>This documentation is for the <a
+		href="http://www.cherokee-project.com/download/0.6/0.6.0/">0.6.0
+		series</a>.</b></p>
+		
+		<a name="step1"></a>
+		<h2>Step 1: Setting Up the Handler</h2>
+		
+		<p>All configuration is done in <a
+		href="file:///etc/cherokee/cherokee.conf"
+		>/etc/cherokee/cherokee.conf</a> or <a
+		href="file:///usr/etc/cherokee/cherokee.conf"
+		>/usr/etc/cherokee/cherokee.conf</a>.</p>
+		
+		<pre>vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,asd,cs,config,dll!handler = fcgi
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,asd,cs,config,dll!handler!balancer = round_robin
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,asd,cs,config,dll!handler!balancer!type = interpreter
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,asd,cs,config,dll!handler!balancer!local1!host = localhost:8002
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,asd,cs,config,dll!handler!balancer!local1!interpreter = /usr/bin/fastcgi-mono-server /socket=tcp:8002 /nonstop
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,asd,cs,config,dll!priority = 99999</pre>
+		
+		<p>Yep, Cherokee's new format does take a few more bytes than it
+		used to, but what can you do? This configuration tells Cherokee
+		to look for the server at localhost:8002 and if it doesn't find
+		it, spawn a new server using the command line:</p>
+		
+		<pre>/usr/bin/fastcgi-mono-server /socket=tcp:8002 /nonstop</pre>
+		
+		<p>A few changes can be made to this. First, you can switch to the
+		<b>.NET 2.0</b> runtime by calling "<tt>fastcgi-mono-server2</tt>"
+		instead in the "<tt>local1!interpreter</tt>" line. Second, you can
+		change the port. You may have another server using 8002, so you can
+		change the port to whatever number you want (less than 65536). Just make
+		sure, you update the port on both the "<tt>local1!host</tt>"
+		line and "<tt>local1!interpreter</tt>" line otherwise you'll
+		keep trying to spawn a host you can't use.</p>
+		
+		<p>The third and biggest change is to not spawn a host at all, but
+		instead use an existing host. To do this, you must manually start the
+		Mono server as shown above, remove the "<tt>local1!interpreter</tt>"
+		line, and update the "<tt>local1!host</tt>" line to the resolvable
+		hostname or IP address and port of the server. For example,
+		"<tt>192.168.0.123:8002</tt>" or
+		"<tt>monohost.localnetwork:8002</tt>".</p>
+		
+		<a name="step2"></a>
+		<h2>Step 2: Adding Index Pages</h2>
+		
+		<p>Once you have finished Step 1, you should have a working
+		ASP.NET server with one exception, if you look at a folder like
+		"/", you'll get a 503 error or directory listing instead of
+		"default.aspx". To fix this, you need modify
+		<tt>vserver!default!directory_index</tt>. You'll probably see
+		the following block:</p>
+		
+		<pre>vserver!default!directory_index = index.php,index.html</pre>
+
+		<p>You will need to modify it so it includes "index.aspx" and
+		"default.aspx". For example,
+		
+		<pre>vserver!default!directory_index = index.php,index.html<b>,index.aspx,default.aspx</b></pre>
+
+		<h2>Bada Bing!</h2>
+		
+		<p>You should now have ASP.NET working with Lighttpd. Enjoy!</p>
+		
+		<p>- Brian Nickel &lt;<a href="http://kerrick.wordpress.com">http://kerrick.wordpress.com</a>&gt;</p>
 	</body>
 </html>

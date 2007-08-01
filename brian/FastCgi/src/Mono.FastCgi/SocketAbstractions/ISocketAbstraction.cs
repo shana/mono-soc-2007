@@ -38,11 +38,11 @@ namespace Mono.FastCgi {
 		/// <seealso cref="System.Net.Sockets.Socket.Close" />.
 		public abstract void Close ();
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Receive(byte[])" />.
-		public abstract int Receive (byte [] buffer, int size, System.Net.Sockets.SocketFlags flags);
+		/// <seealso cref="System.Net.Sockets.Socket.Receive(byte[],int,int,System.Net.Sockets.SocketFlags)" />.
+		public abstract int Receive (byte [] buffer, int offset, int size, System.Net.Sockets.SocketFlags flags);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Send(byte[])" />.
-		public abstract int Send (byte [] data, int size, System.Net.Sockets.SocketFlags flags);
+		/// <seealso cref="System.Net.Sockets.Socket.Send(byte[],int,int,System.Net.Sockets.SocketFlags)" />.
+		public abstract int Send (byte [] data, int offset, int size, System.Net.Sockets.SocketFlags flags);
 		
 		/// <seealso cref="System.Net.Sockets.Socket.Blocking" />.
 		public abstract bool Blocking {get; set;}
