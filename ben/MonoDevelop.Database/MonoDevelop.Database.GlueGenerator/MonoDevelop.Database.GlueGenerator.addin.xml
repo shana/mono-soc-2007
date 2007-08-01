@@ -5,18 +5,18 @@
 	copyright	= "MIT X11"
 	url		= "http://www.monodevelop.com"
 	description	= "Database glue generator module."
-	version		= "0.14.0">
+	version		= "0.15.0">
     
 	<Runtime>
 		<Import assembly="MonoDevelop.Database.GlueGenerator.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<Addin id="Core" version="0.14.0"/>
-		<Addin id="Core.Gui" version="0.14.0"/>
-		<Addin id="Ide" version="0.14.0"/>
-		<Addin id="MonoDevelop.Database.Sql" version="0.14.0"/>
-		<Addin id="Database.Query" version="0.14.0"/>
+		<Addin id="Core" version="0.15.0"/>
+		<Addin id="Core.Gui" version="0.15.0"/>
+		<Addin id="Ide" version="0.15.0"/>
+		<Addin id="MonoDevelop.Database.Sql" version="0.15.0"/>
+		<Addin id="Database.Query" version="0.15.0"/>
 	</Dependencies>
 	
 	<Extension path = "/SharpDevelop/Commands">
