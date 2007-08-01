@@ -91,6 +91,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
-EXTRA_DIST =
+EXTRA_DIST = MonoDevelop.Database.Components.addin.xml $(RES)
 
 include $(top_srcdir)/Makefile.include
