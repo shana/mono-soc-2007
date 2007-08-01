@@ -1,3 +1,10 @@
+2007-08-02  Ben Motmans <ben.motmans@gmail.com>
+
+	* Collections/ConstraintSchemaCollection.cs: added GetConstraints method to get all
+	constraints of a specified type
+	* Schema/TriggerSchema.cs, Schema/TriggerFireType.cs: added a property to distinguish
+	for each row and for each statement triggers
+
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>
 
 	* Providers/AbstractSchemaProvider.cs, Providers/ISchemaProvider.cs: IsValidName method

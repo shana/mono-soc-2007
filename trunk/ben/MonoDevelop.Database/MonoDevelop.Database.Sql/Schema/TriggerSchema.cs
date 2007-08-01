@@ -36,6 +36,7 @@ namespace MonoDevelop.Database.Sql
 	{
 		protected string tableName;
 		protected TriggerType triggerType;
+		protected TriggerFireType triggerFireType;
 		protected TriggerEvent triggerEvent;
 		protected int position;
 		protected bool isActive;
@@ -51,6 +52,7 @@ namespace MonoDevelop.Database.Sql
 		{
 			tableName = trigger.tableName;
 			triggerType = trigger.triggerType;
+			triggerFireType = trigger.triggerFireType;
 			triggerEvent = trigger.triggerEvent;
 			position = trigger.position;
 			isActive = trigger.isActive;
@@ -72,6 +74,16 @@ namespace MonoDevelop.Database.Sql
 			set {
 				if (triggerType != value) {
 					triggerType = value;
+					OnChanged ();
+				}
+			}
+		}
+		
+		public TriggerFireType TriggerFireType {
+			get { return triggerFireType; }
+			set {
+				if (triggerFireType != value) {
+					triggerFireType = value;
 					OnChanged ();
 				}
 			}

@@ -130,6 +130,7 @@ FILES =  \
 	Schema/SequenceSchema.cs \
 	Schema/TableSchema.cs \
 	Schema/TriggerEvent.cs \
+	Schema/TriggerFireType.cs \
 	Schema/TriggerSchema.cs \
 	Schema/TriggerType.cs \
 	Schema/UniqueConstraintSchema.cs \
