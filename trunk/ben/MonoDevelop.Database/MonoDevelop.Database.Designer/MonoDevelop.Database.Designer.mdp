@@ -17,7 +17,6 @@
     <File name="./gtk-gui/gui.stetic" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./gtk-gui/generated.cs" subtype="Code" buildaction="Compile" />
     <File name="./Commands/temp.cs" subtype="Code" buildaction="Compile" />
-    <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./Widgets/TriggersEditorWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Designer.TriggersEditorWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/ColumnsEditorWidget.cs" subtype="Code" buildaction="Compile" />
@@ -70,7 +69,7 @@
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
-    <ResourcesVar />
+    <ResourcesVar Sync="True" Name="RES" />
     <OthersVar />
     <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
     <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />

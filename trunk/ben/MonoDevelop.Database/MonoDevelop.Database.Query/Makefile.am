@@ -17,6 +17,32 @@ REFS =  \
 	-r:System \
 	-r:System.Data
 
+RES =  \
+	icons/Icons.16x16.Database.Column.Key.png \
+	icons/Icons.16x16.Database.Column.png \
+	icons/Icons.16x16.Database.Connection.Error.png \
+	icons/Icons.16x16.Database.Connection.png \
+	icons/Icons.16x16.Database.Connection.Remove.png \
+	icons/Icons.16x16.Database.Constraints.png \
+	icons/Icons.16x16.Database.Database.Error.png \
+	icons/Icons.16x16.Database.Database.Ok.png \
+	icons/Icons.16x16.Database.Database.png \
+	icons/Icons.16x16.Database.Execute.png \
+	icons/Icons.16x16.Database.Parameter.png \
+	icons/Icons.16x16.Database.Procedure.Error.png \
+	icons/Icons.16x16.Database.Procedure.png \
+	icons/Icons.16x16.Database.Procedure.Source.png \
+	icons/Icons.16x16.Database.Relations.png \
+	icons/Icons.16x16.Database.Table.Error.png \
+	icons/Icons.16x16.Database.Table.png \
+	icons/Icons.16x16.Database.Tables.png \
+	icons/Icons.16x16.Database.User.png \
+	icons/Icons.16x16.Database.Users.png \
+	icons/Icons.16x16.Database.View.Error.png \
+	icons/Icons.16x16.Database.View.png \
+	icons/Icons.16x16.Database.View.Source.png \
+	icons/Icons.16x16.Database.Views.png
+
 FILES =  \
 	Commands/ToolCommands.cs \
 	QueryResultView.cs \

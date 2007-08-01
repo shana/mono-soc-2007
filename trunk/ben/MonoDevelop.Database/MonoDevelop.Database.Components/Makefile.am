@@ -68,6 +68,8 @@ FILES =  \
 	Widgets/SelectSchemaWidget.cs \
 	Widgets/SqlEditorWidget.cs
 
+RES = gtk-gui/gui.stetic
+
 ADDIN = MonoDevelop.Database.Components.addin.xml
 
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)

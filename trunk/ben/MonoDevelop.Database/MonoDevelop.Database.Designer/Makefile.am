@@ -49,6 +49,8 @@ FILES =  \
 	Widgets/TriggersEditorWidget.cs \
 	Widgets/UniqueConstraintEditorWidget.cs
 
+RES = gtk-gui/gui.stetic
+
 ADDIN = MonoDevelop.Database.Designer.addin.xml
 
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
