@@ -633,12 +633,13 @@ using MonoDevelop.Core;
 			}
 			
 			sb.Append (";");
+			
+			foreach (TriggerSchema trigger in table.Triggers) {
+				sb.Append (Environment.NewLine);
+				sb.Append (GetTriggerCreateStatement (trigger));				
+			}
 
 			return sb.ToString ();
-			
-			//TODO:
-			//foreach (TriggerSchema trigger in table.Triggers)
-			//	CreateTrigger (trigger);
 		}
 		
 		protected virtual string GetConstraintString (ConstraintSchema constraint)
@@ -699,6 +700,12 @@ using MonoDevelop.Core;
 		//http://dev.mysql.com/doc/refman/5.1/en/create-trigger.html
 		public override void CreateTrigger (TriggerSchema trigger)
 		{
+			string sql = GetTriggerCreateStatement (trigger);
+			ExecuteNonQuery (sql);
+		}
+
+		protected virtual string GetTriggerCreateStatement (TriggerSchema trigger)
+		{
 			StringBuilder sb = new StringBuilder ();
 			
 			sb.Append ("CREATE TRIGGER ");
@@ -728,7 +735,7 @@ using MonoDevelop.Core;
 			sb.Append (trigger.Source);
 			sb.Append (";");
 			
-			ExecuteNonQuery (sb.ToString ());
+			return sb.ToString ();
 		}
 
 		//http://dev.mysql.com/doc/refman/5.1/en/create-user.html
