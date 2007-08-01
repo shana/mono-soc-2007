@@ -1,5 +1,9 @@
 2007-08-01  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* UniformGridTest.cs: Added some layout tests.
+
+2007-08-01  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* UniformGridTest.cs: Added.
 
 2007-07-14  George Giolfan  <georgegiolfan@yahoo.com>
