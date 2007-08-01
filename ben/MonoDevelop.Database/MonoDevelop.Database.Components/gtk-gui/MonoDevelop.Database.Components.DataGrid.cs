@@ -54,10 +54,11 @@ namespace MonoDevelop.Database.Components {
             this.scrolledwindow.ShadowType = ((Gtk.ShadowType)(1));
             // Container child scrolledwindow.Gtk.Container+ContainerChild
             this.grid = new Gtk.TreeView();
-            this.grid.HasDefault = true;
+            this.grid.CanDefault = true;
             this.grid.CanFocus = true;
             this.grid.Name = "grid";
             this.grid.EnableSearch = false;
+            this.grid.HeadersClickable = true;
             this.scrolledwindow.Add(this.grid);
             this.vbox.Add(this.scrolledwindow);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vbox[this.scrolledwindow]));

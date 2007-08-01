@@ -57,6 +57,8 @@ namespace MonoDevelop.Database.Components
 		private Dictionary<Type, IDataGridContentRenderer> contentRenderers;
 		private List<IDataGridVisualizer> visualizers;
 		
+		private List<int> conversionList = new List<int> ();
+		
 		public DataGrid ()
 		{
 			this.Build ();
@@ -130,12 +132,17 @@ namespace MonoDevelop.Database.Components
 			foreach (DataColumn col in dataSource.Columns) {
 				DataGridColumn dgCol = new DataGridColumn (this, col, index);
 				grid.AppendColumn (dgCol);
-				
-				//the ListStore doesn't allow types that can't be converted to a GType
-				if (col.DataType.IsPrimitive || col.DataType == typeof (string))
+
+				if (col.DataType == typeof (char)) {
+					//special case for char (TODO: look up the bugzilla bug id)
+					storeTypes[index] = typeof (string);
+					conversionList.Add (index);
+				} else if (col.DataType.IsPrimitive || col.DataType == typeof (string)) {
 					storeTypes[index] = col.DataType;
-				else
+				} else {
+					//the ListStore doesn't allow types that can't be converted to a GType
 					storeTypes[index] = typeof (object);
+				}
 					
 				index++;
 			}
@@ -165,6 +172,8 @@ namespace MonoDevelop.Database.Components
 			currentRecord = 0;
 			numRecords = 0;
 			columnCount = 0;
+			
+			conversionList.Clear ();
 
 			if (store != null) {
 				store.Clear ();
@@ -252,8 +261,13 @@ namespace MonoDevelop.Database.Components
 				DataRow row = dataSource.Rows[i];
 				
 				TreeIter iter = store.Append ();
-				for (int j=0;j<columnCount; j++)
-					store.SetValue (iter, j, row[j]);
+				for (int j=0;j<columnCount; j++) {
+					//HACK: this is a hack for a bug that doesn't allow chars in a liststore
+					if (conversionList.Contains (j))
+						store.SetValue (iter, j, new string ((char)row[j], 1));
+					else
+						store.SetValue (iter, j, row[j]);
+				}
 			}
 			
 			grid.Model = store;

@@ -40,7 +40,9 @@ namespace MonoDevelop.Database.Components
 			
 			selecter = new SelectColumnWidget (showCheckBoxes);
 			selecter.Initialize (columns);
-			vboxContent.PackStart (selecter, true, true, 0);
+			selecter.ColumnToggled += new EventHandler (OnColumnToggled);
+			
+			hboxContent.PackStart (selecter, true, true, 0);
 			
 			ShowAll ();
 		}
@@ -59,10 +61,25 @@ namespace MonoDevelop.Database.Components
 			Destroy ();
 		}
 
-		protected virtual void OkClicked (object sender, System.EventArgs e)
+		protected virtual void OkClicked (object sender, EventArgs e)
 		{
 			Respond (ResponseType.Ok);
 			Destroy ();
+		}
+
+		protected virtual void DeselectAllClicked (object sender, EventArgs e)
+		{
+			selecter.DeselectAll ();
+		}
+
+		protected virtual void SelectAllClicked (object sender, EventArgs e)
+		{
+			selecter.SelectAll ();
+		}
+		
+		protected virtual void OnColumnToggled (object sender, EventArgs e)
+		{
+			buttonOk.Sensitive = selecter.IsColumnChecked;
 		}
 	}
 }

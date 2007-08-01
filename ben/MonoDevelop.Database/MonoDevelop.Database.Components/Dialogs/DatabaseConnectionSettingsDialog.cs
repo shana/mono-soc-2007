@@ -74,6 +74,7 @@ namespace MonoDevelop.Database.Components
 
 			storeDatabases = comboDatabase.Model as ListStore;
 			comboDatabase.TextColumn = 0;
+			comboDatabase.Entry.IsEditable = true;
 			comboDatabase.Entry.Changed += new EventHandler (DatabaseChanged);
 
 			CellRendererText providerRenderer = new CellRendererText ();

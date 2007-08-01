@@ -50,7 +50,7 @@ namespace MonoDevelop.Database.Components {
             this.image.Name = "image";
             this.image.Xalign = 0F;
             this.image.Yalign = 0F;
-            this.image.Pixbuf = Stetic.IconLoader.LoadIcon("stock_alarm", 48);
+            this.image.Pixbuf = Stetic.IconLoader.LoadIcon(this, "stock_alarm", Gtk.IconSize.Dialog, 48);
             this.hbox2.Add(this.image);
             Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.hbox2[this.image]));
             w1.Position = 0;

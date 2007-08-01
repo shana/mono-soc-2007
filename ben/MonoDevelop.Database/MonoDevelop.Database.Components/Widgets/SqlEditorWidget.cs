@@ -57,7 +57,7 @@ namespace MonoDevelop.Database.Components
 			sourceView.Buffer.Changed += new EventHandler (BufferChanged);
 			sourceView.PopulatePopup += new PopulatePopupHandler (OnPopulatePopup);
 			
-			Add (sourceView);
+			scrolledwindow.Add (sourceView);
 			ShowAll ();
 		}
 		

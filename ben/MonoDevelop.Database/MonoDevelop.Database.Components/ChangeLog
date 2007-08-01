@@ -1,3 +1,12 @@
+2007-08-01  Ben Motmans <ben.motmans@gmail.com>
+
+	* Widgets/DataGrid/DataGrid.cs: Added workaround for chars in the liststore
+	* Widgets/SqlEditorWidget.cs: Added a scrolledwindow
+	* Widgets/SelectColumnWidget.cs: IsColumnChecked property to verify that at least
+	1 column is selected
+	* Dialogs/SelectColumnDialog.cs: SelectAll and DeselectAll buttons
+	* Dialogs/WaitDialog.cs: Correctly draw the window border
+
 2007-07-31  Ben Motmans <ben.motmans@gmail.com>
 
 	* Widgets/SelectColumnWidget.cs: various bugfixes

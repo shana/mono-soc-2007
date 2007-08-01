@@ -92,8 +92,7 @@ namespace MonoDevelop.Database.Components
 		{
 			base.OnExposeEvent (ev);
 			Requisition req = SizeRequest ();
-			Style.PaintFlatBox (this.Style, this.GdkWindow, StateType.Normal, 
-				ShadowType.Out, Gdk.Rectangle.Zero, this, "dialog", 0, 0, req.Width, req.Height);
+			Style.PaintFlatBox (this.Style, this.GdkWindow, StateType.Normal, ShadowType.Out, Gdk.Rectangle.Zero, this, "tooltip", 0, 0, req.Width, req.Height);
 			return true;
 		}
 	}
