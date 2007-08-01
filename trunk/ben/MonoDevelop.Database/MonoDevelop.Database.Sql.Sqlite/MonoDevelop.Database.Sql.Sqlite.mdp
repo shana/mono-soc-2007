@@ -42,7 +42,7 @@
     <ProjectReference type="Assembly" localcopy="True" refto="../../contrib/Mono.Data.Sqlite.dll" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Designer" />
   </References>
-  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True">
+  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
     <ResourcesVar />

@@ -39,8 +39,11 @@ namespace MonoDevelop.Database.Sql
 	// http://www.sqlite.org/google-talk-slides/page-021.html
 	[DatabaseMetaData (DatabaseMetaData.Create | DatabaseMetaData.Drop)]
 	[TableMetaData (TableMetaData.Create | TableMetaData.Alter | TableMetaData.Drop | TableMetaData.Rename | TableMetaData.Name | TableMetaData.Schema | TableMetaData.Columns | TableMetaData.Definition | TableMetaData.Triggers | TableMetaData.IsSystem | TableMetaData.PrimaryKeyConstraint | TableMetaData.CheckConstraint | TableMetaData.UniqueConstraint | TableMetaData.CanAppendColumn)]
-	[ViewMetaData (ViewMetaData.Create | ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
+	[ViewMetaData (ViewMetaData.Create | ViewMetaData.Drop | ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
 	[TableColumnMetaData (ColumnMetaData.Name | ColumnMetaData.Definition | ColumnMetaData.Schema | ColumnMetaData.DataType | ColumnMetaData.DefaultValue | ColumnMetaData.Nullable | ColumnMetaData.Position | ColumnMetaData.PrimaryKeyConstraint | ColumnMetaData.CheckConstraint | ColumnMetaData.UniqueConstraint)]
+	[PrimaryKeyConstraintMetaData (PrimaryKeyConstraintMetaData.Name | PrimaryKeyConstraintMetaData.Columns | PrimaryKeyConstraintMetaData.IsColumnConstraint)]
+	[CheckConstraintMetaData (CheckConstraintMetaData.Name | CheckConstraintMetaData.Columns | CheckConstraintMetaData.IsColumnConstraint | CheckConstraintMetaData.Source)]
+	[UniqueConstraintMetaData (UniqueConstraintMetaData.Name | UniqueConstraintMetaData.Columns | UniqueConstraintMetaData.IsColumnConstraint)]
 	public class SqliteSchemaProvider : AbstractSchemaProvider
 	{
 		public SqliteSchemaProvider (IConnectionPool connectionPool)
@@ -56,20 +59,24 @@ namespace MonoDevelop.Database.Sql
 			IDbCommand command = conn.CreateCommand (
 				"SELECT name, sql FROM sqlite_master WHERE type = 'table'"
 			);
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						TableSchema table = new TableSchema (this);
-	
-						table.SchemaName = "main";
-						table.Name = r.GetString (0);
-						table.IsSystemTable = table.Name.StartsWith ("sqlite_");
-						table.Definition = r.GetString (1);
-						
-						tables.Add (table);
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							TableSchema table = new TableSchema (this);
+		
+							table.SchemaName = "main";
+							table.Name = r.GetString (0);
+							table.IsSystemTable = table.Name.StartsWith ("sqlite_");
+							table.Definition = r.GetString (1);
+							
+							tables.Add (table);
+						}
+						r.Close ();
 					}
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -84,21 +91,25 @@ namespace MonoDevelop.Database.Sql
 			IDbCommand command = conn.CreateCommand (
 				"PRAGMA table_info('" +  table.Name + "')"
 			);
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ColumnSchema column = new ColumnSchema (this);
-		
-						column.Position = r.GetInt32 (0);
-						column.Name = r.GetString (1);
-						column.DataTypeName = r.GetString (2);
-						column.IsNullable = r.GetInt32 (3) == 0;
-						column.DefaultValue = r.GetString (4);
-		
-						columns.Add (column);
-					}
-					r.Close ();
-				};
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							ColumnSchema column = new ColumnSchema (this, table);
+
+							column.Position = r.GetInt32 (0);
+							column.Name = r.GetString (1);
+							column.DataTypeName = r.GetString (2);
+							column.IsNullable = r.GetInt32 (3) != 0;
+							column.DefaultValue = r.IsDBNull (4) ? null : r.GetValue (4).ToString ();
+			
+							columns.Add (column);
+						}
+						r.Close ();
+					};
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -113,19 +124,23 @@ namespace MonoDevelop.Database.Sql
 			IDbCommand command = conn.CreateCommand (
 				"SELECT name, sql FROM sqlite_master WHERE type = 'views'"
 			);
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ViewSchema view = new ViewSchema (this);
-	
-						view.SchemaName = "main";
-						view.Name = r.GetString (0);
-						view.Definition = r.GetString (1);
-						
-						views.Add (view);
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							ViewSchema view = new ViewSchema (this);
+		
+							view.SchemaName = "main";
+							view.Name = r.GetString (0);
+							view.Definition = r.GetString (1);
+							
+							views.Add (view);
+						}
+						r.Close ();
 					}
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -155,94 +170,60 @@ namespace MonoDevelop.Database.Sql
 			
 			//fk and unique
 			IDbCommand command = conn.CreateCommand ("SELECT name, tbl_name FROM sqlite_master WHERE sql IS NULL AND type = 'index'");
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ConstraintSchema constraint = null;
-						
-						if (r.IsDBNull (1) || r.GetString (1) == null) {
-							constraint = new UniqueConstraintSchema (this);
-						} else {
-							ForeignKeyConstraintSchema fkc = new ForeignKeyConstraintSchema (this);
-							fkc.ReferenceTableName = r.GetString (1);
-							
-							constraint = fkc;
-						}
-						constraint.Name = r.GetString (0);
-
-						constraints.Add (constraint);
-					}
-					r.Close ();
-				}
-			}
-			
-			//pk, column
-			if (columnName != null) {
-				command = conn.CreateCommand (
-					"PRAGMA table_info('" +  table.Name + "')"
-				);
+			try {
 				using (command) {
 					using (IDataReader r = command.ExecuteReader()) {
 						while (r.Read ()) {
-							if (r.GetInt32 (5) == 1 && r.GetString (1) == columnName) {
-								PrimaryKeyConstraintSchema constraint = new PrimaryKeyConstraintSchema (this);
+							ConstraintSchema constraint = null;
 							
-								ColumnSchema priColumn = new ColumnSchema (this);
-								priColumn.Name = r.GetString (1);
+							if (r.IsDBNull (1) || r.GetString (1) == null) {
+								constraint = new UniqueConstraintSchema (this);
+							} else {
+								ForeignKeyConstraintSchema fkc = new ForeignKeyConstraintSchema (this);
+								fkc.ReferenceTableName = r.GetString (1);
 								
-								constraint.Columns.Add (priColumn);
-								constraint.IsColumnConstraint = true;
-								constraint.Name = "pk_" + table.Name + "_" + priColumn.Name;
-								
-								constraints.Add (constraint);
+								constraint = fkc;
 							}
+							constraint.Name = r.GetString (0);
+
+							constraints.Add (constraint);
 						}
 						r.Close ();
 					}
 				}
+				
+				//pk, column
+				if (columnName != null) {
+					command = conn.CreateCommand (
+						"PRAGMA table_info('" +  table.Name + "')"
+					);
+					using (command) {
+						using (IDataReader r = command.ExecuteReader()) {
+							while (r.Read ()) {
+								if (r.GetInt32 (5) == 1 && r.GetString (1) == columnName) {
+									PrimaryKeyConstraintSchema constraint = new PrimaryKeyConstraintSchema (this);
+								
+									ColumnSchema priColumn = new ColumnSchema (this, table);
+									priColumn.Name = r.GetString (1);
+									
+									constraint.Columns.Add (priColumn);
+									constraint.IsColumnConstraint = true;
+									constraint.Name = "pk_" + table.Name + "_" + priColumn.Name;
+									
+									constraints.Add (constraint);
+								}
+							}
+							r.Close ();
+						}
+					}
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			
 			conn.Release ();
 
 			return constraints;
-		}
-		
-		public override DataTypeSchemaCollection GetDataTypes ()
-		{
-			//FIXME: this override should be removed, but needed for now cause of a sqlite bug
-			DataTypeSchemaCollection col = new DataTypeSchemaCollection ();
-			DataTypeSchema s1 = new DataTypeSchema (this);
-			DataTypeSchema s2 = new DataTypeSchema (this);
-			DataTypeSchema s3 = new DataTypeSchema (this);
-			DataTypeSchema s4 = new DataTypeSchema (this);
-			s1.Name = "INTEGER";
-			s2.Name = "REAL";
-			s3.Name = "TEXT";
-			s4.Name = "BLOB";
-			col.Add (s1);
-			col.Add (s2);
-			col.Add (s3);
-			col.Add (s4);
-			return col;
-		}
-
-		//http://www.sqlite.org/datatype3.html
-		protected override void ProvideDataTypeInformation (DataTypeSchema schema)
-		{
-			string name = schema.Name.ToUpper ();
-			
-			if (name.Contains ("INT")) {
-				schema.DataTypeCategory = DataTypeCategory.Integer;
-				schema.LengthRange = new Range (1, 8, 4);
-			} else if (name.Contains ("REAL") || name.Contains ("FLOA") || name.Contains ("DOUB")) {
-				schema.DataTypeCategory = DataTypeCategory.Float;
-			} else if (name.Contains ("CHAR") || name.Contains ("CLOB") || name.Contains ("TEXT")) {
-				schema.DataTypeCategory = DataTypeCategory.NVarChar;
-			} else if (name.Contains ("BLOB")) {
-				schema.DataTypeCategory = DataTypeCategory.Binary;
-			} else {
-				schema.DataTypeCategory = DataTypeCategory.Float;
-			}
 		}
 		
 		public override void CreateDatabase (DatabaseSchema database)
@@ -258,7 +239,7 @@ namespace MonoDevelop.Database.Sql
 		}
 
 		//http://www.sqlite.org/lang_createtable.html
-		public override void CreateTable (TableSchema table)
+		public override string GetTableCreateStatement (TableSchema table)
 		{
 			StringBuilder sb = new StringBuilder ();
 			
@@ -269,7 +250,7 @@ namespace MonoDevelop.Database.Sql
 			foreach (ColumnSchema column in table.Columns) {
 				sb.Append (column.Name);
 				sb.Append (' ');
-				sb.Append (column.DataType.ToString ());
+				sb.Append (column.DataType.GetCreateString (column));
 				
 				if (!column.IsNullable)
 					sb.Append (" NOT NULL");
@@ -291,14 +272,7 @@ namespace MonoDevelop.Database.Sql
 			
 			sb.Append (" );");
 			
-			string sql = sb.ToString ();
-			Runtime.LoggingService.Error (sql);
-			
-//			IPooledDbConnection conn = connectionPool.Request ();
-//			IDbCommand command = conn.CreateCommand (sql);
-//			using (command)
-//				conn.ExecuteNonQuery (command);
-//			conn.Release ();
+			return sb.ToString ();
 		}
 		
 		protected virtual string GetConstraintString (ConstraintSchema constraint)
@@ -400,6 +374,11 @@ namespace MonoDevelop.Database.Sql
 			ExecuteNonQuery ("ALTER TABLE " + table.Name + " RENAME TO " + name);
 			
 			table.Name = name;
+		}
+		
+		public override string GetViewAlterStatement (ViewSchema view)
+		{
+			return String.Concat ("DROP VIEW IF EXISTS ", view.Name, "; ", Environment.NewLine, view.Definition); 
 		}
 	}
 }
