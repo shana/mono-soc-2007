@@ -1,5 +1,10 @@
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>
 
+	* Providers/AbstractSchemaProvider.cs, Providers/ISchemaProvider.cs: IsValidName method
+	* Configuration/DatabaseConnectionContextCollection.cs: Contains method that can
+	look for a specific name
+	* Configuration/DatabaseConnectionContext.cs: Refresh event
+
 	* Schema/ViewSchema.cs, Schema/TableSchema.cs: update column parent after clone
 	* Schema/ColumnSchema.cs, Schema/DataTypeSchema.cs: store length, scale and precision
 	information in the datatype and not in the column

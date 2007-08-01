@@ -75,6 +75,15 @@ namespace MonoDevelop.Database.Sql
 			return contexts.Contains (item);
 		}
 		
+		public bool Contains (string name)
+		{
+			foreach (DatabaseConnectionContext context in this) {
+				if (context.ConnectionSettings.Name == name)
+					return true;
+			}
+			return false;
+		}
+		
 		public IEnumerator<DatabaseConnectionContext> GetEnumerator ()
 		{
 			return contexts.GetEnumerator ();
