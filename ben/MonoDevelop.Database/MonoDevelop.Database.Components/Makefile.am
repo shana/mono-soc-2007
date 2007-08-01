@@ -6,7 +6,7 @@ REFS =  \
 	$(GTKSOURCEVIEW_SHARP_LIBS) \
 	-pkg:gtk-dotnet-2.0 \
 	-pkg:monodevelop \
-	-r:../../contrib/Mono.Addins.dll \
+	-r:../../../contrib/Mono.Addins.dll \
 	-r:../MonoDevelop.Database.Sql/bin/Debug/MonoDevelop.Database.Sql.dll \
 	-r:Mono.Posix \
 	-r:System \
