@@ -54,7 +54,7 @@ namespace Gendarme.Rules.Performance {
 							return true;
 						break;
 					case Code.Ldarg_S:
-						if (instruction.Operand == parameter)
+						if (instruction.Operand.Equals (parameter))
 							return true;
 						break;
 					default:
