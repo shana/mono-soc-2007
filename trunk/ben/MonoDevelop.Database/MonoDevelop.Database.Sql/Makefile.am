@@ -136,6 +136,8 @@ FILES =  \
 	Schema/UserSchema.cs \
 	Schema/ViewSchema.cs
 
+RES = MonoDevelop.Database.Sql.addin.xml
+
 ADDIN = MonoDevelop.Database.Sql.addin.xml
 
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
@@ -157,6 +159,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
-EXTRA_DIST = MonoDevelop.Database.Sql.addin.xml
+EXTRA_DIST =
 
 include $(top_srcdir)/Makefile.include

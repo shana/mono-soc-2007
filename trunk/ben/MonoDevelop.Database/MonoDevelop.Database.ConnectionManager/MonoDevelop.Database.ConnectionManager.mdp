@@ -15,7 +15,7 @@
   </Configurations>
   <Contents>
     <File name="./ConnectionManagerPad.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MonoDevelop.Database.ConnectionManager.addin.xml" subtype="Code" buildaction="FileCopy" />
+    <File name="./MonoDevelop.Database.ConnectionManager.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./NodeBuilders/ConnectionContextCollectionNodeBuilder.cs" subtype="Code" buildaction="Compile" />
     <File name="./NodeBuilders/ConnectionContextNodeBuilder.cs" subtype="Code" buildaction="Compile" />
     <File name="./NodeBuilders/TablesNodeBuilder.cs" subtype="Code" buildaction="Compile" />
@@ -48,12 +48,8 @@
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Query" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Designer" />
     <ProjectReference type="Gac" localcopy="True" refto="glib-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="pango-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="atk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
@@ -65,11 +61,15 @@
     <ProjectReference type="Project" localcopy="False" refto="MonoDevelop.Core.Gui" />
     <ProjectReference type="Project" localcopy="False" refto="MonoDevelop.Projects" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Query.dll" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
-    <ResourcesVar />
+    <ResourcesVar Sync="True" Name="RES" />
     <OthersVar />
     <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
     <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />

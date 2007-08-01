@@ -41,7 +41,8 @@ RES =  \
 	icons/Icons.16x16.Database.View.Error.png \
 	icons/Icons.16x16.Database.View.png \
 	icons/Icons.16x16.Database.View.Source.png \
-	icons/Icons.16x16.Database.Views.png
+	icons/Icons.16x16.Database.Views.png \
+	MonoDevelop.Database.Query.addin.xml
 
 FILES =  \
 	Commands/ToolCommands.cs \
@@ -69,6 +70,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
-EXTRA_DIST = MonoDevelop.Database.Query.addin.xml $(RES)
+EXTRA_DIST =
 
 include $(top_srcdir)/Makefile.include

@@ -23,6 +23,8 @@ FILES =  \
 	NpgsqlPooledDbConnection.cs \
 	NpgsqlSchemaProvider.cs
 
+RES = MonoDevelop.Database.Sql.Npgsql.addin.xml
+
 ADDIN = MonoDevelop.Database.Sql.Npgsql.addin.xml
 
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
@@ -44,6 +46,6 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
-EXTRA_DIST = MonoDevelop.Database.Sql.Npgsql.addin.xml
+EXTRA_DIST =
 
 include $(top_srcdir)/Makefile.include
