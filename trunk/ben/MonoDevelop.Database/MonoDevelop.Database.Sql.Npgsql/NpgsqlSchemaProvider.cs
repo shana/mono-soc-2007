@@ -539,6 +539,12 @@ using MonoDevelop.Core;
 			if (table.TableSpaceName != null) {
 				sb.Append (" TABLESPACE ");
 				sb.Append (table.TableSpaceName);
+				sb.Append (';');
+			}
+			
+			foreach (TriggerSchema trigger in table.Triggers) {
+				sb.Append (Environment.NewLine);
+				sb.Append (GetTriggerCreateStatement (trigger));				
 			}
 			
 			return sb.ToString ();
@@ -601,7 +607,64 @@ using MonoDevelop.Core;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createtrigger.html
 		public override void CreateTrigger (TriggerSchema trigger)
 		{
-			throw new NotImplementedException ();
+			string sql = GetTriggerCreateStatement (trigger);
+			ExecuteNonQuery (sql);
+		}
+		
+		protected virtual string GetTriggerCreateStatement (TriggerSchema trigger)
+		{
+			StringBuilder sb = new StringBuilder ();
+			
+			sb.Append ("CREATE TRIGGER ");
+			sb.Append (trigger.Name);
+			
+			switch (trigger.TriggerType) {
+			case TriggerType.Before:
+				sb.Append (" BEFORE");
+				break;
+			case TriggerType.After:
+				sb.Append (" AFTER");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
+			switch (trigger.TriggerEvent) {
+			case TriggerEvent.Insert:
+				sb.Append (" INSERT ");
+				break;
+			case TriggerEvent.Update:
+				sb.Append (" UPDATE ");
+				break;
+			case TriggerEvent.Delete:
+				sb.Append (" DELETE ");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
+			sb.Append ("ON ");
+			sb.Append (trigger.TableName);
+			sb.Append (' ');
+			sb.Append (Environment.NewLine);
+			
+			switch (trigger.TriggerFireType) {
+			case TriggerFireType.ForEachRow:
+				sb.Append (" FOR EACH ROW ");
+				break;
+			case TriggerFireType.ForEachStatement:
+				sb.Append (" FOR EACH STATEMENT ");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
+			sb.Append (Environment.NewLine);
+			sb.Append ("EXECUTE PROCEDURE ");
+			sb.Append (trigger.Source);
+			sb.Append (";");
+			
+			return sb.ToString ();
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createuser.html
