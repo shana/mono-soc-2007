@@ -54,6 +54,7 @@
     <Compile Include="Test\System.Windows.Controls.Primitives\ButtonBaseTest.cs" />
     <None Include="Test\System.Windows.Controls.Primitives\ChangeLog" />
     <None Include="Test\System.Windows.Controls\ChangeLog" />
+    <Compile Include="Test\System.Windows.Controls.Primitives\UniformGridTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ContentControlTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ViewboxTest.cs" />
     <Compile Include="Test\System.Windows.Controls\HeaderedContentControlTest.cs" />

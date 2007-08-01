@@ -1,3 +1,7 @@
+2007-08-01  George Giolfan  <georgegiolfan@yahoo.com>
+	
+	* UniformGrid.cs: Added.
+
 2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
 	
 	* TickBarPlacement.cs: Added.
