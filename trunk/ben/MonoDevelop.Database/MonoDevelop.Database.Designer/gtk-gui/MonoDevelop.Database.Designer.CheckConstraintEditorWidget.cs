@@ -60,6 +60,7 @@ namespace MonoDevelop.Database.Designer {
             this.listCheck = new Gtk.TreeView();
             this.listCheck.CanFocus = true;
             this.listCheck.Name = "listCheck";
+            this.listCheck.HeadersClickable = true;
             this.windowCheck.Add(this.listCheck);
             this.hbox.Add(this.windowCheck);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox[this.windowCheck]));

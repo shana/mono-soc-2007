@@ -7,9 +7,9 @@ REFS =  \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll \
+	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll \
+	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll \
+	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll \
 	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
 	-r:$(top_srcdir)/Extras/MonoDevelop.Database/libs/Mono.Data.Sqlite.dll \
 	-r:Mono.Data \
@@ -55,6 +55,8 @@ assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN) $(SRC_SQLITE_FILES)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb $(BUILD_SQLITE_FILES)
-EXTRA_DIST = MonoDevelop.Database.Sql.Sqlite.addin.xml $(SRC_SQLITE_FILES)
+EXTRA_DIST =  \
+	$(SRC_SQLITE_FILES) \
+	MonoDevelop.Database.Sql.Sqlite.addin.xml
 
 include $(top_srcdir)/Makefile.include

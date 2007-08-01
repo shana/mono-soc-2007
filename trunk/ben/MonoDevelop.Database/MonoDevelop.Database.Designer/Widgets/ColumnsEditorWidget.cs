@@ -142,7 +142,7 @@ namespace MonoDevelop.Database.Designer
 			treeColumns.Reorderable = false;
 			treeColumns.HeadersClickable = false;
 			treeColumns.HeadersVisible = true;
-			treeColumns.EnableGridLines = TreeViewGridLines.Both;
+			//Gtk# 2.10:treeColumns.EnableGridLines = TreeViewGridLines.Both;
 			treeColumns.EnableSearch = false;
 			
 			if (!create) {

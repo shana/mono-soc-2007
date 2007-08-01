@@ -45,6 +45,7 @@ namespace MonoDevelop.Database.Designer {
             this.listUnique = new Gtk.TreeView();
             this.listUnique.CanFocus = true;
             this.listUnique.Name = "listUnique";
+            this.listUnique.HeadersClickable = true;
             this.windowUnique.Add(this.listUnique);
             this.hbox.Add(this.windowUnique);
             Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox[this.windowUnique]));
