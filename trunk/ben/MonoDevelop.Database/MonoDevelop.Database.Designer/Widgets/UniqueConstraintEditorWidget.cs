@@ -66,12 +66,12 @@ namespace MonoDevelop.Database.Designer
 
 		protected virtual void AddClicked (object sender, EventArgs e)
 		{
-			CheckConstraintSchema check = schemaProvider.GetNewCheckConstraintSchema ("check_new");
+			UniqueConstraintSchema uni = schemaProvider.GetNewUniqueConstraintSchema ("uni_new");
 			int index = 1;
-			while (constraints.Contains (check.Name))
-				check.Name = "check_new" + (index++); 
-			constraints.Add (check);
-			AddConstraint (check);
+			while (constraints.Contains (uni.Name))
+				uni.Name = "uni_new" + (index++); 
+			constraints.Add (uni);
+			//AddConstraint (uni);
 		}
 
 		protected virtual void RemoveClicked (object sender, EventArgs e)

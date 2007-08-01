@@ -7,7 +7,6 @@ REFS =  \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
 	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
-	-r:$(top_srcdir)/Extras/contrib/Mono.Addins.dll \
 	-r:System \
 	-r:System.Data \
 	-r:System.Xml
