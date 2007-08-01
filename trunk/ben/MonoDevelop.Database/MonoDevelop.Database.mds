@@ -4,7 +4,6 @@
       <Entry build="True" name="MonoDevelop.Database.Sql" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Sql.Tests" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.GlueGenerator" configuration="Debug" />
-      <Entry build="False" name="MonoDevelop.Database.Visualization" configuration="Debug" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Project" configuration="Debug" />
       <Entry build="False" name="MonoDevelop.Database.Sql.Sybase" configuration="Debug" />
@@ -23,7 +22,6 @@
       <Entry build="True" name="MonoDevelop.Database.Sql" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Sql.Tests" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.GlueGenerator" configuration="Release" />
-      <Entry build="True" name="MonoDevelop.Database.Visualization" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Query" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Project" configuration="Release" />
       <Entry build="True" name="MonoDevelop.Database.Sql.Sybase" configuration="Release" />
@@ -62,7 +60,6 @@
     <Entry filename="./MonoDevelop.Database.Sql/MonoDevelop.Database.Sql.mdp" />
     <Entry filename="./MonoDevelop.Database.Sql.Tests/MonoDevelop.Database.Sql.Tests.mdp" />
     <Entry filename="./MonoDevelop.Database.GlueGenerator/MonoDevelop.Database.GlueGenerator.mdp" />
-    <Entry filename="./MonoDevelop.Database.Visualization/MonoDevelop.Database.Visualization.mdp" />
     <Entry filename="./MonoDevelop.Database.Query/MonoDevelop.Database.Query.mdp" />
     <Entry filename="./MonoDevelop.Database.Project/MonoDevelop.Database.Project.mdp" />
     <Entry filename="./MonoDevelop.Database.Sql.Sybase/MonoDevelop.Database.Sql.Sybase.mdp" />
