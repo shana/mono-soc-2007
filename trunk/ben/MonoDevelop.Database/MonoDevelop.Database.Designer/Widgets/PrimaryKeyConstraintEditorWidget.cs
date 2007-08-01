@@ -88,6 +88,11 @@ namespace MonoDevelop.Database.Designer
 			
 			listPK.Selection.Changed += new EventHandler (SelectionChanged);
 			columnSelecter.ColumnToggled += new EventHandler (ColumnToggled);
+			
+			foreach (PrimaryKeyConstraintSchema pk in constraints.GetConstraints (ConstraintType.PrimaryKey))
+				AddConstraint (pk);
+			
+			ShowAll ();
 		}
 		
 		private void NameEdited (object sender, EditedArgs args)

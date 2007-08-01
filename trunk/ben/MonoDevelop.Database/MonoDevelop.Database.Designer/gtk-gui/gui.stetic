@@ -7,6 +7,7 @@
   <import>
     <widget-library name="../../../../build/AddIns/MonoDevelop.Ide.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Components.dll" />
+    <widget-library name="../../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll" />
     <widget-library name="../bin/Debug/MonoDevelop.Database.Designer.dll" internal="true" />
   </import>
   <widget class="Gtk.Bin" id="MonoDevelop.Database.Designer.TriggersEditorWidget" design-size="422 300">
@@ -1326,84 +1327,106 @@
             <property name="VscrollbarPolicy">Automatic</property>
             <property name="HscrollbarPolicy">Automatic</property>
             <property name="ShadowType">In</property>
+            <property name="SingleSelect">False</property>
           </widget>
         </child>
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="MonoDevelop.Database.Designer.UniqueConstraintEditorWidget" design-size="344 300">
+  <widget class="Gtk.Bin" id="MonoDevelop.Database.Designer.UniqueConstraintEditorWidget" design-size="439 300">
     <property name="MemberName" />
     <child>
-      <widget class="Gtk.HBox" id="hbox">
+      <widget class="Gtk.HPaned" id="hpaned">
         <property name="MemberName" />
-        <property name="Spacing">6</property>
+        <property name="CanFocus">True</property>
+        <property name="Position">276</property>
         <child>
-          <widget class="Gtk.ScrolledWindow" id="windowUnique">
+          <widget class="Gtk.VBox" id="vbox3">
             <property name="MemberName" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.ScrolledWindow" id="windowPK">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="VscrollbarPolicy">Automatic</property>
+                <property name="HscrollbarPolicy">Automatic</property>
+                <property name="ShadowType">In</property>
+                <child>
+                  <widget class="Gtk.TreeView" id="listUnique">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="HeadersClickable">True</property>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.HButtonBox" id="hbuttonbox">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <property name="Size">2</property>
+                <property name="LayoutStyle">Start</property>
+                <child>
+                  <widget class="Gtk.Button" id="buttonAdd">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="UseStock">True</property>
+                    <property name="Type">StockItem</property>
+                    <property name="StockId">gtk-add</property>
+                    <property name="IsDialogButton">False</property>
+                    <signal name="Clicked" handler="AddClicked" />
+                    <property name="label">gtk-add</property>
+                  </widget>
+                  <packing>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="buttonRemove">
+                    <property name="MemberName" />
+                    <property name="Sensitive">False</property>
+                    <property name="CanFocus">True</property>
+                    <property name="UseStock">True</property>
+                    <property name="Type">StockItem</property>
+                    <property name="StockId">gtk-remove</property>
+                    <property name="IsDialogButton">False</property>
+                    <signal name="Clicked" handler="RemoveClicked" />
+                    <property name="label">gtk-remove</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Resize">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="MonoDevelop.Database.Components.SelectColumnWidget" id="columnSelecter">
+            <property name="MemberName" />
+            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="VscrollbarPolicy">Automatic</property>
             <property name="HscrollbarPolicy">Automatic</property>
             <property name="ShadowType">In</property>
-            <child>
-              <widget class="Gtk.TreeView" id="listUnique">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="HeadersClickable">True</property>
-              </widget>
-            </child>
+            <property name="SingleSelect">False</property>
           </widget>
-          <packing>
-            <property name="Position">0</property>
-            <property name="AutoSize">True</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.VButtonBox" id="vbuttonbox">
-            <property name="MemberName" />
-            <property name="Spacing">6</property>
-            <property name="Size">2</property>
-            <property name="LayoutStyle">Start</property>
-            <child>
-              <widget class="Gtk.Button" id="buttonAdd">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="UseStock">True</property>
-                <property name="Type">StockItem</property>
-                <property name="StockId">gtk-add</property>
-                <property name="IsDialogButton">False</property>
-                <signal name="Clicked" handler="AddClicked" />
-                <property name="label">gtk-add</property>
-              </widget>
-              <packing>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.Button" id="buttonRemove">
-                <property name="MemberName" />
-                <property name="Sensitive">False</property>
-                <property name="CanFocus">True</property>
-                <property name="UseStock">True</property>
-                <property name="Type">StockItem</property>
-                <property name="StockId">gtk-remove</property>
-                <property name="IsDialogButton">False</property>
-                <signal name="Clicked" handler="RemoveClicked" />
-                <property name="label">gtk-remove</property>
-              </widget>
-              <packing>
-                <property name="Position">1</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="Position">1</property>
-            <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
         </child>
       </widget>
     </child>

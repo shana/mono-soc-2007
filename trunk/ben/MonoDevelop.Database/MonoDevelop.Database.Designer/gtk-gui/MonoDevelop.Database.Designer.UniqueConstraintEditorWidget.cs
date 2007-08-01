@@ -13,17 +13,21 @@ namespace MonoDevelop.Database.Designer {
     
     public partial class UniqueConstraintEditorWidget {
         
-        private Gtk.HBox hbox;
+        private Gtk.HPaned hpaned;
         
-        private Gtk.ScrolledWindow windowUnique;
+        private Gtk.VBox vbox3;
+        
+        private Gtk.ScrolledWindow windowPK;
         
         private Gtk.TreeView listUnique;
         
-        private Gtk.VButtonBox vbuttonbox;
+        private Gtk.HButtonBox hbuttonbox;
         
         private Gtk.Button buttonAdd;
         
         private Gtk.Button buttonRemove;
+        
+        private MonoDevelop.Database.Components.SelectColumnWidget columnSelecter;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize();
@@ -31,42 +35,47 @@ namespace MonoDevelop.Database.Designer {
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.UniqueConstraintEditorWidget";
             // Container child MonoDevelop.Database.Designer.UniqueConstraintEditorWidget.Gtk.Container+ContainerChild
-            this.hbox = new Gtk.HBox();
-            this.hbox.Name = "hbox";
-            this.hbox.Spacing = 6;
-            // Container child hbox.Gtk.Box+BoxChild
-            this.windowUnique = new Gtk.ScrolledWindow();
-            this.windowUnique.CanFocus = true;
-            this.windowUnique.Name = "windowUnique";
-            this.windowUnique.VscrollbarPolicy = ((Gtk.PolicyType)(1));
-            this.windowUnique.HscrollbarPolicy = ((Gtk.PolicyType)(1));
-            this.windowUnique.ShadowType = ((Gtk.ShadowType)(1));
-            // Container child windowUnique.Gtk.Container+ContainerChild
+            this.hpaned = new Gtk.HPaned();
+            this.hpaned.CanFocus = true;
+            this.hpaned.Name = "hpaned";
+            this.hpaned.Position = 276;
+            // Container child hpaned.Gtk.Paned+PanedChild
+            this.vbox3 = new Gtk.VBox();
+            this.vbox3.Name = "vbox3";
+            this.vbox3.Spacing = 6;
+            // Container child vbox3.Gtk.Box+BoxChild
+            this.windowPK = new Gtk.ScrolledWindow();
+            this.windowPK.CanFocus = true;
+            this.windowPK.Name = "windowPK";
+            this.windowPK.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowPK.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.windowPK.ShadowType = ((Gtk.ShadowType)(1));
+            // Container child windowPK.Gtk.Container+ContainerChild
             this.listUnique = new Gtk.TreeView();
             this.listUnique.CanFocus = true;
             this.listUnique.Name = "listUnique";
             this.listUnique.HeadersClickable = true;
-            this.windowUnique.Add(this.listUnique);
-            this.hbox.Add(this.windowUnique);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox[this.windowUnique]));
+            this.windowPK.Add(this.listUnique);
+            this.vbox3.Add(this.windowPK);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.vbox3[this.windowPK]));
             w2.Position = 0;
-            // Container child hbox.Gtk.Box+BoxChild
-            this.vbuttonbox = new Gtk.VButtonBox();
-            this.vbuttonbox.Name = "vbuttonbox";
-            this.vbuttonbox.Spacing = 6;
-            this.vbuttonbox.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
-            // Container child vbuttonbox.Gtk.ButtonBox+ButtonBoxChild
+            // Container child vbox3.Gtk.Box+BoxChild
+            this.hbuttonbox = new Gtk.HButtonBox();
+            this.hbuttonbox.Name = "hbuttonbox";
+            this.hbuttonbox.Spacing = 6;
+            this.hbuttonbox.LayoutStyle = ((Gtk.ButtonBoxStyle)(3));
+            // Container child hbuttonbox.Gtk.ButtonBox+ButtonBoxChild
             this.buttonAdd = new Gtk.Button();
             this.buttonAdd.CanFocus = true;
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.UseStock = true;
             this.buttonAdd.UseUnderline = true;
             this.buttonAdd.Label = "gtk-add";
-            this.vbuttonbox.Add(this.buttonAdd);
-            Gtk.ButtonBox.ButtonBoxChild w3 = ((Gtk.ButtonBox.ButtonBoxChild)(this.vbuttonbox[this.buttonAdd]));
+            this.hbuttonbox.Add(this.buttonAdd);
+            Gtk.ButtonBox.ButtonBoxChild w3 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox[this.buttonAdd]));
             w3.Expand = false;
             w3.Fill = false;
-            // Container child vbuttonbox.Gtk.ButtonBox+ButtonBoxChild
+            // Container child hbuttonbox.Gtk.ButtonBox+ButtonBoxChild
             this.buttonRemove = new Gtk.Button();
             this.buttonRemove.Sensitive = false;
             this.buttonRemove.CanFocus = true;
@@ -74,17 +83,30 @@ namespace MonoDevelop.Database.Designer {
             this.buttonRemove.UseStock = true;
             this.buttonRemove.UseUnderline = true;
             this.buttonRemove.Label = "gtk-remove";
-            this.vbuttonbox.Add(this.buttonRemove);
-            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(this.vbuttonbox[this.buttonRemove]));
+            this.hbuttonbox.Add(this.buttonRemove);
+            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox[this.buttonRemove]));
             w4.Position = 1;
             w4.Expand = false;
             w4.Fill = false;
-            this.hbox.Add(this.vbuttonbox);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.hbox[this.vbuttonbox]));
+            this.vbox3.Add(this.hbuttonbox);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vbox3[this.hbuttonbox]));
             w5.Position = 1;
             w5.Expand = false;
             w5.Fill = false;
-            this.Add(this.hbox);
+            this.hpaned.Add(this.vbox3);
+            Gtk.Paned.PanedChild w6 = ((Gtk.Paned.PanedChild)(this.hpaned[this.vbox3]));
+            w6.Resize = false;
+            // Container child hpaned.Gtk.Paned+PanedChild
+            this.columnSelecter = new MonoDevelop.Database.Components.SelectColumnWidget();
+            this.columnSelecter.Sensitive = false;
+            this.columnSelecter.CanFocus = true;
+            this.columnSelecter.Name = "columnSelecter";
+            this.columnSelecter.VscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.columnSelecter.HscrollbarPolicy = ((Gtk.PolicyType)(1));
+            this.columnSelecter.ShadowType = ((Gtk.ShadowType)(1));
+            this.columnSelecter.SingleSelect = false;
+            this.hpaned.Add(this.columnSelecter);
+            this.Add(this.hpaned);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }

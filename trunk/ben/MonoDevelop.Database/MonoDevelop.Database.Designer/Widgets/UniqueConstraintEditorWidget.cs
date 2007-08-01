@@ -26,6 +26,7 @@
 using Gtk;
 using System;
 using System.Text;
+using System.Collections.Generic;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Components;
@@ -46,7 +47,8 @@ namespace MonoDevelop.Database.Designer
 		
 		private const int colNameIndex = 0;
 		private const int colIsColumnConstraintIndex = 1;
-		private const int colObjIndex = 2;
+		private const int colColumnsIndex = 2;
+		private const int colObjIndex = 3;
 		
 		public UniqueConstraintEditorWidget (ISchemaProvider schemaProvider, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
 		{
@@ -62,16 +64,113 @@ namespace MonoDevelop.Database.Designer
 			this.constraints = constraints;
 			
 			this.Build();
-		}
+			
+			store = new ListStore (typeof (string), typeof (bool), typeof (string), typeof (object));
+			listUnique.Model = store;
+			listUnique.Selection.Changed += new EventHandler (SelectionChanged);
+			columnSelecter.ColumnToggled += new EventHandler (ColumnToggled);
+			
+			TreeViewColumn colName = new TreeViewColumn ();
+			TreeViewColumn colIsColConstraint = new TreeViewColumn ();
+			TreeViewColumn colColumns = new TreeViewColumn ();
 
+			colName.Title = GettextCatalog.GetString ("Name");
+			colColumns.Title = GettextCatalog.GetString ("Columns");
+			colIsColConstraint.Title = GettextCatalog.GetString ("Column Constraint");
+			
+			CellRendererText nameRenderer = new CellRendererText ();
+			CellRendererText columnsRenderer = new CellRendererText ();
+			CellRendererToggle toggleRenderer = new CellRendererToggle ();
+			
+			nameRenderer.Editable = true;
+			nameRenderer.Edited += new EditedHandler (NameEdited);
+			
+			toggleRenderer.Activatable = true;
+			toggleRenderer.Toggled += new ToggledHandler (IsColumnConstraintToggled);
+			
+			colName.AddAttribute (nameRenderer, "text", colNameIndex);
+			colColumns.AddAttribute (columnsRenderer, "text", colColumnsIndex);
+			colIsColConstraint.AddAttribute (toggleRenderer, "active", colIsColumnConstraintIndex);
+			
+			colName.PackStart (nameRenderer, false);
+			colColumns.PackStart (columnsRenderer, false);
+			colIsColConstraint.PackStart (toggleRenderer, false);
+			
+			listUnique.AppendColumn (colName);
+			listUnique.AppendColumn (colColumns);
+			listUnique.AppendColumn (colIsColConstraint);
+			
+			columnSelecter.Initialize (columns);
+			
+			foreach (UniqueConstraintSchema uni in constraints.GetConstraints (ConstraintType.Unique))
+				AddConstraint (uni);
+			
+			ShowAll ();
+		}
+		
+		private void NameEdited (object sender, EditedArgs args)
+		{
+			TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+				if (!string.IsNullOrEmpty (args.NewText) && !constraints.Contains (args.NewText)) {
+					store.SetValue (iter, colNameIndex, args.NewText);
+				} else {
+					string oldText = store.GetValue (iter, colNameIndex) as string;
+					(sender as CellRendererText).Text = oldText;
+				}
+			}
+		}
+		
+		private void IsColumnConstraintToggled (object sender, ToggledArgs args)
+		{
+	 		TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+	 			bool val = (bool) store.GetValue (iter, colIsColumnConstraintIndex);
+	 			store.SetValue (iter, colIsColumnConstraintIndex, !val);
+				SetSelectionFromIter (iter);
+	 		}
+		}
+		
+		private void SelectionChanged (object sender, EventArgs args)
+		{
+			columnSelecter.DeselectAll ();
+			
+			TreeIter iter;
+			if (listUnique.Selection.GetSelected (out iter)) {
+				columnSelecter.Sensitive = true;
+				SetSelectionFromIter (iter);
+			} else {
+				columnSelecter.Sensitive = false;
+			}
+		}
+		
+		private void SetSelectionFromIter (TreeIter iter)
+		{
+			bool iscolc = (bool)store.GetValue (iter, colIsColumnConstraintIndex);
+			columnSelecter.SingleSelect = iscolc;
+			
+			string colstr = store.GetValue (iter, colColumnsIndex) as string;
+			string[] cols = colstr.Split (',');
+			foreach (string col in cols)
+				columnSelecter.Select (col);
+		}
+		
+		private void ColumnToggled (object sender, EventArgs args)
+		{
+			TreeIter iter;
+			if (listUnique.Selection.GetSelected (out iter)) {
+				store.SetValue (iter, colColumnsIndex, GetColumnsString (columnSelecter.CheckedColumns));
+			}
+		}
+		
 		protected virtual void AddClicked (object sender, EventArgs e)
 		{
 			UniqueConstraintSchema uni = schemaProvider.GetNewUniqueConstraintSchema ("uni_new");
 			int index = 1;
 			while (constraints.Contains (uni.Name))
-				uni.Name = "uni_new" + (index++); 
+				uni.Name = "uni_new" + (index++);
 			constraints.Add (uni);
-			//AddConstraint (uni);
+			AddConstraint (uni);
 		}
 
 		protected virtual void RemoveClicked (object sender, EventArgs e)
@@ -88,6 +187,27 @@ namespace MonoDevelop.Database.Designer
 					constraints.Remove (uni);
 				}
 			}
+		}
+		
+		private void AddConstraint (UniqueConstraintSchema uni)
+		{
+			string colstr = GetColumnsString (uni.Columns);
+			store.AppendValues (uni.Name, uni.IsColumnConstraint, colstr, uni);
+		}
+		
+		private string GetColumnsString (IEnumerable<ColumnSchema> collection)
+		{
+			bool first = true;
+			StringBuilder sb = new StringBuilder ();
+			foreach (ColumnSchema column in collection) {
+				if (first)
+					first = false;
+				else
+					sb.Append (',');
+				
+				sb.Append (column.Name);
+			}
+			return sb.ToString ();
 		}
 		
 		public virtual bool Validate ()
