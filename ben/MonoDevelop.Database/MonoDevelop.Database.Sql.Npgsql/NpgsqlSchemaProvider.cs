@@ -58,46 +58,50 @@ using MonoDevelop.Core;
 				+ "      WHERE r.ev_class = c.oid AND r.ev_type = '1') "
 				+ "ORDER BY relname;"
 			);
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						TableSchema table = new TableSchema (this);
-	
-						table.Name = r.GetString (0);
-						table.IsSystemTable = table.Name.StartsWith ("pg_") || table.Name.StartsWith ("sql_");
-						table.SchemaName = r.GetString (1);
-						table.OwnerName = r.GetString (2);
-						table.Comment = r.GetString (3);
-						
-						StringBuilder sb = new StringBuilder();
-						sb.AppendFormat ("-- Table: {0}\n", table.Name);
-						sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
-						sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
-						
-						ColumnSchemaCollection columns = table.Columns;
-						string[] parts = new string[columns.Count];
-						int i = 0;
-						foreach (ColumnSchema col in columns)
-							parts[i++] = col.Definition;
-						sb.Append (String.Join (",\n", parts));
-						
-						ConstraintSchemaCollection constraints = table.Constraints;
-						parts = new string[constraints.Count];
-						if (constraints.Count > 0)
-							sb.Append (",\n");
-						i = 0;
-						foreach (ConstraintSchema constr in constraints)
-							parts[i++] = "\t" + constr.Definition;
-						sb.Append (String.Join (",\n", parts));
-						
-						sb.Append ("\n);\n");
-						sb.AppendFormat ("COMMENT ON TABLE {0} IS '{1}';", table.Name, table.Comment);
-						table.Definition = sb.ToString();
-						
-						tables.Add (table);
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							TableSchema table = new TableSchema (this);
+		
+							table.Name = r.GetString (0);
+							table.IsSystemTable = table.Name.StartsWith ("pg_") || table.Name.StartsWith ("sql_");
+							table.SchemaName = r.GetString (1);
+							table.OwnerName = r.GetString (2);
+							table.Comment = r.GetString (3);
+							
+							StringBuilder sb = new StringBuilder();
+							sb.AppendFormat ("-- Table: {0}\n", table.Name);
+							sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
+							sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
+							
+							ColumnSchemaCollection columns = table.Columns;
+							string[] parts = new string[columns.Count];
+							int i = 0;
+							foreach (ColumnSchema col in columns)
+								parts[i++] = col.Definition;
+							sb.Append (String.Join (",\n", parts));
+							
+							ConstraintSchemaCollection constraints = table.Constraints;
+							parts = new string[constraints.Count];
+							if (constraints.Count > 0)
+								sb.Append (",\n");
+							i = 0;
+							foreach (ConstraintSchema constr in constraints)
+								parts[i++] = "\t" + constr.Definition;
+							sb.Append (String.Join (",\n", parts));
+							
+							sb.Append ("\n);\n");
+							sb.AppendFormat ("COMMENT ON TABLE {0} IS '{1}';", table.Name, table.Comment);
+							table.Definition = sb.ToString();
+							
+							tables.Add (table);
+						}
+						r.Close ();
 					}
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -126,31 +130,35 @@ using MonoDevelop.Core;
 				+ "AND a.atttypid = typ.oid "
 				+ "ORDER BY a.attnum;"
 			);
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ColumnSchema column = new ColumnSchema (this);
-		
-						column.Name = r.GetString (0);
-						column.DataTypeName = r.GetString (3);
-						column.IsNullable = r.GetBoolean (1);
-						column.DefaultValue = r.GetString (4);
-						column.Length = r.GetInt32 (2);
-				
-						StringBuilder sb = new StringBuilder();
-						sb.AppendFormat("{0} {1}{2}",
-							column.Name,
-							column.DataTypeName,
-							(column.Length > 0) ? ("(" + column.Length + ")") : "");
-						sb.AppendFormat(" {0}", column.IsNullable ? "NULL" : "NOT NULL");
-						if (column.DefaultValue.Length > 0)
-							sb.AppendFormat(" DEFAULT {0}", column.DefaultValue);
-						column.Definition = sb.ToString();
-		
-						columns.Add (column);
-					}
-					r.Close ();
-				};
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							ColumnSchema column = new ColumnSchema (this, table);
+			
+							column.Name = r.GetString (0);
+							column.DataTypeName = r.GetString (3);
+							column.IsNullable = r.GetBoolean (1);
+							column.DefaultValue = r.GetString (4);
+							column.DataType.LengthRange.Default = r.GetInt32 (2);
+					
+							StringBuilder sb = new StringBuilder();
+							sb.AppendFormat("{0} {1}{2}",
+								column.Name,
+								column.DataTypeName,
+								(column.DataType.LengthRange.Default > 0) ? ("(" + column.DataType.LengthRange.Default + ")") : "");
+							sb.AppendFormat(" {0}", column.IsNullable ? "NULL" : "NOT NULL");
+							if (column.DefaultValue.Length > 0)
+								sb.AppendFormat(" DEFAULT {0}", column.DefaultValue);
+							column.Definition = sb.ToString();
+			
+							columns.Add (column);
+						}
+						r.Close ();
+					};
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -172,29 +180,34 @@ using MonoDevelop.Core;
 				+ "WHERE v.viewname = c.relname "
 				+ "ORDER BY viewname"
 			);
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ViewSchema view = new ViewSchema (this);
-	
-						view.Name = r.GetString (1);
-						view.OwnerName = r.GetString (2);
-						view.SchemaName = r.GetString (0);
-						view.IsSystemView = r.GetBoolean (4);
-						view.Comment = r.GetString (5);
-						
-						StringBuilder sb = new StringBuilder();
-						sb.AppendFormat ("-- View: {0}\n", view.Name);
-						sb.AppendFormat ("-- DROP VIEW {0};\n\n", view.Name);
-						sb.AppendFormat ("CREATE VIEW {0} AS (\n", view.Name);
-						string core = r.GetString(3);
-						sb.AppendFormat ("  {0}\n);", core.Substring (0, core.Length-1));
-						view.Definition = sb.ToString ();
-						
-						views.Add (view);
+
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							ViewSchema view = new ViewSchema (this);
+		
+							view.Name = r.GetString (1);
+							view.OwnerName = r.GetString (2);
+							view.SchemaName = r.GetString (0);
+							view.IsSystemView = r.GetBoolean (4);
+							view.Comment = r.GetString (5);
+							
+							StringBuilder sb = new StringBuilder();
+							sb.AppendFormat ("-- View: {0}\n", view.Name);
+							sb.AppendFormat ("-- DROP VIEW {0};\n\n", view.Name);
+							sb.AppendFormat ("CREATE VIEW {0} AS (\n", view.Name);
+							string core = r.GetString(3);
+							sb.AppendFormat ("  {0}\n);", core.Substring (0, core.Length-1));
+							view.Definition = sb.ToString ();
+							
+							views.Add (view);
+						}
+						r.Close ();
 					}
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -219,21 +232,25 @@ using MonoDevelop.Core;
 				+ "  AND a.attnum > 0 AND NOT a.attisdropped "
 				+ "     ORDER BY a.attnum;"
 			);
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {
-						ColumnSchema column = new ColumnSchema (this);
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {
+							ColumnSchema column = new ColumnSchema (this, view);
 
-						column.Name = r.GetString(0);
-						column.DataTypeName = r.GetString (1);
-						column.SchemaName = view.SchemaName;
-						column.IsNullable = r.GetBoolean (3);
-						column.Length = r.GetInt32 (2);
-		
-						columns.Add (column);
-					}
-					r.Close ();
-				};
+							column.Name = r.GetString(0);
+							column.DataTypeName = r.GetString (1);
+							column.SchemaName = view.SchemaName;
+							column.IsNullable = r.GetBoolean (3);
+							column.DataType.LengthRange.Default = r.GetInt32 (2);
+			
+							columns.Add (column);
+						}
+						r.Close ();
+					};
+				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -266,23 +283,26 @@ using MonoDevelop.Core;
 				+ "AND pc.prorettype = 0 "
 				+ "AND pc.prolang = pl.oid;"
 			);
-			
-			using (command) {
-			    	using (IDataReader r = command.ExecuteReader()) {
-			    		while (r.Read ()) {
-			    			ProcedureSchema procedure = new ProcedureSchema (this);
-						
-						procedure.Name = r.GetString (0);
-						procedure.Definition = r.GetString (3);
-						procedure.LanguageName = r.GetString (2);
-						
-						if (!r.IsDBNull (1) && r.GetInt32 (1) <= LastSystemOID)
-							procedure.IsSystemProcedure = true;
-			    			
-			    			procedures.Add (procedure);
-			    		}
-					r.Close ();
+			try {
+				using (command) {
+				    	using (IDataReader r = command.ExecuteReader()) {
+				    		while (r.Read ()) {
+				    			ProcedureSchema procedure = new ProcedureSchema (this);
+							
+							procedure.Name = r.GetString (0);
+							procedure.Definition = r.GetString (3);
+							procedure.LanguageName = r.GetString (2);
+							
+							if (!r.IsDBNull (1) && r.GetInt32 (1) <= LastSystemOID)
+								procedure.IsSystemProcedure = true;
+				    			
+				    			procedures.Add (procedure);
+				    		}
+						r.Close ();
+					}
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 			
@@ -359,36 +379,40 @@ using MonoDevelop.Core;
 				+ "ORDER BY "
 				+ "1;", table.Name, table.SchemaName
 			));
-			using (command) {
-				using (IDataReader r = command.ExecuteReader()) {
-					while (r.Read ()) {	
-						ConstraintSchema constraint = null;
-										
-						// XXX: Add support for Check constraints.
-						switch (r.GetString (2)) {
-							case "f":
-								string match = @".*REFERENCES (.+)\(.*\).*";
-								constraint = new ForeignKeyConstraintSchema (this);
-								if (Regex.IsMatch (r.GetString (1), match))
-									(constraint as ForeignKeyConstraintSchema).ReferenceTableName
-										= Regex.Match (r.GetString (1), match).Groups[0].Captures[0].Value;
-								break;
-							case "u":
-								constraint = new UniqueConstraintSchema (this);
-								break;
-							case "p":
-							default:
-								constraint = new PrimaryKeyConstraintSchema (this);
-								break;
-						}
-					
-						constraint.Name = r.GetString (0);
-						constraint.Definition = r.GetString (1);
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader()) {
+						while (r.Read ()) {	
+							ConstraintSchema constraint = null;
+											
+							// XXX: Add support for Check constraints.
+							switch (r.GetString (2)) {
+								case "f":
+									string match = @".*REFERENCES (.+)\(.*\).*";
+									constraint = new ForeignKeyConstraintSchema (this);
+									if (Regex.IsMatch (r.GetString (1), match))
+										(constraint as ForeignKeyConstraintSchema).ReferenceTableName
+											= Regex.Match (r.GetString (1), match).Groups[0].Captures[0].Value;
+									break;
+								case "u":
+									constraint = new UniqueConstraintSchema (this);
+									break;
+								case "p":
+								default:
+									constraint = new PrimaryKeyConstraintSchema (this);
+									break;
+							}
 						
-						constraints.Add (constraint);
+							constraint.Name = r.GetString (0);
+							constraint.Definition = r.GetString (1);
+							
+							constraints.Add (constraint);
+						}
+						r.Close ();
 					}
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -401,38 +425,43 @@ using MonoDevelop.Core;
 
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand ("SELECT * FROM pg_user;");
-			using (command) {
-				using (IDataReader r = command.ExecuteReader ()) {
-					while (r.Read ()) {
-						UserSchema user = new UserSchema (this);
-						
-						user.Name = r.GetString (0);
-						user.UserId = String.Format ("{0}", r.GetValue (1));
-						user.Expires = r.IsDBNull (6) ? DateTime.MinValue : r.GetDateTime (6);
-						//user.Options["createdb"] = r.GetBoolean (2);
-						//user.Options["createuser"] = r.GetBoolean (3);
-						user.Password = r.GetString (5);
-						
-						StringBuilder sb = new StringBuilder ();
-						sb.AppendFormat ("-- User: \"{0}\"\n\n", user.Name);
-						sb.AppendFormat ("-- DROP USER {0};\n\n", user.Name);
-						sb.AppendFormat ("CREATE USER {0}", user.Name);
-						sb.AppendFormat ("  WITH SYSID {0}", user.UserId);
-						if (user.Password != "********")
-							sb.AppendFormat (" ENCRYPTED PASSWORD {0}", user.Password);
-						//sb.AppendFormat (((bool) user.Options["createdb"]) ?
-						//	" CREATEDB" : " NOCREATEDB");
-						//sb.AppendFormat (((bool) user.Options["createuser"]) ?
-						//	" CREATEUSER" : " NOCREATEUSER");
-						if (user.Expires != DateTime.MinValue)
-							sb.AppendFormat (" VALID UNTIL {0}", user.Expires);
-						sb.Append (";");
-						user.Definition = sb.ToString ();
-	
-						users.Add (user);
+
+			try {
+				using (command) {
+					using (IDataReader r = command.ExecuteReader ()) {
+						while (r.Read ()) {
+							UserSchema user = new UserSchema (this);
+							
+							user.Name = r.GetString (0);
+							user.UserId = String.Format ("{0}", r.GetValue (1));
+							user.Expires = r.IsDBNull (6) ? DateTime.MinValue : r.GetDateTime (6);
+							//user.Options["createdb"] = r.GetBoolean (2);
+							//user.Options["createuser"] = r.GetBoolean (3);
+							user.Password = r.GetString (5);
+							
+							StringBuilder sb = new StringBuilder ();
+							sb.AppendFormat ("-- User: \"{0}\"\n\n", user.Name);
+							sb.AppendFormat ("-- DROP USER {0};\n\n", user.Name);
+							sb.AppendFormat ("CREATE USER {0}", user.Name);
+							sb.AppendFormat ("  WITH SYSID {0}", user.UserId);
+							if (user.Password != "********")
+								sb.AppendFormat (" ENCRYPTED PASSWORD {0}", user.Password);
+							//sb.AppendFormat (((bool) user.Options["createdb"]) ?
+							//	" CREATEDB" : " NOCREATEDB");
+							//sb.AppendFormat (((bool) user.Options["createuser"]) ?
+							//	" CREATEUSER" : " NOCREATEUSER");
+							if (user.Expires != DateTime.MinValue)
+								sb.AppendFormat (" VALID UNTIL {0}", user.Expires);
+							sb.Append (";");
+							user.Definition = sb.ToString ();
+		
+							users.Add (user);
+						}
+						r.Close ();
 					}
-					r.Close ();
 				}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
 			}
 			conn.Release ();
 
@@ -462,15 +491,11 @@ using MonoDevelop.Core;
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createdatabase.html
 		public override void CreateDatabase (DatabaseSchema database)
 		{
-			IPooledDbConnection conn = connectionPool.Request ();
-			IDbCommand command = conn.CreateCommand ("CREATE DATABASE " + database.Name);
-			using (command)
-				command.ExecuteNonQuery ();
-			conn.Release ();
+			ExecuteNonQuery ("CREATE DATABASE " + database.Name);
 		}
 
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createtable.html
-		public override void CreateTable (TableSchema table)
+		public override string GetTableCreateStatement (TableSchema table)
 		{
 			StringBuilder sb = new StringBuilder ();
 			
@@ -487,7 +512,7 @@ using MonoDevelop.Core;
 				
 				sb.Append (column.Name);
 				sb.Append (' ');
-				sb.Append (column.DataType.ToString ());
+				sb.Append (column.DataType.GetCreateString (column));
 				
 				if (!column.IsNullable)
 					sb.Append (" NOT NULL");
@@ -516,14 +541,7 @@ using MonoDevelop.Core;
 				sb.Append (table.TableSpaceName);
 			}
 			
-			string sql = sb.ToString ();
-			Runtime.LoggingService.Error (sql);
-			
-//			IPooledDbConnection conn = connectionPool.Request ();
-//			IDbCommand command = conn.CreateCommand (sql);
-//			using (command)
-//				conn.ExecuteNonQuery (command);
-//			conn.Release ();
+			return sb.ToString ();
 		}
 					
 		protected virtual string GetConstraintString (ConstraintSchema constraint, bool isTableConstraint)
@@ -698,6 +716,18 @@ using MonoDevelop.Core;
 			ExecuteNonQuery ("ALTER USER " + user.Name + " RENAME TO " + name + ";");
 			
 			user.Name = name;
+		}
+		
+		public override string GetViewAlterStatement (ViewSchema view)
+		{
+			//'CREATE ' <-- after this we insert
+			return view.Definition.Insert (6, "OR REPLACE ");
+		}
+		
+		public override string GetProcedureAlterStatement (ProcedureSchema procedure)
+		{
+			//'CREATE ' <-- after this we insert
+			return procedure.Definition.Insert (6, "OR REPLACE ");
 		}
 						
 		/// <summary>

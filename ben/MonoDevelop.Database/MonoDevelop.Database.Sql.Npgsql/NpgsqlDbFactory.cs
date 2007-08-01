@@ -86,7 +86,7 @@ using MonoDevelop.Database.Components;
 			settings.ProviderIdentifier = Identifier;
 			settings.Server = "localhost";
 			settings.Port = 5432;
-			settings.Username = "SYSDBA";
+			settings.Username = "postgres";
 			settings.MaxPoolSize = 5;
 			
 			return settings;

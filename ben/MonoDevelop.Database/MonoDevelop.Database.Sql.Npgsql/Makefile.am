@@ -1,7 +1,7 @@
 ADDIN_BUILD = $(top_builddir)/build/AddIns/MonoDevelop.Database
 ASSEMBLY = $(ADDIN_BUILD)/MonoDevelop.Database.Sql.Npgsql.dll
 REFS =  \
-	-pkg:gtk-sharp-2.0 \
+	$(GTK_SHARP_LIBS) \
 	-pkg:monodevelop \
 	-r:../MonoDevelop.Database.Components/bin/Debug/MonoDevelop.Database.Components.dll \
 	-r:../MonoDevelop.Database.Designer/bin/Debug/MonoDevelop.Database.Designer.dll \
