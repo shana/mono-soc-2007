@@ -1,3 +1,14 @@
+2007-08-02  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/Test/TestUtils.cs: Minor change.
+	* Monodoc.Editor.Gui/Test/TestDocumentTagTable.cs,
+	  Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Added
+	  TestDocumentTagTable that has the test units for the
+	  DocumentTagTable class.
+	* Monodoc.Editor.Gui/DocumentTagTable.cs: Raise an Argument Exception
+	  if the tag name is not a valid dynamic tag in CreateDynamicTag
+	  method.
+
 2007-08-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/Test/TestUtils.cs: Added test units for GetLastTag
