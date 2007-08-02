@@ -1,3 +1,11 @@
+2007-08-02  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/TestUtils.cs: Minor typo.
+	* Test/TestDocumentTagTable.cs: Added a test to check the base number
+	  of tags (115) in DocumentTagTable class
+	* DocumentBufferArchiver.cs, DocumentTagTable.cs: IsDynamic method and
+	  dynamic_tags member are now static.
+
 2007-08-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Test/TestUtils.cs: Added unit test for TagEndsHere static method.
