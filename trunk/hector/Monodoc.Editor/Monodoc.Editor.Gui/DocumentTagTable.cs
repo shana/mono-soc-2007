@@ -31,6 +31,10 @@ public class DocumentTagTable : TextTagTable {
 	
 	public DocumentTag CreateDynamicTag (string fullTagName)
 	{
+		string tagName = fullTagName.Split ('#') [0];
+		if (!IsDynamic (tagName))
+			throw new ArgumentException ("Error: The tag {0} is not a Dynamic Tag");
+		
 		DocumentTag tag;
 		tag = new DocumentTag (fullTagName);
 		tag.IsDynamic = true;

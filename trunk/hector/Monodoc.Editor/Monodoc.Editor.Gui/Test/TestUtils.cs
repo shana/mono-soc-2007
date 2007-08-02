@@ -9,7 +9,6 @@
 using Gtk;
 using System;
 using NUnit.Framework;
-using Monodoc.Editor.Gui;
 
 namespace Monodoc.Editor.Gui {
 [TestFixture()]
