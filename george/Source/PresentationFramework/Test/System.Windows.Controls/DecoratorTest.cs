@@ -1,7 +1,9 @@
 using NUnit.Framework;
 using System.Collections;
 using System.Windows.Markup;
+using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 namespace Mono.System.Windows.Controls {
 #else
@@ -129,9 +131,110 @@ namespace System.Windows.Controls {
 		public void IAddChildTest() {
 			Decorator d = new Decorator();
 			IAddChild add_child = (IAddChild)d;
-			Button b = new Button();
+			UIElement b = new UIElement();
 			add_child.AddChild(b);
 			Assert.AreSame(d.Child, b, "1");
+			try {
+				add_child.AddChild(new UIElement());
+				Assert.Fail("2");
+			} catch (ArgumentException ex) {
+				Assert.AreEqual(ex.Message, "'System.Windows.Controls.Decorator' already has a child and cannot add 'System.Windows.UIElement'. 'System.Windows.Controls.Decorator' can accept only one child.", "3");
+			}
+			d.Child = null;
+			try {
+				add_child.AddChild(new DrawingVisual());
+				Assert.Fail("4");
+			} catch (ArgumentException ex) {
+				Assert.AreEqual(ex.Message, "Parameter is unexpected type 'System.Windows.Media.DrawingVisual'. Expected type is 'System.Windows.UIElement'.\r\nParameter name: value", "5");
+			}
+			d.Child = new UIElement();
+			try {
+				add_child.AddChild(new DrawingVisual());
+				Assert.Fail("5");
+			} catch (ArgumentException ex) {
+				Assert.AreEqual(ex.Message, "Parameter is unexpected type 'System.Windows.Media.DrawingVisual'. Expected type is 'System.Windows.UIElement'.\r\nParameter name: value", "6");
+			}
+			d.Child = null;
+			try {
+				add_child.AddChild(null);
+				Assert.Fail("7");
+			} catch (NullReferenceException) {
+			}
+			try {
+				add_child.AddText("1");
+				Assert.Fail("8");
+			} catch (ArgumentException ex) {
+				Assert.AreEqual(ex.Message, "'1' text cannot be added because text is not valid in this element.", "9");
+			}
 		}
+
+		#region AddChildCallsChild
+		[Test]
+		public void AddChildCallsChild() {
+			new AddChildCallsChildDecorator();
+		}
+
+		class AddChildCallsChildDecorator : Decorator {
+			int get_calls;
+			int set_calls;
+
+			public AddChildCallsChildDecorator() {
+				Assert.AreEqual(get_calls, 0, "1");
+				Assert.AreEqual(set_calls, 0, "2");
+				((IAddChild)this).AddChild(new UIElement());
+				Assert.AreEqual(get_calls, 1, "3");
+				Assert.AreEqual(set_calls, 1, "4");
+			}
+
+			public override UIElement Child {
+				get {
+					get_calls++;
+					return base.Child;
+				}
+				set {
+					set_calls++;
+					base.Child = value;
+				}
+			}
+		}
+		#endregion
+
+		[Test]
+		public void ChildAddsVisualChild() {
+			Decorator d = new Decorator();
+			d.Child = new UIElement();
+			Assert.AreEqual(VisualTreeHelper.GetChildrenCount(d), 1);
+		}
+
+		#region ChildAddsVisualChild2
+		[Test]
+		public void ChildAddsVisualChild2() {
+			new ChildAddsVisualChild2Decorator();
+		}
+
+		class ChildAddsVisualChild2Decorator : Decorator {
+			static int calls;
+
+			public ChildAddsVisualChild2Decorator() {
+				Window w = new Window();
+				w.Content = this;
+				w.Show();
+				Child = new TestFrameworkElement();
+				Assert.AreEqual(calls, 0);
+			}
+
+			class TestFrameworkElement : FrameworkElement {
+				protected override void OnRender(DrawingContext drawingContext) {
+					calls++;
+					base.OnRender(drawingContext);
+				}
+
+				protected override Size MeasureOverride(Size availableSize) {
+					calls++;
+					return base.MeasureOverride(availableSize);
+				}
+			}
+		}
+		#endregion
 	}
 }

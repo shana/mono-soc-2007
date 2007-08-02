@@ -1,5 +1,9 @@
 2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Decorator.cs: Implemented IAddChild members and fixed Child.
+
+2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Decorator.cs: Added.
 	
 2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>

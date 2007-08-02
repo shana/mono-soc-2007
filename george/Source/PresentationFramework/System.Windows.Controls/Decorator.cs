@@ -2,6 +2,7 @@ using System.Collections;
 using System.Windows.Markup;
 using System.Windows.Media;
 #if Implementation
+using System;
 using System.Windows;
 namespace Mono.System.Windows.Controls {
 #else
@@ -22,7 +23,18 @@ namespace System.Windows.Controls {
 		#region Public Properties
 		public virtual UIElement Child {
 			get { return child; }
-			set { child = value; }
+			set {
+				if (child == value)
+					return;
+				if (child != null) {
+					RemoveLogicalChild(child);
+					RemoveVisualChild(child);
+				}
+				child = value;
+				AddLogicalChild(child);
+				AddVisualChild(child);
+				InvalidateVisual();
+			}
 		}
 		#endregion
 
@@ -63,11 +75,21 @@ namespace System.Windows.Controls {
 		#region Explicit Interface Implementations
 		#region IAddChild
 		void IAddChild.AddChild(object value) {
-			//WDTDH
+			UIElement ui_element = value as UIElement;
+			if (ui_element == null)
+				if (value == null)
+					throw new NullReferenceException();
+				else
+					throw new ArgumentException(string.Format("Parameter is unexpected type '{0}'. Expected type is 'System.Windows.UIElement'.\r\nParameter name: value", value.GetType().FullName));
+			else
+				if (Child == null)
+					Child = ui_element;
+				else
+					throw new ArgumentException(string.Format("'System.Windows.Controls.Decorator' already has a child and cannot add '{0}'. 'System.Windows.Controls.Decorator' can accept only one child.", value.GetType().FullName));
 		}
 
 		void IAddChild.AddText(string text) {
-			//WDTDH
+			throw new ArgumentException(string.Format("'{0}' text cannot be added because text is not valid in this element.", text));
 		}
 		#endregion
 		#endregion
