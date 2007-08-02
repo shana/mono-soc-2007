@@ -445,10 +445,105 @@ using MonoDevelop.Core;
 			conn.Release ();
 		}
 
-		//http://msdn2.microsoft.com/en-us/library/aa258259(SQL.80).aspx
-		public override void CreateTable (TableSchema table)
+		//http://msdn2.microsoft.com/en-us/library/aa258255(SQL.80).aspx
+		public override string GetTableCreateStatement (TableSchema table)
 		{
-			throw new NotImplementedException ();
+			StringBuilder sb = new StringBuilder ();
+			sb.Append ("CREATE TABLE ");
+			sb.Append (table.Name);
+			sb.Append (' ');
+			
+			bool first = true;
+			foreach (ColumnSchema column in table.Columns) {
+				if (first)
+					first = false;
+				else
+					sb.Append ("," + Environment.NewLine);
+				
+				sb.Append (column.Name);
+				sb.Append (' ');
+				sb.Append (column.DataType.GetCreateString (column));
+
+				if (column.HasDefaultValue) {
+					sb.Append (" DEFAULT ");
+					if (column.DefaultValue == null)
+						sb.Append ("NULL");
+					else
+						sb.Append (column.DefaultValue);
+				}
+				if (!column.IsNullable)
+					sb.Append (" NOT NULL");
+				//TODO: AUTO_INCREMENT
+				
+				foreach (ConstraintSchema constraint in column.Constraints) {
+					switch (constraint.ConstraintType) {
+					case ConstraintType.Unique:
+						sb.Append (" UNIQUE");
+						break;
+					case ConstraintType.PrimaryKey:
+						sb.Append (" PRIMARY KEY");
+						break;
+					default:
+						throw new NotImplementedException ();
+					}
+				}
+				
+				//TODO: col comment
+			}
+			//TODO: table comment
+			
+			foreach (ConstraintSchema constraint in table.Constraints) {
+				sb.Append ("," + Environment.NewLine);
+				sb.Append (GetConstraintString (constraint));
+			}
+			
+			sb.Append (";");
+			
+			foreach (TriggerSchema trigger in table.Triggers) {
+				sb.Append (Environment.NewLine);
+				sb.Append (GetTriggerCreateStatement (trigger));				
+			}
+
+			return sb.ToString ();
+		}
+		
+		protected virtual string GetConstraintString (ConstraintSchema constraint)
+		{
+			StringBuilder sb = new StringBuilder ();
+			sb.Append ("CONSTRAINT ");
+			sb.Append (constraint.Name);
+			sb.Append (' ');
+
+			switch (constraint.ConstraintType) {
+			case ConstraintType.PrimaryKey:
+				sb.Append ("PRIMARY KEY ");
+				sb.Append (GetColumnsString (constraint.Columns, true));
+				break;
+			case ConstraintType.Unique:
+				sb.Append ("UNIQUE ");
+				sb.Append (GetColumnsString (constraint.Columns, true));
+				break;
+			case ConstraintType.Check:
+				sb.Append ("CHECK (");
+				sb.Append ((constraint as CheckConstraintSchema).Source);
+				sb.Append (")");
+				break;
+			case ConstraintType.ForeignKey:
+				sb.Append ("FOREIGN KEY ");
+				sb.Append (GetColumnsString (constraint.Columns, true));
+				sb.Append (" REFERENCES ");
+				
+				ForeignKeyConstraintSchema fk = constraint as ForeignKeyConstraintSchema;
+				sb.Append (fk.ReferenceTable);
+				sb.Append (' ');
+				if (fk.ReferenceColumns != null)
+					sb.Append (GetColumnsString (fk.ReferenceColumns, true));
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+			
+			return sb.ToString ();
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa258254(SQL.80).aspx
@@ -472,7 +567,56 @@ using MonoDevelop.Core;
 		//http://msdn2.microsoft.com/en-us/library/aa258254(SQL.80).aspx
 		public override void CreateTrigger (TriggerSchema trigger)
 		{
-			throw new NotImplementedException ();
+			string sql = GetTriggerCreateStatement (trigger);
+			ExecuteNonQuery (sql);
+		}
+		
+		protected virtual string GetTriggerCreateStatement (TriggerSchema trigger)
+		{
+			StringBuilder sb = new StringBuilder ();
+		
+//		{ FOR | AFTER | INSTEAD OF } { [ INSERT ] [ , ] [ UPDATE ] [ , ] [ DELETE ] }
+//        [ WITH APPEND ]
+//        [ NOT FOR REPLICATION ]
+//        AS
+//        [ { IF UPDATE ( column )
+//            [ { AND | OR } UPDATE ( column ) ]
+//                [ ...n ]
+//        | IF ( COLUMNS_UPDATED ( ) { bitwise_operator } updated_bitmask )
+//                { comparison_operator } column_bitmask [ ...n ]
+//        } ]
+//        sql_statement [ ...n ] 
+			
+			sb.Append ("CREATE TRIGGER ");
+			sb.Append (trigger.Name);
+			sb.Append (" ON ");
+			sb.Append (trigger.TableName);
+
+			if (trigger.TriggerType == TriggerType.Before)
+				sb.Append (" FOR ");
+			else
+				sb.Append (" AFTER ");
+			
+			switch (trigger.TriggerEvent) {
+			case TriggerEvent.Delete:
+				sb.Append ("DELETE");
+				break;
+			case TriggerEvent.Insert:
+				sb.Append ("INSERT");
+				break;
+			case TriggerEvent.Update:
+				sb.Append ("UPDATE");
+				break;
+			default:
+				throw new NotImplementedException ();
+			}
+
+			sb.Append (" AS ");
+			sb.Append (Environment.NewLine);
+			sb.Append (trigger.Source);
+			sb.Append (";");
+			
+			return sb.ToString ();
 		}
 		
 		//http://msdn2.microsoft.com/en-us/library/aa275464(SQL.80).aspx
@@ -490,13 +634,13 @@ using MonoDevelop.Core;
 		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
 		public override void AlterView (ViewSchema view)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery (view.Definition);
 		}
 
 		//http://msdn2.microsoft.com/en-us/library/aa225939(SQL.80).aspx
 		public override void AlterProcedure (ProcedureSchema procedure)
 		{
-			throw new NotImplementedException ();
+			ExecuteNonQuery (procedure.Definition);
 		}
 
 		public override void AlterIndex (IndexSchema index)

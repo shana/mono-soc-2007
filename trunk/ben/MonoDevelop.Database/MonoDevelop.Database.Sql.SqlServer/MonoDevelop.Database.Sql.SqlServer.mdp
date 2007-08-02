@@ -1,13 +1,13 @@
 <Project name="MonoDevelop.Database.Sql.SqlServer" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" assembly="MonoDevelop.Database.Sql.SqlServer" />
+      <Output directory="../../../build/AddIns/MonoDevelop.Database" assembly="MonoDevelop.Database.Sql.SqlServer" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" assembly="MonoDevelop.Database.Sql.SqlServer" />
+      <Output directory="../../../build/AddIns/MonoDevelop.Database" assembly="MonoDevelop.Database.Sql.SqlServer" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -35,9 +35,9 @@
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Core.Gui" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Components" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Designer" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
