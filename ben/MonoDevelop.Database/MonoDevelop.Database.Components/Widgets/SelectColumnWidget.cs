@@ -36,15 +36,9 @@ namespace MonoDevelop.Database.Components
 		public event EventHandler ColumnToggled;
 		
 		protected TreeView list;
-		protected ListStore store;
+		protected SortedColumnListStore store;
 		
 		private ColumnSchemaCollection columns;
-
-		protected const int columnSelected = 0;
-		protected const int columnName = 1;
-		protected const int columnObj = 2;
-		
-		private bool singleSelect;
 		
 		public SelectColumnWidget ()
 			: this (true)
@@ -53,9 +47,7 @@ namespace MonoDevelop.Database.Components
 		
 		public SelectColumnWidget (bool showCheckBoxes)
 		{
-			InitializeStore ();
-			
-			list = new TreeView (store);
+			list = new TreeView ();
 			list.HeadersVisible = true;
 			
 			InitializeColumns (showCheckBoxes);
@@ -63,20 +55,15 @@ namespace MonoDevelop.Database.Components
 			this.Add (list);
 		}
 		
-		public bool SingleSelect {
-			get { return singleSelect; }
+		public bool SingleCheck {
+			get { return store.SingleCheck; }
 			set {
-				singleSelect = value;
-				if (value)
-					DeselectAll ();
+				if (store == null)
+					return; //when init isn't called yet
+				store.SingleCheck = value;
 			}
 		}
-		
-		protected virtual void InitializeStore ()
-		{
-			store = new ListStore (typeof (bool), typeof (string), typeof (ColumnSchema));
-		}
-		
+
 		protected virtual void InitializeColumns (bool showCheckBoxes)
 		{
 			TreeViewColumn col = new TreeViewColumn ();
@@ -87,12 +74,12 @@ namespace MonoDevelop.Database.Components
 				toggleRenderer.Activatable = true;
 				toggleRenderer.Toggled += new ToggledHandler (ItemToggled);
 				col.PackStart (toggleRenderer, false);
-				col.AddAttribute (toggleRenderer, "active", columnSelected);
+				col.AddAttribute (toggleRenderer, "active", SortedColumnListStore.ColSelectIndex);
 			}
 
 			CellRendererText textRenderer = new CellRendererText ();
 			col.PackStart (textRenderer, true);
-			col.AddAttribute (textRenderer, "text", columnName);
+			col.AddAttribute (textRenderer, "text", SortedColumnListStore.ColNameIndex);
 
 			list.AppendColumn (col);
 		}
@@ -101,162 +88,56 @@ namespace MonoDevelop.Database.Components
 		{
 			this.columns = columns;
 			
-			foreach (ColumnSchema column in columns)
-				store.AppendValues (false, column.Name, column);
-			
-			columns.ItemAdded += new SortedCollectionItemEventHandler<ColumnSchema> (ColumnAdded);
-			columns.ItemRemoved += new SortedCollectionItemEventHandler<ColumnSchema> (ColumnRemoved);
-		}
-		
-		protected virtual void ColumnAdded (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
-		{
-			ColumnSchemaCollection columns = sender as ColumnSchemaCollection;
-			int index = columns.IndexOf (args.Item);
-			TreeIter iter = store.Insert (index);
-			SetColumnValues (iter, args.Item);
-		}
-		
-		protected virtual void SetColumnValues (TreeIter iter, ColumnSchema column)
-		{
-			store.SetValue (iter, columnSelected, false);
-			store.SetValue (iter, columnName, column.Name);
-			store.SetValue (iter, columnObj, column);
-		}
-		
-		protected virtual void ColumnRemoved (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
-		{
-			TreeIter iter;
-			if (store.GetIterFirst (out iter)) {
-				do {
-					object obj = store.GetValue (iter, columnObj);
-					if (obj == args.Item) {
-						store.Remove (ref iter);
-						return;
-					}
-				} while (store.IterNext (ref iter));
-			}
+			store = new SortedColumnListStore (columns);
+			store.ColumnToggled += delegate (object sender, EventArgs args) {
+				if (ColumnToggled != null)
+					ColumnToggled (this, args);
+			};
+			list.Model = store.Store;
 		}
 		
 		public ColumnSchema SelectedColumn {
 			get {
 				TreeIter iter;
 				if (list.Selection.GetSelected (out iter))
-					return store.GetValue (iter, columnObj) as ColumnSchema;
+					return store.GetColumnSchema (iter);
 				return null;
 			}
 		}
 		
 		public IEnumerable<ColumnSchema> CheckedColumns {
-			get {
-				TreeIter iter;
-				if (store.GetIterFirst (out iter)) {
-					do {
-						bool chk = (bool)store.GetValue (iter, columnSelected);
-						if (chk)
-							yield return store.GetValue (iter, columnObj) as ColumnSchema;
-					} while (store.IterNext (ref iter));
-				}
-			}
+			get { return store.CheckedColumns; }
 		}
 		
 		public bool IsColumnChecked {
-			get {
-				TreeIter iter;
-				if (store.GetIterFirst (out iter)) {
-					do {
-						bool chk = (bool)store.GetValue (iter, columnSelected);
-						if (chk)
-							return true;
-					} while (store.IterNext (ref iter));
-				}
-				return false;
-			}
+			get { return store.IsColumnChecked; }
 		}
 		
 		public void SelectAll ()
 		{
-			SetSelectState (true);
+			store.SelectAll ();
 		}
 		
 		public void DeselectAll ()
 		{
-			SetSelectState (false);
+			store.DeselectAll ();
 		}
 		
-		public void Select (string column)
+		public void Select (string name)
 		{
-			if (column == null)
-				throw new ArgumentNullException ("column");
-			
-			ColumnSchema col = columns.Search (column);
-			if (col != null)
-				Select (col);
+			store.Select (name);
 		}
 		
 		public void Select (ColumnSchema column)
 		{
-			if (column == null)
-				throw new ArgumentNullException ("column");
-			
-			TreeIter iter;
-			if (store.GetIterFirst (out iter)) {
-				do {
-					ColumnSchema col = store.GetValue (iter, columnObj) as ColumnSchema;
-					if (column == col) {
-						store.SetValue (iter, columnSelected, true);
-						OnColumnToggled ();
-						return;
-					} else {
-						if (singleSelect)
-							store.SetValue (iter, columnSelected, false);
-					}
-				} while (store.IterNext (ref iter));
-			}	
-		}
-
-		private void SetSelectState (bool state)
-		{
-			TreeIter iter;
-			if (store.GetIterFirst (out iter)) {
-				do {
-					store.SetValue (iter, columnSelected, state);
-				} while (store.IterNext (ref iter));
-			}
-			OnColumnToggled ();
+			store.Select (column);
 		}
 		
 		private void ItemToggled (object sender, ToggledArgs args)
 		{
 	 		TreeIter iter;
-			if (store.GetIterFromString (out iter, args.Path)) {
-	 			bool val = (bool) store.GetValue (iter, columnSelected);
-	 			store.SetValue (iter, columnSelected, !val);
-				CheckSingleSelect (store.GetValue (iter, columnObj) as ColumnSchema);
-				OnColumnToggled ();
-	 		}
-		}
-		
-		private void CheckSingleSelect (ColumnSchema column)
-		{
-			if (!singleSelect)
-				return;
-			
-			TreeIter iter;
-			if (store.GetIterFirst (out iter)) {
-				do {
-					object obj = store.GetValue (iter, columnObj);
-					if (obj != column) {
-						store.SetValue (iter, columnSelected, false);
-						return;
-					}
-				} while (store.IterNext (ref iter));
-			}
-		}
-		
-		protected virtual void OnColumnToggled ()
-		{
-			if (ColumnToggled != null)
-				ColumnToggled (this, EventArgs.Empty);
+			if (store.Store.GetIterFromString (out iter, args.Path))
+	 			store.ToggleSelect (iter);
 		}
 	}
 }

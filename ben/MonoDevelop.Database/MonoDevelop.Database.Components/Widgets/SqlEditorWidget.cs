@@ -60,15 +60,18 @@ namespace MonoDevelop.Database.Components
 			scrolledwindow.Add (sourceView);
 			ShowAll ();
 		}
-		
-		[GLib.ConnectBefore]
+
 		protected virtual void OnPopulatePopup (object sender, PopulatePopupArgs args)
 		{
+			try {
 			Menu menu = IdeApp.CommandService.CreateMenu ("/SharpDevelop/Components/SqlEditor/ContextMenu");
 			int pos=2; //after undo and redo
 			foreach (Widget w in menu.Children)
 				args.Menu.Insert (w, pos++);
 			menu.Destroy ();
+			} catch (Exception e) {
+				Runtime.LoggingService.Error (e);
+			}
 		}
 		
 		private void BufferChanged (object sender, EventArgs args)

@@ -74,7 +74,6 @@ namespace MonoDevelop.Database.Components
 
 			storeDatabases = comboDatabase.Model as ListStore;
 			comboDatabase.TextColumn = 0;
-			comboDatabase.Entry.IsEditable = true;
 			comboDatabase.Entry.Changed += new EventHandler (DatabaseChanged);
 
 			CellRendererText providerRenderer = new CellRendererText ();
@@ -288,8 +287,9 @@ namespace MonoDevelop.Database.Components
 		
 		protected virtual void DatabaseChanged (object sender, EventArgs e)
 		{
-			if (isDatabaseListEmpty && comboDatabase.Entry.Text.Length > 0)
+			if (isDatabaseListEmpty && comboDatabase.Entry.Text == GettextCatalog.GetString ("No databases found!")) {
 				comboDatabase.Entry.Text = String.Empty;
+			}
 			
 			CheckSettings ();
 		}

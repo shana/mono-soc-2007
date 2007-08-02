@@ -57,7 +57,11 @@ namespace MonoDevelop.Database.Components
 		private Dictionary<Type, IDataGridContentRenderer> contentRenderers;
 		private List<IDataGridVisualizer> visualizers;
 		
-		private List<int> conversionList = new List<int> ();
+		private Dictionary<int, ConvertObjectFunc> conversionLookup = new Dictionary<int, ConvertObjectFunc> ();
+		private delegate string ConvertObjectFunc (object obj);
+		
+		private ConvertObjectFunc byteConvertFunc = new ConvertObjectFunc (ByteConvertFunc);
+		private ConvertObjectFunc sbyteConvertFunc = new ConvertObjectFunc (SByteConvertFunc);
 		
 		public DataGrid ()
 		{
@@ -133,17 +137,20 @@ namespace MonoDevelop.Database.Components
 				DataGridColumn dgCol = new DataGridColumn (this, col, index);
 				grid.AppendColumn (dgCol);
 
-				if (col.DataType == typeof (char)) {
-					//special case for char (TODO: look up the bugzilla bug id)
+				if (col.DataType == typeof (byte)) {
+					//special case for gchar (TODO: look up the bugzilla bug id)
 					storeTypes[index] = typeof (string);
-					conversionList.Add (index);
-				} else if (col.DataType.IsPrimitive || col.DataType == typeof (string)) {
+					conversionLookup.Add (index, byteConvertFunc);
+				} else if (col.DataType == typeof (sbyte)) {
+					storeTypes[index] = typeof (string);
+					conversionLookup.Add (index, sbyteConvertFunc);
+				} else if (col.DataType.IsPrimitive || col.DataType == typeof (string) || col.DataType.IsEnum) {
 					storeTypes[index] = col.DataType;
 				} else {
 					//the ListStore doesn't allow types that can't be converted to a GType
 					storeTypes[index] = typeof (object);
 				}
-					
+
 				index++;
 			}
 			store = new ListStore (storeTypes);
@@ -173,7 +180,7 @@ namespace MonoDevelop.Database.Components
 			numRecords = 0;
 			columnCount = 0;
 			
-			conversionList.Clear ();
+			conversionLookup.Clear ();
 
 			if (store != null) {
 				store.Clear ();
@@ -262,11 +269,13 @@ namespace MonoDevelop.Database.Components
 				
 				TreeIter iter = store.Append ();
 				for (int j=0;j<columnCount; j++) {
-					//HACK: this is a hack for a bug that doesn't allow chars in a liststore
-					if (conversionList.Contains (j))
-						store.SetValue (iter, j, new string ((char)row[j], 1));
-					else
+					//HACK: this is a hack for a bug that doesn't allow gchars in a liststore
+					if (conversionLookup.ContainsKey (j)) {
+						ConvertObjectFunc func = conversionLookup[j];
+						store.SetValue (iter, j, func (row[j]));
+					} else {
 						store.SetValue (iter, j, row[j]);
+					}
 				}
 			}
 			
@@ -410,6 +419,24 @@ namespace MonoDevelop.Database.Components
 					}
 				}
 			}
+		}
+		
+		private static string ByteConvertFunc (object obj)
+		{
+			if (Convert.IsDBNull (obj) || obj == null)
+				return null;
+			
+			byte b = (byte)obj;
+			return "0x" + b.ToString ("X");
+		}
+		
+		private static string SByteConvertFunc (object obj)
+		{
+			if (Convert.IsDBNull (obj) || obj == null)
+				return null;			
+			
+			sbyte b = (sbyte)obj;
+			return b.ToString ("N");
 		}
 	}
 }

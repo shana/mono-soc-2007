@@ -1,13 +1,13 @@
 <Project name="MonoDevelop.Database.Components" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" assemblyKeyFile="./" assembly="MonoDevelop.Database.Components" />
+      <Output directory="../../../build/AddIns/MonoDevelop.Database" assemblyKeyFile="./" assembly="MonoDevelop.Database.Components" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" assembly="MonoDevelop.Database.Components" />
+      <Output directory="../../../build/AddIns/MonoDevelop.Database" assembly="MonoDevelop.Database.Components" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -66,6 +66,7 @@
     <File name="./Widgets/DataGrid/Visualizers/DataGridItemCommandHandler.cs" subtype="Code" buildaction="Compile" />
     <File name="./MonoDevelop.Database.Components.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./gtk-gui/objects.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./Widgets/SortedColumnListStore.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -85,7 +86,7 @@
     <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gtksourceview-sharp, Version=1.0.0.2, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
