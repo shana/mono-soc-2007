@@ -13,7 +13,7 @@ namespace MonoDevelop.Database.Designer {
     
     public partial class ColumnsEditorWidget {
         
-        private Gtk.HPaned hpaned1;
+        private Gtk.HPaned hpaned;
         
         private Gtk.VBox vboxLeft;
         
@@ -39,11 +39,11 @@ namespace MonoDevelop.Database.Designer {
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.ColumnsEditorWidget";
             // Container child MonoDevelop.Database.Designer.ColumnsEditorWidget.Gtk.Container+ContainerChild
-            this.hpaned1 = new Gtk.HPaned();
-            this.hpaned1.CanFocus = true;
-            this.hpaned1.Name = "hpaned1";
-            this.hpaned1.Position = 467;
-            // Container child hpaned1.Gtk.Paned+PanedChild
+            this.hpaned = new Gtk.HPaned();
+            this.hpaned.CanFocus = true;
+            this.hpaned.Name = "hpaned";
+            this.hpaned.Position = 662;
+            // Container child hpaned.Gtk.Paned+PanedChild
             this.vboxLeft = new Gtk.VBox();
             this.vboxLeft.Name = "vboxLeft";
             this.vboxLeft.Spacing = 6;
@@ -123,18 +123,18 @@ namespace MonoDevelop.Database.Designer {
             w7.Position = 1;
             w7.Expand = false;
             w7.Fill = false;
-            this.hpaned1.Add(this.vboxLeft);
-            Gtk.Paned.PanedChild w8 = ((Gtk.Paned.PanedChild)(this.hpaned1[this.vboxLeft]));
+            this.hpaned.Add(this.vboxLeft);
+            Gtk.Paned.PanedChild w8 = ((Gtk.Paned.PanedChild)(this.hpaned[this.vboxLeft]));
             w8.Resize = false;
-            // Container child hpaned1.Gtk.Paned+PanedChild
+            // Container child hpaned.Gtk.Paned+PanedChild
             this.scrolledwindowRight = new Gtk.ScrolledWindow();
             this.scrolledwindowRight.CanFocus = true;
             this.scrolledwindowRight.Name = "scrolledwindowRight";
             this.scrolledwindowRight.VscrollbarPolicy = ((Gtk.PolicyType)(1));
             this.scrolledwindowRight.HscrollbarPolicy = ((Gtk.PolicyType)(1));
             this.scrolledwindowRight.ShadowType = ((Gtk.ShadowType)(1));
-            this.hpaned1.Add(this.scrolledwindowRight);
-            this.Add(this.hpaned1);
+            this.hpaned.Add(this.scrolledwindowRight);
+            this.Add(this.hpaned);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }

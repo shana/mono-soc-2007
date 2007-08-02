@@ -39,6 +39,7 @@ namespace MonoDevelop.Database.Designer
 		public event EventHandler ContentChanged;
 		
 		private ISchemaProvider schemaProvider;
+		private TableSchema table;
 		private ColumnSchemaCollection columns;
 		private ConstraintSchemaCollection constraints;
 		
@@ -48,16 +49,19 @@ namespace MonoDevelop.Database.Designer
 		private const int colColumnsIndex = 1;
 		private const int colObjIndex = 2;
 		
-		public PrimaryKeyConstraintEditorWidget (ISchemaProvider schemaProvider, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
+		public PrimaryKeyConstraintEditorWidget (ISchemaProvider schemaProvider, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
 		{
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
+			if (table == null)
+				throw new ArgumentNullException ("table");
 			if (constraints == null)
 				throw new ArgumentNullException ("constraints");
 			if (schemaProvider == null)
 				throw new ArgumentNullException ("schemaProvider");
 			
 			this.schemaProvider = schemaProvider;
+			this.table = table;
 			this.columns = columns;
 			this.constraints = constraints;
 			
@@ -77,6 +81,9 @@ namespace MonoDevelop.Database.Designer
 			
 			nameRenderer.Editable = true;
 			nameRenderer.Edited += new EditedHandler (NameEdited);
+			
+			colName.PackStart (nameRenderer, true);
+			colColumns.PackStart (columnsRenderer, true);
 			
 			colName.AddAttribute (nameRenderer, "text", colNameIndex);
 			colColumns.AddAttribute (columnsRenderer, "text", colColumnsIndex);
@@ -101,6 +108,7 @@ namespace MonoDevelop.Database.Designer
 			if (store.GetIterFromString (out iter, args.Path)) {
 				if (!string.IsNullOrEmpty (args.NewText) && !constraints.Contains (args.NewText)) {
 					store.SetValue (iter, colNameIndex, args.NewText);
+					EmitContentChanged ();
 				} else {
 					string oldText = store.GetValue (iter, colNameIndex) as string;
 					(sender as CellRendererText).Text = oldText;
@@ -140,6 +148,7 @@ namespace MonoDevelop.Database.Designer
 				}
 			
 				store.SetValue (iter, colColumnsIndex, sb.ToString ());
+				EmitContentChanged ();
 			}
 		}
 
@@ -151,6 +160,7 @@ namespace MonoDevelop.Database.Designer
 				pk.Name = "pk_new" + (index++); 
 			constraints.Add (pk);
 			AddConstraint (pk);
+			EmitContentChanged ();
 		}
 
 		protected virtual void RemoveClicked (object sender, System.EventArgs e)
@@ -165,6 +175,7 @@ namespace MonoDevelop.Database.Designer
 				)) {
 					store.Remove (ref iter);
 					constraints.Remove (pk);
+					EmitContentChanged ();
 				}
 			}
 		}
@@ -174,9 +185,40 @@ namespace MonoDevelop.Database.Designer
 			store.AppendValues (pk.Name, String.Empty, pk);
 		}
 		
-		public virtual bool Validate ()
+		public virtual bool ValidateSchemaObjects ()
 		{
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					string name = store.GetValue (iter, colNameIndex) as string;
+					string columns = store.GetValue (iter, colColumnsIndex) as string;
+					
+					if (String.IsNullOrEmpty (name) || String.IsNullOrEmpty (columns))
+						return false;
+				} while (store.IterNext (ref iter));
+				return true;
+			}
 			return false;
+		}
+		
+		public virtual void FillSchemaObjects ()
+		{
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					PrimaryKeyConstraintSchema pk = store.GetValue (iter, colObjIndex) as PrimaryKeyConstraintSchema;
+
+					pk.Name = store.GetValue (iter, colNameIndex) as string;
+					string colstr = store.GetValue (iter, colColumnsIndex) as string;
+					string[] cols = colstr.Split (',');
+					foreach (string col in cols) {
+						ColumnSchema column = columns.Search (col);
+						pk.Columns.Add (column);
+					}
+					
+					table.Constraints.Add (pk);
+				} while (store.IterNext (ref iter));
+			}
 		}
 		
 		protected virtual void EmitContentChanged ()

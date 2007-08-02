@@ -8,7 +8,7 @@
     <widget-library name="../../../../build/AddIns/MonoDevelop.Ide.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Components.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll" />
-    <widget-library name="../bin/Debug/MonoDevelop.Database.Designer.dll" internal="true" />
+    <widget-library name="../../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll" internal="true" />
   </import>
   <widget class="Gtk.Bin" id="MonoDevelop.Database.Designer.TriggersEditorWidget" design-size="422 300">
     <property name="MemberName" />
@@ -16,7 +16,7 @@
       <widget class="Gtk.VPaned" id="vpaned">
         <property name="MemberName" />
         <property name="CanFocus">True</property>
-        <property name="Position">172</property>
+        <property name="Position">205</property>
         <child>
           <widget class="Gtk.HBox" id="hbox">
             <property name="MemberName" />
@@ -108,6 +108,7 @@
                 <child>
                   <widget class="MonoDevelop.Database.Components.SqlEditorWidget" id="sqlEditor">
                     <property name="MemberName" />
+                    <property name="HeightRequest">80</property>
                     <property name="Events">ButtonPressMask</property>
                     <property name="Editable">False</property>
                   </widget>
@@ -132,10 +133,10 @@
   <widget class="Gtk.Bin" id="MonoDevelop.Database.Designer.ColumnsEditorWidget" design-size="668 400">
     <property name="MemberName" />
     <child>
-      <widget class="Gtk.HPaned" id="hpaned1">
+      <widget class="Gtk.HPaned" id="hpaned">
         <property name="MemberName" />
         <property name="CanFocus">True</property>
-        <property name="Position">467</property>
+        <property name="Position">662</property>
         <child>
           <widget class="Gtk.VBox" id="vboxLeft">
             <property name="MemberName" />
@@ -282,7 +283,7 @@
       <placeholder />
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.TableEditorDialog" design-size="538 355">
+  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.TableEditorDialog" design-size="640 480">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Edit Table</property>
     <property name="TypeHint">Dialog</property>
@@ -671,7 +672,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.ViewEditorDialog" design-size="512 383">
+  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.ViewEditorDialog" design-size="640 480">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -783,7 +784,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.ProcedureEditorDialog" design-size="504 387">
+  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.ProcedureEditorDialog" design-size="640 480">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -998,7 +999,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.UserEditorDialog" design-size="504 368">
+  <widget class="Gtk.Dialog" id="MonoDevelop.Database.Designer.UserEditorDialog" design-size="640 480">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -1327,7 +1328,7 @@
             <property name="VscrollbarPolicy">Automatic</property>
             <property name="HscrollbarPolicy">Automatic</property>
             <property name="ShadowType">In</property>
-            <property name="SingleSelect">False</property>
+            <property name="SingleCheck">False</property>
           </widget>
         </child>
       </widget>
@@ -1425,7 +1426,7 @@
             <property name="VscrollbarPolicy">Automatic</property>
             <property name="HscrollbarPolicy">Automatic</property>
             <property name="ShadowType">In</property>
-            <property name="SingleSelect">False</property>
+            <property name="SingleCheck">False</property>
           </widget>
         </child>
       </widget>

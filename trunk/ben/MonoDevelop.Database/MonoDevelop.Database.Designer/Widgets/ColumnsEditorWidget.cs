@@ -197,6 +197,7 @@ namespace MonoDevelop.Database.Designer
 			
 			columns.Add (column);
 			AppendColumnSchema (column);
+			EmitContentChanged ();
 		}
 
 		protected virtual void RemoveClicked (object sender, EventArgs e)
@@ -212,8 +213,10 @@ namespace MonoDevelop.Database.Designer
 					GettextCatalog.GetString ("Remove Column")
 				);
 				
-				if (result)
+				if (result) {
 					storeColumns.Remove (ref iter);
+					EmitContentChanged ();
+				}
 			}
 		}
 		
@@ -260,8 +263,16 @@ namespace MonoDevelop.Database.Designer
 			TreeIter iter;
 			if (storeColumns.GetIterFromString (out iter, args.Path)) {
 				if (!string.IsNullOrEmpty (args.NewText)) {
-					storeColumns.SetValue (iter, colTypeIndex, args.NewText);
 					ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
+		
+					int len = int.Parse (storeColumns.GetValue (iter, colLengthIndex) as string);
+					if (column.DataType.LengthRange.Default == len) {
+						//change the length if it is still the default length
+						DataTypeSchema dtNew = schemaProvider.GetDataType (args.NewText);
+						storeColumns.SetValue (iter, colLengthIndex, dtNew.LengthRange.Default.ToString ());
+					}
+					
+					storeColumns.SetValue (iter, colTypeIndex, args.NewText);
 					column.DataTypeName = args.NewText;
 					EmitContentChanged ();
 				} else {
@@ -346,7 +357,7 @@ namespace MonoDevelop.Database.Designer
 				ContentChanged (this, EventArgs.Empty);
 		}
 		
-		public virtual bool Validate ()
+		public virtual bool ValidateSchemaObjects ()
 		{
 			TreeIter iter;
 			if (storeColumns.GetIterFirst (out iter)) {
@@ -368,6 +379,27 @@ namespace MonoDevelop.Database.Designer
 				return true;
 			}
 			return false;
+		}
+		
+		public virtual void FillSchemaObjects ()
+		{
+			TreeIter iter;
+			if (storeColumns.GetIterFirst (out iter)) {
+				do {
+					ColumnSchema column = storeColumns.GetValue (iter, colObjIndex) as ColumnSchema;
+
+					column.Name = storeColumns.GetValue (iter, colNameIndex) as string;
+					column.DataTypeName = storeColumns.GetValue (iter, colTypeIndex) as string;
+					column.DataType.LengthRange.Default = int.Parse (storeColumns.GetValue (iter, colLengthIndex) as string);
+					column.IsNullable = (bool)storeColumns.GetValue (iter, colNullableIndex);
+					column.Comment = storeColumns.GetValue (iter, colCommentIndex) as string;
+					
+					if ((bool)storeColumns.GetValue (iter, colPKIndex)) {
+						PrimaryKeyConstraintSchema pk = schemaProvider.GetNewPrimaryKeyConstraintSchema ("pk_" + column.Name);
+						column.Constraints.Add (pk);
+					}
+				} while (storeColumns.IterNext (ref iter));
+			}
 		}
 	}
 }

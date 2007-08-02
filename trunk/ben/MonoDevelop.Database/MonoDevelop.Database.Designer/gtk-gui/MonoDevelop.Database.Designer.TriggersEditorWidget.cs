@@ -44,7 +44,7 @@ namespace MonoDevelop.Database.Designer {
             this.vpaned = new Gtk.VPaned();
             this.vpaned.CanFocus = true;
             this.vpaned.Name = "vpaned";
-            this.vpaned.Position = 172;
+            this.vpaned.Position = 205;
             // Container child vpaned.Gtk.Paned+PanedChild
             this.hbox = new Gtk.HBox();
             this.hbox.Name = "hbox";
@@ -113,6 +113,7 @@ namespace MonoDevelop.Database.Designer {
             this.alignment.LeftPadding = ((uint)(12));
             // Container child alignment.Gtk.Container+ContainerChild
             this.sqlEditor = new MonoDevelop.Database.Components.SqlEditorWidget();
+            this.sqlEditor.HeightRequest = 80;
             this.sqlEditor.Events = ((Gdk.EventMask)(256));
             this.sqlEditor.Name = "sqlEditor";
             this.sqlEditor.Editable = false;

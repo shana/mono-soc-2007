@@ -42,8 +42,6 @@ namespace MonoDevelop.Database.Designer
 		private Notebook notebook;
 		
 		private ISchemaProvider schemaProvider;
-		private ConstraintSchemaCollection constraints;
-		private ColumnSchemaCollection columns;
 		
 		private PrimaryKeyConstraintEditorWidget pkEditor;
 		private ForeignKeyConstraintEditorWidget fkEditor;
@@ -65,20 +63,19 @@ namespace MonoDevelop.Database.Designer
 			Add (notebook);
 		}
 		
-		public void Initialize (ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
+		public void Initialize (TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
 		{
 			Runtime.LoggingService.Error ("COEW: Initialize");
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
 			if (constraints == null)
 				throw new ArgumentNullException ("constraints");
-
-			this.columns = columns;
-			this.constraints = constraints;
+			if (table == null)
+				throw new ArgumentNullException ("table");
 
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.PrimaryKeyConstraint)) {
 				//not for column constraints, since they are already editable in the column editor
-				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, columns, constraints);
+				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, table, columns, constraints);
 				pkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (checkEditor, new Label (GettextCatalog.GetString ("Primary Key")));
 			}
@@ -92,14 +89,14 @@ namespace MonoDevelop.Database.Designer
 			
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CheckConstraint)
 				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.CheckConstraint)) {
-				checkEditor = new CheckConstraintEditorWidget (schemaProvider, columns, constraints);
+				checkEditor = new CheckConstraintEditorWidget (schemaProvider, table, columns, constraints);
 				checkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (checkEditor, new Label (GettextCatalog.GetString ("Check")));
 			}
 			
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.UniqueConstraint)
 				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.UniqueConstraint)) {
-				uniqueEditor = new UniqueConstraintEditorWidget (schemaProvider, columns, constraints);
+				uniqueEditor = new UniqueConstraintEditorWidget (schemaProvider, table, columns, constraints);
 				uniqueEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (uniqueEditor, new Label (GettextCatalog.GetString ("Unique")));
 			}
@@ -115,12 +112,24 @@ namespace MonoDevelop.Database.Designer
 				ContentChanged (this, args);
 		}
 		
-		public virtual bool Validate ()
+		public virtual bool ValidateSchemaObjects ()
 		{
-			return (pkEditor != null && pkEditor.Validate ())
-				&& (fkEditor != null && fkEditor.Validate ())
-				&& (checkEditor != null && checkEditor.Validate ())
-				&& (uniqueEditor != null && uniqueEditor.Validate ());
+			return (pkEditor != null && pkEditor.ValidateSchemaObjects ())
+				&& (fkEditor != null && fkEditor.ValidateSchemaObjects ())
+				&& (checkEditor != null && checkEditor.ValidateSchemaObjects ())
+				&& (uniqueEditor != null && uniqueEditor.ValidateSchemaObjects ());
+		}
+		
+		public virtual void FillSchemaObjects ()
+		{
+			if (pkEditor != null)
+				pkEditor.FillSchemaObjects ();
+			if (fkEditor != null)
+				fkEditor.FillSchemaObjects ();
+			if (checkEditor != null)
+				checkEditor.FillSchemaObjects ();
+			if (uniqueEditor != null)
+				uniqueEditor.FillSchemaObjects ();
 		}
 	}
 }

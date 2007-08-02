@@ -1,9 +1,17 @@
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
+	* Widgets/UniqueConstraintEditorWidget.cs: removed the "Columns" column from the listview,
+	Validate and FillSchemaObjects implementation
+	* Widgets/TriggersEditorWidget.cs, Widgets/PrimaryKeyConstraintEditorWidget.cs, 
+	Widgets/CheckConstraintEditorWidget.cs: Validate and FillSchemaObjects implementation
+	* Widgets/ForeignKeyConstraintEditorWidget.cs, Widgets/IndicesEditorWidget.cs: FillSchemaObjects stub
+	* Widgets/ConstraintsEditorWidget.cs: ValidateSchemaObjects implementation
+	* Widgets/ColumnsEditorWidget.cs: FillSchemaObjects implementation, show the default length
+	if the datatype is changed
+	* Dialogs/TableEditorDialog.cs: Fill objects when Ok is clicked
+
 	* Widgets/UniqueConstraintEditorWidget.cs: implementation of the treeview with handlers
 	* Widgets/TriggersEditorWidget.cs: added a column for the TriggerFireType
-
-	* Widgets/PrimaryKeyConstraintEditorWidget.cs: 
 
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>
 

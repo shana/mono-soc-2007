@@ -1,13 +1,13 @@
 <Project name="MonoDevelop.Database.Designer" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" assemblyKeyFile="./" assembly="MonoDevelop.Database.Designer" />
+      <Output directory="../../../build/AddIns/MonoDevelop.Database" assemblyKeyFile="./" assembly="MonoDevelop.Database.Designer" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" assembly="MonoDevelop.Database.Designer" />
+      <Output directory="../../../build/AddIns/MonoDevelop.Database" assembly="MonoDevelop.Database.Designer" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="True" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -39,7 +39,6 @@
     <File name="./gtk-gui/MonoDevelop.Database.Designer.PreviewDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./Dialogs/UserEditorDialog.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Designer.UserEditorDialog.cs" subtype="Code" buildaction="Compile" />
-    <File name="./Widgets/SelectColumnConstraintWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/ForeignKeyConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./gtk-gui/MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
     <File name="./Widgets/CheckConstraintEditorWidget.cs" subtype="Code" buildaction="Compile" />
@@ -65,8 +64,8 @@
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Core.Gui" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Components" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
