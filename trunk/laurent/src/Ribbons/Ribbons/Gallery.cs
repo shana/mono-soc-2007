@@ -173,9 +173,7 @@ namespace Ribbons
 				callback (expand);
 			}
 			
-			callback (tiles[0]);
-			
-			for(int i = firstDisplayedTileIndex ; i <= lastDisplayedTileIndex ; ++i)
+			for(int i = 0 ; i < tiles.Count ; ++i)
 			{
 				callback (tiles[i]);
 			}
@@ -258,18 +256,27 @@ namespace Ribbons
 				lastDisplayedTileIndex = tiles.Count - 1;
 			}
 			
-			Console.WriteLine ("First: " + firstDisplayedTileIndex);
-			Console.WriteLine ("Last: " + lastDisplayedTileIndex);
+			for(int tileIndex = 0 ; tileIndex < firstDisplayedTileIndex ; ++tileIndex)
+			{
+				if(tiles[tileIndex].IsMapped) tiles[tileIndex].Unmap ();
+			}
+			for(int tileIndex = lastDisplayedTileIndex + 1 ; tileIndex < tiles.Count ; ++tileIndex)
+			{
+				if(tiles[tileIndex].IsMapped) tiles[tileIndex].Unmap ();
+			}
+			
+			Console.WriteLine ("ALLOC {0} ~ {1}", firstDisplayedTileIndex, lastDisplayedTileIndex);
+			
 			for(int tileIndex = firstDisplayedTileIndex ; tileIndex <= lastDisplayedTileIndex ; ++tileIndex)
 			{
 				Widget t = tiles[tileIndex];
 				
+				if(!t.IsMapped) t.Map ();
+				
 				t.SizeRequest ();
 				
 				t.SizeAllocate (tileAlloc);
-				Console.WriteLine(tileAlloc);
 				tileAlloc.X += tileAlloc.Width + tileSpacing;
-				Console.WriteLine(tileAlloc);
 			}
 		}
 	}
