@@ -15,7 +15,7 @@ namespace MonoDevelop.Database.Components {
         
         private Gtk.VBox vboxContent;
         
-        private Gtk.Button buttonClose;
+        private Gtk.Button button462;
         
         protected virtual void Build() {
             Stetic.Gui.Initialize();
@@ -40,20 +40,16 @@ namespace MonoDevelop.Database.Components {
             w2.Position = 0;
             // Internal child MonoDevelop.Database.Components.ShowTextDialog.ActionArea
             Gtk.HButtonBox w3 = this.ActionArea;
-            w3.Name = "dialog1_ActionArea";
-            w3.Spacing = 6;
-            w3.BorderWidth = ((uint)(5));
+            w3.Name = "GtkDialog_ActionArea";
             w3.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
-            // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
-            this.buttonClose = new Gtk.Button();
-            this.buttonClose.CanDefault = true;
-            this.buttonClose.CanFocus = true;
-            this.buttonClose.Name = "buttonClose";
-            this.buttonClose.UseStock = true;
-            this.buttonClose.UseUnderline = true;
-            this.buttonClose.Label = "gtk-close";
-            this.AddActionWidget(this.buttonClose, -7);
-            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.buttonClose]));
+            // Container child GtkDialog_ActionArea.Gtk.ButtonBox+ButtonBoxChild
+            this.button462 = new Gtk.Button();
+            this.button462.CanFocus = true;
+            this.button462.Name = "button462";
+            this.button462.UseUnderline = true;
+            this.button462.Label = Mono.Unix.Catalog.GetString("button462");
+            this.AddActionWidget(this.button462, 0);
+            Gtk.ButtonBox.ButtonBoxChild w4 = ((Gtk.ButtonBox.ButtonBoxChild)(w3[this.button462]));
             w4.Expand = false;
             w4.Fill = false;
             if ((this.Child != null)) {
@@ -62,7 +58,6 @@ namespace MonoDevelop.Database.Components {
             this.DefaultWidth = 400;
             this.DefaultHeight = 300;
             this.Show();
-            this.buttonClose.Clicked += new System.EventHandler(this.CloseClicked);
         }
     }
 }

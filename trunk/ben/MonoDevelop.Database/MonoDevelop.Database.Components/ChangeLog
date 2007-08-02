@@ -1,5 +1,10 @@
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
+	* Dialogs/DatabaseConnectionSettingsDialog.cs: make sure the database entry is always editable
+	* Widgets/SelectColumnWidget.cs, Widgets/SortedColumnListStore.cs: moved the liststore into a 
+	separate SortedColumnListStore class that can easily be reused
+	* Widgets/DataGrid/DataGrid.cs: improved gchar workaround
+
 	* Widgets/SelectColumnWidget.cs: added SingleMode property to force single selects
 
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>

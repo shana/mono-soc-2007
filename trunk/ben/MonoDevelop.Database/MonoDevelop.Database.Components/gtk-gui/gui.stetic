@@ -8,7 +8,7 @@
     <widget-library name="../../../../build/AddIns/MonoDevelop.Components.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Ide.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Projects.Gui.dll" />
-    <widget-library name="../bin/Debug/MonoDevelop.Database.Components.dll" internal="true" />
+    <widget-library name="../../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll" internal="true" />
   </import>
   <widget class="Gtk.Dialog" id="MonoDevelop.Database.Components.SelectColumnDialog" design-size="400 300">
     <property name="MemberName" />
@@ -424,24 +424,19 @@
       </widget>
     </child>
     <child internal-child="ActionArea">
-      <widget class="Gtk.HButtonBox" id="dialog1_ActionArea">
+      <widget class="Gtk.HButtonBox" id="GtkDialog_ActionArea">
         <property name="MemberName" />
-        <property name="Spacing">6</property>
-        <property name="BorderWidth">5</property>
         <property name="Size">1</property>
         <property name="LayoutStyle">End</property>
         <child>
-          <widget class="Gtk.Button" id="buttonClose">
+          <widget class="Gtk.Button" id="button462">
             <property name="MemberName" />
-            <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-close</property>
+            <property name="Type">TextOnly</property>
+            <property name="Label" translatable="yes">button462</property>
+            <property name="UseUnderline">True</property>
             <property name="IsDialogButton">True</property>
-            <property name="ResponseId">-7</property>
-            <signal name="Clicked" handler="CloseClicked" />
-            <property name="label">gtk-close</property>
+            <property name="ResponseId">0</property>
           </widget>
           <packing>
             <property name="Expand">False</property>

@@ -14,7 +14,7 @@
   <object type="MonoDevelop.Database.Components.SelectColumnWidget" palette-category="widget" allow-children="false" base-type="Gtk.ScrolledWindow">
     <itemgroups>
       <itemgroup label="SelectColumnWidget Properties">
-        <property name="SingleSelect" />
+        <property name="SingleCheck" />
       </itemgroup>
     </itemgroups>
     <signals>
