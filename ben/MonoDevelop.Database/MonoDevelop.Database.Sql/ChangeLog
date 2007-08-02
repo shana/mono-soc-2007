@@ -1,5 +1,7 @@
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
+	* MetaData/ConnectionSettingsMetaData.cs: fixed incorrect field initializer in ctor
+
 	* Collections/ConstraintSchemaCollection.cs: added GetConstraints method to get all
 	constraints of a specified type
 	* Schema/TriggerSchema.cs, Schema/TriggerFireType.cs: added a property to distinguish
