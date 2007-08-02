@@ -1,5 +1,9 @@
 2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* DecoratorTest.cs: Added.
+
+2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* SliderTest.cs: Changed to use implemented types.
 
 2007-08-01  George Giolfan  <georgegiolfan@yahoo.com>
