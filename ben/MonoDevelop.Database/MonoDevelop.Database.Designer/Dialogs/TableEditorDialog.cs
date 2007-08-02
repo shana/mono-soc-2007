@@ -156,7 +156,7 @@ namespace MonoDevelop.Database.Designer
 			
 			columnEditor.Initialize (table, columns, constraints, dataTypes);
 			if (constraintEditor != null)
-				constraintEditor.Initialize (columns, constraints, dataTypes);
+				constraintEditor.Initialize (table, columns, constraints, dataTypes);
 			if (triggerEditor != null)
 				triggerEditor.Initialize (table, triggers);
 			Runtime.LoggingService.Error ("TED: InitializeGui 2");
@@ -170,6 +170,14 @@ namespace MonoDevelop.Database.Designer
 
 		protected virtual void OkClicked (object sender, System.EventArgs e)
 		{
+			columnEditor.FillSchemaObjects ();
+			if (constraintEditor != null)
+				constraintEditor.FillSchemaObjects ();
+			if (triggerEditor != null)
+				triggerEditor.FillSchemaObjects ();
+			if (commentEditor != null)
+				table.Comment = commentEditor.Comment;
+			
 			if (create)
 				table.Definition = schemaProvider.GetTableCreateStatement (table);
 			else
@@ -202,9 +210,9 @@ namespace MonoDevelop.Database.Designer
 		
 		protected virtual void OnContentChanged (object sender, EventArgs args)
 		{
-			bool val = columnEditor.Validate () &&
-				(constraintEditor != null && constraintEditor.Validate ()) &&
-				(triggerEditor != null && triggerEditor.Validate ());
+			bool val = columnEditor.ValidateSchemaObjects () &&
+				(constraintEditor != null && constraintEditor.ValidateSchemaObjects ()) &&
+				(triggerEditor != null && triggerEditor.ValidateSchemaObjects ());
 			//TODO: validate indexEditor
 			
 			buttonOk.Sensitive = val;

@@ -43,15 +43,20 @@ namespace MonoDevelop.Database.Designer
 			this.Build();
 		}
 		
-		public virtual bool Validate ()
+		public virtual bool ValidateSchemaObjects ()
 		{
-			return false;
+			return true;
 		}
 		
 		protected virtual void EmitContentChanged ()
 		{
 			if (ContentChanged != null)
 				ContentChanged (this, EventArgs.Empty);
+		}
+		
+		public virtual void FillSchemaObjects ()
+		{
+			
 		}
 	}
 }

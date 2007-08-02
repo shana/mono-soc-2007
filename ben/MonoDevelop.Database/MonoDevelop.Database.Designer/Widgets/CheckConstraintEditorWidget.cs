@@ -38,11 +38,12 @@ namespace MonoDevelop.Database.Designer
 		public event EventHandler ContentChanged;
 		
 		private ISchemaProvider schemaProvider;
+		private TableSchema table;
 		private ColumnSchemaCollection columns;
 		private ConstraintSchemaCollection constraints;
 		
 		private ListStore store;
-		private ListStore storeColumns;
+		private SortedColumnListStore storeColumns;
 		
 		private const int colNameIndex = 0;
 		private const int colColumnNameIndex = 1;
@@ -53,53 +54,48 @@ namespace MonoDevelop.Database.Designer
 		private bool columnConstraintsSupported;
 		private bool tableConstraintsSupported;
 		
-		public CheckConstraintEditorWidget (ISchemaProvider schemaProvider, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
+		public CheckConstraintEditorWidget (ISchemaProvider schemaProvider, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
 		{
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
+			if (table == null)
+				throw new ArgumentNullException ("table");
 			if (constraints == null)
 				throw new ArgumentNullException ("constraints");
 			if (schemaProvider == null)
 				throw new ArgumentNullException ("schemaProvider");
 			
 			this.schemaProvider = schemaProvider;
+			this.table = table;
 			this.columns = columns;
 			this.constraints = constraints;
 			
 			this.Build();
-			
+
 			store = new ListStore (typeof (string), typeof (string), typeof (bool), typeof (string), typeof (object));
-			storeColumns = new ListStore (typeof (string));
-			
+			storeColumns = new SortedColumnListStore (columns);
+
 			listCheck.Model = store;
-			
-			columns.ItemAdded += new SortedCollectionItemEventHandler<ColumnSchema> (OnColumnAdded);
-			columns.ItemRemoved += new SortedCollectionItemEventHandler<ColumnSchema> (OnColumnRemoved);
-			
-			//TODO: add/remove columns on events
-			
+
 			TreeViewColumn colName = new TreeViewColumn ();
 			TreeViewColumn colColumn = new TreeViewColumn ();
 			TreeViewColumn colIsColumnConstraint = new TreeViewColumn ();
-			TreeViewColumn colSource = new TreeViewColumn ();
 			
 			colName.Title = GettextCatalog.GetString ("Name");
 			colColumn.Title = GettextCatalog.GetString ("Column");
 			colIsColumnConstraint.Title = GettextCatalog.GetString ("Column Constraint");
-			colSource.Title = GettextCatalog.GetString ("Condition");
 			
 			colColumn.MinWidth = 120; //request a bigger width
 			
 			CellRendererText nameRenderer = new CellRendererText ();
 			CellRendererCombo columnRenderer = new CellRendererCombo ();
 			CellRendererToggle isColumnConstraintRenderer = new CellRendererToggle ();
-			CellRendererText sourceRenderer = new CellRendererText ();
 
 			nameRenderer.Editable = true;
 			nameRenderer.Edited += new EditedHandler (NameEdited);
 			
-			columnRenderer.Model = storeColumns;
-			columnRenderer.TextColumn = 0;
+			columnRenderer.Model = storeColumns.Store;
+			columnRenderer.TextColumn = SortedColumnListStore.ColNameIndex;
 			columnRenderer.Editable = true;
 			columnRenderer.Edited += new EditedHandler (ColumnEdited);
 
@@ -109,12 +105,10 @@ namespace MonoDevelop.Database.Designer
 			colName.PackStart (nameRenderer, true);
 			colColumn.PackStart (columnRenderer, true);
 			colIsColumnConstraint.PackStart (isColumnConstraintRenderer, true);
-			colSource.PackStart (sourceRenderer, true);
 
 			colName.AddAttribute (nameRenderer, "text", colNameIndex);
 			colColumn.AddAttribute (columnRenderer, "text", colColumnNameIndex);
 			colIsColumnConstraint.AddAttribute (isColumnConstraintRenderer, "active", colIsColumnConstraintIndex);
-			colSource.AddAttribute (sourceRenderer, "text", colSourceIndex);
 
 			columnConstraintsSupported = MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.CheckConstraint);
 			tableConstraintsSupported = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CheckConstraint);
@@ -124,10 +118,13 @@ namespace MonoDevelop.Database.Designer
 				listCheck.AppendColumn (colColumn);
 			if (columnConstraintsSupported && tableConstraintsSupported)
 				listCheck.AppendColumn (colIsColumnConstraint);
-			listCheck.AppendColumn (colSource);
 			
 			listCheck.Selection.Changed += new EventHandler (OnSelectionChanged);
 			sqlEditor.TextChanged += new EventHandler (SourceChanged);
+			
+			foreach (CheckConstraintSchema check in constraints.GetConstraints (ConstraintType.Check))
+				AddConstraint (check);
+			//TODO: also col constraints
 			
 			ShowAll ();
 		}
@@ -140,6 +137,7 @@ namespace MonoDevelop.Database.Designer
 				check.Name = "check_new" + (index++); 
 			constraints.Add (check);
 			AddConstraint (check);
+			EmitContentChanged ();
 		}
 
 		protected virtual void RemoveClicked (object sender, EventArgs e)
@@ -154,6 +152,7 @@ namespace MonoDevelop.Database.Designer
 				)) {
 					store.Remove (ref iter);
 					constraints.Remove (check);
+					EmitContentChanged ();
 				}
 			}
 		}
@@ -166,9 +165,7 @@ namespace MonoDevelop.Database.Designer
 				sqlEditor.Editable = true;
 				
 				CheckConstraintSchema check = store.GetValue (iter, colObjIndex) as CheckConstraintSchema;
-				
 				sqlEditor.Text = check.Source;
-				
 			} else {
 				buttonRemove.Sensitive = false;
 				sqlEditor.Editable = false;
@@ -179,20 +176,22 @@ namespace MonoDevelop.Database.Designer
 		private void IsColumnConstraintToggled (object sender, ToggledArgs args)
 		{
 	 		TreeIter iter;
-			if (storeColumns.GetIterFromString (out iter, args.Path)) {
-	 			bool val = (bool) storeColumns.GetValue (iter, colIsColumnConstraintIndex);
-	 			storeColumns.SetValue (iter, colIsColumnConstraintIndex, !val);
+			if (store.GetIterFromString (out iter, args.Path)) {
+	 			bool val = (bool) store.GetValue (iter, colIsColumnConstraintIndex);
+	 			store.SetValue (iter, colIsColumnConstraintIndex, !val);
+				EmitContentChanged ();
 	 		}
 		}
 		
 		private void NameEdited (object sender, EditedArgs args)
 		{
 			TreeIter iter;
-			if (storeColumns.GetIterFromString (out iter, args.Path)) {
+			if (store.GetIterFromString (out iter, args.Path)) {
 				if (!string.IsNullOrEmpty (args.NewText)) {
-					storeColumns.SetValue (iter, colNameIndex, args.NewText);
+					store.SetValue (iter, colNameIndex, args.NewText);
+					EmitContentChanged ();
 				} else {
-					string oldText = storeColumns.GetValue (iter, colNameIndex) as string;
+					string oldText = store.GetValue (iter, colNameIndex) as string;
 					(sender as CellRendererText).Text = oldText;
 				}
 			}
@@ -201,11 +200,12 @@ namespace MonoDevelop.Database.Designer
 		private void ColumnEdited (object sender, EditedArgs args)
 		{
 			TreeIter iter;
-			if (storeColumns.GetIterFromString (out iter, args.Path)) {
+			if (store.GetIterFromString (out iter, args.Path)) {
 				if (columns.Contains (args.NewText)) { //only allow existing columns
-					storeColumns.SetValue (iter, colColumnNameIndex, args.NewText);
+					store.SetValue (iter, colColumnNameIndex, args.NewText);
+					EmitContentChanged ();
 				} else {
-					string oldText = storeColumns.GetValue (iter, colColumnNameIndex) as string;
+					string oldText = store.GetValue (iter, colColumnNameIndex) as string;
 					(sender as CellRendererText).Text = oldText;
 				}
 			}
@@ -218,6 +218,7 @@ namespace MonoDevelop.Database.Designer
 				CheckConstraintSchema check = store.GetValue (iter, colObjIndex) as CheckConstraintSchema;
 				check.Source = sqlEditor.Text;
 				store.SetValue (iter, colSourceIndex, sqlEditor.Text);
+				EmitContentChanged ();
 			}
 		}
 		
@@ -232,29 +233,46 @@ namespace MonoDevelop.Database.Designer
 				ContentChanged (this, EventArgs.Empty);
 		}
 		
-		private void OnColumnAdded (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
-		{
-			storeColumns.AppendValues (args.Item.Name);
-		}
-		
-		private void OnColumnRemoved (object sender, SortedCollectionItemEventArgs<ColumnSchema> args)
+		public virtual bool ValidateSchemaObjects ()
 		{
 			TreeIter iter;
-			if (storeColumns.GetIterFirst (out iter)) {
+			if (store.GetIterFirst (out iter)) {
 				do {
-					string name = storeColumns.GetValue (iter, 0) as string;
+					string name = store.GetValue (iter, colNameIndex) as string;
+					string column = store.GetValue (iter, colColumnNameIndex) as string;
+					string source = store.GetValue (iter, colSourceIndex) as string;
+					bool iscolc = (bool)store.GetValue (iter, colIsColumnConstraintIndex);
 					
-					if (name == args.Item.Name) {
-						storeColumns.Remove (ref iter);
-						return;
-					}
-				} while (storeColumns.IterNext (ref iter));
+					if (String.IsNullOrEmpty (name) || String.IsNullOrEmpty (source))
+						return false;
+					
+					if (iscolc && String.IsNullOrEmpty (column))
+						return false;
+				} while (store.IterNext (ref iter));
+				return true;
 			}
+			return false;
 		}
 		
-		public virtual bool Validate ()
+		public virtual void FillSchemaObjects ()
 		{
-			return false;
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					CheckConstraintSchema check = store.GetValue (iter, colObjIndex) as CheckConstraintSchema;
+					
+					check.Name = store.GetValue (iter, colNameIndex) as string;
+					check.Source = store.GetValue (iter, colSourceIndex) as string;
+					check.IsColumnConstraint = (bool)store.GetValue (iter, colIsColumnConstraintIndex);
+					
+					if (check.IsColumnConstraint) {
+						string column = store.GetValue (iter, colColumnNameIndex) as string;
+						check.Columns.Add (columns.Search (column));
+					}
+					
+					table.Constraints.Add (check);
+				} while (store.IterNext (ref iter));
+			}
 		}
 	}
 }

@@ -40,11 +40,6 @@
     <signals>
     </signals>
   </object>
-  <object type="MonoDevelop.Database.Designer.SelectColumnConstraintWidget" palette-category="widget" allow-children="false" base-type="MonoDevelop.Database.Components.SelectColumnWidget">
-    <itemgroups />
-    <signals>
-    </signals>
-  </object>
   <object type="MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget" palette-category="widget" allow-children="false" base-type="Gtk.Bin">
     <itemgroups />
     <signals>

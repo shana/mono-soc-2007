@@ -124,8 +124,8 @@ namespace MonoDevelop.Database.Designer {
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
-            this.DefaultWidth = 538;
-            this.DefaultHeight = 355;
+            this.DefaultWidth = 640;
+            this.DefaultHeight = 480;
             this.Show();
             this.entryName.Changed += new System.EventHandler(this.NameChanged);
             this.buttonCancel.Clicked += new System.EventHandler(this.CancelClicked);

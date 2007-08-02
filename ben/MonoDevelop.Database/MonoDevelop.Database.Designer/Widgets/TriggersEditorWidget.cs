@@ -54,7 +54,8 @@ namespace MonoDevelop.Database.Designer
 		private const int colPositionIndex = 4;
 		private const int colActiveIndex = 5;
 		private const int colCommentIndex = 6;
-		private const int colObjIndex = 7;
+		private const int colSourceIndex = 7;
+		private const int colObjIndex = 8;
 		
 		public TriggersEditorWidget (ISchemaProvider schemaProvider)
 		{
@@ -68,7 +69,7 @@ namespace MonoDevelop.Database.Designer
 			sqlEditor.Editable = false;
 			sqlEditor.TextChanged += new EventHandler (SourceChanged);
 			
-			store = new ListStore (typeof (string), typeof (string), typeof (string), typeof (bool), typeof (string), typeof (bool), typeof (string), typeof (object));
+			store = new ListStore (typeof (string), typeof (string), typeof (string), typeof (bool), typeof (string), typeof (bool), typeof (string), typeof (string), typeof (object));
 			storeTypes = new ListStore (typeof (string));
 			storeEvents = new ListStore (typeof (string));
 			listTriggers.Model = store;
@@ -184,6 +185,7 @@ namespace MonoDevelop.Database.Designer
 				)) {
 					store.Remove (ref iter);
 					triggers.Remove (trigger);
+					EmitContentChanged ();
 				}
 			}
 		}
@@ -197,13 +199,15 @@ namespace MonoDevelop.Database.Designer
 				trigger.Name = "trigger_" + table.Name + (index++); 
 			triggers.Add (trigger);
 			AddTrigger (trigger);
+			EmitContentChanged ();
 		}
 		
 		private void AddTrigger (TriggerSchema trigger)
 		{
 			store.AppendValues (trigger.Name, trigger.TriggerType.ToString (),
 				trigger.TriggerEvent.ToString (), trigger.TriggerFireType == TriggerFireType.ForEachRow,
-				trigger.Position.ToString (), trigger.IsActive, trigger.Comment, trigger);
+				trigger.Position.ToString (), trigger.IsActive, trigger.Comment,
+				trigger.Source , trigger);
 		}
 		
 		private void NameEdited (object sender, EditedArgs args)
@@ -241,8 +245,8 @@ namespace MonoDevelop.Database.Designer
 		{
 			TreeIter iter;
 			if (listTriggers.Selection.GetSelected (out iter)) {
-				TriggerSchema trigger = store.GetValue (iter, colObjIndex) as TriggerSchema;
-				trigger.Source = sqlEditor.Text;
+				store.SetValue (iter, colSourceIndex, sqlEditor.Text);
+				EmitContentChanged ();
 			}
 		}
 		
@@ -253,6 +257,7 @@ namespace MonoDevelop.Database.Designer
 				foreach (string name in Enum.GetNames (typeof (TriggerType))) {
 					if (args.NewText == name) {
 						store.SetValue (iter, colTypeIndex, args.NewText);
+						EmitContentChanged ();
 						return;
 					}
 				}
@@ -268,6 +273,7 @@ namespace MonoDevelop.Database.Designer
 				foreach (string name in Enum.GetNames (typeof (TriggerEvent))) {
 					if (args.NewText == name) {
 						store.SetValue (iter, colEventIndex, args.NewText);
+						EmitContentChanged ();
 						return;
 					}
 				}
@@ -283,6 +289,7 @@ namespace MonoDevelop.Database.Designer
 				int len;
 				if (!string.IsNullOrEmpty (args.NewText) && int.TryParse (args.NewText, out len)) {
 					store.SetValue (iter, colPositionIndex, args.NewText);
+					EmitContentChanged ();
 				} else {
 					string oldText = store.GetValue (iter, colPositionIndex) as string;
 					(sender as CellRendererText).Text = oldText;
@@ -296,6 +303,7 @@ namespace MonoDevelop.Database.Designer
 			if (store.GetIterFromString (out iter, args.Path)) {
 	 			bool val = (bool) store.GetValue (iter, colFireTypeIndex);
 	 			store.SetValue (iter, colFireTypeIndex, !val);
+				EmitContentChanged ();
 	 		}
 		}
 		
@@ -305,19 +313,58 @@ namespace MonoDevelop.Database.Designer
 			if (store.GetIterFromString (out iter, args.Path)) {
 	 			bool val = (bool) store.GetValue (iter, colActiveIndex);
 	 			store.SetValue (iter, colActiveIndex, !val);
+				EmitContentChanged ();
 	 		}
 		}
 		
 		private void CommentEdited (object sender, EditedArgs args)
 		{
 			TreeIter iter;
-			if (store.GetIterFromString (out iter, args.Path))
+			if (store.GetIterFromString (out iter, args.Path)) {
 				store.SetValue (iter, colCommentIndex, args.NewText);
+				EmitContentChanged ();
+			}
 		}
 		
-		public virtual bool Validate ()
+		public virtual bool ValidateSchemaObjects ()
 		{
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					string name = store.GetValue (iter, colNameIndex) as string;
+					string source = store.GetValue (iter, colSourceIndex) as string;
+					//type, event, firetype, position and fireType are always valid
+					
+					if (String.IsNullOrEmpty (name) || String.IsNullOrEmpty (source))
+						return false;
+				} while (store.IterNext (ref iter));
+				return true;
+			}
 			return false;
+		}
+		
+		public virtual void FillSchemaObjects ()
+		{
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					TriggerSchema trigger = store.GetValue (iter, colObjIndex) as TriggerSchema;
+
+					trigger.Name = store.GetValue (iter, colNameIndex) as string;
+					
+					trigger.TriggerType = (TriggerType)Enum.Parse (typeof (TriggerType), store.GetValue (iter, colTypeIndex) as string);
+					trigger.TriggerEvent = (TriggerEvent)Enum.Parse (typeof (TriggerEvent), store.GetValue (iter, colEventIndex) as string);
+					trigger.TriggerFireType = (TriggerFireType)Enum.Parse (typeof (TriggerFireType), store.GetValue (iter, colFireTypeIndex) as string);
+					
+					trigger.Position = int.Parse (store.GetValue (iter, colPositionIndex) as string);
+					trigger.IsActive = (bool)store.GetValue (iter, colActiveIndex);
+					
+					trigger.Comment = store.GetValue (iter, colCommentIndex) as string;
+					trigger.Source = store.GetValue (iter, colSourceIndex) as string;
+	
+					table.Triggers.Add (trigger);
+				} while (store.IterNext (ref iter));
+			}
 		}
 		
 		protected virtual void EmitContentChanged ()
