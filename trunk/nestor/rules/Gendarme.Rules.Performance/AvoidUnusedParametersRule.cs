@@ -36,46 +36,26 @@ using Gendarme.Framework;
 namespace Gendarme.Rules.Performance {
 
 	public class AvoidUnusedParametersRule : IMethodRule {
-		
-		private bool UseParameter (ParameterDefinition parameter, MethodDefinition method) 
+	
+		private bool UseParameter (MethodDefinition method, ParameterDefinition parameter) 
 		{
 			foreach (Instruction instruction in method.Body.Instructions) {
 				switch (instruction.OpCode.Code) {
 					case Code.Ldarg_0:
-						if (method.IsStatic) {
-							if (method.Parameters.IndexOf (parameter) == 0)
-								return true;
-						}
+						if (method.Parameters.IndexOf (parameter) == 0)
+							return true;
 						break;
 					case Code.Ldarg_1:
-						if (method.IsStatic) {
-							if (method.Parameters.IndexOf (parameter) == 1)
-								return true;
-						}
-						else {
-							if (method.Parameters.IndexOf (parameter) == 0)
-								return true;
-						}
+						if (method.Parameters.IndexOf (parameter) == (method.IsStatic? 1 : 0))
+							return true;
 						break;
 					case Code.Ldarg_2:
-						if (method.IsStatic) {
-							if (method.Parameters.IndexOf (parameter) == 2)
-								return true;
-						}
-						else {
-							if (method.Parameters.IndexOf (parameter) == 1)
-								return true;
-						}
+						if (method.Parameters.IndexOf (parameter) == (method.IsStatic? 2 : 1))
+							return true;
 						break;
 					case Code.Ldarg_3:
-						if (method.IsStatic) {
-							if (method.Parameters.IndexOf (parameter) == 3)
-								return true;
-						}
-						else {
-							if (method.Parameters.IndexOf (parameter) == 2)
-								return true;
-						}
+						if (method.Parameters.IndexOf (parameter) == (method.IsStatic? 3 : 2))
+							return true;
 						break;
 					case Code.Ldarg_S:
 						if (instruction.Operand.Equals (parameter))
@@ -127,7 +107,7 @@ namespace Gendarme.Rules.Performance {
 			ArrayList unusedParameters = new ArrayList ();
 			if (IsExaminable (method)) {
 				foreach (ParameterDefinition parameter in method.Parameters) {
-					if (!UseParameter (parameter, method))
+					if (!UseParameter (method, parameter))
 						unusedParameters.Add (parameter);
 				}
 			}
