@@ -44,7 +44,7 @@ namespace MonoDevelop.Database.Sql
 			this.requiresServer = requiresServer;
 			this.requiresPort = requiresPort;
 			this.requiresUsername = requiresUsername;
-			this.requiresPort = requiresPort;
+			this.requiresPassword = requiresPassword;
 			this.canListDatabases = canListDatabases;
 			this.canSelectDatabase = canSelectDatabase;
 		}

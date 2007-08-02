@@ -34,8 +34,7 @@ namespace MonoDevelop.Database.Sql
 		Alter,
 		Drop,
 		Rename,
-		
-		//TODO: more flags
+
 		Name,
 		TableSpaceName,
 		Owner,
@@ -45,6 +44,7 @@ namespace MonoDevelop.Database.Sql
 		TableName,
 		TriggerType,
 		TriggerEvent,
+		TriggerFireType,
 		Position,
 		IsActive,
 		Source
