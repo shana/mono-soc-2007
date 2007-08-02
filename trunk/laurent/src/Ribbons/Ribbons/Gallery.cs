@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Cairo;
 using Gtk;
 
 namespace Ribbons
 {
 	public class Gallery : Container
 	{
+		protected Theme theme = new Theme ();
 		private int tileWidth, tileHeight;
 		private List<Widget> tiles;
 		private Button up, down, expand;
@@ -15,6 +17,7 @@ namespace Ribbons
 		private int firstDisplayedTileIndex, lastDisplayedTileIndex;
 		private int btnWidth;
 		private Requisition upReq, downReq, expandReq;
+		private Gdk.Rectangle tilesAlloc;
 		
 		public int TileWidth
 		{
@@ -222,7 +225,6 @@ namespace Ribbons
 			btnAlloc.Height = expandReq.Height;
 			expand.SizeAllocate (btnAlloc);
 			
-			Gdk.Rectangle tilesAlloc;
 			tilesAlloc.Y = allocation.Y + (int)BorderWidth + tileSpacing;
 			tilesAlloc.X = allocation.X + (int)BorderWidth + tileSpacing;
 			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing;
@@ -265,7 +267,7 @@ namespace Ribbons
 				if(tiles[tileIndex].IsMapped) tiles[tileIndex].Unmap ();
 			}
 			
-			Console.WriteLine ("ALLOC {0} ~ {1}", firstDisplayedTileIndex, lastDisplayedTileIndex);
+			//Console.WriteLine ("ALLOC {0} ~ {1}", firstDisplayedTileIndex, lastDisplayedTileIndex);
 			
 			for(int tileIndex = firstDisplayedTileIndex ; tileIndex <= lastDisplayedTileIndex ; ++tileIndex)
 			{
@@ -278,6 +280,24 @@ namespace Ribbons
 				t.SizeAllocate (tileAlloc);
 				tileAlloc.X += tileAlloc.Width + tileSpacing;
 			}
+		}
+		
+		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
+		{
+			Context cr = Gdk.CairoHelper.Create (this.GdkWindow);
+			
+			cr.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			cr.Clip ();
+			Draw (cr);
+			
+			return base.OnExposeEvent (evnt);
+		}
+		
+		protected void Draw (Context cr)
+		{
+			Rectangle alloc = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
+			Rectangle tiles = new Rectangle (tilesAlloc.X - tileSpacing, tilesAlloc.Y - tileSpacing, tilesAlloc.Width + 2 * tileSpacing, tilesAlloc.Height + 2 * tileSpacing);
+			theme.DrawGallery (cr, alloc, tiles, this);
 		}
 	}
 }
