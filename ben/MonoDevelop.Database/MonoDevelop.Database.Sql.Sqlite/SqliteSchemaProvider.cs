@@ -44,6 +44,7 @@ namespace MonoDevelop.Database.Sql
 	[PrimaryKeyConstraintMetaData (PrimaryKeyConstraintMetaData.Name | PrimaryKeyConstraintMetaData.Columns | PrimaryKeyConstraintMetaData.IsColumnConstraint)]
 	[CheckConstraintMetaData (CheckConstraintMetaData.Name | CheckConstraintMetaData.Columns | CheckConstraintMetaData.IsColumnConstraint | CheckConstraintMetaData.Source)]
 	[UniqueConstraintMetaData (UniqueConstraintMetaData.Name | UniqueConstraintMetaData.Columns | UniqueConstraintMetaData.IsColumnConstraint)]
+	[TriggerMetaData (TriggerMetaData.Name | TriggerMetaData.TableName | TriggerMetaData.TriggerType | TriggerMetaData.TriggerEvent | TriggerMetaData.Position | TriggerMetaData.IsActive | TriggerMetaData.Source | TriggerMetaData.Create | TriggerMetaData.Drop)]
 	public class SqliteSchemaProvider : AbstractSchemaProvider
 	{
 		public SqliteSchemaProvider (IConnectionPool connectionPool)

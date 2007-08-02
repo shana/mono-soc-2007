@@ -604,10 +604,10 @@ using MonoDevelop.Core;
 				foreach (ConstraintSchema constraint in column.Constraints) {
 					switch (constraint.ConstraintType) {
 					case ConstraintType.Unique:
-						sb.Append ("UNIQUE");
+						sb.Append (" UNIQUE");
 						break;
 					case ConstraintType.PrimaryKey:
-						sb.Append ("PRIMARY KEY");
+						sb.Append (" PRIMARY KEY");
 						break;
 					default:
 						throw new NotImplementedException ();
@@ -620,6 +620,7 @@ using MonoDevelop.Core;
 					sb.Append ("'");
 				}
 			}
+			//TODO: table comment
 			
 			foreach (ConstraintSchema constraint in table.Constraints) {
 				sb.Append ("," + Environment.NewLine);
@@ -732,6 +733,7 @@ using MonoDevelop.Core;
 			sb.Append (" ON ");
 			sb.Append (trigger.TableName);
 			sb.Append (" FOR EACH ROW ");
+			sb.Append (Environment.NewLine);
 			sb.Append (trigger.Source);
 			sb.Append (";");
 			

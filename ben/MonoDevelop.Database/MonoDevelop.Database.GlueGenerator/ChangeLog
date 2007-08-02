@@ -1,9 +1,0 @@
-2007-07-15  Ben Motmans <ben.motmans@gmail.com>
-
-	* GlueGeneratorDialog.cs: moved to Dialogs/GenerateObjectsDialog.cs
-	* Commands/ToolCommands.cs, MonoDevelop.Database.GlueGenerator.addin.xml: implemented
-	some commands in the Tools menu
-
-2007-07-10  Ben Motmans <ben.motmans@gmail.com>
-
-	* GlueGeneratorDialog.cs: Start of glue generator wizard (extremely unfinished)
