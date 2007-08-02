@@ -114,8 +114,8 @@ public class TestUtils {
 		TextTag expectedTag = buffer.TagTable.Lookup ("format#0");
 		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
 		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), insertIter);
-		Assert.IsTrue (beginsFormat, "ASI01");
-		Assert.IsTrue (endsFormat, "ASI02");
+		Assert.IsTrue (beginsFormat, "ASV01");
+		Assert.IsTrue (endsFormat, "ASV02");
 	}
 }
 }

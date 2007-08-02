@@ -14,7 +14,7 @@ using Pango;
 
 namespace Monodoc.Editor.Gui {
 public class DocumentTagTable : TextTagTable {
-	private Hashtable dynamic_tags;
+	private static Hashtable dynamic_tags;
 	
 	public DocumentTagTable () : base ()
 	{
@@ -24,16 +24,16 @@ public class DocumentTagTable : TextTagTable {
 	}
 	
 	
-	public bool IsDynamic (string name) 
+	public static bool IsDynamic (string name) 
 	{
 		return dynamic_tags [name] != null;
 	}
 	
 	public DocumentTag CreateDynamicTag (string fullTagName)
 	{
-		string tagName = fullTagName.Split ('#') [0];
+		string tagName = fullTagName.Split (':', '#') [0];
 		if (!IsDynamic (tagName))
-			throw new ArgumentException ("Error: The tag {0} is not a Dynamic Tag");
+			throw new ArgumentException ("Error: The tag " + tagName + " is not a Dynamic Tag");
 		
 		DocumentTag tag;
 		tag = new DocumentTag (fullTagName);
@@ -511,7 +511,6 @@ public class DocumentTagTable : TextTagTable {
 	
 	private void InitDynamicTags ()
 	{
-
 		// Schema defined elements.
 		dynamic_tags ["block"] = true;
 		dynamic_tags ["code"] = true;
@@ -534,7 +533,7 @@ public class DocumentTagTable : TextTagTable {
 		dynamic_tags ["term"] = true;
 		dynamic_tags ["typeparamref"] = true;
 		dynamic_tags ["ul"] = true;
-
+		
 		// Editor defined tags to format the documentation
 		dynamic_tags ["padding"] = true;
 		dynamic_tags ["newline"] = true;

@@ -190,7 +190,7 @@ public class DocumentBufferArchiver {
 		string suffix = String.Empty;
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
 		bool emptyElement = xmlReader.IsEmptyElement;
-		bool isDynamic = tagTable.IsDynamic (elementName);
+		bool isDynamic = DocumentTagTable.IsDynamic (elementName);
 		TextIter insertAt, applyStart, applyEnd;
 		TagStart tagStart = new TagStart ();
 		tagStart.Start = offset;

@@ -26,19 +26,35 @@ public class TestDocumentTagTable {
 	}
 	
 	[Test()]
+	public void TestTagTableSize ()
+	{
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		
+		Assert.AreEqual (115, tagTable.Size, "TTS01");
+	}
+	
+	public void TestIsDynamicValid ()
+	{
+	}
+	
+	[Test()]
 	public void TestCreateDynamicTag ()
 	{
 		DocumentEditor editor = new DocumentEditor ();
 		TextBuffer buffer = editor.Buffer;
-		
 		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		
+		TextTag expectedTag = tagTable.Lookup ("format#0");
+		Assert.IsNull (expectedTag, "CDT01");
 		TextTag actualTag = tagTable.CreateDynamicTag ("format#0");
+		expectedTag = tagTable.Lookup ("format#0");
 		
 		TextIter insertIter = buffer.StartIter;
 		buffer.InsertWithTags (ref insertIter, "Example Region", actualTag);
 		
-		TextTag expectedTag = tagTable.Lookup ("format#0");
-		Assert.AreEqual (expectedTag, actualTag, "CDT01");
+		Assert.AreEqual (expectedTag, actualTag, "CDT02");
 	}
 }
 }
