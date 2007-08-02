@@ -39,9 +39,12 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ProcedureNodeBuilder : TypeNodeBuilder
 	{
+		private EventHandler RefreshHandler;
+
 		public ProcedureNodeBuilder ()
 			: base ()
 		{
+			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
@@ -63,12 +66,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("Procedure");
+			ProcedureNode node = dataObject as ProcedureNode;
+			return node.Procedure.Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			ProcedureNode node = dataObject as ProcedureNode;
+			node.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
 
 			label = node.Procedure.Name;
 			icon = Context.GetIcon ("md-db-procedure");
@@ -97,6 +102,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			return true;
 		}
+		
+		private void OnRefreshEvent (object sender, EventArgs args)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (sender);
+			builder.Update ();
+		}
 	}
 	
 	public class ProcedureNodeCommandHandler : NodeCommandHandler
@@ -123,6 +134,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			if (provider.IsValidName (newName)) {
 				provider.RenameProcedure (node.Procedure, newName);
+				node.Refresh ();
 			} else {
 				Services.DispatchService.GuiDispatch (delegate () {
 					Services.MessageService.ShowError (String.Format (

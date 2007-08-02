@@ -40,9 +40,12 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ViewNodeBuilder : TypeNodeBuilder
 	{
+		private EventHandler RefreshHandler;
+
 		public ViewNodeBuilder ()
 			: base ()
 		{
+			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
@@ -64,12 +67,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("View");
+			ViewNode node = dataObject as ViewNode;
+			return node.View.Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			ViewNode node = dataObject as ViewNode;
+			node.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
 
 			label = node.View.Name;
 			icon = Context.GetIcon ("md-db-view");
@@ -98,6 +103,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			return true;
 		}
+		
+		private void OnRefreshEvent (object sender, EventArgs args)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (sender);
+			builder.Update ();
+		}
 	}
 	
 	public class ViewNodeCommandHandler : NodeCommandHandler
@@ -124,6 +135,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			if (provider.IsValidName (newName)) {
 				provider.RenameView (node.View, newName);
+				node.Refresh ();
 			} else {
 				Services.DispatchService.GuiDispatch (delegate () {
 					Services.MessageService.ShowError (String.Format (

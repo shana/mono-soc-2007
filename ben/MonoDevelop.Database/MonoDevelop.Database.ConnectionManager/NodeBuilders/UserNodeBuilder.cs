@@ -40,9 +40,12 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class UserNodeBuilder : TypeNodeBuilder
 	{
+		private EventHandler RefreshHandler;
+		
 		public UserNodeBuilder ()
 			: base ()
 		{
+			RefreshHandler = new EventHandler (OnRefreshEvent);
 		}
 		
 		public override Type NodeDataType {
@@ -64,12 +67,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("User");
+			UserNode node = dataObject as UserNode;
+			return node.User.Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			UserNode node = dataObject as UserNode;
+			node.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
 
 			label = node.User.Name;
 			icon = Context.GetIcon ("md-db-user");
@@ -78,6 +83,12 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
 			return false;
+		}
+		
+		private void OnRefreshEvent (object sender, EventArgs args)
+		{
+			ITreeBuilder builder = Context.GetTreeBuilder (sender);
+			builder.Update ();
 		}
 	}
 	
@@ -105,6 +116,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			if (provider.IsValidName (newName)) {
 				provider.RenameUser (node.User, newName);
+				node.Refresh ();
 			} else {
 				Services.DispatchService.GuiDispatch (delegate () {
 					Services.MessageService.ShowError (String.Format (
@@ -121,8 +133,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			CurrentNode.MoveToParent ();
 			BaseNode node = CurrentNode.DataItem as BaseNode;
-			if (node != null)
-				node.Refresh ();
+			node.Refresh ();
 			CurrentNode.ExpandToNode ();
 		}
 		

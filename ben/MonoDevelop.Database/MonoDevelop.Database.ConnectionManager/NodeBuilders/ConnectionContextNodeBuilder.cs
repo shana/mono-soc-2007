@@ -42,7 +42,7 @@ namespace MonoDevelop.Database.ConnectionManager
 {
 	public class ConnectionContextNodeBuilder : TypeNodeBuilder
 	{
-		private EventHandler RefreshHandler;		
+		private EventHandler RefreshHandler;
 		
 		public ConnectionContextNodeBuilder ()
 			: base ()
@@ -69,13 +69,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
 		{
-			return GettextCatalog.GetString ("Database Connections");
+			DatabaseConnectionContext context = dataObject as DatabaseConnectionContext;
+			return context.ConnectionSettings.Name;
 		}
 		
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			DatabaseConnectionContext context = dataObject as DatabaseConnectionContext;
-			context.RefreshEvent += RefreshHandler;
+			context.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
 			
 			label = context.ConnectionSettings.Name;
 			if (context.HasConnectionPool) {
@@ -152,6 +153,7 @@ namespace MonoDevelop.Database.ConnectionManager
 					));
 				} else {
 					context.ConnectionSettings.Name = newName;
+					OnRefreshConnection ();
 				}
 			}
 		}
@@ -191,8 +193,10 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnDisconnectConnection ()
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			if (context.HasConnectionPool)
+			if (context.HasConnectionPool) {
 				context.ConnectionPool.Close ();
+				context.Refresh ();
+			}
 		}
 		
 		public override void ActivateItem ()
