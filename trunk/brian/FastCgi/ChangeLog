@@ -1,5 +1,10 @@
 2007-08-01 Brian Nickel <brian.nickel@gmail.com>
 
+	* doc/linux/lighttpd.html: 
+	* doc/linux/cherokee.html: Replace .asd with .axd. Oops.
+
+2007-08-01 Brian Nickel <brian.nickel@gmail.com>
+
 	* doc/linux/cherokee.html: Trivial change.
 	
 	* src/Mono.FastCgi/Structures/Record.cs: Remove "using
