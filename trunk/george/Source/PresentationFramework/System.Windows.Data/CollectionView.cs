@@ -316,7 +316,7 @@ namespace System.Windows.Data {
 		}
 
 		public virtual void Refresh() {
-			//WDTDH
+			RefreshOverride();
 		}
 		#endregion
 
@@ -440,6 +440,7 @@ namespace System.Windows.Data {
 
 			public void Dispose() {
 				owner.is_refresh_deferred = false;
+				owner.Refresh();
 			}
 		}
 		#endregion

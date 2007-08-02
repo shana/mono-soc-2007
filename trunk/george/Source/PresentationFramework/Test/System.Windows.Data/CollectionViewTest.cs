@@ -616,6 +616,7 @@ namespace System.Windows.Data {
 			public DeferRefresh8CollectionView()
 				: base(new object[] { 1, 2 }) {
 				using (DeferRefresh()) {
+					Assert.IsTrue(OKToChangeCurrent());
 					MoveCurrentToPrevious();
 				}
 			}
@@ -671,8 +672,7 @@ namespace System.Windows.Data {
 			}
 		}
 		#endregion
-
-
+		
 		#region DeferRefresh2
 		[Test]
 		public void DeferRefresh2() {
@@ -715,6 +715,52 @@ namespace System.Windows.Data {
 			"Mono." +
 #endif
 			"System.Windows.Data.CollectionView+DeferHelper");
+		}
+		#endregion
+
+		#region DeferHelperCallsRefresh
+		[Test]
+		public void DeferHelperCallsRefresh() {
+			new DeferHelperCallsRefreshCollectionView();
+		}
+
+		class DeferHelperCallsRefreshCollectionView : CollectionView {
+			int needs_refresh_calls;
+			int refresh_calls;
+			int refresh_override_calls;
+
+			public DeferHelperCallsRefreshCollectionView()
+				: base(new object[] { 1, 2 }) {
+				Assert.AreEqual(needs_refresh_calls, 0, "1");
+				Assert.AreEqual(refresh_calls, 0, "2");
+				Assert.AreEqual(refresh_override_calls, 0, "3");
+				using (DeferRefresh()) {
+					Assert.AreEqual(needs_refresh_calls, 0, "4");
+					Assert.AreEqual(refresh_calls, 0, "5");
+					Assert.AreEqual(refresh_override_calls, 0, "6");
+				}
+				Assert.AreEqual(needs_refresh_calls, 0, "7");
+				Assert.AreEqual(refresh_calls, 1, "8");
+				Assert.AreEqual(refresh_override_calls, 1, "9");
+			}
+
+			public override bool NeedsRefresh {
+				get {
+					needs_refresh_calls++;
+					return base.NeedsRefresh;
+				}
+			}
+
+			public override void Refresh() {
+				refresh_calls++;
+				Assert.IsFalse(IsRefreshDeferred, "10");
+				base.Refresh();
+			}
+
+			protected override void RefreshOverride() {
+				refresh_override_calls++;
+				base.RefreshOverride();
+			}
 		}
 		#endregion
 		#endregion
@@ -1080,6 +1126,31 @@ namespace System.Windows.Data {
 		bool CallsFilterOnNullFilter(object item) {
 			calls_filter_on_null = true;
 			return false;
+		}
+		#endregion
+		#endregion
+
+		#region Refresh
+		#region RefreshCallsRefreshOverride
+		[Test]
+		public void RefreshCallsRefreshOverride() {
+			new RefreshCallsRefreshOverrideCollectionView();
+		}
+
+		class RefreshCallsRefreshOverrideCollectionView : CollectionView {
+			int calls;
+
+			public RefreshCallsRefreshOverrideCollectionView()
+				: base(new object[] { 1, 2 }) {
+				Assert.AreEqual(calls, 0, "1");
+				Refresh();
+				Assert.AreEqual(calls, 1, "2");
+			}
+
+			protected override void RefreshOverride() {
+				calls++;
+				base.RefreshOverride();
+			}
 		}
 		#endregion
 		#endregion
