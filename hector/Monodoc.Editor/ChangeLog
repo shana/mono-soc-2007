@@ -1,3 +1,10 @@
+2007-08-01  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/Test/TestUtils.cs: Added test units for GetLastTag
+	  and AddString methods.
+	* Monodoc.Editor.Gui/Utils.cs: Moving AddString, AddNewLine and
+	  AddPadding methods to DocumentUtils helper class.
+
 2007-07-16  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/DocumentTagTable.cs: Some comments about tags.
