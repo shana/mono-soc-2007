@@ -1,3 +1,7 @@
+2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Slider.cs: Switched to implemented *EventArgs types.
+
 2007-08-01  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ContentControl.cs: Added.
