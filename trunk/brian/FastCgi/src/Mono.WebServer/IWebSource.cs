@@ -196,8 +196,9 @@ namespace Mono.WebServer {
 		///    the method, <see cref="IsAsync" /> should be set to <see
 		///    langword="false" />. If, however, the method evokes an
 		///    asynchronous or threaded call, like <see
-		///    cref="Socket.BeginReceive" />, <see cref="IsAsync" />
-		///    should be set to <see langword="true" />.
+		///    cref="Socket.BeginReceive(byte[],int,int,SocketFlags,AsyncCallback,object)"
+		///    />, <see cref="IsAsync" /> should be set to <see
+		///    langword="true" />.
 		/// </remarks>
 		public abstract void Run (object state);
 		

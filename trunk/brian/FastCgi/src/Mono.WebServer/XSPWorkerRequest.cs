@@ -282,8 +282,12 @@ namespace Mono.WebServer
 		{
 			try {
 				string line;
+				#if NET_2_0
+				headers = new Hashtable (StringComparer.InvariantCultureIgnoreCase);
+				#else
 				headers = new Hashtable (CaseInsensitiveHashCodeProvider.DefaultInvariant,
 							CaseInsensitiveComparer.DefaultInvariant);
+				#endif
 				while ((line = ReadLine ()) != null && line.Length > 0) {
 					int colon = line.IndexOf (':');
 					if (colon == -1 || line.Length < colon + 2)
@@ -486,7 +490,11 @@ namespace Mono.WebServer
 			string ip = GetRemoteAddress ();
 			string name = null;
 			try {
+				#if NET_2_0
+				IPHostEntry entry = Dns.GetHostEntry (ip);
+				#else
 				IPHostEntry entry = Dns.GetHostByName (ip);
+				#endif
 				name = entry.HostName;
 			} catch {
 				name = ip;

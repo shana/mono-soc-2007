@@ -41,27 +41,37 @@ namespace Mono.FastCgi {
 		/// <summary>
 		///    No messages will be logged.
 		/// </summary>
-		None    = 0x00,
+		None     = 0x00,
 		
 		/// <summary>
 		///    Error messages will be logged.
 		/// </summary>
-		Error   = 0x01,
+		Error    = 0x01,
 		
 		/// <summary>
 		///    Warning message will be logged.
 		/// </summary>
-		Warning = 0x02,
+		Warning  = 0x02,
 		
 		/// <summary>
 		///    Notice messages will be logged.
 		/// </summary>
-		Notice  = 0x04,
+		Notice   = 0x04,
+		
+		/// <summary>
+		///    Debug messages will be logged.
+		/// </summary>
+		Debug    = 0x08,
+		
+		/// <summary>
+		///    Standard messages will be logged.
+		/// </summary>
+		Standard = Error | Warning | Notice,
 		
 		/// <summary>
 		///    All messages will be logged.
 		/// </summary>
-		All     = Error | Warning | Notice
+		All     = Error | Warning | Notice | Debug
 	}
 	
 	
@@ -253,7 +263,7 @@ namespace Mono.FastCgi {
 				return;
 			
 			string text = string.Format (CultureInfo.CurrentCulture,
-				"[{0:u}] {1} {2}",
+				Strings.Logger_Format,
 				DateTime.Now,
 				level,
 				message);

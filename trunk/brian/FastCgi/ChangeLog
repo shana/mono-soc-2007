@@ -1,3 +1,66 @@
+2007-08-03 Brian Nickel <brian.nickel@gmail.com>
+
+	* src/Mono.FastCgi/Structures/BeginRequestBody.cs: 
+	* src/Mono.FastCgi/Structures/Record.cs: 
+	* src/Mono.FastCgi/Structures/NameValuePair.cs: 
+	* src/Mono.FastCgi/SocketAbstractions/UnixSocket.cs: 
+	* src/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: Use "Strings".
+	
+	* src/Mono.FastCgi/Connection.cs: Make sure to close the socket and
+	release the buffers at the end of "Run" if there are no requests
+	pending.
+	
+	* src/Mono.FastCgi/Mono.FastCgi.mdp: Target 2.0 runtime.
+	
+	* src/Mono.FastCgi/Logger.cs: Add "Debug" level. Use "Strings".
+	
+	* src/Mono.FastCgi/Server.cs:
+	* src/Mono.FastCgi/Requests/Request.cs: Use "Strings". Don't throw
+	exceptions when warnings would suffice.
+	* src/Mono.FastCgi/Requests/ResponderRequest.cs: Use "Strings". 
+	
+	* src/Mono.FastCgi/Strings.cs:
+	* src/Mono.FastCgi.sources: Add Strings.cs to hold all message strings.
+	The strings will later be moved into a resource so internationalization
+	can take place.
+	
+	* src/Makefile.am: Define "NET_2_0" for all 2.0 assemblies.
+	
+	* src/Mono.WebServer.FastCgi/Responder.cs: 
+	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Use new API w/ generics.
+	
+	* src/Mono.WebServer.FastCgi/Mono.WebServer.FastCgi.mdp: Target 2.0
+	runtime.
+	
+	* src/Mono.WebServer.FastCgi/ConfigurationManager.cs: Only show warnings
+	when parsing the command line. Simply reject bad formats and arguments.
+	
+	* src/Mono.WebServer.FastCgi/ConfigurationManager.xml: 
+	* src/Mono.WebServer.FastCgi/server.cs: Replaced "/nonstop" with
+	"/stopable" and added message to output. Not all FastCGI implementations
+	keep standard input and output open or allow arugments. This keeps the
+	number of required arguments down to zero.
+	
+	* src/Mono.WebServer/MonoWorkerRequest.cs: Use new Certificate
+	properties when targeting 2.0 runtime.
+	
+	* src/Mono.WebServer/XSPWorkerRequest.cs: Use new Dns methods and
+	properties for 2.0 runtime.
+	
+	* src/Mono.WebServer/Mono.WebServer.mdp: Target 2.0 runtime.
+	
+	* src/Mono.WebServer/XSPApplicationHost.cs: Use new Certificate
+	properties when targeting 2.0 runtime.
+	
+	* src/Mono.WebServer/IWebSource.cs: Updated documentation for 2.0
+	compiler.
+	
+	* src/Mono.WebServer.FastCgi.sources: Added /r:System.Configuration for
+	2.0 compiler.
+	
+	* src/Mono.WebServer.sources: Added /r:System.Configuration for 2.0
+	compiler.
+
 2007-08-01 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/linux/lighttpd.html: 

@@ -286,17 +286,11 @@ namespace Mono.WebServer
 			return builder;
 		}
 		
-		private static readonly string except_no_prefix =
-			"Argument #{0} ({1}) is invalid and should have the format \"--arg\", \"-arg\", or \"/arg\".";
-		
-		private static readonly string except_duplicate =
-			"Argument #{0} ({1}) is can only be assigned once.";
-		
-		private static readonly string except_no_param =
-			"Argument #{0} ({1}) requires a parameter.";
-		
 		public void LoadCommandLineArgs (string [] args)
 		{
+			if (args == null)
+				throw new ArgumentNullException ("args");
+			
 			for (int i = 0; i < args.Length; i ++) {
 				// Randomize the hash a bit.
 				int idx = (i + 1 < args.Length) ? i + 1 : i;
@@ -307,12 +301,17 @@ namespace Mono.WebServer
 				
 				if (len > 0)
 					arg = arg.Substring (len);
-				else throw AppExcept (except_no_prefix, i + 1,
-					args [i]);
+				else {
+					Console.WriteLine (
+						"Warning: \"{0}\" is not a valid argument. Ignoring.",
+						args [i]);
+					continue;
+				}
 				
 				if (cmd_args [arg] != null)
-					throw AppExcept (except_duplicate,
-						i + 1, args [i]);
+					Console.WriteLine (
+						"Warning: \"{0}\" has already been set. Overwriting.",
+						args [i]);
 				
 				string [] pair = arg.Split (new char [] {'='},
 					2);
@@ -323,6 +322,13 @@ namespace Mono.WebServer
 				}
 				
 				XmlElement setting = GetSetting (arg);
+				if (setting == null) {
+					Console.WriteLine (
+						"Warning: \"{0}\" is an unknown argument. Ignoring.",
+						args [i]);
+					continue;
+				}
+				
 				string type = GetXmlValue (setting,
 					"Type").ToLower (
 						CultureInfo.InvariantCulture);
@@ -330,14 +336,19 @@ namespace Mono.WebServer
 				
 				if (type == "bool")
 					value = (i + 1 < args.Length &&
-						PrefixLength (args [i + 1]) == 0) ?
+						(args [i+1].ToLower () == "true" ||
+						args [i+1].ToLower () == "false")) ?
 						args [++ i] : "True";
 				else if (i + 1 < args.Length)
 					value = args [++i];
-				else throw AppExcept (except_no_param, i + 1,
-					args [i]);
+				else {
+					Console.WriteLine (
+						"Warning: \"{0}\" is missing its value. Ignoring.",
+						args [i]);
+					continue;
+				}
 				
-				cmd_args.Add (arg, value);
+				cmd_args [arg] = value;
 			}
 		}
 		

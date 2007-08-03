@@ -11,6 +11,7 @@ FCGI_CSFILES = \
 	$(srcdir)/Mono.FastCgi/Requests/ResponderRequest.cs \
 	$(srcdir)/Mono.FastCgi/Connection.cs \
 	$(srcdir)/Mono.FastCgi/Logger.cs \
+	$(srcdir)/Mono.FastCgi/Strings.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/UnixSocket.cs \
 	$(srcdir)/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs \

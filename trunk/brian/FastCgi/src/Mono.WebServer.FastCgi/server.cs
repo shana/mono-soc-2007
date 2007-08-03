@@ -272,7 +272,6 @@ namespace Mono.WebServer.FastCgi
 			appmanager = new ApplicationManager (
 				typeof (ApplicationHost), auto_map, false);
 			appmanager.Verbose = (bool) configmanager ["verbose"];
-			appmanager.HostCreated += OnHostCreated;
 			
 			string applications = (string)
 				configmanager ["applications"];
@@ -325,12 +324,16 @@ namespace Mono.WebServer.FastCgi
 			Console.WriteLine ("Multiplex connections: {0}",
 				server.MultiplexConnections);
 			
-			bool nonstop = (bool) configmanager ["nonstop"];
-			server.Start (!nonstop);
+			bool stopable = (bool) configmanager ["stopable"];
+			if (!stopable)
+				Console.WriteLine (
+					"Use /stopable=True to enable stopping from the console.");
+			
+			server.Start (stopable);
 			
 			configmanager = null;
 			
-			if (!nonstop) {
+			if (stopable) {
 				Console.WriteLine (
 					"Hit Return to stop the server.");
 				Console.ReadLine ();
@@ -338,13 +341,6 @@ namespace Mono.WebServer.FastCgi
 			}
 			
 			return 0;
-		}
-		
-		private static void OnHostCreated (string vhost, int port,
-		                                   string path,
-		                                   IApplicationHost appHost)
-		{
-			// TODO: Implement config registrations.
 		}
 	}
 }

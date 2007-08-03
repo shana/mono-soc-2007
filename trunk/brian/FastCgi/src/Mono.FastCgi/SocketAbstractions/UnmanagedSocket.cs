@@ -46,7 +46,7 @@ namespace Mono.FastCgi {
 		{
 			if (!supports_libc)
 				throw new NotSupportedException (
-					"Unmanaged sockets not supported.");
+					Strings.UnmanagedSocket_NotSupported);
 			
 			if ((int) socket < 0)
 				throw new ArgumentException ("Invalid socket.",

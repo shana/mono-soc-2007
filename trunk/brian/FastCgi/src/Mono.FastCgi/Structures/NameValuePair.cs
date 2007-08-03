@@ -147,8 +147,8 @@ namespace Mono.FastCgi {
 			this.value = enc.GetString (data, index, value_length);
 			index += value_length;
 			
-			Logger.Write (LogLevel.Notice,
-				"Read Parameter ({0}={1})",
+			Logger.Write (LogLevel.Debug,
+				Strings.NameValuePair_ParameterRead,
 				this.name, this.value);
 		}
 		
@@ -257,11 +257,13 @@ namespace Mono.FastCgi {
 				NameValuePair pair = new NameValuePair
 					(data, ref index);
 				
-				if (pairs.ContainsKey (pair.Name))
+				if (pairs.ContainsKey (pair.Name)) {
 					Logger.Write (LogLevel.Warning,
-						"Server.GetValues: Duplicate name, '{0}', encountered.",
+						Strings.NameValuePair_DuplicateParameter,
 						pair.Name);
-				else
+					
+					pairs [pair.Name] = pair.Value;
+				} else
 					pairs.Add (pair.Name, pair.Value);
 			}
 			
@@ -326,7 +328,7 @@ namespace Mono.FastCgi {
 				// strings.
 				if (name == null || value == null)
 					throw new ArgumentException (
-						"Dictionary must only contain string values.",
+						Strings.NameValuePair_DictionaryContainsNonString,
 						"pairs");
 				
 				int name_length = enc.GetByteCount (name);
@@ -459,7 +461,7 @@ namespace Mono.FastCgi {
 		{
 			if (length < 0)
 				throw new ArgumentException (
-					"Length must be greater than zero",
+					Strings.NameValuePair_LengthLessThanZero,
 					"length");
 			
 			if (index < 0 ||

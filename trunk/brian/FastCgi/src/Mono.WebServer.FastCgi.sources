@@ -14,5 +14,4 @@ WEBFCGI_DEPS = $(WEBFCGI_CSFILES) $(WEBFCGI_RESOURCES)
 
 WEBFCGI_FLAGS = /r:System.Xml /r:System.Web /resource:$(srcdir)/Mono.WebServer.FastCgi/ConfigurationManager.xml
 WEBFCGI1_FLAGS = $(WEBFCGI_FLAGS) /r:$(srcdir)/bin/Mono.FastCgi.dll /r:$(srcdir)/bin/Mono.WebServer.dll
-WEBFCGI2_FLAGS = $(WEBFCGI_FLAGS) /r:$(srcdir)/bin/Mono.FastCgi2.dll /r:$(srcdir)/bin/Mono.WebServer2.dll
-
+WEBFCGI2_FLAGS = $(WEBFCGI_FLAGS) /r:$(srcdir)/bin/Mono.FastCgi2.dll /r:$(srcdir)/bin/Mono.WebServer2.dll /r:System.Configuration

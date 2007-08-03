@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Globalization;
 
 namespace Mono.FastCgi {
 	/// <summary>
@@ -257,6 +258,10 @@ namespace Mono.FastCgi {
 			// complete data cannot be read.
 			if (total_length > 0)
 				ReceiveAll (socket, data, total_length);
+			
+			Logger.Write (LogLevel.Debug,
+				Strings.Record_Received,
+				Type, RequestID, BodyLength);
 		}
 		
 		/// <summary>
@@ -365,8 +370,9 @@ namespace Mono.FastCgi {
 				bodyLength = bodyData.Length - bodyIndex;
 			
 			if (bodyLength > 0xFFFF)
-				throw new ArgumentException
-				("Data is too large.", "data");
+				throw new ArgumentException (
+					Strings.Record_DataTooBig,
+					"data");
 			
 			
 			this.version     = version;
@@ -488,11 +494,9 @@ namespace Mono.FastCgi {
 		/// </value>
 		public override string ToString ()
 		{
-			return "FastCGI Record:" +
-			       "\n   Version:        " + Version +
-			       "\n   Type:           " + Type +
-			       "\n   Request ID:     " + RequestID +
-			       "\n   Content Length: " + BodyLength;
+			return string.Format (CultureInfo.CurrentCulture,
+				Strings.Record_ToString,
+				Version, Type, RequestID, BodyLength);
 		}
 		
 		/// <summary>
@@ -546,10 +550,9 @@ namespace Mono.FastCgi {
 			for (int i = 0; i < padding_size; i ++)
 				data [8 + body_length + i] = 0;
 			
-			Logger.Write (LogLevel.Notice,
-				"Record sent ({0}, {1}, {2})",
-				Type, RequestID,
-				body_length);
+			Logger.Write (LogLevel.Debug,
+				Strings.Record_Sent,
+				Type, RequestID, body_length);
 			
 			SendAll (socket, data, total_size);
 		}

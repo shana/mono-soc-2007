@@ -17,4 +17,4 @@ WEB_DEPS = $(WEB_CSFILES)
 WEB_FLAGS = /unsafe /r:Mono.Security /r:System.Xml /r:System.Web
 
 WEB1_FLAGS = $(WEB_FLAGS)
-WEB2_FLAGS = $(WEB_FLAGS)
+WEB2_FLAGS = $(WEB_FLAGS) /r:System.Configuration
