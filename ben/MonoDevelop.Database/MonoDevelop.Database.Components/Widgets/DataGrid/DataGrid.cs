@@ -51,8 +51,6 @@ namespace MonoDevelop.Database.Components
 		private int sortColumn = 0;
 		private IComparer sortComparer;
 		
-		private object dataObject;
-		
 		private ObjectContentRenderer defaultContentRenderer;
 		private Dictionary<Type, IDataGridContentRenderer> contentRenderers;
 		private List<IDataGridVisualizer> visualizers;
@@ -410,10 +408,10 @@ namespace MonoDevelop.Database.Components
 				TreePath path = null;
 				TreeViewColumn col = null;
 				if (grid.GetPathAtPos ((int)args.Event.X, (int)args.Event.Y, out path, out col)) {
-					DataGridColumn dgCol = col as DataGridColumn;
+					//DataGridColumn dgCol = col as DataGridColumn;
 					TreeIter iter;
 					if (store.GetIter (out iter, path)) {
-						dataObject = store.GetValue (iter, dgCol.ColumnIndex);
+						//dataObject = store.GetValue (iter, dgCol.ColumnIndex);
 							
 						IdeApp.CommandService.ShowContextMenu ("/SharpDevelop/Components/DataGrid/ContextMenu");
 					}

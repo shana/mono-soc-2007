@@ -185,9 +185,7 @@ namespace MonoDevelop.Database.Designer
 				table.Definition = schemaProvider.GetTableCreateStatement (table);
 			else
 				table.Definition = schemaProvider.GetTableAlterStatement (table);
-			
-			Runtime.LoggingService.Error ("===", table.Definition);
-			
+
 			if (checkPreview.Active) {
 				PreviewDialog dlg = new PreviewDialog (table.Definition);
 				if (dlg.Run () == (int)ResponseType.Ok) {
@@ -205,17 +203,20 @@ namespace MonoDevelop.Database.Designer
 
 		protected virtual void NameChanged (object sender, System.EventArgs e)
 		{
-			if (entryName.Text.Length == 0)
-				entryName.Text = table.Name;
-			else
-				table.Name = entryName.Text;
+			table.Name = entryName.Text;
 		}
 		
 		protected virtual void OnContentChanged (object sender, EventArgs args)
 		{
 			string msg;
 			
-			bool val = columnEditor.ValidateSchemaObjects (out msg);
+			bool val = entryName.Text.Length > 0;
+			if (!val) {
+				msg = GettextCatalog.GetString ("No name specified.");
+				goto sens;
+			}
+			
+			val &= columnEditor.ValidateSchemaObjects (out msg);
 			if (!val) goto sens;
 			
 			if (constraintEditor != null) {

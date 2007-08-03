@@ -380,10 +380,11 @@ namespace MonoDevelop.Database.Designer
 						return false;
 					}
 					
-					if (!dt.LengthRange.IsInRange (len)) {
-						msg = GettextCatalog.GetString ("Invalid length for '{0}'.", name);
-						return false;
-					}
+					//TODO: enable when all providers have good datatype info
+//					if (!dt.LengthRange.IsInRange (len)) {
+//						msg = GettextCatalog.GetString ("Invalid length for '{0}'.", name);
+//						return false;
+//					}
 				} while (storeColumns.IterNext (ref iter));
 				
 				if (!isPk) {

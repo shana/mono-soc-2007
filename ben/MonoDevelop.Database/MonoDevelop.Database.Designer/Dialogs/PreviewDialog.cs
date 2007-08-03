@@ -53,13 +53,13 @@ namespace MonoDevelop.Database.Designer
 		protected virtual void CancelClicked (object sender, EventArgs e)
 		{
 			Respond (ResponseType.Cancel);
-			Destroy ();
+			Hide ();
 		}
 
 		protected virtual void OkClicked (object sender, EventArgs e)
 		{
 			Respond (ResponseType.Ok);
-			Destroy ();
+			Hide ();
 		}
 		
 		protected virtual void SqlChanged (object sender, EventArgs e)
