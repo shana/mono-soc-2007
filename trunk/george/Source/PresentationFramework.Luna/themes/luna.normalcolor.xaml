@@ -659,7 +659,7 @@ Theme Styles For Windows Presentation Foundation Version 3.0.6817.0
                      Color="#0046D5"/>
 
  
-    <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
+    <mono_system_windows_controls:BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
     <Style x:Key="{x:Type mono_system_windows_controls:GroupBox}"
            TargetType="{x:Type mono_system_windows_controls:GroupBox}">
         <Setter Property="BorderBrush"

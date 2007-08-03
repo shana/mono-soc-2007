@@ -72,6 +72,7 @@
     <Compile Include="System.Windows.Controls.Primitives\UniformGrid.cs" />
     <Compile Include="System.Windows.Controls\BooleanToVisibilityConverter.cs" />
     <Compile Include="System.Windows.Controls\Border.cs" />
+    <Compile Include="System.Windows.Controls\BorderGapMaskConverter.cs" />
     <Compile Include="System.Windows.Controls\Button.cs" />
     <Compile Include="System.Windows.Controls\Canvas.cs" />
     <Compile Include="System.Windows.Controls\CharacterCasing.cs" />

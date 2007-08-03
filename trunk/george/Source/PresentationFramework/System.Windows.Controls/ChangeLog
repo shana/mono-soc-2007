@@ -1,3 +1,7 @@
+2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* BorderGapMaskConverter.cs: Added.
+
 2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Decorator.cs: Implemented IAddChild members and fixed Child.

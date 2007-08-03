@@ -1,3 +1,7 @@
+2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* BorderGapMaskConverterTest.cs: Added.
+
 2007-08-02  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* DecoratorTest.cs: Added some tests.
