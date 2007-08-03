@@ -72,7 +72,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			icon = Context.GetIcon ("md-db-views");
 			
 			BaseNode node = (BaseNode) dataObject;
-			node.RefreshEvent += RefreshHandler;
+			node.RefreshEvent += (EventHandler)(DispatchService.GuiDispatch (RefreshHandler));
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
@@ -87,15 +87,15 @@ namespace MonoDevelop.Database.ConnectionManager
 
 			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
 			ViewSchemaCollection views = node.ConnectionContext.SchemaProvider.GetViews ();
-			foreach (ViewSchema view in views) {
-				if (view.IsSystemView && !showSystemObjects)
-					continue;
-				
-				DispatchService.GuiDispatch (delegate {
+			DispatchService.GuiDispatch (delegate {
+				foreach (ViewSchema view in views) {
+					if (view.IsSystemView && !showSystemObjects)
+						continue;
+
 					builder.AddChild (new ViewNode (node.ConnectionContext, view));
-					builder.Expanded = true;
-				});
-			}
+				}
+				builder.Expanded = true;
+			});
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -107,9 +107,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder (sender);
 			
-			if (builder != null)
-				builder.UpdateChildren ();
-			
+			builder.UpdateChildren ();			
 			builder.ExpandToNode ();
 		}
 	}

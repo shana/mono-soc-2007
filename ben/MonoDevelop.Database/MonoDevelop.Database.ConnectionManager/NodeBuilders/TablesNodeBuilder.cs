@@ -73,7 +73,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			icon = Context.GetIcon ("md-db-tables");
 			
 			BaseNode node = (BaseNode) dataObject;
-			node.RefreshEvent += RefreshHandler;
+			node.RefreshEvent += (EventHandler)(DispatchService.GuiDispatch (RefreshHandler));
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
@@ -88,15 +88,15 @@ namespace MonoDevelop.Database.ConnectionManager
 			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
 			TableSchemaCollection tables = node.ConnectionContext.SchemaProvider.GetTables ();
 			
-			foreach (TableSchema table in tables) {
-				if (table.IsSystemTable && !showSystemObjects)
-					continue;
-				
-				DispatchService.GuiDispatch (delegate {
+			DispatchService.GuiDispatch (delegate {
+				foreach (TableSchema table in tables) {
+					if (table.IsSystemTable && !showSystemObjects)
+						continue;
+
 					builder.AddChild (new TableNode (node.ConnectionContext, table));
-					builder.Expanded = true;
-				});
-			}
+				}
+				builder.Expanded = true;
+			});
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -108,9 +108,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder ();
 			
-			if (builder != null)
-				builder.UpdateChildren ();
-			
+			builder.UpdateChildren ();			
 			builder.ExpandToNode ();
 		}
 	}
@@ -148,11 +146,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider provider = objs[0] as ISchemaProvider;
 			TableSchema table = objs[1] as TableSchema;
 			BaseNode node = objs[2] as BaseNode;
-			
-			string sql = table.Definition;
+
+			Runtime.LoggingService.Debug ("ADD TABLE: ", table.Definition);
 			
 			IPooledDbConnection conn = provider.ConnectionPool.Request ();
-			conn.ExecuteNonQuery (sql);
+			conn.ExecuteNonQuery (table.Definition);
 			conn.Release ();
 			
 			node.Refresh ();
