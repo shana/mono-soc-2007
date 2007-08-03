@@ -1,6 +1,7 @@
 <!--<SnippetMarkup>-->
 <UserControl x:Class="MyUserControl.NumericUpDown"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
+    xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Grid Margin="3">
     <Grid.RowDefinitions>

@@ -111,6 +111,7 @@
     <Compile Include="System.Windows.Controls\TabControl.cs" />
     <Compile Include="System.Windows.Controls\TabItem trivial things.cs" />
     <Compile Include="System.Windows.Controls\TabItem.cs" />
+    <Compile Include="System.Windows.Controls\UserControl.cs" />
     <Compile Include="System.Windows.Controls\Viewbox.cs">
       <SubType>Code</SubType>
     </Compile>
