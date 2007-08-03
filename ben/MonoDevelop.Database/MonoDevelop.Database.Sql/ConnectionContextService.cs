@@ -48,7 +48,7 @@ namespace MonoDevelop.Database.Sql
 
 		static ConnectionContextService ()
 		{
-			string configFile = Path.Combine (Runtime.Properties.ConfigDirectory, "MonoDevelop.Database.ConnectionManager.xml");
+			configFile = Path.Combine (Runtime.Properties.ConfigDirectory, "MonoDevelop.Database.ConnectionManager.xml");
 			Initialize (configFile);
 		}
 		
@@ -152,7 +152,7 @@ namespace MonoDevelop.Database.Sql
 				}
 				collection.Add (context.ConnectionSettings);
 			}
-			
+
 			using (FileStream fs = new FileStream (configFile, FileMode.Create)) {
 				XmlSerializer serializer = new XmlSerializer (typeof (DatabaseConnectionSettingsCollection));
 				serializer.Serialize (fs, collection);
