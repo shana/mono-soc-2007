@@ -1,5 +1,10 @@
 2007-08-02  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Test/TestUtils.cs: Added test units for the overloads of AddNewLine.
+	* Utils.cs: Uncommented line in AddNewLine.
+
+2007-08-02  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* Test/TestUtils.cs: Minor typo.
 	* Test/TestDocumentTagTable.cs: Added a test to check the base number
 	  of tags (115) in DocumentTagTable class

@@ -53,7 +53,7 @@ public class DocumentUtils {
 	public static int AddNewLine (TextBuffer buffer, int offset, string suffix)
 	{
 		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		// AddNewLine (buffer, ref insertAt, suffix);
+		AddNewLine (buffer, ref insertAt, suffix);
 		
 		return insertAt.Offset;
 	}
