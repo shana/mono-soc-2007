@@ -62,6 +62,11 @@
     <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Projects.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/bin/MonoDevelop.Core.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Ide.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Core.Gui.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Components.dll" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />

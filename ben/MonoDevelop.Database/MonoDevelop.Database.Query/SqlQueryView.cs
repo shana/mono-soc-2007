@@ -49,11 +49,9 @@ namespace MonoDevelop.Database.Query
 		private ToolButton buttonExecute;
 		private ToolButton buttonStop;
 		private ToolButton buttonClear;
-		private Menu menuConnections;
+		private DatabaseConnectionContextComboBox comboConnections;
 		private Notebook notebook;
 		private VPaned pane;
-		private GLib.SList group;
-		private EventHandler connectionMenuActivatedHandler;
 		private TextView status;
 		
 		private object currentQueryState;
@@ -87,26 +85,19 @@ namespace MonoDevelop.Database.Query
 			buttonStop.Clicked += new EventHandler (StopClicked);
 			buttonClear.Clicked += new EventHandler (ClearClicked);
 			
-			MenuToolButton menuConnectionsButton = new MenuToolButton (
-				Services.Resources.GetImage ("md-db-database", IconSize.SmallToolbar),
-				GettextCatalog.GetString ("Select Connection")
-			);
-			menuConnections = new Menu ();
-			menuConnectionsButton.Menu = menuConnections;
-
-			connectionMenuActivatedHandler = new EventHandler (ConnectionMenuActivated);
-			foreach (DatabaseConnectionContext context in ConnectionContextService.DatabaseConnections)
-				AddConnectionSettingsMenu (context);
-			SelectFirstConnectionSettings ();
+			comboConnections = new DatabaseConnectionContextComboBox ();
+			comboConnections.Changed += new EventHandler (ConnectionChanged);
 
 			buttonExecute.IsImportant = true;
-			menuConnectionsButton.IsImportant = true;
+			
+			ToolItem comboItem = new ToolItem ();
+			comboItem.Child = comboConnections;
 			
 			toolbar.Add (buttonExecute);
 			toolbar.Add (buttonStop);
 			toolbar.Add (buttonClear);
 			toolbar.Add (new SeparatorToolItem ());
-			toolbar.Add (menuConnectionsButton);
+			toolbar.Add (comboItem);
 			
 			pane = new VPaned ();
 
@@ -123,10 +114,6 @@ namespace MonoDevelop.Database.Query
 			vbox.PackStart (toolbar, false, true, 0);
 			vbox.PackStart (pane, true, true, 0);
 			
-			ConnectionContextService.ConnectionContextAdded += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionAdded));
-			ConnectionContextService.ConnectionContextRemoved += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionRemoved));
-			ConnectionContextService.ConnectionContextEdited += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionEdited));
-
 			vbox.ShowAll ();
 			notebook.Hide ();
 		}
@@ -139,14 +126,10 @@ namespace MonoDevelop.Database.Query
 		public DatabaseConnectionContext SelectedConnectionContext {
 			get { return selectedConnection; }
 			set {
-				selectedConnection = value;
-				buttonExecute.Sensitive = value != null;
-				foreach (ConnectionContextMenuItem item in menuConnections.Children) {
-					if (item.ConnectionContext == value) {
-						if (!item.Active)
-							item.Active = true;
-						return;
-					}
+				if (selectedConnection != value) {
+					selectedConnection = value;
+					buttonExecute.Sensitive = value != null;
+					comboConnections.DatabaseConnection = value;
 				}
 			}
 		}
@@ -197,7 +180,7 @@ namespace MonoDevelop.Database.Query
 		{
 			connection.Release ();
 
-			Services.DispatchService.GuiDispatch (delegate () {
+			DispatchService.GuiDispatch (delegate () {
 				notebook.ShowAll ();
 				string msg = GettextCatalog.GetPluralString ("Query executed ({0} result table)",
 					"Query executed ({0} result tables)", result.Tables.Count);
@@ -211,7 +194,7 @@ namespace MonoDevelop.Database.Query
 
 			if (result != null) {
 				foreach (DataTable table in result.Tables) {
-					Services.DispatchService.GuiDispatch (delegate () {
+					DispatchService.GuiDispatch (delegate () {
 						MonoDevelop.Database.Components.DataGrid grid = new MonoDevelop.Database.Components.DataGrid ();
 						grid.DataSource = table;
 						grid.DataBind ();
@@ -229,7 +212,7 @@ namespace MonoDevelop.Database.Query
 			}
 			
 			if (result == null || result.Tables.Count == 0) {
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					status.Buffer.Text += GettextCatalog.GetString ("No Results");
 				});
 			}
@@ -271,56 +254,10 @@ namespace MonoDevelop.Database.Query
 				stoppedQueries.Add (currentQueryState);
 		}
 		
-		private void OnConnectionAdded (object sender, DatabaseConnectionContextEventArgs args)
+		private void ConnectionChanged (object sender, EventArgs args)
 		{
-			AddConnectionSettingsMenu (args.ConnectionContext);
-		}
-		
-		private void OnConnectionRemoved (object sender, DatabaseConnectionContextEventArgs args)
-		{
-			ConnectionContextMenuItem removeItem = null;
-			foreach (ConnectionContextMenuItem item in menuConnections.Children) {
-				if (item.ConnectionContext == args.ConnectionContext) {
-					removeItem = item;
-					break;
-				}
-			}
-			if (removeItem != null) {
-				removeItem.Activated -= connectionMenuActivatedHandler;
-				menuConnections.Remove (removeItem);
-			}
-			
-			SelectFirstConnectionSettings ();
-		}
-		
-		private void OnConnectionEdited (object sender, DatabaseConnectionContextEventArgs args)
-		{
-			foreach (ConnectionContextMenuItem item in menuConnections.Children) {
-				if (item.ConnectionContext == args.ConnectionContext) {
-					item.Update ();
-					return;
-				}
-			}
-		}
-		
-		private void AddConnectionSettingsMenu (DatabaseConnectionContext context)
-		{
-			ConnectionContextMenuItem item = new ConnectionContextMenuItem (context);
-			if (group == null)
-				group = item.Group;
-			else
-				item.Group = group;
-			item.Active = false;
-			item.Activated += connectionMenuActivatedHandler;
-			item.ShowAll ();
-			menuConnections.Append (item);
-		}
-		
-		private void ConnectionMenuActivated (object sender, EventArgs args)
-		{
-			ConnectionContextMenuItem item = sender as ConnectionContextMenuItem;
-			selectedConnection = item.ConnectionContext;
-			buttonExecute.Sensitive = true;
+			selectedConnection = comboConnections.DatabaseConnection;
+			buttonExecute.Sensitive = sqlEditor.Text.Length > 0;
 		}
 		
 		private void SqlChanged (object sender, EventArgs args)
@@ -336,16 +273,6 @@ namespace MonoDevelop.Database.Query
 			sqlEditor.Editable = !exec;
 			
 			status.Buffer.Text = msg + Environment.NewLine;
-		}
-		
-		private void SelectFirstConnectionSettings ()
-		{
-			foreach (ConnectionContextMenuItem item in menuConnections.Children) {
-				item.Active = true;
-				selectedConnection = item.ConnectionContext;
-				buttonExecute.Sensitive = true;
-				return;
-			}
 		}
 	}
 	

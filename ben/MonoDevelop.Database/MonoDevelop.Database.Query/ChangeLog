@@ -1,3 +1,8 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlQueryView.cs: make use of the DatabaseConnectionContextComboBox in the toolbar
+	instead of a menu toolitem
+
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqlQueryView.cs: Use correct strings when showing results and don't allow
