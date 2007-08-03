@@ -117,5 +117,42 @@ public class TestUtils {
 		Assert.IsTrue (beginsFormat, "ASV01");
 		Assert.IsTrue (endsFormat, "ASV02");
 	}
+	
+	[Test()]
+	public void AddNewLineInt ()
+	{
+		int initialOffset, endOffset, nextOffset;
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		initialOffset = 0;
+		nextOffset = DocumentUtils.AddNewLine (buffer, initialOffset, "#0");
+		endOffset = nextOffset - 1;
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("newline#0");
+		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
+		Assert.IsTrue (beginsFormat, "ANLI01");
+		Assert.IsTrue (endsFormat, "ANLI02");
+	}
+	
+	[Test()]
+	public void AddNewLineVoid ()
+	{
+		int initialOffset, endOffset;
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		initialOffset = 0;
+		TextIter insertIter = buffer.StartIter;
+		DocumentUtils.AddNewLine (buffer, ref insertIter, "#0");
+		endOffset = insertIter.Offset - 1;
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("newline#0");
+		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), insertIter);
+		Assert.IsTrue (beginsFormat, "ANLV01");
+		Assert.IsTrue (endsFormat, "ANLV02");
+	}
 }
 }
