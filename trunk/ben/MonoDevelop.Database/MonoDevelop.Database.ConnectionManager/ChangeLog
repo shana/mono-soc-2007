@@ -1,3 +1,9 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* NodeBuilders/ConnectionContextNodeBuilder.cs: Added a connect command and correctly implemented
+	the DropDatabase command
+	* use the DispatchService as a static class instead of a service
+
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
 	* NodeBuilders/ViewNodeBuilder.cs, NodeBuilders/UserNodeBuilder.cs,

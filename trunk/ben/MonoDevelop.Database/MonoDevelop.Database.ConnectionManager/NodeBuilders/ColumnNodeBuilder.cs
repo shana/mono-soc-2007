@@ -82,7 +82,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				|| MetaDataService.IsApplied (provider, typeof (PrimaryKeyConstraintMetaDataAttribute))
 				|| MetaDataService.IsApplied (provider, typeof (UniqueConstraintMetaDataAttribute))
 			)
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ConstraintsNode (node.ConnectionContext, node.Column));
 					builder.Expanded = true;
 				});

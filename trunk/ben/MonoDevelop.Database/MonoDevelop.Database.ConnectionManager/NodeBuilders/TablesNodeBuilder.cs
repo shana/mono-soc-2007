@@ -92,7 +92,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				if (table.IsSystemTable && !showSystemObjects)
 					continue;
 				
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new TableNode (node.ConnectionContext, table));
 					builder.Expanded = true;
 				});

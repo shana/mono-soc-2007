@@ -91,7 +91,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				if (procedure.IsSystemProcedure && !showSystemObjects)
 					continue;
 				
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ProcedureNode (node.ConnectionContext, procedure));
 					builder.Expanded = true;
 				});

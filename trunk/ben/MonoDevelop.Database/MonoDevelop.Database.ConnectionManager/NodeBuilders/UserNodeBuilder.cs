@@ -74,7 +74,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			UserNode node = dataObject as UserNode;
-			node.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
+			node.RefreshEvent += (EventHandler)DispatchService.GuiDispatch (RefreshHandler);
 
 			label = node.User.Name;
 			icon = Context.GetIcon ("md-db-user");
@@ -118,7 +118,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				provider.RenameUser (node.User, newName);
 				node.Refresh ();
 			} else {
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					Services.MessageService.ShowError (String.Format (
 						"Unable to rename user '{0}' to '{1}'!",
 						node.User.Name, newName

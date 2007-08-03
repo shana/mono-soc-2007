@@ -73,7 +73,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			ProcedureNode node = dataObject as ProcedureNode;
-			node.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
+			node.RefreshEvent += (EventHandler)DispatchService.GuiDispatch (RefreshHandler);
 
 			label = node.Procedure.Name;
 			icon = Context.GetIcon ("md-db-procedure");
@@ -91,7 +91,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
 
 			if (MetaDataService.IsApplied (schemaProvider, typeof (ParameterMetaDataAttribute))) {
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ParametersNode (node.ConnectionContext, node.Procedure));
 					builder.Expanded = true;
 				});
@@ -136,7 +136,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				provider.RenameProcedure (node.Procedure, newName);
 				node.Refresh ();
 			} else {
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					Services.MessageService.ShowError (String.Format (
 						"Unable to rename procedure '{0}' to '{1}'!",
 						node.Procedure.Name, newName

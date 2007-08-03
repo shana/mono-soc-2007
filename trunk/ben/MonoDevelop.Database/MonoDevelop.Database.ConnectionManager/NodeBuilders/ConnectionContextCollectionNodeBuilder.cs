@@ -46,8 +46,8 @@ namespace MonoDevelop.Database.ConnectionManager
 		public ConnectionContextCollectionNodeBuilder ()
 			: base ()
 		{
-			ConnectionContextService.ConnectionContextAdded += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionAdded));
-			ConnectionContextService.ConnectionContextRemoved += (DatabaseConnectionContextEventHandler)Services.DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionRemoved));
+			ConnectionContextService.ConnectionContextAdded += (DatabaseConnectionContextEventHandler)DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionAdded));
+			ConnectionContextService.ConnectionContextRemoved += (DatabaseConnectionContextEventHandler)DispatchService.GuiDispatch (new DatabaseConnectionContextEventHandler (OnConnectionRemoved));
 		}
 		
 		public override Type NodeDataType {
@@ -155,7 +155,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			schemaProvider.CreateDatabase (db);
 			
-			Services.DispatchService.GuiDispatch (delegate () {
+			DispatchService.GuiDispatch (delegate () {
 				WaitDialog.HideDialog ();
 				ConnectionContextService.AddDatabaseConnectionContext (context);
 			});

@@ -94,7 +94,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				return;
 			
 			foreach (ConstraintSchema constraint in constraints) {
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (constraint);
 					builder.Expanded = true;
 				});

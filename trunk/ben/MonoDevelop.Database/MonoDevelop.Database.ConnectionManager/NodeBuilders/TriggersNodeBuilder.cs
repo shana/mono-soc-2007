@@ -117,8 +117,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateTrigger (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			//TODO: info.Enabled = MetaDataService.IsTriggerMetaDataSupported (node.ConnectionContext.SchemaProvider, TriggerMetaData.Create);
-			info.Enabled = false;
+			info.Enabled = MetaDataService.IsTriggerMetaDataSupported (node.ConnectionContext.SchemaProvider, TriggerMetaData.Create);
 		}
 	}
 }

@@ -175,6 +175,9 @@
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Refresh"
 			_label = "Refresh"
 			icon = "gtk-refresh"/>
+		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.ConnectConnection"
+			_label = "Connect"
+			icon = "gtk-connect"/>
 		<Command id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DisconnectConnection"
 			_label = "Disconnect"
 			icon = "gtk-disconnect"/>
@@ -272,6 +275,7 @@
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionNode">
+		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.ConnectConnection"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.DisconnectConnection"/>
 		<SeparatorItem id = "DisconnectSeparator"/>
 		<CommandItem id = "MonoDevelop.Database.ConnectionManager.ConnectionManagerCommands.Rename"/>

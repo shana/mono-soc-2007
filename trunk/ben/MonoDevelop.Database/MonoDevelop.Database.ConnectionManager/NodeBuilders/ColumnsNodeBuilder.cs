@@ -89,18 +89,16 @@ namespace MonoDevelop.Database.ConnectionManager
 				columns = node.ConnectionContext.SchemaProvider.GetTableColumns (schema as TableSchema);
 			else if (schema is ViewSchema)
 				columns = node.ConnectionContext.SchemaProvider.GetViewColumns (schema as ViewSchema);
-			//else if (schema is ProcedureSchema)
-			//	columns = nodeState.ConnectionContext.SchemaProvider.GetProcedureColumns (schema as ProcedureSchema);
 			
 			if (columns == null)
 				return;
 			
 			foreach (ColumnSchema column in columns) {
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (column);
 				});
 			}
-			Services.DispatchService.GuiDispatch (delegate {
+			DispatchService.GuiDispatch (delegate {
 				builder.Expanded = true;
 			});
 		}
