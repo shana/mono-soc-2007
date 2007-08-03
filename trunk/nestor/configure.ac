@@ -53,13 +53,16 @@ rules/Makefile
 rules/AssemblyInfo.cs
 rules/Gendarme.Rules.Naming/Makefile
 rules/Gendarme.Rules.Naming/Test/Makefile
+rules/Gendarme.Rules.Naming/Gendarme.Rules.Naming.xml
 rules/Gendarme.Rules.Exceptions/Makefile
 rules/Gendarme.Rules.Exceptions/Test/Makefile
+rules/Gendarme.Rules.Exceptions/Gendarme.Rules.Exceptions.xml
 rules/Gendarme.Rules.Smells/Makefile
 rules/Gendarme.Rules.Smells/Test/Makefile
 rules/Gendarme.Rules.Smells/Gendarme.Rules.Smells.xml
 rules/Gendarme.Rules.Performance/Makefile
 rules/Gendarme.Rules.Performance/Test/Makefile
+rules/Gendarme.Rules.Performance/Gendarme.Rules.Performance.xml
 measurement/Makefile
 measurement/src/Makefile
 measurement/src/AssemblyInfo.cs
