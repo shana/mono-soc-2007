@@ -87,16 +87,13 @@
     <ProjectReference type="Gac" localcopy="True" refto="gtksourceview-sharp, Version=1.0.0.2, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Projects.Gui.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Projects.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/bin/MonoDevelop.Core.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Ide.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Core.Gui.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Components.dll" />
   </References>
-  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
-    <BuildFilesVar Sync="True" Name="FILES" />
-    <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
-    <ResourcesVar Sync="True" Name="RES" />
-    <OthersVar />
-    <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
-    <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />
-    <ProjectRefVar Sync="True" Name="REFS" Prefix="-r:" />
-  </MonoDevelop.Autotools.MakefileInfo>
   <GtkDesignInfo partialTypes="True" isWidgetLibrary="True">
     <ExportedWidgets>
       <Widget>MonoDevelop.Database.Components.ProjectDirectoryComboBox</Widget>
@@ -107,4 +104,13 @@
       <Widget>MonoDevelop.Database.Components.SqlEditorWidget</Widget>
     </ExportedWidgets>
   </GtkDesignInfo>
+  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
+    <BuildFilesVar Sync="True" Name="FILES" />
+    <DeployFilesVar Sync="True" Name="EXTRA_DIST" />
+    <ResourcesVar Sync="True" Name="RES" />
+    <OthersVar />
+    <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <ProjectRefVar Sync="True" Name="REFS" Prefix="-r:" />
+  </MonoDevelop.Autotools.MakefileInfo>
 </Project>

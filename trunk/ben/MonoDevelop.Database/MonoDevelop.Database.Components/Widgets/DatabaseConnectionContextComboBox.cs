@@ -82,7 +82,10 @@ namespace MonoDevelop.Database.Components
 		
 		private void OnConnectionAdded (object sender, DatabaseConnectionContextEventArgs args)
 		{
-			store.AppendValues (args.ConnectionContext.ConnectionSettings.Name, args.ConnectionContext);
+			TreeIter newIter = store.AppendValues (args.ConnectionContext.ConnectionSettings.Name, args.ConnectionContext);
+			TreeIter iter;
+			if (!GetActiveIter (out iter))
+				SetActiveIter (newIter);
 		}
 		
 		private void OnConnectionRemoved (object sender, DatabaseConnectionContextEventArgs args)

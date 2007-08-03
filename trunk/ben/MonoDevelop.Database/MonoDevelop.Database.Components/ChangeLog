@@ -1,3 +1,7 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* Widgets/SqlEditorWidget.cs: fixed the context menu
+
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
 	* Dialogs/DatabaseConnectionSettingsDialog.cs: make sure the database entry is always editable
