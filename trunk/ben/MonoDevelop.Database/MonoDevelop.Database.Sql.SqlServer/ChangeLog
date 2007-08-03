@@ -1,3 +1,8 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqlServerConnectionProvider.cs: added support for an error message
+	* SqlServerSchemaProvider.cs: added MetaData information
+
 2007-08-01  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqlServerSchemaProvider.cs: Catch exceptions and notify the user
