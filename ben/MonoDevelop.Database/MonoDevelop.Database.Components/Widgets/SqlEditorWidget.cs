@@ -63,14 +63,10 @@ namespace MonoDevelop.Database.Components
 
 		protected virtual void OnPopulatePopup (object sender, PopulatePopupArgs args)
 		{
-			try {
-			Menu menu = IdeApp.CommandService.CreateMenu ("/SharpDevelop/Components/SqlEditor/ContextMenu");
-			int pos=2; //after undo and redo
-			foreach (Widget w in menu.Children)
-				args.Menu.Insert (w, pos++);
-			menu.Destroy ();
-			} catch (Exception e) {
-				Runtime.LoggingService.Error (e);
+			CommandEntrySet cset = IdeApp.CommandService.CreateCommandEntrySet ("/SharpDevelop/Components/SqlEditor/ContextMenu");
+			if (cset.Count > 0) {
+				cset.AddItem (Command.Separator);
+				IdeApp.CommandService.InsertOptions (args.Menu, cset, 0);
 			}
 		}
 		
@@ -92,7 +88,7 @@ namespace MonoDevelop.Database.Components
 		
 		public bool Editable {
 			get { return sourceView.Editable; }
-			set { sourceView.Editable = false; }
+			set { sourceView.Editable = value; }
 		}
 		
 		[CommandHandler (SqlEditorCommands.ImportFromFile)]
@@ -108,7 +104,7 @@ namespace MonoDevelop.Database.Components
 			dlg.Modal = true;
 			
 			FileFilter filter = new FileFilter ();
-			filter.AddPattern ("*.sql");
+			filter.AddPattern ("*.[sS][qQ][lL]");
 			filter.Name = GettextCatalog.GetString ("SQL files");
 			FileFilter filterAll = new FileFilter ();
 			filterAll.AddPattern ("*");
@@ -140,7 +136,7 @@ namespace MonoDevelop.Database.Components
 			dlg.Modal = true;
 			
 			FileFilter filter = new FileFilter ();
-			filter.AddPattern ("*.sql");
+			filter.AddPattern ("*.[sS][qQ][lL]");
 			filter.Name = GettextCatalog.GetString ("SQL files");
 			dlg.AddFilter (filter);
 
@@ -162,7 +158,7 @@ namespace MonoDevelop.Database.Components
 			dlg.Destroy ();
 		}
 		
-		[CommandUpdateHandler (SqlEditorCommands.ImportFromFile)]
+		[CommandUpdateHandler (SqlEditorCommands.ExportToFile)]
 		protected void OnUpdateExportToFile (CommandInfo info)
 		{
 			info.Enabled = Text.Length > 0;

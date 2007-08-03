@@ -58,6 +58,5 @@
 	<Extension path = "/SharpDevelop/Components/SqlEditor/ContextMenu">
 		<CommandItem id = "MonoDevelop.Database.Components.SqlEditorCommands.ImportFromFile"/>
 		<CommandItem id = "MonoDevelop.Database.Components.SqlEditorCommands.ExportToFile"/>
-		<SeparatorItem />
 	</Extension>
 </Addin>

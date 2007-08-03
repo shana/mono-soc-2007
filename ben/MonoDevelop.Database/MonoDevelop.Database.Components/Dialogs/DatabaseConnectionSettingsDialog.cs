@@ -218,7 +218,7 @@ namespace MonoDevelop.Database.Components
 				DatabaseSchemaCollection databases = prov.GetDatabases ();
 				
 				foreach (DatabaseSchema db in databases) {
-					Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 						storeDatabases.AppendValues (db.Name);
 					});
 				}
@@ -226,11 +226,11 @@ namespace MonoDevelop.Database.Components
 			} catch {}
 
 			if (isDatabaseListEmpty) {
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					storeDatabases.AppendValues (GettextCatalog.GetString ("No databases found!"));
 				});
 			} else {
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					TreeIter iter;
 					if (storeDatabases.GetIterFirst (out iter))
 						comboDatabase.SetActiveIter (iter);

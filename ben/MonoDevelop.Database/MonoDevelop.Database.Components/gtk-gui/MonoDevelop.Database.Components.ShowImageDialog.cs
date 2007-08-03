@@ -47,7 +47,6 @@ namespace MonoDevelop.Database.Components {
             this.scrolledwindow.ShadowType = ((Gtk.ShadowType)(1));
             // Container child scrolledwindow.Gtk.Container+ContainerChild
             Gtk.Viewport w2 = new Gtk.Viewport();
-            w2.Name = "GtkViewport";
             w2.ShadowType = ((Gtk.ShadowType)(0));
             // Container child GtkViewport.Gtk.Container+ContainerChild
             this.image1 = new Gtk.Image();

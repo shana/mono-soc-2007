@@ -71,7 +71,7 @@ namespace MonoDevelop.Database.Components
 		private static void ProgressUpdate (object state)
 		{
 			while (isRunning) {
-				Services.DispatchService.GuiDispatch (delegate () {
+			DispatchService.GuiDispatch (delegate () {
 					dlg.progressbar.Pulse ();
 				});
 				Thread.Sleep (1000);
