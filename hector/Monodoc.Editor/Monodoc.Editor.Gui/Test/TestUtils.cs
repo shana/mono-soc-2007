@@ -154,5 +154,42 @@ public class TestUtils {
 		Assert.IsTrue (beginsFormat, "ANLV01");
 		Assert.IsTrue (endsFormat, "ANLV02");
 	}
+	
+	[Test()]
+	public void AddPaddingInt ()
+	{
+		int initialOffset, endOffset, nextOffset;
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		initialOffset = 0;
+		nextOffset = DocumentUtils.AddPadding (buffer, initialOffset, "#0");
+		endOffset = nextOffset - 1;
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("padding#0");
+		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
+		Assert.IsTrue (beginsFormat, "API01");
+		Assert.IsTrue (endsFormat, "API02");
+	}
+	
+	[Test()]
+	public void AddPaddingVoid ()
+	{
+		int initialOffset, endOffset;
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		initialOffset = 0;
+		TextIter insertIter = buffer.StartIter;
+		DocumentUtils.AddPadding (buffer, ref insertIter, "#0");
+		endOffset = insertIter.Offset - 1;
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("padding#0");
+		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), insertIter);
+		Assert.IsTrue (beginsFormat, "APV01");
+		Assert.IsTrue (endsFormat, "APV02");
+	}
 }
 }

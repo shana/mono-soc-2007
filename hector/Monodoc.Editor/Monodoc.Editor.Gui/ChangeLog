@@ -1,3 +1,7 @@
+2007-08-03  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/TestUtils.cs: Added test units for the overloads of AddPadding
+
 2007-08-02  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Test/TestUtils.cs: Added test units for the overloads of AddNewLine.
