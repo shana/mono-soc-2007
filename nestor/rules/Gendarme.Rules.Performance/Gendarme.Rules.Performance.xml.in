@@ -1,0 +1,9 @@
+<rules>
+	<rule 	Name="AvoidUnusedParametersRule"
+		Type="Gendarme.Rules.Performance.AvoidUnusedParametersRule, Gendarme.Rules.Performance, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
+		Uri="">
+	
+		<problem>The method '{0}' contains unused parameters.</problem>
+		<solution>You should remove the unused parameters.</solution>
+	</rule>
+</rules>
