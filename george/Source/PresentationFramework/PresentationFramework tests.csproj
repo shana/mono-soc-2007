@@ -56,6 +56,7 @@
     <None Include="Test\System.Windows.Controls\ChangeLog" />
     <Compile Include="Test\System.Windows.Controls.Primitives\UniformGridTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ContentControlTest.cs" />
+    <Compile Include="Test\System.Windows.Controls\BorderGapMaskConverterTest.cs" />
     <Compile Include="Test\System.Windows.Controls\DecoratorTest.cs" />
     <Compile Include="Test\System.Windows.Controls\ViewboxTest.cs" />
     <Compile Include="Test\System.Windows.Controls\HeaderedContentControlTest.cs" />

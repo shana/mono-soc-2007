@@ -1,3 +1,7 @@
+2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* luna.normalcolor.xaml: Changed to use the implemented BorderGapMaskConverter.
+
 2007-08-01  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* luna.normalcolor.xaml: Added the ContentControl style.
