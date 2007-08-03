@@ -33,7 +33,7 @@ using System.Collections.Generic;
 {
 	public class SqlServerConnectionProvider : AbstractConnectionProvider
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings)
+		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings, out string error)
 		{
 			SqlConnectionStringBuilder builder = null;
 			try {	
@@ -51,8 +51,10 @@ using System.Collections.Generic;
 				SqlConnection connection = new SqlConnection (builder.ToString ());
 				connection.Open ();
 				
+				error = null;
 				return new SqlServerPooledDbConnection (pool, connection);
-			} catch {
+			} catch (Exception e) {
+				error = e.Message;
 				return null;
 			}
 		}
