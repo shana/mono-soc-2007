@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Mono.FastCgi
 {
@@ -39,7 +40,9 @@ namespace Mono.FastCgi
 					conn.Connect (ep);
 					conn.Close ();
 					throw new InvalidOperationException (
-						"There's already a server listening on " + path);
+						string.Format (CultureInfo.CurrentCulture,
+							Strings.UnixSocket_AlreadyExists,
+							path));
 				} catch (System.Net.Sockets.SocketException) {
 				}
 				

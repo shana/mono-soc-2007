@@ -152,11 +152,11 @@
 		</Description>
 	</Setting>
 	
-	<Setting Name="nonstop" Type="Bool" ConsoleVisible="True">
+	<Setting Name="stopable" Type="Bool" ConsoleVisible="True">
 		<Description>
-			<para>Specifies not to stop the server by if "Enter" is
-			pressed. This must be used when the server has no
-			controlling terminal.</para>
+			<para>Allows the user to stop the server by if "Enter"
+			is pressed. This should not be used when the server has
+			no controlling terminal.</para>
 		</Description>
 	</Setting>
 	

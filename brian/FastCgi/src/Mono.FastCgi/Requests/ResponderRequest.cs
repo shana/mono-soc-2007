@@ -138,14 +138,13 @@ namespace Mono.FastCgi {
 		                                  DataReceivedArgs args)
 		{
 			// If the data is completed, call the worker and return.
-			if (args.DataCompleted)
-			{
+			if (args.DataCompleted) {
 				DataNeeded = false;
 				
 				if (input_data != null &&
 					write_index < input_data.Length) {
-					AbortRequest (
-						"Insufficient input data received.");
+					Abort (Strings.ResponderRequest_IncompleteInput,
+						write_index, input_data.Length);
 				}
 				else if (Server.MultiplexConnections)
 					ThreadPool.QueueUserWorkItem (Worker);
@@ -163,8 +162,7 @@ namespace Mono.FastCgi {
 				
 				// If the field is missing we can't continue.
 				if (length_text == null) {
-					AbortRequest (
-						"Content length parameter missing.");
+					Abort (Strings.ResponderRequest_NoContentLength);
 					return;
 				}
 				
@@ -175,8 +173,7 @@ namespace Mono.FastCgi {
 					length = int.Parse (length_text,
 						CultureInfo.InvariantCulture);
 				} catch {
-					AbortRequest (
-						"Content length parameter not an integer.");
+					Abort (Strings.ResponderRequest_NoContentLengthNotNumber);
 					return;
 				}
 				
@@ -185,8 +182,7 @@ namespace Mono.FastCgi {
 			
 			if (write_index + args.DataLength > input_data.Length)
 			{
-				AbortRequest (
-					"Input data exceeds content length.");
+				Abort (Strings.ResponderRequest_ContentExceedsLength);
 				return;
 			}
 			

@@ -78,9 +78,22 @@ namespace Mono.FastCgi {
 		/// </summary>
 		private object request_lock = new object ();
 		
+		/// <summary>
+		///    Contains the lock used to regulate the sending of
+		///    records.
+		/// </summary>
 		private object send_lock = new object ();
+		
+		/// <summary>
+		///    Contains the buffer used to receive records.
+		/// </summary>
 		private byte[] receive_buffer;
+		
+		/// <summary>
+		///    Contains the buffer used to send records.
+		/// </summary>
 		private byte[] send_buffer;
+		
 		#endregion
 		
 		
@@ -164,7 +177,8 @@ namespace Mono.FastCgi {
 		/// </remarks>
 		public void Run ()
 		{
-			Logger.Write (LogLevel.Notice, "Receiving records...");
+			Logger.Write (LogLevel.Notice,
+				Strings.Connection_BeginningRun);
 			
 			do {
 				Record record;
@@ -173,17 +187,12 @@ namespace Mono.FastCgi {
 					record = new Record (socket,
 						receive_buffer);
 				} catch (System.Net.Sockets.SocketException) {
-					StopRun ("Failed to receive record.");
+					StopRun (Strings.Connection_RecordNotReceived);
 					Stop ();
-					return;
+					break;
 				}
 				
 				Request request = GetRequest (record.RequestID);
-				
-				Logger.Write (LogLevel.Notice,
-					"Record received ({0}, {1}, {2})",
-					record.Type, record.RequestID,
-					record.BodyLength);
 				
 				switch (record.Type) {
 					
@@ -194,8 +203,7 @@ namespace Mono.FastCgi {
 					// already exists, there's a bug in the
 					// client. Abort.
 					if (request != null) {
-						StopRun (
-							"Request with given ID already exists.");
+						StopRun (Strings.Connection_RequestAlreadyExists);
 						break;
 					}
 					
@@ -234,7 +242,7 @@ namespace Mono.FastCgi {
 					// don't begin the request.
 					if (request == null) {
 						Logger.Write (LogLevel.Warning,
-							"Unknown role ({0}).",
+							Strings.Connection_RoleNotSupported,
 							body.Role);
 						EndRequest (record.RequestID, 0,
 							ProtocolStatus.UnknownRole);
@@ -276,13 +284,15 @@ namespace Mono.FastCgi {
 						response_data = new byte [0];
 					}
 					
-					SendRecord (RecordType.GetValuesResult, record.RequestID, response_data);
+					SendRecord (RecordType.GetValuesResult,
+						record.RequestID, response_data);
 				break;
 				
 				// Sends params to the request.
 				case RecordType.Params:
 					if (request == null) {
-						StopRun ("Request with given ID does not exist.");
+						StopRun (Strings.Connection_RequestDoesNotExist,
+							record.RequestID);
 						break;
 					}
 					
@@ -293,8 +303,8 @@ namespace Mono.FastCgi {
 				// Sends standard input to the request.
 				case RecordType.StandardInput:
 					if (request == null) {
-						StopRun ("Request with given ID does not exist.");
-						break;
+						StopRun (Strings.Connection_RequestDoesNotExist,
+							record.RequestID);
 					}
 					
 					request.AddInputData (record);
@@ -304,8 +314,8 @@ namespace Mono.FastCgi {
 				// Sends file data to the request.
 				case RecordType.Data:
 					if (request == null) {
-						StopRun ("Request with given ID does not exist.");
-						break;
+						StopRun (Strings.Connection_RequestDoesNotExist,
+							record.RequestID);
 					}
 					
 					request.AddFileData (record);
@@ -314,9 +324,11 @@ namespace Mono.FastCgi {
 				
 				// Aborts a request when the server aborts.
 				case RecordType.AbortRequest:
-					if (request == null)
-						request.AbortRequest (
-							"FastCGI Abort Request");
+					if (request != null)
+						break;
+					
+					request.Abort (
+						Strings.Connection_AbortRecordReceived);
 				
 				break;
 				
@@ -324,7 +336,7 @@ namespace Mono.FastCgi {
 				// unknown.
 				default:
 					Logger.Write (LogLevel.Warning,
-						"Unknown type encountered: {0}",
+						Strings.Connection_UnknownRecordType,
 						record.Type);
 					SendRecord (RecordType.UnknownType,
 						record.RequestID,
@@ -335,6 +347,16 @@ namespace Mono.FastCgi {
 				}
 			}
 			while (!stop && (UnfinishedRequests || keep_alive));
+			
+			if (requests.Count == 0) {
+				socket.Close ();
+				server.EndConnection (this);
+				server.ReleaseBuffers (receive_buffer,
+					send_buffer);
+			}
+			
+			Logger.Write (LogLevel.Notice,
+				Strings.Connection_EndingRun);
 		}
 		
 		/// <summary>
@@ -476,6 +498,7 @@ namespace Mono.FastCgi {
 		public void Stop ()
 		{
 			stop = true;
+			
 			#if NET_2_0
 			foreach (Request req in new List<Request> (requests))
 			#else
@@ -559,7 +582,8 @@ namespace Mono.FastCgi {
 		{
 			int i = 0;
 			int count = requests.Count;
-			while (i < count && (requests [i] as Request).RequestID != requestID)
+			while (i < count &&
+				(requests [i] as Request).RequestID != requestID)
 				i ++;
 			
 			return (i != count) ? i : -1;
@@ -569,12 +593,13 @@ namespace Mono.FastCgi {
 		///    Flags the process to stop and writes an error message to
 		///    the log.
 		/// </summary>
-		private void StopRun (string message)
+		private void StopRun (string message, params object [] args)
 		{
-			stop = true;
-			Logger.Write (LogLevel.Error, message);
+			Logger.Write (LogLevel.Error, message, args);
 			Logger.Write (LogLevel.Error,
-				"Terminating connection.");
+				Strings.Connection_Terminating);
+			
+			Stop ();
 		}
 		
 		#endregion

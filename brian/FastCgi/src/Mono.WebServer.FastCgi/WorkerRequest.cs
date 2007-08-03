@@ -28,7 +28,11 @@
 //
 
 using System;
+#if NET_2_0
+using System.Collections.Generic;
+#else
 using System.Collections;
+#endif
 using Mono.FastCgi;
 using Mono.WebServer;
 using System.Text;
@@ -239,7 +243,12 @@ namespace Mono.WebServer.FastCgi
 			if (unknownHeaders != null)
 				return unknownHeaders;
 			
+			#if NET_2_0
+			IDictionary<string,string> pairs =
+				responder.GetParameters ();
+			#else
 			IDictionary pairs = responder.GetParameters ();
+			#endif
 			knownHeaders = new string [RequestHeaderMaximum];
 			string [][] headers = new string [pairs.Count][];
 			int count = 0;

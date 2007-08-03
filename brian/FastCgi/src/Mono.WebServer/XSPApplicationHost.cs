@@ -187,8 +187,13 @@ namespace Mono.WebServer
 
 				if (ssl.RawServerCertificate != null) {
 					X509Certificate server = ssl.GetServerCertificate ();
+					#if NET_2_0
+					mwr.AddServerVariable ("CERT_SERVER_ISSUER", server.Issuer);
+					mwr.AddServerVariable ("CERT_SERVER_SUBJECT", server.Subject);
+					#else
 					mwr.AddServerVariable ("CERT_SERVER_ISSUER", server.GetIssuerName ());
 					mwr.AddServerVariable ("CERT_SERVER_SUBJECT", server.GetName ());
+					#endif
 				}
 			}
 

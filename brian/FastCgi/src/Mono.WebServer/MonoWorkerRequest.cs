@@ -900,8 +900,13 @@ namespace Mono.WebServer
 	 				if (cert_issuer == null) {
 	 					if (client == null)
 	 						cert_issuer = String.Empty;
-	 					else
+	 					else {
+		 					#if NET_2_0
+	 						cert_issuer = client.Issuer;
+	 						#else
 	 						cert_issuer = client.GetIssuerName ();
+	 						#endif
+	 					}
 	 				}
 	 				return cert_issuer;
 	 			case "CERT_SERIALNUMBER":
@@ -916,8 +921,13 @@ namespace Mono.WebServer
 	 				if (cert_subject == null) {
 	 					if (client == null)
 	 						cert_subject = String.Empty;
-	 					else
+	 					else {
+		 					#if NET_2_0
+	 						cert_subject = client.Subject;
+	 						#else
 	 						cert_subject = client.GetName ();
+	 						#endif
+	 					}
 	 				}
 					return cert_subject;
 	 			}

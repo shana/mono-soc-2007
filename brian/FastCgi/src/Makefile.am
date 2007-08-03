@@ -15,7 +15,7 @@ TARGET_EXE_CONFIGS = \
 TARGETS = $(TARGET_DLLS) $(TARGET_EXES)
 
 CSC1 = $(MCS)  $(MCS_FLAGS) $(CSFLAGS)
-CSC2 = $(GMCS) $(MCS_FLAGS) $(CSFLAGS)
+CSC2 = $(GMCS) $(MCS_FLAGS) $(CSFLAGS) /d:NET_2_0 
 
 
 
@@ -28,7 +28,7 @@ $(srcdir)/bin/Mono.FastCgi.dll: $(FCGI_DEPS) $(srcdir)/AssemblyInfo.cs $(top_src
 	$(CSC1) /target:library $(LIBFLAGS) $(FCGI1_FLAGS) $(FCGI_CSFILES) $(srcdir)/AssemblyInfo.cs /out:$@
 
 $(srcdir)/bin/Mono.FastCgi2.dll: $(FCGI_DEPS) $(srcdir)/AssemblyInfo.cs $(top_srcdir)/Mono.FastCgi.snk
-	$(CSC2) /d:NET_2_0 /target:library $(LIBFLAGS) $(FCGI2_FLAGS) $(FCGI_CSFILES) $(srcdir)/AssemblyInfo.cs /out:$@
+	$(CSC2) /target:library $(LIBFLAGS) $(FCGI2_FLAGS) $(FCGI_CSFILES) $(srcdir)/AssemblyInfo.cs /out:$@
 
 
 

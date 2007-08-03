@@ -178,8 +178,9 @@ namespace Mono.FastCgi {
 			get {return max_connections;}
 			set {
 				if (value < 1)
-					throw new ArgumentOutOfRangeException
-						("value", "At least one connection must be permitted.");
+					throw new ArgumentOutOfRangeException (
+						"value",
+						Strings.Server_MaxConnsOutOfRange);
 				
 				max_connections = value;
 			}
@@ -212,8 +213,9 @@ namespace Mono.FastCgi {
 			get {return max_requests;}
 			set {
 				if (value < 1)
-					throw new ArgumentOutOfRangeException
-						("value", "At least one connection must be permitted.");
+					throw new ArgumentOutOfRangeException (
+						"value",
+						Strings.Server_MaxReqsOutOfRange);
 				
 				max_requests = value;
 			}
@@ -319,7 +321,8 @@ namespace Mono.FastCgi {
 		public void Start (bool background)
 		{
 			if (started)
-				throw new InvalidOperationException ("The server is already started.");
+				throw new InvalidOperationException (
+					Strings.Server_AlreadyStarted);
 			
 			listen_socket.Blocking = false;
 			listen_socket.Listen (500);
@@ -344,7 +347,7 @@ namespace Mono.FastCgi {
 		{
 			if (!started)
 				throw new InvalidOperationException (
-					"The server is not started.");
+					Strings.Server_NotStarted);
 
 			started = false;
 			listen_socket.Close ();
@@ -447,20 +450,12 @@ namespace Mono.FastCgi {
 			foreach (object key in names) {
 			#endif
 				
-				if (pairs.ContainsKey (key)) {
-					Logger.Write (LogLevel.Warning,
-						"Duplicate param discarded ({0})",
-						key);
-					continue;
-				}
-				
 				string name = key as string;
 				
-				if (name == null)
-					throw new ArgumentException (
-						"Names must all be strings.",
-						"names");
-				
+				// We can't handle null values and we don't need
+				// to store the same value twice.
+				if (name == null || pairs.ContainsKey (name))
+					continue;
 				
 				string value = null;
 				switch (name)
@@ -482,7 +477,7 @@ namespace Mono.FastCgi {
 				
 				if (value == null) {
 					Logger.Write (LogLevel.Warning,
-						"Unknown value ignored ({0})",
+						Strings.Server_ValueUnknown,
 						key);
 					continue;
 				}
@@ -639,7 +634,7 @@ namespace Mono.FastCgi {
 		/// </remarks>
 		private void OnAccept (IAsyncResult ares)
 		{
-			Logger.Write (LogLevel.Notice, "Server.OnAccept () [ENTER]");
+			Logger.Write (LogLevel.Debug, Strings.Server_Accepting);
 			Connection connection = null;
 			
 			lock (accept_lock) {
@@ -653,7 +648,7 @@ namespace Mono.FastCgi {
 				connections.Add (connection);
 			} catch (Exception e) {
 				Logger.Write (LogLevel.Error,
-					"Error accepting connection: {0}", e);
+					Strings.Server_AcceptFailed, e.Message);
 			}
 			
 			if (CanAccept)
@@ -661,8 +656,6 @@ namespace Mono.FastCgi {
 			
 			if (connection != null)
 				connection.Run ();
-			
-			Logger.Write (LogLevel.Notice, "Server.OnAccept () [EXIT]");
 		}
 		
 		/// <summary>
@@ -716,17 +709,20 @@ namespace Mono.FastCgi {
 			// IResponder interface was not found.
 			if (i == faces.Length)
 				throw new ArgumentException (
-					"Responder must implement the " + 
-					"FastCgi.IResponder interface.",
+					Strings.Server_ResponderDoesNotImplement,
 					"responder");
 			
 			// Checks that the correct constructor is available.
-			if (responder.GetConstructor
-				(new System.Type[] {typeof (ResponderRequest)}) == null)
-				throw new ArgumentException (
-					"Responder must contain constructor " +
-					" 'ctor(ResponderRequest)'",
-					"responder");
+			if (responder.GetConstructor (new System.Type[]
+				{typeof (ResponderRequest)}) == null) {
+				
+				string msg = string.Format (
+					CultureInfo.CurrentCulture,
+					Strings.Server_ResponderLacksProperConstructor,
+					responder);
+				
+				throw new ArgumentException (msg, "responder");
+			}
 			
 			responder_type = responder;
 		}
@@ -750,7 +746,7 @@ namespace Mono.FastCgi {
 		{
 			if (!SupportsResponder)
 				throw new InvalidOperationException (
-					"Responder role not supported.");
+					Strings.Server_ResponderNotSupported);
 			
 			return (IResponder) Activator.CreateInstance
 				(responder_type, new object [] {request});

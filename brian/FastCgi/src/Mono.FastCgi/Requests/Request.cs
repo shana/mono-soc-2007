@@ -132,12 +132,16 @@ namespace Mono.FastCgi {
 		/// <param name="message">
 		///    A <see cref="string" /> containing the error message.
 		/// </param>
-		public void AbortRequest (string message)
+		/// <param name="args">
+		///    A <see cref="object[]" /> containing argument to insert
+		///    into the message.
+		/// </param>
+		public void Abort (string message, params object [] args)
 		{
 			SendError (message);
 			Logger.Write (LogLevel.Error,
-				"Aborting request. Reason follows:");
-			Logger.Write (LogLevel.Error, message);
+				Strings.Request_Aborting, RequestID);
+			Logger.Write (LogLevel.Error, message, args);
 			CompleteRequest (-1, ProtocolStatus.RequestComplete);
 		}
 		
@@ -380,9 +384,11 @@ namespace Mono.FastCgi {
 			// When all the parameter data is received, it is acted
 			// on and the parameter_data object is nullified.
 			// Further data suggests a problem with the HTTP server.
-			if (parameter_data == null)
-				throw new InvalidOperationException (
-					"Data already completed.");
+			if (parameter_data == null) {
+				Logger.Write (LogLevel.Warning,
+					Strings.Request_ParametersAlreadyCompleted);
+				return;
+			}
 			
 			// If data was provided, append it to that already
 			// received, and exit.
@@ -412,7 +418,7 @@ namespace Mono.FastCgi {
 					ParameterDataCompleted (this,
 						EventArgs.Empty);
 			} catch {
-				AbortRequest ("Error parsing parameters.");
+				Abort (Strings.Request_CanNotParseParameters);
 			}
 			
 		}
@@ -525,14 +531,16 @@ namespace Mono.FastCgi {
 			// Validate arguments in public methods.
 			if (record.Type != RecordType.StandardInput)
 				throw new ArgumentException (
-					"Record is not of type 'StandardInput'.",
+					Strings.Request_NotStandardInput,
 					"record");
 			
 			// There should be no data following a zero byte record.
-			if (input_data_completed)
-				throw new InvalidOperationException (
-					"Data already completed.");
-			
+			if (input_data_completed) {
+				Logger.Write (LogLevel.Warning,
+					Strings.Request_StandardInputAlreadyCompleted);
+				return;
+			}
+
 			if (record.BodyLength == 0)
 				input_data_completed = true;
 			
@@ -588,13 +596,15 @@ namespace Mono.FastCgi {
 			// Validate arguments in public methods.
 			if (record.Type != RecordType.Data)
 				throw new ArgumentException (
-					"Record is not of type 'Data'.",
+					Strings.Request_NotFileData,
 					"record");
 			
 			// There should be no data following a zero byte record.
-			if (file_data_completed)
-				throw new InvalidOperationException (
-					"Data already completed.");
+			if (file_data_completed) {
+				Logger.Write (LogLevel.Warning,
+					Strings.Request_FileDataAlreadyCompleted);
+				return;
+			}
 			
 			if (record.BodyLength == 0)
 				file_data_completed = true;
