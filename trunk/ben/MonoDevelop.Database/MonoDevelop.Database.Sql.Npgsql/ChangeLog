@@ -1,3 +1,8 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* NpgsqlConnectionProvider.cs: added support for an error message
+	* NpgsqlSchemaProvider.cs: added MetaData information and implemented GetProcedureParameters
+
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
 	* NpgsqlSchemaProvider.cs: CreateTrigger implementation
