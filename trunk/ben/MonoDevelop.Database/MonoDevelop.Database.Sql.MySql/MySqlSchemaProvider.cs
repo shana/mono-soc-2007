@@ -577,7 +577,7 @@ using MonoDevelop.Core;
 			StringBuilder sb = new StringBuilder ();
 			sb.Append ("CREATE TABLE ");
 			sb.Append (table.Name);
-			sb.Append (' ');
+			sb.Append (" (");
 			
 			bool first = true;
 			foreach (ColumnSchema column in table.Columns) {
@@ -626,6 +626,8 @@ using MonoDevelop.Core;
 				sb.Append ("," + Environment.NewLine);
 				sb.Append (GetConstraintString (constraint));
 			}
+			
+			sb.Append (")");
 			
 			if (table.TableSpaceName != null) {
 				sb.Append (", TABLESPACE ");

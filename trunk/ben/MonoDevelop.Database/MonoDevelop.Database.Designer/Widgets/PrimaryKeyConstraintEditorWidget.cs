@@ -71,7 +71,6 @@ namespace MonoDevelop.Database.Designer
 			listPK.Model = store;
 			
 			TreeViewColumn colName = new TreeViewColumn ();
-			TreeViewColumn colColumns = new TreeViewColumn ();
 			
 			colName.Title = GettextCatalog.GetString ("Name");
 			CellRendererText nameRenderer = new CellRendererText ();
