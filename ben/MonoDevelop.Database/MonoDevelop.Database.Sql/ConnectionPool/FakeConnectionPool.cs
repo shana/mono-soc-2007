@@ -38,6 +38,9 @@ namespace MonoDevelop.Database.Sql
 		protected IPooledDbConnection connection;
 		protected bool inUse = false;
 		
+		protected bool hasErrors;
+		protected string error;
+		
 		protected bool isInitialized;
 		
 		public FakeConnectionPool (IDbFactory factory, IConnectionProvider connectionProvider, DatabaseConnectionContext context)
@@ -68,6 +71,14 @@ namespace MonoDevelop.Database.Sql
 		
 		public virtual bool IsInitialized {
 			get { return isInitialized; }
+		}
+		
+		public virtual bool HasErrors {
+			get { return hasErrors; }
+		}
+		
+		public virtual string Error {
+			get { return error; }
 		}
 		
 		public virtual int MinSize {
@@ -104,8 +115,7 @@ namespace MonoDevelop.Database.Sql
 		
 		public virtual IPooledDbConnection Request ()
 		{
-			if (connection == null)
-				connection = connectionProvider.CreateConnection (this, context.ConnectionSettings);
+			Initialize (); //this does nothing when already initialized, so it's safe to call every time
 
 			if (HasFreeConnection) {
 				inUse = true;
@@ -123,10 +133,16 @@ namespace MonoDevelop.Database.Sql
 		
 		public virtual bool Initialize ()
 		{
-			connection = connectionProvider.CreateConnection (this, context.ConnectionSettings);
-			if (connection == null)
-				return false;
+			if (isInitialized)
+				return true;
 			
+			connection = connectionProvider.CreateConnection (this, context.ConnectionSettings, out error);
+			if (connection == null) {
+				hasErrors = true;
+				return false;
+			}
+			
+			hasErrors = false;
 			isInitialized = true;
 			return true;
 		}

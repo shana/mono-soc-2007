@@ -33,7 +33,7 @@ namespace MonoDevelop.Database.Sql
 {
 	public interface IConnectionProvider
 	{
-		IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings);
+		IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings, out string error);
 		
 		bool CheckConnection (IPooledDbConnection connection, DatabaseConnectionSettings settings);
 	}

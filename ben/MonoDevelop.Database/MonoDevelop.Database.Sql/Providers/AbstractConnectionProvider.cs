@@ -36,7 +36,7 @@ namespace MonoDevelop.Database.Sql
 {
 	public abstract class AbstractConnectionProvider : IConnectionProvider
 	{
-		public abstract IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings);
+		public abstract IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings, out string error);
 
 		public virtual bool CheckConnection (IPooledDbConnection connection, DatabaseConnectionSettings settings)
 		{

@@ -63,6 +63,18 @@ namespace MonoDevelop.Database.Sql
 			return null;
 		}
 		
+		public static bool IsTriggerMetaDataSupported (object obj, TriggerMetaData meta)
+		{
+			if (obj == null)
+				throw new ArgumentNullException ("obj");
+			
+			object[] attributes = obj.GetType ().GetCustomAttributes (typeof (TriggerMetaDataAttribute), true);
+			foreach (TriggerMetaDataAttribute attrib in attributes)
+				if ((attrib.TriggerMetaData & meta) == meta)
+					return true;
+			return false;
+		}
+		
 		public static bool IsCheckConstraintMetaDataSupported (object obj, CheckConstraintMetaData meta)
 		{
 			if (obj == null)
