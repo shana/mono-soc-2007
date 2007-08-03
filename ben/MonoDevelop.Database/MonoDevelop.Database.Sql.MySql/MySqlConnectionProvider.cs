@@ -35,7 +35,7 @@ using System.Collections.Generic;
 {
 	public class MySqlConnectionProvider : AbstractConnectionProvider
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings)
+		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings, out string error)
 		{
 			string connStr = null;
 			try {	
@@ -50,9 +50,11 @@ using System.Collections.Generic;
 				connStr = SetConnectionStringParameter (connStr, String.Empty, "Pooling", "false");
 				MySqlConnection connection = new MySqlConnection (connStr);
 				connection.Open ();
-
+				
+				error = null;
 				return new MySqlPooledDbConnection (pool, connection);
-			} catch {
+			} catch (Exception e) {
+				error = e.Message;
 				return null;
 			}
 		}
