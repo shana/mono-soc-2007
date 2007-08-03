@@ -5,6 +5,149 @@
 	</head>
 	<body>
 		<h1>Configuring Abyss Web Server to use <tt>fastcgi-mono-server</tt></h1>
-		<p style="color:red">TO BE ADDED</p>
+		
+		<h2>Table of Contents</h2>
+		<ul>
+			<li><a href="#intro">Introduction</a></li>
+			<li><a href="#step1">Step 1: Setting Up the Interpreter</a></li>
+			<li><a href="#step2">Step 2: Extending the Server Lifetime</a></li>
+			<li><a href="#step3">Step 3: Adding Index Pages</a></li>
+		</ul>
+		
+		<a name="intro"></a>
+		<h2>Introduction</h2>
+		
+		<p><a href="http://www.aprelium.com/">Abyss Web Server</a> is a
+		easy to use and feature rich Web Server. Although closed source,
+		the X1 server is <i>"a free and fully functional software: no
+		nag screens, no time limitations, no spyware, and no
+		advertisements."</i> (<a
+		href="http://www.aprelium.com/abyssws/download.php">Download</a>)</p>
+		
+		<p>True to its claims of "ease of use", Abyss was the easiest
+		server to set up thus far. This is largely due to its simple and
+		straightforward control center.</p>
+		
+		<h3>NOTE</h3>
+		
+		<p style="color:red">This configuration is not completely tested
+		and there is at least one known problem with ASP.NET 2.0. More
+		testing will occur in the coming weeks.</p>
+		
+		<a name="step1"></a>
+		<h2>Step 1: Setting Up the Interpreter</h2>
+		
+		<p>Upon starting the Abyss Web Server, a control center web
+		server starts up as well, by default at <a
+		href="http://localhost:9999">http://localhost:9999</a>. Simply
+		open it up in your web browser to that address and follow the
+		steps outlined below:</p>
+		
+		<ol>
+			<li>Click "Configure" on the host you wish to add
+			ASP.NET support to.</li>
+			
+			<li>Click on "Scripting Parameters"</li>
+			
+			<li>Click on "Add" in the "Interpreters" box.</li>
+			
+			<li>
+				<p>You are now on the page to add the ASP.NET
+				interpretter. The two options I would recommend
+				are "FastCGI (Local - Pipes)" and "FastCGI
+				(Remote - TCP/IP sockets)":</p>
+				
+				<ul>
+				
+					<li><p><b>FastCGI (Local - Pipes)</b> -
+					Abyss will start the Mono server by
+					itself using a piped socket. Pipes are
+					the fastest way to communicate and
+					having the Abyss spawn its own server
+					means you don't have to do it manually.
+					This is possibly the simplest option.</p>
+					
+					<p>If using this option, simply set
+					"Interpreter" to
+					"/usr/bin/fastcgi-mono-server" or
+					"/usr/bin/fastcgi-mono-server2".</p></li>
+					
+					
+					<li><p><b>FastCGI (Remote - TCP/IP
+					sockets)</b> - Abyss will look for the
+					Mono server at a specified IP address
+					and port. You can use this to run the
+					server on another machine and
+					redistribute the processor load. The
+					only caveat is that you will need to
+					start the Mono server on the other
+					computer manually, using a command like
+					"<tt>fastcgi-mono-server2 /socket=tcp:8002</tt>"</p>
+					
+					<p>If using this option, simply set
+					"Remote server IP Address" to the IP
+					address of the machine running the Mono
+					server, and "Port" to the port you used
+					in the command line. For the command
+					line shown above, this would be 8002.</p></li>
+				</ul>
+			
+			</li>
+			
+			<li>Uncheck "Check for file existence before execution".
+			This option improves performance but can cripple ASP.NET
+			2.0 as it sometimes uses paths that don't necessarily
+			exist like WebResource.axd.</li>
+			
+			<li>Add the following extensions:
+				
+				<ul>
+					<li>aspx</li>
+					<li>asmx</li>
+					<li>ashx</li>
+					<li>asax</li>
+					<li>ascx</li>
+					<li>soap</li>
+					<li>rem</li>
+					<li>axd</li>
+					<li>cs</li>
+					<li>config</li>
+					<li>dll</li>
+				</ul>
+			</li>
+			
+			<li>Click "OK"</li>
+		</ol>
+		
+		<a name="step2"></a>
+		<h2>Step 2: Extending the Server Lifetime</h2>
+		
+		<p>Upon completion of the previous step, you should have
+		automatically returned to "Scripting Parameters". Click on
+		"Edit..." next to "FastCGI Parameters". The option "FastCGI
+		Processes Timeout" specifies the number of seconds after the
+		last request you're going to want to wait before shutting down
+		the Mono (or any) FastCGI server. Because ASP.NET pages need to
+		recompiled and AppDomains need to be recreated every time the
+		server starts up, you want to set this value to some arbitrarily
+		high value. 604800 is the number of seconds in a week and the
+		value I chose for my server. Once you've chosen your value,
+		click "OK".</p>
+		
+		<a name="step3"></a>
+		<h2>Step 3: Adding Index Pages</h2>
+		
+		<p>Upon completion of the previous step, you should have
+		automatically returned to "Scripting Parameters". Click "OK" at
+		the bottom of the page to get back to the host configuration
+		page. Once there, click "Index Files" and proceed to add
+		"index.aspx" and "default.aspx". Click "OK" and then "Reset" to
+		restart the web server.</p>
+		
+		<h2>Bada Bing!</h2>
+		
+		<p>You should now have ASP.NET working with Abyss. Enjoy!</p>
+		
+		<p>- Brian Nickel &lt;<a href="http://kerrick.wordpress.com">http://kerrick.wordpress.com</a>&gt;</p>
 	</body>
 </html>

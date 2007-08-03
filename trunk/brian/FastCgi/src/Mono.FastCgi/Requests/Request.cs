@@ -834,7 +834,9 @@ namespace Mono.FastCgi {
 			if (length > data.Length)
 				length = data.Length;
 			
-			if (length < 0xFFFF)
+			int max_size = 0x7fff;
+			
+			if (length < max_size)
 				connection.SendRecord (type, requestID, data, 0,
 					length);
 			else
@@ -842,8 +844,9 @@ namespace Mono.FastCgi {
 				int index = 0;
 				while (index < length)
 				{
-					int chunk_length = (index + 0xFFFF <
-						length) ? 0xFFFF : (length - index);
+					int chunk_length = (max_size <
+						length - index) ? max_size :
+							(length - index);
 					
 					connection.SendRecord (type, requestID,
 						data, index, chunk_length);

@@ -44,7 +44,7 @@
 vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer = round_robin
 vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!type = interpreter
 vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!local1!host = localhost:8002
-vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!local1!interpreter = /usr/bin/fastcgi-mono-server /socket=tcp:8002 /nonstop
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!local1!interpreter = /usr/bin/fastcgi-mono-server /socket=tcp:8002
 vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!priority = 99999</pre>
 		
 		<p>Yep, Cherokee's new format does take a few more bytes than it
