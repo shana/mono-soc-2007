@@ -169,7 +169,7 @@ namespace CBinding
 			else if (item is Namespace)
 				image = Stock.NameSpace;
 			else if (item is Typedef)
-				image = Stock.Reference;
+				image = Stock.Interface;
 			else
 				image = Stock.Literal;
 			

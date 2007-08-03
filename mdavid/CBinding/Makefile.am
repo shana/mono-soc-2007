@@ -87,18 +87,35 @@ FILES =  \
 
 RES =  \
 	gtk-gui/gui.stetic \
-	icons/C.File.Empty \
 	icons/C.Project.Empty \
-	icons/C.Source.File.Empty \
 	icons/Cpp.Project.Empty \
 	icons/Icons.16x16.PrivateUnion \
+	icons/Icons.16x16.ProjectReference \
 	icons/Icons.16x16.ProtectedUnion \
 	icons/Icons.16x16.Union \
+	icons/text-x-c++hdr.16x16.png \
+	icons/text-x-c++hdr.22x22.png \
+	icons/text-x-c++hdr.32x32.png \
+	icons/text-x-c++hdr.48x48.png \
+	icons/text-x-c++src.16x16.png \
+	icons/text-x-c++src.22x22.png \
+	icons/text-x-c++src.32x32.png \
+	icons/text-x-c++src.48x48.png \
+	icons/text-x-chdr.16x16.png \
+	icons/text-x-chdr.22x22.png \
+	icons/text-x-chdr.32x32.png \
+	icons/text-x-chdr.48x48.png \
+	icons/text-x-csrc.16x16.png \
+	icons/text-x-csrc.22x22.png \
+	icons/text-x-csrc.32x32.png \
+	icons/text-x-csrc.48x48.png \
 	icons/update \
-	icons/Icons.16x16.ProjectReference \
-	templates/EmptyCFile.xft.xml \
+	templates/EmptyCHeaderFile.xft.xml \
+	templates/EmptyCppHeaderFile.xft.xml \
 	templates/EmptyCppProject.xpt.xml \
-	templates/EmptyCProject.xpt.xml
+	templates/EmptyCppSourceFile.xft.xml \
+	templates/EmptyCProject.xpt.xml \
+	templates/EmptyCSourceFile.xft.xml
 
 ADDIN = CBinding.addin.xml
 
