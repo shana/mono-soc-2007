@@ -79,7 +79,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			TableNode node = dataObject as TableNode;
-			node.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
+			node.RefreshEvent += (EventHandler)DispatchService.GuiDispatch (RefreshHandler);
 
 			label = node.Table.Name;
 			icon = Context.GetIcon ("md-db-table");
@@ -97,7 +97,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 		
 			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute)))
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ColumnsNode (node.ConnectionContext, node.Table));
 				});
 			
@@ -106,18 +106,18 @@ namespace MonoDevelop.Database.ConnectionManager
 				|| MetaDataService.IsApplied (provider, typeof (PrimaryKeyConstraintMetaDataAttribute))
 				|| MetaDataService.IsApplied (provider, typeof (UniqueConstraintMetaDataAttribute))
 			)
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ConstraintsNode (node.ConnectionContext, node.Table));
 				});
 			
 			if (MetaDataService.IsApplied (provider, typeof (TriggerMetaDataAttribute)))
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new TriggersNode (node.ConnectionContext));
 				});
 			
 			//TODO: rules
 			
-			Services.DispatchService.GuiDispatch (delegate {
+			DispatchService.GuiDispatch (delegate {
 				builder.Expanded = true;
 			});
 		}
@@ -165,7 +165,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				provider.RenameTable (node.Table, newName);
 				node.Refresh ();
 			} else {
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					Services.MessageService.ShowError (String.Format (
 						"Unable to rename table '{0}' to '{1}'!",
 						node.Table.Name, newName
@@ -204,7 +204,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			ColumnSchemaCollection columns = node.Table.Columns; //this can invoke the schema provider, so it must be in bg thread
 			
-			Services.DispatchService.GuiDispatch (delegate () {
+			DispatchService.GuiDispatch (delegate () {
 				SelectColumnDialog dlg = new SelectColumnDialog (true, columns);
 				if (dlg.Run () == (int)Gtk.ResponseType.Ok) {
 					IdentifierExpression tableId = new IdentifierExpression (node.Table.Name);
@@ -240,7 +240,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			connection.Release ();
 				
-			Services.DispatchService.GuiDispatch (delegate () {
+			DispatchService.GuiDispatch (delegate () {
 				QueryResultView view = new QueryResultView (table);
 				IdeApp.Workbench.OpenDocument (view, true);
 			});
@@ -268,7 +268,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			connection.Release ();
 
-			Services.DispatchService.GuiDispatch (delegate () {
+			DispatchService.GuiDispatch (delegate () {
 				IdeApp.Workbench.StatusBar.SetMessage (GettextCatalog.GetString ("Table emptied"));
 			});
 		}
@@ -291,7 +291,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 			
 			provider.DropTable (node.Table);
-			Services.DispatchService.GuiDispatch (delegate () { OnRefresh (); });
+			DispatchService.GuiDispatch (delegate () { OnRefresh (); });
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Refresh)]

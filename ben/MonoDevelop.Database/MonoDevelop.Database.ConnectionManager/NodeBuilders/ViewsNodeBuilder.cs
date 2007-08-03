@@ -91,7 +91,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				if (view.IsSystemView && !showSystemObjects)
 					continue;
 				
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ViewNode (node.ConnectionContext, view));
 					builder.Expanded = true;
 				});

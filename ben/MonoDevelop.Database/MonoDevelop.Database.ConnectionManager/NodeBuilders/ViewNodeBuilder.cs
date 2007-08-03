@@ -74,7 +74,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			ViewNode node = dataObject as ViewNode;
-			node.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
+			node.RefreshEvent += (EventHandler)DispatchService.GuiDispatch (RefreshHandler);
 
 			label = node.View.Name;
 			icon = Context.GetIcon ("md-db-view");
@@ -92,7 +92,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 			
 			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute))) {
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ColumnsNode (node.ConnectionContext, node.View));
 					builder.Expanded = true;
 				});
@@ -137,7 +137,7 @@ namespace MonoDevelop.Database.ConnectionManager
 				provider.RenameView (node.View, newName);
 				node.Refresh ();
 			} else {
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					Services.MessageService.ShowError (String.Format (
 						"Unable to rename view '{0}' to '{1}'!",
 						node.View.Name, newName

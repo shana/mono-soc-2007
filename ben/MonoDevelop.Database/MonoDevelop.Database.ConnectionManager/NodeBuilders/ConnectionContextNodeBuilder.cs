@@ -76,17 +76,19 @@ namespace MonoDevelop.Database.ConnectionManager
 		public override void BuildNode (ITreeBuilder builder, object dataObject, ref string label, ref Gdk.Pixbuf icon, ref Gdk.Pixbuf closedIcon)
 		{
 			DatabaseConnectionContext context = dataObject as DatabaseConnectionContext;
-			context.RefreshEvent += (EventHandler)Services.DispatchService.GuiDispatch (RefreshHandler);
+			context.RefreshEvent += (EventHandler)DispatchService.GuiDispatch (RefreshHandler);
 			
 			label = context.ConnectionSettings.Name;
 			if (context.HasConnectionPool) {
 				IConnectionPool pool = context.ConnectionPool;
-				if (pool.IsInitialized)
+				if (pool.IsInitialized) {
 					icon = Context.GetIcon ("md-db-database-ok");
-//				else if (provider.IsError)
-//					icon = Context.GetIcon ("md-db-database-error");
-				else
+				} else if (pool.HasErrors) {
+					icon = Context.GetIcon ("md-db-database-error");
+					Services.MessageService.ShowError (GettextCatalog.GetString ("Unable to connect:") + Environment.NewLine + pool.Error);
+				} else {
 					icon = Context.GetIcon ("md-db-database");
+				}
 			} else {
 				icon = Context.GetIcon ("md-db-database");
 			}
@@ -136,7 +138,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		private void OnRefreshEvent (object sender, EventArgs args)
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder (sender);
-			builder.Update ();
+			builder.UpdateAll ();
 		}
 	}
 	
@@ -196,7 +198,31 @@ namespace MonoDevelop.Database.ConnectionManager
 			if (context.HasConnectionPool) {
 				context.ConnectionPool.Close ();
 				context.Refresh ();
+				CurrentNode.Expanded = false;
 			}
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.DisconnectConnection)]
+		protected void OnUpdateDisconnectConnection (CommandInfo info)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			info.Enabled = context.HasConnectionPool && context.ConnectionPool.IsInitialized;
+		}
+		
+		[CommandHandler (ConnectionManagerCommands.ConnectConnection)]
+		protected void OnConnectConnection ()
+		{
+			CurrentNode.Expanded = true;			
+		}
+		
+		[CommandUpdateHandler (ConnectionManagerCommands.ConnectConnection)]
+		protected void OnUpdateConnectConnection (CommandInfo info)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			if (context.HasConnectionPool)
+				info.Enabled = !context.ConnectionPool.IsInitialized;
+			else
+				info.Enabled = true;
 		}
 		
 		public override void ActivateItem ()
@@ -211,6 +237,28 @@ namespace MonoDevelop.Database.ConnectionManager
 			view.SelectedConnectionContext = (DatabaseConnectionContext) CurrentNode.DataItem;
 
 			IdeApp.Workbench.OpenDocument (view, true);
+		}
+			
+		[CommandHandler (ConnectionManagerCommands.DropDatabase)]
+		protected void OnDropDatabase ()
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			if (Services.MessageService.AskQuestion (
+				GettextCatalog.GetString ("Are you sure you want to drop database '{0}'", context.ConnectionSettings.Database),
+				GettextCatalog.GetString ("Drop Database")
+			)) {
+				ThreadPool.QueueUserWorkItem (new WaitCallback (OnDropDatabaseThreaded), CurrentNode.DataItem);
+			}
+		}
+		
+		private void OnDropDatabaseThreaded (object state)
+		{
+			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
+			ISchemaProvider provider = context.SchemaProvider;
+			DatabaseSchema db = provider.GetNewDatabaseSchema (context.ConnectionSettings.Name);
+			
+			context.SchemaProvider.DropDatabase (db);
+			DispatchService.GuiDispatch (delegate () { OnRefreshConnection (); });
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.DropDatabase)]

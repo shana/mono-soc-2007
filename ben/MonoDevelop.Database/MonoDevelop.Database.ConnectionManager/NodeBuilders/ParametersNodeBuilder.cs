@@ -86,7 +86,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ParameterSchemaCollection parameters = node.ConnectionContext.SchemaProvider.GetProcedureParameters (node.Procedure);
 			
 			foreach (ParameterSchema parameter in parameters) {
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (parameter);
 					builder.Expanded = true;
 				});

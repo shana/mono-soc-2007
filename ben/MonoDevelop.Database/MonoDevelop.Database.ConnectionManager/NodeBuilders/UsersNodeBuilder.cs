@@ -87,7 +87,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			UserSchemaCollection users = node.ConnectionContext.SchemaProvider.GetUsers ();
 			foreach (UserSchema user in users) {
-				Services.DispatchService.GuiDispatch (delegate {
+				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new UserNode (node.ConnectionContext, user));
 					builder.Expanded = true;
 				});

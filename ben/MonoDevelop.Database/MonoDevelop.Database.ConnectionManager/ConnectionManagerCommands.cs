@@ -43,6 +43,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		AddConnection,
 		EditConnection,
 		RemoveConnection,
+		ConnectConnection,
 		DisconnectConnection,
 
 		Query,
