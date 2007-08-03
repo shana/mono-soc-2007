@@ -1,5 +1,9 @@
 2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* UserControl.cs: Implemented(?).
+
+2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* BorderGapMaskConverter.cs: Implemented.
 
 2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
