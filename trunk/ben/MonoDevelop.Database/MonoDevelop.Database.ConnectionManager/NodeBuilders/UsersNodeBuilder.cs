@@ -72,7 +72,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			icon = Context.GetIcon ("md-db-users");
 			
 			BaseNode node = (BaseNode) dataObject;
-			node.RefreshEvent += RefreshHandler;
+			node.RefreshEvent += (EventHandler)(DispatchService.GuiDispatch (RefreshHandler));
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
@@ -86,12 +86,11 @@ namespace MonoDevelop.Database.ConnectionManager
 			ITreeBuilder builder = Context.GetTreeBuilder (state);
 			
 			UserSchemaCollection users = node.ConnectionContext.SchemaProvider.GetUsers ();
-			foreach (UserSchema user in users) {
-				DispatchService.GuiDispatch (delegate {
+			DispatchService.GuiDispatch (delegate {
+				foreach (UserSchema user in users)
 					builder.AddChild (new UserNode (node.ConnectionContext, user));
-					builder.Expanded = true;
-				});
-			}
+				builder.Expanded = true;
+			});
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -103,9 +102,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder (sender);
 			
-			if (builder != null)
-				builder.UpdateChildren ();
-			
+			builder.UpdateChildren ();			
 			builder.ExpandToNode ();
 		}
 	}

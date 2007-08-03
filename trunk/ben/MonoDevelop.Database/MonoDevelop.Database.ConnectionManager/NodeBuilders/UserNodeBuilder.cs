@@ -131,10 +131,16 @@ namespace MonoDevelop.Database.ConnectionManager
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
-			CurrentNode.MoveToParent ();
 			BaseNode node = CurrentNode.DataItem as BaseNode;
 			node.Refresh ();
-			CurrentNode.ExpandToNode ();
+		}
+		
+		protected void OnRefreshParent ()
+		{
+			if (CurrentNode.MoveToParent ()) {
+				BaseNode node = CurrentNode.DataItem as BaseNode;
+				node.Refresh ();
+			}
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.AlterUser)]
@@ -174,6 +180,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 			
 			provider.DropUser (node.User);
+			OnRefreshParent ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Rename)]

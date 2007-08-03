@@ -72,7 +72,7 @@ namespace MonoDevelop.Database.ConnectionManager
 			icon = Context.GetIcon ("md-db-procedure");
 			
 			BaseNode node = (BaseNode) dataObject;
-			node.RefreshEvent += RefreshHandler;
+			node.RefreshEvent += (EventHandler)(DispatchService.GuiDispatch (RefreshHandler));
 		}
 		
 		public override void BuildChildNodes (ITreeBuilder builder, object dataObject)
@@ -87,15 +87,15 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			bool showSystemObjects = (bool)builder.Options["ShowSystemObjects"];
 			ProcedureSchemaCollection procedures = node.ConnectionContext.SchemaProvider.GetProcedures ();
-			foreach (ProcedureSchema procedure in procedures) {
-				if (procedure.IsSystemProcedure && !showSystemObjects)
-					continue;
-				
-				DispatchService.GuiDispatch (delegate {
+			DispatchService.GuiDispatch (delegate {
+				foreach (ProcedureSchema procedure in procedures) {
+					if (procedure.IsSystemProcedure && !showSystemObjects)
+						continue;
+	
 					builder.AddChild (new ProcedureNode (node.ConnectionContext, procedure));
-					builder.Expanded = true;
-				});
-			}
+				}
+				builder.Expanded = true;
+			});
 		}
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
@@ -107,9 +107,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder ();
 			
-			if (builder != null)
-				builder.UpdateChildren ();
-			
+			builder.UpdateChildren ();			
 			builder.ExpandToNode ();
 		}
 	}

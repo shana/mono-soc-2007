@@ -138,7 +138,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		private void OnRefreshEvent (object sender, EventArgs args)
 		{
 			ITreeBuilder builder = Context.GetTreeBuilder (sender);
-			builder.UpdateAll ();
+			builder.Update ();
 		}
 	}
 	

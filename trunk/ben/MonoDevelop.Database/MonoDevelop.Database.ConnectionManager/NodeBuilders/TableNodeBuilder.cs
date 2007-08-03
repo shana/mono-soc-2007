@@ -291,17 +291,22 @@ namespace MonoDevelop.Database.ConnectionManager
 			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
 			
 			provider.DropTable (node.Table);
-			DispatchService.GuiDispatch (delegate () { OnRefresh (); });
+			OnRefreshParent ();
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.Refresh)]
 		protected void OnRefresh ()
 		{
-			CurrentNode.MoveToParent ();
 			BaseNode node = CurrentNode.DataItem as BaseNode;
-			if (node != null)
+			node.Refresh ();
+		}
+		
+		protected void OnRefreshParent ()
+		{
+			if (CurrentNode.MoveToParent ()) {
+				BaseNode node = CurrentNode.DataItem as BaseNode;
 				node.Refresh ();
-			CurrentNode.ExpandToNode ();
+			}
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.AlterTable)]
