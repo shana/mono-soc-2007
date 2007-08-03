@@ -248,7 +248,13 @@ namespace MonoDevelop.Database.Sql
 			sb.Append (table.Name);
 			sb.Append (" ( ");
 
+			bool first = true;
 			foreach (ColumnSchema column in table.Columns) {
+				if (first)
+					first = false;
+				else
+					sb.Append ("," + Environment.NewLine);
+
 				sb.Append (column.Name);
 				sb.Append (' ');
 				sb.Append (column.DataType.GetCreateString (column));

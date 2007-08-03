@@ -35,7 +35,7 @@ namespace MonoDevelop.Database.Sql
 {
 	public class SqliteConnectionProvider : AbstractConnectionProvider
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings)
+		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings, out string error)
 		{
 			string connStr = null;
 			try {
@@ -47,8 +47,10 @@ namespace MonoDevelop.Database.Sql
 				SqliteConnection connection = new SqliteConnection (connStr);
 				connection.Open ();
 				
+				error = null;
 				return new SqlitePooledDbConnection (pool, connection);
-			} catch {
+			} catch (Exception e) {
+				error = e.Message;
 				return null;
 			}
 		}

@@ -1,3 +1,8 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* SqliteConnectionProvider.cs: added support for an error message
+	* SqliteSchemaProvider.cs: fixed a bug in the CreateTable method
+
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
 	* SqliteSchemaProvider.cs: CreateTrigger implementation
