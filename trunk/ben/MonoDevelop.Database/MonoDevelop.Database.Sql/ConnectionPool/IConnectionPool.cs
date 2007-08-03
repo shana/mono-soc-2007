@@ -35,6 +35,9 @@ namespace MonoDevelop.Database.Sql
 		DatabaseConnectionContext ConnectionContext { get; }
 		
 		bool IsInitialized { get; }
+		bool HasErrors { get; }
+		
+		string Error { get; }
 		
 		int MinSize { get; set; }
 		int MaxSize { get; set; }

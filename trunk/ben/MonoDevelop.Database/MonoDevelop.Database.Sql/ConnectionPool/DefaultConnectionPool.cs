@@ -36,6 +36,9 @@ namespace MonoDevelop.Database.Sql
 		protected int growSize = 3;
 		protected int shrinkSize = 5;
 		
+		protected bool hasErrors;
+		protected string error;
+		
 		protected IDbFactory factory;
 		protected DatabaseConnectionContext context;
 		protected IConnectionProvider connectionProvider;
@@ -78,6 +81,14 @@ namespace MonoDevelop.Database.Sql
 		
 		public virtual bool IsInitialized {
 			get { return isInitialized; }
+		}
+		
+		public virtual bool HasErrors {
+			get { return hasErrors; }
+		}
+		
+		public virtual string Error {
+			get { return error; }
 		}
 		
 		public virtual int MinSize {
@@ -172,41 +183,61 @@ namespace MonoDevelop.Database.Sql
 		
 		public virtual bool Initialize ()
 		{
-			for (int i=0; i<minSize; i++) {
-				IPooledDbConnection conn = connectionProvider.CreateConnection (this, context.ConnectionSettings);
-				if (conn == null)
+			if (isInitialized)
+				return true;
+			
+			isInitialized = CreateNewConnections (minSize);
+			if (!isInitialized)
+				Cleanup ();
+			
+			return isInitialized;
+		}
+		
+		protected virtual bool CreateNewConnections (int count)
+		{
+			for (int i=0; i<count; i++) {
+				if (!CreateNewConnection ())
 					return false;
-				
-				lock (sync)
-					freeConnections.Enqueue (conn);
 			}
-			isInitialized = true;
+			return true;
+		}
+		
+		protected virtual bool CreateNewConnection ()
+		{
+			IPooledDbConnection conn = connectionProvider.CreateConnection (this, context.ConnectionSettings, out error);
+			if (conn == null) {
+				hasErrors = true;
+				return false;
+			}
+			
+			hasErrors = false;
+			lock (sync)
+				freeConnections.Enqueue (conn);
+
 			return true;
 		}
 		
 		public virtual void Close ()
+		{
+			Cleanup ();
+			isInitialized = false;
+			hasErrors = false;
+			error = null;
+		}
+		
+		protected virtual void Cleanup ()
 		{
 			lock (sync) {
 				foreach (IPooledDbConnection conn in connections)
 					conn.Dispose ();
 				foreach (IPooledDbConnection conn in freeConnections)
 					conn.Dispose ();
-			
-				isInitialized = false;
 			}
 		}
 					
 		protected virtual bool Grow ()
 		{
-			for (int i=0; i<growSize; i++) {
-				IPooledDbConnection conn = connectionProvider.CreateConnection (this, context.ConnectionSettings);
-				if (conn == null)
-					return false;
-				
-				lock (sync)
-					freeConnections.Enqueue (conn);
-			}
-			return true;
+			return CreateNewConnections (growSize);
 		}
 					
 		protected virtual void Shrink ()

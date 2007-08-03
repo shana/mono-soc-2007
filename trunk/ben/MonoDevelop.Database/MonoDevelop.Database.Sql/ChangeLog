@@ -1,3 +1,11 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* Providers/IConnectionProvider.cs, Providers/AbstractConnectionProvider.cs:
+	included an out parameter to pass connection errors
+	* ConnectionPool/IConnectionPool.cs, ConnectionPool/DefaultConnectionPool.cs,
+	ConnectionPool/FakeConnectionPool.cs: added support to store errors that occured
+	while creating new connections
+
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
 	* MetaData/ConnectionSettingsMetaData.cs: fixed incorrect field initializer in ctor

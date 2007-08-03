@@ -97,13 +97,13 @@ namespace MonoDevelop.Database.Sql
 
 			try {
 				pool.Initialize ();
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					internalState.Callback (internalState.ConnectionContext, true, internalState.State);
 				});
 			} catch (Exception e) {
 				Runtime.LoggingService.Debug (e);
 				
-				Services.DispatchService.GuiDispatch (delegate () {
+				DispatchService.GuiDispatch (delegate () {
 					internalState.Callback (internalState.ConnectionContext, false, internalState.State);
 				});
 			}
