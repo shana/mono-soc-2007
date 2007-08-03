@@ -57,6 +57,7 @@ rules/Gendarme.Rules.Exceptions/Makefile
 rules/Gendarme.Rules.Exceptions/Test/Makefile
 rules/Gendarme.Rules.Smells/Makefile
 rules/Gendarme.Rules.Smells/Test/Makefile
+rules/Gendarme.Rules.Smells/Gendarme.Rules.Smells.xml
 rules/Gendarme.Rules.Performance/Makefile
 rules/Gendarme.Rules.Performance/Test/Makefile
 measurement/Makefile
