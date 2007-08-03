@@ -111,9 +111,12 @@ namespace MonoDevelop.Database.Designer
 			entryName.Text = originalTable.Name;
 
 			WaitDialog.ShowDialog ("Loading table data ...");
+
 			notebook.Sensitive = false;
 			ThreadPool.QueueUserWorkItem (new WaitCallback (InitializeThreaded));
+			
 			vboxContent.ShowAll ();
+			SetWarning (null);
 		}
 		
 		private void InitializeThreaded (object state)
@@ -142,7 +145,7 @@ namespace MonoDevelop.Database.Designer
 			if (!create) //make a duplicate if we are going to alter the table
 				this.table = originalTable.Clone () as TableSchema;
 
-			Services.DispatchService.GuiDispatch (delegate () {
+		DispatchService.GuiDispatch (delegate () {
 				InitializeGui ();
 			});
 		}
@@ -210,12 +213,36 @@ namespace MonoDevelop.Database.Designer
 		
 		protected virtual void OnContentChanged (object sender, EventArgs args)
 		{
-			bool val = columnEditor.ValidateSchemaObjects () &&
-				(constraintEditor != null && constraintEditor.ValidateSchemaObjects ()) &&
-				(triggerEditor != null && triggerEditor.ValidateSchemaObjects ());
-			//TODO: validate indexEditor
+			string msg;
 			
+			bool val = columnEditor.ValidateSchemaObjects (out msg);
+			if (!val) goto sens;
+			
+			if (constraintEditor != null) {
+				val &= constraintEditor.ValidateSchemaObjects (out msg);
+				if (!val) goto sens;
+			}
+			
+			if (triggerEditor != null) {
+				val &= triggerEditor.ValidateSchemaObjects (out msg);
+				if (!val) goto sens;
+			}
+			
+			//TODO: validate indexEditor
+		 sens:
+			SetWarning (msg);
 			buttonOk.Sensitive = val;
+		}
+		
+		protected virtual void SetWarning (string msg)
+		{
+			if (msg == null) {
+				hboxWarning.Hide ();
+				labelWarning.Text = "";
+			} else {
+				hboxWarning.ShowAll ();
+				labelWarning.Text = msg;
+			}
 		}
 	}
 }

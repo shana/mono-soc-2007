@@ -38,7 +38,7 @@ namespace MonoDevelop.Database.Designer {
             this.hpaned = new Gtk.HPaned();
             this.hpaned.CanFocus = true;
             this.hpaned.Name = "hpaned";
-            this.hpaned.Position = 276;
+            this.hpaned.Position = 304;
             // Container child hpaned.Gtk.Paned+PanedChild
             this.vbox3 = new Gtk.VBox();
             this.vbox3.Name = "vbox3";

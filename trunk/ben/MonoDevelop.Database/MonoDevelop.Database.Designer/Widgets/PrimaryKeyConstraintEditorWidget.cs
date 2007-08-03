@@ -74,22 +74,14 @@ namespace MonoDevelop.Database.Designer
 			TreeViewColumn colColumns = new TreeViewColumn ();
 			
 			colName.Title = GettextCatalog.GetString ("Name");
-			colColumns.Title = GettextCatalog.GetString ("Columns");
-			
 			CellRendererText nameRenderer = new CellRendererText ();
-			CellRendererText columnsRenderer = new CellRendererText ();
 			
 			nameRenderer.Editable = true;
 			nameRenderer.Edited += new EditedHandler (NameEdited);
 			
 			colName.PackStart (nameRenderer, true);
-			colColumns.PackStart (columnsRenderer, true);
-			
 			colName.AddAttribute (nameRenderer, "text", colNameIndex);
-			colColumns.AddAttribute (columnsRenderer, "text", colColumnsIndex);
-			
 			listPK.AppendColumn (colName);
-			listPK.AppendColumn (colColumns);
 			
 			columnSelecter.Initialize (columns);
 			
@@ -123,12 +115,15 @@ namespace MonoDevelop.Database.Designer
 			TreeIter iter;
 			if (listPK.Selection.GetSelected (out iter)) {
 				columnSelecter.Sensitive = true;
+				buttonRemove.Sensitive = true;
+
 				string colstr = store.GetValue (iter, colColumnsIndex) as string;
 				string[] cols = colstr.Split (',');
 				foreach (string col in cols)
 					columnSelecter.Select (col);
 			} else {
 				columnSelecter.Sensitive = false;
+				buttonRemove.Sensitive = false;
 			}
 		}
 		
@@ -185,20 +180,22 @@ namespace MonoDevelop.Database.Designer
 			store.AppendValues (pk.Name, String.Empty, pk);
 		}
 		
-		public virtual bool ValidateSchemaObjects ()
-		{
+		public virtual bool ValidateSchemaObjects (out string msg)
+		{ 
 			TreeIter iter;
 			if (store.GetIterFirst (out iter)) {
 				do {
 					string name = store.GetValue (iter, colNameIndex) as string;
 					string columns = store.GetValue (iter, colColumnsIndex) as string;
 					
-					if (String.IsNullOrEmpty (name) || String.IsNullOrEmpty (columns))
+					if (String.IsNullOrEmpty (columns)) {
+						msg = GettextCatalog.GetString ("Primary Key constraint '{0}' must be applied to one or more columns.", name);
 						return false;
+					}
 				} while (store.IterNext (ref iter));
-				return true;
 			}
-			return false;
+			msg = null;
+			return true;
 		}
 		
 		public virtual void FillSchemaObjects ()

@@ -187,10 +187,15 @@ namespace MonoDevelop.Database.Designer
 
 		protected virtual void AddClicked (object sender, EventArgs e)
 		{
-			ColumnSchema column = schemaProvider.GetNewColumnSchema ("column", table);
 			int index = 1;
-			while (columns.Contains (column.Name))
-				column.Name = "column" + (index++); 
+			string name = null;
+			do {
+				name = "column" + index;
+				index++;
+			} while (columns.Contains (name));
+			
+			ColumnSchema column = schemaProvider.GetNewColumnSchema (name, table);
+
 			TreeIter iter;
 			if (storeTypes.GetIterFirst (out iter))
 				column.DataTypeName = storeTypes.GetValue (iter, 0) as string;
@@ -357,27 +362,39 @@ namespace MonoDevelop.Database.Designer
 				ContentChanged (this, EventArgs.Empty);
 		}
 		
-		public virtual bool ValidateSchemaObjects ()
-		{
+		public virtual bool ValidateSchemaObjects (out string msg)
+		{ 
 			TreeIter iter;
 			if (storeColumns.GetIterFirst (out iter)) {
+				bool isPk = constraints.GetConstraint (ConstraintType.PrimaryKey) != null;
 				do {
 					string name = storeColumns.GetValue (iter, colNameIndex) as string;
 					string type = storeColumns.GetValue (iter, colTypeIndex) as string;
 					int len = int.Parse (storeColumns.GetValue (iter, colLengthIndex) as string);
-					
-					if (name == null || type == null)
-						return false;
-					
+					if (!isPk)
+						isPk = (bool)storeColumns.GetValue (iter, colPKIndex);
+		
 					DataTypeSchema dt = schemaProvider.GetDataType (type);
-					if (dt == null)
+					if (dt == null) {
+						msg = GettextCatalog.GetString ("Unknown data type '{0}' applied to column '{1}'.", type, name);
 						return false;
+					}
 					
-					if (!dt.LengthRange.IsInRange (len))
+					if (!dt.LengthRange.IsInRange (len)) {
+						msg = GettextCatalog.GetString ("Invalid length for '{0}'.", name);
 						return false;
+					}
 				} while (storeColumns.IterNext (ref iter));
-				return true;
+				
+				if (!isPk) {
+					msg = GettextCatalog.GetString ("Table '{0}' must contain at least one primary key.", table.Name);
+					return false;
+				} else {
+					msg = null;
+					return true;
+				}
 			}
+			msg = GettextCatalog.GetString ("Table '{0}' must contain at least 1 column.", table.Name);
 			return false;
 		}
 		

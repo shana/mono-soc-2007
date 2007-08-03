@@ -21,6 +21,12 @@ namespace MonoDevelop.Database.Designer {
         
         private Gtk.Entry entryName;
         
+        private Gtk.HBox hboxWarning;
+        
+        private Gtk.Image imageWarning;
+        
+        private Gtk.Label labelWarning;
+        
         private Gtk.Button buttonCancel;
         
         private Gtk.Button buttonOk;
@@ -68,15 +74,41 @@ namespace MonoDevelop.Database.Designer {
             w4.Position = 0;
             w4.Expand = false;
             w4.Fill = false;
-            w1.Add(this.vboxContent);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
+            // Container child vboxContent.Gtk.Box+BoxChild
+            this.hboxWarning = new Gtk.HBox();
+            this.hboxWarning.Name = "hboxWarning";
+            this.hboxWarning.Spacing = 6;
+            // Container child hboxWarning.Gtk.Box+BoxChild
+            this.imageWarning = new Gtk.Image();
+            this.imageWarning.Name = "imageWarning";
+            this.imageWarning.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-dialog-warning", Gtk.IconSize.Menu, 16);
+            this.hboxWarning.Add(this.imageWarning);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.hboxWarning[this.imageWarning]));
             w5.Position = 0;
+            w5.Expand = false;
+            w5.Fill = false;
+            // Container child hboxWarning.Gtk.Box+BoxChild
+            this.labelWarning = new Gtk.Label();
+            this.labelWarning.Name = "labelWarning";
+            this.labelWarning.Xalign = 0F;
+            this.labelWarning.LabelProp = "";
+            this.hboxWarning.Add(this.labelWarning);
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.hboxWarning[this.labelWarning]));
+            w6.Position = 1;
+            this.vboxContent.Add(this.hboxWarning);
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vboxContent[this.hboxWarning]));
+            w7.Position = 2;
+            w7.Expand = false;
+            w7.Fill = false;
+            w1.Add(this.vboxContent);
+            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
+            w8.Position = 0;
             // Internal child MonoDevelop.Database.Designer.ProcedureEditorDialog.ActionArea
-            Gtk.HButtonBox w6 = this.ActionArea;
-            w6.Name = "dialog1_ActionArea";
-            w6.Spacing = 6;
-            w6.BorderWidth = ((uint)(5));
-            w6.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            Gtk.HButtonBox w9 = this.ActionArea;
+            w9.Name = "dialog1_ActionArea";
+            w9.Spacing = 6;
+            w9.BorderWidth = ((uint)(5));
+            w9.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonCancel = new Gtk.Button();
             this.buttonCancel.CanDefault = true;
@@ -86,9 +118,9 @@ namespace MonoDevelop.Database.Designer {
             this.buttonCancel.UseUnderline = true;
             this.buttonCancel.Label = "gtk-cancel";
             this.AddActionWidget(this.buttonCancel, -6);
-            Gtk.ButtonBox.ButtonBoxChild w7 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.buttonCancel]));
-            w7.Expand = false;
-            w7.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w10 = ((Gtk.ButtonBox.ButtonBoxChild)(w9[this.buttonCancel]));
+            w10.Expand = false;
+            w10.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
             this.buttonOk.Sensitive = false;
@@ -99,10 +131,10 @@ namespace MonoDevelop.Database.Designer {
             this.buttonOk.UseUnderline = true;
             this.buttonOk.Label = "gtk-ok";
             this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w8 = ((Gtk.ButtonBox.ButtonBoxChild)(w6[this.buttonOk]));
-            w8.Position = 1;
-            w8.Expand = false;
-            w8.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w11 = ((Gtk.ButtonBox.ButtonBoxChild)(w9[this.buttonOk]));
+            w11.Position = 1;
+            w11.Expand = false;
+            w11.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }

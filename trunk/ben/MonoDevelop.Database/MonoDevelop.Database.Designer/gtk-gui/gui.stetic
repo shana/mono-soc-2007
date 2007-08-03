@@ -8,6 +8,8 @@
     <widget-library name="../../../../build/AddIns/MonoDevelop.Ide.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Components.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Components.dll" />
+    <widget-library name="../../../../build/AddIns/MonoDevelop.Ide.dll" />
+    <widget-library name="../../../../build/AddIns/MonoDevelop.Components.dll" />
     <widget-library name="../../../../build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Designer.dll" internal="true" />
   </import>
   <widget class="Gtk.Bin" id="MonoDevelop.Database.Designer.TriggersEditorWidget" design-size="422 300">
@@ -54,7 +56,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-add</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="AddClicked" />
                     <property name="label">gtk-add</property>
                   </widget>
@@ -71,7 +72,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-remove</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="RemoveClicked" />
                     <property name="label">gtk-remove</property>
                   </widget>
@@ -174,7 +174,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-add</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="AddClicked" />
                     <property name="label">gtk-add</property>
                   </widget>
@@ -191,7 +190,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-remove</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="RemoveClicked" />
                     <property name="label">gtk-remove</property>
                   </widget>
@@ -209,7 +207,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-go-up</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="UpClicked" />
                     <property name="label">gtk-go-up</property>
                   </widget>
@@ -227,7 +224,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-go-down</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="DownClicked" />
                     <property name="label">gtk-go-down</property>
                   </widget>
@@ -343,17 +339,54 @@
               <placeholder />
             </child>
             <child>
+              <widget class="Gtk.HBox" id="hboxWarning">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Image" id="imageWarning">
+                    <property name="MemberName" />
+                    <property name="Pixbuf">stock:gtk-dialog-warning Menu</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="labelWarning">
+                    <property name="MemberName" />
+                    <property name="Xalign">0</property>
+                    <property name="LabelProp" translatable="yes" />
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="PackType">End</property>
+                <property name="Position">2</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
               <widget class="Gtk.CheckButton" id="checkPreview">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Label" translatable="yes">Preview SQL</property>
+                <property name="Active">True</property>
                 <property name="DrawIndicator">True</property>
                 <property name="HasLabel">True</property>
                 <property name="UseUnderline">True</property>
               </widget>
               <packing>
                 <property name="PackType">End</property>
-                <property name="Position">2</property>
+                <property name="Position">3</property>
                 <property name="AutoSize">True</property>
                 <property name="Expand">False</property>
                 <property name="Fill">False</property>
@@ -382,7 +415,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
@@ -401,7 +433,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
@@ -443,7 +474,6 @@
                 <property name="UseStock">True</property>
                 <property name="Type">StockItem</property>
                 <property name="StockId">gtk-new</property>
-                <property name="IsDialogButton">False</property>
                 <signal name="Clicked" handler="NewClicked" />
                 <property name="label">gtk-new</property>
               </widget>
@@ -469,7 +499,6 @@
                 <property name="UseStock">True</property>
                 <property name="Type">StockItem</property>
                 <property name="StockId">gtk-save-as</property>
-                <property name="IsDialogButton">False</property>
                 <signal name="Clicked" handler="SaveAsClicked" />
                 <property name="label">gtk-save-as</property>
               </widget>
@@ -639,7 +668,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
@@ -658,7 +686,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
@@ -728,6 +755,41 @@
             <child>
               <placeholder />
             </child>
+            <child>
+              <widget class="Gtk.HBox" id="hboxWarning">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Image" id="imageWarning">
+                    <property name="MemberName" />
+                    <property name="Pixbuf">stock:gtk-dialog-warning Menu</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="labelWarning">
+                    <property name="MemberName" />
+                    <property name="Xalign">0</property>
+                    <property name="LabelProp" translatable="yes" />
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">2</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">0</property>
@@ -751,7 +813,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
@@ -770,7 +831,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
@@ -840,6 +900,41 @@
             <child>
               <placeholder />
             </child>
+            <child>
+              <widget class="Gtk.HBox" id="hboxWarning">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Image" id="imageWarning">
+                    <property name="MemberName" />
+                    <property name="Pixbuf">stock:gtk-dialog-warning Menu</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="labelWarning">
+                    <property name="MemberName" />
+                    <property name="Xalign">0</property>
+                    <property name="LabelProp" translatable="yes" />
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">2</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="Position">0</property>
@@ -863,7 +958,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
@@ -882,7 +976,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
@@ -966,7 +1059,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
@@ -985,7 +1077,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
@@ -1078,7 +1169,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="CancelClicked" />
             <property name="label">gtk-cancel</property>
@@ -1097,7 +1187,6 @@
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
-            <property name="IsDialogButton">True</property>
             <property name="ResponseId">-5</property>
             <signal name="Clicked" handler="OkClicked" />
             <property name="label">gtk-ok</property>
@@ -1161,7 +1250,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-add</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="AddClicked" />
                     <property name="label">gtk-add</property>
                   </widget>
@@ -1178,7 +1266,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-remove</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="RemoveClicked" />
                     <property name="label">gtk-remove</property>
                   </widget>
@@ -1280,7 +1367,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-add</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="AddClicked" />
                     <property name="label">gtk-add</property>
                   </widget>
@@ -1297,7 +1383,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-remove</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="RemoveClicked" />
                     <property name="label">gtk-remove</property>
                   </widget>
@@ -1340,7 +1425,7 @@
       <widget class="Gtk.HPaned" id="hpaned">
         <property name="MemberName" />
         <property name="CanFocus">True</property>
-        <property name="Position">276</property>
+        <property name="Position">304</property>
         <child>
           <widget class="Gtk.VBox" id="vbox3">
             <property name="MemberName" />
@@ -1378,7 +1463,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-add</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="AddClicked" />
                     <property name="label">gtk-add</property>
                   </widget>
@@ -1395,7 +1479,6 @@
                     <property name="UseStock">True</property>
                     <property name="Type">StockItem</property>
                     <property name="StockId">gtk-remove</property>
-                    <property name="IsDialogButton">False</property>
                     <signal name="Clicked" handler="RemoveClicked" />
                     <property name="label">gtk-remove</property>
                   </widget>

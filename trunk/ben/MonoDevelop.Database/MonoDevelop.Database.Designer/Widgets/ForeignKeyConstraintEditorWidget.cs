@@ -43,8 +43,9 @@ namespace MonoDevelop.Database.Designer
 			this.Build();
 		}
 		
-		public virtual bool ValidateSchemaObjects ()
+		public virtual bool ValidateSchemaObjects (out string msg)
 		{
+			msg = null;
 			return true;
 		}
 		

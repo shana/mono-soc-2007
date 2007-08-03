@@ -21,6 +21,12 @@ namespace MonoDevelop.Database.Designer {
         
         private Gtk.Entry entryName;
         
+        private Gtk.HBox hboxWarning;
+        
+        private Gtk.Image imageWarning;
+        
+        private Gtk.Label labelWarning;
+        
         private Gtk.CheckButton checkPreview;
         
         private Gtk.Button buttonCancel;
@@ -74,27 +80,55 @@ namespace MonoDevelop.Database.Designer {
             w4.Expand = false;
             w4.Fill = false;
             // Container child vboxContent.Gtk.Box+BoxChild
+            this.hboxWarning = new Gtk.HBox();
+            this.hboxWarning.Name = "hboxWarning";
+            this.hboxWarning.Spacing = 6;
+            // Container child hboxWarning.Gtk.Box+BoxChild
+            this.imageWarning = new Gtk.Image();
+            this.imageWarning.Name = "imageWarning";
+            this.imageWarning.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-dialog-warning", Gtk.IconSize.Menu, 16);
+            this.hboxWarning.Add(this.imageWarning);
+            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.hboxWarning[this.imageWarning]));
+            w5.Position = 0;
+            w5.Expand = false;
+            w5.Fill = false;
+            // Container child hboxWarning.Gtk.Box+BoxChild
+            this.labelWarning = new Gtk.Label();
+            this.labelWarning.Name = "labelWarning";
+            this.labelWarning.Xalign = 0F;
+            this.labelWarning.LabelProp = "";
+            this.hboxWarning.Add(this.labelWarning);
+            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(this.hboxWarning[this.labelWarning]));
+            w6.Position = 1;
+            this.vboxContent.Add(this.hboxWarning);
+            Gtk.Box.BoxChild w7 = ((Gtk.Box.BoxChild)(this.vboxContent[this.hboxWarning]));
+            w7.PackType = ((Gtk.PackType)(1));
+            w7.Position = 2;
+            w7.Expand = false;
+            w7.Fill = false;
+            // Container child vboxContent.Gtk.Box+BoxChild
             this.checkPreview = new Gtk.CheckButton();
             this.checkPreview.CanFocus = true;
             this.checkPreview.Name = "checkPreview";
             this.checkPreview.Label = Mono.Unix.Catalog.GetString("Preview SQL");
+            this.checkPreview.Active = true;
             this.checkPreview.DrawIndicator = true;
             this.checkPreview.UseUnderline = true;
             this.vboxContent.Add(this.checkPreview);
-            Gtk.Box.BoxChild w5 = ((Gtk.Box.BoxChild)(this.vboxContent[this.checkPreview]));
-            w5.PackType = ((Gtk.PackType)(1));
-            w5.Position = 2;
-            w5.Expand = false;
-            w5.Fill = false;
+            Gtk.Box.BoxChild w8 = ((Gtk.Box.BoxChild)(this.vboxContent[this.checkPreview]));
+            w8.PackType = ((Gtk.PackType)(1));
+            w8.Position = 3;
+            w8.Expand = false;
+            w8.Fill = false;
             w1.Add(this.vboxContent);
-            Gtk.Box.BoxChild w6 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
-            w6.Position = 0;
+            Gtk.Box.BoxChild w9 = ((Gtk.Box.BoxChild)(w1[this.vboxContent]));
+            w9.Position = 0;
             // Internal child MonoDevelop.Database.Designer.TableEditorDialog.ActionArea
-            Gtk.HButtonBox w7 = this.ActionArea;
-            w7.Name = "dialog1_ActionArea";
-            w7.Spacing = 6;
-            w7.BorderWidth = ((uint)(5));
-            w7.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
+            Gtk.HButtonBox w10 = this.ActionArea;
+            w10.Name = "dialog1_ActionArea";
+            w10.Spacing = 6;
+            w10.BorderWidth = ((uint)(5));
+            w10.LayoutStyle = ((Gtk.ButtonBoxStyle)(4));
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonCancel = new Gtk.Button();
             this.buttonCancel.CanDefault = true;
@@ -104,9 +138,9 @@ namespace MonoDevelop.Database.Designer {
             this.buttonCancel.UseUnderline = true;
             this.buttonCancel.Label = "gtk-cancel";
             this.AddActionWidget(this.buttonCancel, -6);
-            Gtk.ButtonBox.ButtonBoxChild w8 = ((Gtk.ButtonBox.ButtonBoxChild)(w7[this.buttonCancel]));
-            w8.Expand = false;
-            w8.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w11 = ((Gtk.ButtonBox.ButtonBoxChild)(w10[this.buttonCancel]));
+            w11.Expand = false;
+            w11.Fill = false;
             // Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
             this.buttonOk = new Gtk.Button();
             this.buttonOk.Sensitive = false;
@@ -117,10 +151,10 @@ namespace MonoDevelop.Database.Designer {
             this.buttonOk.UseUnderline = true;
             this.buttonOk.Label = "gtk-ok";
             this.AddActionWidget(this.buttonOk, -5);
-            Gtk.ButtonBox.ButtonBoxChild w9 = ((Gtk.ButtonBox.ButtonBoxChild)(w7[this.buttonOk]));
-            w9.Position = 1;
-            w9.Expand = false;
-            w9.Fill = false;
+            Gtk.ButtonBox.ButtonBoxChild w12 = ((Gtk.ButtonBox.ButtonBoxChild)(w10[this.buttonOk]));
+            w12.Position = 1;
+            w12.Expand = false;
+            w12.Fill = false;
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }

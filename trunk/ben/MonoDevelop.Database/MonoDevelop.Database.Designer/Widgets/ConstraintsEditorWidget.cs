@@ -77,7 +77,7 @@ namespace MonoDevelop.Database.Designer
 				//not for column constraints, since they are already editable in the column editor
 				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, table, columns, constraints);
 				pkEditor.ContentChanged += new EventHandler (OnContentChanged);
-				notebook.AppendPage (checkEditor, new Label (GettextCatalog.GetString ("Primary Key")));
+				notebook.AppendPage (pkEditor, new Label (GettextCatalog.GetString ("Primary Key")));
 			}
 			
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.ForeignKeyConstraint)
@@ -112,12 +112,28 @@ namespace MonoDevelop.Database.Designer
 				ContentChanged (this, args);
 		}
 		
-		public virtual bool ValidateSchemaObjects ()
+		public virtual bool ValidateSchemaObjects (out string msg)
 		{
-			return (pkEditor != null && pkEditor.ValidateSchemaObjects ())
-				&& (fkEditor != null && fkEditor.ValidateSchemaObjects ())
-				&& (checkEditor != null && checkEditor.ValidateSchemaObjects ())
-				&& (uniqueEditor != null && uniqueEditor.ValidateSchemaObjects ());
+			msg = null;
+			bool ret = true;
+
+			if (pkEditor != null)
+				ret &= pkEditor.ValidateSchemaObjects (out msg);
+			if (!ret) return ret;
+			
+			if (fkEditor != null)
+				ret &= fkEditor.ValidateSchemaObjects (out msg);
+			if (!ret) return ret;
+			
+			if (checkEditor != null)
+				ret &= checkEditor.ValidateSchemaObjects (out msg);
+			if (!ret) return ret;
+			
+			if (uniqueEditor != null)
+				ret &= uniqueEditor.ValidateSchemaObjects (out msg);
+			if (!ret) return ret;
+			
+			return ret;
 		}
 		
 		public virtual void FillSchemaObjects ()

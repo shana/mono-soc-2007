@@ -40,8 +40,9 @@ namespace MonoDevelop.Database.Designer
 		public PreviewDialog (string sql)
 		{
 			this.Build();
-			
+
 			sqlEditor.TextChanged += new EventHandler (SqlChanged);
+			sqlEditor.Text = sql;
 		}
 		
 		public string Text {

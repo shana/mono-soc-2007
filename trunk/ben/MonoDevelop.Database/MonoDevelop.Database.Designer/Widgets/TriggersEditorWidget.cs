@@ -326,7 +326,7 @@ namespace MonoDevelop.Database.Designer
 			}
 		}
 		
-		public virtual bool ValidateSchemaObjects ()
+		public virtual bool ValidateSchemaObjects (out string msg)
 		{
 			TreeIter iter;
 			if (store.GetIterFirst (out iter)) {
@@ -335,12 +335,14 @@ namespace MonoDevelop.Database.Designer
 					string source = store.GetValue (iter, colSourceIndex) as string;
 					//type, event, firetype, position and fireType are always valid
 					
-					if (String.IsNullOrEmpty (name) || String.IsNullOrEmpty (source))
+					if (String.IsNullOrEmpty (source)) {
+						msg = GettextCatalog.GetString ("Trigger '{0}' does not contain a trigger statement.", name);
 						return false;
+					}
 				} while (store.IterNext (ref iter));
-				return true;
 			}
-			return false;
+			msg = null;
+			return true;
 		}
 		
 		public virtual void FillSchemaObjects ()
