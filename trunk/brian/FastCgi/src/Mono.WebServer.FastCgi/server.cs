@@ -169,7 +169,6 @@ namespace Mono.WebServer.FastCgi
 				try {
 					socket = SocketFactory.CreatePipeSocket (
 						IntPtr.Zero);
-					configmanager ["nonstop"] = "True";
 				} catch (System.Net.Sockets.SocketException){
 					Console.WriteLine (
 						"Error: Pipe socket is not bound.");

@@ -1,5 +1,10 @@
 2007-08-03 Brian Nickel <brian.nickel@gmail.com>
 
+	* src/Mono.WebServer.FastCgi/server.cs: Removed
+	`configmanager ["nonstop"] = "True";' as it is no longer necessary.
+
+2007-08-03 Brian Nickel <brian.nickel@gmail.com>
+
 	* doc/linux/lighttpd.html: Explain disabling local checking.
 	
 	* doc/linux/abyss.html: Started documenting.
