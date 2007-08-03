@@ -1,3 +1,13 @@
+2007-08-03  Ben Motmans <ben.motmans@gmail.com>
+
+	* Dialogs/TableEditorDialog.cs, Dialogs/ViewEditorDialog.cs, Dialogs/ProcedureEditorDialog.cs:
+	added a warning widget that can show the user whats wrong with the schema object
+	* Dialogs/PreviewDialog.cs: fixed the ctor
+	* Widgets/TriggersEditorWidget.cs, Widgets/PrimaryKeyConstraintEditorWidget.cs, 
+	Widgets/CheckConstraintEditorWidget.cs, Widgets/UniqueConstraintEditorWidget.cs,
+	Widgets/ForeignKeyConstraintEditorWidget.cs, Widgets/IndicesEditorWidget.cs,
+	Widgets/ColumnsEditorWidget.cs: Added support for a error message while validating the control
+
 2007-08-02  Ben Motmans <ben.motmans@gmail.com>
 
 	* Widgets/UniqueConstraintEditorWidget.cs: removed the "Columns" column from the listview,

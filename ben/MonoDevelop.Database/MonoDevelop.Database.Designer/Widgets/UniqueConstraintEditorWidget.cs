@@ -89,12 +89,12 @@ namespace MonoDevelop.Database.Designer
 			toggleRenderer.Activatable = true;
 			toggleRenderer.Toggled += new ToggledHandler (IsColumnConstraintToggled);
 			
-			colName.AddAttribute (nameRenderer, "text", colNameIndex);
-			colIsColConstraint.AddAttribute (toggleRenderer, "active", colIsColumnConstraintIndex);
-			
 			colName.PackStart (nameRenderer, true);
 			colIsColConstraint.PackStart (toggleRenderer, true);
 			
+			colName.AddAttribute (nameRenderer, "text", colNameIndex);
+			colIsColConstraint.AddAttribute (toggleRenderer, "active", colIsColumnConstraintIndex);
+
 			listUnique.AppendColumn (colName);
 			listUnique.AppendColumn (colIsColConstraint);
 			
@@ -113,6 +113,7 @@ namespace MonoDevelop.Database.Designer
 			if (store.GetIterFromString (out iter, args.Path)) {
 				if (!string.IsNullOrEmpty (args.NewText) && !constraints.Contains (args.NewText)) {
 					store.SetValue (iter, colNameIndex, args.NewText);
+					EmitContentChanged ();
 				} else {
 					string oldText = store.GetValue (iter, colNameIndex) as string;
 					(sender as CellRendererText).Text = oldText;
@@ -127,6 +128,7 @@ namespace MonoDevelop.Database.Designer
 	 			bool val = (bool) store.GetValue (iter, colIsColumnConstraintIndex);
 	 			store.SetValue (iter, colIsColumnConstraintIndex, !val);
 				SetSelectionFromIter (iter);
+				EmitContentChanged ();
 	 		}
 		}
 		
@@ -159,6 +161,7 @@ namespace MonoDevelop.Database.Designer
 			TreeIter iter;
 			if (listUnique.Selection.GetSelected (out iter)) {
 				store.SetValue (iter, colColumnsIndex, GetColumnsString (columnSelecter.CheckedColumns));
+				EmitContentChanged ();
 			}
 		}
 		
@@ -170,6 +173,7 @@ namespace MonoDevelop.Database.Designer
 				uni.Name = "uni_new" + (index++);
 			constraints.Add (uni);
 			AddConstraint (uni);
+			EmitContentChanged ();
 		}
 
 		protected virtual void RemoveClicked (object sender, EventArgs e)
@@ -184,6 +188,7 @@ namespace MonoDevelop.Database.Designer
 				)) {
 					store.Remove (ref iter);
 					constraints.Remove (uni);
+					EmitContentChanged ();
 				}
 			}
 		}
@@ -209,20 +214,22 @@ namespace MonoDevelop.Database.Designer
 			return sb.ToString ();
 		}
 		
-		public virtual bool ValidateSchemaObjects ()
-		{
+		public virtual bool ValidateSchemaObjects (out string msg)
+		{ 
 			TreeIter iter;
 			if (store.GetIterFirst (out iter)) {
 				do {
 					string name = store.GetValue (iter, colNameIndex) as string;
 					string columns = store.GetValue (iter, colColumnsIndex) as string;
 					
-					if (String.IsNullOrEmpty (name) || String.IsNullOrEmpty (columns))
+					if (String.IsNullOrEmpty (columns)) {
+						msg = GettextCatalog.GetString ("Unique Key constraint '{0}' must be applied to one or more columns.", name);
 						return false;
+					}
 				} while (store.IterNext (ref iter));
-				return true;
 			}
-			return false;
+			msg = null;
+			return true;
 		}
 		
 		public virtual void FillSchemaObjects ()

@@ -233,8 +233,8 @@ namespace MonoDevelop.Database.Designer
 				ContentChanged (this, EventArgs.Empty);
 		}
 		
-		public virtual bool ValidateSchemaObjects ()
-		{
+		public virtual bool ValidateSchemaObjects (out string msg)
+		{ 
 			TreeIter iter;
 			if (store.GetIterFirst (out iter)) {
 				do {
@@ -243,15 +243,19 @@ namespace MonoDevelop.Database.Designer
 					string source = store.GetValue (iter, colSourceIndex) as string;
 					bool iscolc = (bool)store.GetValue (iter, colIsColumnConstraintIndex);
 					
-					if (String.IsNullOrEmpty (name) || String.IsNullOrEmpty (source))
+					if (String.IsNullOrEmpty (source)) {
+						msg = GettextCatalog.GetString ("Checked constraint '{0}' does not contain a check statement.", name);
 						return false;
+					}
 					
-					if (iscolc && String.IsNullOrEmpty (column))
+					if (iscolc && String.IsNullOrEmpty (column)) {
+						msg = GettextCatalog.GetString ("Checked constraint '{0}' is marked as a column constraint but is not applied to a column.", name);
 						return false;
+					}
 				} while (store.IterNext (ref iter));
-				return true;
 			}
-			return false;
+			msg = null;
+			return true;
 		}
 		
 		public virtual void FillSchemaObjects ()

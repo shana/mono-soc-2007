@@ -82,9 +82,10 @@ namespace MonoDevelop.Database.Designer
 				sqlEditor.Text = schemaProvider.GetProcedureAlterStatement (procedure);
 				commentEditor.Comment = procedure.Comment;
 			}
-			
+
 			vboxContent.PackStart (notebook, true, true, 0);
 			vboxContent.ShowAll ();
+			SetWarning (null);
 		}
 
 		protected virtual void OkClicked (object sender, EventArgs e)
@@ -117,6 +118,17 @@ namespace MonoDevelop.Database.Designer
 		{
 			buttonOk.Sensitive = entryName.Text.Length > 0 && sqlEditor.Text.Length > 0;
 			//TODO: check for duplicate name
+		}
+		
+		protected virtual void SetWarning (string msg)
+		{
+			if (msg == null) {
+				hboxWarning.Hide ();
+				labelWarning.Text = "";
+			} else {
+				hboxWarning.ShowAll ();
+				labelWarning.Text = msg;
+			}
 		}
 	}
 }
