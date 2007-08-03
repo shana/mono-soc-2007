@@ -1,5 +1,18 @@
 2007-08-03 Brian Nickel <brian.nickel@gmail.com>
 
+	* doc/linux/lighttpd.html: Explain disabling local checking.
+	
+	* doc/linux/abyss.html: Started documenting.
+	
+	* doc/linux/cherokee.html: Remove "/nonstop" argument.
+	
+	* src/Mono.FastCgi/Requests/Request.cs: Send data in records 0x7fff
+	bytes or less rather than 0xffff bytes or less. Abyss skipped over this
+	packet. (Other servers may do the same.) I've noticed similar behavior
+	from Cherokee where it sends smaller than the maximum size.
+
+2007-08-03 Brian Nickel <brian.nickel@gmail.com>
+
 	* src/Mono.FastCgi/Structures/BeginRequestBody.cs: 
 	* src/Mono.FastCgi/Structures/Record.cs: 
 	* src/Mono.FastCgi/Structures/NameValuePair.cs: 
