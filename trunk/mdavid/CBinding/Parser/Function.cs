@@ -38,9 +38,11 @@ namespace CBinding.Parser
 	public class Function : LanguageItem
 	{
 		private string[] parameters;
+		private string signature;
 		
 		public Function (Tag tag, Project project, string ctags_output) : base (tag, project)
 		{
+			signature = tag.Signature;
 			ParseSignature (tag.Signature);
 			
 			// We need the prototype tag because the implementation tag
@@ -82,6 +84,28 @@ namespace CBinding.Parser
 		
 		public string[] Parameters {
 			get { return parameters; }
+		}
+		
+		public string Signature {
+			get { return signature; }
+		}
+		
+		public override bool Equals (object o)
+		{
+			Function other = o as Function;
+			
+			if (other != null &&
+			    other.FullName.Equals (FullName) &&
+			    other.Project.Equals (Project) &&
+				other.Signature.Equals (signature))
+				return true;
+			
+			return false;
+		}
+		
+		public override int GetHashCode ()
+		{
+			return base.GetHashCode () + parameters.GetHashCode ();
 		}
 	}
 }

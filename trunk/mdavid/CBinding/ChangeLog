@@ -1,3 +1,18 @@
+2007-08-03  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/CTextEditorExtension.cs: Added support for '::' completion.
+	* Gui/DataProvider.cs: Changed the completion icon of a typedef to match the
+	  icon used in the class pad.
+	* Makefile.am, CBinding.addin.xml, CBinding.mdp,
+	  templates/EmptyCSourceFile.xft.xml,
+	  templates/EmptyCppSourceFile.xft.xml,
+	  templates/EmptyCHeaderFile.xft.xml,
+	  templates/EmptyCppHeaderFile.xft.xml: Added file templates and changed
+	  icons.
+	* Parser/ProjectInformation.cs: Added some helper methods.
+	* Parser/Function.cs: Overrided the Equals and GetHasCode methods so that it
+	  uses the function's parameters too.
+
 2007-07-26  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Navigation/ProjectNodeBuilderExtension.cs,

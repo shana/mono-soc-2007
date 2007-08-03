@@ -31,7 +31,10 @@
 	</Extension>
 
 	<Extension path = "/MonoDevelop/FileTemplates">
-		<FileTemplate id = "EmptyCFile" resource = "EmptyCFile.xft.xml"/>
+		<FileTemplate id = "EmptyCSourceFile" resource = "EmptyCSourceFile.xft.xml"/>
+		<FileTemplate id = "EmptyCHeaderFile" resource = "EmptyCHeaderFile.xft.xml"/>
+		<FileTemplate id = "EmptyCppSourceFile" resource = "EmptyCppSourceFile.xft.xml"/>
+		<FileTemplate id = "EmptyCppHeaderFile" resource = "EmptyCppHeaderFile.xft.xml"/>
 	</Extension>
 
 	<Extension path = "/MonoDevelop/ProjectTemplates">
@@ -40,18 +43,18 @@
 	</Extension>
 	
 	<Extension path = "/Workspace/Icons">
-		<Icon
-			id = "CPrj"
-			language = "C"
-			resource = "res:C.Project.Empty"/>
     	<Icon
-    		id = "CFile"
+    		id = "CHeaderFile"
 			extensions = ".h"
-			resource = "res:C.File.Empty"/>
+			resource = "res:text-x-chdr.16x16.png"/>
 		<Icon
     		id = "CSourceFile"
-			extensions = ".c,.cpp"
-			resource = "res:C.Source.File.Empty"/>
+			extensions = ".c"
+			resource = "res:text-x-csrc.16x16.png"/>
+		<Icon
+    		id = "CppSourceFile"
+			extensions = ".cpp,.cxx,.c++"
+			resource = "res:text-x-c++src.16x16.png"/>
 	</Extension>
 	
 	<Extension path = "/SharpDevelop/Workbench/ProjectBindings">

@@ -79,6 +79,58 @@ namespace CBinding.Parser
 			typedefs.Clear ();
 		}
 		
+		public IEnumerable<LanguageItem> Containers ()
+		{
+			foreach (Namespace n in namespaces)
+				yield return n;
+			
+			foreach (Class c in classes)
+				yield return c;
+			
+			foreach (Structure s in structures)
+				yield return s;
+			
+			foreach (Enumeration e in enumerations)
+				yield return e;
+			
+			foreach (Union u in unions)
+				yield return u;
+		}
+		
+		// All items except macros
+		public IEnumerable<LanguageItem> AllItems ()
+		{
+			foreach (Namespace n in namespaces)
+				yield return n;
+			
+			foreach (Class c in classes)
+				yield return c;
+			
+			foreach (Structure s in structures)
+				yield return s;
+			
+			foreach (Enumeration e in enumerations)
+				yield return e;
+			
+			foreach (Union u in unions)
+				yield return u;
+			
+			foreach (Function f in functions)
+				yield return f;
+			
+			foreach (Member m in members)
+				yield return m;
+			
+			foreach (Variable v in variables)
+				yield return v;
+			
+			foreach (Enumerator e in enumerators)
+				yield return e;
+			
+			foreach (Typedef t in typedefs)
+				yield return t;
+		}
+		
 //		public void AddFunction (Function function)
 //		{
 //			functions.Add (function);

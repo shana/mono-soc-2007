@@ -43,6 +43,18 @@ namespace CBinding
 {
 	public class CTextEditorExtension : TextEditorExtension
 	{
+		// Allowed chars to be next to an identifier
+		private static char[] allowedChars = new char[] {
+			'.', ':', ' ', '\t', '=', '*', '+', '-', '/', '%', ',', '&',
+			'|', '^', '{', '}', '[', ']', '(', ')', '\n', '!', '?', '<', '>'
+		};
+		
+		// Allowed Chars to be next to an identifier excluding ':' (to get the full name in '::' completion).
+		private static char[] allowedCharsMinusColon = new char[] {
+			'.', ' ', '\t', '=', '*', '+', '-', '/', '%', ',', '&', '|',
+			'^', '{', '}', '[', ']', '(', ')', '\n', '!', '?', '<', '>'
+		};
+		
 		public override bool ExtendsEditor (Document doc, IEditableTextBuffer editor)
 		{
 			return (Path.GetExtension (doc.Title).ToUpper () == ".C"   ||
@@ -77,6 +89,24 @@ namespace CBinding
 		public override ICompletionDataProvider HandleCodeCompletion (
 		    ICodeCompletionContext completionContext, char completionChar)
 		{
+			string lineText = Editor.GetLineText (completionContext.TriggerLine + 1);
+			
+			if (lineText.EndsWith ("::")) {
+				// remove the trailing '::'
+				lineText = lineText.Substring (0, lineText.Length - 2);
+				
+				int nameStart = lineText.LastIndexOfAny (allowedCharsMinusColon);
+
+				nameStart++;
+				
+				string itemName = lineText.Substring (nameStart).Trim ();
+				
+				if (string.IsNullOrEmpty (itemName))
+					return null;
+				
+				return GetMembersOfItem (itemName);
+			}
+			
 			return null;
 		}
 		
@@ -94,6 +124,34 @@ namespace CBinding
 			    return GlobalComplete ();
 			
 			return HandleCodeCompletion (completionContext, Editor.GetText (pos - 1, pos)[0]);
+		}
+		
+		private CompletionDataProvider GetMembersOfItem (string itemFullName)
+		{
+			CProject project = Document.Project as CProject;
+			
+			if (project == null)
+				return null;
+				
+			ProjectInformation info = ProjectInformationManager.Instance.Get (project);
+			CompletionDataProvider provider = new CompletionDataProvider ();
+			
+			LanguageItem container = null;
+				
+			foreach (LanguageItem li in info.Containers ()) {
+				if (itemFullName == li.FullName)
+					container = li;
+			}
+			
+			if (container == null)
+				return null;
+			
+			foreach (LanguageItem li in info.AllItems ()) {
+				if (li.Parent != null && li.Parent.Equals (container))
+					provider.AddCompletionData (new CompletionData (li));
+			}
+			
+			return provider;
 		}
 		
 		private ICompletionDataProvider GlobalComplete ()
@@ -157,8 +215,6 @@ namespace CBinding
 			Editor.GetLineColumnFromPosition (Editor.CursorPosition, out line, out column);
 			int position = Editor.GetPositionFromLineColumn (line, 1);
 			string lineText = Editor.GetText (position, Editor.CursorPosition - 1).TrimEnd ();
-			
-			char[] allowedChars = new char[] { '.', ':', ' ', '\t', '=', '*', '+', '-', '/', '%', ',', '&', '|', '^', '{', '}', '[', ']', '(', ')', '\n', '!', '?' };
 			
 			int nameStart = lineText.LastIndexOfAny (allowedChars);
 
