@@ -33,7 +33,7 @@ using System.Collections.Generic;
 {
 	public class NpgsqlConnectionProvider : AbstractConnectionProvider
 	{
-		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings)
+		public override IPooledDbConnection CreateConnection (IConnectionPool pool, DatabaseConnectionSettings settings, out string error)
 		{
 			string connStr = null;
 			try {	
@@ -47,9 +47,11 @@ using System.Collections.Generic;
 				connStr = SetConnectionStringParameter (connStr, String.Empty, "Pooling", "false");
 				NpgsqlConnection connection = new NpgsqlConnection (connStr);
 				connection.Open ();
-
+				
+				error = null;
 				return new NpgsqlPooledDbConnection (pool, connection);
-			} catch {
+			} catch (Exception e) {
+				error = e.Message;
 				return null;
 			}
 		}

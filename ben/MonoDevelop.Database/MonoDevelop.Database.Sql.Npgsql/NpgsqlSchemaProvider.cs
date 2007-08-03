@@ -34,6 +34,16 @@ using Npgsql;
 using MonoDevelop.Core;
 namespace MonoDevelop.Database.Sql
 {
+	[DatabaseMetaData (DatabaseMetaData.Create | DatabaseMetaData.Alter | DatabaseMetaData.Drop | DatabaseMetaData.Rename)]
+	[TableMetaData (TableMetaData.Create | TableMetaData.Alter | TableMetaData.Drop | TableMetaData.Rename | TableMetaData.Name | TableMetaData.Schema | TableMetaData.Columns | TableMetaData.Definition | TableMetaData.Triggers | TableMetaData.IsSystem | TableMetaData.PrimaryKeyConstraint | TableMetaData.CheckConstraint | TableMetaData.UniqueConstraint | TableMetaData.ForeignKeyConstraint | TableMetaData.CanAppendColumn)]
+	[ViewMetaData (ViewMetaData.Create | ViewMetaData.Alter | ViewMetaData.Drop | ViewMetaData.Rename | ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
+	//TODO: functions in postgres [ProcedureMetaData (ProcedureMetaData.Create | ProcedureMetaData.Alter | ProcedureMetaData.Drop | ProcedureMetaData.Rename | ProcedureMetaData.Name | ProcedureMetaData.Schema | ProcedureMetaData.Definition)]
+	[TableColumnMetaData (ColumnMetaData.Name | ColumnMetaData.Definition | ColumnMetaData.Schema | ColumnMetaData.DataType | ColumnMetaData.DefaultValue | ColumnMetaData.Nullable | ColumnMetaData.Position | ColumnMetaData.PrimaryKeyConstraint | ColumnMetaData.CheckConstraint | ColumnMetaData.UniqueConstraint | ColumnMetaData.ForeignKeyConstraint)]
+	[ParameterMetaData (ParameterMetaData.Name | ParameterMetaData.DataType | ParameterMetaData.Direction)]   
+	[PrimaryKeyConstraintMetaData (PrimaryKeyConstraintMetaData.Name | PrimaryKeyConstraintMetaData.Columns | PrimaryKeyConstraintMetaData.IsColumnConstraint)]
+	[CheckConstraintMetaData (CheckConstraintMetaData.Name | CheckConstraintMetaData.Columns | CheckConstraintMetaData.IsColumnConstraint | CheckConstraintMetaData.Source)]
+	[UniqueConstraintMetaData (UniqueConstraintMetaData.Name | UniqueConstraintMetaData.Columns | UniqueConstraintMetaData.IsColumnConstraint)]
+	[TriggerMetaData (TriggerMetaData.Name | TriggerMetaData.TableName | TriggerMetaData.TriggerType | TriggerMetaData.TriggerEvent | TriggerMetaData.Position | TriggerMetaData.IsActive | TriggerMetaData.Source | TriggerMetaData.Create | TriggerMetaData.Alter | TriggerMetaData.Drop | TriggerMetaData.Rename)]
 	public class NpgsqlSchemaProvider : AbstractSchemaProvider
 	{
 		public NpgsqlSchemaProvider (IConnectionPool connectionPool)
@@ -308,41 +318,40 @@ using MonoDevelop.Core;
 			
 			return procedures;
 		}
-
-//		public override ColumnSchemaCollection GetProcedureColumns (ProcedureSchema procedure)
-//		{
-//			ColumnSchemaCollection columns = new ColumnSchemaCollection ();
-//			
-//			// FIXME: Won't work properly with overload functions.
-//			// Maybe check the number of columns in the parameters for
-//			// proper match.
-//			IPooledDbConnection conn = connectionPool.Request ();
-//			IDbCommand command = conn.CreateCommand (String.Format (
-//				"SELECT format_type (prorettype, NULL) "
-//				+ "FROM pg_proc pc, pg_language pl "
-//				+ "WHERE pc.prolang = pl.oid "
-//				+ "AND pc.proname = '{0}';", procedure.Name
-//			));
-//			
-//			using (command) {
-//			    	using (IDataReader r = command.ExecuteReader()) {
-//			    		while (r.Read ()) {	
-//						ColumnSchema column = new ColumnSchema (this);
-//						column.DataTypeName = r.GetString (0);
-//						column.Name = r.GetString (0);
-//						columns.Add (column);
-//			    		}
-//					r.Close ();
-//				}
-//			}
-//			conn.Release ();
-//			
-//			return columns;
-//		}
 		
 		public override ParameterSchemaCollection GetProcedureParameters (ProcedureSchema procedure)
 		{
-			throw new NotImplementedException ();
+			ParameterSchemaCollection parameters = new ParameterSchemaCollection ();
+			
+			// FIXME: Won't work properly with overload functions.
+			// Maybe check the number of columns in the parameters for
+			// proper match.
+			IPooledDbConnection conn = connectionPool.Request ();
+			IDbCommand command = conn.CreateCommand (String.Format (
+				"SELECT format_type (prorettype, NULL) "
+				+ "FROM pg_proc pc, pg_language pl "
+				+ "WHERE pc.prolang = pl.oid "
+				+ "AND pc.proname = '{0}';", procedure.Name
+			));
+			try {
+			using (command) {
+			    	using (IDataReader r = command.ExecuteReader()) {
+			    		while (r.Read ()) {	
+						ParameterSchema param = new ParameterSchema (this);
+
+						param.DataTypeName = r.GetString (0);
+						param.Name = r.GetString (0);
+						parameters.Add (param);
+			    		}
+					r.Close ();
+				}
+			}
+			} catch (Exception e) {
+				QueryService.RaiseException (e);
+			}
+			conn.Release ();
+			
+			return parameters;
 		}
 
 		public override ConstraintSchemaCollection GetTableConstraints (TableSchema table)
