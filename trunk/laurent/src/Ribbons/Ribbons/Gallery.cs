@@ -74,6 +74,7 @@ namespace Ribbons
 			this.tileHeight = 48;
 			this.tileWidth = 64;
 			this.tileSpacing = 8;
+			this.BorderWidth = 2;
 			
 			this.up = new Button ("\u25B2");
 			this.up.Parent = this;
@@ -195,7 +196,7 @@ namespace Ribbons
 			
 			requisition.Width = btnWidth + tiles.Count * tileWidth + (tiles.Count + 1) * tileSpacing + 2 * (int)BorderWidth;
 			requisition.Height = Math.Max (tileHeight + 2*tileSpacing, btnHeight) + 2 * (int)BorderWidth;
-			
+			Console.WriteLine(requisition.Width);
 			if(WidthRequest != -1) requisition.Width = WidthRequest;
 			if(HeightRequest != -1) requisition.Height = HeightRequest;
 		}
@@ -203,7 +204,7 @@ namespace Ribbons
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
-			
+			Console.WriteLine(allocation.Width);
 			allocation.X += (int)BorderWidth;
 			allocation.Y += (int)BorderWidth;
 			allocation.Width -= 2 * (int)BorderWidth;
@@ -211,9 +212,9 @@ namespace Ribbons
 			
 			Gdk.Rectangle btnAlloc;
 			btnAlloc.Width = btnWidth;
-			btnAlloc.X = allocation.X + allocation.Width - (int)BorderWidth - btnAlloc.Width;
+			btnAlloc.X = allocation.X + allocation.Width - btnAlloc.Width;
 			
-			btnAlloc.Y = allocation.Y + (int)BorderWidth;
+			btnAlloc.Y = allocation.Y;
 			btnAlloc.Height = upReq.Height;
 			up.SizeAllocate (btnAlloc);
 			
@@ -225,10 +226,10 @@ namespace Ribbons
 			btnAlloc.Height = expandReq.Height;
 			expand.SizeAllocate (btnAlloc);
 			
-			tilesAlloc.Y = allocation.Y + (int)BorderWidth + tileSpacing;
-			tilesAlloc.X = allocation.X + (int)BorderWidth + tileSpacing;
+			tilesAlloc.Y = allocation.Y + tileSpacing;
+			tilesAlloc.X = allocation.X + tileSpacing;
 			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing;
-			tilesAlloc.Height = allocation.Height - 2 * ((int)BorderWidth + tileSpacing); 
+			tilesAlloc.Height = allocation.Height - 2 * tileSpacing; 
 			
 			Gdk.Rectangle tileAlloc;
 			tileAlloc.X = tilesAlloc.X;
