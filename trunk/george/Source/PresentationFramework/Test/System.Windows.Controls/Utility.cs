@@ -25,5 +25,32 @@ namespace System.Windows.Controls {
 		public static bool AreCloseEnough(double value1, double value2) {
 			return Math.Abs(value1 - value2) < 0.1;
 		}
+
+		public static FrameworkPropertyMetadataOptions GetOptions(FrameworkPropertyMetadata value) {
+			FrameworkPropertyMetadataOptions result = FrameworkPropertyMetadataOptions.None;
+			if (value.AffectsArrange)
+				result |= FrameworkPropertyMetadataOptions.AffectsArrange;
+			if (value.AffectsMeasure)
+				result |= FrameworkPropertyMetadataOptions.AffectsMeasure;
+			if (value.AffectsParentArrange)
+				result |= FrameworkPropertyMetadataOptions.AffectsParentArrange;
+			if (value.AffectsParentMeasure)
+				result |= FrameworkPropertyMetadataOptions.AffectsParentMeasure;
+			if (value.AffectsRender)
+				result |= FrameworkPropertyMetadataOptions.AffectsRender;
+			if (value.BindsTwoWayByDefault)
+				result |= FrameworkPropertyMetadataOptions.BindsTwoWayByDefault;
+			if (value.Inherits)
+				result |= FrameworkPropertyMetadataOptions.Inherits;
+			if (value.Journal)
+				result |= FrameworkPropertyMetadataOptions.Journal;
+			if (value.IsNotDataBindable)
+				result |= FrameworkPropertyMetadataOptions.NotDataBindable;
+			if (value.OverridesInheritanceBehavior)
+				result |= FrameworkPropertyMetadataOptions.OverridesInheritanceBehavior;
+			if (value.SubPropertiesDoNotAffectRender)
+				result |= FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender;
+			return result;
+		}
 	}
 }
