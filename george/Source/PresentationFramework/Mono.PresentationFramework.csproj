@@ -117,6 +117,9 @@
     </Compile>
     <Compile Include="System.Windows.Controls\WrapPanel.cs" />
     <Compile Include="System.Windows.Data\CollectionView.cs" />
+    <None Include="System.Windows.Shapes\ChangeLog" />
+    <Compile Include="System.Windows.Shapes\Ellipse.cs" />
+    <Compile Include="System.Windows.Shapes\Shape.cs" />
     <Compile Include="Theme.cs" />
   </ItemGroup>
   <ItemGroup>
