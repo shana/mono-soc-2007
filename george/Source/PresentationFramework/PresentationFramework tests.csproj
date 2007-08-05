@@ -50,6 +50,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Test\System.Windows.Shapes\ShapeTest.cs" />
+    <Compile Include="Test\System.Windows.Shapes\EllipseTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\BulletDecoratorTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\ButtonBaseTest.cs" />
     <None Include="Test\System.Windows.Controls.Primitives\ChangeLog" />
@@ -117,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Test\System.Windows.Data\ChangeLog" />
+    <None Include="Test\System.Windows.Shapes\ChangeLog" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Test.png">
