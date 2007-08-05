@@ -17,6 +17,7 @@ namespace Ribbons
 		private double padding;
 		private bool isSmall;
 		private Menu dropDownMenu;
+		private bool enable;
 		
 		private double arrowSize;
 		private Gdk.Rectangle arrowAllocation;
@@ -57,6 +58,18 @@ namespace Ribbons
 				QueueDraw ();
 			}
 			get { return drawBg; }
+		}
+		
+		/// <summary><b>true</b> if the button is enabled, <b>false</B> otherwise.</summary>
+		public bool Enabled
+		{
+			set
+			{
+				if(enable == value) return;
+				enable = value;
+				QueueDraw ();
+			}
+			get { return enable; }
 		}
 		
 		/// <summary>Image to display.</summary>
@@ -124,6 +137,7 @@ namespace Ribbons
 			this.Padding = 2;
 			this.ImagePosition = PositionType.Top;
 			this.isSmall = false;
+			this.enable = true;
 		}
 		
 		/// <summary>Constructor given a label to display.</summary>
@@ -175,13 +189,13 @@ namespace Ribbons
 		/// <summary>Fires the Click event.</summary>
 		public void Click ()
 		{
-			if(Clicked != null) Clicked (this, EventArgs.Empty);
+			if(enable && Clicked != null) Clicked (this, EventArgs.Empty);
 		}
 		
 		/// <summary>Displays the drop down menu if any.</summary>
 		public void Popup ()
 		{
-			if(dropDownMenu != null)
+			if(enable && dropDownMenu != null)
 			{
 				dropDownMenu.Popup ();
 			}
@@ -405,6 +419,7 @@ namespace Ribbons
 		{
 			bool ret = base.OnButtonReleaseEvent (evnt);
 			state = Theme.ButtonState.Hover;
+			if(!enable) state = Theme.ButtonState.Default;
 			this.QueueDraw ();
 			return ret;
 		}
@@ -413,6 +428,7 @@ namespace Ribbons
 		{
 			bool ret = base.OnEnterNotifyEvent (evnt);
 			state = Theme.ButtonState.Hover;
+			if(!enable) state = Theme.ButtonState.Default;
 			this.QueueDraw ();
 			return ret;
 		}
