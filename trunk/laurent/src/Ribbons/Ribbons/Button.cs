@@ -405,6 +405,7 @@ namespace Ribbons
 		{
 			bool ret = base.OnButtonPressEvent (evnt);
 			state = Theme.ButtonState.Pressed;
+			if(!enable) state = Theme.ButtonState.Default;
 			this.QueueDraw ();
 			
 			if(dropDownMenu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
