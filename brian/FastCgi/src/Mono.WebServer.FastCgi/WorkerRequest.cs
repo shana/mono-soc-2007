@@ -36,6 +36,7 @@ using System.Collections;
 using Mono.FastCgi;
 using Mono.WebServer;
 using System.Text;
+using System.Net;
 
 namespace Mono.WebServer.FastCgi
 {
@@ -122,9 +123,19 @@ namespace Mono.WebServer.FastCgi
 
 		public override string GetLocalAddress ()
 		{
-			string address = responder.GetParameter ("HTTP_HOST");
+			string address = responder.GetParameter ("SERVER_ADDR");
 			if (address != null && address.Length > 0)
-				return address.Split (new char [] {':'}, 2) [0];
+				return address;
+			
+			address = AddressFromHostName (
+				responder.GetParameter ("HTTP_HOST"));
+			if (address != null && address.Length > 0)
+				return address;
+			
+			address = AddressFromHostName (
+				responder.GetParameter ("SERVER_NAME"));
+			if (address != null && address.Length > 0)
+				return address;
 			
 			return base.GetLocalAddress ();
 		}
@@ -134,7 +145,7 @@ namespace Mono.WebServer.FastCgi
 			try {
 				return responder.PortNumber;
 			} catch {
-				return 0;
+				return base.GetLocalPort ();
 			}
 		}
 
@@ -153,21 +164,41 @@ namespace Mono.WebServer.FastCgi
 
 		public override string GetRemoteAddress ()
 		{
-			return responder.GetParameter ("REMOTE_ADDR");
+			string addr = responder.GetParameter ("REMOTE_ADDR");
+			return addr != null && addr.Length > 0 ?
+				addr : base.GetRemoteAddress ();
 		}
-		
-		/*
-		FIXME: HOW CAN WE FIGURE THIS OUT?
 		
 		public override string GetRemoteName ()
 		{
+			string ip = GetRemoteAddress ();
+			string name = null;
+			try {
+				#if NET_2_0
+				IPHostEntry entry = Dns.GetHostEntry (ip);
+				#else
+				IPHostEntry entry = Dns.GetHostByName (ip);
+				#endif
+				name = entry.HostName;
+			} catch {
+				name = ip;
+			}
+
+			return name;
 		}
 
 		public override int GetRemotePort ()
 		{
-			return remotePort;
+			string port = responder.GetParameter ("REMOTE_PORT");
+			if (port == null || port.Length == 0)
+				return base.GetRemotePort ();
+			
+			try {
+				return int.Parse (port);
+			} catch {
+				return base.GetRemotePort ();
+			}
 		}
-		*/
 		
 		public override string GetServerVariable (string name)
 		{
@@ -194,7 +225,9 @@ namespace Mono.WebServer.FastCgi
 			if (statusCode == 200)
 				return;
 			
-			string line = string.Format ("{0} {1} {2}\r\n", GetHttpVersion (), statusCode, statusDescription);
+			string line = string.Format ("{0} {1} {2}\r\n",
+				GetHttpVersion (), statusCode,
+				statusDescription);
 			responder.SendOutput (line, HeaderEncoding);
 		}
 
@@ -309,7 +342,17 @@ namespace Mono.WebServer.FastCgi
 		
 		public override string GetServerName ()
 		{
-			return responder.GetParameter ("SERVER_NAME");
+			string server_name = HostNameFromString (
+				responder.GetParameter ("SERVER_NAME"));
+			
+			if (server_name == null)
+				server_name = HostNameFromString (
+					responder.GetParameter ("HTTP_HOST"));
+			
+			if (server_name == null)
+				server_name = GetLocalAddress ();
+			
+			return server_name;
 		}
 
 		public override byte [] GetPreloadedEntityBody ()
@@ -320,6 +363,48 @@ namespace Mono.WebServer.FastCgi
 		public override bool IsEntireEntityBodyIsPreloaded ()
 		{
 			return true;
+		}
+		
+		private static string HostNameFromString (string host)
+		{
+			if (host == null || host.Length == 0)
+				return null;
+			
+			int colon_index = host.IndexOf (':');
+			
+			if (colon_index == -1)
+				return host;
+			
+			if (colon_index == 0)
+				return null;
+			
+			return host.Substring (0, colon_index);
+		}
+		
+		private static string AddressFromHostName (string host)
+		{
+			host = HostNameFromString (host);
+			
+			if (host == null || host.Length > 126)
+				return null;
+			
+			System.Net.IPAddress [] addresses = null;
+			try {
+				#if NET_2_0
+				addresses = Dns.GetHostEntry (host).AddressList;
+				#else
+				addresses = Dns.GetHostByName (host).AddressList;
+				#endif
+			} catch (System.Net.Sockets.SocketException) {
+				return null;
+			} catch (ArgumentException) {
+				return null;
+			}
+			
+			if (addresses == null || addresses.Length == 0)
+				return null;
+			
+			return addresses [0].ToString ();
 		}
 	}
 }
