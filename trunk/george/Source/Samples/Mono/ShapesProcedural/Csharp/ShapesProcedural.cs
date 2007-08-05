@@ -12,7 +12,7 @@ namespace ShapesProcedural
     {
         Border myBorder;
         Rectangle myRect;
-        Ellipse myEllipse;
+		Mono.System.Windows.Shapes.Ellipse myEllipse;
         Line myLine;
         Path myPath;
         Polygon myPolygon;
@@ -103,7 +103,7 @@ namespace ShapesProcedural
 
 
             // Add an Ellipse Element
-            myEllipse = new Ellipse();
+			myEllipse = new Mono.System.Windows.Shapes.Ellipse();
             myEllipse.Stroke = Brushes.Black;
             myEllipse.Fill = Brushes.DarkBlue;
             myEllipse.HorizontalAlignment = HorizontalAlignment.Left;
