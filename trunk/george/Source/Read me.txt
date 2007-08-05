@@ -55,3 +55,6 @@ http://msdn.microsoft.com/msdnmag/issues/05/06/EventHandling/
 Visual tree
 http://www.artfulbits.com/Technologies/WinFX/UIAutomation1.aspx
 http://www.blois.us/Snoop/
+
+Shapes
+http://damianpedwards.spaces.live.com/blog/cns!A079DE667E1958B3!459.entry
