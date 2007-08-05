@@ -51,8 +51,7 @@ namespace Sample
 			
 			Gallery gallery = new Gallery ();
 			gallery.AppendTile (new SampleTile (new Color (1, 0, 0), new Color (0, 1, 0)));
-			//gallery.AppendTile (new SampleTile (new Color (0.5, 0.5, 0), new Color (0, 0, 1)));
-			//gallery.AppendTile (new Button("ok"));
+			gallery.AppendTile (new SampleTile (new Color (0.5, 0.5, 0), new Color (0, 0, 1)));
 			
 			group2 = new RibbonGroup ();
 			group2.Label = "Gallery";
