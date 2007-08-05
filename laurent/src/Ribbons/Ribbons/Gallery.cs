@@ -194,9 +194,10 @@ namespace Ribbons
 			btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
 			int btnHeight = upReq.Height + downReq.Height + expandReq.Height;
 			
-			requisition.Width = btnWidth + tiles.Count * tileWidth + (tiles.Count + 1) * tileSpacing + 2 * (int)BorderWidth;
+			int count = Math.Min (tiles.Count, defaultTilesPerRow);
+			requisition.Width = btnWidth + count * tileWidth + (count + 1) * tileSpacing + 2 * (int)BorderWidth;
 			requisition.Height = Math.Max (tileHeight + 2*tileSpacing, btnHeight) + 2 * (int)BorderWidth;
-			Console.WriteLine(requisition.Width);
+			
 			if(WidthRequest != -1) requisition.Width = WidthRequest;
 			if(HeightRequest != -1) requisition.Height = HeightRequest;
 		}
@@ -238,7 +239,6 @@ namespace Ribbons
 			tileAlloc.Width = tileWidth;
 			
 			int maxTiles = (tilesAlloc.Width + tileSpacing) / (tileWidth + tileSpacing);
-			Console.WriteLine ("Max tiles: " + maxTiles);
 			
 			if(firstDisplayedTileIndex == -1)
 			{
@@ -259,6 +259,9 @@ namespace Ribbons
 				lastDisplayedTileIndex = tiles.Count - 1;
 			}
 			
+			up.Enabled = firstDisplayedTileIndex > 0;
+			down.Enabled = lastDisplayedTileIndex < tiles.Count - 1;
+			
 			for(int tileIndex = 0 ; tileIndex < firstDisplayedTileIndex ; ++tileIndex)
 			{
 				if(tiles[tileIndex].IsMapped) tiles[tileIndex].Unmap ();
@@ -267,8 +270,6 @@ namespace Ribbons
 			{
 				if(tiles[tileIndex].IsMapped) tiles[tileIndex].Unmap ();
 			}
-			
-			//Console.WriteLine ("ALLOC {0} ~ {1}", firstDisplayedTileIndex, lastDisplayedTileIndex);
 			
 			for(int tileIndex = firstDisplayedTileIndex ; tileIndex <= lastDisplayedTileIndex ; ++tileIndex)
 			{
