@@ -1,3 +1,8 @@
+2007-08-04 Brian Nickel <brian.nickel@gmail.com>
+
+	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Improved detection of
+	host names, addresses, and ports.
+
 2007-08-03 Brian Nickel <brian.nickel@gmail.com>
 
 	* src/Mono.WebServer.FastCgi/server.cs: Removed
