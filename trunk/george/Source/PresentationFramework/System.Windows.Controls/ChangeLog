@@ -1,3 +1,7 @@
+2007-08-06  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* GridSplitter.cs: Added.
+
 2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* UserControl.cs: Implemented(?).
