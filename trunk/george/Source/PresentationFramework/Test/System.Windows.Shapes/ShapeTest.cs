@@ -151,6 +151,31 @@ namespace System.Windows.Shapes {
 		}
 		#endregion
 
+		#region ArrangeOverrideCallsDefiningGeometryStretchFill
+		[Test]
+		public void ArrangeOverrideCallsDefiningGeometryStretchFill() {
+			new ArrangeOverrideCallsDefiningGeometryStretchFillShape();
+		}
+
+		class ArrangeOverrideCallsDefiningGeometryStretchFillShape : Shape {
+			int calls;
+
+			public ArrangeOverrideCallsDefiningGeometryStretchFillShape() {
+				Stretch = Stretch.Fill;
+				Assert.AreEqual(calls, 0, "1");
+				ArrangeOverride(new Size(100, 100));
+				Assert.AreEqual(calls, 1, "2");
+			}
+
+			protected override Geometry DefiningGeometry {
+				get {
+					calls++;
+					return new RectangleGeometry();
+				}
+			}
+		}
+		#endregion
+
 		#region Layout
 		[Test]
 		public void Layout() {
