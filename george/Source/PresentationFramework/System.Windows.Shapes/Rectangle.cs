@@ -1,24 +1,45 @@
+using System.ComponentModel;
 using System.Windows.Media;
 #if Implementation
-using System.Windows;
-using System.Windows.Shapes;
 using System;
+using System.Windows;
 namespace Mono.System.Windows.Shapes {
 #else
 namespace System.Windows.Shapes {
 #endif
-	public sealed class Ellipse : global::System.Windows.Shapes.Shape {
+	public sealed class Rectangle : global::System.Windows.Shapes.Shape {
+		#region Public Fields
+		#region Dependency Properties
+		public static readonly DependencyProperty RadiusXProperty = DependencyProperty.Register("RadiusX", typeof(double), typeof(Rectangle), new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+		public static readonly DependencyProperty RadiusYProperty = DependencyProperty.Register("RadiusY", typeof(double), typeof(Rectangle), new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+		#endregion
+		#endregion
+
 		#region Private Fields
 		Geometry rendered_geometry;
 		#endregion
 
 		#region Public Constructors
-		public Ellipse() {
+		public Rectangle() {
 			Stretch = Stretch.Fill;
 		}
 		#endregion
 
 		#region Public Properties
+		#region Dependency Properties
+		[TypeConverter(typeof(LengthConverter))]
+		public double RadiusX {
+			get { return (double)GetValue(RadiusXProperty); }
+			set { SetValue(RadiusXProperty, value); }
+		}
+
+		[TypeConverter(typeof(LengthConverter))]
+		public double RadiusY {
+			get { return (double)GetValue(RadiusYProperty); }
+			set { SetValue(RadiusYProperty, value); }
+		}
+		#endregion
+
 		public override Transform GeometryTransform {
 			get {
 				return base.GeometryTransform;
@@ -26,7 +47,9 @@ namespace System.Windows.Shapes {
 		}
 
 		public override Geometry RenderedGeometry {
-			get { return rendered_geometry ?? base.RenderedGeometry; }
+			get {
+				return rendered_geometry ?? new RectangleGeometry();
+			}
 		}
 		#endregion
 
@@ -35,26 +58,13 @@ namespace System.Windows.Shapes {
 			get {
 				double width;
 				double height;
-				switch (Stretch) {
-				case Stretch.None:
-					width = height = 0;
-					break;
-				case Stretch.Fill:
-					width = ActualWidth;
-					height = ActualHeight;
-					break;
-				case Stretch.Uniform:
-					width = height = Math.Min(ActualWidth, ActualHeight);
-					break;
-				default:
-					width = height = Math.Max(ActualWidth, ActualHeight);
-					break;
-				}
+				width = ActualWidth;
+				height = ActualHeight;
 				double stroke_thickness = Stroke == null ? 0 : StrokeThickness;
-				if (width >= stroke_thickness && height >= stroke_thickness)
-					return new EllipseGeometry(new Rect(stroke_thickness / 2, stroke_thickness / 2, width - stroke_thickness, height - stroke_thickness));
+				if (width >= stroke_thickness && height > stroke_thickness)
+					return new RectangleGeometry(new Rect(stroke_thickness / 2, stroke_thickness / 2, width - stroke_thickness, height - stroke_thickness), RadiusX, RadiusY);
 				else
-					return new EllipseGeometry();
+					return new RectangleGeometry();
 			}
 		}
 		#endregion
@@ -79,7 +89,7 @@ namespace System.Windows.Shapes {
 			}
 		}
 		#endregion
-
+		
 		#region Private Methods
 		Pen CreatePen() {
 			Pen result = new Pen(Stroke, StrokeThickness);
