@@ -52,6 +52,12 @@ namespace CBinding
 			get;
 		}
 		
+		public string CompilerCommand {
+			get { return compilerCommand; }
+		}
+		
+		public abstract string GetCompilerFlags (CProjectConfiguration configuration);
+		
 		public abstract ICompilerResult Compile (
 			ProjectFileCollection projectFiles,
 		    ProjectPackageCollection packages,

@@ -1,13 +1,13 @@
 <Project name="CBinding" fileversion="2.0" language="C#" clr-version="Net_2_0" ctype="DotNetProject">
   <Configurations active="Debug">
     <Configuration name="Debug" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Debug" assemblyKeyFile="./" assembly="CBinding" />
+      <Output directory="../../build/AddIns/BackendBindings/" assemblyKeyFile="./" assembly="CBinding" />
       <Build debugmode="True" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" win32Icon="./" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release" ctype="DotNetProjectConfiguration">
-      <Output directory="./bin/Release" assembly="CBinding" />
+      <Output directory="../../build/AddIns/BackendBindings/" assembly="CBinding" />
       <Build debugmode="False" target="Library" />
       <Execution runwithwarnings="True" consolepause="False" runtime="MsNet" clr-version="Net_2_0" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" generatexmldocumentation="False" win32Icon="./" ctype="CSharpCompilerParameters" />
@@ -15,7 +15,7 @@
   </Configurations>
   <Contents>
     <File name="./Makefile.am" subtype="Code" buildaction="Nothing" />
-    <File name="./CBinding.addin.xml" subtype="Code" buildaction="Nothing" />
+    <File name="./CBinding.addin.xml" subtype="Code" buildaction="FileCopy" />
     <File name="./icons/C.Project.Empty" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./templates/EmptyCProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./templates/EmptyCSourceFile.xft.xml" subtype="Code" buildaction="EmbedAsResource" />
@@ -130,7 +130,7 @@
     <ProjectReference type="Project" localcopy="False" refto="MonoDevelop.SourceEditor" />
     <ProjectReference type="Gac" localcopy="False" refto="glib-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
-  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am">
+  <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="./Makefile.am">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar />
     <ResourcesVar Sync="True" Name="RES" />
