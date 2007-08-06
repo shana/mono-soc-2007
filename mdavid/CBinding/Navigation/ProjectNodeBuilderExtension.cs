@@ -62,7 +62,7 @@ namespace CBinding.Navigation
 		
 		protected override void Initialize ()
 		{
-			finishedBuildingTreeHandler = (ClassPadEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ClassPadEventHandler (OnFinishedBuildingTree));
+			finishedBuildingTreeHandler = (ClassPadEventHandler)DispatchService.GuiDispatch (new ClassPadEventHandler (OnFinishedBuildingTree));
 //			FinishedBuildingTree += finishedBuildingTreeHandler;
 			TagDatabaseManager.Instance.FileUpdated += finishedBuildingTreeHandler;
 		}

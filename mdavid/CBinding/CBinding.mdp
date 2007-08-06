@@ -130,7 +130,6 @@
     <ProjectReference type="Project" localcopy="False" refto="MonoDevelop.SourceEditor" />
     <ProjectReference type="Gac" localcopy="False" refto="glib-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
-  <Deployment.LinuxDeployData scriptName="cbinding" />
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar />
@@ -140,5 +139,6 @@
     <AsmRefVar />
     <ProjectRefVar />
   </MonoDevelop.Autotools.MakefileInfo>
+  <Deployment.LinuxDeployData scriptName="cbinding" />
   <GtkDesignInfo partialTypes="True" />
 </Project>
