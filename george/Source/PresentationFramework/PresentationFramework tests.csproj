@@ -50,6 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Test\System.Windows.Shapes\RectangleTest.cs" />
+    <Compile Include="Test\System.Windows.Shapes\PathTest.cs" />
+    <Compile Include="Test\System.Windows.Shapes\LineTest.cs" />
     <Compile Include="Test\System.Windows.Shapes\ShapeTest.cs" />
     <Compile Include="Test\System.Windows.Shapes\EllipseTest.cs" />
     <Compile Include="Test\System.Windows.Controls.Primitives\BulletDecoratorTest.cs" />
