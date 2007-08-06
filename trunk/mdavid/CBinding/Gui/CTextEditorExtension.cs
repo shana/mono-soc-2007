@@ -165,30 +165,14 @@ namespace CBinding
 			
 			CompletionDataProvider provider = new CompletionDataProvider ();
 			
-			foreach (Namespace n in info.Namespaces)
-				if (n.Parent == null)
-					provider.AddCompletionData (new CompletionData (n));
+			foreach (LanguageItem li in info.Containers ())
+				if (li.Parent == null)
+					provider.AddCompletionData (new CompletionData (li));
 			
 			foreach (Function f in info.Functions)
 				if (f.Parent == null)
 					provider.AddCompletionData (new CompletionData (f));
-			
-			foreach (Class c in info.Classes)
-				if (c.Parent == null)
-					provider.AddCompletionData (new CompletionData (c));
-			
-			foreach (Structure s in info.Structures)
-				if (s.Parent == null)
-					provider.AddCompletionData (new CompletionData (s));
-			
-			foreach (Union u in info.Unions)
-				if (u.Parent == null)
-					provider.AddCompletionData (new CompletionData (u));
-			
-			foreach (Enumeration e in info.Enumerations)
-				if (e.Parent == null)
-					provider.AddCompletionData (new CompletionData (e));
-			
+
 			foreach (Enumerator e in info.Enumerators)
 				provider.AddCompletionData (new CompletionData (e));
 			

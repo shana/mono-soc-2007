@@ -1,5 +1,9 @@
 2007-08-06  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Gui/DataProvider.cs: Use correct icons.
+
+2007-08-06  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Navigation/ProjectNodeBuilderExtension.cs,
 	  ProjectPad/ProjectPackagesFolderNodeBuilder.cs: Adjusted to new API
 	  changes.
