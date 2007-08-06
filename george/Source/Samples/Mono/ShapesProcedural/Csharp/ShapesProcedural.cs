@@ -11,12 +11,12 @@ namespace ShapesProcedural
     public class app : Application
     {
         Border myBorder;
-        Rectangle myRect;
+		Mono.System.Windows.Shapes.Rectangle myRect;
 		Mono.System.Windows.Shapes.Ellipse myEllipse;
-        Line myLine;
-        Path myPath;
-        Polygon myPolygon;
-        Polyline myPolyline;
+		Mono.System.Windows.Shapes.Line myLine;
+		Mono.System.Windows.Shapes.Path myPath;
+		Mono.System.Windows.Shapes.Polygon myPolygon;
+        Mono.System.Windows.Shapes.Polyline myPolyline;
         Grid myGrid;
         TextBlock myTextBlock;
         ColumnDefinition myColDef1;
@@ -83,7 +83,7 @@ namespace ShapesProcedural
 
 
             // Add a Rectangle Element
-            myRect = new Rectangle();
+			myRect = new Mono.System.Windows.Shapes.Rectangle();
             myRect.Stroke = Brushes.Black;
             myRect.Fill = Brushes.SkyBlue;
             myRect.HorizontalAlignment = HorizontalAlignment.Left;
@@ -123,7 +123,7 @@ namespace ShapesProcedural
 
 
             // Add a Line Element
-            myLine = new Line();
+			myLine = new Mono.System.Windows.Shapes.Line();
             myLine.Stroke = Brushes.LightSteelBlue;
             myLine.X1 = 1;
             myLine.X2 = 50;
@@ -145,7 +145,7 @@ namespace ShapesProcedural
 
 
             //Add the Path Element
-            myPath = new Path();
+			myPath = new Mono.System.Windows.Shapes.Path();
             myPath.Stroke = Brushes.Black;
             myPath.Fill = Brushes.MediumSlateBlue;
             myPath.StrokeThickness = 4;
@@ -169,7 +169,7 @@ namespace ShapesProcedural
 
 
             //Add the Polygon Element
-            myPolygon = new Polygon();
+			myPolygon = new Mono.System.Windows.Shapes.Polygon();
             myPolygon.Stroke = Brushes.Black;
             myPolygon.Fill = Brushes.LightSeaGreen;
             myPolygon.StrokeThickness = 2;
@@ -196,7 +196,7 @@ namespace ShapesProcedural
 
 
             // Add the Polyline Element
-            myPolyline = new Polyline();
+			myPolyline = new Mono.System.Windows.Shapes.Polyline();
             myPolyline.Stroke = Brushes.SlateGray;
             myPolyline.StrokeThickness = 2;
             myPolyline.FillRule = FillRule.EvenOdd;
