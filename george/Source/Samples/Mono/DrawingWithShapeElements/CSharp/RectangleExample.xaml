@@ -2,7 +2,8 @@
 <Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Microsoft.Samples.Graphics.RectangleExample"
-    WindowTitle="Rectangle Example">
+    WindowTitle="Rectangle Example"
+	xmlns:mono_sytem_windows_shapes="clr-namespace:Mono.System.Windows.Shapes;assembly=Mono.PresentationFramework">
 <StackPanel>
   <Border>
     <Border.Background>
@@ -24,17 +25,17 @@
   <Canvas Width="120" Height="200" >
 
   <!-- Draws a 100 by 50 rectangle with a solid blue fill. -->
-  <Rectangle
-    Width="100"
+	  <mono_sytem_windows_shapes:Rectangle
+		Width="100"
     Height="50"
     Fill="Blue"
     Canvas.Left="10"
     Canvas.Top="25" />
 
-  <!-- Draws a 100 by 50 rectangle with a solid blue fill,
+	  <!-- Draws a 100 by 50 rectangle with a solid blue fill,
        a black outline, and rounded corners. -->
-  <Rectangle
-    Width="100"
+	  <mono_sytem_windows_shapes:Rectangle
+		Width="100"
     Height="50"
     Fill="Blue"
     Stroke="Black" StrokeThickness="4"

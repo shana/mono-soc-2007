@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Microsoft.Samples.Graphics.EllipseExample"
-    WindowTitle="Ellipse Example">
+    WindowTitle="Ellipse Example"
+	xmlns:mono_sytem_windows_shapes="clr-namespace:Mono.System.Windows.Shapes;assembly=Mono.PresentationFramework">
 <StackPanel>    
 <Border>
   <Border.Background>
@@ -24,16 +25,16 @@
   <Canvas Height="200" Width="200">
 
     <!-- Draws an oval with a blue interior. -->
-    <Ellipse
-      Width="100"
+	  <mono_sytem_windows_shapes:Ellipse
+		Width="100"
       Height="50"
       Fill="Blue"
       Canvas.Left="10"
       Canvas.Top="25" />
 
     <!-- Draws an oval with a blue interior and a black outline. -->
-    <Ellipse
-      Width="100"
+	  <mono_sytem_windows_shapes:Ellipse
+		Width="100"
       Height="50"
       Fill="Blue"
       Stroke="Black"
@@ -42,16 +43,16 @@
       Canvas.Top="100"/>
 
     <!-- Draws a circle with a blue interior. -->
-    <Ellipse
-      Width="50"
+	  <mono_sytem_windows_shapes:Ellipse
+		Width="50"
       Height="50"
       Fill="Blue"
       Canvas.Left="135"
       Canvas.Top="25"/>
 
-    <!-- Draws a circle with a blue interior and a black outline. -->
-    <Ellipse
-      Width="50"
+	  <!-- Draws a circle with a blue interior and a black outline. -->
+	  <mono_sytem_windows_shapes:Ellipse
+		Width="50"
       Height="50"
       Stroke="Black"
       StrokeThickness="4"
