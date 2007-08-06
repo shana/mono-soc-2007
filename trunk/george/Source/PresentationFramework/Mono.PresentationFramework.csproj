@@ -118,7 +118,12 @@
     <Compile Include="System.Windows.Controls\WrapPanel.cs" />
     <Compile Include="System.Windows.Data\CollectionView.cs" />
     <None Include="System.Windows.Shapes\ChangeLog" />
+    <Compile Include="System.Windows.Shapes\Polyline.cs" />
+    <Compile Include="System.Windows.Shapes\Polygon.cs" />
     <Compile Include="System.Windows.Shapes\Ellipse.cs" />
+    <Compile Include="System.Windows.Shapes\Line.cs" />
+    <Compile Include="System.Windows.Shapes\Path.cs" />
+    <Compile Include="System.Windows.Shapes\Rectangle.cs" />
     <Compile Include="System.Windows.Shapes\Shape.cs" />
     <Compile Include="Theme.cs" />
   </ItemGroup>
