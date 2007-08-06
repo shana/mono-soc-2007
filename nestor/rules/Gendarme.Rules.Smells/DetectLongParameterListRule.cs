@@ -38,8 +38,16 @@ namespace Gendarme.Rules.Smells {
 	//SUGGESTION: Different value for public / private / protected methods *may*
 	//be useful.
 	public class DetectLongParameterListRule : IMethodRule {
-
-		public const int MaxParameters = 6;
+		private int maxParameters = 6;
+	
+		public int MaxParameters {
+			get {
+				return maxParameters;
+			}
+			set {
+				maxParameters = value;
+			}
+		}
 
 		private bool IsOverloaded (MethodDefinition method) 
 		{
