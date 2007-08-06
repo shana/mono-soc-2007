@@ -71,6 +71,9 @@ namespace CBinding
 			int cursor = editor.CursorPosition;
 			int i = ctx.TriggerOffset;
 			
+			if (editor.GetCharAt (i) == ')')
+				return -1;
+			
 			if (i > cursor)
 				return -1;
 			else if (i == cursor)
@@ -158,7 +161,7 @@ namespace CBinding
 				image = Stock.Class;
 			else if (item is Structure)
 				image = Stock.Struct;
-			else if (item is Union)
+			else if (item is Union) // TODO: Use my own icon
 				image = Stock.Struct;
 			else if (item is Enumeration)
 				image = Stock.Enum;
@@ -170,6 +173,12 @@ namespace CBinding
 				image = Stock.NameSpace;
 			else if (item is Typedef)
 				image = Stock.Interface;
+			else if (item is Member)
+				image = Stock.Field;
+			else if (item is Variable)
+				image = Stock.Field;
+			else if (item is Macro)
+				image = Stock.Literal;
 			else
 				image = Stock.Literal;
 			
