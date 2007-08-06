@@ -1,5 +1,9 @@
 2007-08-06  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Ellipse.cs, Rectangle.cs: Now they render the stroke when the fill is null.
+	
+2007-08-06  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Line.cs, Path.cs, Polygon.cs, Polyline.cs, Rectangle.cs: Added.
 	* Ellipse.cs: Added a temporary fix for a crash.
 	
