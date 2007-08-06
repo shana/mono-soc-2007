@@ -82,7 +82,7 @@ namespace System.Windows.Shapes {
 			base.OnRender(drawingContext);
 			rendered_geometry = DefiningGeometry;
 			Brush fill = Fill;
-			if (fill != null) {
+			if (fill != null || Stroke != null) {
 				//drawingContext.PushClip(new RectangleGeometry(new Rect(0, 0, ActualWidth, ActualHeight)));
 				drawingContext.DrawGeometry(fill, CreatePen(), DefiningGeometry);
 				//drawingContext.Pop();
