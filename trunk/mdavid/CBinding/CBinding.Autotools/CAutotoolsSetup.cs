@@ -1,6 +1,5 @@
 //
-// ICompiler.cs: interface that must be implemented by any class that wants
-// to provide a compiler for the CBinding addin.
+// CAutotoolsSetup.cs
 //
 // Authors:
 //   Marcos David Marin Amador <MarcosMarin@gmail.com>
@@ -30,34 +29,46 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using Mono.Addins;
+using System;
 
-using MonoDevelop.Core;
 using MonoDevelop.Projects;
+using MonoDevelop.Autotools;
 
-namespace CBinding
+using CBinding;
+
+namespace CBinding.Autotools
 {
-	[TypeExtensionPoint ("/CBinding/Compilers")]
-	public interface ICompiler
+	public class CAutotoolsSetup : ISimpleAutotoolsSetup
 	{
-		string Name {
-			get;
+		public string GetCompilerCommand (Project project, string configuration)
+		{
+			if (!CanDeploy (project))
+				throw new Exception ("Not a deployable project.");
+			
+			CProject cproj = project as CProject;
+			
+			return cproj.Compiler.CompilerCommand;
 		}
-		
-		Language Language {
-			get;
+
+		public string GetCompilerFlags (Project project, string configuration)
+		{
+			if (!CanDeploy (project))
+				throw new Exception ("Not a deployable project.");
+			
+			CProjectConfiguration config = project.Configurations[configuration] as CProjectConfiguration;
+			
+			if (config == null)
+				return string.Empty;
+			
+			CProject cproj = project as CProject;
+			
+			return cproj.Compiler.GetCompilerFlags (config);
 		}
-		
-		string CompilerCommand {
-			get;
+
+		public bool CanDeploy (Project project)
+		{
+			Console.WriteLine ("THIS IS BEIGN CALLED!");
+			return project is CProject;
 		}
-		
-		string GetCompilerFlags (CProjectConfiguration configuration);
-		
-		ICompilerResult Compile (
-			ProjectFileCollection projectFiles,
-		    ProjectPackageCollection packages,
-		    CProjectConfiguration configuration,
-		    IProgressMonitor monitor);
 	}
 }

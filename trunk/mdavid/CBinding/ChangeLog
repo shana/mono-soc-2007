@@ -1,5 +1,14 @@
 2007-08-06  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* CBinding.addin.xml, CBinding.mdp, CBinding.mds,
+	  CBinding.Autotools/AssemblyInfo.cs,
+	  CBinding.Autotools/CAutotoolsSetup.cs,
+	  CBinding.Autotools/CBinding.Autotools.mdp, Compiler/CCompiler.cs,
+	  Compiler/ICompiler.cs, Compiler/GNUCompiler.cs: Started work on
+	  supporting makefile generation.
+
+2007-08-06  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Gui/DataProvider.cs: Use correct icons.
 
 2007-08-06  Marcos David Marín Amador <MarcosMarin@gmail.com> 

@@ -10,16 +10,18 @@
 
 	<Runtime>
 		<Import assembly = "CBinding.dll"/>
+		<Import assembly = "CBinding.Autotools.dll"/> <!-- temp -->
 		<!-- This is here so that the delete command shows in the package node's context menu -->
 		<Import assembly = "../MonoDevelop.Ide.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<AddIn id = "MonoDevelop.Core" version = "0.14.0"/>
-		<AddIn id = "MonoDevelop.Core.Gui" version = "0.14.0"/>
-		<AddIn id = "MonoDevelop.Ide" version = "0.14.0"/>
-		<AddIn id = "MonoDevelop.Projects" version = "0.14.0"/>
-		<AddIn id = "MonoDevelop.Projects.Gui" version = "0.14.0"/>
+		<AddIn id = "MonoDevelop.Core" version = "0.15.0"/>
+		<AddIn id = "MonoDevelop.Core.Gui" version = "0.15.0"/>
+		<AddIn id = "MonoDevelop.Ide" version = "0.15.0"/>
+		<AddIn id = "MonoDevelop.Projects" version = "0.15.0"/>
+		<AddIn id = "MonoDevelop.Projects.Gui" version = "0.15.0"/>
+		<Addin id = "MonoDevelop.Autotools" version = "0.15.0"/> <!-- temp -->
 	</Dependencies>
 
 	<Extension path = "/SharpDevelop/Workbench/FileFilter">
@@ -159,4 +161,23 @@
 		<DataType class = "CBinding.ProjectPackage"/>
 	</Extension>
 	
+	<!-- temp -->
+	<Extension path = "/Autotools/SimpleSetups">
+		<Class class = "CBinding.Autotools.CAutotoolsSetup"/>
+	</Extension>
+	<!--
+	<Module>
+	    <Runtime>
+	        <Import assembly = "CBinding.Autotools.dll"/>
+	    </Runtime>
+	    
+		<Dependencies>
+			<Addin id = "MonoDevelop.Autotools" version = "0.15.0"/>
+		</Dependencies>
+		
+		<Extension path = "/Autotools/SimpleSetups">
+			<Class class = "CBinding.Autotools.CAutotoolsSetup"/>
+		</Extension>
+	</Module>
+	-->
 </AddIn>

@@ -56,12 +56,61 @@ namespace CBinding
 		    CProjectConfiguration configuration,
 		    IProgressMonitor monitor)
 		{
-			StringBuilder args = new StringBuilder ();
 			CompilerResults cr = new CompilerResults (new TempFileCollection ());
 			bool res = true;
+			string args = GetCompilerFlags (configuration);
 			
 			string outputName = Path.Combine (configuration.OutputDirectory,
 			                                  configuration.CompiledOutputName);
+			
+			// Precompile header files and place them in .prec/<config_name>/
+			string precdir = Path.Combine (configuration.SourceDirectory, ".prec");
+			if (!Directory.Exists (precdir))
+				Directory.CreateDirectory (precdir);
+			precdir = Path.Combine (precdir, configuration.Name);
+			if (!Directory.Exists (precdir))
+				Directory.CreateDirectory (precdir);
+			
+			PrecompileHeaders (projectFiles, configuration, args);
+			
+			foreach (ProjectFile f in projectFiles) {
+				if (f.Subtype == Subtype.Directory) continue;
+				
+				if (f.BuildAction == BuildAction.Compile) {
+					if (NeedsCompiling (f))
+						res = DoCompilation (f, args, packages, monitor, cr);
+				}
+				else
+					res = true;
+				
+				if (!res) break;
+			}
+
+			if (res) {
+				switch (configuration.CompileTarget)
+				{
+				case CBinding.CompileTarget.Bin:
+					MakeBin (
+						projectFiles, packages, configuration, cr, monitor, outputName);
+					break;
+				case CBinding.CompileTarget.StaticLibrary:
+					MakeStaticLibrary (
+						projectFiles, monitor, outputName);
+					break;
+				case CBinding.CompileTarget.SharedLibrary:
+					MakeSharedLibrary (
+						projectFiles, packages, configuration, cr, monitor, outputName);
+					break;
+				}
+			}
+			
+			return new DefaultCompilerResult (cr, "");
+		}
+		
+		public override string GetCompilerFlags (CProjectConfiguration configuration)
+		{
+			StringBuilder args = new StringBuilder ();
+			string precdir = Path.Combine (configuration.SourceDirectory, ".prec");
 			
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
@@ -97,50 +146,9 @@ namespace CBinding
 				foreach (string inc in configuration.Includes)
 					args.Append ("-I" + inc + " ");
 			
-			// Precompile header files and place them in .prec/<config_name>/
-			string precdir = Path.Combine (configuration.SourceDirectory, ".prec");
-			if (!Directory.Exists (precdir))
-				Directory.CreateDirectory (precdir);
-			precdir = Path.Combine (precdir, configuration.Name);
-			if (!Directory.Exists (precdir))
-				Directory.CreateDirectory (precdir);
-			
 			args.Append ("-I" + precdir);
 			
-			PrecompileHeaders (projectFiles, configuration, args.ToString ());
-			
-			foreach (ProjectFile f in projectFiles) {
-				if (f.Subtype == Subtype.Directory) continue;
-				
-				if (f.BuildAction == BuildAction.Compile) {
-					if (NeedsCompiling (f))
-						res = DoCompilation (f, args.ToString (), packages, monitor, cr);
-				}
-				else
-					res = true;
-				
-				if (!res) break;
-			}
-
-			if (res) {
-				switch (configuration.CompileTarget)
-				{
-				case CBinding.CompileTarget.Bin:
-					MakeBin (
-						projectFiles, packages, configuration, cr, monitor, outputName);
-					break;
-				case CBinding.CompileTarget.StaticLibrary:
-					MakeStaticLibrary (
-						projectFiles, monitor, outputName);
-					break;
-				case CBinding.CompileTarget.SharedLibrary:
-					MakeSharedLibrary (
-						projectFiles, packages, configuration, cr, monitor, outputName);
-					break;
-				}
-			}
-			
-			return new DefaultCompilerResult (cr, "");
+			return args.ToString ();
 		}
 		
 		private bool NeedsCompiling (ProjectFile file)
