@@ -110,9 +110,13 @@ namespace System.Windows.Shapes {
 		protected override Size ArrangeOverride(Size finalSize) {
 			if (Stretch == Stretch.None)
 				return finalSize;
-			if (Stretch == Stretch.Fill && Stroke != null) {
-				double stroke_thickness = StrokeThickness;
-				return new Size(stroke_thickness, stroke_thickness);
+			if (Stretch == Stretch.Fill) {
+				//FIXME: How is it used?
+				object dummy = DefiningGeometry;
+				if (Stroke != null) {
+					double stroke_thickness = StrokeThickness;
+					return new Size(stroke_thickness, stroke_thickness);
+				}
 			}
 			return new Size(0, 0);
 		}
@@ -134,6 +138,7 @@ namespace System.Windows.Shapes {
 		}
 		#endregion
 
+		#region Private Methods
 		Pen CreatePen() {
 			Pen result = new Pen(Stroke, StrokeThickness);
 			result.DashStyle = new DashStyle(StrokeDashArray, StrokeDashOffset);
@@ -144,5 +149,6 @@ namespace System.Windows.Shapes {
 			result.MiterLimit = StrokeMiterLimit;
 			return result;
 		}
+		#endregion
 	}
 }

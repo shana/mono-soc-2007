@@ -1,5 +1,9 @@
 2007-08-06  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* Shape.cs: Added a call to pass a test.
+
+2007-08-06  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* Ellipse.cs, Rectangle.cs: Now they render the stroke when the fill is null.
 	
 2007-08-06  George Giolfan  <georgegiolfan@yahoo.com>
