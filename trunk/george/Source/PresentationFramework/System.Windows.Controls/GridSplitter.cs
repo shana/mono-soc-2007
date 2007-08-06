@@ -1,3 +1,5 @@
+using System.Windows.Input;
+using System.Windows.Automation.Peers;
 #if Implementation
 using System.Windows;
 using Mono.System.Windows.Controls.Primitives;
@@ -60,6 +62,25 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Protected Methods
+		protected override AutomationPeer OnCreateAutomationPeer() {
+#if Implementation
+			return null;
+#else
+			return new GridSplitterAutomationPeer(this);
+#endif
+		}
+
+		protected override void OnKeyDown(KeyEventArgs e) {
+			base.OnKeyDown(e);
+		}
+
+		protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e) {
+			base.OnLostKeyboardFocus(e);
+		}
+
+		protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
+			base.OnRenderSizeChanged(sizeInfo);
+		}
 		#endregion
 	}
 }
