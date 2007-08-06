@@ -74,8 +74,8 @@ namespace CBinding.ProjectPad
 		
 		protected override void Initialize ()
 		{
-			addedHandler = (ProjectPackageEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnAddPackage));
-			removedHandler = (ProjectPackageEventHandler)MonoDevelop.Core.Gui.Services.DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnRemovePackage));
+			addedHandler = (ProjectPackageEventHandler)DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnAddPackage));
+			removedHandler = (ProjectPackageEventHandler)DispatchService.GuiDispatch (new ProjectPackageEventHandler (OnRemovePackage));
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)

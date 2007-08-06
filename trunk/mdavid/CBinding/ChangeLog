@@ -1,3 +1,9 @@
+2007-08-06  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/ProjectNodeBuilderExtension.cs,
+	  ProjectPad/ProjectPackagesFolderNodeBuilder.cs: Adjusted to new API
+	  changes.
+
 2007-08-03  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/CTextEditorExtension.cs: Added support for '::' completion.
