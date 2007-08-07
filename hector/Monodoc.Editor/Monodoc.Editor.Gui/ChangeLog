@@ -1,5 +1,10 @@
 2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* DocumentBufferArchiver.cs: FormaEnd is called before the start offset
+	  of an element is saved.
+
+2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentBufferArchiver.cs: Removed commented lines.
 	
 	  Moved AddNewLine method to DocumentUtils class, change old calls to
