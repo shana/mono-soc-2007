@@ -10,7 +10,7 @@ using System.Windows.Controls.Primitives;
 namespace System.Windows.Controls {
 #endif
 	[StyleTypedProperty(Property = "PreviewStyle", StyleTargetType = typeof(Control))]
-	public class GridSplitter : Thumb {
+	public class GridSplitter : global::System.Windows.Controls.Primitives.Thumb {
 		#region Public Fields
 		#region Dependency Properties
 		public static readonly DependencyProperty DragIncrementProperty = DependencyProperty.Register("DragIncrement", typeof(double), typeof(GridSplitter), new FrameworkPropertyMetadata(1D));
@@ -20,6 +20,16 @@ namespace System.Windows.Controls {
 		public static readonly DependencyProperty ResizeDirectionProperty = DependencyProperty.Register("ResizeDirection", typeof(GridResizeDirection), typeof(GridSplitter), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty ShowsPreviewProperty = DependencyProperty.Register("ShowsPreview", typeof(bool), typeof(GridSplitter), new FrameworkPropertyMetadata());
 		#endregion
+		#endregion
+
+		#region Static Constructor
+		static GridSplitter() {
+#if Implementation
+			Theme.Load();
+#endif
+			HorizontalAlignmentProperty.AddOwner(typeof(GridSplitter), new FrameworkPropertyMetadata(HorizontalAlignment.Right));
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(GridSplitter), new FrameworkPropertyMetadata(typeof(GridSplitter)));
+		}
 		#endregion
 
 		#region Public Constructors
@@ -80,7 +90,21 @@ namespace System.Windows.Controls {
 
 		protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
 			base.OnRenderSizeChanged(sizeInfo);
+			Cursor = GetActualResizeDirection() == GridResizeDirection.Rows ? Cursors.SizeNS : Cursors.SizeWE;
 		}
 		#endregion
+
+		GridResizeDirection GetActualResizeDirection() {
+			GridResizeDirection value = ResizeDirection;
+			if (value == GridResizeDirection.Auto)
+				if (HorizontalAlignment != HorizontalAlignment.Stretch)
+					return GridResizeDirection.Columns;
+				else if (VerticalAlignment != VerticalAlignment.Stretch)
+					return GridResizeDirection.Rows;
+				else
+					return ActualHeight >= ActualWidth ? GridResizeDirection.Columns : GridResizeDirection.Rows;
+			else
+				return value;
+		}
 	}
 }
