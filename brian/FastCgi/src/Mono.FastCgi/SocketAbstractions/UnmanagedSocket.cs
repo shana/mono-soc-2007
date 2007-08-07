@@ -36,10 +36,7 @@ using System.IO;
 namespace Mono.FastCgi {
 	internal class UnmanagedSocket : Socket
 	{
-		private const int O_NONBLOCK = 2048;
-		
 		private IntPtr socket;
-		private bool blocking = true;
 		private bool connected = false;
 		
 		unsafe public UnmanagedSocket (IntPtr socket)
@@ -104,27 +101,6 @@ namespace Mono.FastCgi {
 			
 			connected = false;
 			throw new sock.SocketException ();
-		}
-		
-		public override bool Blocking {
-			get {return blocking;}
-			set {
-				long ret = Syscall.fcntl ((int) socket,
-					FcntlCommand.F_GETFL, 0L);
-				if (ret == -1)
-					throw new sock.SocketException ();
-				
-				
-				if (value)
-					ret |= O_NONBLOCK;
-				else
-					ret &= ~O_NONBLOCK;
-				
-				ret = Syscall.fcntl ((int) socket,
-					FcntlCommand.F_SETFL, ret);
-				
-				blocking = value;
-			}
 		}
 		
 		public override void Listen (int backlog)

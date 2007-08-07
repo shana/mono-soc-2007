@@ -71,11 +71,6 @@ namespace Mono.FastCgi {
 			return socket.Send (data, offset, size, flags);
 		}
 		
-		public override bool Blocking {
-			get {return socket.Blocking;}
-			set {socket.Blocking = value;}
-		}
-		
 		public override void Listen (int backlog)
 		{
 			socket.Listen (backlog);

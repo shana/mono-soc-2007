@@ -324,7 +324,6 @@ namespace Mono.FastCgi {
 				throw new InvalidOperationException (
 					Strings.Server_AlreadyStarted);
 			
-			listen_socket.Blocking = false;
 			listen_socket.Listen (500);
 			
 			runner = new Thread (new ThreadStart (RunServer));
@@ -643,7 +642,6 @@ namespace Mono.FastCgi {
 			
 			try {
 				Socket accepted = listen_socket.EndAccept (ares);
-				accepted.Blocking = true;
 				connection = new Connection (accepted, this);
 				connections.Add (connection);
 			} catch (Exception e) {
