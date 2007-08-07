@@ -10,7 +10,7 @@
       <widget class="Gtk.Notebook" id="notebook1">
         <property name="MemberName" />
         <property name="CanFocus">True</property>
-        <property name="CurrentPage">0</property>
+        <property name="CurrentPage">2</property>
         <child>
           <widget class="Gtk.VPaned" id="vpaned2">
             <property name="MemberName" />
@@ -426,10 +426,12 @@ Example:
             <child>
               <widget class="Gtk.Button" id="addLibButton">
                 <property name="MemberName" />
+                <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Add</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Clicked" handler="OnLibAdded" />
               </widget>
               <packing>
                 <property name="LeftAttach">2</property>
@@ -468,6 +470,8 @@ Example:
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
+                <signal name="Changed" handler="OnLibAddEntryChanged" />
+                <signal name="Activated" handler="OnLibAddEntryActivated" />
               </widget>
               <packing>
                 <property name="LeftAttach">1</property>
@@ -494,6 +498,7 @@ Example:
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
                     <property name="HeadersClickable">True</property>
+                    <signal name="CursorChanged" handler="OnLibTreeViewCursorChanged" />
                   </widget>
                 </child>
               </widget>
@@ -522,6 +527,7 @@ Example:
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">Browse...</property>
                     <property name="UseUnderline">True</property>
+                    <signal name="Clicked" handler="OnBrowseButtonClick" />
                   </widget>
                   <packing>
                     <property name="Position">0</property>
@@ -533,10 +539,13 @@ Example:
                 <child>
                   <widget class="Gtk.Button" id="removeLibButton">
                     <property name="MemberName" />
+                    <property name="Sensitive">False</property>
                     <property name="CanFocus">True</property>
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">Remove</property>
                     <property name="UseUnderline">True</property>
+                    <signal name="Clicked" handler="OnRemoveLibButtonClicked" />
+                    <signal name="Clicked" handler="OnLibRemoved" />
                   </widget>
                   <packing>
                     <property name="Position">1</property>
@@ -583,7 +592,7 @@ Example:
           <widget class="Gtk.VPaned" id="vpaned1">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Position">172</property>
+            <property name="Position">189</property>
             <property name="BorderWidth">3</property>
             <child>
               <widget class="Gtk.Table" id="table3">
@@ -598,10 +607,12 @@ Example:
                 <child>
                   <widget class="Gtk.Button" id="includePathAddButton">
                     <property name="MemberName" />
+                    <property name="Sensitive">False</property>
                     <property name="CanFocus">True</property>
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">Add</property>
                     <property name="UseUnderline">True</property>
+                    <signal name="Clicked" handler="OnIncludePathAdded" />
                   </widget>
                   <packing>
                     <property name="LeftAttach">2</property>
@@ -623,6 +634,8 @@ Example:
                     <property name="CanFocus">True</property>
                     <property name="IsEditable">True</property>
                     <property name="InvisibleChar">●</property>
+                    <signal name="Changed" handler="OnIncludePathEntryChanged" />
+                    <signal name="Activated" handler="OnIncludePathEntryActivated" />
                   </widget>
                   <packing>
                     <property name="LeftAttach">1</property>
@@ -666,6 +679,7 @@ Example:
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="HeadersClickable">True</property>
+                        <signal name="CursorChanged" handler="OnIncludePathTreeViewCursorChanged" />
                       </widget>
                     </child>
                   </widget>
@@ -694,6 +708,7 @@ Example:
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Browse...</property>
                         <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnIncludePathBrowseButtonClick" />
                       </widget>
                       <packing>
                         <property name="Position">0</property>
@@ -705,10 +720,13 @@ Example:
                     <child>
                       <widget class="Gtk.Button" id="includePathRemoveButton">
                         <property name="MemberName" />
+                        <property name="Sensitive">False</property>
                         <property name="CanFocus">True</property>
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Remove</property>
                         <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnIncludePathRemoveButtonClicked" />
+                        <signal name="Clicked" handler="OnIncludePathRemoved" />
                       </widget>
                       <packing>
                         <property name="Position">1</property>
@@ -771,10 +789,12 @@ Example:
                 <child>
                   <widget class="Gtk.Button" id="libPathAddButton">
                     <property name="MemberName" />
+                    <property name="Sensitive">False</property>
                     <property name="CanFocus">True</property>
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">Add</property>
                     <property name="UseUnderline">True</property>
+                    <signal name="Clicked" handler="OnLibPathAdded" />
                   </widget>
                   <packing>
                     <property name="LeftAttach">2</property>
@@ -796,6 +816,8 @@ Example:
                     <property name="CanFocus">True</property>
                     <property name="IsEditable">True</property>
                     <property name="InvisibleChar">●</property>
+                    <signal name="Changed" handler="OnLibPathEntryChanged" />
+                    <signal name="Activated" handler="OnLibPathEntryActivated" />
                   </widget>
                   <packing>
                     <property name="LeftAttach">1</property>
@@ -822,6 +844,7 @@ Example:
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="HeadersClickable">True</property>
+                        <signal name="CursorChanged" handler="OnLibPathTreeViewCursorChanged" />
                       </widget>
                     </child>
                   </widget>
@@ -850,6 +873,7 @@ Example:
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Browse...</property>
                         <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnLibPathBrowseButtonClick" />
                       </widget>
                       <packing>
                         <property name="Position">0</property>
@@ -861,10 +885,13 @@ Example:
                     <child>
                       <widget class="Gtk.Button" id="libPathRemoveButton">
                         <property name="MemberName" />
+                        <property name="Sensitive">False</property>
                         <property name="CanFocus">True</property>
                         <property name="Type">TextOnly</property>
                         <property name="Label" translatable="yes">Remove</property>
                         <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnLibPathRemoveButtonClicked" />
+                        <signal name="Clicked" handler="OnLibPathRemoved" />
                       </widget>
                       <packing>
                         <property name="Position">1</property>
@@ -970,7 +997,7 @@ Example:
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="CBinding.AddLibraryDialog" design-size="649 412">
+  <widget class="Gtk.Dialog" id="CBinding.AddLibraryDialog" design-size="648 439">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Add Library</property>
     <property name="Modal">True</property>
@@ -979,10 +1006,12 @@ Example:
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
+        <property name="Spacing">6</property>
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.FileChooserWidget" id="filechooserwidget1">
+          <widget class="Gtk.FileChooserWidget" id="file_chooser_widget">
             <property name="MemberName" />
+            <property name="ShowHidden">True</property>
           </widget>
           <packing>
             <property name="Position">0</property>
@@ -1007,6 +1036,7 @@ Example:
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
             <property name="ResponseId">-6</property>
+            <signal name="Clicked" handler="OnCancelButtonClick" />
             <property name="label">gtk-cancel</property>
           </widget>
           <packing>
@@ -1023,6 +1053,7 @@ Example:
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
             <property name="ResponseId">-5</property>
+            <signal name="Clicked" handler="OnOkButtonClick" />
             <property name="label">gtk-ok</property>
           </widget>
           <packing>
@@ -1034,7 +1065,7 @@ Example:
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="CBinding.AddPathDialog" design-size="649 413">
+  <widget class="Gtk.Dialog" id="CBinding.AddPathDialog" design-size="649 436">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Add Path</property>
     <property name="Modal">True</property>
@@ -1043,10 +1074,12 @@ Example:
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
+        <property name="Spacing">6</property>
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.FileChooserWidget" id="filechooserwidget1">
+          <widget class="Gtk.FileChooserWidget" id="file_chooser_widget">
             <property name="MemberName" />
+            <property name="ShowHidden">True</property>
           </widget>
           <packing>
             <property name="Position">0</property>
@@ -1071,6 +1104,7 @@ Example:
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
             <property name="ResponseId">-6</property>
+            <signal name="Clicked" handler="OnCancelButtonClick" />
             <property name="label">gtk-cancel</property>
           </widget>
           <packing>
@@ -1087,6 +1121,7 @@ Example:
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
             <property name="ResponseId">-5</property>
+            <signal name="Clicked" handler="OnOkButtonClick" />
             <property name="label">gtk-ok</property>
           </widget>
           <packing>
@@ -1221,6 +1256,7 @@ Example:
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="HeadersClickable">True</property>
+                        <signal name="CursorChanged" handler="OnSelectedPackagesTreeViewCursorChanged" />
                       </widget>
                     </child>
                   </widget>
@@ -1246,12 +1282,15 @@ Example:
                         <property name="MemberName" />
                         <property name="WidthRequest">33</property>
                         <property name="HeightRequest">33</property>
+                        <property name="Sensitive">False</property>
                         <property name="Tooltip">Remove selected package from the project.</property>
                         <property name="CanFocus">True</property>
                         <property name="Type">TextAndIcon</property>
                         <property name="Icon">stock:gtk-remove Menu</property>
                         <property name="Label" />
                         <property name="UseUnderline">True</property>
+                        <signal name="Clicked" handler="OnRemoveButtonClicked" />
+                        <signal name="Clicked" handler="OnRemoveButtonClick" />
                       </widget>
                       <packing>
                         <property name="Position">0</property>
@@ -1309,6 +1348,7 @@ Example:
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
             <property name="ResponseId">-6</property>
+            <signal name="Clicked" handler="OnCancelButtonClick" />
             <property name="label">gtk-cancel</property>
           </widget>
           <packing>
@@ -1325,6 +1365,7 @@ Example:
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-ok</property>
             <property name="ResponseId">-5</property>
+            <signal name="Clicked" handler="OnOkButtonClick" />
             <property name="label">gtk-ok</property>
           </widget>
           <packing>
@@ -1377,6 +1418,7 @@ Example:
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">_Browse</property>
                     <property name="UseUnderline">True</property>
+                    <signal name="Clicked" handler="OnBrowseButtonClick" />
                   </widget>
                   <packing>
                     <property name="Position">1</property>
@@ -1540,9 +1582,11 @@ Example:
             <property name="MemberName" />
             <property name="CanFocus">True</property>
             <property name="Label" translatable="yes">Run on e_xternal console</property>
+            <property name="Active">True</property>
             <property name="DrawIndicator">True</property>
             <property name="HasLabel">True</property>
             <property name="UseUnderline">True</property>
+            <signal name="Clicked" handler="OnExternalConsoleCheckboxClicked" />
           </widget>
           <packing>
             <property name="Position">1</property>
@@ -1554,6 +1598,7 @@ Example:
         <child>
           <widget class="Gtk.CheckButton" id="pauseCheckbox">
             <property name="MemberName" />
+            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="Label" translatable="yes">Pause _console output</property>
             <property name="DrawIndicator">True</property>

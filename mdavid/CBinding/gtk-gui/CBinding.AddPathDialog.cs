@@ -13,7 +13,7 @@ namespace CBinding {
     
     public partial class AddPathDialog {
         
-        private Gtk.FileChooserWidget filechooserwidget1;
+        private Gtk.FileChooserWidget file_chooser_widget;
         
         private Gtk.Button buttonCancel;
         
@@ -28,12 +28,14 @@ namespace CBinding {
             // Internal child CBinding.AddPathDialog.VBox
             Gtk.VBox w1 = this.VBox;
             w1.Name = "dialog1_VBox";
+            w1.Spacing = 6;
             w1.BorderWidth = ((uint)(2));
             // Container child dialog1_VBox.Gtk.Box+BoxChild
-            this.filechooserwidget1 = new Gtk.FileChooserWidget(((Gtk.FileChooserAction)(0)));
-            this.filechooserwidget1.Name = "filechooserwidget1";
-            w1.Add(this.filechooserwidget1);
-            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.filechooserwidget1]));
+            this.file_chooser_widget = new Gtk.FileChooserWidget(((Gtk.FileChooserAction)(0)));
+            this.file_chooser_widget.Name = "file_chooser_widget";
+            this.file_chooser_widget.ShowHidden = true;
+            w1.Add(this.file_chooser_widget);
+            Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(w1[this.file_chooser_widget]));
             w2.Position = 0;
             // Internal child CBinding.AddPathDialog.ActionArea
             Gtk.HButtonBox w3 = this.ActionArea;
@@ -70,8 +72,10 @@ namespace CBinding {
                 this.Child.ShowAll();
             }
             this.DefaultWidth = 649;
-            this.DefaultHeight = 413;
+            this.DefaultHeight = 436;
             this.Show();
+            this.buttonCancel.Clicked += new System.EventHandler(this.OnCancelButtonClick);
+            this.buttonOk.Clicked += new System.EventHandler(this.OnOkButtonClick);
         }
     }
 }

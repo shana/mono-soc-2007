@@ -114,16 +114,6 @@ namespace CBinding
 			
 			foreach (string includePath in configuration.Includes)
 				includePathStore.AppendValues (includePath);
-
-			addLibButton.Clicked += OnLibAdded;
-			removeLibButton.Clicked += OnLibRemoved;
-			libPathAddButton.Clicked += OnLibPathAdded;
-			libPathRemoveButton.Clicked += OnLibPathRemoved;
-			includePathAddButton.Clicked += OnIncludePathAdded;
-			includePathRemoveButton.Clicked += OnIncludePathRemoved;
-			browseButton.Clicked += OnBrowseButtonClick;
-			includePathBrowseButton.Clicked += OnIncludePathBrowseButtonClick;
-			libPathBrowseButton.Clicked += OnLibPathBrowseButtonClick;
 		}
 		
 		private string SingleLineToMultiline (string line)
@@ -265,6 +255,75 @@ namespace CBinding
 			}
 			
 			return true;
+		}
+
+		protected virtual void OnLibAddEntryChanged (object sender, EventArgs e)
+		{
+			if (string.IsNullOrEmpty (libAddEntry.Text))
+			    addLibButton.Sensitive = false;
+			else
+			    addLibButton.Sensitive = true;
+		}
+
+		protected virtual void OnLibTreeViewCursorChanged (object sender, System.EventArgs e)
+		{
+			removeLibButton.Sensitive = true;
+		}
+
+		protected virtual void OnRemoveLibButtonClicked (object sender, System.EventArgs e)
+		{
+			removeLibButton.Sensitive = false;
+		}
+
+		protected virtual void OnIncludePathEntryChanged (object sender, System.EventArgs e)
+		{
+			if (string.IsNullOrEmpty (includePathEntry.Text))
+			    includePathAddButton.Sensitive = false;
+			else
+			    includePathAddButton.Sensitive = true;
+		}
+
+		protected virtual void OnLibPathEntryChanged (object sender, System.EventArgs e)
+		{
+			if (string.IsNullOrEmpty (libPathEntry.Text))
+			    libPathAddButton.Sensitive = false;
+			else
+			    libPathAddButton.Sensitive = true;
+		}
+
+		protected virtual void OnIncludePathTreeViewCursorChanged (object sender, System.EventArgs e)
+		{
+			includePathRemoveButton.Sensitive = true;
+		}
+
+		protected virtual void OnIncludePathRemoveButtonClicked (object sender, System.EventArgs e)
+		{
+			includePathRemoveButton.Sensitive = false;
+		}
+		
+		protected virtual void OnLibPathTreeViewCursorChanged (object sender, System.EventArgs e)
+		{
+			libPathRemoveButton.Sensitive = true;
+		}
+
+		protected virtual void OnLibPathRemoveButtonClicked (object sender, System.EventArgs e)
+		{
+			libPathRemoveButton.Sensitive = false;
+		}
+
+		protected virtual void OnLibAddEntryActivated (object sender, System.EventArgs e)
+		{
+			OnLibAdded (this, new EventArgs ());
+		}
+
+		protected virtual void OnIncludePathEntryActivated (object sender, System.EventArgs e)
+		{
+			OnIncludePathAdded (this, new EventArgs ());
+		}
+
+		protected virtual void OnLibPathEntryActivated (object sender, System.EventArgs e)
+		{
+			OnLibPathAdded (this, new EventArgs ());
 		}
 	}
 	

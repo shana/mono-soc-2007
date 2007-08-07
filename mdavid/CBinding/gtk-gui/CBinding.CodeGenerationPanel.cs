@@ -132,7 +132,7 @@ namespace CBinding {
             this.notebook1 = new Gtk.Notebook();
             this.notebook1.CanFocus = true;
             this.notebook1.Name = "notebook1";
-            this.notebook1.CurrentPage = 0;
+            this.notebook1.CurrentPage = 2;
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.vpaned2 = new Gtk.VPaned();
             this.vpaned2.CanFocus = true;
@@ -381,6 +381,7 @@ namespace CBinding {
             this.table2.BorderWidth = ((uint)(3));
             // Container child table2.Gtk.Table+TableChild
             this.addLibButton = new Gtk.Button();
+            this.addLibButton.Sensitive = false;
             this.addLibButton.CanFocus = true;
             this.addLibButton.Name = "addLibButton";
             this.addLibButton.UseUnderline = true;
@@ -446,6 +447,7 @@ namespace CBinding {
             w29.Fill = false;
             // Container child vbox4.Gtk.Box+BoxChild
             this.removeLibButton = new Gtk.Button();
+            this.removeLibButton.Sensitive = false;
             this.removeLibButton.CanFocus = true;
             this.removeLibButton.Name = "removeLibButton";
             this.removeLibButton.UseUnderline = true;
@@ -475,7 +477,7 @@ namespace CBinding {
             this.vpaned1 = new Gtk.VPaned();
             this.vpaned1.CanFocus = true;
             this.vpaned1.Name = "vpaned1";
-            this.vpaned1.Position = 172;
+            this.vpaned1.Position = 189;
             this.vpaned1.BorderWidth = ((uint)(3));
             // Container child vpaned1.Gtk.Paned+PanedChild
             this.table3 = new Gtk.Table(((uint)(2)), ((uint)(3)), false);
@@ -484,6 +486,7 @@ namespace CBinding {
             this.table3.ColumnSpacing = ((uint)(10));
             // Container child table3.Gtk.Table+TableChild
             this.includePathAddButton = new Gtk.Button();
+            this.includePathAddButton.Sensitive = false;
             this.includePathAddButton.CanFocus = true;
             this.includePathAddButton.Name = "includePathAddButton";
             this.includePathAddButton.UseUnderline = true;
@@ -549,6 +552,7 @@ namespace CBinding {
             w38.Fill = false;
             // Container child vbox5.Gtk.Box+BoxChild
             this.includePathRemoveButton = new Gtk.Button();
+            this.includePathRemoveButton.Sensitive = false;
             this.includePathRemoveButton.CanFocus = true;
             this.includePathRemoveButton.Name = "includePathRemoveButton";
             this.includePathRemoveButton.UseUnderline = true;
@@ -583,6 +587,7 @@ namespace CBinding {
             w42.YOptions = ((Gtk.AttachOptions)(4));
             // Container child table4.Gtk.Table+TableChild
             this.libPathAddButton = new Gtk.Button();
+            this.libPathAddButton.Sensitive = false;
             this.libPathAddButton.CanFocus = true;
             this.libPathAddButton.Name = "libPathAddButton";
             this.libPathAddButton.UseUnderline = true;
@@ -640,6 +645,7 @@ namespace CBinding {
             w47.Fill = false;
             // Container child vbox3.Gtk.Box+BoxChild
             this.libPathRemoveButton = new Gtk.Button();
+            this.libPathRemoveButton.Sensitive = false;
             this.libPathRemoveButton.CanFocus = true;
             this.libPathRemoveButton.Name = "libPathRemoveButton";
             this.libPathRemoveButton.UseUnderline = true;
@@ -671,6 +677,27 @@ namespace CBinding {
                 this.Child.ShowAll();
             }
             this.Show();
+            this.browseButton.Clicked += new System.EventHandler(this.OnBrowseButtonClick);
+            this.removeLibButton.Clicked += new System.EventHandler(this.OnRemoveLibButtonClicked);
+            this.removeLibButton.Clicked += new System.EventHandler(this.OnLibRemoved);
+            this.libTreeView.CursorChanged += new System.EventHandler(this.OnLibTreeViewCursorChanged);
+            this.libAddEntry.Changed += new System.EventHandler(this.OnLibAddEntryChanged);
+            this.libAddEntry.Activated += new System.EventHandler(this.OnLibAddEntryActivated);
+            this.addLibButton.Clicked += new System.EventHandler(this.OnLibAdded);
+            this.includePathBrowseButton.Clicked += new System.EventHandler(this.OnIncludePathBrowseButtonClick);
+            this.includePathRemoveButton.Clicked += new System.EventHandler(this.OnIncludePathRemoveButtonClicked);
+            this.includePathRemoveButton.Clicked += new System.EventHandler(this.OnIncludePathRemoved);
+            this.includePathTreeView.CursorChanged += new System.EventHandler(this.OnIncludePathTreeViewCursorChanged);
+            this.includePathEntry.Changed += new System.EventHandler(this.OnIncludePathEntryChanged);
+            this.includePathEntry.Activated += new System.EventHandler(this.OnIncludePathEntryActivated);
+            this.includePathAddButton.Clicked += new System.EventHandler(this.OnIncludePathAdded);
+            this.libPathBrowseButton.Clicked += new System.EventHandler(this.OnLibPathBrowseButtonClick);
+            this.libPathRemoveButton.Clicked += new System.EventHandler(this.OnLibPathRemoveButtonClicked);
+            this.libPathRemoveButton.Clicked += new System.EventHandler(this.OnLibPathRemoved);
+            this.libPathTreeView.CursorChanged += new System.EventHandler(this.OnLibPathTreeViewCursorChanged);
+            this.libPathEntry.Changed += new System.EventHandler(this.OnLibPathEntryChanged);
+            this.libPathEntry.Activated += new System.EventHandler(this.OnLibPathEntryActivated);
+            this.libPathAddButton.Clicked += new System.EventHandler(this.OnLibPathAdded);
         }
     }
 }

@@ -50,16 +50,13 @@ namespace CBinding
 			filter.AddMimeType ("x-directory/normal");
 			filter.Name = "Folders";
 			
-			filechooserwidget1.SetCurrentFolder (currentDir);
-			filechooserwidget1.AddFilter (filter);
-			
-			buttonOk.Clicked += OnOkButtonClick;
-			buttonCancel.Clicked += OnCancelButtonClick;
+			file_chooser_widget.SetCurrentFolder (currentDir);
+			file_chooser_widget.AddFilter (filter);
 		}
 		
 		private void OnOkButtonClick (object sender, EventArgs e)
 		{
-			path = filechooserwidget1.Filename;
+			path = file_chooser_widget.Filename;
 			Destroy ();
 		}
 		

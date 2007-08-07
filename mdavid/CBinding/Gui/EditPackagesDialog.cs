@@ -146,10 +146,6 @@ namespace CBinding
 					}
 				}
 			}
-			
-			buttonOk.Clicked += OnOkButtonClick;
-			buttonCancel.Clicked += OnCancelButtonClick;
-			removeButton.Clicked += OnRemoveButtonClick;
 		}
 		
 		private ProjectPackageCollection ProjectPackages (Project project)
@@ -418,6 +414,16 @@ namespace CBinding
 			}
 			
 			return exists;
+		}
+
+		protected virtual void OnSelectedPackagesTreeViewCursorChanged (object sender, System.EventArgs e)
+		{
+			removeButton.Sensitive = true;
+		}
+
+		protected virtual void OnRemoveButtonClicked (object sender, System.EventArgs e)
+		{
+			removeButton.Sensitive = false;
 		}
 	}
 }

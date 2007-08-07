@@ -53,18 +53,15 @@ namespace CBinding
 			all.AddPattern ("*.*");
 			all.Name = "All Files";
 			
-			filechooserwidget1.AddFilter (libs);
-			filechooserwidget1.AddFilter (all);
-			filechooserwidget1.SetCurrentFolder ("/usr/lib");
-			
-			buttonOk.Clicked += OnOkButtonClick;
-			buttonCancel.Clicked += OnCancelButtonClick;
+			file_chooser_widget.AddFilter (libs);
+			file_chooser_widget.AddFilter (all);
+			file_chooser_widget.SetCurrentFolder ("/usr/lib");
 		}
 		
 		private void OnOkButtonClick (object sender, EventArgs e)
 		{
 			lib = System.IO.Path.GetFileNameWithoutExtension (
-				filechooserwidget1.Filename);
+				file_chooser_widget.Filename);
 			
 			if (lib.StartsWith ("lib"))
 				lib = lib.Remove (0, 3);
