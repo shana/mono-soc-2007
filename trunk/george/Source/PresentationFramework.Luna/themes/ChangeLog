@@ -1,3 +1,7 @@
+2007-08-07  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* luna.normalcolor.xaml: Added the GridSplitter style.
+
 2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* luna.normalcolor.xaml: Added the UserControl style.
