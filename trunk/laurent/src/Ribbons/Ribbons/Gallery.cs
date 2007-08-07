@@ -19,6 +19,8 @@ namespace Ribbons
 		private Requisition upReq, downReq, expandReq;
 		private Gdk.Rectangle tilesAlloc;
 		
+		private const double space = 2.0; 
+		
 		public int TileWidth
 		{
 			set
@@ -67,7 +69,7 @@ namespace Ribbons
 			
 			this.tiles = new List<Widget> ();
 			
-			this.defaultTilesPerRow = 5;
+			this.defaultTilesPerRow = 3;
 			this.firstDisplayedTileIndex = 0;
 			this.lastDisplayedTileIndex = -1;
 			
@@ -155,6 +157,7 @@ namespace Ribbons
 				firstDisplayedTileIndex = -1;
 				lastDisplayedTileIndex = firstDisplayedTileIndex - 1;
 			}
+			UpdateTilesLayour ();
 			QueueDraw ();
 		}
 		
@@ -165,73 +168,12 @@ namespace Ribbons
 				firstDisplayedTileIndex = lastDisplayedTileIndex + 1;
 				lastDisplayedTileIndex = -1;
 			}
+			UpdateTilesLayour ();
 			QueueDraw ();
 		}
 		
-		protected override void ForAll (bool include_internals, Callback callback)
+		private void UpdateTilesLayour ()
 		{
-			//if(include_internals)
-			{
-				callback (up);
-				callback (down);
-				callback (expand);
-			}
-			
-			for(int i = 0 ; i < tiles.Count ; ++i)
-			{
-				callback (tiles[i]);
-			}
-		}
-		
-		protected override void OnSizeRequested (ref Requisition requisition)
-		{
-			base.OnSizeRequested (ref requisition);
-			
-			upReq = up.SizeRequest ();
-			downReq = down.SizeRequest ();
-			expandReq = expand.SizeRequest ();
-			
-			btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
-			int btnHeight = upReq.Height + downReq.Height + expandReq.Height;
-			
-			int count = Math.Min (tiles.Count, defaultTilesPerRow);
-			requisition.Width = btnWidth + count * tileWidth + (count + 1) * tileSpacing + 2 * (int)BorderWidth;
-			requisition.Height = Math.Max (tileHeight + 2*tileSpacing, btnHeight) + 2 * (int)BorderWidth;
-			
-			if(WidthRequest != -1) requisition.Width = WidthRequest;
-			if(HeightRequest != -1) requisition.Height = HeightRequest;
-		}
-		
-		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
-		{
-			base.OnSizeAllocated (allocation);
-			Console.WriteLine(allocation.Width);
-			allocation.X += (int)BorderWidth;
-			allocation.Y += (int)BorderWidth;
-			allocation.Width -= 2 * (int)BorderWidth;
-			allocation.Height -= 2 * (int)BorderWidth;
-			
-			Gdk.Rectangle btnAlloc;
-			btnAlloc.Width = btnWidth;
-			btnAlloc.X = allocation.X + allocation.Width - btnAlloc.Width;
-			
-			btnAlloc.Y = allocation.Y;
-			btnAlloc.Height = upReq.Height;
-			up.SizeAllocate (btnAlloc);
-			
-			btnAlloc.Y += btnAlloc.Height;
-			btnAlloc.Height = downReq.Height;
-			down.SizeAllocate (btnAlloc);
-			
-			btnAlloc.Y += btnAlloc.Height;
-			btnAlloc.Height = expandReq.Height;
-			expand.SizeAllocate (btnAlloc);
-			
-			tilesAlloc.Y = allocation.Y + tileSpacing;
-			tilesAlloc.X = allocation.X + tileSpacing;
-			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing;
-			tilesAlloc.Height = allocation.Height - 2 * tileSpacing; 
-			
 			Gdk.Rectangle tileAlloc;
 			tileAlloc.X = tilesAlloc.X;
 			tileAlloc.Y = tilesAlloc.Y;
@@ -282,6 +224,73 @@ namespace Ribbons
 				t.SizeAllocate (tileAlloc);
 				tileAlloc.X += tileAlloc.Width + tileSpacing;
 			}
+		}
+		
+		protected override void ForAll (bool include_internals, Callback callback)
+		{
+			//if(include_internals)
+			{
+				callback (up);
+				callback (down);
+				callback (expand);
+			}
+			
+			for(int i = 0 ; i < tiles.Count ; ++i)
+			{
+				callback (tiles[i]);
+			}
+		}
+		
+		protected override void OnSizeRequested (ref Requisition requisition)
+		{
+			base.OnSizeRequested (ref requisition);
+			
+			upReq = up.SizeRequest ();
+			downReq = down.SizeRequest ();
+			expandReq = expand.SizeRequest ();
+			
+			btnWidth = Math.Max (upReq.Width, Math.Max (downReq.Width, expandReq.Width));
+			int btnHeight = upReq.Height + downReq.Height + expandReq.Height;
+			
+			int count = Math.Min (tiles.Count, defaultTilesPerRow);
+			requisition.Width = btnWidth + (int)space + count * tileWidth + (count + 1) * tileSpacing + 2 * (int)BorderWidth;
+			requisition.Height = Math.Max (tileHeight + 2*tileSpacing, btnHeight) + 2 * (int)BorderWidth;
+			
+			if(WidthRequest != -1) requisition.Width = WidthRequest;
+			if(HeightRequest != -1) requisition.Height = HeightRequest;
+		}
+		
+		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
+		{
+			base.OnSizeAllocated (allocation);
+			Console.WriteLine(allocation.Width);
+			allocation.X += (int)BorderWidth;
+			allocation.Y += (int)BorderWidth;
+			allocation.Width -= 2 * (int)BorderWidth;
+			allocation.Height -= 2 * (int)BorderWidth;
+			
+			Gdk.Rectangle btnAlloc;
+			btnAlloc.Width = btnWidth;
+			btnAlloc.X = allocation.X + allocation.Width - btnAlloc.Width;
+			
+			btnAlloc.Y = allocation.Y;
+			btnAlloc.Height = upReq.Height;
+			up.SizeAllocate (btnAlloc);
+			
+			btnAlloc.Y += btnAlloc.Height;
+			btnAlloc.Height = downReq.Height;
+			down.SizeAllocate (btnAlloc);
+			
+			btnAlloc.Y += btnAlloc.Height;
+			btnAlloc.Height = expandReq.Height;
+			expand.SizeAllocate (btnAlloc);
+			
+			tilesAlloc.Y = allocation.Y + tileSpacing;
+			tilesAlloc.X = allocation.X + tileSpacing;
+			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing - (int)space;
+			tilesAlloc.Height = allocation.Height - 2 * tileSpacing; 
+			
+			UpdateTilesLayour ();
 		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
