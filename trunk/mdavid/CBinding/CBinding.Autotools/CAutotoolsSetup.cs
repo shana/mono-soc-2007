@@ -50,6 +50,7 @@ namespace CBinding.Autotools
 			return cproj.Compiler.CompilerCommand;
 		}
 
+		// FIXME: Currently only the compiler flags are sent, no linker flags are sent.
 		public string GetCompilerFlags (Project project, string configuration)
 		{
 			if (!CanDeploy (project))
@@ -67,7 +68,6 @@ namespace CBinding.Autotools
 
 		public bool CanDeploy (Project project)
 		{
-			Console.WriteLine ("THIS IS BEIGN CALLED!");
 			return project is CProject;
 		}
 	}

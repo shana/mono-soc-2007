@@ -1,3 +1,8 @@
+2007-08-07  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* CBinding.addin.xml, gtk-gui/CBinding.CodeGenerationPanel.cs: Removed
+	  autotools support since it is currently very .NET specific.
+
 2007-08-06  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* CBinding.addin.xml, CBinding.mdp, CBinding.mds,

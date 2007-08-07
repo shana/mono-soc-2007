@@ -64,7 +64,7 @@ namespace CBinding
 	public class CProject : Project
 	{
 		[ItemProperty ("compiler", ValueType = typeof(CCompiler))]
-		private CCompiler compiler_manager;
+		private ICompiler compiler_manager;
 		
 		[ItemProperty]
 		private Language language;
@@ -295,7 +295,7 @@ namespace CBinding
 			get { return language; }
 		}
 		
-		public CCompiler Compiler {
+		public ICompiler Compiler {
 			get { return compiler_manager; }
 			set {
 				if (value != null) {
