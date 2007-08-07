@@ -41,6 +41,7 @@ namespace Ribbons
 			Cairo.Rectangle area = new Cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
 			cr.Rectangle (area);
 			cr.Clip ();
+			theme.DrawTile (cr, area, this);
 			DrawContent (cr, area);
 			
 			return base.OnExposeEvent (evnt);

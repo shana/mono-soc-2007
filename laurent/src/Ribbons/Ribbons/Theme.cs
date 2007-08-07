@@ -431,8 +431,17 @@ namespace Ribbons
 		/// <summary>Draws a gallery.</summary>
 		public void DrawGallery (Context cr, Rectangle bodyAllocation, Rectangle tilesAllocation, Gallery widget)
 		{
+			cr.Color = new Color (0, 0, 0, 0.3);
+			cr.LineWidth = 1;
+			cr.Rectangle (tilesAllocation.X + 0.5, tilesAllocation.Y + 0.5, tilesAllocation.Width - 1.0, tilesAllocation.Height - 1.0);
+			cr.Stroke ();
+		}
+		
+		/// <summary>Draws a tile.</summary>
+		public void DrawTile (Context cr, Rectangle bodyAllocation, Tile widget)
+		{
 			cr.Color = new Color (1, 1, 1);
-			cr.Rectangle (tilesAllocation);
+			cr.Rectangle (bodyAllocation);
 			cr.Fill ();
 		}
 	}
