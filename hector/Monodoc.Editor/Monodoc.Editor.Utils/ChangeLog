@@ -1,3 +1,7 @@
+2007-08-07  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
+
+	* EcmaReader.cs: Some spanish typos.
+
 2007-07-17  Hector E. Gomez M. <hectoregm@gmail.com> 
 
 	* MonoDocument.cs: Member name changes and changes in the unit tests.
