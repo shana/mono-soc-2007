@@ -50,6 +50,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Test\System.Windows.Controls\GridSplitterTest.cs" />
     <Compile Include="Test\System.Windows.Shapes\RectangleTest.cs" />
     <Compile Include="Test\System.Windows.Shapes\PathTest.cs" />
     <Compile Include="Test\System.Windows.Shapes\LineTest.cs" />
