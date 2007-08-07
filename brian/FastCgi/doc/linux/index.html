@@ -28,6 +28,23 @@ cd fastcgi-mono-server
 		
 		<a name="config"></a>
 		<h2>Server Specific Configuration</h2>
+		
+		<h3>NOTE</h3>
+		
+		<p style="color:red">The following documentation is currently
+		based strictly on redirecting known ASP.NET extensions to the
+		FastCGI Mono Server. This yields a performance advantage by not
+		sending static and non-ASP.NET files across FastCGI, but
+		provides a security disadvantage as it doesn't incorporate all
+		of ASP.NET's file rejection. For example, ASP.NET would reject
+		certain paths, like "App_Data/", by default.</p>
+		
+		<p style="color:red;font-weight:bold">It is always important to
+		test that files containing secure data are not accessible in a
+		web browser. For extra security, look in your web server's
+		documentation for how to send all requests for a path straight
+		to a FastCGI interpreter.</p>
+		
 		<li><a href="abyss.html">Abyss Web Server</a></li>
 		<li><a href="apache.html">Apache HTTP Server</a> <span style="color:red">[TO BE ADDED]</span></li>
 		<li><a href="caudium.html">Caudium</a> <span style="color:red">[TO BE ADDED]</span></li>
@@ -37,7 +54,7 @@ cd fastcgi-mono-server
 		<li><a href="lighttpd.html">Lighttpd</a></li>
 		<li><a href="litespeed.html">LiteSpeed Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
 		<li><a href="myserver.html">MyServer</a> <span style="color:red">[TO BE ADDED]</span></li>
-		<li><a href="nginx.html">Nginx</a> <span style="color:red">[TO BE ADDED]</span></li>
+		<li><a href="nginx.html">Nginx</a></li>
 		<li><a href="roxen.html">Roxen</a> <span style="color:red">[TO BE ADDED]</span></li>
 		<li><a href="sun.html">Sun Java System Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
 		<li><a href="zeus.html">Zeus Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>

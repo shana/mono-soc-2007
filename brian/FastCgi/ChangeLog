@@ -1,3 +1,19 @@
+2007-08-07 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/linux/abyss.html: Added "Tested on" information.
+	
+	* doc/linux/nginx.html: Filled in.
+	
+	* doc/linux/cherokee.html: Added "Tested on" information.
+	
+	* doc/linux/index.html: Added warning about the risks associated with
+	only redirecting extensions.
+	
+	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Send all the headers
+	together. Sending them one at a time caused Nginx to occasionally flip
+	out. This also reduces the amount of network traffic, taking up very
+	little extra memory per request.
+
 2007-08-06 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/linux/abyss.html: Removed warning about ASP.NET 2.0
