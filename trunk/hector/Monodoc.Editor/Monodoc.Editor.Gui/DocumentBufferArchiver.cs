@@ -248,9 +248,7 @@ public class DocumentBufferArchiver {
 				buffer.Insert (ref insertAt, "[");
 				offset += 1;
 				
-//				TextTag textTag = DocumentUtils.GetAssociatedTextTag (buffer, tagStart.Tag);
-//				offset = DocumentUtils.AddText (buffer, offset, "Documentation for this section has not yet been entered.", suffix, textTag);
-//				offset = DocumentUtils.AddStub (buffer, offset, "To be added test", suffix);
+				offset = DocumentUtils.AddStub (buffer, offset, "Click to Add Documentation", suffix);
 				
 				insertAt = buffer.GetIterAtOffset (offset);
 				buffer.Insert (ref insertAt, "]");
@@ -309,15 +307,14 @@ public class DocumentBufferArchiver {
 		#endif
 		
 		if (((DocumentTag) tagStart.Tag).IsEditable) {
-//			TextTag textTag = DocumentUtils.GetAssociatedTextTag (buffer, tagStart.Tag);
-//			offset = DocumentUtils.AddText (buffer, offset, "Documentation for this section has not yet been entered.", suffix, textTag);
-//			offset = DocumentUtils.AddStub (buffer, offset, "To be added test", suffix);
-			
 			insertAt = buffer.GetIterAtOffset (offset);
 			buffer.Insert (ref insertAt, "]");
 			offset += 1;
 		} else if (tagStart.Start == offset)
 			offset = DocumentUtils.AddPaddingEmpty (buffer, offset, suffix);
+		
+//		if (((DocumentTag) tagStart.Tag).IsEditable && tagStart.Empty)
+//			offset = DocumentUtils.AddStub (buffer, offset, "To be added test", suffix);
 		
 		applyStart = buffer.GetIterAtOffset (tagStart.Start);
 		applyEnd = buffer.GetIterAtOffset (offset);
@@ -417,16 +414,6 @@ public class DocumentBufferArchiver {
 		return insertAt.Offset;
 	}
 	
-	private static void AddNewLine (TextBuffer buffer, ref TextIter insertAt, string suffix)
-	{
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		TextTag tag = tagTable.Lookup ("newline" + suffix);
-		
-		if (tag == null)
-			tag = tagTable.CreateDynamicTag ("newline" + suffix);
-		buffer.InsertWithTags (ref insertAt, "\n", tag);
-	}
-	
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
 	{
 		string elementName, tagName;
@@ -491,7 +478,7 @@ public class DocumentBufferArchiver {
 			#endif
 		}
 		
-		AddNewLine (buffer, ref insertAt, tagSuffix);
+		DocumentUtils.AddNewLine (buffer, ref insertAt, tagSuffix);
 	}
 	
 	private static void DeserializeAttributesTypeSignature (TextBuffer buffer, ref TextIter insertAt, XmlTextReader xmlReader, string tagSuffix)
@@ -521,7 +508,7 @@ public class DocumentBufferArchiver {
 				tag = tagTable.CreateDynamicTag (tagName);
 			
 			buffer.InsertWithTags (ref insertAt, xmlReader.Value, tag);
-			AddNewLine (buffer, ref insertAt, tagSuffix);
+			DocumentUtils.AddNewLine (buffer, ref insertAt, tagSuffix);
 			
 			#if DEBUG
 			Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);
@@ -550,7 +537,7 @@ public class DocumentBufferArchiver {
 				tag = tagTable.CreateDynamicTag (tagName);
 			
 			buffer.InsertWithTags (ref insertAt, xmlReader.Value, tag);
-			AddNewLine (buffer, ref insertAt, tagSuffix);
+			DocumentUtils.AddNewLine (buffer, ref insertAt, tagSuffix);
 			
 			#if DEBUG
 			Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);
@@ -582,7 +569,7 @@ public class DocumentBufferArchiver {
 				tag = tagTable.CreateDynamicTag (tagName);
 			
 			buffer.InsertWithTags (ref insertAt, xmlReader.Value, tag);
-			AddNewLine (buffer, ref insertAt, tagSuffix);
+			DocumentUtils.AddNewLine (buffer, ref insertAt, tagSuffix);
 			
 			#if DEBUG
 			Console.WriteLine ("Attribute: {0} End: {1}", tagName, insertAt.Offset);

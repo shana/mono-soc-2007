@@ -1,3 +1,11 @@
+2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentBufferArchiver.cs: Removed commented lines.
+	
+	  Moved AddNewLine method to DocumentUtils class, change old calls to
+	  new arrange.
+	* DocumentTagTable.cs: Minor changes.
+
 2007-08-07  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
 
 	* Test/TestDocumentTagTable.cs: Several test units
