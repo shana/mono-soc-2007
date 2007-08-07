@@ -30,9 +30,11 @@
 		
 		<h3>NOTE</h3>
 		
-		<p style="color:red">This configuration is not completely tested
-		and there is at least one known problem with ASP.NET 2.0. More
-		testing will occur in the coming weeks.</p>
+		<p style="color:red">There is currently an issue with ASP.NET
+		2.0 where pages that depend on <tt>WebResource.axd</tt> will not
+		behave properly unless the file is present. A simple workaround
+		is to add an empty <tt>WebResource.axd</tt> file in the
+		application root.</p>
 		
 		<a name="step1"></a>
 		<h2>Step 1: Setting Up the Interpreter</h2>

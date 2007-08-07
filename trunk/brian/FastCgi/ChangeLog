@@ -1,3 +1,15 @@
+2007-08-06 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/linux/abyss.html: Update with new info about ASP.NET 2.0
+	
+	* src/Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs:
+	* src/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs:
+	* src/Mono.FastCgi/SocketAbstractions/StandardSocket.cs:
+	* src/Mono.FastCgi/Server.cs: Removed "Blocking". It was only used to
+	disable blocking on the listening socket, which was unneccessary.
+	Disabling blocking on the UnmanagedSocket caused significant problems
+	with Abyss.
+
 2007-08-04 Brian Nickel <brian.nickel@gmail.com>
 
 	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Improved detection of

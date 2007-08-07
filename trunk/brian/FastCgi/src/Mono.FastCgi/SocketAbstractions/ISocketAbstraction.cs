@@ -35,28 +35,25 @@ namespace Mono.FastCgi {
 	/// </summary>
 	public abstract class Socket
 	{
-		/// <seealso cref="System.Net.Sockets.Socket.Close()" />.
+		/// <seealso cref="System.Net.Sockets.Socket.Close()" />
 		public abstract void Close ();
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Receive(byte[],int,int,System.Net.Sockets.SocketFlags)" />.
+		/// <seealso cref="System.Net.Sockets.Socket.Receive(byte[],int,int,System.Net.Sockets.SocketFlags)" />
 		public abstract int Receive (byte [] buffer, int offset, int size, System.Net.Sockets.SocketFlags flags);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Send(byte[],int,int,System.Net.Sockets.SocketFlags)" />.
+		/// <seealso cref="System.Net.Sockets.Socket.Send(byte[],int,int,System.Net.Sockets.SocketFlags)" />
 		public abstract int Send (byte [] data, int offset, int size, System.Net.Sockets.SocketFlags flags);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Blocking" />.
-		public abstract bool Blocking {get; set;}
-		
-		/// <seealso cref="System.Net.Sockets.Socket.Listen" />.
+		/// <seealso cref="System.Net.Sockets.Socket.Listen" />
 		public abstract void Listen (int backlog);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.BeginAccept(AsyncCallback,object)" />.
+		/// <seealso cref="System.Net.Sockets.Socket.BeginAccept(AsyncCallback,object)" />
 		public abstract IAsyncResult BeginAccept (AsyncCallback callback, object state);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.EndAccept(IAsyncResult)" />.
+		/// <seealso cref="System.Net.Sockets.Socket.EndAccept(IAsyncResult)" />
 		public abstract Socket EndAccept (IAsyncResult asyncResult);
 		
-		/// <seealso cref="System.Net.Sockets.Socket.Connected" />.
+		/// <seealso cref="System.Net.Sockets.Socket.Connected" />
 		public abstract bool Connected {get;}
 	}
 }
