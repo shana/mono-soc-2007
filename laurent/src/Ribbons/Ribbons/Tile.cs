@@ -65,7 +65,7 @@ namespace Ribbons
 		protected override bool OnButtonReleaseEvent (Gdk.EventButton evnt)
 		{
 			bool ret = base.OnButtonReleaseEvent (evnt);
-			
+			Click ();
 			this.QueueDraw ();
 			return ret;
 		}

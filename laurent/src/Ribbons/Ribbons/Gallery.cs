@@ -9,7 +9,7 @@ namespace Ribbons
 	{
 		protected Theme theme = new Theme ();
 		private int tileWidth, tileHeight;
-		private List<Widget> tiles;
+		private List<Tile> tiles;
 		private Button up, down, expand;
 		private int defaultTilesPerRow;
 		private int tileSpacing;
@@ -20,6 +20,8 @@ namespace Ribbons
 		private Gdk.Rectangle tilesAlloc;
 		
 		private const double space = 2.0; 
+		
+		public TileSelectedHandler TileSelected;
 		
 		public int TileWidth
 		{
@@ -67,7 +69,7 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
-			this.tiles = new List<Widget> ();
+			this.tiles = new List<Tile> ();
 			
 			this.defaultTilesPerRow = 3;
 			this.firstDisplayedTileIndex = 0;
@@ -96,14 +98,14 @@ namespace Ribbons
 		
 		/// <summary>Adds a tile before all existing tiles.</summary>
 		/// <param name="t">The tile to add.</param>
-		public void PrependTile (Widget t)
+		public void PrependTile (Tile t)
 		{
 			InsertTile (t, 0);
 		}
 		
 		/// <summary>Adds a tile after all existing tiles.</summary>
 		/// <param name="t">The tile to add.</param>
-		public void AppendTile (Widget t)
+		public void AppendTile (Tile t)
 		{
 			InsertTile (t, -1);
 		}
@@ -111,7 +113,7 @@ namespace Ribbons
 		/// <summary>Inserts a tile at the specified location.</summary>
 		/// <param name="t">The tile to add.</param>
 		/// <param name="TileIndex">The index (starting at 0) at which the tile must be inserted, or -1 to insert the tile after all existing tiles.</param>
-		public void InsertTile (Widget t, int TileIndex)
+		public void InsertTile (Tile t, int TileIndex)
 		{
 			if(TileIndex == -1 || TileIndex == tiles.Count)
 			{
@@ -124,12 +126,14 @@ namespace Ribbons
 			
 			t.Parent = this;
 			t.Visible = true;
+			t.Clicked += Tile_Clicked;
 		}
 		
 		/// <summary>Removes the tile at the specified index.</summary>
 		/// <param name="TileIndex">Index of the tile to remove.</param>
 		public void RemoveTile (int TileIndex)
 		{
+			tiles[TileIndex].Clicked -= Tile_Clicked;
 			tiles[TileIndex].Unparent ();
 			
 			tiles.RemoveAt (TileIndex);
@@ -148,6 +152,11 @@ namespace Ribbons
 		private void expand_Clicked(object Sender, EventArgs e)
 		{
 			
+		}
+		
+		private void Tile_Clicked(object Sender, EventArgs e)
+		{
+			OnTileSelected ((Tile)Sender);
 		}
 		
 		private void MoveUp ()
@@ -170,6 +179,13 @@ namespace Ribbons
 			}
 			UpdateTilesLayour ();
 			QueueDraw ();
+		}
+		
+		/// <summary>Fires the SelectedTile event.</summary>
+		/// <param name="SelectedTile">The Tile that has been selected.</param>
+		protected void OnTileSelected (Tile SelectedTile)
+		{
+			if(TileSelected != null) TileSelected (this, new TileSelectedEventArgs (SelectedTile));
 		}
 		
 		private void UpdateTilesLayour ()
