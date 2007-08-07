@@ -82,40 +82,223 @@ public class TestUtils {
 	}
 	
 	[Test()]
-	public void AddStringInt ()
+	public void GetAssociatedTextTag ()
+	{
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		TextTag summaryTag = buffer.TagTable.Lookup ("summary");
+		Assert.IsNotNull (summaryTag);
+		DocumentTag actualTag = (DocumentTag) DocumentUtils.GetAssociatedTextTag (buffer, summaryTag);
+		Assert.AreEqual ("summary:Text", actualTag.Name);
+		Assert.IsTrue (actualTag.IsText);
+	}
+	
+	[Test()]
+	public void AddPaddingIntOffset ()
+	{
+		int initialOffset = 0;
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		int nextOffset = DocumentUtils.AddPadding (buffer, initialOffset, "#0");
+		Assert.AreEqual (1, nextOffset, "APIO");
+	}
+	
+	[Test()]
+	public void AddPaddingIntValidRegion ()
 	{
 		int initialOffset, endOffset, nextOffset;
 		DocumentEditor editor = new DocumentEditor ();
 		TextBuffer buffer = editor.Buffer;
 		
 		initialOffset = 0;
-		nextOffset = DocumentUtils.AddString (buffer, initialOffset, "Inserting format Region", "#0");
+		nextOffset = DocumentUtils.AddPadding (buffer, initialOffset, "#0");
 		endOffset = nextOffset - 1;
 		
-		TextTag expectedTag = buffer.TagTable.Lookup ("format#0");
-		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
-		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
-		Assert.IsTrue (beginsFormat, "ASI01");
-		Assert.IsTrue (endsFormat, "ASI02");
+		TextTag expectedTag = buffer.TagTable.Lookup ("padding#0");
+		bool beginsPadding = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsPadding = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
+		Assert.IsTrue (beginsPadding, "APIVR01");
+		Assert.IsTrue (endsPadding, "APIVR02");
 	}
 	
 	[Test()]
-	public void AddStringVoid ()
+	public void AddPaddingVoidOffset ()
 	{
-		int initialOffset, endOffset;
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		TextIter insertIter = buffer.StartIter;
+		DocumentUtils.AddPadding (buffer, ref insertIter, "#0");
+		
+		Assert.AreEqual (1, insertIter.Offset, "APVO");
+	}
+	
+	[Test()]
+	public void AddPaddingVoidValidRegion ()
+	{
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		TextIter insertIter = buffer.StartIter;
+		DocumentUtils.AddPadding (buffer, ref insertIter, "#0");
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("padding#0");
+		bool beginsPadding = buffer.StartIter.BeginsTag (expectedTag);
+		bool endsPadding = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (insertIter.Offset - 1), insertIter);
+		Assert.IsTrue (beginsPadding, "APVR01");
+		Assert.IsTrue (endsPadding, "APVR02");
+	}
+	
+	[Test()]
+	public void AddPaddingEmptyIntOffset ()
+	{
+		int initialOffset = 0;
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		int nextOffset = DocumentUtils.AddPaddingEmpty (buffer, initialOffset, "#0");
+		Assert.AreEqual (1, nextOffset, "APEIO");
+	}
+	
+	[Test()]
+	public void AddPaddingEmptyIntValidRegion ()
+	{
+		int initialOffset, endOffset, nextOffset;
 		DocumentEditor editor = new DocumentEditor ();
 		TextBuffer buffer = editor.Buffer;
 		
 		initialOffset = 0;
+		nextOffset = DocumentUtils.AddPaddingEmpty (buffer, initialOffset, "#0");
+		endOffset = nextOffset - 1;
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("padding-empty#0");
+		bool beginsPadding = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsPadding = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
+		Assert.IsTrue (beginsPadding, "APEIVR01");
+		Assert.IsTrue (endsPadding, "APEIVR02");
+	}
+	
+	[Test()]
+	public void AddPaddingEmptyVoidOffset ()
+	{
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
 		TextIter insertIter = buffer.StartIter;
-		DocumentUtils.AddString (buffer, ref insertIter, "Inserting format Region", "#0");
-		endOffset = insertIter.Offset - 1;
+		DocumentUtils.AddPaddingEmpty (buffer, ref insertIter, "#0");
+		
+		Assert.AreEqual (1, insertIter.Offset, "APEVO");
+	}
+	
+	[Test()]
+	public void AddPaddingEmptyVoidValidRegion ()
+	{
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		TextIter insertIter = buffer.StartIter;
+		DocumentUtils.AddPaddingEmpty (buffer, ref insertIter, "#0");
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("padding-empty#0");
+		bool beginsPadding = buffer.StartIter.BeginsTag (expectedTag);
+		bool endsPadding = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (insertIter.Offset - 1), insertIter);
+		Assert.IsTrue (beginsPadding, "APEVR01");
+		Assert.IsTrue (endsPadding, "APEVR02");
+	}
+	
+//	[Test()]
+//	public void AddText ()
+//	{
+//		int initialOffset, endOffset;
+//		DocumentEditor editor = new DocumentEditor ();
+//		TextBuffer buffer = editor.Buffer;
+//		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+//		TextTag textTag = tagTable.Lookup ("summary:Text");
+//		
+//		initialOffset = 0;
+//		TextIter insertIter = buffer.StartIter;
+//		DocumentUtils.AddText (buffer, ref insertIter, "\n    Test Region\n    ", "#0", textTag);
+//		endOffset = insertIter.Offset - 1;
+//		
+//		TextTag expectedTag = buffer.TagTable.Lookup ("significant-whitespace#0#0");
+//		bool beginsSpace = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+//		bool endsSpace = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (4), buffer.GetIterAtOffset (5));
+//		Assert.IsTrue (beginsSpace, "AT01");
+//		Assert.IsTrue (endsSpace, "AT02");
+//		
+//		bool beginsText = buffer.GetIterAtOffset (5).BeginsTag (textTag);
+//		bool endsText = DocumentUtils.TagEndsHere  (textTag, buffer.GetIterAtOffset (15), buffer.GetIterAtOffset (16));
+//		Assert.IsTrue (beginsText, "AT03");
+//		Assert.IsTrue (endsText, "AT04");
+//		
+//		beginsSpace = buffer.GetIterAtOffset (16).BeginsTag (expectedTag);
+//		endsSpace = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (insertIter.Offset));
+//		Assert.IsTrue (beginsSpace, "AT05");
+//		Assert.IsTrue (endsSpace, "AT06");
+//	}
+	
+	[Test()]
+	public void AddStringIntOffset ()
+	{
+		int initialOffset, nextOffset;
+		string data = "Inserting format Region";
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		initialOffset = 0;
+		
+		nextOffset = DocumentUtils.AddString (buffer, initialOffset, data, "#0");
+		Assert.AreEqual (data.Length + 1, nextOffset, "ASIO");
+	}
+	
+	[Test ()]
+	public void AddStringIntValidRegion ()
+	{
+		int initialOffset, endOffset, nextOffset;
+		string data = "Inserting format Region";
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		initialOffset = 0;
+		nextOffset = DocumentUtils.AddString (buffer, initialOffset, data, "#0");
+		endOffset = nextOffset - 2;
 		
 		TextTag expectedTag = buffer.TagTable.Lookup ("format#0");
 		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
-		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), insertIter);
-		Assert.IsTrue (beginsFormat, "ASV01");
-		Assert.IsTrue (endsFormat, "ASV02");
+		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset - 1));
+		Assert.IsTrue (beginsFormat, "ASIVR01");
+		Assert.IsTrue (endsFormat, "ASIVR02");
+	}
+	
+	[Test()]
+	public void AddStringVoidOffset ()
+	{
+		string data = "Inserting format Region";
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		TextIter insertIter = buffer.StartIter;
+		DocumentUtils.AddString (buffer, ref insertIter, data, "#0");
+		
+		Assert.AreEqual (data.Length + 1, insertIter.Offset, "ASVO");
+	}
+	
+	[Test()]
+	public void AddStringVoidValidRegion ()
+	{
+		string data = "Inserting format Region";
+		DocumentEditor editor = new DocumentEditor ();
+		TextBuffer buffer = editor.Buffer;
+		
+		TextIter insertIter = buffer.StartIter;
+		DocumentUtils.AddString (buffer, ref insertIter, data, "#0");
+		
+		TextTag expectedTag = buffer.TagTable.Lookup ("format#0");
+		bool beginsFormat = buffer.StartIter.BeginsTag (expectedTag);
+		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (insertIter.Offset - 2), buffer.GetIterAtOffset (insertIter.Offset -1 ));
+		Assert.IsTrue (beginsFormat, "ASVR01");
+		Assert.IsTrue (endsFormat, "ASVR02");
 	}
 	
 	[Test()]
@@ -130,10 +313,10 @@ public class TestUtils {
 		endOffset = nextOffset - 1;
 		
 		TextTag expectedTag = buffer.TagTable.Lookup ("newline#0");
-		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
-		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
-		Assert.IsTrue (beginsFormat, "ANLI01");
-		Assert.IsTrue (endsFormat, "ANLI02");
+		bool beginsNewLine = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsNewLine = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
+		Assert.IsTrue (beginsNewLine, "ANLI01");
+		Assert.IsTrue (endsNewLine, "ANLI02");
 	}
 	
 	[Test()]
@@ -149,47 +332,10 @@ public class TestUtils {
 		endOffset = insertIter.Offset - 1;
 		
 		TextTag expectedTag = buffer.TagTable.Lookup ("newline#0");
-		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
-		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), insertIter);
-		Assert.IsTrue (beginsFormat, "ANLV01");
-		Assert.IsTrue (endsFormat, "ANLV02");
-	}
-	
-	[Test()]
-	public void AddPaddingInt ()
-	{
-		int initialOffset, endOffset, nextOffset;
-		DocumentEditor editor = new DocumentEditor ();
-		TextBuffer buffer = editor.Buffer;
-		
-		initialOffset = 0;
-		nextOffset = DocumentUtils.AddPadding (buffer, initialOffset, "#0");
-		endOffset = nextOffset - 1;
-		
-		TextTag expectedTag = buffer.TagTable.Lookup ("padding#0");
-		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
-		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), buffer.GetIterAtOffset (nextOffset));
-		Assert.IsTrue (beginsFormat, "API01");
-		Assert.IsTrue (endsFormat, "API02");
-	}
-	
-	[Test()]
-	public void AddPaddingVoid ()
-	{
-		int initialOffset, endOffset;
-		DocumentEditor editor = new DocumentEditor ();
-		TextBuffer buffer = editor.Buffer;
-		
-		initialOffset = 0;
-		TextIter insertIter = buffer.StartIter;
-		DocumentUtils.AddPadding (buffer, ref insertIter, "#0");
-		endOffset = insertIter.Offset - 1;
-		
-		TextTag expectedTag = buffer.TagTable.Lookup ("padding#0");
-		bool beginsFormat = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
-		bool endsFormat = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), insertIter);
-		Assert.IsTrue (beginsFormat, "APV01");
-		Assert.IsTrue (endsFormat, "APV02");
+		bool beginsNewLine = buffer.GetIterAtOffset (initialOffset).BeginsTag (expectedTag);
+		bool endsNewLine = DocumentUtils.TagEndsHere  (expectedTag, buffer.GetIterAtOffset (endOffset), insertIter);
+		Assert.IsTrue (beginsNewLine, "ANLV01");
+		Assert.IsTrue (endsNewLine, "ANLV02");
 	}
 }
 }

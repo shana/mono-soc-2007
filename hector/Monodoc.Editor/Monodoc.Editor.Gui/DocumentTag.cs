@@ -19,6 +19,7 @@ public class DocumentTag : TextTag {
 		IsAttribute = 0x0004,
 		IsText = 0x0008,
 		IsDynamic = 0x0010,
+		IsEditable = 0x0020,
 		IsSerializableText = (IsSerializable | IsText)
 	};
 	
@@ -110,6 +111,19 @@ public class DocumentTag : TextTag {
 				flags |= TagFlags.IsSerializableText;
 			else
 				flags &= ~TagFlags.IsSerializableText;
+		}
+	}
+	
+	public bool IsEditable {
+		get {
+			return (flags & (TagFlags.IsEditable)) == TagFlags.IsEditable;
+		}
+		
+		set {
+			if (value)
+				flags |= TagFlags.IsEditable;
+			else
+				flags &= ~TagFlags.IsEditable;
 		}
 	}
 }
