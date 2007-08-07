@@ -196,15 +196,19 @@ public class DocumentBufferArchiver {
 		bool emptyElement = xmlReader.IsEmptyElement;
 		bool isDynamic = DocumentTagTable.IsDynamic (elementName);
 		TextIter insertAt, applyStart, applyEnd;
-		TagStart tagStart = new TagStart ();
-		tagStart.Start = offset;
-		tagStart.Name = elementName;
 		depth++;
 		
 		// We define a suffix so each dynamic tag has an unique name.
 		// Suffix has format: #{depth level}
 		if (isDynamic)
 			suffix = "#" + depth;
+		
+		// We add any needed string to give format to the document.
+		offset = FormatStart (buffer, offset, suffix, elementName);
+		
+		TagStart tagStart = new TagStart ();
+		tagStart.Start = offset;
+		tagStart.Name = elementName;
 		
 		// We first lookup the tag name, if the element is dynamic, we can
 		// have three scenarios.
@@ -230,9 +234,6 @@ public class DocumentBufferArchiver {
 			Environment.Exit (1);
 		}
 		#endif
-		
-		// We add any needed string to give format to the document.
-		offset = FormatStart (buffer, offset, suffix, elementName);
 		
 		// If element has attributes we have to get them and deserialize them.
 		if (xmlReader.HasAttributes)
@@ -307,14 +308,14 @@ public class DocumentBufferArchiver {
 		#endif
 		
 		if (((DocumentTag) tagStart.Tag).IsEditable) {
+			if (tagStart.Start + 1 == offset)
+				offset = DocumentUtils.AddStub (buffer, offset, "To be added test", suffix);
+			
 			insertAt = buffer.GetIterAtOffset (offset);
 			buffer.Insert (ref insertAt, "]");
 			offset += 1;
 		} else if (tagStart.Start == offset)
 			offset = DocumentUtils.AddPaddingEmpty (buffer, offset, suffix);
-		
-//		if (((DocumentTag) tagStart.Tag).IsEditable && tagStart.Empty)
-//			offset = DocumentUtils.AddStub (buffer, offset, "To be added test", suffix);
 		
 		applyStart = buffer.GetIterAtOffset (tagStart.Start);
 		applyEnd = buffer.GetIterAtOffset (offset);
