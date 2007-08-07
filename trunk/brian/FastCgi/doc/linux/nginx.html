@@ -5,6 +5,112 @@
 	</head>
 	<body>
 		<h1>Configuring Nginx to use <tt>fastcgi-mono-server</tt></h1>
-		<p style="color:red">TO BE ADDED</p>
+		
+		<h2>Table of Contents</h2>
+		<ul>
+			<li><a href="#intro">Introduction</a></li>
+			<li><a href="#step1">Step 1: Setting Up the FastCGI Pass</a></li>
+			<li><a href="#step2">Step 2: Adding Index Pages</a></li>
+		</ul>
+		
+		<a name="intro"></a>
+		<h2>Introduction</h2>
+		
+		<p><a href="http://wiki.codemongers.com/">Nginx</a> ("engine x")
+		is a high-performance HTTP server and reverse proxy. Designed
+		not just as a typical web server but also to proxy requests,
+		proxying to FastCGI is second nature to Nginx and can be done in
+		just a few short lines of configuration.</p>
+		
+		<h3>NOTE</h3>
+		
+		<ul>
+			<li><a href="http://en.opensuse.org/OpenSUSE_News/10.2-Release">OpenSuSE
+			10.2</a> (Nginx 0.5.30 from source)</li>
+			<li><i>If you have tested an additional configuration,
+			please email me at
+			<a href="mailto:brian.nickel@gmail.com">brian.nickel@gmail.com</a>.</i></li>
+		</ul>
+		
+		<a name="step1"></a>
+		<h2>Step 1: Setting Up the FastCGI Pass</h2>
+		
+		<p>Insert the following into the <tt>server</tt> section of
+		<tt>conf/nginx.conf</tt>:</p>
+		
+		<pre>        location ~ \.(aspx|asmx|ashx|asax|ascx|soap|rem|axd|cs|config|dll)$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        conf/fastcgi_params;
+        }</pre>
+		
+		<ul>
+			<li><p><tt>location ~ ... {}</tt> specifies the
+			extensions to pass to the FastCGI server.</p></li>
+			
+			<li><p><tt>fastcgi_pass ...</tt> specifies the server
+			and port of the Mono server. The server must be started
+			manually with arguments like the below.</p>
+			
+			<pre>fastcgi-mono-server2 /socket=tcp:9000</pre></li>
+			
+			<p>The value can also be the path to a Unix socket, eg
+			"unix:/tmp/fastcgi.socket". This corresponds to a Mono
+			server started with the path below.</p>
+			
+			<pre>fastcgi-mono-server2 /socket=unix:/tmp/fastcgi.socket</pre></li>
+			
+			<li><p><tt>fastcgi_param SCRIPT_FILENAME ...</tt>
+			specifies the physical location of the file on the
+			machine running the Mono server.
+			<tt>$fastcgi_script_name</tt> is the requested path, eg.
+			"/default.aspx" or "/test/file.aspx" so it should be
+			preceeded with the physical path of the document root.
+			In the above example, the files are expected to be in
+			the server's root directory.</p></li>
+			
+			<li><p><tt>include ...</tt> includes configuration
+			options from the default set of FastCGI parameters. When
+			installing the test server, this file failed to copy so
+			it may have to be copied manually from the source
+			package.</p></li>
+		</ul>
+		
+		<a name="step2"></a>
+		<h2>Step 2: Adding Index Pages</h2>
+		
+		<p>Nginx includes a setting <tt>fastcgi_index ...</tt> for
+		specifying an index page for the FastCGI pass. However, it is
+		unclear to me how this works, for extension based passing and
+		appears to only support one extension, so I'm recommending a
+		different method. For more information on <tt>fastcgi_index</tt>,
+		see <a
+		href="http://wiki.codemongers.com/NginxHttpFcgiModule">the
+		FastCGI documentation</a>.</p>
+		
+		<p>The method I recommend is editing the index page list in the
+		server's default location. For instance, a standard server will
+		have the the first block of code below, and you will want to
+		update it to the second block of code.</p>
+		
+		<h3>BEFORE</h3>
+		
+		<pre>        location / {
+            root   html;
+            index  index.html index.htm;
+        }</pre>
+		
+		<h3>AFTER</h3>
+		
+		<pre>        location / {
+            root   html;
+            index  index.html index.htm <b>index.aspx default.aspx</b>;
+        }</pre>
+		
+		<h2>Bada Bing!</h2>
+		
+		<p>You should now have ASP.NET working with Nginx. Enjoy!</p>
+		
+		<p>- Brian Nickel &lt;<a href="http://kerrick.wordpress.com">http://kerrick.wordpress.com</a>&gt;</p>
 	</body>
 </html>

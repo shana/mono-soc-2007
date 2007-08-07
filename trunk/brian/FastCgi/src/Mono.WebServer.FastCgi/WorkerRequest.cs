@@ -37,11 +37,13 @@ using Mono.FastCgi;
 using Mono.WebServer;
 using System.Text;
 using System.Net;
+using System.Globalization;
 
 namespace Mono.WebServer.FastCgi
 {
 	public class WorkerRequest : MonoWorkerRequest
 	{
+		private StringBuilder headers = new StringBuilder ();
 		private Responder responder;
 		private byte [] input_data;
 		public WorkerRequest (Responder responder, ApplicationHost appHost) : base (appHost)
@@ -83,7 +85,7 @@ namespace Mono.WebServer.FastCgi
 		
 		public override bool HeadersSent ()
 		{
-			return response_sent;
+			return headers == null;
 		}
 		
 		public override void FlushResponse (bool finalFlush)
@@ -103,8 +105,12 @@ namespace Mono.WebServer.FastCgi
 			if (closed)
 				return;
 			
-			if (!response_sent)
-				responder.SendOutput ("\r\n", HeaderEncoding);
+			if (headers != null) {
+				headers.Append ("\r\n");
+				responder.SendOutput (headers.ToString (),
+					HeaderEncoding);
+				headers = null;
+			}
 			
 			responder.CompleteRequest (0);
 			
@@ -210,27 +216,33 @@ namespace Mono.WebServer.FastCgi
 			return value != null ? value : base.GetServerVariable (name);
 		}
 		
-		private bool response_sent = false;
 		public override void SendResponseFromMemory (byte [] data, int length)
 		{
-			if (!response_sent)
-				responder.SendOutput ("\r\n", HeaderEncoding);
+			if (headers != null) {
+				headers.Append ("\r\n");
+				responder.SendOutput (headers.ToString (),
+					HeaderEncoding);
+				headers = null;
+			}
 			
 			responder.SendOutput (data, length);
-			response_sent = true;
 		}
 
 		public override void SendStatus (int statusCode, string statusDescription)
 		{
-			responder.SendOutput (string.Format ("{0} {1} {2}\r\n",
-				GetHttpVersion (), statusCode,
-				statusDescription), HeaderEncoding);
+			if (headers != null)
+				headers.AppendFormat (
+					CultureInfo.InvariantCulture,
+					"{0} {1} {2}\r\n", GetHttpVersion (),
+					statusCode, statusDescription);
 		}
 
 		public override void SendUnknownResponseHeader (string name, string value)
 		{
-			string line = string.Format ("{0}: {1}\r\n", name, value);
-			responder.SendOutput (line, HeaderEncoding);
+			if (headers != null)
+				headers.AppendFormat (
+					CultureInfo.InvariantCulture,
+					"{0}: {1}\r\n", name, value);
 		}
 
 		public override bool IsClientConnected ()
@@ -333,7 +345,8 @@ namespace Mono.WebServer.FastCgi
 				break;
 			}
 			
-			return (value != null) ? value : base.GetKnownRequestHeader (index);
+			return (value != null) ?
+				value : base.GetKnownRequestHeader (index);
 		}
 		
 		public override string GetServerName ()
