@@ -1,5 +1,16 @@
 2007-08-07  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Gui/OutputOptionsPanel.cs, Gui/AddLibraryDialog.cs,
+	  Gui/EditPackagesDialog.cs, Gui/AddPathDialog.cs,
+	  Gui/CodeGenerationPanel.cs, gtk-gui/CBinding.EditPackagesDialog.cs,
+	  gtk-gui/CBinding.AddPathDialog.cs,
+	  gtk-gui/CBinding.CodeGenerationPanel.cs,
+	  gtk-gui/CBinding.OutputOptionsPanel.cs,
+	  gtk-gui/CBinding.AddLibraryDialog.cs, gtk-gui/gui.stetic: Updated
+	  widgets.
+
+2007-08-07  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* CBinding.addin.xml, gtk-gui/CBinding.CodeGenerationPanel.cs: Removed
 	  autotools support since it is currently very .NET specific.
 

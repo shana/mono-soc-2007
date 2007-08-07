@@ -154,6 +154,7 @@ namespace CBinding {
             w10.SetTip(this.removeButton, "Remove selected package from the project.", "Remove selected package from the project.");
             this.removeButton.WidthRequest = 33;
             this.removeButton.HeightRequest = 33;
+            this.removeButton.Sensitive = false;
             this.removeButton.CanFocus = true;
             this.removeButton.Name = "removeButton";
             this.removeButton.UseUnderline = true;
@@ -226,6 +227,11 @@ namespace CBinding {
             this.DefaultWidth = 580;
             this.DefaultHeight = 449;
             this.Show();
+            this.removeButton.Clicked += new System.EventHandler(this.OnRemoveButtonClicked);
+            this.removeButton.Clicked += new System.EventHandler(this.OnRemoveButtonClick);
+            this.selectedPackagesTreeView.CursorChanged += new System.EventHandler(this.OnSelectedPackagesTreeViewCursorChanged);
+            this.buttonCancel.Clicked += new System.EventHandler(this.OnCancelButtonClick);
+            this.buttonOk.Clicked += new System.EventHandler(this.OnOkButtonClick);
         }
     }
 }

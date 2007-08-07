@@ -56,8 +56,6 @@ namespace CBinding
 			
 			externalConsoleCheckbox.Active = configuration.ExternalConsole;
 			pauseCheckbox.Active = configuration.PauseConsoleOutput;
-			
-			browseButton.Clicked += OnBrowseButtonClick;
 		}
 		
 		private void OnBrowseButtonClick (object sender, EventArgs e)
@@ -85,6 +83,11 @@ namespace CBinding
 			configuration.PauseConsoleOutput = pauseCheckbox.Active;
 			
 			return true;
+		}
+
+		protected virtual void OnExternalConsoleCheckboxClicked (object sender, System.EventArgs e)
+		{
+			pauseCheckbox.Sensitive = externalConsoleCheckbox.Active;
 		}
 	}
 	

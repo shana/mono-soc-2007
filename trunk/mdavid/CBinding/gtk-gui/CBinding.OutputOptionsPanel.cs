@@ -168,6 +168,7 @@ namespace CBinding {
             this.externalConsoleCheckbox.CanFocus = true;
             this.externalConsoleCheckbox.Name = "externalConsoleCheckbox";
             this.externalConsoleCheckbox.Label = Mono.Unix.Catalog.GetString("Run on e_xternal console");
+            this.externalConsoleCheckbox.Active = true;
             this.externalConsoleCheckbox.DrawIndicator = true;
             this.externalConsoleCheckbox.UseUnderline = true;
             this.vbox2.Add(this.externalConsoleCheckbox);
@@ -177,6 +178,7 @@ namespace CBinding {
             w11.Fill = false;
             // Container child vbox2.Gtk.Box+BoxChild
             this.pauseCheckbox = new Gtk.CheckButton();
+            this.pauseCheckbox.Sensitive = false;
             this.pauseCheckbox.CanFocus = true;
             this.pauseCheckbox.Name = "pauseCheckbox";
             this.pauseCheckbox.Label = Mono.Unix.Catalog.GetString("Pause _console output");
@@ -192,6 +194,8 @@ namespace CBinding {
                 this.Child.ShowAll();
             }
             this.Show();
+            this.browseButton.Clicked += new System.EventHandler(this.OnBrowseButtonClick);
+            this.externalConsoleCheckbox.Clicked += new System.EventHandler(this.OnExternalConsoleCheckboxClicked);
         }
     }
 }
