@@ -134,7 +134,14 @@ namespace System.Windows.Shapes {
 
 		protected override void OnRender(DrawingContext drawingContext) {
 			base.OnRender(drawingContext);
-			drawingContext.DrawGeometry(Fill, CreatePen(), DefiningGeometry);
+			Pen pen = CreatePen();
+			Geometry defining_geometry = DefiningGeometry;
+			if (Stretch == Stretch.Fill) {
+				Rect defining_geometry_bounds = defining_geometry.GetRenderBounds(pen);
+				if (defining_geometry_bounds.Left < 0 || defining_geometry_bounds.Top < 0)
+					defining_geometry.Transform = new MatrixTransform(1, 0, 0, 1, defining_geometry_bounds.Left < 0 ? -defining_geometry_bounds.Left : 0, defining_geometry_bounds.Top < 0 ? -defining_geometry_bounds.Top : 0);
+			}
+			drawingContext.DrawGeometry(Fill, pen, defining_geometry);
 		}
 		#endregion
 
