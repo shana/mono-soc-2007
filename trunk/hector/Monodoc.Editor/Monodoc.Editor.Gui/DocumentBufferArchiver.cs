@@ -121,7 +121,11 @@ public class DocumentBufferArchiver {
 					readingValue = false;
 					attributeValue = attributeName = String.Empty;
 				} else if (docTag.IsSerializableText) {
-					xmlWriter.WriteString (elementText);
+					if (docTag.Name.IndexOf ("significant-whitespace") != -1) {
+						xmlWriter.WriteString (DocumentUtils.Unescape (elementText));
+					} else
+						xmlWriter.WriteString (elementText);
+					
 					elementText = String.Empty;
 					readingText = false;
 				}
@@ -200,7 +204,7 @@ public class DocumentBufferArchiver {
 		// We define a suffix so each dynamic tag has an unique name.
 		// Suffix has format: #{depth level}
 		if (isDynamic)
-			suffix = '#' + depth.ToString ();
+			suffix = "#" + depth;
 		
 		// We first lookup the tag name, if the element is dynamic, we can
 		// have three scenarios.
@@ -234,28 +238,33 @@ public class DocumentBufferArchiver {
 		if (xmlReader.HasAttributes)
 			offset = DeserializeAttributes (buffer, offset, xmlReader, suffix);
 		
-		// Special case when an elment is empty. Because the way TextTag
-		// are implemented, empty ranges get lost in the buffer so we but
-		// a padding.
+		// Special case when an elment is empty.
+		// Case A: If element is editable a string stub is inserted to allow edition.
+		// Case B: If element is not editable then a padding is inserted to handle
+		// TextTag behaviour in which zero length ranges are lost.
 		if (emptyElement) {
-			if (tagStart.Start != offset) {
-				applyStart = buffer.GetIterAtOffset (tagStart.Start);
-				applyEnd = buffer.GetIterAtOffset (offset);
-			} else {
-				// Padding to conserve empty element
-				offset = AddPadding (buffer, offset, suffix);
+			if (((DocumentTag) tagStart.Tag).IsEditable) {
+				insertAt = buffer.GetIterAtOffset (offset);
+				buffer.Insert (ref insertAt, "[");
+				offset += 1;
 				
-				applyStart = buffer.GetIterAtOffset (tagStart.Start);
-				applyEnd = buffer.GetIterAtOffset (offset);
-			}
+//				TextTag textTag = DocumentUtils.GetAssociatedTextTag (buffer, tagStart.Tag);
+//				offset = DocumentUtils.AddText (buffer, offset, "Documentation for this section has not yet been entered.", suffix, textTag);
+//				offset = DocumentUtils.AddStub (buffer, offset, "To be added test", suffix);
+				
+				insertAt = buffer.GetIterAtOffset (offset);
+				buffer.Insert (ref insertAt, "]");
+				offset += 1;
+			} else
+				offset = DocumentUtils.AddPaddingEmpty (buffer, offset, suffix);
 			
+			applyStart = buffer.GetIterAtOffset (tagStart.Start);
+			applyEnd = buffer.GetIterAtOffset (offset);
 			buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+			offset = FormatEnd (buffer, offset, suffix, elementName);
 			
-			if (suffix == String.Empty)
-				suffix = "#0";
-			
-			// End string added for empty elements.
-			offset = FormatEmpty (buffer, offset, suffix, elementName);
+			// Padding between tag regions
+			offset = DocumentUtils.AddPadding (buffer, offset, suffix);
 			depth--;
 			
 			#if DEBUG
@@ -264,7 +273,7 @@ public class DocumentBufferArchiver {
 		} else {
 			stack.Push (tagStart);
 			
-			if (elementName.Equals ("summary")) {
+			if (((DocumentTag) tagStart.Tag).IsEditable) {
 				insertAt = buffer.GetIterAtOffset (offset);
 				buffer.Insert (ref insertAt, "[");
 				offset += 1;
@@ -276,34 +285,17 @@ public class DocumentBufferArchiver {
 	
 	private static int InsertText (TextBuffer buffer, int offset, string data, Stack stack)
 	{
-		string tagName;
-		TextTag textTag;
 		TagStart tagStart = (TagStart) stack.Peek ();
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		DocumentTag elementTag = (DocumentTag) tagStart.Tag;
-		string elementName = elementTag.Name;
-		
-		// Check if element is dynamic:
-		// True: We create a tagname with suffix :Text#[0-9]* so its unique.
-		// False: We create a tagname with a standard suffix :Text
-		if (elementTag.IsDynamic)
-			tagName = elementName.Split ('#')[0] + ":Text" + '#' + elementName.Split ('#')[1];
-		else
-			tagName = elementName + ":Text";
-		
-		textTag = tagTable.Lookup (tagName);
-		if (textTag == null)
-			textTag = tagTable.CreateDynamicTag (tagName);
+		TextIter insertAt = buffer.GetIterAtOffset (offset);
+		TextTag textTag = DocumentUtils.GetAssociatedTextTag (buffer, tagStart.Tag);
+		DocumentUtils.AddText (buffer, ref insertAt, data, textTag);
+//		buffer.InsertWithTags (ref insertAt, data, textTag);
 		
 		#if DEBUG
-		Console.WriteLine ("Text: {0} Value: {1} Start: {2}", tagName, data, offset);
+		Console.WriteLine ("Text: {0} Value: {1} Start: {2}", textTag.Name, data, offset);
 		#endif
 		
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		buffer.InsertWithTags (ref insertAt, data, textTag);
-		offset += data.Length;
-		
-		return offset;
+		return insertAt.Offset;
 	}
 	
 	private static int InsertEndElement (TextBuffer buffer, int offset, Stack stack, ref int depth)
@@ -316,36 +308,30 @@ public class DocumentBufferArchiver {
 		Console.WriteLine ("Element: {0}, End: {1}", tagStart.Tag.Name, offset);
 		#endif
 		
-		if (tagStart.Start != offset) {
+		if (((DocumentTag) tagStart.Tag).IsEditable) {
+//			TextTag textTag = DocumentUtils.GetAssociatedTextTag (buffer, tagStart.Tag);
+//			offset = DocumentUtils.AddText (buffer, offset, "Documentation for this section has not yet been entered.", suffix, textTag);
+//			offset = DocumentUtils.AddStub (buffer, offset, "To be added test", suffix);
 			
-			if (tagStart.Name.Equals ("summary")) {
-				insertAt = buffer.GetIterAtOffset (offset);
-				buffer.Insert (ref insertAt, "]");
-				offset += 1;
-			}
-			
-			applyStart = buffer.GetIterAtOffset (tagStart.Start);
-			applyEnd = buffer.GetIterAtOffset (offset);
-			buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
-			offset = FormatEnd (buffer, offset, suffix, tagStart.Name);
-		} else {
-			// Padding to conserve empty element
-			offset = AddPadding (buffer, offset, suffix);
-			
-			applyStart = buffer.GetIterAtOffset (tagStart.Start);
-			applyEnd = buffer.GetIterAtOffset (offset); 
-			buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
-		}
+			insertAt = buffer.GetIterAtOffset (offset);
+			buffer.Insert (ref insertAt, "]");
+			offset += 1;
+		} else if (tagStart.Start == offset)
+			offset = DocumentUtils.AddPaddingEmpty (buffer, offset, suffix);
+		
+		applyStart = buffer.GetIterAtOffset (tagStart.Start);
+		applyEnd = buffer.GetIterAtOffset (offset);
+		buffer.ApplyTag (tagStart.Tag, applyStart, applyEnd);
+		offset = FormatEnd (buffer, offset, suffix, tagStart.Name);
 		depth--;
 		
 		#if DEBUG
 		Console.WriteLine ("Applied: {0}, Start: {1}, End: {2}", tagStart.Tag.Name, tagStart.Start, offset);
 		#endif
 		
-				
 		// Padding between tag regions
-		suffix = '#' + depth.ToString ();
-		offset = AddPadding (buffer, offset, suffix);
+		suffix = "#" + depth;
+		offset = DocumentUtils.AddPadding (buffer, offset, suffix);
 		
 		return offset;
 	}
@@ -355,66 +341,42 @@ public class DocumentBufferArchiver {
 		TextIter insertAt = buffer.GetIterAtOffset (offset);
 		switch (elementName) {
 		case "AssemblyName":
-			AddString (buffer, ref insertAt, "Assembly Name: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Assembly Name: ", suffix);
 			break;
 		case "AssemblyPublicKey":
-			AddString (buffer, ref insertAt, "Assembly PublicKey: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Assembly PublicKey: ", suffix);
 			break;
 		case "AssemblyVersion":
-			AddString (buffer, ref insertAt, "Assembly Version: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Assembly Version: ", suffix);
 			break;
 		case "MemberOfLibrary":
-			AddString (buffer, ref insertAt, "From Library: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "From Library: ", suffix);
 			break;
 		case "ThreadSafetyStatement":
-			AddString (buffer, ref insertAt, "Threading Safety: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Threading Safety: ", suffix);
 			break;
 		case "ThreadingSafetyStatement":
-			AddString (buffer, ref insertAt, "Threading Safety: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Threading Safety: ", suffix);
 			break;
 		case "summary":
-			AddString (buffer, ref insertAt, "Summary:", suffix);
-		        AddNewLine (buffer, ref insertAt, suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Summary:\n", suffix);
 			break;
 		case "remarks":
-			AddString (buffer, ref insertAt, "Remarks:", suffix);
-			AddNewLine (buffer, ref insertAt, suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Remarks:\n", suffix);
 			break;
 		case "Members":
-			AddString (buffer, ref insertAt, "Members:", suffix);
-			AddNewLine (buffer, ref insertAt, suffix);
-			AddNewLine (buffer, ref insertAt, suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Members:\n\n", suffix);
 			break;
 		case "MemberType":
-			AddString (buffer, ref insertAt, "Member Type: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Member Type: ", suffix);
 			break;
 		case "ReturnType":
-			AddString (buffer, ref insertAt, "Member Return Type: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Member Return Type: ", suffix);
 			break;
 		case "since":
-			AddString (buffer, ref insertAt, "Since version: ", suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "Since version: ", suffix);
 			break;
 		default:
-			break;
-		}
-		
-		return insertAt.Offset;
-	}
-	
-	private static int FormatEmpty (TextBuffer buffer, int offset, string suffix, string elementName)
-	{
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		switch (elementName) {
-		case "see":
-		case "since":
-		case "paramref":
-		case "Parameters":
-		case "remarks":
-		case "MemberSignature":
-			AddPadding (buffer, ref insertAt, suffix);
-			break;
-		default:
-			AddNewLine (buffer, ref insertAt, suffix);
 			break;
 		}
 		
@@ -436,28 +398,23 @@ public class DocumentBufferArchiver {
 		case "Type":
 		case "link":
 			break;
+		case "see":
+		case "since":
+		case "paramref":
+		case "Parameters":
+		case "MemberSignature":
+			break;
 		case "summary":
 		case "ThreadSafetyStatement":
 		case "ThreadingSafetyStatement":
-			AddNewLine (buffer, ref insertAt, suffix);
-			AddNewLine (buffer, ref insertAt, suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "\n\n",  suffix);
 			break;
 		default:
-			AddNewLine (buffer, ref insertAt, suffix);
+			DocumentUtils.AddString (buffer, ref insertAt, "\n", suffix);
 			break;
 		}
 		
 		return insertAt.Offset;
-	}
-	
-	private static void AddString (TextBuffer buffer, ref TextIter insertAt, string data, string suffix)
-	{
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		TextTag tag = tagTable.Lookup ("format" + suffix);
-		
-		if (tag == null)
-			tag = tagTable.CreateDynamicTag ("format" + suffix);
-		buffer.InsertWithTags (ref insertAt, data, tag);
 	}
 	
 	private static void AddNewLine (TextBuffer buffer, ref TextIter insertAt, string suffix)
@@ -468,29 +425,6 @@ public class DocumentBufferArchiver {
 		if (tag == null)
 			tag = tagTable.CreateDynamicTag ("newline" + suffix);
 		buffer.InsertWithTags (ref insertAt, "\n", tag);
-	}
-	
-	private static int AddPadding (TextBuffer buffer, int offset, string suffix)
-	{
-		TextIter insertAt = buffer.GetIterAtOffset (offset);
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		TextTag tag = tagTable.Lookup ("padding" + suffix);
-		
-		if (tag == null)
-			tag = tagTable.CreateDynamicTag ("padding" + suffix);
-		buffer.InsertWithTags (ref insertAt, " ", tag);
-		
-		return insertAt.Offset;
-	}
-	
-	private static void AddPadding (TextBuffer buffer, ref TextIter insertAt, string suffix)
-	{
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		TextTag tag = tagTable.Lookup ("padding" + suffix);
-		
-		if (tag == null)
-			tag = tagTable.CreateDynamicTag ("padding" + suffix);
-		buffer.InsertWithTags (ref insertAt, " ", tag);
 	}
 	
 	private static int DeserializeAttributes (TextBuffer buffer, int offset, XmlTextReader xmlReader, string tagSuffix)
@@ -685,7 +619,7 @@ public class DocumentBufferArchiver {
 		
 		if (currentIter.BeginsTag (last))
 			GetBeginTags (currentIter, tags, beginTags);
-			
+		
 		if (DocumentUtils.TagEndsHere (last, currentIter, nextIter))
 			GetEndTags (currentIter, nextIter, tags, endTags);
 	}
@@ -695,18 +629,18 @@ public class DocumentBufferArchiver {
 		foreach (TextTag tag in tagArray) {
 			if (!currentIter.BeginsTag (tag))
 				continue;
-
+			
 			beginTags.Add (tag);
 		}
 	}
-
+	
 	private static void GetEndTags (TextIter currentIter, TextIter nextIter, TextTag [] tagArray, ArrayList endTags)
 	{
 		Array.Reverse (tagArray);
 		foreach (TextTag tag in tagArray) {
 			if (!DocumentUtils.TagEndsHere (tag, currentIter, nextIter))
 				continue;
-
+			
 			endTags.Add (tag);
 		}
 	}

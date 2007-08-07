@@ -28,33 +28,48 @@ public class TestDocumentTagTable {
 	[Test()]
 	public void TestTagTableSize ()
 	{
-		DocumentEditor editor = new DocumentEditor ();
-		TextBuffer buffer = editor.Buffer;
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
-		
-		Assert.AreEqual (115, tagTable.Size, "TTS01");
+		DocumentTagTable tagTable = new DocumentTagTable ();
+		Assert.AreEqual (115, tagTable.Size, "TTS");
 	}
 	
+	[Test()]
 	public void TestIsDynamicValid ()
 	{
+		Assert.IsTrue (DocumentTagTable.IsDynamic ("para"), "TIDV");
+	}
+	
+	[Test()]
+	public void TestIsDynamicInvalid ()
+	{
+		Assert.IsFalse (DocumentTagTable.IsDynamic ("test"), "TIDI");
 	}
 	
 	[Test()]
 	public void TestCreateDynamicTag ()
 	{
-		DocumentEditor editor = new DocumentEditor ();
-		TextBuffer buffer = editor.Buffer;
-		DocumentTagTable tagTable = (DocumentTagTable) buffer.TagTable;
+		DocumentTagTable tagTable = new DocumentTagTable ();
 		
 		TextTag expectedTag = tagTable.Lookup ("format#0");
 		Assert.IsNull (expectedTag, "CDT01");
+		
 		TextTag actualTag = tagTable.CreateDynamicTag ("format#0");
 		expectedTag = tagTable.Lookup ("format#0");
-		
-		TextIter insertIter = buffer.StartIter;
-		buffer.InsertWithTags (ref insertIter, "Example Region", actualTag);
-		
 		Assert.AreEqual (expectedTag, actualTag, "CDT02");
+	}
+	
+	[Test()]
+	public void TestCreateDynamicTagInvalid ()
+	{
+		DocumentTagTable tagTable = new DocumentTagTable ();
+		TextTag tag = null;
+		
+		try {
+			tag = tagTable.CreateDynamicTag ("foo-tag");
+		} catch (ArgumentException exception) {
+			Assert.AreEqual ("Error -> The tag \"foo-tag\" is not a Dynamic Tag", exception.Message, "TCDTI01");
+		}
+		
+		Assert.IsNull (tag);
 	}
 }
 }

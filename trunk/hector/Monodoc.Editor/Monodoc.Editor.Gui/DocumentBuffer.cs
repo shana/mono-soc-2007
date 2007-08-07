@@ -89,7 +89,7 @@ public class DocumentBuffer : TextBuffer {
 		if (startsRegion && endsRegion) {
 			Console.WriteLine ("Deleting whole editing region");
 			TextIter insertIter = GetIterAtOffset (startOffset);
-			InsertWithTags (ref insertIter, "Insert documentation", last);
+			InsertWithTags (ref insertIter, "Documentation for this section has not yet been entered.", last);
 		}
 	}
 

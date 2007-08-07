@@ -18,14 +18,13 @@ public class DocumentTagTable : TextTagTable {
 	
 	public DocumentTagTable () : base ()
 	{
-		dynamic_tags = new Hashtable ();
 		InitNormalTags ();
 		InitDynamicTags ();
 	}
 	
-	
 	public static bool IsDynamic (string name) 
 	{
+		InitDynamicTags ();
 		return dynamic_tags [name] != null;
 	}
 	
@@ -33,12 +32,12 @@ public class DocumentTagTable : TextTagTable {
 	{
 		string tagName = fullTagName.Split (':', '#') [0];
 		if (!IsDynamic (tagName))
-			throw new ArgumentException ("Error: The tag " + tagName + " is not a Dynamic Tag");
+			throw new ArgumentException ("Error -> The tag \"" + tagName + "\" is not a Dynamic Tag");
 		
 		DocumentTag tag;
 		tag = new DocumentTag (fullTagName);
 		tag.IsDynamic = true;
-		InitializeTag (tag);
+		InitializeDynamicTag (tag);
 		Add (tag);
 		
 		return tag;
@@ -374,6 +373,7 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("summary");
 		tag.IsElement = true;
+		tag.IsEditable = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("summary:Text");
@@ -422,10 +422,13 @@ public class DocumentTagTable : TextTagTable {
 		
 		tag = new DocumentTag ("remarks");
 		tag.IsElement = true;
+		tag.IsEditable = true;
 		Add (tag);
 		
 		tag = new DocumentTag ("remarks:Text");
 		tag.IsText = true;
+		tag.Editable = true;
+		tag.Background =  "#A5C0E6";
 		Add (tag);
 		
 		tag = new DocumentTag ("value");
@@ -509,8 +512,11 @@ public class DocumentTagTable : TextTagTable {
 		Add (tag);
 	}
 	
-	private void InitDynamicTags ()
+	private static void InitDynamicTags ()
 	{
+		if (dynamic_tags == null)
+			dynamic_tags = new Hashtable ();
+		
 		// Schema defined elements.
 		dynamic_tags ["block"] = true;
 		dynamic_tags ["code"] = true;
@@ -536,11 +542,15 @@ public class DocumentTagTable : TextTagTable {
 		
 		// Editor defined tags to format the documentation
 		dynamic_tags ["padding"] = true;
+		dynamic_tags ["padding-empty"] = true;
 		dynamic_tags ["newline"] = true;
 		dynamic_tags ["format"] = true;
+		dynamic_tags ["format-end"] = true;
+		dynamic_tags ["significant-whitespace"] = true;
+		dynamic_tags ["stub"] = true;
 	}
 	
-	private void InitializeTag (DocumentTag tag)
+	private void InitializeDynamicTag (DocumentTag tag)
 	{
 		string tagName = tag.Name.Split ('#')[0];
 		switch (tagName) {
@@ -638,6 +648,8 @@ public class DocumentTagTable : TextTagTable {
 			break;
 		case "para:Text":
 			tag.IsText = true;
+			tag.Editable = true;
+			tag.Background =  "#A5C0E6";
 			break;
 		case "paramref":
 			tag.IsElement = true;
@@ -714,6 +726,11 @@ public class DocumentTagTable : TextTagTable {
 			tag.IsSerializable = false;
 			tag.Invisible = true;
 			break;
+		case "padding-empty":
+			tag.IsText = true;
+			tag.IsSerializable = false;
+			tag.Invisible = true;
+			break;
 		case "newline":
 			tag.IsText = true;
 			tag.IsSerializable = false;
@@ -722,6 +739,24 @@ public class DocumentTagTable : TextTagTable {
 		case "format":
 			tag.IsText = true;
 			tag.IsSerializable = false;
+			tag.Invisible = false;
+			break;
+		case "format-end":
+			tag.IsText = true;
+			tag.IsSerializable = false;
+			tag.Invisible = true;
+			break;
+		case "significant-whitespace":
+			tag.IsText = true;
+			tag.Invisible = false;
+			tag.Invisible = true;
+			break;
+		case "stub":
+			tag.IsText = true;
+			tag.IsSerializable = false;
+			tag.Invisible = false;
+			tag.Editable = true;
+			tag.Background =  "#A5C0E6";
 			break;
 		default:
 			break;
