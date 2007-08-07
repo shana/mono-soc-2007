@@ -757,6 +757,8 @@ public class DocumentTagTable : TextTagTable {
 			tag.Invisible = false;
 			tag.Editable = true;
 			tag.Background =  "#A5C0E6";
+			tag.Weight = Pango.Weight.Bold;
+			tag.Style = Pango.Style.Italic;
 			break;
 		default:
 			break;
