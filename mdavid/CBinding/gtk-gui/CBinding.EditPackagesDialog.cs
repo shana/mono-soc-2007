@@ -77,6 +77,7 @@ namespace CBinding {
             this.normalPackageTreeView = new Gtk.TreeView();
             this.normalPackageTreeView.CanFocus = true;
             this.normalPackageTreeView.Name = "normalPackageTreeView";
+            this.normalPackageTreeView.HeadersClickable = true;
             this.scrolledwindow1.Add(this.normalPackageTreeView);
             this.notebook1.Add(this.scrolledwindow1);
             Gtk.Notebook.NotebookChild w3 = ((Gtk.Notebook.NotebookChild)(this.notebook1[this.scrolledwindow1]));
@@ -97,6 +98,7 @@ namespace CBinding {
             this.projectPackageTreeView = new Gtk.TreeView();
             this.projectPackageTreeView.CanFocus = true;
             this.projectPackageTreeView.Name = "projectPackageTreeView";
+            this.projectPackageTreeView.HeadersClickable = true;
             this.scrolledwindow3.Add(this.projectPackageTreeView);
             this.notebook1.Add(this.scrolledwindow3);
             Gtk.Notebook.NotebookChild w5 = ((Gtk.Notebook.NotebookChild)(this.notebook1[this.scrolledwindow3]));
@@ -135,6 +137,7 @@ namespace CBinding {
             this.selectedPackagesTreeView = new Gtk.TreeView();
             this.selectedPackagesTreeView.CanFocus = true;
             this.selectedPackagesTreeView.Name = "selectedPackagesTreeView";
+            this.selectedPackagesTreeView.HeadersClickable = true;
             this.scrolledwindow2.Add(this.selectedPackagesTreeView);
             this.table1.Add(this.scrolledwindow2);
             Gtk.Table.TableChild w9 = ((Gtk.Table.TableChild)(this.table1[this.scrolledwindow2]));
@@ -156,19 +159,15 @@ namespace CBinding {
             this.removeButton.UseUnderline = true;
             // Container child removeButton.Gtk.Container+ContainerChild
             Gtk.Alignment w11 = new Gtk.Alignment(0.5F, 0.5F, 0F, 0F);
-            w11.Name = "GtkAlignment";
             // Container child GtkAlignment.Gtk.Container+ContainerChild
             Gtk.HBox w12 = new Gtk.HBox();
-            w12.Name = "GtkHBox";
             w12.Spacing = 2;
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Image w13 = new Gtk.Image();
-            w13.Name = "image3";
-            w13.Pixbuf = Stetic.IconLoader.LoadIcon("gtk-remove", 16);
+            w13.Pixbuf = Stetic.IconLoader.LoadIcon(this, "gtk-remove", Gtk.IconSize.Menu, 16);
             w12.Add(w13);
             // Container child GtkHBox.Gtk.Container+ContainerChild
             Gtk.Label w15 = new Gtk.Label();
-            w15.Name = "GtkLabel";
             w15.LabelProp = "";
             w12.Add(w15);
             w11.Add(w12);

@@ -421,6 +421,7 @@ namespace CBinding {
             this.libTreeView = new Gtk.TreeView();
             this.libTreeView.CanFocus = true;
             this.libTreeView.Name = "libTreeView";
+            this.libTreeView.HeadersClickable = true;
             this.scrolledwindow1.Add(this.libTreeView);
             this.table2.Add(this.scrolledwindow1);
             Gtk.Table.TableChild w28 = ((Gtk.Table.TableChild)(this.table2[this.scrolledwindow1]));
@@ -523,6 +524,7 @@ namespace CBinding {
             this.includePathTreeView = new Gtk.TreeView();
             this.includePathTreeView.CanFocus = true;
             this.includePathTreeView.Name = "includePathTreeView";
+            this.includePathTreeView.HeadersClickable = true;
             this.scrolledwindow2.Add(this.includePathTreeView);
             this.table3.Add(this.scrolledwindow2);
             Gtk.Table.TableChild w37 = ((Gtk.Table.TableChild)(this.table3[this.scrolledwindow2]));
@@ -613,6 +615,7 @@ namespace CBinding {
             this.libPathTreeView = new Gtk.TreeView();
             this.libPathTreeView.CanFocus = true;
             this.libPathTreeView.Name = "libPathTreeView";
+            this.libPathTreeView.HeadersClickable = true;
             this.scrolledwindow3.Add(this.libPathTreeView);
             this.table4.Add(this.scrolledwindow3);
             Gtk.Table.TableChild w46 = ((Gtk.Table.TableChild)(this.table4[this.scrolledwindow3]));
