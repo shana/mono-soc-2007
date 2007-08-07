@@ -222,13 +222,9 @@ namespace Mono.WebServer.FastCgi
 
 		public override void SendStatus (int statusCode, string statusDescription)
 		{
-			if (statusCode == 200)
-				return;
-			
-			string line = string.Format ("{0} {1} {2}\r\n",
+			responder.SendOutput (string.Format ("{0} {1} {2}\r\n",
 				GetHttpVersion (), statusCode,
-				statusDescription);
-			responder.SendOutput (line, HeaderEncoding);
+				statusDescription), HeaderEncoding);
 		}
 
 		public override void SendUnknownResponseHeader (string name, string value)

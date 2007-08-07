@@ -1,5 +1,16 @@
 2007-08-06 Brian Nickel <brian.nickel@gmail.com>
 
+	* doc/linux/abyss.html: Removed warning about ASP.NET 2.0
+	
+	* doc/linux/index.html: Removed "To Be Added."
+	
+	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Send status 200 if
+	successful. Abyss Web Server apparently sends a failure status if the
+	file doesn't exist and the status isn't set. This messes things up for
+	JavaScript produced by WebResource.axd.
+
+2007-08-06 Brian Nickel <brian.nickel@gmail.com>
+
 	* doc/linux/abyss.html: Update with new info about ASP.NET 2.0
 	
 	* src/Mono.FastCgi/SocketAbstractions/ISocketAbstraction.cs:
