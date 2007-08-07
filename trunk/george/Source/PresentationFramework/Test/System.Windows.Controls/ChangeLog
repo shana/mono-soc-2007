@@ -1,3 +1,7 @@
+2007-08-07  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* Shape.cs: Expanded RendersDefiningGeometryStretchFill.
+
 2007-08-03  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Utility.cs: Added GetOptions.

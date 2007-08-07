@@ -431,6 +431,7 @@ namespace System.Windows.Shapes {
 				Assert.AreEqual(geometry_drawing.Bounds, new Rect(0, 0, 60, 60), "3");
 				Assert.IsTrue(geometry_drawing.Geometry is EllipseGeometry, "4");
 				Assert.AreEqual(geometry_drawing.Geometry.Bounds, new Rect(15, 15, 30, 30), "5");
+				Assert.AreEqual(((MatrixTransform)geometry_drawing.Geometry.Transform).Matrix, new Matrix(1, 0, 0, 1, 15, 15), "6");
 			}
 
 			protected override Geometry DefiningGeometry {
