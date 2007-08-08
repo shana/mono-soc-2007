@@ -39,6 +39,7 @@ namespace Measures {
 		IEnumerable methodMeasures;
 		int maxLinesInMethod;
 		int maxParametersInMethod;
+		int fields;
 
 		public TypeMeasure (TypeDefinition type) 
 		{
@@ -96,6 +97,15 @@ namespace Measures {
 			}
 		}
 
+		public int Fields {
+			get {
+				return fields;
+			}
+			internal set {
+				fields = value;
+			}
+		}
+
 		public object Clone () 
 		{
 			TypeMeasure typeMeasure = new TypeMeasure (type);
@@ -104,6 +114,7 @@ namespace Measures {
 			typeMeasure.MethodMeasures = MethodMeasures;
 			typeMeasure.ParametersPerMethod = ParametersPerMethod;
 			typeMeasure.LinesPerMethod = LinesPerMethod;
+			typeMeasure.Fields = Fields;
 			return typeMeasure;
 		}
 	}

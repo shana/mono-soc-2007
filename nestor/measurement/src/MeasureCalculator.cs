@@ -98,6 +98,11 @@ namespace Measures {
 			}
 			return maxValue;
 		}
+
+		private int CountFields (TypeDefinition type) 
+		{
+			return type.Fields.Count;
+		}
 		
 
 		public TypeMeasure MeasureType (TypeDefinition type) 
@@ -107,6 +112,7 @@ namespace Measures {
 			typeMeasure.ParametersPerMethod = CalculateParametersPerMethod (type);
 			typeMeasure.MaxLinesInMethod = CalculateMaxLinesInMethod (type);
 			typeMeasure.MaxParametersInMethod = CalculateMaxParametersInMethod (type);
+			typeMeasure.Fields = CountFields (type);
 			return typeMeasure;
 		}
 

@@ -41,6 +41,7 @@ namespace Measures.Ui {
 		[Widget] Label parametersPerMethod;
 		[Widget] Label maxLinesInMethod;
 		[Widget] Label maxParametersInMethod;
+		[Widget] Label numberOfFields;
 
 		public TypeMeasureWidget (TypeMeasure typeMeasure) 
 		{
@@ -50,6 +51,7 @@ namespace Measures.Ui {
 			parametersPerMethod.Text = typeMeasure.ParametersPerMethod.ToString ();
 			maxLinesInMethod.Text = typeMeasure.MaxLinesInMethod.ToString ();
 			maxParametersInMethod.Text = typeMeasure.MaxParametersInMethod.ToString ();
+			numberOfFields.Text = typeMeasure.Fields.ToString ();
 		}
 
 		public Widget Widget {
