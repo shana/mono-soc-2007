@@ -35,7 +35,7 @@ namespace Gendarme.Rules.Smells {
 	
 	public class DetectLargeClassRule : ITypeRule {
 
-		private int maxFields = 20;
+		private int maxFields = 25;
 
 		public int MaxFields {
 			get {
@@ -48,7 +48,7 @@ namespace Gendarme.Rules.Smells {
 
 		private bool IsTooLarge (TypeDefinition type) 
 		{
-			return type.Fields.Count > MaxFields;
+			return type.Fields.Count >= MaxFields;
 		}
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
