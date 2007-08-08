@@ -44,6 +44,7 @@ namespace Measures.Ui {
 		[Widget] RadioButton parametersPerMethodRadioButton;
 		[Widget] RadioButton numberOfLinesRadioButton;
 		[Widget] RadioButton numberOfParametersRadioButton;
+		[Widget] RadioButton numberOfFieldsRadioButton;
 		[Widget] Button okButton;
 		[Widget] Entry minimumValueEntry;
 
@@ -84,6 +85,9 @@ namespace Measures.Ui {
 				}
 				else if (numberOfParametersRadioButton.Active) {
 					results = measureFinder.FindByNumberOfParameters (measures, minimumValue);
+				}
+				else if (numberOfFieldsRadioButton.Active) {
+					results = measureFinder.FindByNumberOfFields (measures, minimumValue);
 				}
 			}
 			findDialog.Destroy ();

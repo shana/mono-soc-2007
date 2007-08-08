@@ -54,6 +54,16 @@ namespace Measures {
 			return arrayList;
 		}
 
+		public IEnumerable FindByNumberOfFields (IEnumerable measures, int minimumValue) 
+		{
+			ArrayList arrayList = new ArrayList ();
+			foreach (TypeMeasure typeMeasure in measures) {
+				if (minimumValue <= typeMeasure.Fields)
+					arrayList.Add (typeMeasure);
+			}
+			return arrayList;
+		}
+
 		public IEnumerable FindByNumberOfLines (IEnumerable measures, int minimumValue) 
 		{
 			ArrayList arrayList = new ArrayList ();
