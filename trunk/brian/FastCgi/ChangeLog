@@ -1,3 +1,29 @@
+2007-08-08 Brian Nickel <brian.nickel@gmail.com>
+
+	* fastcgi-mono-server.in:
+	* fastcgi-mono-server2.in: Use the mono executable found by Autoconf
+	rather than hard coding.
+	
+	* doc/linux/lighttpd.html: s/asd/axd/ I had missed one.
+	
+	* src/Mono.WebServer.FastCgi/Responder.cs: Respond with a 500 error if
+	the correct application could not be found.
+	
+	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Implement index file
+	detection if a directory is encountered. This is necessary if FastCGI is
+	managing whole directories. Code borrowed from XspWorkerRequest.
+	
+	* src/Mono.WebServer.FastCgi/server.cs: Return null in
+	GetApplicationForPath rather than throwing a NullValueException.
+	
+	* src/Mono.WebServer/MonoWorkerRequest.cs: Don't double close the
+	handle.
+	
+	* src/Mono.WebServer/ApplicationManager.cs: Don't check that the file
+	exists. This stops an application host from being created with requests
+	to non-existent files. Also cleaned up automapping, as it was failing
+	for paths like "/test//".
+
 2007-08-07 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/linux/abyss.html: Added "Tested on" information.

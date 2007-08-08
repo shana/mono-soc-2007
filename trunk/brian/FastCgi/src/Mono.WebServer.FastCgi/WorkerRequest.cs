@@ -38,14 +38,61 @@ using Mono.WebServer;
 using System.Text;
 using System.Net;
 using System.Globalization;
+using System.IO;
 
 namespace Mono.WebServer.FastCgi
 {
 	public class WorkerRequest : MonoWorkerRequest
 	{
+		private static string [] indexFiles = { "index.aspx",
+							"Default.aspx",
+							"default.aspx",
+							"index.html",
+							"index.htm" };
+		
+		static WorkerRequest ()
+		{
+			#if NET_2_0
+			SetDefaultIndexFiles (System.Configuration.ConfigurationManager.AppSettings [
+				"MonoServerDefaultIndexFiles"]);
+			#else
+			SetDefaultIndexFiles (System.Configuration.ConfigurationSettings.AppSettings [
+				"MonoServerDefaultIndexFiles"]);
+			#endif
+		}
+		
+		private static void SetDefaultIndexFiles (string list)
+		{
+			if (list == null)
+				return;
+			
+			#if NET_2_0
+			List<string> files = new List<string> ();
+			#else
+			ArrayList files = new ArrayList ();
+			#endif
+			
+			string [] fs = list.Split (',');
+			foreach (string f in fs) {
+				string trimmed = f.Trim ();
+				if (trimmed == "") 
+					continue;
+
+				files.Add (trimmed);
+			}
+
+			#if NET_2_0
+			indexFiles = files.ToArray ();
+			#else
+			indexFiles = (string []) files.ToArray (typeof (string));
+			#endif
+		}
+
+
 		private StringBuilder headers = new StringBuilder ();
 		private Responder responder;
 		private byte [] input_data;
+		private string extra_path;
 		public WorkerRequest (Responder responder, ApplicationHost appHost) : base (appHost)
 		{
 			this.responder = responder;
@@ -80,6 +127,20 @@ namespace Mono.WebServer.FastCgi
 
 		protected override bool GetRequestData ()
 		{
+			// This checks if the current path is a directory and
+			// tries to determine the appropriate file.
+			string path = responder.PhysicalPath;
+			
+			if (!Directory.Exists (path))
+				return true;
+			
+			foreach (string file in indexFiles)
+				if (File.Exists (Path.Combine (path, file))) {
+					extra_path = (responder.Path.EndsWith ("/") ?
+						"" : "/") + file;
+					return true;
+				}
+			
 			return true;
 		}
 		
@@ -262,6 +323,9 @@ namespace Mono.WebServer.FastCgi
 
 		public override string GetFilePath ()
 		{
+			if (extra_path != null)
+				return responder.Path + extra_path;
+			
 			return responder.Path;
 		}
 		

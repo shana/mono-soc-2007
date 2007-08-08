@@ -34,11 +34,34 @@ using System.Collections.Generic;
 using System.Collections;
 #endif
 using Mono.FastCgi;
+using System.Text;
 
 namespace Mono.WebServer.FastCgi
 {
 	public class Responder : MarshalByRefObject, IResponder
 	{
+		private static string error500 = 
+			"HTTP/1.0 500 No Application Found\r\n" +
+			"Content-type: text/html\r\n" + 
+			"Connection: close\r\n\r\n" +
+			"<html>\r\n" +
+			"	<head>\r\n" +
+			"		<title>500 No Application Found</title>\r\n" +
+			"	</head>\r\n" +
+			"	<body>\r\n" +
+			"		<h1>No Application Found</h1>\r\n" +
+			"		<p>The server could not find our register\r\n" +
+			"		an application matching the following\r\n" +
+			"		characteristics:</p>\r\n" +
+			"		<table>\r\n" +
+			"			<tr><th>Host</th><td>{0}</td>\r\n" +
+			"			<tr><th>Port</th><td>{1}</td>\r\n" +
+			"			<tr><th>Request Path</th><td>{2}</td>\r\n" +
+			"			<tr><th>Physical Path</th><td>{3}</td>\r\n" +
+			"		</table>\r\n" +
+			"	</body>\r\n" +
+			"</html>\r\n";
+		
 		private ResponderRequest request;
 		
 		public Responder (ResponderRequest request)
@@ -52,12 +75,20 @@ namespace Mono.WebServer.FastCgi
 			// + headers to be rendered as plain text. (Pretty sweet
 			// for debugging.)
 			
-			//SendOutputText ("Content-type: text/plain\r\n\r\n");
-			//SendOutputText ("Output:\r\n");
+			//request.SendOutputText ("Content-type: text/plain\r\n\r\n");
+			//request.SendOutputText ("Output:\r\n");
 			
 			ApplicationHost host = Server.GetApplicationForPath (
-				request.HostName, request.PortNumber,
-				request.Path, request.PhysicalPath);
+				HostName, PortNumber, Path, PhysicalPath);
+			
+			// If the host is null, the server was unable to
+			// determine a sane plan. Alert the client.
+			if (host == null) {
+				request.SendOutputText (string.Format (error500,
+					HostName, PortNumber,
+					Path, PhysicalPath));
+				return -1;
+			}
 			
 			try {
 				host.ProcessRequest (this);
