@@ -37,13 +37,13 @@ using Gendarme.Rules.Smells;
 namespace Test.Rules.Smells {
 	
 	public class LargeClass {
-		//21 fields
 		int x, x1, x2, x3;
 		string foo, foo1, foo2, foo3;
 		DateTime bar, bar1, bar2, bar3;
 		float f, f1, f2, f3;
 		char c, c1, c2, c3;
-		short s;
+		short s, s1, s2, s3;
+		string[] array;
 	}
 
 	public class NotLargeClass {
