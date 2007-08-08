@@ -59,4 +59,4 @@ fi
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 BINDIR=@libdir@/@PACKAGE@
-MONO_PATH="$BINDIR" /usr/bin/mono $MONO_OPTIONS "$BINDIR/fastcgi-mono-server.exe" "$@" $MONO_FCGI_OPTIONS
+MONO_PATH="$BINDIR" @MONO@ $MONO_OPTIONS "$BINDIR/fastcgi-mono-server.exe" "$@" $MONO_FCGI_OPTIONS

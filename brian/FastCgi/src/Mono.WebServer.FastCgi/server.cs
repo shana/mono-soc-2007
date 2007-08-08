@@ -90,8 +90,10 @@ namespace Mono.WebServer.FastCgi
 		                                                     string path,
 		                                                     string realPath)
 		{
-			return appmanager.GetApplicationForPath (vhost, port,
-				path, realPath).AppHost as ApplicationHost;
+			VPathToHost h = appmanager.GetApplicationForPath (vhost,
+				port, path, realPath);
+			
+			return h == null ? null : h.AppHost as ApplicationHost;
 		}
 		
 		public static int Main (string [] args)

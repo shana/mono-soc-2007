@@ -250,10 +250,9 @@ namespace Mono.WebServer
 		                                          string realPath)
 		{
 			// Check if auto-mapping is enabled and "realPath"
-			// points to an actual file. If so, we need to perform
+			// contains is not null. If so, we need to perform
 			// extra mapping operations.
-			bool mapping = auto_map && realPath != null
-				&& new FileInfo (realPath).Exists;
+			bool mapping = auto_map && realPath != null;
 			
 			// If mapping is enabled, we'll have to add an
 			// additional check to make sure that the right path is
@@ -269,19 +268,30 @@ namespace Mono.WebServer
 				char sep = Path.DirectorySeparatorChar;
 				string [] vSplit = vpath.Split ('/');
 				string [] rSplit = realPath.Split (sep);
+				int vLength = vSplit.Length;
+				int rLength = rSplit.Length;
+				
+				while (vLength > 0 &&
+					vSplit [vLength - 1].Length == 0)
+					vLength --;
 					
-				int parts = 0;
-				while (parts < vSplit.Length &&
-					parts < rSplit.Length &&
-					vSplit [vSplit.Length - parts - 1] ==
-					rSplit [rSplit.Length - parts - 1] &&
+				while (rLength > 0 &&
+					rSplit [rLength - 1].Length == 0)
+					rLength --;
+					
+				while (vLength > 0 && rLength > 0 &&
+					vSplit [vLength - 1] ==
+					rSplit [rLength - 1] &&
 					! new DirectoryInfo (Path.Combine (realPath, "bin")).Exists
-				)
+				) {
+					rLength --;
+					vLength --;
 					realPath = string.Join (sep.ToString (),
-						rSplit, 0, rSplit.Length - (++parts)) + sep;
-					
+						rSplit, 0, rLength) + sep;
+				}
+				
 				topVPath = string.Join ("/", vSplit, 0,
-					vSplit.Length - parts) + "/";
+					vLength) + "/";
 			}
 			
 			VPathToHost bestMatch = null;
@@ -315,14 +325,17 @@ namespace Mono.WebServer
 				lock (vpathToHost) {
 					AddApplication (vhost, vport, topVPath,
 						realPath);
-					VPathToHost v = vpathToHost [vpathToHost.Count - 1] as VPathToHost;
+					VPathToHost v = vpathToHost [
+						vpathToHost.Count - 1] as VPathToHost;
 					CreateHost (v);
 					return v;
 				}
 			}
 			
 			if (verbose)
-				Console.WriteLine ("No application defined for: {0}:{1}{2}", vhost, vport, vpath);
+				Console.WriteLine (
+					"No application defined for: {0}:{1}{2}",
+					vhost, vport, vpath);
 
 			return null;
 		}
