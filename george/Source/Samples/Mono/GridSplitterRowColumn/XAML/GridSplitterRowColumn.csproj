@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{57C9C9FC-0696-4879-A078-09246FD34C93}</ProjectGuid>
+    <ProjectGuid>{4EF65EF6-A245-4B38-BEF3-C3214A6519D1}</ProjectGuid>
     <RootNamespace>SDKSample</RootNamespace>
     <AssemblyName>GridSplitterRowColumn</AssemblyName>
     <WarningLevel>4</WarningLevel>
@@ -40,7 +40,13 @@
   <ItemGroup>
     <ApplicationDefinition Include="app.xaml" />
     <Page Include="Window1.xaml" />
-   </ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PresentationFramework\Mono.PresentationFramework.csproj">
+      <Project>{7E667176-D940-4B73-9CE1-D5A01A9DB05E}</Project>
+      <Name>Mono.PresentationFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.WinFX.targets" />
 </Project>
