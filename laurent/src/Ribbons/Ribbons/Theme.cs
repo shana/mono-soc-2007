@@ -433,15 +433,27 @@ namespace Ribbons
 		{
 			cr.Color = new Color (0, 0, 0, 0.3);
 			cr.LineWidth = 1;
-			cr.Rectangle (tilesAllocation.X + 0.5, tilesAllocation.Y + 0.5, tilesAllocation.Width - 1.0, tilesAllocation.Height - 1.0);
+			cr.Rectangle (tilesAllocation.X - 0.5, tilesAllocation.Y - 0.5, tilesAllocation.Width + 1.0, tilesAllocation.Height + 1.0);
 			cr.Stroke ();
 		}
 		
 		/// <summary>Draws a tile.</summary>
-		public void DrawTile (Context cr, Rectangle bodyAllocation, Tile widget)
+		public void DrawTile (Context cr, Rectangle bodyAllocation, Rectangle contentAllocation, Tile widget)
 		{
+			if(widget.Selected)
+			{
+				LinearGradient grad = new LinearGradient (bodyAllocation.X, bodyAllocation.Y, bodyAllocation.X, bodyAllocation.Y + bodyAllocation.Height);
+				grad.AddColorStop (0.00, new Color (0.9922, 0.7373, 0.4353));
+				grad.AddColorStop (0.27, new Color (0.9961, 0.8039, 0.5569));
+				grad.AddColorStop (0.33, new Color (0.9961, 0.7255, 0.4078));
+				grad.AddColorStop (1.00, new Color (0.9843, 0.8980, 0.6313));
+				cr.Rectangle (bodyAllocation);
+				cr.Pattern = grad;
+				cr.Fill ();
+			}
+			
 			cr.Color = new Color (1, 1, 1);
-			cr.Rectangle (bodyAllocation);
+			cr.Rectangle (contentAllocation);
 			cr.Fill ();
 		}
 	}

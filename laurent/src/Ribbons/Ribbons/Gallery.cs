@@ -14,12 +14,14 @@ namespace Ribbons
 		private int defaultTilesPerRow;
 		private int tileSpacing;
 		
+		private Tile selectedTile;
 		private int firstDisplayedTileIndex, lastDisplayedTileIndex;
 		private int btnWidth;
 		private Requisition upReq, downReq, expandReq;
 		private Gdk.Rectangle tilesAlloc;
 		
-		private const double space = 2.0; 
+		private const double space = 2.0;
+		private const double lineWidth = 1.0;
 		
 		public TileSelectedHandler TileSelected;
 		
@@ -63,6 +65,11 @@ namespace Ribbons
 			get { return defaultTilesPerRow; }
 		}
 		
+		public Tile SelectedTile
+		{
+			get { return selectedTile; }
+		}
+		
 		public Gallery()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
@@ -75,9 +82,9 @@ namespace Ribbons
 			this.firstDisplayedTileIndex = 0;
 			this.lastDisplayedTileIndex = -1;
 			
-			this.tileHeight = 48;
-			this.tileWidth = 64;
-			this.tileSpacing = 8;
+			this.tileHeight = 56;
+			this.tileWidth = 72;
+			this.tileSpacing = 0;
 			this.BorderWidth = 2;
 			
 			this.up = new Button ("\u25B2");
@@ -133,8 +140,10 @@ namespace Ribbons
 		/// <param name="TileIndex">Index of the tile to remove.</param>
 		public void RemoveTile (int TileIndex)
 		{
-			tiles[TileIndex].Clicked -= Tile_Clicked;
-			tiles[TileIndex].Unparent ();
+			Tile t = tiles[TileIndex];
+			t.Clicked -= Tile_Clicked;
+			t.Unparent ();
+			if(selectedTile == t) selectedTile = null;
 			
 			tiles.RemoveAt (TileIndex);
 		}
@@ -156,7 +165,10 @@ namespace Ribbons
 		
 		private void Tile_Clicked(object Sender, EventArgs e)
 		{
-			OnTileSelected ((Tile)Sender);
+			if(selectedTile != null) selectedTile.Selected = false;
+			selectedTile = (Tile)Sender;
+			selectedTile.Selected = true;
+			OnTileSelected (selectedTile);
 		}
 		
 		private void MoveUp ()
@@ -269,8 +281,8 @@ namespace Ribbons
 			int btnHeight = upReq.Height + downReq.Height + expandReq.Height;
 			
 			int count = Math.Min (tiles.Count, defaultTilesPerRow);
-			requisition.Width = btnWidth + (int)space + count * tileWidth + (count + 1) * tileSpacing + 2 * (int)BorderWidth;
-			requisition.Height = Math.Max (tileHeight + 2*tileSpacing, btnHeight) + 2 * (int)BorderWidth;
+			requisition.Width = btnWidth + (int)space + 2 * (int)lineWidth + count * tileWidth + (count + 1) * tileSpacing + 2 * (int)BorderWidth;
+			requisition.Height = Math.Max (tileHeight + 2 * (tileSpacing + (int)lineWidth), btnHeight) + 2 * (int)BorderWidth;
 			
 			if(WidthRequest != -1) requisition.Width = WidthRequest;
 			if(HeightRequest != -1) requisition.Height = HeightRequest;
@@ -287,7 +299,7 @@ namespace Ribbons
 			
 			Gdk.Rectangle btnAlloc;
 			btnAlloc.Width = btnWidth;
-			btnAlloc.X = allocation.X + allocation.Width - btnAlloc.Width;
+			btnAlloc.X = allocation.X + allocation.Width - btnAlloc.Width + 1;
 			
 			btnAlloc.Y = allocation.Y;
 			btnAlloc.Height = upReq.Height;
@@ -301,10 +313,10 @@ namespace Ribbons
 			btnAlloc.Height = expandReq.Height;
 			expand.SizeAllocate (btnAlloc);
 			
-			tilesAlloc.Y = allocation.Y + tileSpacing;
-			tilesAlloc.X = allocation.X + tileSpacing;
-			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing - (int)space;
-			tilesAlloc.Height = allocation.Height - 2 * tileSpacing; 
+			tilesAlloc.X = allocation.X + (int)lineWidth + tileSpacing;
+			tilesAlloc.Y = allocation.Y + (int)lineWidth + tileSpacing;
+			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing - (int)space - 2 * (int)lineWidth;
+			tilesAlloc.Height = allocation.Height - 2 * (tileSpacing + (int)lineWidth); 
 			
 			UpdateTilesLayour ();
 		}

@@ -7,6 +7,28 @@ namespace Ribbons
 	public abstract class Tile : Widget
 	{
 		protected Theme theme = new Theme ();
+		private bool selected;
+		private uint borderWidth;
+		
+		public uint BorderWidth
+		{
+			set
+			{
+				borderWidth = value;
+				QueueDraw ();
+			}
+			get { return borderWidth; }
+		}
+		
+		public bool Selected
+		{
+			set
+			{
+				selected = value;
+				QueueDraw ();
+			}
+			get { return selected; }
+		}
 		
 		public event EventHandler Clicked;
 		
@@ -16,6 +38,9 @@ namespace Ribbons
 			this.SetFlag (WidgetFlags.NoWindow);
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
+			this.selected = false;
+			this.BorderWidth = 4;
 		}
 		
 		/// <summary>Fires the Click event.</summary>
@@ -39,10 +64,13 @@ namespace Ribbons
 			Context cr = Gdk.CairoHelper.Create (this.GdkWindow);
 			
 			Cairo.Rectangle area = new Cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
+			Cairo.Rectangle contentArea = new Cairo.Rectangle (area.X + BorderWidth, area.Y + BorderWidth, area.Width - 2 * BorderWidth, area.Height - 2 * BorderWidth);
+			
 			cr.Rectangle (area);
 			cr.Clip ();
-			theme.DrawTile (cr, area, this);
-			DrawContent (cr, area);
+			theme.DrawTile (cr, area, contentArea, this);
+			
+			DrawContent (cr, contentArea);
 			
 			return base.OnExposeEvent (evnt);
 		}
