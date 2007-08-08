@@ -1,3 +1,10 @@
+2007-08-08  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/CTextEditorExtension.cs, Gui/DataProvider.cs,
+	  Parser/ProjectInformation.cs, Parser/Function.cs,
+	  Parser/TagDatabaseManager.cs: Parse and complete for included system
+	  files too.
+
 2007-08-07  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/OutputOptionsPanel.cs, Gui/AddLibraryDialog.cs,

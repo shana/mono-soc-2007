@@ -46,13 +46,25 @@ namespace CBinding
 		private TextEditor editor;
 		private List<Function> functions = new List<Function> ();
 		
-		public ParameterDataProvider (TextEditor editor, ProjectInformation info, string functionName)
+		public ParameterDataProvider (Document document, ProjectInformation info, string functionName)
 		{
-			this.editor = editor;
+			this.editor = document.TextEditor;
 			
 			foreach (Function f in info.Functions) {
 				if (f.Name == functionName) {
 					functions.Add (f);
+				}
+			}
+			
+			string currentFile = document.FileName;
+			
+			if (info.IncludedFiles.ContainsKey (currentFile)) {
+				foreach (FileInformation fi in info.IncludedFiles[currentFile]) {
+					foreach (Function f in fi.Functions) {
+						if (f.Name == functionName) {
+							functions.Add (f);
+						}
+					}
 				}
 			}
 		}
