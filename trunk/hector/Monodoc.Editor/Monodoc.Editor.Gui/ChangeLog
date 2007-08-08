@@ -1,18 +1,28 @@
-2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
+2007-08-07  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
 
+	* 2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/Test/TestDocumentUtils.cs,
+	  Monodoc.Editor.Gui/Test/TestUtils.cs,
+	  Monodoc.Editor.Gui/Test/TestTextRange.cs,
+	  Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Changed name from
+	  TestUtils to TestDocumentUtils.cs, added TestTextRange.cs too.
+	* Monodoc.Editor.Gui/DocumentUndoManager.cs: Skeleton of abstract class
+	  SplitterAction that implements the interface EditAction that
+	  represents a given "action" done in the text buffer. The interface
+	  request the implementation of basic functions like Undo, Redo and
+	  Destroy for any Action.
+	* Monodoc.Editor.Gui/Utils.cs: Added TextRange helper class, this class
+	  takes the start TextIter and end TextIter over a region on a buffer
+	  and grants helpful method to get the Text inside the region, change
+	  the region bounds, delete the text in the region, etc.
 	* DocumentBufferArchiver.cs: FormaEnd is called before the start offset
 	  of an element is saved.
-
-2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
-
 	* DocumentBufferArchiver.cs: Removed commented lines.
 	
 	  Moved AddNewLine method to DocumentUtils class, change old calls to
 	  new arrange.
 	* DocumentTagTable.cs: Minor changes.
-
-2007-08-07  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
-
 	* Test/TestDocumentTagTable.cs: Several test units
 	  for DocumentTagTable class.
 	* Test/TestDocumentTag.cs,

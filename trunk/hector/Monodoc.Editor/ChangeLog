@@ -1,20 +1,3 @@
-2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
-
-	* Monodoc.Editor.Gui/Test/TestDocumentUtils.cs,
-	  Monodoc.Editor.Gui/Test/TestUtils.cs,
-	  Monodoc.Editor.Gui/Test/TestTextRange.cs,
-	  Monodoc.Editor.Gui/Monodoc.Editor.Gui.mdp: Changed name from
-	  TestUtils to TestDocumentUtils.cs, added TestTextRange.cs too.
-	* Monodoc.Editor.Gui/DocumentUndoManager.cs: Skeleton of abstract class
-	  SplitterAction that implements the interface EditAction that
-	  represents a given "action" done in the text buffer. The interface
-	  request the implementation of basic functions like Undo, Redo and
-	  Destroy for any Action.
-	* Monodoc.Editor.Gui/Utils.cs: Added TextRange helper class, this class
-	  takes the start TextIter and end TextIter over a region on a buffer
-	  and grants helpful method to get the Text inside the region, change
-	  the region bounds, delete the text in the region, etc.
-
 2007-08-02  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/Test/TestUtils.cs: Minor change.
