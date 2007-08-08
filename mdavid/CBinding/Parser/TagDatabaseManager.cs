@@ -32,6 +32,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 using MonoDevelop.Projects;
 using MonoDevelop.Core;
@@ -86,9 +87,10 @@ namespace CBinding.Parser
 			}
 		}
 		
-		internal string Headers (string filename)
+		internal string[] Headers (string filename, bool with_system)
 		{
-			ProcessWrapper p = Runtime.ProcessService.StartProcess ("gcc", "-MM -MG " + filename, null, null);
+			string option = (with_system ? "-M" : "-MM");
+			ProcessWrapper p = Runtime.ProcessService.StartProcess ("gcc", option + " -MG " + filename, null, null);
 			p.WaitForExit ();
 			
 			StringBuilder output = new StringBuilder ();
@@ -100,7 +102,7 @@ namespace CBinding.Parser
 			p.Close ();
 			
 			string[] lines = output.ToString ().Split ('\\');
-			StringBuilder headers = new StringBuilder ();
+			List<string> headers = new List<string> ();
 			
 			for (int i = 0; i < lines.Length; i++) {
 				string[] files = lines[i].Split (' ');
@@ -112,16 +114,96 @@ namespace CBinding.Parser
 					string depfile = files[j].Trim ();
 					
 					if (!string.IsNullOrEmpty (depfile))
-						headers.Append (depfile + " ");
+						headers.Add (depfile);
 				}
 			}
 			
-			return headers.ToString ();
+			return headers.ToArray ();
+		}
+		
+		private void UpdateSystemTags (Project project, string filename, string[] includedFiles)
+		{
+			ProjectInformation info = ProjectInformationManager.Instance.Get (project);
+			List<FileInformation> files;
+			
+			if (!info.IncludedFiles.ContainsKey (filename)) {
+				files = new List<FileInformation> ();
+				info.IncludedFiles.Add (filename, files);
+			} else {
+				files = info.IncludedFiles[filename];
+			}
+			
+			foreach (string includedFile in includedFiles) {
+				bool contains = false;
+				
+				foreach (FileInformation fi in files) {
+					if (fi.FileName == includedFile) {
+						contains = true;
+					}
+				}
+				
+				if (!contains) {
+					FileInformation newFileInfo = new FileInformation (project, includedFile);
+					files.Add (newFileInfo);
+					FillFileInformation (newFileInfo);
+				}
+				
+				contains = false;
+			}
+		}
+		
+		private void FillFileInformation (FileInformation fileInfo)
+		{
+			PropertyService propertyService = (PropertyService)ServiceManager.GetService (typeof (PropertyService));
+			string confdir = propertyService.ConfigDirectory;
+			string tagFileName = Path.GetFileName (fileInfo.FileName) + ".tag";
+			string tagdir = Path.Combine (confdir, "system-tags");
+			string tagFullFileName = Path.Combine (tagdir, tagFileName);
+			string ctags_options = "--C++-kinds=+p+u --fields=+a-f+S --language-force=C++ --excmd=pattern -f " + tagFullFileName + " " + fileInfo.FileName;
+			
+			if (!Directory.Exists (tagdir))
+				Directory.CreateDirectory (tagdir);
+			
+			if (!File.Exists (tagFullFileName)) {
+				ProcessWrapper p;
+				
+				try {
+					p = Runtime.ProcessService.StartProcess ("ctags", ctags_options, null, null);
+					p.WaitForExit ();
+				} catch (Exception ex) {
+					throw new IOException ("Could not create tags database (You must have exuberant ctags installed).", ex);
+				}
+				
+				p.Close ();
+			}
+			
+			string ctags_output;
+			string tagEntry;
+			
+			using (StreamReader reader = new StreamReader (tagFullFileName)) {
+				ctags_output = reader.ReadToEnd ();
+			}
+			
+			using (StringReader reader = new StringReader (ctags_output)) {
+				while ((tagEntry = reader.ReadLine ()) != null) {
+					if (tagEntry.StartsWith ("!_")) continue;
+					
+					Tag tag = ParseTag (tagEntry);
+					
+					AddInfo (fileInfo, tag, ctags_output, true);
+				}
+			}
+			
+			fileInfo.IsFilled = true;
 		}
 		
 		public void UpdateFileTags (Project project, string filename)
 		{
-			string ctags_options = "--C++-kinds=+p+u --fields=+a-f+S --language-force=C++ --excmd=pattern -f - " + filename + " " + Headers (filename);
+			string[] headers = Headers (filename, false);
+			string ctags_options = "--C++-kinds=+p+u --fields=+a-f+S --language-force=C++ --excmd=pattern -f - " + filename + " " + string.Join (" ", headers);
+			
+			string[] system_headers = diff (Headers (filename, true), headers);
+			
 			
 			ProcessWrapper p;
 			
@@ -144,75 +226,88 @@ namespace CBinding.Parser
 					
 					Tag tag = ParseTag (tagEntry);
 					
-					switch (tag.Kind)
-					{
-					case TagKind.Class:
-						Class c = new Class (tag, project, ctags_output);
-						if (!info.Classes.Contains (c))
-							info.Classes.Add (c);
-						break;
-					case TagKind.Enumeration:
-						Enumeration e = new Enumeration (tag, project, ctags_output);
-						if (!info.Enumerations.Contains (e))
-							info.Enumerations.Add (e);
-						break;
-					case TagKind.Enumerator:
-						Enumerator en= new Enumerator (tag, project, ctags_output);
-						if (!info.Enumerators.Contains (en))
-							info.Enumerators.Add (en);
-						break;
-					case TagKind.ExternalVariable:
-						break;
-					case TagKind.Function:
-						Function f = new Function (tag, project, ctags_output);
-						if (!info.Functions.Contains (f))
-							info.Functions.Add (f);
-						break;
-					case TagKind.Local:
-						break;
-					case TagKind.Macro:
-						Macro m = new Macro (tag, project);
-						if (!info.Macros.Contains (m))
-							info.Macros.Add (m);
-						break;
-					case TagKind.Member:
-						Member me = new Member (tag, project, ctags_output);
-						if (!info.Members.Contains (me))
-							info.Members.Add (me);
-						break;
-					case TagKind.Namespace:
-						Namespace n = new Namespace (tag, project, ctags_output);
-						if (!info.Namespaces.Contains (n))
-							info.Namespaces.Add (n);
-						break;
-					case TagKind.Prototype:
-						break;
-					case TagKind.Structure:
-						Structure s = new Structure (tag, project, ctags_output);
-						if (!info.Structures.Contains (s))
-							info.Structures.Add (s);
-						break;
-					case TagKind.Typedef:
-						Typedef t = new Typedef (tag, project, ctags_output);
-						if (!info.Typedefs.Contains (t))
-							info.Typedefs.Add (t);
-						break;
-					case TagKind.Union:
-						Union u = new Union (tag, project, ctags_output);
-						if (!info.Unions.Contains (u))
-							info.Unions.Add (u);
-						break;
-					case TagKind.Variable:
-						Variable v = new Variable (tag, project);
-						if (!info.Variables.Contains (v))
-							info.Variables.Add (v);
-						break;
-					default:
-						break;
-					}
+					AddInfo (info, tag, ctags_output, false);
 				}
-			}
+			}			
+			
 			FileUpdated (new ClassPadEventArgs (project));
+			
+			UpdateSystemTags (project, filename, system_headers);
+		}
+		
+		private void AddInfo (FileInformation info, Tag tag, string ctags_output, bool getFunctionFromPrototype)
+		{
+			switch (tag.Kind)
+			{
+			case TagKind.Class:
+				Class c = new Class (tag, info.Project, ctags_output);
+				if (!info.Classes.Contains (c))
+					info.Classes.Add (c);
+				break;
+			case TagKind.Enumeration:
+				Enumeration e = new Enumeration (tag, info.Project, ctags_output);
+				if (!info.Enumerations.Contains (e))
+					info.Enumerations.Add (e);
+				break;
+			case TagKind.Enumerator:
+				Enumerator en= new Enumerator (tag, info.Project, ctags_output);
+				if (!info.Enumerators.Contains (en))
+					info.Enumerators.Add (en);
+				break;
+			case TagKind.ExternalVariable:
+				break;
+			case TagKind.Function:
+				Function f = new Function (tag, info.Project, ctags_output);
+				if (!info.Functions.Contains (f))
+					info.Functions.Add (f);
+				break;
+			case TagKind.Local:
+				break;
+			case TagKind.Macro:
+				Macro m = new Macro (tag, info.Project);
+				if (!info.Macros.Contains (m))
+					info.Macros.Add (m);
+				break;
+			case TagKind.Member:
+				Member me = new Member (tag, info.Project, ctags_output);
+				if (!info.Members.Contains (me))
+					info.Members.Add (me);
+				break;
+			case TagKind.Namespace:
+				Namespace n = new Namespace (tag, info.Project, ctags_output);
+				if (!info.Namespaces.Contains (n))
+					info.Namespaces.Add (n);
+				break;
+			case TagKind.Prototype:
+				if (getFunctionFromPrototype) {
+					Function fu = new Function (tag, info.Project, ctags_output);
+					if (!info.Functions.Contains (fu))
+						info.Functions.Add (fu);
+				}
+				break;
+			case TagKind.Structure:
+				Structure s = new Structure (tag, info.Project, ctags_output);
+				if (!info.Structures.Contains (s))
+					info.Structures.Add (s);
+				break;
+			case TagKind.Typedef:
+				Typedef t = new Typedef (tag, info.Project, ctags_output);
+				if (!info.Typedefs.Contains (t))
+					info.Typedefs.Add (t);
+				break;
+			case TagKind.Union:
+				Union u = new Union (tag, info.Project, ctags_output);
+				if (!info.Unions.Contains (u))
+					info.Unions.Add (u);
+				break;
+			case TagKind.Variable:
+				Variable v = new Variable (tag, info.Project);
+				if (!info.Variables.Contains (v))
+					info.Variables.Add (v);
+				break;
+			default:
+				break;
+			}
 		}
 		
 		private Tag ParseTag (string tagEntry)
@@ -441,6 +536,21 @@ namespace CBinding.Parser
 				
 				return null;
 			}
+		}
+		
+		// TODO: This could probably be optimized...
+		private static string[] diff (string[] a1, string[] a2)
+		{
+			List<string> res = new List<string> ();
+			
+			List<string> right = new List<string> (a2);
+			
+			foreach (string s in a1) {
+				if (!right.Contains (s))
+					res.Add (s);
+			}
+			
+			return res.ToArray ();
 		}
 	}
 }

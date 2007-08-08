@@ -37,31 +37,36 @@ using MonoDevelop.Projects;
 using CBinding.Navigation;
 
 namespace CBinding.Parser
-{	
-	public class ProjectInformation
+{
+	public class FileInformation
 	{
-		private Project project;
-		private Globals globals;
-		private MacroDefinitions macroDefs;
-		private List<Namespace> namespaces = new List<Namespace> ();
-		private List<Function> functions = new List<Function> ();
-		private List<Class> classes = new List<Class> ();
-		private List<Structure> structures = new List<Structure> ();
-		private List<Member> members = new List<Member> ();
-		private List<Variable> variables = new List<Variable> ();
-		private List<Macro> macros = new List<Macro> ();
-		private List<Enumeration> enumerations = new List<Enumeration> ();
-		private List<Enumerator> enumerators = new List<Enumerator> ();
-		private List<Union> unions = new List<Union> ();
-		private List<Typedef> typedefs = new List<Typedef> ();
+		protected Project project;
 		
-//		public event LanguageItemEventHandler FunctionAdded;
+		protected List<Namespace> namespaces = new List<Namespace> ();
+		protected List<Function> functions = new List<Function> ();
+		protected List<Class> classes = new List<Class> ();
+		protected List<Structure> structures = new List<Structure> ();
+		protected List<Member> members = new List<Member> ();
+		protected List<Variable> variables = new List<Variable> ();
+		protected List<Macro> macros = new List<Macro> ();
+		protected List<Enumeration> enumerations = new List<Enumeration> ();
+		protected List<Enumerator> enumerators = new List<Enumerator> ();
+		protected List<Union> unions = new List<Union> ();
+		protected List<Typedef> typedefs = new List<Typedef> ();
 		
-		public ProjectInformation (Project project)
+		private string file_name;
+		private bool is_filled = false;
+		
+		public FileInformation (Project project)
 		{
 			this.project = project;
-			globals = new Globals (project);
-			macroDefs = new MacroDefinitions (project);
+			this.file_name = null;
+		}
+		
+		public FileInformation (Project project, string filename)
+		{
+			this.project = project;
+			this.file_name = filename;
 		}
 		
 		public void Clear ()
@@ -131,22 +136,8 @@ namespace CBinding.Parser
 				yield return t;
 		}
 		
-//		public void AddFunction (Function function)
-//		{
-//			functions.Add (function);
-//			FunctionAdded (this, new LanguageItemEventArgs (function));
-//		}
-		
 		public Project Project {
 			get { return project; }
-		}
-		
-		public Globals Globals {
-			get { return globals; }
-		}
-		
-		public MacroDefinitions MacroDefinitions {
-			get { return macroDefs; }
 		}
 		
 		public List<Namespace> Namespaces {
@@ -191,6 +182,42 @@ namespace CBinding.Parser
 		
 		public List<Typedef> Typedefs {
 			get { return typedefs; }
+		}
+		
+		public string FileName {
+			get { return file_name; }
+			set { file_name = value; }
+		}
+		
+		public bool IsFilled {
+			get { return is_filled; }
+			set { is_filled = value; }
+		}
+	}
+	
+	public class ProjectInformation : FileInformation
+	{
+		private Globals globals;
+		private MacroDefinitions macroDefs;
+		
+		private Dictionary<string, List<FileInformation>> includedFiles = new Dictionary<string, List<FileInformation>> ();
+		
+		public ProjectInformation (Project project) : base (project)
+		{
+			globals = new Globals (project);
+			macroDefs = new MacroDefinitions (project);
+		}
+		
+		public Globals Globals {
+			get { return globals; }
+		}
+		
+		public MacroDefinitions MacroDefinitions {
+			get { return macroDefs; }
+		}
+		
+		public Dictionary<string, List<FileInformation>> IncludedFiles {
+			get { return includedFiles; }
 		}
 	}
 }

@@ -137,18 +137,41 @@ namespace CBinding
 			CompletionDataProvider provider = new CompletionDataProvider ();
 			
 			LanguageItem container = null;
+			
+			string currentFileName = Document.FileName;
+			bool in_project = false;
 				
 			foreach (LanguageItem li in info.Containers ()) {
-				if (itemFullName == li.FullName)
+				if (itemFullName == li.FullName) {
 					container = li;
+					in_project = true;
+				}
+			}
+			
+			if (!in_project && info.IncludedFiles.ContainsKey (currentFileName)) {
+				foreach (FileInformation fi in info.IncludedFiles[currentFileName]) {
+					foreach (LanguageItem li in fi.Containers ()) {
+						if (itemFullName == li.FullName)
+							container = li;
+					}
+				}
 			}
 			
 			if (container == null)
 				return null;
 			
-			foreach (LanguageItem li in info.AllItems ()) {
-				if (li.Parent != null && li.Parent.Equals (container))
-					provider.AddCompletionData (new CompletionData (li));
+			if (in_project) {
+				foreach (LanguageItem li in info.AllItems ()) {
+					if (li.Parent != null && li.Parent.Equals (container))
+						provider.AddCompletionData (new CompletionData (li));
+				}
+			} else {
+				foreach (FileInformation fi in info.IncludedFiles[currentFileName]) {
+					foreach (LanguageItem li in fi.AllItems ()) {
+						if (li.Parent != null && li.Parent.Equals (container))
+							provider.AddCompletionData (new CompletionData (li));
+					}
+				}
 			}
 			
 			return provider;
@@ -178,6 +201,26 @@ namespace CBinding
 			
 			foreach (Macro m in info.Macros)
 				provider.AddCompletionData (new CompletionData (m));
+			
+			string currentFileName = Document.FileName;
+			
+			if (info.IncludedFiles.ContainsKey (currentFileName)) {
+				foreach (FileInformation fi in info.IncludedFiles[currentFileName]) {
+					foreach (LanguageItem li in fi.Containers ())
+						if (li.Parent == null)
+							provider.AddCompletionData (new CompletionData (li));
+					
+					foreach (Function f in fi.Functions)
+						if (f.Parent == null)
+							provider.AddCompletionData (new CompletionData (f));
+
+					foreach (Enumerator e in fi.Enumerators)
+						provider.AddCompletionData (new CompletionData (e));
+					
+					foreach (Macro m in fi.Macros)
+						provider.AddCompletionData (new CompletionData (m));
+				}
+			}
 			
 			return provider;
 		}
@@ -209,7 +252,7 @@ namespace CBinding
 			if (string.IsNullOrEmpty (functionName))
 				return null;
 			
-			return new ParameterDataProvider (Editor, info, functionName);
+			return new ParameterDataProvider (Document, info, functionName);
 		}
 		
 		private bool AllWhiteSpace (string lineText)

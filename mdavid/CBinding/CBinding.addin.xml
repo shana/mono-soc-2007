@@ -1,7 +1,7 @@
 <AddIn
 	id          = "MonoDevelop.CBinding"
 	name        = "C/C++ Language Binding"
-	author      = "Marcos David Marin Amador"
+	author      = "Marcos David Marín Amador"
 	copright    = "MIT X11"
 	url         = "http://www.monodevelop.com"
 	description = "C/C++ Language binding"
@@ -10,7 +10,6 @@
 
 	<Runtime>
 		<Import assembly = "CBinding.dll"/>
-		<!-- This is here so that the delete command shows in the package node's context menu -->
 		<Import assembly = "../MonoDevelop.Ide.dll"/>
 	</Runtime>
 	
