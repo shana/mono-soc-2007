@@ -1,5 +1,9 @@
 2007-08-07  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* GridSplitter.cs: The beginning of the implementation (does not support preview and may have bugs).
+
+2007-08-07  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* GridSplitter.cs: Added theme loading and cursor logic.
 
 2007-08-06  George Giolfan  <georgegiolfan@yahoo.com>
