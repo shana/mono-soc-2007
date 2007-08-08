@@ -1,9 +1,11 @@
+using System.Collections;
 using System.Windows.Input;
 using System.Windows.Automation.Peers;
 #if Implementation
+using System;
 using System.Windows;
-using Mono.System.Windows.Controls.Primitives;
 using System.Windows.Controls;
+using Mono.System.Windows.Controls.Primitives;
 namespace Mono.System.Windows.Controls {
 #else
 using System.Windows.Controls.Primitives;
@@ -34,10 +36,86 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public GridSplitter() {
+			DragDelta += delegate(object sender, global::System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
+				Grid grid = Parent as Grid;
+				if (grid == null)
+					return;
+				GridResizeDirection resize_direction = GetActualResizeDirection();
+				GridResizeBehavior resize_behavior = GetActualResizeBehavior(resize_direction);
+				double change;
+				int position_in_grid;
+				int definition_index1;
+				int definition_index2;
+				double definition1_actual_size;
+				double definition2_actual_size;
+				if (resize_direction == GridResizeDirection.Rows) {
+					change = e.VerticalChange;
+					position_in_grid = Grid.GetRow(this);
+					switch (resize_behavior) {
+					case GridResizeBehavior.CurrentAndNext:
+						definition_index1 = position_in_grid;
+						definition_index2 = position_in_grid + 1;
+						break;
+					case GridResizeBehavior.PreviousAndCurrent:
+						definition_index1 = position_in_grid - 1;
+						definition_index2 = position_in_grid;
+						break;
+					default:
+						definition_index1 = position_in_grid - 1;
+						definition_index2 = position_in_grid + 1;
+						break;
+					}
+					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index1))
+						return;
+					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index2))
+						return;
+					RowDefinition definition1 = grid.RowDefinitions[definition_index1];
+					RowDefinition definition2 = grid.RowDefinitions[definition_index2];
+					definition1_actual_size = definition1.ActualHeight;
+					if (definition1_actual_size + change < 0)
+						change = -definition1_actual_size;
+					definition2_actual_size = definition2.ActualHeight;
+					if (definition2_actual_size - change < 0)
+						change = definition2_actual_size;
+					definition1.Height = new GridLength(definition1_actual_size + change);
+					definition2.Height = new GridLength(definition2_actual_size - change);
+				} else {
+					change = e.HorizontalChange;
+					position_in_grid = Grid.GetColumn(this);
+					switch (resize_behavior) {
+					case GridResizeBehavior.CurrentAndNext:
+						definition_index1 = position_in_grid;
+						definition_index2 = position_in_grid + 1;
+						break;
+					case GridResizeBehavior.PreviousAndCurrent:
+						definition_index1 = position_in_grid - 1;
+						definition_index2 = position_in_grid;
+						break;
+					default:
+						definition_index1 = position_in_grid - 1;
+						definition_index2 = position_in_grid + 1;
+						break;
+					}
+					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index1))
+						return;
+					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index2))
+						return;
+					ColumnDefinition definition1 = grid.ColumnDefinitions[definition_index1];
+					ColumnDefinition definition2 = grid.ColumnDefinitions[definition_index2];
+					definition1_actual_size = definition1.ActualWidth;
+					if (definition1_actual_size + change < 0)
+						change = -definition1_actual_size;
+					definition2_actual_size = definition2.ActualWidth;
+					if (definition2_actual_size - change < 0)
+						change = definition2_actual_size;
+					definition1.Width = new GridLength(definition1_actual_size + change);
+					definition2.Width = new GridLength(definition2_actual_size - change);
+				}
+			};
 		}
 		#endregion
 
-		#region Public Fields
+		#region Public Properties
 		#region Dependency Properties
 		public double DragIncrement {
 			get { return (double)GetValue(DragIncrementProperty); }
@@ -94,6 +172,32 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region Private Methods
+		GridResizeBehavior GetActualResizeBehavior(GridResizeDirection resizeDirection) {
+			GridResizeBehavior value = ResizeBehavior;
+			if (value == GridResizeBehavior.BasedOnAlignment)
+				if (resizeDirection == GridResizeDirection.Rows)
+					switch (VerticalAlignment) {
+					case VerticalAlignment.Top:
+						return GridResizeBehavior.PreviousAndCurrent;
+					case VerticalAlignment.Bottom:
+						return GridResizeBehavior.CurrentAndNext;
+					default:
+						return GridResizeBehavior.PreviousAndNext;
+					}
+				else
+					switch (HorizontalAlignment) {
+					case HorizontalAlignment.Left:
+						return GridResizeBehavior.PreviousAndCurrent;
+					case HorizontalAlignment.Right:
+						return GridResizeBehavior.CurrentAndNext;
+					default:
+						return GridResizeBehavior.PreviousAndNext;
+					}
+			else
+				return value;
+		}
+
 		GridResizeDirection GetActualResizeDirection() {
 			GridResizeDirection value = ResizeDirection;
 			if (value == GridResizeDirection.Auto)
@@ -106,5 +210,10 @@ namespace System.Windows.Controls {
 			else
 				return value;
 		}
+
+		static bool CheckDefinitionIndex(ICollection collection, int value) {
+			return value < 0 || value == collection.Count;
+		}
+		#endregion
 	}
 }
