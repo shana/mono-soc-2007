@@ -211,4 +211,76 @@ public class DocumentUtils {
 		buffer.InsertWithTags (ref insertAt, "\n", tag);
 	}
 }
+
+public class TextRange {
+	private TextBuffer buffer;
+	private TextMark start_mark;
+	private TextMark end_mark;
+	
+	public TextRange (TextIter start, TextIter end)
+	{
+		if (start.Buffer != end.Buffer)
+			throw new Exception ("Start buffer and end buffer do not match");
+		
+		buffer = start.Buffer;
+		start_mark = buffer.CreateMark (null, start, true);
+		end_mark = buffer.CreateMark (null, end, true);
+	}
+	
+	public TextBuffer Buffer {
+		get {
+			return buffer;
+		}
+	}
+	
+	public string Text {
+		get {
+			return Start.GetText (End);
+		}
+	}
+	
+	public int Length {
+		get {
+			return  Text.Length;
+		}
+	}
+	
+	public TextIter Start {
+		get {
+			return buffer.GetIterAtMark (start_mark);
+		}
+		
+		set {
+			buffer.MoveMark (start_mark, value);
+		}
+	}
+	
+	public TextIter End {
+		get {
+			return buffer.GetIterAtMark (end_mark);
+		}
+		
+		set {
+			buffer.MoveMark (end_mark, value);
+		}
+	}
+	
+	public void Erase ()
+	{
+		TextIter startIter = Start;
+		TextIter endIter = End;
+		buffer.Delete (ref startIter, ref endIter);
+	}
+	
+	public void Destroy ()
+	{
+		buffer.DeleteMark (start_mark);
+		buffer.DeleteMark (end_mark);
+	}
+	
+	public void RemoveTag (TextTag tag)
+	{
+		buffer.RemoveTag (tag, Start, End);
+	}
+}
 }

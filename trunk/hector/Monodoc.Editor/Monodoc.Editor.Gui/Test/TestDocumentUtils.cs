@@ -1,5 +1,5 @@
 //
-// TestUtils.cs: Test unit for Utils helpers classes.
+// TestDocumentUtils.cs: Test unit for DocumentUtils helper class.
 //
 // Author:
 //   Hector E. Gomez M (hectorgm@ciencias.unam.mx)

@@ -8,10 +8,24 @@
 // (C) 2007 Hector E. Gomez M
 //
 
+using Gtk;
 using System;
 using System.Collections;
 
 namespace Monodoc.Editor.Gui {
+public abstract class SplitterAction : EditAction {
+	protected ArrayList splitTags;
+	protected TextRange chop;
+	
+	protected SplitterAction ()
+	{
+	}
+	
+	public abstract void Undo (TextBuffer buffer);
+	public abstract void Redo (TextBuffer buffer);
+	public abstract void Destroy ();
+}
+
 public class DocumentUndoManager {
 	DocumentBuffer buffer;
 	Stack undo_stack;
