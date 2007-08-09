@@ -48,7 +48,7 @@ namespace Test.Rules.Smells {
 		{
 			string unit = Assembly.GetExecutingAssembly ().Location;
 			assembly = AssemblyFactory.GetAssembly (unit);
-			type = assembly.MainModule.Types["Test.Rules.Smells.DetectLongParameterListTest"];
+			type = assembly.MainModule.Types["Test.Rules.Smells.AvoidLongParameterListsTest"];
 			rule = new AvoidLongParameterListsRule ();
 			messageCollection = null;
 		}
