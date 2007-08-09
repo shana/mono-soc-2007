@@ -15,7 +15,7 @@
   </Configurations>
   <Contents>
     <File name="./Makefile.am" subtype="Code" buildaction="Nothing" />
-    <File name="./CBinding.addin.xml" subtype="Code" buildaction="FileCopy" />
+    <File name="./CBinding.addin.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./icons/C.Project.Empty" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./templates/EmptyCProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./templates/EmptyCSourceFile.xft.xml" subtype="Code" buildaction="EmbedAsResource" />
@@ -130,14 +130,14 @@
     <ProjectReference type="Project" localcopy="False" refto="MonoDevelop.SourceEditor" />
     <ProjectReference type="Gac" localcopy="False" refto="glib-sharp, Version=2.4.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
   </References>
-  <MonoDevelop.Autotools.MakefileInfo RelativeMakefileName="./Makefile.am">
+  <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" SyncReferences="True">
     <BuildFilesVar Sync="True" Name="FILES" />
     <DeployFilesVar />
     <ResourcesVar Sync="True" Name="RES" />
     <OthersVar />
-    <GacRefVar />
-    <AsmRefVar />
-    <ProjectRefVar />
+    <GacRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <AsmRefVar Sync="True" Name="REFS" Prefix="-r:" />
+    <ProjectRefVar Sync="True" Name="REFS" Prefix="-r:" />
   </MonoDevelop.Autotools.MakefileInfo>
   <Deployment.LinuxDeployData scriptName="cbinding" />
   <GtkDesignInfo partialTypes="True" />
