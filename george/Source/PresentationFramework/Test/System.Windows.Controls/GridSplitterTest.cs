@@ -37,5 +37,44 @@ namespace System.Windows.Controls {
 			Assert.AreEqual(grid_splitter.ResizeBehavior, GridResizeBehavior.BasedOnAlignment, "3");
 			Assert.AreEqual(grid_splitter.ResizeDirection, GridResizeDirection.Auto, "4");
 		}
+
+		[Test]
+		public void PropertyValueValidation() {
+			GridSplitter g = new GridSplitter();
+			g.DragIncrement = 2;
+			g.DragIncrement = 1;
+			try {
+				g.DragIncrement = 0;
+				Assert.Fail("1");
+			} catch (ArgumentException) {
+			}
+			try {
+				g.DragIncrement = -1;
+				Assert.Fail("2");
+			} catch (ArgumentException) {
+			}
+			try {
+				g.DragIncrement = -2;
+				Assert.Fail("3");
+			} catch (ArgumentException) {
+			}
+			g.KeyboardIncrement = 2;
+			g.KeyboardIncrement = 1;
+			try {
+				g.KeyboardIncrement = 0;
+				Assert.Fail("4");
+			} catch (ArgumentException) {
+			}
+			try {
+				g.KeyboardIncrement = -1;
+				Assert.Fail("5");
+			} catch (ArgumentException) {
+			}
+			try {
+				g.KeyboardIncrement = -2;
+				Assert.Fail("6");
+			} catch (ArgumentException) {
+			}
+		}
 	}
 }
