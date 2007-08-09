@@ -15,6 +15,7 @@ namespace System.Windows.Controls {
 	public class GridSplitter : global::System.Windows.Controls.Primitives.Thumb {
 		#region Public Fields
 		#region Dependency Properties
+		//TODO: Validate.
 		public static readonly DependencyProperty DragIncrementProperty = DependencyProperty.Register("DragIncrement", typeof(double), typeof(GridSplitter), new FrameworkPropertyMetadata(1D));
 		public static readonly DependencyProperty KeyboardIncrementProperty = DependencyProperty.Register("KeyboardIncrement", typeof(double), typeof(GridSplitter), new FrameworkPropertyMetadata(10D));
 		public static readonly DependencyProperty PreviewStyleProperty = DependencyProperty.Register("PreviewStyle", typeof(Style), typeof(GridSplitter), new FrameworkPropertyMetadata());
@@ -36,13 +37,13 @@ namespace System.Windows.Controls {
 
 		#region Public Constructors
 		public GridSplitter() {
+			Focusable = true;
 			DragDelta += delegate(object sender, global::System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
 				Grid grid = Parent as Grid;
 				if (grid == null)
 					return;
 				GridResizeDirection resize_direction = GetActualResizeDirection();
-				double change = resize_direction == GridResizeDirection.Rows ? e.VerticalChange : e.HorizontalChange;
-				HandleChange(grid, resize_direction, change);
+				HandleChange(grid, resize_direction, resize_direction == GridResizeDirection.Rows ? e.VerticalChange : e.HorizontalChange);
 			};
 		}
 
@@ -93,6 +94,34 @@ namespace System.Windows.Controls {
 
 		protected override void OnKeyDown(KeyEventArgs e) {
 			base.OnKeyDown(e);
+			Grid grid = Parent as Grid;
+			if (grid == null)
+				return;
+			double keyboard_increment_multiplier = 0;
+			GridResizeDirection resize_direction = GetActualResizeDirection();
+			if (resize_direction == GridResizeDirection.Rows) {
+				switch (e.Key) {
+				case Key.Up:
+					keyboard_increment_multiplier = -1;
+					break;
+				case Key.Down:
+					keyboard_increment_multiplier = 1;
+					break;
+				}
+			} else {
+				switch (e.Key) {
+				case Key.Left:
+					keyboard_increment_multiplier = -1;
+					break;
+				case Key.Right:
+					keyboard_increment_multiplier = 1;
+					break;
+				}
+			}
+			if (keyboard_increment_multiplier != 0) {
+				HandleChange(grid, resize_direction, KeyboardIncrement * keyboard_increment_multiplier);
+				e.Handled = true;
+			}
 		}
 
 		protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e) {
