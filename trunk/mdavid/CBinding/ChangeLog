@@ -1,3 +1,8 @@
+2007-08-09   <> 
+
+	* CBinding.addin.xml, CBinding.mdp, Makefile.am: Updated the paths and
+	  embedded the .addin.xml into the assembly
+
 2007-08-08  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/CTextEditorExtension.cs, Gui/DataProvider.cs,

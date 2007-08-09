@@ -2,19 +2,15 @@
 ADDIN_BUILD = $(top_builddir)/build/AddIns/BackendBindings
 ASSEMBLY = $(ADDIN_BUILD)/CBinding.dll
 
-REFS = \
-	-r:System \
-	-r:System.Xml \
+REFS =  \
+	-pkg:glib-sharp-2.0 \
+	-pkg:gtk-sharp-2.0 \
+	-pkg:monodevelop \
+	-r:../../build/AddIns/MonoDevelop.SourceEditor.dll \
+	-r:../../contrib/Mono.Addins.dll \
 	-r:Mono.Posix \
-	-r:$(top_builddir)/contrib/Mono.Addins.dll \
-	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Core.Gui.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.Gui.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.SourceEditor.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll \
-	$(GTK_SHARP_LIBS)
+	-r:System \
+	-r:System.Xml
 	
 
 FILES =  \
@@ -86,6 +82,7 @@ FILES =  \
 	ProjectPad/ProjectReferencesExtension.cs
 
 RES =  \
+	CBinding.addin.xml \
 	gtk-gui/gui.stetic \
 	icons/C.Project.Empty \
 	icons/Cpp.Project.Empty \
@@ -117,25 +114,18 @@ RES =  \
 	templates/EmptyCProject.xpt.xml \
 	templates/EmptyCSourceFile.xft.xml
 
-ADDIN = CBinding.addin.xml
-
-all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
-
-$(ADDIN_BUILD)/$(ADDIN): $(srcdir)/$(ADDIN)
-	mkdir -p $(ADDIN_BUILD)
-	cp $(srcdir)/$(ADDIN) $(ADDIN_BUILD)/$(ADDIN)
+all: $(ASSEMBLY)
 
 $(ASSEMBLY): $(build_sources) $(build_resources)
 	mkdir -p $(ADDIN_BUILD)
 	$(CSC) $(CSC_FLAGS) -debug -out:$@ -target:library $(REFS) \
 		$(build_resources:%=/resource:%) $(build_sources)
 
-
 cbindinglibdir = $(MD_ADDIN_DIR)/BackendBindings
-cbindinglib_DATA = $(ASSEMBLY) $(ADDIN)
+cbindinglib_DATA = $(ASSEMBLY)
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
 
-EXTRA_DIST = $(FILES) $(ADDIN) $(RES)
+EXTRA_DIST = $(FILES) $(RES)
 
 include $(top_srcdir)/Makefile.include
