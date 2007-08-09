@@ -2,52 +2,53 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="GridSplitter Example"
+	xmlns:mono_sytem_windows_controls="clr-namespace:Mono.System.Windows.Controls;assembly=Mono.PresentationFramework"
 >
-<Grid>
-  <Grid.ColumnDefinitions>
-    <ColumnDefinition Name="Col0" />
-    <ColumnDefinition Name="Col1" />
-    <ColumnDefinition Name="Col2" />
-    <ColumnDefinition Name="Col3" />
-  </Grid.ColumnDefinitions>
-  <Grid.RowDefinitions>
-    <RowDefinition Name="Row0" />
-    <RowDefinition Name="Row1" />
-    <RowDefinition Name="Row2" />
-  </Grid.RowDefinitions>
+	<mono_sytem_windows_controls:Grid>
+		<mono_sytem_windows_controls:Grid.ColumnDefinitions>
+			<mono_sytem_windows_controls:ColumnDefinition Name="Col0" />
+			<mono_sytem_windows_controls:ColumnDefinition Name="Col1" />
+			<mono_sytem_windows_controls:ColumnDefinition Name="Col2" />
+			<mono_sytem_windows_controls:ColumnDefinition Name="Col3" />
+		</mono_sytem_windows_controls:Grid.ColumnDefinitions>
+		<mono_sytem_windows_controls:Grid.RowDefinitions>
+			<mono_sytem_windows_controls:RowDefinition Name="Row0" />
+			<mono_sytem_windows_controls:RowDefinition Name="Row1" />
+			<mono_sytem_windows_controls:RowDefinition Name="Row2" />
+		</mono_sytem_windows_controls:Grid.RowDefinitions>
 
-  <StackPanel Grid.Row="0" Grid.Column="0" Background="Orange">
-    <TextBlock>Row 0 Col 0</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="1" Grid.Column="0" Background="Blue">
-    <TextBlock>Row 1 Col 0</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="2" Grid.Column="0" Background="Green">
-    <TextBlock>Row 2 Col 1</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="0" Grid.Column="1" Background="Purple">
-    <TextBlock>Row 0 Col 1</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="1" Grid.Column="1" Background="Red">
-    <TextBlock>Row 1 Col 1</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="2" Grid.Column="1" Background="Salmon">
-   <TextBlock>Row 2 Col 1</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="0" Grid.Column="2" Background="MediumVioletRed">
-    <TextBlock>Row 0 Col 2</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="1" Grid.Column="2" Background="SteelBlue">
-    <TextBlock>Row 1 Col 2</TextBlock>
-  </StackPanel>
-  <StackPanel Grid.Row="2" Grid.Column="2" Background="Olive">
+		<StackPanel mono_sytem_windows_controls:Grid.Row="0" mono_sytem_windows_controls:Grid.Column="0" Background="Orange">
+			<TextBlock>Row 0 Col 0</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.Column="0" Background="Blue">
+			<TextBlock>Row 1 Col 0</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.Column="0" Background="Green">
+			<TextBlock>Row 2 Col 1</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="0" mono_sytem_windows_controls:Grid.Column="1" Background="Purple">
+			<TextBlock>Row 0 Col 1</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.Column="1" Background="Red">
+			<TextBlock>Row 1 Col 1</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.Column="1" Background="Salmon">
+			<TextBlock>Row 2 Col 1</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="0" mono_sytem_windows_controls:Grid.Column="2" Background="MediumVioletRed">
+			<TextBlock>Row 0 Col 2</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="1" mono_sytem_windows_controls:Grid.Column="2" Background="SteelBlue">
+			<TextBlock>Row 1 Col 2</TextBlock>
+		</StackPanel>
+		<StackPanel mono_sytem_windows_controls:Grid.Row="2" mono_sytem_windows_controls:Grid.Column="2" Background="Olive">
     <TextBlock>Row 2 Col 2</TextBlock>
   </StackPanel>
-   
-  <GridSplitter Name="myGridSplitter" Grid.Column="1" Grid.Row="1"
+
+		<mono_sytem_windows_controls:GridSplitter Name="myGridSplitter" mono_sytem_windows_controls:Grid.Column="1" mono_sytem_windows_controls:Grid.Row="1"
                                       Width="5"/>
     
-  <StackPanel Grid.Column="3" Grid.RowSpan="3" Background="Brown">
+  <StackPanel mono_sytem_windows_controls:Grid.Column="3" mono_sytem_windows_controls:Grid.RowSpan="3" Background="Brown">
 
   <TextBlock FontSize="14" Foreground="Yellow">Property Settings</TextBlock>
 
@@ -208,5 +209,5 @@
 
 
   </StackPanel>
-</Grid>
+</mono_sytem_windows_controls:Grid>
 </Window>
