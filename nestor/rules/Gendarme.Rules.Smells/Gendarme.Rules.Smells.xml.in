@@ -1,22 +1,22 @@
 <rules>
-	<rule 	Name="DetectLongMethodRule"
-		Type="Gendarme.Rules.Smells.DetectLongMethodRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
+	<rule 	Name="AvoidLongMethodsRule"
+		Type="Gendarme.Rules.Smells.AvoidLongMethodsRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
 		Uri="">
 	
 		<problem>Long methods are usually hard to understand and maintain.  The method '{0}' can cause problems because contains more code than the maximum allowed.</problem>
 		<solution>You should apply an Extract Method refactoring, but there are other solutions.</solution>
 	</rule>
 
-	<rule	Name="DetectLongParameterListRule"
-		Type="Gendarme.Rules.Smells.DetectLongParameterListRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
+	<rule	Name="AvoidLongParameterListsRule"
+		Type="Gendarme.Rules.Smells.AvoidLongParameterListsRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
 		Uri="">
 
 		<problem>Generally, long parameter lists are hard to understand because they become hard to use and inconsistent.  And you will be forever changing them if you need more data.</problem>
 		<solution>You should apply the Replace parameter with method refactoring, or preserve whole object or introduce parameter object.</solution>
 	</rule>
 
-	<rule	Name="DetectCodeDuplicatedInSameClassRule"
-		Type="Gendarme.Rules.Smells.DetectCodeDuplicatedInSameClassRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
+	<rule	Name="AvoidCodeDuplicatedInSameClassRule"
+		Type="Gendarme.Rules.Smells.AvoidCodeDuplicatedInSameClassRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
 		Uri="">
 
 		<problem>There are same code structure in various methods in the same class.  Your code will be better if you can unify them.</problem>
