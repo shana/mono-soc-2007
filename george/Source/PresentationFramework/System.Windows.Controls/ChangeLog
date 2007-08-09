@@ -1,5 +1,9 @@
 2007-08-09  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* GridSplitter.cs: Added DragIncrement support.
+
+2007-08-09  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* GridSplitter.cs: Added keyboard (arrow keys) support.
 
 2007-08-09  George Giolfan  <georgegiolfan@yahoo.com>
