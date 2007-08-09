@@ -77,3 +77,51 @@ pre {
     color: #000;
     padding: 0.2em;
 }
+
+tt {
+    background-color: #ffffef;
+}
+
+#navigation {
+    position: absolute;
+    top: 10px;
+    left: 11em;
+}
+
+#navigation #indices {
+    position: absolute;
+    top: 13px;
+    left: 100px;
+    background-color: #e8f3d4;
+    font-size: 12pt;
+    font-family: vag rounded, vag round, arial mt rounded, arial rounded, verdana, bitstream vera sans, lucida sans, sans-serif;
+    font-weight: bold;
+    padding: 5px;
+    margin: 5px;
+    list-style: none;
+    display: block;
+    white-space: nowrap;
+}
+
+#navigation #indices li {
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+#navigation #indices li a {
+    padding: 0.5em;
+    text-transform: lowercase;
+    text-decoration: none;
+    color: #5a7ac7;
+}
+
+#navigation #indices li + li:before {
+    content: " :: ";
+    color: #999;
+}
+
+#navigation #indices li a:hover {
+    color: #fff;
+    background-color: #5a7ac7;
+}

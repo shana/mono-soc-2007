@@ -1,3 +1,13 @@
+2007-08-09 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/linux/index.html: Added header, moved warnings to doc/index.html
+	
+	* doc/linux/template.html: Added template for documentation.
+	
+	* doc/style.css: Added formatting for header.
+	
+	* doc/index.html: Added. Contains warnings and information.
+
 2007-08-08 Brian Nickel <brian.nickel@gmail.com>
 
 	* fastcgi-mono-server.in:

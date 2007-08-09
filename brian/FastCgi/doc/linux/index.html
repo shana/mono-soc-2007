@@ -9,7 +9,7 @@
 		<h2>Table of Contents</h2>
 		<ul>
 			<li><a href="#install">Installation Instructions</a></li>
-			<li><a href="#config">Server Specific Configuration</a>
+			<li><a href="#config">Server Specific Configuration</a></li>
 		</ul>
 		
 		<a name="install"></a>
@@ -26,24 +26,9 @@
 cd fastcgi-mono-server
 ./autogen.sh --prefix=/usr && make && sudo make install</pre>
 		
+		
 		<a name="config"></a>
 		<h2>Server Specific Configuration</h2>
-		
-		<h3>NOTE</h3>
-		
-		<p style="color:red">The following documentation is currently
-		based strictly on redirecting known ASP.NET extensions to the
-		FastCGI Mono Server. This yields a performance advantage by not
-		sending static and non-ASP.NET files across FastCGI, but
-		provides a security disadvantage as it doesn't incorporate all
-		of ASP.NET's file rejection. For example, ASP.NET would reject
-		certain paths, like "App_Data/", by default.</p>
-		
-		<p style="color:red;font-weight:bold">It is always important to
-		test that files containing secure data are not accessible in a
-		web browser. For extra security, look in your web server's
-		documentation for how to send all requests for a path straight
-		to a FastCGI interpreter.</p>
 		
 		<li><a href="abyss.html">Abyss Web Server</a></li>
 		<li><a href="apache.html">Apache HTTP Server</a> <span style="color:red">[TO BE ADDED]</span></li>
@@ -58,6 +43,14 @@ cd fastcgi-mono-server
 		<li><a href="roxen.html">Roxen</a> <span style="color:red">[TO BE ADDED]</span></li>
 		<li><a href="sun.html">Sun Java System Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
 		<li><a href="zeus.html">Zeus Web Server</a> <span style="color:red">[TO BE ADDED]</span></li>
-
+		
+		<div id="navigation">
+			<a href="http://www.mono-project.com" id="logo"><img src="../mono-logo.png" width="93" height="112" /></a>
+			<ul id="indices">
+				<li><a href="../index.html">Introduction</a>
+				<li><a href="../linux/index.html">Linux</a>
+				<li><a href="../mac/index.html">Macintosh</a>
+				<li><a href="../windows/index.html">Windows</a></ul>
+		</div>
 	</body>
 </html>
