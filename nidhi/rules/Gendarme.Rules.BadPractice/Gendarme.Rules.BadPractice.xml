@@ -11,4 +11,10 @@
 		<problem>The ICloneable.Clone () method in '{0}' seems to return null in some circumstances.</problem>
 		<solution>Please return an appropriate object instead of returning null.</solution>
 	</rule>
+	<rule	Name="ToStringReturnsNullRule" 
+		Type="Gendarme.Rules.BadPractice.ToStringReturnsNullRule, Gendarme.Rules.BadPractice, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#ToStringReturnsNullRule" >
+		<problem>The method '{0}' contains ToString () conversion that returns null.</problem>
+		<solution>Return an empty string or other appropriate string rather than returning null.</solution>
+	</rule>
 </rules>
