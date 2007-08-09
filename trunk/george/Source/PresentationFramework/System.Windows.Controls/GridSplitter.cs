@@ -43,7 +43,6 @@ namespace System.Windows.Controls {
 				GridResizeDirection resize_direction = GetActualResizeDirection();
 				double change = resize_direction == GridResizeDirection.Rows ? e.VerticalChange : e.HorizontalChange;
 				HandleChange(grid, resize_direction, change);
-				return;
 			};
 		}
 
@@ -263,7 +262,6 @@ namespace System.Windows.Controls {
 				definition1.Width = new GridLength(definition1_actual_size + change);
 				definition2.Width = new GridLength(definition2_actual_size - change);
 			}
-			return;
 		}
 		#endregion
 	}
