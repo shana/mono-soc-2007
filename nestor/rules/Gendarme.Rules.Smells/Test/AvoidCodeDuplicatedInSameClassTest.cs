@@ -1,5 +1,5 @@
 //
-// Unit Test for DetectCodeDuplicatedInSameClass Rule.
+// Unit Test for AvoidCodeDuplicatedInSameClass Rule.
 //
 // Authors:
 //	Néstor Salceda <nestor.salceda@gmail.com>
@@ -164,7 +164,7 @@ namespace Test.Rules.Smells {
 	}
 
 	[TestFixture]
-	public class DetectCodeDuplicatedInSameClassTest {
+	public class AvoidCodeDuplicatedInSameClassTest {
 		private ITypeRule rule;
 		private AssemblyDefinition assembly;
 		private TypeDefinition type;

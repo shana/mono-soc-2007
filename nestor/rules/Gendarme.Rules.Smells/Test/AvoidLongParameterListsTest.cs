@@ -1,5 +1,5 @@
 //
-// Unit Test for DetectLongParameterList Rule.
+// Unit Test for AvoidLongParameterLists Rule.
 //
 // Authors:
 //      Néstor Salceda <nestor.salceda@gmail.com>
@@ -36,7 +36,7 @@ using Gendarme.Rules.Smells;
 
 namespace Test.Rules.Smells {
 	[TestFixture]
-	public class DetectLongParameterListTest {
+	public class AvoidLongParameterListsTest {
 		private IMethodRule rule;
 		private AssemblyDefinition assembly;
 		private MethodDefinition method;
@@ -49,7 +49,7 @@ namespace Test.Rules.Smells {
 			string unit = Assembly.GetExecutingAssembly ().Location;
 			assembly = AssemblyFactory.GetAssembly (unit);
 			type = assembly.MainModule.Types["Test.Rules.Smells.DetectLongParameterListTest"];
-			rule = new DetectLongParameterListRule ();
+			rule = new AvoidLongParameterListsRule ();
 			messageCollection = null;
 		}
 

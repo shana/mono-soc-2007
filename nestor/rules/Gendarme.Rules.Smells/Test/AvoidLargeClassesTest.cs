@@ -1,5 +1,5 @@
 //
-// Unit Test for DetectLargeClass Rule.
+// Unit Test for AvoidLargeClasses Rule.
 //
 // Authors:
 //      Néstor Salceda <nestor.salceda@gmail.com>
@@ -50,7 +50,7 @@ namespace Test.Rules.Smells {
 	}
 
 	[TestFixture]
-	public class DetectLargeClassTest{
+	public class AvoidLargeClassesTest {
 		private ITypeRule rule;
 		private AssemblyDefinition assembly;
 		private TypeDefinition type;
@@ -61,7 +61,7 @@ namespace Test.Rules.Smells {
 		{
 			string unit = Assembly.GetExecutingAssembly ().Location;
 			assembly = AssemblyFactory.GetAssembly (unit);
-			rule = new DetectLargeClassRule ();
+			rule = new AvoidLargeClassesRule ();
 			messageCollection = null;
 		}
 
