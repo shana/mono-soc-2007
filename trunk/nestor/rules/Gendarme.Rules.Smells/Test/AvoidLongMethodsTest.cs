@@ -867,7 +867,7 @@ namespace Test.Rules.Smells {
 
 		private MethodDefinition GetMethodForTest (string methodName) 
 		{
-			return GetMethodForTestFrom ("Test.Rules.Smells.DetectLongMethodTest", methodName);
+			return GetMethodForTestFrom ("Test.Rules.Smells.AvoidLongMethodsTest", methodName);
 		}
 
 		private MethodDefinition GetMethodForTestFrom (string fullTypeName, string methodName) 

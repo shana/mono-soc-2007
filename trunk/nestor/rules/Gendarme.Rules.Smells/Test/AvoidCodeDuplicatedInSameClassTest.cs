@@ -175,7 +175,7 @@ namespace Test.Rules.Smells {
 		{
 			string unit = Assembly.GetExecutingAssembly ().Location;
 			assembly = AssemblyFactory.GetAssembly (unit);
-			rule = new DetectCodeDuplicatedInSameClassRule ();
+			rule = new AvoidCodeDuplicatedInSameClassRule ();
 			messageCollection = null;
 		}
 
