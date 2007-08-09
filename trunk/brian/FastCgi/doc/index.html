@@ -1,0 +1,245 @@
+<html>
+	<head>
+		<title>FastCGI &amp; Mono: ASP.NET on Your Server</title>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+	</head>
+	<body>
+		<h1>FastCGI &amp; Mono: ASP.NET on Your Server</h1>
+		
+		<h2>Table of Contents</h2>
+		<ul>
+			<li><a href="#intro">Introduction</a></li>
+			<li><a href="#platforms">Platform Documentation</a></li>
+			<li><a href="#info">Important Information</a></li>
+			<ul>
+				<li><a href="#info1">Paths vs. Extensions</a></li>
+				<li><a href="#info2">What are ASP.NET Applications?</a></li>
+				<li><a href="#info3">How Applications are Handled (And How to Configure Them)</a></li>
+				<li><a href="#info4">Running the Mono Server and Web Server on Different Machines</a></li>
+			</ul>
+		</ul>
+		
+		<a name="intro"></a>
+		<h2>Introduction</h2>
+		
+		<p>The FastCGI Mono Server was developed as part of the 2007
+		<a href="http://code.google.com/soc/2007/">Google Summer of
+		Code</a> with the goal of increasing the availablity of ASP.NET
+		and simplifying configuration. Requiring as little as zero
+		command line options and supporting a large number of servers,
+		the FastCGI Mono Server makes it simple to include ASP.NET on
+		your server.</p>
+		
+		<p>This documentation contains configuration instructions for
+		serveral web servers on Linux, with plans to expand support to
+		Windows and Macintosh in the future. Please take the time to
+		read all the information below before configuring your
+		server.</p>
+		
+		
+		<a name="platforms"></a>
+		<h2>Platform Documentation</h2>
+		
+		<ul>
+			<li><a href="linux/index.html">Linux</a> (0 servers
+				documented, 4 servers partially documented)</li>
+			<li><a href="linux/index.html">Macintosh</a> (0 servers
+				documented, 0 servers partially documented)</li>
+			<li><a href="linux/index.html">Windows</a> (0 servers
+				documented, 0 servers partially documented)</li>
+		</ul>
+		
+		
+		<a name="info"></a>
+		<h2>Important Information</h2>
+		
+		<a name="info1"></a>
+		<h3>Paths vs. Extensions</h3>
+		
+		<p>Most programming languages used for web sites contain all
+		their information within a single file format, for example, PHP
+		uses the <tt>.php</tt> extension and Python uses the
+		<tt>.py</tt> extension. ASP.NET, on the other hand, uses a
+		combination of file types, combined with programming paradigms
+		like session objects, sandboxed environments, and private
+		directories. This makes configuring ASP.NET unique when compared
+		to other FastCGI handlers you may have configured.</p>
+		
+		<p>You could easily configure FastCGI to simply pass the 11
+		standard extensions to the FastCGI Mono Server and have all
+		remaining files processed by standard methods, but you will
+		suffer the following negative consequences:</p>
+		
+		<ul>
+			<li><p><b>Exposed files.</b> Some files that would
+			normally be hidden will be exposed. This is typically
+			any file that appears in an <tt>App_Data</tt> directory.
+			Additionally, you may miss some files that should be
+			private. As ASP.NET was origianally written for the
+			Windows operating system, many applications use case
+			insensitive formatting (<tt>.CONFIG == .config ==
+			.Config</tt>) which you may miss when specifying the
+			extensions to block. This can pose a <b>security
+			risk</b>.</p></li>
+			
+			<li><p><b>Missing features.</b> When an ASP.NET
+			application is recognized by the FastCGI Mono Server, it
+			loads configuration details that would affect how the
+			site is displayed. For example, an application may
+			register <tt>index.py</tt> as its index page and for the
+			<tt>.py</tt> extension to be handled by IronPython
+			within the Mono Server. The web server can't keep up
+			with these kinds of changes and would just show an error
+			page, directory listing, or whatever the default
+			configuration may be.</li>
+			
+		</ul>
+		
+		<p>To overcome these problems, the <b>recommended method</b> for
+		processing files is to send all requests directly to the FastCGI
+		Mono Server. This way, features and security are preserved. The
+		negative consequence is that all files are then processed by the
+		Mono Server and you suffer a decrease in performance. There are
+		methods for overcoming this on a server-by-server basis. For
+		example, directories could be excluded from ASP.NET and serve
+		strictly static files, but this is a topic to be discussed in
+		server configuration pages.</p>
+		
+		
+		<a name="info2"></a>
+		<h3>What are ASP.NET Applications?</h3>
+		
+		<p>If you've programmed with other web language even dabbled in
+		ASP.NET on another hosting solution, you may be unfamiliar with
+		what ASP.NET applications actually are, how they are used, and
+		why this matters. The most important thing to know, is that
+		every ASP.NET page belongs to an application and that they need
+		to be configured properly for your application to load. That
+		said, relax, because the FastCGI Mono Server does most of the
+		work for you and odds are you won't have to worry about how to
+		configure them. They're be more information on this in "<a
+		href="#info3">How Applications are Handled</a>."</p>
+		
+		<p>Applications are, in short, directories on a website which
+		behave just like a traditional application or program, with
+		pages just being different UI's in the same program. This is
+		managed by having all ASP.NET pages handled by a continuously
+		running server which keeps the application alive, and keeping
+		these separate pages in their own Application Domains as to
+		stop one application from messing with another. This yields some
+		very powerful features.</p>
+		
+		<ul>
+			<li><p>Applications can handle and understand starting
+			up (the first time a page is called) and shutting down 
+			(the server shuts down). This means you can maintain
+			objects or connections through the life of your
+			server.</p></li>
+			
+			<li><p>Because all pages are just parts of the same
+			application, you can share objects between them. When a
+			user logs in with <tt>login.aspx</tt>, you can store all
+			their information in your custom object, and access it
+			again on <tt>editprofile.aspx</tt>. Not only does this
+			simplify your work, it reduces the number of database
+			calls you have to make.</p></li>
+			
+			<li><p>Applications can define how to handle files and
+			settings. You can add, <tt>Welcome.aspx</tt> as an
+			index page, you make all files with a <tt>.cs</tt>
+			extension show up as highlighted code, you could even
+			register <tt>.rb</tt> with IronRuby so you can write
+			your webpage is Ruby.</p></li>
+			
+			<li><p>Applications get all the perks of being their own
+			program. They can load libraries (DLL's) placed in their
+			<tt>bin</tt> directory. This is how you can share
+			custom objects between one page and the next. In
+			addition, it allows you to write code for your web
+			application, and then move it to your desktop
+			application, cutting out hours of work.</p></li>
+		</ul>
+		
+		<a name="info3"></a>
+		<h3>How Applications are Handled (And How to Configure Them)</h3>
+		
+		<p>By default, the FastCGI Mono Server detects applications for
+		you with information it detects from the web server. As
+		discussed in the last section, applications are unique
+		directories. On a server, though, there are four different parts
+		to a directory:</p>
+		
+		<ul>
+			<li><p><b>The Host.</b> The host is the part of the URL
+			that identifies the site. <tt>blog.mysite.com</tt> and
+			<tt>www.mysite.com</tt> may both be on the same server,
+			but you don't want them returning the same
+			content.</p></li>
+			
+			<li><p><b>The Port.</b> The port not often seen because
+			the browser assumes <tt>80</tt> if not specified. You
+			may have a server running on port 80 and another running
+			on port 8080, as above, you don't want them to be the
+			same.</p></li>
+			
+			<li><p><b>The Path.</b> The path is the part following
+			the host in the URL. This part actually looks like a
+			directory in the file system.</p></li>
+			
+			<li><p><b>The Physical Path.</b> The physical path
+			contains the actual directory on your computer
+			containing the web site. For example, the virtual path
+			<tt>/path/to/file.aspx</tt> would have a physical path
+			<tt>C:\Inetpub\wwwroot\path\to\file.aspx</tt>.</p></li>
+		</ul>
+		
+		<p>The FastCGI Mono Server detects applications by taking the
+		their virtual and physical paths and recursing up the paths
+		until A) the path names differ or B) the directory contains a
+		<tt>bin</tt> directory. In the case of A, as soon as the names
+		differ you've reached the point where a virtual directory has
+		been applied, and in the case of B, a <tt>bin</tt> directory is
+		a strong indicator of an application, and it is safest to assume
+		that it is. In other word, for the paths
+		<tt>/path/to/file.aspx</tt> and
+		<tt>C:\Inetpub\wwwroot\path\to\file.aspx</tt>, <tt>/</tt> would
+		be assumed as the directory unless <tt>/path/to/bin</tt> or
+		<tt>/path/bin</tt> exists, in which case <tt>/path/to</tt> or
+		<tt>/path</tt> would be the application. This should work for
+		virtual paths, virtual hosts, and user directories without
+		any problem.</p>
+		
+		<p><b>However</b>, you may want to register your own
+		applications or turn off automatic mapping for whatever reason.
+		<span style="color:red;font-weight:bold">[TODO: INSERT
+		DESCRIPTION OF APPLICATION COMMAND LINE OPTIONS.]</span></p>
+		
+		
+		<a name="info4"></a>
+		<h3>Running the Mono Server and Web Server on Different
+		Machines</h3>
+		
+		<p>Many web servers will let you connect to the FastCGI Mono
+		Server on another machine over TCP. If you are using automatic
+		application mapping, the paths it uses come from the web server
+		and where it thinks the files should be. If you are your web
+		server has a document root of <tt>C:\Inetpub\wwwroot</tt> and
+		the machine running the Mono Server stores the files on 
+		<tt>D:\Inetpub\wwwroot</tt>, <tt>C:\Mirror\Inetpub\wwwroot</tt>,
+		or anything other that <tt>C:\Inetpub\wwwroot</tt>, it will be
+		unable to find or serve the files. Some servers will let you
+		specify the document root to use, but <b>it is recommended that
+		you have an identical directory structure on both
+		machines</b>.</p>
+		
+		
+		<div id="navigation">
+			<a href="http://www.mono-project.com" id="logo"><img src="mono-logo.png" width="93" height="112" /></a>
+			<ul id="indices">
+				<li><a href="index.html">Introduction</a>
+				<li><a href="linux/index.html">Linux</a>
+				<li><a href="mac/index.html">Macintosh</a>
+				<li><a href="windows/index.html">Windows</a></ul>
+		</div>
+	</body>
+</html>
