@@ -41,124 +41,12 @@ namespace System.Windows.Controls {
 				if (grid == null)
 					return;
 				GridResizeDirection resize_direction = GetActualResizeDirection();
-				GridResizeBehavior resize_behavior = GetActualResizeBehavior(resize_direction);
-				double change;
-				int position_in_grid;
-				int definition_index1;
-				int definition_index2;
-				double definition1_actual_size;
-				double definition2_actual_size;
-				double minimum_size1;
-				double minimum_size2;
-				if (resize_direction == GridResizeDirection.Rows) {
-					change = e.VerticalChange;
-					position_in_grid = Grid.GetRow(this);
-					switch (resize_behavior) {
-					case GridResizeBehavior.CurrentAndNext:
-						definition_index1 = position_in_grid;
-						definition_index2 = position_in_grid + 1;
-						break;
-					case GridResizeBehavior.PreviousAndCurrent:
-						definition_index1 = position_in_grid - 1;
-						definition_index2 = position_in_grid;
-						break;
-					default:
-						definition_index1 = position_in_grid - 1;
-						definition_index2 = position_in_grid + 1;
-						break;
-					}
-					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index1))
-						return;
-					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index2))
-						return;
-					RowDefinition definition1 = grid.RowDefinitions[definition_index1];
-					RowDefinition definition2 = grid.RowDefinitions[definition_index2];
-					switch (resize_behavior) {
-					case GridResizeBehavior.PreviousAndNext:
-						minimum_size1 = 0;
-						minimum_size2 = 0;
-						break;
-					default:
-						switch (VerticalAlignment) {
-						case VerticalAlignment.Top:
-							minimum_size1 = 0;
-							minimum_size2 = ActualHeight;
-							break;
-						case VerticalAlignment.Bottom:
-							minimum_size1 = ActualHeight;
-							minimum_size2 = 0;
-							break;
-						default:
-							minimum_size1 = ActualHeight;
-							minimum_size2 = 0;
-							break;
-						}
-						break;
-					}
-					definition1_actual_size = definition1.ActualHeight;
-					if (definition1_actual_size + change < minimum_size1)
-						change = minimum_size1 - definition1_actual_size;
-					definition2_actual_size = definition2.ActualHeight;
-					if (definition2_actual_size - change < minimum_size2)
-						change = definition2_actual_size - minimum_size2;
-					definition1.Height = new GridLength(definition1_actual_size + change);
-					definition2.Height = new GridLength(definition2_actual_size - change);
-				} else {
-					change = e.HorizontalChange;
-					position_in_grid = Grid.GetColumn(this);
-					switch (resize_behavior) {
-					case GridResizeBehavior.CurrentAndNext:
-						definition_index1 = position_in_grid;
-						definition_index2 = position_in_grid + 1;
-						break;
-					case GridResizeBehavior.PreviousAndCurrent:
-						definition_index1 = position_in_grid - 1;
-						definition_index2 = position_in_grid;
-						break;
-					default:
-						definition_index1 = position_in_grid - 1;
-						definition_index2 = position_in_grid + 1;
-						break;
-					}
-					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index1))
-						return;
-					if (CheckDefinitionIndex(grid.RowDefinitions, definition_index2))
-						return;
-					ColumnDefinition definition1 = grid.ColumnDefinitions[definition_index1];
-					ColumnDefinition definition2 = grid.ColumnDefinitions[definition_index2];
-					switch (resize_behavior) {
-					case GridResizeBehavior.PreviousAndNext:
-						minimum_size1 = 0;
-						minimum_size2 = 0;
-						break;
-					default:
-						switch (HorizontalAlignment) {
-						case HorizontalAlignment.Left:
-							minimum_size1 = 0;
-							minimum_size2 = ActualWidth;
-							break;
-						case HorizontalAlignment.Right:
-							minimum_size1 = ActualWidth;
-							minimum_size2 = 0;
-							break;
-						default:
-							minimum_size1 = ActualWidth;
-							minimum_size2 = 0;
-							break;
-						}
-						break;
-					}
-					definition1_actual_size = definition1.ActualWidth;
-					if (definition1_actual_size + change < minimum_size1)
-						change = minimum_size1 - definition1_actual_size;
-					definition2_actual_size = definition2.ActualWidth;
-					if (definition2_actual_size - change < minimum_size2)
-						change = definition2_actual_size - minimum_size2;
-					definition1.Width = new GridLength(definition1_actual_size + change);
-					definition2.Width = new GridLength(definition2_actual_size - change);
-				}
+				double change = resize_direction == GridResizeDirection.Rows ? e.VerticalChange : e.HorizontalChange;
+				HandleChange(grid, resize_direction, change);
+				return;
 			};
 		}
+
 		#endregion
 
 		#region Public Properties
@@ -259,6 +147,123 @@ namespace System.Windows.Controls {
 
 		static bool CheckDefinitionIndex(ICollection collection, int value) {
 			return value < 0 || value == collection.Count;
+		}
+
+		void HandleChange(Grid grid, GridResizeDirection resizeDirection, double change) {
+			GridResizeBehavior resize_behavior = GetActualResizeBehavior(resizeDirection);
+			int position_in_grid;
+			int definition_index1;
+			int definition_index2;
+			double definition1_actual_size;
+			double definition2_actual_size;
+			double minimum_size1;
+			double minimum_size2;
+			if (resizeDirection == GridResizeDirection.Rows) {
+				position_in_grid = Grid.GetRow(this);
+				switch (resize_behavior) {
+				case GridResizeBehavior.CurrentAndNext:
+					definition_index1 = position_in_grid;
+					definition_index2 = position_in_grid + 1;
+					break;
+				case GridResizeBehavior.PreviousAndCurrent:
+					definition_index1 = position_in_grid - 1;
+					definition_index2 = position_in_grid;
+					break;
+				default:
+					definition_index1 = position_in_grid - 1;
+					definition_index2 = position_in_grid + 1;
+					break;
+				}
+				if (CheckDefinitionIndex(grid.RowDefinitions, definition_index1))
+					return;
+				if (CheckDefinitionIndex(grid.RowDefinitions, definition_index2))
+					return;
+				RowDefinition definition1 = grid.RowDefinitions[definition_index1];
+				RowDefinition definition2 = grid.RowDefinitions[definition_index2];
+				switch (resize_behavior) {
+				case GridResizeBehavior.PreviousAndNext:
+					minimum_size1 = 0;
+					minimum_size2 = 0;
+					break;
+				default:
+					switch (VerticalAlignment) {
+					case VerticalAlignment.Top:
+						minimum_size1 = 0;
+						minimum_size2 = ActualHeight;
+						break;
+					case VerticalAlignment.Bottom:
+						minimum_size1 = ActualHeight;
+						minimum_size2 = 0;
+						break;
+					default:
+						minimum_size1 = ActualHeight;
+						minimum_size2 = 0;
+						break;
+					}
+					break;
+				}
+				definition1_actual_size = definition1.ActualHeight;
+				if (definition1_actual_size + change < minimum_size1)
+					change = minimum_size1 - definition1_actual_size;
+				definition2_actual_size = definition2.ActualHeight;
+				if (definition2_actual_size - change < minimum_size2)
+					change = definition2_actual_size - minimum_size2;
+				definition1.Height = new GridLength(definition1_actual_size + change);
+				definition2.Height = new GridLength(definition2_actual_size - change);
+			} else {
+				position_in_grid = Grid.GetColumn(this);
+				switch (resize_behavior) {
+				case GridResizeBehavior.CurrentAndNext:
+					definition_index1 = position_in_grid;
+					definition_index2 = position_in_grid + 1;
+					break;
+				case GridResizeBehavior.PreviousAndCurrent:
+					definition_index1 = position_in_grid - 1;
+					definition_index2 = position_in_grid;
+					break;
+				default:
+					definition_index1 = position_in_grid - 1;
+					definition_index2 = position_in_grid + 1;
+					break;
+				}
+				if (CheckDefinitionIndex(grid.RowDefinitions, definition_index1))
+					return;
+				if (CheckDefinitionIndex(grid.RowDefinitions, definition_index2))
+					return;
+				ColumnDefinition definition1 = grid.ColumnDefinitions[definition_index1];
+				ColumnDefinition definition2 = grid.ColumnDefinitions[definition_index2];
+				switch (resize_behavior) {
+				case GridResizeBehavior.PreviousAndNext:
+					minimum_size1 = 0;
+					minimum_size2 = 0;
+					break;
+				default:
+					switch (HorizontalAlignment) {
+					case HorizontalAlignment.Left:
+						minimum_size1 = 0;
+						minimum_size2 = ActualWidth;
+						break;
+					case HorizontalAlignment.Right:
+						minimum_size1 = ActualWidth;
+						minimum_size2 = 0;
+						break;
+					default:
+						minimum_size1 = ActualWidth;
+						minimum_size2 = 0;
+						break;
+					}
+					break;
+				}
+				definition1_actual_size = definition1.ActualWidth;
+				if (definition1_actual_size + change < minimum_size1)
+					change = minimum_size1 - definition1_actual_size;
+				definition2_actual_size = definition2.ActualWidth;
+				if (definition2_actual_size - change < minimum_size2)
+					change = definition2_actual_size - minimum_size2;
+				definition1.Width = new GridLength(definition1_actual_size + change);
+				definition2.Width = new GridLength(definition2_actual_size - change);
+			}
+			return;
 		}
 		#endregion
 	}
