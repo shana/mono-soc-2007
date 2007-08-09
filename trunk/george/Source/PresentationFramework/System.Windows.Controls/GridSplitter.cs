@@ -1,3 +1,5 @@
+//TODO: Support preview mode.
+
 using System.Collections;
 using System.Windows.Input;
 using System.Windows.Automation.Peers;
@@ -15,9 +17,8 @@ namespace System.Windows.Controls {
 	public class GridSplitter : global::System.Windows.Controls.Primitives.Thumb {
 		#region Public Fields
 		#region Dependency Properties
-		//TODO: Validate.
-		public static readonly DependencyProperty DragIncrementProperty = DependencyProperty.Register("DragIncrement", typeof(double), typeof(GridSplitter), new FrameworkPropertyMetadata(1D));
-		public static readonly DependencyProperty KeyboardIncrementProperty = DependencyProperty.Register("KeyboardIncrement", typeof(double), typeof(GridSplitter), new FrameworkPropertyMetadata(10D));
+		public static readonly DependencyProperty DragIncrementProperty = DependencyProperty.Register("DragIncrement", typeof(double), typeof(GridSplitter), new FrameworkPropertyMetadata(1D), ValidatePositiveValue);
+		public static readonly DependencyProperty KeyboardIncrementProperty = DependencyProperty.Register("KeyboardIncrement", typeof(double), typeof(GridSplitter), new FrameworkPropertyMetadata(10D), ValidatePositiveValue);
 		public static readonly DependencyProperty PreviewStyleProperty = DependencyProperty.Register("PreviewStyle", typeof(Style), typeof(GridSplitter), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty ResizeBehaviorProperty = DependencyProperty.Register("ResizeBehavior", typeof(GridResizeBehavior), typeof(GridSplitter), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty ResizeDirectionProperty = DependencyProperty.Register("ResizeDirection", typeof(GridResizeDirection), typeof(GridSplitter), new FrameworkPropertyMetadata());
@@ -134,6 +135,7 @@ namespace System.Windows.Controls {
 
 		protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e) {
 			base.OnLostKeyboardFocus(e);
+			//WDTDH
 		}
 
 		protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
@@ -299,6 +301,10 @@ namespace System.Windows.Controls {
 				definition1.Width = new GridLength(definition1_actual_size + change);
 				definition2.Width = new GridLength(definition2_actual_size - change);
 			}
+		}
+
+		static bool ValidatePositiveValue(object value) {
+			return (double)value > 0;
 		}
 		#endregion
 	}
