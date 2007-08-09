@@ -38,15 +38,23 @@ namespace System.Windows.Controls {
 		#region Public Constructors
 		public GridSplitter() {
 			Focusable = true;
+			
 			DragDelta += delegate(object sender, global::System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
 				Grid grid = Parent as Grid;
 				if (grid == null)
 					return;
 				GridResizeDirection resize_direction = GetActualResizeDirection();
-				HandleChange(grid, resize_direction, resize_direction == GridResizeDirection.Rows ? e.VerticalChange : e.HorizontalChange);
+				double drag_increment = DragIncrement;
+				if (drag_increment == 1)
+					HandleChange(grid, resize_direction, resize_direction == GridResizeDirection.Rows ? e.VerticalChange : e.HorizontalChange);
+				else {
+					Point mouse_position = Mouse.GetPosition(this);
+					double increments = Math.Round((resize_direction == GridResizeDirection.Rows ? mouse_position.Y : mouse_position.X) / drag_increment);
+					if (increments != 0)
+						HandleChange(grid, resize_direction, increments * drag_increment);
+				}
 			};
 		}
-
 		#endregion
 
 		#region Public Properties
