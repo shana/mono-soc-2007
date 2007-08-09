@@ -1,5 +1,5 @@
 //
-// Gendarme.Rules.Smells.DetectLargeClassRule class
+// Gendarme.Rules.Smells.AvoidLargeClassesRule class
 //
 // Authors:
 //	Néstor Salceda <nestor.salceda@gmail.com>
@@ -33,8 +33,9 @@ using Gendarme.Framework;
 
 namespace Gendarme.Rules.Smells {
 	
-	public class DetectLargeClassRule : ITypeRule {
+	public class AvoidLargeClassesRule : ITypeRule {
 
+		private MessageCollection messageCollection;
 		private int maxFields = 25;
 
 		public int MaxFields {
@@ -50,16 +51,39 @@ namespace Gendarme.Rules.Smells {
 		{
 			return type.Fields.Count >= MaxFields;
 		}
+		
+		private void CheckForClassFields (TypeDefinition type) 
+		{
+			if (IsTooLarge (type)) 
+				AddMessage (type.Name, "This class contains a lot of fields.  This is a sign for the Large Class Smell", MessageType.Error);
+		}
+
+		private void AddMessage (string typeName, string summary, MessageType messageType) 
+		{
+			Location location = new Location (typeName, String.Empty, 0);
+			Message message = new Message (summary, location, messageType);
+			messageCollection.Add (message);
+		}
+
+		private bool ExitsCommonPrefixes (TypeDefinition type) 
+		{
+			return false;
+		}
+
+		private void CheckForCommonPrefixesInFields (TypeDefinition type) 
+		{
+			if (ExitsCommonPrefixes (type)) 
+				AddMessage (type.Name, "This class contains some fields with the same prefix.  This is sign for the Large Class Smell", MessageType.Error);
+		}
+
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
 		{
-			MessageCollection messageCollection = new MessageCollection ();
+			messageCollection = new MessageCollection ();
 			
-			if (IsTooLarge (type)) {
-				Location location = new Location (type.Name, String.Empty, 0);
-				Message message = new Message ("This class is too large",location, MessageType.Error);
-				messageCollection.Add (message);
-			}
+			CheckForClassFields (type);
+			CheckForCommonPrefixesInFields (type);
+
 			if (messageCollection.Count != 0)
 				return messageCollection;
 			return null;

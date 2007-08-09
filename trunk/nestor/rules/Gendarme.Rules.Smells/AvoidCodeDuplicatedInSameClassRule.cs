@@ -1,5 +1,5 @@
 //
-// Gendarme.Rules.Smells.DetectCodeDuplicatedInSameClassRule class
+// Gendarme.Rules.Smells.AvoidCodeDuplicatedInSameClassRule class
 //
 // Authors:
 //	Néstor Salceda <nestor.salceda@gmail.com>
@@ -181,7 +181,7 @@ namespace Gendarme.Rules.Smells {
 		}
 	}
 	
-	public class DetectCodeDuplicatedInSameClassRule : ITypeRule {
+	public class AvoidCodeDuplicatedInSameClassRule : ITypeRule {
 		private StringCollection checkedMethods;
 		private MessageCollection messageCollection;
 

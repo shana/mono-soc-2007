@@ -1,5 +1,5 @@
 //
-// Unit Test for DetectLongMethod Rule.
+// Unit Test for AvoidLongMethods Rule.
 //
 // Authors:
 //      Néstor Salceda <nestor.salceda@gmail.com>
@@ -621,7 +621,7 @@ namespace Test.Rules.Smells {
 	}
 
 	[TestFixture]
-	public class DetectLongMethodTest {
+	public class AvoidLongMethodsTest {
 		private IMethodRule rule;
 		private AssemblyDefinition assembly;
 		private MethodDefinition method;
@@ -632,7 +632,7 @@ namespace Test.Rules.Smells {
 		{
 			string unit = Assembly.GetExecutingAssembly ().Location;
 			assembly = AssemblyFactory.GetAssembly (unit);
-			rule = new DetectLongMethodRule ();
+			rule = new AvoidLongMethodsRule ();
 			messageCollection = null;
 		}
 
