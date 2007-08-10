@@ -1,26 +1,25 @@
-<AddIn
-	id          = "CBinding"
-	namespace   = "MonoDevelop"
-	name        = "C/C++ Language Binding"
-	author      = "Marcos David Marín Amador"
-	copright    = "MIT X11"
-	url         = "http://www.monodevelop.com"
-	description = "C/C++ Language binding"
-	category    = "Language bindings"
-	version     = "0.1">
+<Addin id          = "CBinding"
+       namespace   = "MonoDevelop"
+       name		   = "C/C++ Language Binding"
+       author      = "Marcos David Marín Amador"
+       copyright   = "X11"
+       url         = "http://www.monodevelop.com"
+       description = "C/C++ Language binding"
+       category    = "Language bindings"
+       version     = "0.1">
 
 	<Runtime>
 		<Import assembly = "CBinding.dll"/>
 	</Runtime>
 	
 	<Dependencies>
-		<AddIn id = "Core" version = "0.15.0"/>
-		<AddIn id = "Core.Gui" version = "0.15.0"/>
-		<AddIn id = "Ide" version = "0.15.0"/>
-		<AddIn id = "Projects" version = "0.15.0"/>
-		<AddIn id = "Projects.Gui" version = "0.15.0"/>
-		<AddIn id = "Components" version = "0.15.0"/>
-		<AddIn id = "SourceEditor" version = "0.15.0"/>
+		<Addin id = "Core" version = "0.15.0"/>
+		<Addin id = "Core.Gui" version = "0.15.0"/>
+		<Addin id = "Projects" version = "0.15.0"/>
+		<Addin id = "Projects.Gui" version = "0.15.0"/>
+		<Addin id = "Ide" version = "0.15.0"/>
+		<Addin id = "Components" version = "0.15.0"/>
+		<Addin id = "SourceEditor" version = "0.15.0"/>
 	</Dependencies>
 
 	<Extension path = "/MonoDevelop/Ide/FileFilters">
@@ -94,12 +93,12 @@
 	
 	<ExtensionPoint path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackagesFolderNode" name = "Packages folder context menu">
 		<Description>Context menu for packages folder in the solution pad.</Description>
-		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
+		<ExtensionNodeSet id = "MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/CBinding/Views/ProjectBrowser/ContextMenu/PackageNode" name = "ProjectPackage context menu">
 		<Description>Context menu for a package in the solution pad.</Description>
-		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
+		<ExtensionNodeSet id = "MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<Extension path = "/MonoDevelop/Ide/Pads/ProjectPad">
@@ -151,7 +150,7 @@
 		<Class class = "CBinding.CTextEditorExtension" />
 	</Extension>
 
-	<Extension path = "/MonoDevelop/Ide/TextEditorExtensions">
+	<Extension path = "/MonoDevelop/ProjectModel/SerializableClasses">
 		<DataType class = "CBinding.CCompilationParameters"/>
 		<DataType class = "CBinding.CProjectConfiguration"/>
 		<DataType class = "CBinding.CProject"/>
@@ -166,7 +165,7 @@
 	    </Runtime>
 	    
 		<Dependencies>
-			<Addin id = "Autotools" version = "0.15.0"/>
+			<Addin id = "MonoDevelop.Autotools" version = "0.15.0"/>
 		</Dependencies>
 		
 		<Extension path = "/Autotools/SimpleSetups">
@@ -174,4 +173,4 @@
 		</Extension>
 	</Module>
 -->
-</AddIn>
+</Addin>

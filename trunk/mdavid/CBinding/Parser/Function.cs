@@ -39,6 +39,7 @@ namespace CBinding.Parser
 	{
 		private string[] parameters;
 		private string signature;
+		private bool is_const = false;
 		
 		public Function (Tag tag, Project project, string ctags_output) : base (tag, project)
 		{
@@ -73,7 +74,7 @@ namespace CBinding.Parser
 				// we need to re-get the access
 				Access = prototypeTag.Access;
 				
-				if (GetNamespace (prototypeTag, ctags_output))return;
+				if (GetNamespace (prototypeTag, ctags_output)) return;
 				if (GetClass (prototypeTag, ctags_output)) return;
 				if (GetStructure (prototypeTag, ctags_output)) return;
 				if (GetUnion (prototypeTag, ctags_output)) return;
@@ -82,8 +83,15 @@ namespace CBinding.Parser
 		
 		private void ParseSignature (string signature)
 		{
-			// Remove parenthesis
-			string sig = signature.Substring (1, signature.Length - 2);
+			string sig = signature;
+			
+			if (signature.EndsWith ("const")) {
+				is_const = true;
+				sig = signature.Substring (0, signature.Length - 6);
+				sig = sig.Substring (1, sig.Length - 2);
+			} else {
+				sig = signature.Substring (1, signature.Length - 2);
+			}
 			
 			parameters = sig.Split (',');
 			
@@ -97,6 +105,10 @@ namespace CBinding.Parser
 		
 		public string Signature {
 			get { return signature; }
+		}
+		
+		public bool IsConst {
+			get { return is_const; }
 		}
 		
 		public override bool Equals (object o)

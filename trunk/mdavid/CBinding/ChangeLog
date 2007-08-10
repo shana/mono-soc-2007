@@ -1,5 +1,10 @@
 2007-08-09  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Gui/DataProvider.cs, Parser/Function.cs: Support for constant methods.
+	* CBinding.addin.xml: Fixed addin-breaker-typo-from-hell.
+
+2007-08-09  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* CBinding.addin.xml, CBinding.mdp: Some corrections.
 
 2007-08-09   <> 
