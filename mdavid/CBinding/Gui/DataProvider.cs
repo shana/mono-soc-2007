@@ -117,7 +117,12 @@ namespace CBinding
 			if (len > 0)
 				prename = function.FullName.Substring (0, len + 2);
 			
-			return prename + "<b>" + function.Name + "</b>" + " (" + paramTxt + ")";
+			string cons = string.Empty;
+			
+			if (function.IsConst)
+				cons = " const";
+			
+			return prename + "<b>" + function.Name + "</b>" + " (" + paramTxt + ")" + cons;
 		}
 		
 		// Returns the text to use to represent the specified parameter
