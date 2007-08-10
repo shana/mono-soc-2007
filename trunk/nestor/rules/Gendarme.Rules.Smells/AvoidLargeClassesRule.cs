@@ -32,7 +32,9 @@ using Mono.Cecil;
 using Gendarme.Framework;
 
 namespace Gendarme.Rules.Smells {
-	
+	//SUGGESTION: Public / Private ratios.
+	//SUGGESTION: Lines of Code.
+	//SUGGESTION: Weird distributions.
 	public class AvoidLargeClassesRule : ITypeRule {
 
 		private MessageCollection messageCollection;
@@ -141,7 +143,7 @@ namespace Gendarme.Rules.Smells {
 		private void CheckForCommonPrefixesInFields (TypeDefinition type) 
 		{
 			if (ExitsCommonPrefixes (type)) 
-				AddMessage (type.Name, "This class contains some fields with the same prefix.  This is sign for the Large Class Smell", MessageType.Warning);
+				AddMessage (type.Name, "This type contains some fields with the same prefix.  Although this isn't bad, it's a sign for extract a class, for avoid the Large Class smell.", MessageType.Warning);
 		}
 
 
