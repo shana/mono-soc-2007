@@ -144,7 +144,7 @@ namespace Gendarme.Rules.Smells {
 		private void CheckForCommonPrefixesInFields (TypeDefinition type) 
 		{
 			if (ExitsCommonPrefixes (type)) 
-				AddMessage (type.Name, "This class contains some fields with the same prefix.  This is sign for the Large Class Smell", MessageType.Error);
+				AddMessage (type.Name, "This class contains some fields with the same prefix.  This is sign for the Large Class Smell", MessageType.Warning);
 		}
 
 
