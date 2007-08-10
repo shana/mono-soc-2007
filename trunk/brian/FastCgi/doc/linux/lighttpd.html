@@ -1,22 +1,41 @@
 <html>
 	<head>
-		<title>[LINUX] Configuring Lighttpd to use fastcgi-mono-server</title>
+		<title>[Linux] Configuring Lighttpd to use the FastCGI Mono Server</title>
 		<link rel="stylesheet" type="text/css" href="../style.css" />
 	</head>
 	<body>
-		<h1>Configuring Lighttpd to use <tt>fastcgi-mono-server</tt></h1>
+		<h1>Configuring Lighttpd to use the FastCGI Mono Server</h1>
 		
 		<h2>Table of Contents</h2>
 		<ul>
 			<li><a href="#intro">Introduction</a></li>
-			<li><a href="#step1">Step 1: Enabling the FastCGI Module</a></li>
-			<li><a href="#step2">Step 2: Configuring the FastCGI Module</a></li>
+			
+			<li><a href="#warnings">General Warnings</a></li>
+			
+			<li><a href="#paths">Using Paths [Recommended]</a></li>
 			<ul>
-				<li><a href="#step2a">Part A: Adding the Module</a></li>
-				<li><a href="#step2b">Part B: Adding the Server</a></li>
-				<li><a href="#step2c">Part C: Mapping Extensions</a></li>
+				<li><a href="#paths1">Step 1: Enabling the FastCGI Module</a></li>
+				<li><a href="#paths2">Step 2: Configuring the FastCGI Module</a></li>
+				<ul>
+					<li><a href="#paths2a">Part A: Adding the Module</a></li>
+					<li><a href="#paths2b">Part B: Adding the Server</a></li>
+				</ul>
+				<li><a href="#paths-adv">Advanced Topics:
+				Excluding Paths from ASP.NET</a></li>
 			</ul>
-			<li><a href="#step3">Step 3: Adding Index Pages</a></li>
+			
+			<li><a href="#exts">Using Extensions</a></li>
+			<ul>
+				<li><a href="#exts-warn">Warnings</a></li>
+				<li><a href="#exts1">Step 1: Enabling the FastCGI Module</a></li>
+				<li><a href="#exts2">Step 2: Configuring the FastCGI Module</a></li>
+				<ul>
+					<li><a href="#exts2a">Part A: Adding the Module</a></li>
+					<li><a href="#exts2b">Part B: Adding the Server</a></li>
+					<li><a href="#exts2c">Part C: Mapping Extensions</a></li>
+				</ul>
+				<li><a href="#exts3">Step 3: Adding Index Pages</a></li>
+			</ul>
 		</ul>
 		
 		<a name="intro"></a>
@@ -24,26 +43,35 @@
 		
 		<p><a href="http://www.lighttpd.net/">Lighttpd</a> (pronounced
 		"lighty") is a popular lightweight and easy to configure HTTP
-		server. Adding ASP.NET support through
+		server. Adding ASP.NET support through 
 		<tt>fastcgi-mono-server</tt> is very quick and painless and can
 		be done by modifying only three files.</p>
 		
-		<h3>NOTE</h3>
-		
-		<p>These configurations have been tested with the following
-		systems:</p>
+		<h3>Configuration Tested On...</h3>
 		
 		<ul>
-			<li><a href="http://en.opensuse.org/OpenSUSE_News/10.2-Release">OpenSuSE
-			10.2</a> (Lighttpd 1.4.13-41.1 from
-			"SUSE-Linux-10.2-Updates")</li>
+			<li><a href="http://en.opensuse.org/OpenSUSE_News/10.2-Release">OpenSuSE 10.2</a> (Lighttpd 1.4.13-41.1 from "SUSE-Linux-10.2-Updates")</li>
+			<li><a href="http://www.debian.org">Debian 4.0</a> etch (Lighttpd 1.4.13-4)</li>
+			<li><a href="http://www.ubuntu.com">Ubuntu 7.04</a> feisty (Lighttpd 1.4.13-9ubuntu4)</li>
 			<li><i>If you have tested an additional configuration,
 			please email me at
 			<a href="mailto:brian.nickel@gmail.com">brian.nickel@gmail.com</a>.</i></li>
 		</ul>
 		
-		<a name="step1"></a>
-		<h2>Step 1: Enabling the FastCGI Module</h2>
+		
+		<a name="warnings"></a>
+		<h2>General Warnings</h2>
+		
+		<p>Before doing anthing else, you should read "<a
+		href="../index.html#info">Important Information</a>" on the main
+		page.</p>
+		
+		
+		<a name="paths"></a>
+		<h2>Using Paths [Recommended]</h2>
+
+		<a name="paths1"></a>
+		<h3>Step 1: Enabling the FastCGI Module</h3>
 		
 		<p>The server is enabled through the FastCGI module. To enable
 		the module, open <a href="file:///etc/lighttpd/modules.conf">
@@ -61,8 +89,250 @@
 		
 		<pre>include "conf.d/fastcgi.conf"</pre>
 		
-		<a name="step2"></a>
-		<h2>Step 2: Configuring the FastCGI Module</h2>
+		<a name="paths2"></a>
+		<h3>Step 2: Configuring the FastCGI Module</h3>
+		
+		<p>Now that the server is enabled, it takes just a handful of
+		lines to configure it.</p>
+		
+		<p>Your distribution should have included a file <a
+		href="file:///etc/lighttpd/conf.d/fastcgi.conf"
+		>/etc/lighttpd/conf.d/fastcgi.conf</a> in the installation, if 
+		not, add it. This is the largest and most important part of the
+		configuration. It consists of three pieces, which will be
+		discussed in detail, and by the time you are finished the file
+		will look something like this:</p>
+		
+		<pre>server.modules += ( "mod_fastcgi" )
+
+fastcgi.server = (
+        "" => ((
+                "socket" => "/tmp/fastcgi-mono-server",
+                "bin-path" => "/usr/bin/fastcgi-mono-server",
+                "max-procs" => 1,
+                "check-local" => "disable"
+        ))
+)</pre>
+		
+		<p>So without further adu...</p>
+		
+		<a name="paths2a"></a>
+		<h4>Part A: Adding the Module</h4>
+		
+		<p>This file must have the following line in it, otherwise it
+		will not work:</p>
+		
+		<pre>server.modules += ( "mod_fastcgi" )</pre>
+		
+		<p>If the file was included in your distribution, it would be
+		near the very top. If not, make sure you add it. This tells
+		Lighttpd to load the module when it starts up.</p>
+		
+		
+		<a name="paths2b"></a>
+		<h3>Part B: Adding the Server</h3>
+		
+		<p>The next step is to add a server for the ".aspx" extension.
+		Do a quick search for "fastcgi.server". If found, it will
+		probably look something like the following:</p>
+		
+		<pre>fastcgi.server = (
+	".php" => ((
+		"socket" => "/tmp/php-fastcgi.socket",
+		"bin-path" => "/usr/local/bin/php",
+		"bin-environment" => (
+			"PHP_FCGI_CHILDREN" => "16",
+			"PHP_FCGI_MAX_REQUESTS" => "10000"
+		)
+	))
+)</pre>
+		
+		<p>If you have it, you're going to want to add a new extension
+		to it so it looks like the following:</p>
+		
+		<pre>fastcgi.server = (
+	".php" => ((
+		"socket" => "/tmp/php-fastcgi.socket",
+		"bin-path" => "/usr/local/bin/php",
+		"bin-environment" => (
+			"PHP_FCGI_CHILDREN" => "16",
+			"PHP_FCGI_MAX_REQUESTS" => "10000"
+		)
+	))<b>,
+	"" => ((
+		<i># TO BE ADDED</i>
+		"check-local" => "disable"
+	))</b>
+)</pre>
+		
+		<p>Otherwise, if it doesn't exist, just add the following
+		block:</p>
+
+		<pre>fastcgi.server = (
+	"" => ((
+		<i># TO BE ADDED</i>
+		"check-local" => "disable"
+	))
+)</pre>
+		
+		<p>This is the beginning of a server definition for the root
+		directory. <tt>""</tt> looks a little odd, but adding a trailing
+		slash to the directory name dramatically alters how Lighttpd
+		sends the request paths. You will be adding implementation
+		specific settings where "<tt># TO BE ADDED</tt>". The
+		<tt>"check-local"</tt> line tells Lighttpd to send all requests
+		to the Mono server regardless of whether or not the the file
+		exists on disk. This is needed for some features of ASP.NET
+		2.0.</p>
+		
+		<p>There are two recommended server implementations for the Mono
+		server. The first has Lighttpd automatically spawn the child
+		server when it starts and communicate over Unix sockets. This
+		has the advantage of being easy to set up, being secure by
+		limiting access to just Lighttpd, and having the performance
+		boost provided by Unix sockets. The second has Lighttpd
+		communicate via TCP sockets with an existing Mono server
+		somewhere on the network. This has the advantage of being able
+		to run the Mono server on an entirely different machine than
+		Lighttpd and all the performance and logistical advantages
+		associated with that.</p>
+		
+		<p>If you're just setting up a personal server or not trying
+		anything fancy, I would recommend using <a
+		href="#paths2b1">automatic spawning</a>, and if you're using a
+		high bandwidth, multimachine setup, I would recommend using <a
+		href="#paths2b2">TCP</a> and running the server on another
+		system.</p>
+		
+		<a name="paths2b1"></a>
+		<h5>Automatically spawning a new server</h5>
+		
+		<p>Where you previously added "<tt># TO BE ADDED</tt>", replace
+		it with the following:</p>
+		
+		<pre>		"socket" => "/tmp/fastcgi-mono-server",
+		"bin-path" => "/usr/bin/fastcgi-mono-server",
+		"max-procs" => 1,</pre>
+		
+		<ul>
+			<li><p><tt>"socket"</tt> specifies the base name to use
+			for the socket files it creates. Lighttpd will check for
+			the file "/tmp/fastcgi-mono-server-0" to use for the
+			server. If the file does not exist, it will then create
+			the file and use it to spawn a new server.</p></li>
+			
+			<li><p><tt>"bin-path"</tt> specifies the path to the
+			server program, to be called when spawning a new server.
+			You can find the path on your specific system by running
+			<tt>which fastcgi-mono-server</tt>. To use ASP.NET 2.0,
+			use <tt>/usr/bin/fastcgi-mono-server2</tt>.</p></li>
+			
+			<li><p><tt>"max-procs"</tt> specifies the maximum number
+			of servers to spawn. <b>Because 
+			ASP.NET stores session specific objects, I am unsure of
+			how applications would react if switching from one
+			server to another, or if Lighttpd bonds a single server
+			to a client. As such, I highly recommend keeping this
+			value as "1" to avoid any conflicts.</b></p></li>
+		</ul>
+		
+		<a name="paths2b2"></a>
+		<h5>Connecting to an existing server via TCP</h5>
+		
+		<p>Where you previously added "<tt># TO BE ADDED</tt>", replace
+		it with the following:</p>
+		
+		<pre>		"host" => "192.168.0.3",
+		"port" => 9000,
+		"docroot" => "/root/on/remote/machine",</pre>
+		
+		<ul>
+			<li><p><tt>"host"</tt> specifies the host on which the
+			server is running. You will want to replace it with the
+			actual IP address.</p></li>
+			
+			<li><p><tt>"port"</tt> specifies the port on which the
+			server is running. For this example, the ASP.NET server
+			could have been started with the following command:</p>
+			
+				<pre>/usr/bin/fastcgi-mono-server /socket=tcp:9000</pre>
+			
+			</li>
+			
+			<li><p><tt>"docroot"</tt> specifies the document root
+			<b>on the remote machine</b>. It is not necessary if the
+			directory structure is the same as on the local
+			machine.</li>
+		</ul>
+		
+		<a name="paths-adv"></a>
+		<h2>Advanced Topics: Excluding Paths from ASP.NET</h2>
+		
+		<p>Sending all paths to ASP.NET adds some extra overhead to
+		requests and may not be desireable for sending large static
+		files. Additionally, you may want to use PHP or other scripts on
+		the server. You can exclude extensions, paths, and even hosts by
+		blacing the <tt>fastcgi.server</tt> definition in a <a
+		href="http://trac.lighttpd.net/trac/wiki/Docs%3AConfiguration#conditional-configuration"
+		>Conditional Configuration</a>.</p>
+		
+		<p><b>As these requests are not handled by ASP.NET, they do not
+		employ ASP.NET's security features and sensitive material should
+		not be placed in those folders.</b></p>
+		
+		<p>The following example prevents files in the
+		<tt>/downloads/</tt> directory from being sent to
+		ASP.NET:</tt></p>
+		
+		<pre>server.modules += ( "mod_fastcgi" )
+
+$HTTP["url"] !~ "^/downloads/" {
+	fastcgi.server = (
+		"" => ((
+			"socket" => "/tmp/fastcgi-mono-server",
+			"bin-path" => "/usr/bin/fastcgi-mono-server",
+			"max-procs" => 1,
+			"check-local" => "disable"
+		))
+	)
+}</pre>
+		
+		
+		<a name="exts"></a>
+		<h2>Using Extensions</h2>
+		
+		<a name="exts-warn"></a>
+		<h3>Warnings</h3>
+		
+		<p><b>Using Extensions in place place of paths is NOT
+		recommended.</b> Please consult "<a
+		href="../index.html#info1">Paths vs. Extensions</a>" on the main
+		page for an in depth explanation. If you decide to use this
+		configuration, please bear in mind that it is less secure
+		suffers additional disadvantages when compared to using
+		paths.</p>
+		
+		<a name="exts1"></a>
+		<h3>Step 1: Enabling the FastCGI Module</h3>
+		
+		<p>The server is enabled through the FastCGI module. To enable
+		the module, open <a href="file:///etc/lighttpd/modules.conf">
+		/etc/lighttpd/modules.conf</a> and search for the following
+		block:</p>
+		
+		<pre>##
+## FastCGI (mod_fastcgi)
+##
+#include "conf.d/fastcgi.conf"</pre>
+
+		<p>If you find it, you need only uncomment the <tt>include</tt>
+		line. If you don't find that line, or anything like it, simply
+		the following line to end of the file:
+		
+		<pre>include "conf.d/fastcgi.conf"</pre>
+		
+		<a name="exts2"></a>
+		<h3>Step 2: Configuring the FastCGI Module</h3>
 		
 		<p>Now that the server is enabled, it takes just a handful of
 		lines to configure it.</p>
@@ -101,8 +371,8 @@ fastcgi.map-extensions = (
 
 		<p>So without further adu...</p>
 		
-		<a name="step2a"></a>
-		<h3>Part A: Adding the Module</h3>
+		<a name="exts2a"></a>
+		<h4>Part A: Adding the Module</h4>
 		
 		<p>This file must have the following line in it, otherwise it
 		will not work:</p>
@@ -114,8 +384,8 @@ fastcgi.map-extensions = (
 		Lighttpd to load the module when it starts up.</p>
 		
 		
-		<a name="step2b"></a>
-		<h3>Part B: Adding the Server</h3>
+		<a name="exts2b"></a>
+		<h4>Part B: Adding the Server</h4>
 		
 		<p>The next step is to add a server for the ".aspx" extension.
 		Do a quick search for "fastcgi.server". If found, it will
@@ -182,13 +452,13 @@ fastcgi.map-extensions = (
 		
 		<p>If you're just setting up a personal server or not trying
 		anything fancy, I would recommend using <a
-		href="#step2b1">automatic spawning</a>, and if you're using a
+		href="#exts2b1">automatic spawning</a>, and if you're using a
 		high bandwidth, multimachine setup, I would recommend using <a
-		href="#step2b2">TCP</a> and running the server on another
+		href="#exts2b2">TCP</a> and running the server on another
 		system.</p>
 		
-		<a name="step2b1"></a>
-		<h4>Automatically spawning a new server</h4>
+		<a name="exts2b1"></a>
+		<h5>Automatically spawning a new server</h5>
 		
 		<p>Where you previously added "<tt># TO BE ADDED</tt>", replace
 		it with the following:</p>
@@ -208,25 +478,26 @@ fastcgi.map-extensions = (
 			server program, to be called when spawning a new server.
 			You can find the path on your specific system by running
 			<tt>which fastcgi-mono-server</tt>. To use ASP.NET 2.0,
-			use "/usr/bin/fastcgi-mono-server2".</p></li>
+			use <tt>/usr/bin/fastcgi-mono-server2</tt>.</p></li>
 			
 			<li><p><tt>"max-procs"</tt> specifies the maximum number
-			of servers to spawn. <span style="color:red">Because 
+			of servers to spawn. <b>Because 
 			ASP.NET stores session specific objects, I am unsure of
 			how applications would react if switching from one
 			server to another, or if Lighttpd bonds a single server
 			to a client. As such, I highly recommend keeping this
-			value as "1" to avoid any conflicts.</span></p></li>
+			value as "1" to avoid any conflicts.</b></p></li>
 		</ul>
 		
-		<a name="step2b2"></a>
-		<h4>Connecting to an existing server via TCP</h4>
+		<a name="exts2b2"></a>
+		<h5>Connecting to an existing server via TCP</h5>
 		
 		<p>Where you previously added "<tt># TO BE ADDED</tt>", replace
 		it with the following:</p>
 		
 		<pre>		"host" => "192.168.0.3",
-		"port" => 9000,</pre>
+		"port" => 9000,
+		"docroot" => "/root/on/remote/machine",</pre>
 		
 		<ul>
 			<li><p><tt>"host"</tt> specifies the host on which the
@@ -240,10 +511,15 @@ fastcgi.map-extensions = (
 				<pre>/usr/bin/fastcgi-mono-server /socket=tcp:9000</pre>
 			
 			</li>
+			
+			<li><p><tt>"docroot"</tt> specifies the document root
+			<b>on the remote machine</b>. It is not necessary if the
+			directory structure is the same as on the local
+			machine.</li>
 		</ul>
 		
-		<a name="step2c"></a>
-		<h3>Part C: Mapping Extensions</h3>
+		<a name="exts2c"></a>
+		<h4>Part C: Mapping Extensions</h4>
 		
 		<p>ASP.NET uses many extensions for its many different features.
 		It uses ".ashx" for handlers, ".soap" for SOAP, and you really
@@ -293,14 +569,15 @@ fastcgi.map-extensions = (
         ".dll"    => ".aspx"
 )</pre>
 
-		<a name="step3"></a>
-		<h2>Step 3: Adding Index Pages</h2>
+		<a name="exts3"></a>
+		<h3>Step 3: Adding Index Pages</h3>
 		
 		<p>Once you have finished Step 2, you should have a working
 		ASP.NET server with one exception, if you look at a folder like
 		"/", you'll get a 404 error instead of "default.aspx". To fix
-		this, you need to open <a href="file:///etc/lighttpd/lighttpd.conf">
-		/etc/lighttpd/lighttpd.conf</a> and search for
+		this, you need to open <a
+		href="file:///etc/lighttpd/lighttpd.conf"
+		>/etc/lighttpd/lighttpd.conf</a> and search for
 		<tt>index-file.names</tt>. You'll probably see the following
 		block:</p>
 		
@@ -315,10 +592,21 @@ fastcgi.map-extensions = (
   "index.xhtml", "index.html", "index.htm", "default.htm", "index.php"<b>, "default.aspx", "index.aspx"</b>
 )</pre>
 		
+		
 		<h2>Bada Bing!</h2>
 		
 		<p>You should now have ASP.NET working with Lighttpd. Enjoy!</p>
 		
 		<p>- Brian Nickel &lt;<a href="http://kerrick.wordpress.com">http://kerrick.wordpress.com</a>&gt;</p>
+		
+		
+		<div id="navigation">
+			<a href="http://www.mono-project.com" id="logo"><img src="../mono-logo.png" width="93" height="112" /></a>
+			<ul id="indices">
+				<li><a href="../index.html">Introduction</a>
+				<li><a href="../linux/index.html">Linux</a>
+				<li><a href="../mac/index.html">Macintosh</a>
+				<li><a href="../windows/index.html">Windows</a></ul>
+		</div>
 	</body>
 </html>

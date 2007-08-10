@@ -78,6 +78,11 @@ pre {
     padding: 0.2em;
 }
 
+ul {
+    list-style-type: square;
+    padding-left: 2em;
+}
+
 tt {
     background-color: #ffffef;
 }

@@ -294,7 +294,7 @@ namespace Mono.WebServer.FastCgi
 			if (headers != null)
 				headers.AppendFormat (
 					CultureInfo.InvariantCulture,
-					"{0} {1} {2}\r\n", GetHttpVersion (),
+					"Status: {0} {1}\r\n",
 					statusCode, statusDescription);
 		}
 

@@ -217,6 +217,23 @@ namespace Mono.WebServer
 				foreach (XmlElement desc in setting.GetElementsByTagName ("Description"))
 					RenderXml (desc, values, 0, 78 - left_margin);
 				
+				string app_setting = GetXmlValue (setting,
+					"AppSetting");
+				
+				if (app_setting.Length > 0) {
+					string val = AppSettings [app_setting];
+					
+					if (val == null || val.Length == 0)
+						val = "none";
+					
+					values.Add (" Default Value: " + val);
+					
+					values.Add (" AppSettings Key Name: " +
+						app_setting);
+					
+					values.Add (string.Empty);
+				}
+				
 				int start = arg.Length;
 				foreach (string text in values) {
 					for (int i = start; i < left_margin; i++)
