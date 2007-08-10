@@ -302,8 +302,15 @@ namespace Mono.WebServer.FastCgi
 					app_config_dir);
 
 			if (applications == null && app_config_dir == null &&
-				app_config_file == null && !auto_map)
-				appmanager.AddApplicationsFromCommandLine ("/:.");
+				app_config_file == null && !auto_map) {
+				Console.WriteLine (
+					"There are no applications defined, and path mapping is disabled.");
+				Console.WriteLine (
+					"Define an application using /applications, /appconfigfile, /appconfigdir");
+				Console.WriteLine (
+					"or by enabling application mapping with /automappaths=True.");
+				return 1;
+			}
 			
 			Console.WriteLine ("Root directory: {0}", root_dir);
 			Mono.FastCgi.Server server = new Mono.FastCgi.Server (
