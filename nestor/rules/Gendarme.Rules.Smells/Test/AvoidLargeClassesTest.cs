@@ -46,6 +46,26 @@ namespace Test.Rules.Smells {
 		string[] array;
 	}
 
+	public class ClassWithPrefixedFieldsWithCamelCasing {
+		int fooBar;
+		int fooBaz;
+	}
+
+	public class ClassWithoutPrefixedFieldsWithMDashCasing {
+		int m_member;
+		int m_other;
+	}
+
+	public class ClassWithPrefixedFieldsWithMDashCasing {
+		int m_foo_bar;
+		int m_foo_baz;
+	}
+
+	public class ClassWithPrefixedFieldsWithDashCasing {
+		int phone_number;
+		int phone_area_code;
+	}
+
 	public class NotLargeClass {
 	}
 
@@ -71,7 +91,7 @@ namespace Test.Rules.Smells {
 			type = assembly.MainModule.Types["Test.Rules.Smells.LargeClass"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
-			Assert.AreEqual (1, messageCollection.Count);
+			Assert.AreEqual (2, messageCollection.Count);
 		}
 
 		[Test]
@@ -80,6 +100,41 @@ namespace Test.Rules.Smells {
 			type = assembly.MainModule.Types["Test.Rules.Smells.NotLargeClass"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void ClassWithPrefixedFieldsWithCamelCasingTest ()
+		{
+			type = assembly.MainModule.Types["Test.Rules.Smells.ClassWithPrefixedFieldsWithCamelCasing"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+			
+		[Test]
+		public void ClassWithoutPrefixedFieldsWithMDashCasingTest () 
+		{
+			type = assembly.MainModule.Types["Test.Rules.Smells.ClassWithoutPrefixedFieldsWithMDashCasing"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void ClassWithPrefixedFieldsWithDashCasingTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.ClassWithPrefixedFieldsWithDashCasing"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void ClassWithPrefixedFieldsWithMDashCasingTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.ClassWithPrefixedFieldsWithMDashCasing"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
 		}
 	}
 }
