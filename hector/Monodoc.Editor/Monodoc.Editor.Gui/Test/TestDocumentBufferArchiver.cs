@@ -36,7 +36,7 @@ public class TestDocumentBufferArchiver {
 	}
 	
 	[Test()]
-	public void Serialize ()
+	public void TestSerialize ()
 	{
 		string originalXml, newXml, filename;
 		
@@ -56,7 +56,7 @@ public class TestDocumentBufferArchiver {
 	}
 	
 	[Test()]
-	public void SerializePerformance ()
+	public void TestSerializePerformance ()
 	{
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
@@ -76,7 +76,7 @@ public class TestDocumentBufferArchiver {
 	}
 	
 	[Test()]
-	public void DeserializePerformance ()
+	public void TestDeserializePerformance ()
 	{
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();

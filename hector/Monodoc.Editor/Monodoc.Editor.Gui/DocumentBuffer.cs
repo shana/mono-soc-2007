@@ -80,10 +80,15 @@ public class DocumentBuffer : TextBuffer {
 		Console.WriteLine ("DEBUG: End Offset: {0} Char: {1}", endIter.Offset, endIter.Char);
 		
 		int startOffset = startIter.Offset;
+		TextIter regionStart = GetIterAtOffset (startOffset - 1);
+		TextIter regionEnd = GetIterAtOffset (endIter.Offset);
+		
+		Console.WriteLine ("DEBUG: Previous Start Offset: {0} Char: {1}", regionStart.Offset, regionStart.Char);
+		Console.WriteLine ("DEBUG: Next End Offset: {0} Char: {1}", regionEnd.Offset, regionEnd.Char);
 		
 		TextTag last = DocumentUtils.GetLastTag (startIter);
-		bool startsRegion = startIter.BeginsTag (last);
-		bool endsRegion = !endIter.HasTag (last);
+		bool startsRegion = regionStart.Char.Equals ("[");
+		bool endsRegion = regionEnd.Char.Equals ("]");
 		base.OnDeleteRange (startIter, endIter);
 		
 		if (startsRegion && endsRegion) {

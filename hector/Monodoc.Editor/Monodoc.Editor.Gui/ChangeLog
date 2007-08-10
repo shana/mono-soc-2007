@@ -1,3 +1,11 @@
+2007-08-10  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Test/TestDocumentBufferArchiver.cs: Minor name changes of tests.
+	* Test/TestTextRange.cs: Added several test units for TextRange helper
+	  class.
+	* DocumentBuffer.cs: Added some small change for default handler of
+	  DeleteRange event.
+
 2007-08-07  Hector E. Gomez Morales  <hectorgm@ciencias.unam.mx>
 
 	* 2007-08-07  Hector E. Gomez Morales <hectoregm@gmail.com> 
