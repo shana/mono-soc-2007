@@ -1,17 +1,31 @@
 <html>
 	<head>
-		<title>[LINUX] Configuring Abyss Web Server to use fastcgi-mono-server</title>
+		<title>[Linux] Configuring Abyss Web Server to use the FastCGI Mono Server</title>
 		<link rel="stylesheet" type="text/css" href="../style.css" />
 	</head>
 	<body>
-		<h1>Configuring Abyss Web Server to use <tt>fastcgi-mono-server</tt></h1>
+		<h1>Configuring Abyss Web Server to use the FastCGI Mono Server</h1>
 		
 		<h2>Table of Contents</h2>
 		<ul>
 			<li><a href="#intro">Introduction</a></li>
-			<li><a href="#step1">Step 1: Setting Up the Interpreter</a></li>
-			<li><a href="#step2">Step 2: Extending the Server Lifetime</a></li>
-			<li><a href="#step3">Step 3: Adding Index Pages</a></li>
+			
+			<li><a href="#warnings">General Warnings</a></li>
+			
+			<li><a href="#paths">Using Paths [Recommended]</a></li>
+			<ul>
+				<li><a href="#paths1">Step 1: Setting Up the Interpreter</a></li>
+				<li><a href="#paths2">Step 2: Extending the Server Lifetime</a></li>
+				<li><a href="#path3">Step 3: Disabling Directory Listing</a></li>
+			</ul>
+			
+			<li><a href="#exts">Using Extensions</a></li>
+			<ul>
+				<li><a href="#exts-warn">Warnings</a></li>
+				<li><a href="#exts1">Step 1: Setting Up the Interpreter</a></li>
+				<li><a href="#exts2">Step 2: Extending the Server Lifetime</a></li>
+				<li><a href="#exts3">Step 3: Adding Index Pages</a></li>
+			</ul>
 		</ul>
 		
 		<a name="intro"></a>
@@ -28,7 +42,7 @@
 		server to set up thus far. This is largely due to its simple and
 		straightforward control center.</p>
 		
-		<h3>NOTE</h3>
+		<h3>Configuration Tested On...</h3>
 		
 		<ul>
 			<li><a href="http://en.opensuse.org/OpenSUSE_News/10.2-Release">OpenSuSE
@@ -38,8 +52,151 @@
 			<a href="mailto:brian.nickel@gmail.com">brian.nickel@gmail.com</a>.</i></li>
 		</ul>
 		
-		<a name="step1"></a>
-		<h2>Step 1: Setting Up the Interpreter</h2>
+		
+		<a name="warnings"></a>
+		<h2>General Warnings</h2>
+		
+		<p>Before doing anthing else, you should read "<a
+		href="../index.html#info">Important Information</a>" on the main
+		page.</p>
+		
+		
+		<a name="paths"></a>
+		<h2>Using Paths [Recommended]</h2>
+
+		<a name="paths-warn"></a>
+		<h3>Warnings</h3>
+		
+		<a name="paths1"></a>
+		<h3>Step 1: Setting Up the Interpreter</h3>
+		
+		<p>Upon starting the Abyss Web Server, a control center web
+		server starts up as well, by default at <a
+		href="http://localhost:9999">http://localhost:9999</a>. Simply
+		open it up in your web browser to that address and follow the
+		steps outlined below:</p>
+		
+		<ol>
+			<li><p>Click "Configure" on the host you wish to add
+			ASP.NET support to.</p></li>
+			
+			<li><p>Click on "Scripting Parameters".</p></li>
+			
+			<li><p>Click on "Add" in the "Interpreters"
+			box.</p></li>
+			
+			<li>
+				<p>You are now on the page to add the ASP.NET
+				interpretter. The two options I would recommend
+				are "FastCGI (Local - Pipes)" and "FastCGI
+				(Remote - TCP/IP sockets)":</p>
+				
+				<ul>
+				
+					<li><p><b>FastCGI (Local - Pipes)</b> -
+					Abyss will start the Mono server by
+					itself using a piped socket. Pipes are
+					the fastest way to communicate and
+					having the Abyss spawn its own server
+					means you don't have to do it manually.
+					This is possibly the simplest
+					option.</p>
+					
+					<p>If using this option, simply set
+					"Interpreter" to
+					"/usr/bin/fastcgi-mono-server" or
+					"/usr/bin/fastcgi-mono-server2".
+					</p></li>
+					
+					
+					<li><p><b>FastCGI (Remote - TCP/IP
+					sockets)</b> - Abyss will look for the
+					Mono server at a specified IP address
+					and port. You can use this to run the
+					server on another machine and
+					redistribute the processor load. The
+					only caveat is that you will need to
+					start the Mono server on the other
+					computer manually, using a command like
+					"<tt>fastcgi-mono-server2
+					/socket=tcp:8002</tt>"</p>
+					
+					<p>If using this option, simply set
+					"Remote server IP Address" to the IP
+					address of the machine running the Mono
+					server, and "Port" to the port you used
+					in the command line. For the command
+					line shown above, this would be
+					8002.</p></li>
+				</ul>
+			
+			</li>
+			
+			<li><p>Uncheck "Check for file existence before
+			execution". This option improves performance but can
+			cripple ASP.NET 2.0 as it sometimes uses paths that
+			don't necessarily exist like WebResource.axd.</li>
+			
+			<li><p>Uncheck "Use the associated extensions to
+			automatically update the Script Paths".</li>
+			
+			<li><p>Add "*" to "Extensions". It is not a real, but
+			it'll be used to make sure all requests are directed at
+			the FastCGI Mono Server.</p></li>
+			
+			<li><p>Click "OK".</p></li>
+			
+			<li>You should have automatically returned to "Scripting
+			Parameters". Click on "Add" in the "Script Paths"
+			box.</p></li>
+			
+			<li><p>Enter "/*" in "Virtual Path".</p></li>
+			
+			<li><p>Click "OK".</p></li>
+		</ol>
+		
+		<a name="paths2"></a>
+		<h3>Step 2: Extending the Server Lifetime</h3>
+		
+		<p>Upon completion of the previous step, you should have
+		automatically returned to "Scripting Parameters". Click on
+		"Edit..." next to "FastCGI Parameters". The option "FastCGI
+		Processes Timeout" specifies the number of seconds after the
+		last request you're going to want to wait before shutting down
+		the Mono (or any) FastCGI server. Because ASP.NET pages need to
+		recompiled and AppDomains need to be recreated every time the
+		server starts up, you want to set this value to some arbitrarily
+		high value. 604800 is the number of seconds in a week and the
+		value I chose for my server. Once you've chosen your value,
+		click "OK".</p>
+		
+		<a name="paths3"></a>
+		<h3>Step 3: Disabling Directory Listing</h3>
+		
+		<p>Upon completion of the previous step, you should have
+		automatically returned to "Scripting Parameters". Click "OK" at
+		the bottom of the page to get back to the host configuration
+		page. Once there, click "Directory Listing" and proceed to set
+		"Type" to "Disabled". If directory listing is enabled, paths
+		aren't automatically sent to the FastCGI Mono Server.</p>
+		
+		
+		<a name="exts"></a>
+		<h2>Using Extensions</h2>
+		
+		<a name="exts-warn"></a>
+		<h3>Warnings</h3>
+		
+		<p><b>Using Extensions in place place of paths is NOT
+		recommended.</b> Please consult "<a
+		href="../index.html#info1">Paths vs. Extensions</a>" on the main
+		page for an in depth explanation. If you decide to use this
+		configuration, please bear in mind that it is less secure
+		suffers additional disadvantages when compared to using
+		paths.</p>
+		
+		<a name="exts1"></a>
+		<h3>Step 1: Setting Up the Interpreter</h3>
 		
 		<p>Upon starting the Abyss Web Server, a control center web
 		server starts up as well, by default at <a
@@ -128,8 +285,8 @@
 			<li><p>Click "OK".</p></li>
 		</ol>
 		
-		<a name="step2"></a>
-		<h2>Step 2: Extending the Server Lifetime</h2>
+		<a name="exts2"></a>
+		<h3>Step 2: Extending the Server Lifetime</h3>
 		
 		<p>Upon completion of the previous step, you should have
 		automatically returned to "Scripting Parameters". Click on
@@ -143,20 +300,32 @@
 		value I chose for my server. Once you've chosen your value,
 		click "OK".</p>
 		
-		<a name="step3"></a>
-		<h2>Step 3: Adding Index Pages</h2>
+		<a name="exts3"></a>
+		<h3>Step 3: Adding Index Pages</h3>
 		
 		<p>Upon completion of the previous step, you should have
 		automatically returned to "Scripting Parameters". Click "OK" at
 		the bottom of the page to get back to the host configuration
 		page. Once there, click "Index Files" and proceed to add
-		"index.aspx" and "default.aspx". Click "OK" and then "Reset" to
-		restart the web server.</p>
+		<tt>index.aspx</tt>, <tt>default.aspx</tt>, and
+		<tt>Default.aspx</tt>. Click "OK" and then "Reset" to restart
+		the web server.</p>
+		
 		
 		<h2>Bada Bing!</h2>
 		
-		<p>You should now have ASP.NET working with Abyss. Enjoy!</p>
+		<p>You should now have ASP.NET working with Abyss Web Server. Enjoy!</p>
 		
 		<p>- Brian Nickel &lt;<a href="http://kerrick.wordpress.com">http://kerrick.wordpress.com</a>&gt;</p>
+		
+		
+		<div id="navigation">
+			<a href="http://www.mono-project.com" id="logo"><img src="../mono-logo.png" width="93" height="112" /></a>
+			<ul id="indices">
+				<li><a href="../index.html">Introduction</a>
+				<li><a href="../linux/index.html">Linux</a>
+				<li><a href="../mac/index.html">Macintosh</a>
+				<li><a href="../windows/index.html">Windows</a></ul>
+		</div>
 	</body>
 </html>

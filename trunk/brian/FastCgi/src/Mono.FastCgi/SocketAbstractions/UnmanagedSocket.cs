@@ -53,7 +53,7 @@ namespace Mono.FastCgi {
 			int size = 1024;
 			fixed (byte* ptr = address)
 				if (getsockname (socket, ptr, ref size) != 0)
-					throw new sock.SocketException ();
+					throw GetException ();
 		
 		
 			this.socket = socket;
@@ -63,7 +63,7 @@ namespace Mono.FastCgi {
 		{
 			connected = false;
 			if (shutdown (socket, (int) sock.SocketShutdown.Both) != 0)
-				throw new sock.SocketException ();
+				throw GetException ();
 		}
 		
 		unsafe public override int Receive (byte [] buffer, int offset,
@@ -81,7 +81,7 @@ namespace Mono.FastCgi {
 				return value;
 			
 			connected = false;
-			throw new sock.SocketException ();
+			throw GetException ();
 		}
 		
 		unsafe public override int Send (byte [] data, int offset,
@@ -100,7 +100,7 @@ namespace Mono.FastCgi {
 				return value;
 			
 			connected = false;
-			throw new sock.SocketException ();
+			throw GetException ();
 		}
 		
 		public override void Listen (int backlog)
@@ -123,6 +123,9 @@ namespace Mono.FastCgi {
 				throw new ArgumentException (
 					"Result was not produced by current instance.",
 					"asyncResult");
+			
+			if (s.except != null)
+				throw s.except;
 			
 			UnmanagedSocket u = new UnmanagedSocket (s.accepted);
 			u.connected = true;
@@ -160,6 +163,7 @@ namespace Mono.FastCgi {
 			private bool completed = false;
 			public  IntPtr socket;
 			public  IntPtr accepted;
+			public  sock.SocketException except = null;
 			private AsyncCallback callback;
 			private object state;
 			
@@ -175,9 +179,17 @@ namespace Mono.FastCgi {
 			{
 				byte[] address = new byte [1024];
 				int size = 1024;
+				Errno errno;
 				fixed (byte* ptr = address)
-					accepted = accept (socket, ptr,
-						ref size);
+					do {
+						accepted = accept (socket, ptr,
+							ref size);
+						errno = Stdlib.GetLastError ();
+					} while ((int) accepted == -1 &&
+						errno == Errno.EINTR);
+				
+				if ((int) accepted == -1)
+					except = GetException (errno);
 				
 				completed = true;
 				callback (this);
@@ -214,6 +226,30 @@ namespace Mono.FastCgi {
 				supports_libc = os.StartsWith ("Linux");
 			} catch {
 			}
+		}
+		
+		private static sock.SocketException GetException ()
+		{
+			return GetException (Stdlib.GetLastError ());
+		}
+		
+		private static sock.SocketException GetException (Errno error)
+		{
+			if (error == Errno.EAGAIN ||
+				error == Errno.EWOULDBLOCK) // WSAEWOULDBLOCK
+				return new sock.SocketException (10035);
+			
+			if (error == Errno.EBADF ||
+				error == Errno.ENOTSOCK) // WSAENOTSOCK
+				return new sock.SocketException (10038);
+			
+			if (error == Errno.ECONNABORTED) // WSAENETDOWN
+				return new sock.SocketException (10050);
+			
+			if (error == Errno.EINVAL) // WSAEINVAL
+				return new sock.SocketException (10022);
+			
+			return new sock.SocketException ();
 		}
 	}
 }

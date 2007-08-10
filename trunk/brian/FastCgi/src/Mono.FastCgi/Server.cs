@@ -644,9 +644,11 @@ namespace Mono.FastCgi {
 				Socket accepted = listen_socket.EndAccept (ares);
 				connection = new Connection (accepted, this);
 				connections.Add (connection);
-			} catch (Exception e) {
+			} catch (System.Net.Sockets.SocketException e) {
 				Logger.Write (LogLevel.Error,
 					Strings.Server_AcceptFailed, e.Message);
+				if (e.ErrorCode == 10022)
+					Stop ();
 			}
 			
 			if (CanAccept)

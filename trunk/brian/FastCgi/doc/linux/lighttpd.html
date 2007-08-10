@@ -20,8 +20,12 @@
 					<li><a href="#paths2a">Part A: Adding the Module</a></li>
 					<li><a href="#paths2b">Part B: Adding the Server</a></li>
 				</ul>
-				<li><a href="#paths-adv">Advanced Topics:
-				Excluding Paths from ASP.NET</a></li>
+				<li><a href="#paths-adv">Advanced Topics</a></li>
+				<ul>
+					<li><a href="#paths-adv1">Excluding Paths from ASP.NET</a></li>
+					<li><a href="#paths-adv2">Limiting ASP.NET to Specific Virtual Hosts</a></li>
+					<li><a href="#paths-adv3">Allowing PHP to Run in Parallel</a></li>
+				</ul>
 			</ul>
 			
 			<li><a href="#exts">Using Extensions</a></li>
@@ -266,27 +270,30 @@ fastcgi.server = (
 		</ul>
 		
 		<a name="paths-adv"></a>
-		<h2>Advanced Topics: Excluding Paths from ASP.NET</h2>
+		<h2>Advanced Topics</h2>
 		
-		<p>Sending all paths to ASP.NET adds some extra overhead to
-		requests and may not be desireable for sending large static
-		files. Additionally, you may want to use PHP or other scripts on
-		the server. You can exclude extensions, paths, and even hosts by
-		blacing the <tt>fastcgi.server</tt> definition in a <a
+		<p>Sending all requests to ASP.NET adds some extra overhead
+		which may not be desirable for sending large static files. It
+		additionally prevents PHP (and other scripts) from working. The
+		following advanced topics overcome these obstacles by enclosing
+		the <tt>fastcgi.server</tt> definition in a <a
 		href="http://trac.lighttpd.net/trac/wiki/Docs%3AConfiguration#conditional-configuration"
 		>Conditional Configuration</a>.</p>
 		
-		<p><b>As these requests are not handled by ASP.NET, they do not
-		employ ASP.NET's security features and sensitive material should
-		not be placed in those folders.</b></p>
+		<p><b>As this prevents requests from being handled by ASP.NET,
+		the requests do not employ ASP.NET's security features and extra
+		security measures should be applied.</b></p>
+		
+		<a name="paths-adv1"></a>
+		<h3>Excluding Paths from ASP.NET</h3>
 		
 		<p>The following example prevents files in the
-		<tt>/downloads/</tt> directory from being sent to
-		ASP.NET:</tt></p>
+		<tt>/downloads/</tt> and <tt>/images/</tt> directories from
+		being sent to ASP.NET:</p>
 		
 		<pre>server.modules += ( "mod_fastcgi" )
 
-$HTTP["url"] !~ "^/downloads/" {
+$HTTP["url"] !~ "^/(downloads|images)/" {
 	fastcgi.server = (
 		"" => ((
 			"socket" => "/tmp/fastcgi-mono-server",
@@ -296,6 +303,55 @@ $HTTP["url"] !~ "^/downloads/" {
 		))
 	)
 }</pre>
+
+		<a name="paths-adv2"></a>
+		<h3>Limiting ASP.NET to Specific Virtual Hosts</h3>
+		
+		<p>The following example limits ASP.NET to running on
+		<tt>www.example.com</tt> and <tt>example.com</tt>:</p>
+		
+		<pre>server.modules += ( "mod_fastcgi" )
+
+$HTTP["host"] =~ "^(www\.|)example\.com$" {
+	fastcgi.server = (
+		"" => ((
+			"socket" => "/tmp/fastcgi-mono-server",
+			"bin-path" => "/usr/bin/fastcgi-mono-server",
+			"max-procs" => 1,
+			"check-local" => "disable"
+		))
+	)
+}</pre>
+		
+		<a name="paths-adv3"></a>
+		<h3>Allowing PHP to Run in Parallel</h3>
+		
+		<p>The following example sends <tt>.php</tt> requests to a PHP
+		FastCGI server and the rest to ASP.NET:</p>
+		
+		<pre>server.modules += ( "mod_fastcgi" )
+
+$HTTP["url"] !~ "\.php$" {
+	fastcgi.server = (
+	        ""   => ((
+	                "socket" => "/tmp/fastcgi-mono-server",
+	                "bin-path" => "/usr/bin/fastcgi-mono-server2",
+	                "max-procs" => 1,
+	                "check-local" => "disable"
+	        ))
+	)
+}
+
+fastcgi.server = (
+        ".php"   => ((
+                "socket" => "/tmp/php-fastcgi",
+                "bin-path" => "/srv/www/cgi-bin/php5",
+                "bin-environment" => (
+                        "PHP_FCGI_CHILDREN" => "16",
+                        "PHP_FCGI_MAX_REQUESTS" => "10000"
+                )
+        ))
+)</pre>
 		
 		
 		<a name="exts"></a>
