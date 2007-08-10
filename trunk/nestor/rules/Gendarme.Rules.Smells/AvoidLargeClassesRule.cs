@@ -65,8 +65,79 @@ namespace Gendarme.Rules.Smells {
 			messageCollection.Add (message);
 		}
 
+		private bool HasPrefixedFields (string prefix, TypeDefinition type) 
+		{
+			if (prefix == String.Empty)
+				return false;
+
+			int counter = 0;
+			foreach (FieldDefinition field in type.Fields) {
+				if (field.Name.StartsWith (prefix))
+					counter++;
+			}
+			return counter > 1;
+		}
+
+		private int GetIndexOfFirstUpper (string value) 
+		{
+			foreach (char character in value) {
+				if (Char.IsUpper (character))
+					return value.IndexOf (character);
+			}
+			return -1;
+		}
+
+		private int GetIndexOfFirstNumber (string value) 
+		{
+			foreach (char character in value) {
+				if (Char.IsNumber (character))
+					return value.IndexOf (character);
+			}
+			return -1;
+		}
+
+		private int GetIndexOfFirstDash (string value) 
+		{
+			bool valueTruncated = false;
+			if (value.IndexOf ('_') == 1) {
+				value = value.Substring (2, value.Length - 2);
+				valueTruncated = true;
+			}
+
+			foreach (char character in value) {
+				if (character.Equals ('_')) 
+					return value.IndexOf (character) + (valueTruncated? 2 : 0);
+			}
+			return -1;
+		}
+
+		private string GetFieldPrefix (FieldDefinition field)
+		{
+			int index = GetIndexOfFirstNumber (field.Name);
+			if (index != -1) {
+				return field.Name.Substring (0, index);
+			}
+			
+			index = GetIndexOfFirstUpper (field.Name);
+			if (index != -1) {
+				return field.Name.Substring (0, index);
+			}
+			
+			index = GetIndexOfFirstDash (field.Name);
+			if (index != -1) {
+				return field.Name.Substring (0, index);
+			}
+
+			return String.Empty;
+		}
+
 		private bool ExitsCommonPrefixes (TypeDefinition type) 
 		{
+			foreach (FieldDefinition field in type.Fields) {
+				string prefix = GetFieldPrefix (field);
+				if (HasPrefixedFields (prefix, type))
+					return true;
+			}
 			return false;
 		}
 
