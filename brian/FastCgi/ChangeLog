@@ -1,3 +1,17 @@
+2007-08-10 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/linux/lighttpd.html: Added examples for restricting hosts and
+	allowing PHP to execute normally.
+	
+	* doc/linux/abyss.html: Moved to new format, paths documentation.
+	
+	* src/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: Throw a proper
+	SocketException if accept fails.
+	
+	* src/Mono.FastCgi/Server.cs: If error code is WSAEINVAL for Accept,
+	stop the server. WSAEINVAL indicates that the socket is no longer
+	listening, most likely because it has been closed.
+
 2007-08-09 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/linux/lighttpd.html: Update with docs on path mapping.
