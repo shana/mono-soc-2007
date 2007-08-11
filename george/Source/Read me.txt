@@ -1,3 +1,8 @@
+.NET Framework 3.0 Windows Presentation Foundation controls
+This projects aims to provide an implementation of the control (and other high level) classes in WPF. 
+
+They are designed to run on Microsoft's implementations as a normal library. In order to achieve this the classes have to be renamed. This was done by placing the classes in the Mono.<corresponding namespace name> namespace in the Mono.<corresponding assembly name> assembly (for example, the Mono.System.Windows.Controls.Button class in the Mono.PresentationFramework assembly is supposed to be as close as possible to the System.Windows.Controls.Button class in the PresentationFramework assembly)). There is a conditional compilation symbol named "Implementation" that switches between this naming scheme and the normal (without the Mono prefix) one. Currently only the tests use this (the code uses this symbol only to disable code that would not compile, for example in OnCreateAutomationPeer, and to show how the code should look in the end). The Visual Studio solution and project files have a "Debug - Implementation" configuration that includes the "Implementation" symbol. The tests work with the Microsoft implementation in the "Debug" configuration and with the implemented code in the "Debug - Implementation" one.
+
 Contents
 PresentationFramework - Contains source and VS2005 project files for PresentationFramework.dll and its tests. Should be integrated in Mono under mcs/class/.
 PresentationFramework.Luna - The same for PresentationFramework.Luna.dll
@@ -5,11 +10,6 @@ Test - Contains a project I use to quickly test something.
 Samples - Contains sample projects from the Windows SDK related to the classes I am implementing.
  .NET Framework - The original, unmodified versions.
  Mono - Modified to use the Mono version of WPF classes. I want to have these look and work like the ones in ".NET Framework" directory (when using the modified Microsoft theme).
-
-The Implementation compilation constant:
-defined: The code will run in the current setup.
-not defined: This is how the code should look in the end. Probably does not compile now. Some code that is compiled only in this case assumes internal members.
-Currently, it is always defined for WPF assemblies.
 
 http://www.interact-sw.co.uk/iangblog/2007/02/14/wpfdefaulttemplate
 Basically Microsoft uses internal members to achieve some functionality.
