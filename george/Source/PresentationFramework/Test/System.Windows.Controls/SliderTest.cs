@@ -236,7 +236,7 @@ namespace System.Windows.Controls {
 
 		class OnThumbDragDeltaSlider : Slider {
 			public OnThumbDragDeltaSlider() {
-				DragDeltaEventArgs e = new DragDeltaEventArgs(10, 0);
+				global::System.Windows.Controls.Primitives.DragDeltaEventArgs e = new global::System.Windows.Controls.Primitives.DragDeltaEventArgs(10, 0);
 				OnThumbDragDelta(e);
 				Assert.AreEqual(Value, 0);
 			}
@@ -251,8 +251,8 @@ namespace System.Windows.Controls {
 
 		class OnThumbDragDelta2Slider : Slider {
 			public OnThumbDragDelta2Slider() {
-				OnThumbDragStarted(new DragStartedEventArgs(0, 0));
-				DragDeltaEventArgs e = new DragDeltaEventArgs(10, 0);
+				OnThumbDragStarted(new global::System.Windows.Controls.Primitives.DragStartedEventArgs(0, 0));
+				global::System.Windows.Controls.Primitives.DragDeltaEventArgs e = new global::System.Windows.Controls.Primitives.DragDeltaEventArgs(10, 0);
 				OnThumbDragDelta(e);
 				Assert.AreEqual(Value, 0);
 				e.Source = GetTemplateChild("Thumb");
