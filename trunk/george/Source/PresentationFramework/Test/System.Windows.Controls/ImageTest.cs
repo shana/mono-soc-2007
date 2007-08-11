@@ -11,6 +11,7 @@ namespace Mono.System.Windows.Controls {
 namespace System.Windows.Controls {
 #endif
 	[TestFixture]
+	[Ignore("This class cannot be implemented now.")]
 	public class ImageTest {
 		#region BaseUri
 		[Test]
