@@ -1,5 +1,9 @@
 2007-08-11  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* SliderTest.cs: Switched back to Microsoft *EventArgs types.
+
+2007-08-11  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ImageTest.cs: Added an Ignore attribute.
 
 2007-08-09  George Giolfan  <georgegiolfan@yahoo.com>

@@ -280,15 +280,15 @@ namespace System.Windows.Controls {
 			#endregion
 			#region Thumb drag methods
 			//FIXME: Do I need to remove these handlers?
-			thumb.DragStarted += delegate(object sender, DragStartedEventArgs e) {
+			thumb.DragStarted += delegate(object sender, global::System.Windows.Controls.Primitives.DragStartedEventArgs e) {
 				OnThumbDragStarted(e);
 			};
 
-			thumb.DragDelta += delegate(object sender, DragDeltaEventArgs e) {
+			thumb.DragDelta += delegate(object sender, global::System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
 				OnThumbDragDelta(e);
 			};
 
-			thumb.DragCompleted += delegate(object sender, DragCompletedEventArgs e) {
+			thumb.DragCompleted += delegate(object sender, global::System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
 				OnThumbDragCompleted(e);
 			};
 			#endregion
@@ -375,12 +375,12 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-		protected virtual void OnThumbDragCompleted(DragCompletedEventArgs e) {
+		protected virtual void OnThumbDragCompleted(global::System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
 			if (auto_tool_tip != null)
 				auto_tool_tip.IsOpen = false;
 		}
 
-		protected virtual void OnThumbDragDelta(DragDeltaEventArgs e) {
+		protected virtual void OnThumbDragDelta(global::System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
 			if (e.Source == null)
 				return;
 			double value_from_distance = track.ValueFromDistance(e.HorizontalChange, e.VerticalChange);
@@ -392,7 +392,7 @@ namespace System.Windows.Controls {
 				SetAutoToolTipContent();
 		}
 
-		protected virtual void OnThumbDragStarted(DragStartedEventArgs e) {
+		protected virtual void OnThumbDragStarted(global::System.Windows.Controls.Primitives.DragStartedEventArgs e) {
 			if (auto_tool_tip != null) {
 				auto_tool_tip.IsOpen = true;
 				SetAutoToolTipContent();
