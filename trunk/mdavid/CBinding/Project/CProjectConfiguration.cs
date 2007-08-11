@@ -54,11 +54,11 @@ namespace CBinding
 		CBinding.CompileTarget target = CBinding.CompileTarget.Bin;
 		
 		[ItemProperty ("Includes")]
-		[ItemProperty ("Include", Scope = 1, ValueType = typeof(string))]
+		[ProjectPathItemProperty ("Include", Scope = 1, ValueType = typeof(string))]
     	private ArrayList includes = new ArrayList ();
 		
 		[ItemProperty ("LibPaths")]
-		[ItemProperty ("LibPath", Scope = 1, ValueType = typeof(string))]
+		[ProjectPathItemProperty ("LibPath", Scope = 1, ValueType = typeof(string))]
     	private ArrayList libpaths = new ArrayList ();
 		
 		[ItemProperty ("Libs")]
@@ -69,7 +69,7 @@ namespace CBinding
 		              FallbackType = typeof(UnknownCompilationParameters))]
 		ICloneable compilationParameters;
 		
-		[ItemProperty ("SourceDirectory")]
+		[ProjectPathItemProperty ("SourceDirectory")]
 		private string source_directory_path;
 		
 		public string Output {

@@ -1,3 +1,7 @@
+2007-08-11  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProjectConfiguration.cs: Make paths relative to project folder.
+
 2007-08-09  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/DataProvider.cs, Parser/Function.cs: Support for constant methods.
