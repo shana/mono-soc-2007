@@ -428,9 +428,9 @@ namespace System.Windows.Controls {
 				Assert.AreEqual(top_tick.ActualWidth, 0, "ActualWidth 2");
 				Assert.AreEqual(top_tick.Width, double.NaN, "Width 2");
 				Assert.AreEqual(top_tick.Margin.Right, 0, "Margin.Right");
-				Assert.AreEqual(top_tick.Placement, global::System.Windows.Controls.Primitives.TickBarPlacement.Top, "TopTick Placement 2");
+				Assert.AreEqual(top_tick.Placement, TickBarPlacement.Top, "TopTick Placement 2");
 				TickBar bottom_tick = (TickBar)GetTemplateChild("BottomTick");
-				Assert.AreEqual(bottom_tick.Placement, global::System.Windows.Controls.Primitives.TickBarPlacement.Bottom, "BottomTick Placement 2");
+				Assert.AreEqual(bottom_tick.Placement, TickBarPlacement.Bottom, "BottomTick Placement 2");
 				Assert.AreEqual(top_tick.ReservedSpace, 0, "ReservedSpace");
 			}
 		}
