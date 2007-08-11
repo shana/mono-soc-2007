@@ -11,7 +11,7 @@ namespace System.Windows.Controls {
 	public class HeaderedContentControl : ContentControl {
 		#region Public Fields
 		#region Dependency Properties
-		static readonly DependencyPropertyKey HasHeaderPropertyKey = DependencyProperty.RegisterReadOnly("HasHeader", typeof(bool), typeof(HeaderedContentControl), new PropertyMetadata());
+		static readonly DependencyPropertyKey HasHeaderPropertyKey = DependencyProperty.RegisterReadOnly("HasHeader", typeof(bool), typeof(HeaderedContentControl), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty HasHeaderProperty = HasHeaderPropertyKey.DependencyProperty;
 		public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register("Header", typeof(object), typeof(HeaderedContentControl), new FrameworkPropertyMetadata(null, delegate(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 			((HeaderedContentControl)d).OnHeaderChanged(e.OldValue, e.NewValue);
