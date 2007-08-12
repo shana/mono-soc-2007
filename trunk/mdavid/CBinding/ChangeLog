@@ -1,3 +1,8 @@
+2007-08-12   <> 
+
+	* CBinding.addin.xml, ProjectPad/ProjectResourcesExtension.cs, Makefile.am:
+	  Hide the resources node in the project pad for CProjects.
+
 2007-08-12  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* CBinding.addin.xml: Added the paste command to the packages folder node's
