@@ -3,60 +3,52 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:mono_system_windows_controls="clr-namespace:Mono.System.Windows.Controls"
 	xmlns:mono_system_windows_controls_primitives="clr-namespace:Mono.System.Windows.Controls.Primitives"
+	xmlns:mono_windowspresentationfoundation="clr-namespace:Mono.WindowsPresentationFoundation"
 	>
-	<Brush x:Key="ButtonBackgroundColor">LightYellow</Brush>
-	<Brush x:Key="ButtonBorderColor">Black</Brush>
 	<Brush x:Key="SelectionBorderColor">Blue</Brush>
 	<Brush x:Key="HoverBorderColor">Red</Brush>
-	<Brush x:Key="PressedButtonBackgroundColor">LightGray</Brush>
-	<Brush x:Key="DisabledColor">LightGray</Brush>
 	
 	<Style x:Key="ButtonBaseStyle"
 		TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}"
 		>
-		<Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}"/>
-		<Setter Property="BorderBrush" Value="{StaticResource ButtonBorderColor}"/>
+		<Setter Property="Background" Value="{x:Static mono_windowspresentationfoundation:VisualParameters.ThreeDBackgroundBrush}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="BorderThickness" Value="2"/>
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}"
-					>
-					<mono_system_windows_controls:Border x:Name="Border" 
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="{TemplateBinding BorderThickness}"
-						CornerRadius="3"
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}">
+					<mono_windowspresentationfoundation:ThreeDElement x:Name="ThreeD" 
+						BackgroundBrush="{TemplateBinding Background}"
+						FlatBorderBrush="{TemplateBinding BorderBrush}"
 						>
-						<mono_system_windows_controls:Border x:Name="Background" 
-							Background="{TemplateBinding Background}"
-							>
-							<ContentPresenter
-								RecognizesAccessKey="True"
-								Margin="{TemplateBinding Padding}"
-								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-								/>
-						</mono_system_windows_controls:Border>
-					</mono_system_windows_controls:Border>
+						<ContentPresenter
+							RecognizesAccessKey="True"
+							Margin="{TemplateBinding Padding}"
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+							/>
+					</mono_windowspresentationfoundation:ThreeDElement>
 					<ControlTemplate.Triggers>
-						<Trigger Property="IsPressed" Value="True">
-							<Setter TargetName="Background" Property="Background" Value="{StaticResource PressedButtonBackgroundColor}"/>
-						</Trigger>
 						<Trigger Property="IsKeyboardFocused" Value="True">
-							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SelectionBorderColor}"/>
+							<Setter TargetName="ThreeD" Property="ThreeDStyle" Value="Flat"/>
+							<Setter TargetName="ThreeD" Property="FlatBorderBrush" Value="{StaticResource SelectionBorderColor}"/>
 						</Trigger>
 						<Trigger Property="mono_system_windows_controls:Button.IsDefaulted" Value="True">
-							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SelectionBorderColor}"/>
+							<Setter TargetName="ThreeD" Property="ThreeDStyle" Value="Flat"/>
+							<Setter TargetName="ThreeD" Property="FlatBorderBrush" Value="{StaticResource SelectionBorderColor}"/>
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource HoverBorderColor}"/>
+							<Setter TargetName="ThreeD" Property="ThreeDStyle" Value="Flat"/>
+							<Setter TargetName="ThreeD" Property="FlatBorderBrush" Value="{StaticResource HoverBorderColor}"/>
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledColor}"/>
-							<Setter TargetName="Background" Property="Background" Value="{StaticResource DisabledColor}"/>
+							<Setter TargetName="ThreeD" Property="ThreeDStyle" Value="Flat"/>
+							<Setter TargetName="ThreeD" Property="FlatBorderBrush" Value="{x:Null}"/>
 							<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="ThreeD" Property="ThreeDStyle" Value="Sunken"/>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -64,8 +56,8 @@
 		</Setter>
 	</Style>
 	<Style x:Key="{x:Type mono_system_windows_controls:Button}"
-		   BasedOn="{StaticResource ButtonBaseStyle}"
-		   TargetType="{x:Type mono_system_windows_controls:Button}"
+		BasedOn="{StaticResource ButtonBaseStyle}"
+		TargetType="{x:Type mono_system_windows_controls:Button}"
 		/>
 	<Style x:Key="{x:Type mono_system_windows_controls_primitives:ToggleButton}"
 		BasedOn="{StaticResource ButtonBaseStyle}"
@@ -97,7 +89,8 @@
 									Background="{TemplateBinding Background}"
 									Padding="3"
 									>
-									<mono_system_windows_controls:Border x:Name="Check"/>											</mono_system_windows_controls:Border>
+									<mono_system_windows_controls:Border x:Name="Check"/>
+								</mono_system_windows_controls:Border>
 							</mono_system_windows_controls:Border>
 						</mono_system_windows_controls_primitives:BulletDecorator.Bullet>
 						<ContentPresenter

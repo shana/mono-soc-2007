@@ -43,6 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Mono.WindowsPresentationFoundation\ChangeLog" />
+    <Compile Include="Mono.WindowsPresentationFoundation\ButtonChrome.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation\ThreeDElement.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation\ThreeDStyle.cs" />
+    <Compile Include="Mono.WindowsPresentationFoundation\VisualParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System.Windows.Controls.Primitives\BulletDecorator.cs" />
     <Compile Include="System.Windows.Controls.Primitives\ButtonBase.cs" />
