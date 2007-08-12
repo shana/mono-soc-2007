@@ -54,6 +54,9 @@
 						<Trigger Property="IsPressed" Value="True">
 							<Setter TargetName="ThreeD" Property="ThreeDStyle" Value="Sunken"/>
 						</Trigger>
+						<Trigger Property="mono_system_windows_controls_primitives:ToggleButton.IsChecked" Value="true">
+							<Setter TargetName="ThreeD" Property="ThreeDStyle" Value="Sunken"/>
+						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
@@ -210,31 +213,6 @@
 	                        HorizontalAlignment="Left"
 							/>
 					</mono_system_windows_controls:Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-
-	<Style x:Key="{x:Type mono_system_windows_controls:Expander}"
-		TargetType="mono_system_windows_controls:Expander"
-		>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="mono_system_windows_controls:Expander">
-					<StackPanel>
-						<ToggleButton
-							Content="{TemplateBinding Header}"
-							ContentTemplate="{TemplateBinding HeaderTemplate}"
-							ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-							>
-						</ToggleButton>
-						<ContentPresenter
-							Content="{TemplateBinding Header}"
-							ContentTemplate="{TemplateBinding HeaderTemplate}"
-							ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-							>
-						</ContentPresenter>
-					</StackPanel>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>

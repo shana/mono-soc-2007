@@ -1,5 +1,9 @@
 2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* generic.xaml: Fixed ToggleButton.
+
+2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* generic.xaml: Fixed the deletion of a few resources that were still being used.
 	
 2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
