@@ -1,3 +1,9 @@
+2007-08-12  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Parser/TagDatabaseManager.cs: Parse functions from it's prototype if
+	  possible instead of waiting for the implementation, if it is an inline
+	  function parse it with that.
+
 2007-08-12   <> 
 
 	* CBinding.addin.xml, ProjectPad/ProjectResourcesExtension.cs, Makefile.am:

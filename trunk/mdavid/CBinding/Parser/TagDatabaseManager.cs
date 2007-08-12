@@ -190,7 +190,7 @@ namespace CBinding.Parser
 					
 					Tag tag = ParseTag (tagEntry);
 					
-					AddInfo (fileInfo, tag, ctags_output, true);
+					AddInfo (fileInfo, tag, ctags_output);
 				}
 			}
 			
@@ -226,7 +226,7 @@ namespace CBinding.Parser
 					
 					Tag tag = ParseTag (tagEntry);
 					
-					AddInfo (info, tag, ctags_output, false);
+					AddInfo (info, tag, ctags_output);
 				}
 			}			
 			
@@ -235,7 +235,7 @@ namespace CBinding.Parser
 			UpdateSystemTags (project, filename, system_headers);
 		}
 		
-		private void AddInfo (FileInformation info, Tag tag, string ctags_output, bool getFunctionFromPrototype)
+		private void AddInfo (FileInformation info, Tag tag, string ctags_output)
 		{
 			switch (tag.Kind)
 			{
@@ -279,11 +279,9 @@ namespace CBinding.Parser
 					info.Namespaces.Add (n);
 				break;
 			case TagKind.Prototype:
-				if (getFunctionFromPrototype) {
-					Function fu = new Function (tag, info.Project, ctags_output);
-					if (!info.Functions.Contains (fu))
-						info.Functions.Add (fu);
-				}
+				Function fu = new Function (tag, info.Project, ctags_output);
+				if (!info.Functions.Contains (fu))
+					info.Functions.Add (fu);
 				break;
 			case TagKind.Structure:
 				Structure s = new Structure (tag, info.Project, ctags_output);
