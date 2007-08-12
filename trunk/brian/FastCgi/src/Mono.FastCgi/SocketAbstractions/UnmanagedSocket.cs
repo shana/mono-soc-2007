@@ -30,8 +30,9 @@
 using System;
 using sock=System.Net.Sockets;
 using Mono.Unix.Native;
-using System.Runtime.InteropServices;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Mono.FastCgi {
 	internal class UnmanagedSocket : Socket
@@ -112,17 +113,23 @@ namespace Mono.FastCgi {
 		                                 object state)
 		{
 			SockAccept s = new SockAccept (socket, callback, state);
-			System.Threading.ThreadPool.QueueUserWorkItem (s.Run);
+			ThreadPool.QueueUserWorkItem (s.Run);
 			return s;
 		}
 		
 		public override Socket EndAccept (IAsyncResult asyncResult)
 		{
+			if (asyncResult == null)
+				throw new ArgumentNullException ("asyncResult");
+			
 			SockAccept s = asyncResult as SockAccept;
 			if (s == null || s.socket != socket)
 				throw new ArgumentException (
 					"Result was not produced by current instance.",
 					"asyncResult");
+			
+			if (!s.IsCompleted)
+				s.AsyncWaitHandle.WaitOne ();
 			
 			if (s.except != null)
 				throw s.except;
@@ -161,6 +168,7 @@ namespace Mono.FastCgi {
 		private class SockAccept : IAsyncResult
 		{
 			private bool completed = false;
+			private ManualResetEvent waithandle;
 			public  IntPtr socket;
 			public  IntPtr accepted;
 			public  sock.SocketException except = null;
@@ -192,7 +200,12 @@ namespace Mono.FastCgi {
 					except = GetException (errno);
 				
 				completed = true;
-				callback (this);
+				
+				if (waithandle != null)
+					waithandle.Set ();
+				
+				if (callback != null)
+					callback (this);
 			}
 			
 			public bool IsCompleted {
@@ -203,8 +216,14 @@ namespace Mono.FastCgi {
 				get {return false;}
 			}
 			
-			public System.Threading.WaitHandle AsyncWaitHandle {
-				get {return null;}
+			public WaitHandle AsyncWaitHandle {
+				get {
+					lock (this)
+						if (waithandle == null)
+							waithandle = new ManualResetEvent (completed);
+					
+					return waithandle;
+				}
 			}
 			
 			public object AsyncState {
