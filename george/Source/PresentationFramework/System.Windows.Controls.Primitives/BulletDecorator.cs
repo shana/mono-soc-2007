@@ -10,10 +10,15 @@ namespace Mono.System.Windows.Controls.Primitives {
 namespace System.Windows.Controls.Primitives {
 #endif
 	public class BulletDecorator : Decorator {
-		UIElement bullet;
-
+		#region Public Fields
 		#region Dependency Property Fields
 		static public readonly DependencyProperty BackgroundProperty = Panel.BackgroundProperty;
+		#endregion
+		#endregion
+
+		#region Private Fields
+		UIElement bullet;
+		static IEnumerator empty_enumerator = new ArrayList().GetEnumerator();
 		#endregion
 
 		#region Static Constructor
@@ -24,15 +29,16 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Public Constructors
 		public BulletDecorator() {
-			//WDTDH
 		}
 		#endregion
 
 		#region Public Properties
+		#region Dependency Properties
 		public Brush Background {
 			get { return (Brush)GetValue(BackgroundProperty); }
 			set { SetValue(BackgroundProperty, value); }
 		}
+		#endregion
 
 		public UIElement Bullet {
 			get { return bullet; }
@@ -51,8 +57,6 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Protected Properties
-		static IEnumerator empty_enumerator = new ArrayList().GetEnumerator();
-		
 		protected override IEnumerator LogicalChildren {
 			get {
 				if (Bullet == null && Child == null)

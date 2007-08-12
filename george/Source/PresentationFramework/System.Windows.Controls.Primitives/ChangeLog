@@ -1,5 +1,9 @@
 2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
 
+	* BulletDecorator.cs: Cleaned up the code a little.
+
+2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
+
 	* ToggleButton.cs: Fixed theme loading.
 
 2007-08-11  George Giolfan  <georgegiolfan@yahoo.com>
