@@ -119,5 +119,52 @@ namespace Mono.WindowsPresentationFoundation {
 		public static bool IsUniform(Thickness thickness) {
 			return thickness.Bottom == thickness.Left && thickness.Bottom == thickness.Right && thickness.Bottom == thickness.Top;
 		}
+
+		#region Decorator layout
+		static Size GetDesiredDecoratorSize(Size desiredChildSize, double borderThickness) {
+			return new Size(desiredChildSize.Width + 2 * borderThickness, desiredChildSize.Height + 2 * borderThickness);
+		}
+
+		static double GetMeasureSizeToPassToDecoratorChild(double constraint, double borderThickness) {
+			if (double.IsPositiveInfinity(constraint))
+				return double.PositiveInfinity;
+			return Math.Max(constraint - 2 * borderThickness, 0);
+		}
+
+		static Size GetMeasureSizeToPassToDecoratorChild(Size constraint, double borderThickness) {
+			return new Size(GetMeasureSizeToPassToDecoratorChild(constraint.Width, borderThickness), GetMeasureSizeToPassToDecoratorChild(constraint.Height, borderThickness));
+		}
+
+		public static Size MeasureDecoratorChild(UIElement child, Size constraint, double borderThickness) {
+			if (child == null)
+				return Size.Empty;
+			child.Measure(GetMeasureSizeToPassToDecoratorChild(constraint, borderThickness));
+			return GetDesiredDecoratorSize(child.DesiredSize, borderThickness);
+		}
+
+		static double GetArrangeSizeToPassToDecoratorChild(double constraint, double borderThickness) {
+			return Math.Max(constraint - 2 * borderThickness, 0);
+		}
+
+		public static Rect GetArrangeRectToPassToDecoratorChild(Size constraint, double borderThickness) {
+			return new Rect(borderThickness, borderThickness, GetArrangeSizeToPassToDecoratorChild(constraint.Width, borderThickness), GetArrangeSizeToPassToDecoratorChild(constraint.Height, borderThickness));
+		}
+
+		public static Size ArrangeDecoratorChild(UIElement child, Size constraint, double borderThickness) {
+			if (child == null)
+				return Size.Empty;
+			double actualBorderThickness = Utility.GetActualDecoratorBorderThickness(borderThickness, constraint.Width, constraint.Height);
+			child.Arrange(GetArrangeRectToPassToDecoratorChild(constraint, actualBorderThickness));
+			return constraint;
+		}
+
+		static double GetActualDecoratorBorderThickness(double borderThickness, double size) {
+			return Math.Min(size / 2, borderThickness);
+		}
+
+		public static double GetActualDecoratorBorderThickness(double borderThickness, double width, double height) {
+			return Math.Min(GetActualDecoratorBorderThickness(borderThickness, width), GetActualDecoratorBorderThickness(borderThickness, height));
+		}
+		#endregion
 	}
 }

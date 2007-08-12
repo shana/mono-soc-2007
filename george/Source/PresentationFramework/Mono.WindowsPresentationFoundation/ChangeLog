@@ -1,3 +1,8 @@
+2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ThreeDElement.cs, ThreeDStyle.cs, VisualParameters.cs: Added.
+	* Utility.cs: Added decorator layout logic.
+
 2007-07-22  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* Utility.cs: Removed unused methods.
