@@ -1,3 +1,12 @@
+2007-08-12 Brian Nickel <brian.nickel@gmail.com>
+
+	* doc/index.html: Add explanation of request.
+	
+	* doc/request.png: Diagram of request.
+	
+	* src/Mono.FastCgi/SocketAbstractions/UnmanagedSocket.cs: Add wait
+	handle to async operation.
+
 2007-08-10 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/linux/lighttpd.html: Added examples for restricting hosts and

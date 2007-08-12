@@ -9,6 +9,9 @@
 		<h2>Table of Contents</h2>
 		<ul>
 			<li><a href="#intro">Introduction</a></li>
+			<ul>
+				<li><a href="#intro1">How Does It Work?</a></li>
+			</ul>
 			<li><a href="#platforms">Platform Documentation</a></li>
 			<li><a href="#info">Important Information</a></li>
 			<ul>
@@ -35,6 +38,49 @@
 		Windows and Macintosh in the future. Please take the time to
 		read all the information below before configuring your
 		server.</p>
+		
+		<a name="intro1"></a>
+		<h3>How Does It Work?</h3>
+		
+		<p><img width="230" height="406" align="right" src="request.png"
+		/> FastCGI is an interprocess communcation mechanism available
+		in many web servers. A web server will receive and respond to a
+		request in the following manner corresponding to the diagram on
+		the right:</p>
+		
+		<ol>
+			<li><p>The browser tries accessing a page. It finds the
+			host and sends it HTTP GET request.</p></li>
+			
+			<li><p>The web server receives the request, recognizes
+			that it is supposted to send it to a given socket, in
+			this case "/tmp/fastcgi-mono-server-0", connects to it,
+			and sends the request in the CGI format using FastCGI
+			records.</p></li>
+			
+			<li><p>fastcgi-mono-server receives the request and
+			creates a Mono.WebServer.FastCgi.WorkerRequest (a
+			subclass of System.Web.Hosting.SimpleWorkerRequest) and
+			processes the request.</p></li>
+			
+			<li><p>SimpleWorkerRequest checks for an existing
+			compiled version of the requested page. If it does not
+			exist, the page is converted into C# (or the specified
+			language) and compiled. It then invokes Render on the
+			compiled representation of the page.</p></li>
+			
+			<li><p>The page is rendered and sent back to the
+			SimpleWorkerRequest</p></li>
+			
+			<li><p>Overrided method calls in the FastCGI
+			WorkerRequest send the response back to the web server
+			using FastCGI records.</p></li>
+			
+			<li><p>The web server sends the response back to the
+			browser.</p></li>
+			
+			<li><p>The browser displays the page.</p></li>
+		</ol>
 		
 		
 		<a name="platforms"></a>
