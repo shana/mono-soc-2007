@@ -4,7 +4,7 @@
 	  possible instead of waiting for the implementation, if it is an inline
 	  function parse it with that.
 
-2007-08-12   <> 
+2007-08-12  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* CBinding.addin.xml, ProjectPad/ProjectResourcesExtension.cs, Makefile.am:
 	  Hide the resources node in the project pad for CProjects.
@@ -27,7 +27,7 @@
 
 	* CBinding.addin.xml, CBinding.mdp: Some corrections.
 
-2007-08-09   <> 
+2007-08-09  Marcos David Marín Amador <MarcosMarin@gmail.com>
 
 	* CBinding.addin.xml, CBinding.mdp, Makefile.am: Updated the paths and
 	  embedded the .addin.xml into the assembly
