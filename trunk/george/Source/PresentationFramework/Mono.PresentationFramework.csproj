@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Mono.WindowsPresentationFoundation\ChangeLog" />
-    <Compile Include="Mono.WindowsPresentationFoundation\ButtonChrome.cs" />
     <Compile Include="Mono.WindowsPresentationFoundation\ThreeDElement.cs" />
     <Compile Include="Mono.WindowsPresentationFoundation\ThreeDStyle.cs" />
     <Compile Include="Mono.WindowsPresentationFoundation\VisualParameters.cs" />
@@ -131,6 +130,7 @@
     <Compile Include="System.Windows.Shapes\Rectangle.cs" />
     <Compile Include="System.Windows.Shapes\Shape.cs" />
     <Compile Include="Theme.cs" />
+    <None Include="themes\ChangeLog" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Read me.txt">
