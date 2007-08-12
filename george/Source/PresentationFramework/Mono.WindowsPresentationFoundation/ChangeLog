@@ -1,4 +1,10 @@
 2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
+	
+	* ExpanderHeader.cs, PlusMinusElement.cs: Added.
+	* ThreeDElement.cs: Added a highlight border.
+	* Utility.cs: Changed ThreeDElement layout behavior to support no child cases.
+
+2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ThreeDElement.cs, ThreeDStyle.cs, VisualParameters.cs: Added.
 	* Utility.cs: Added decorator layout logic.

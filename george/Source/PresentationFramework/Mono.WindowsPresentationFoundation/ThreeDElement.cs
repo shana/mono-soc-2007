@@ -13,6 +13,7 @@ namespace Mono.WindowsPresentationFoundation {
 		public static readonly DependencyProperty BorderLightBrushProperty = DependencyProperty.Register("BorderLightBrush", typeof(Brush), typeof(ThreeDElement), new FrameworkPropertyMetadata(VisualParameters.ThreeDBorderLightBrush, FrameworkPropertyMetadataOptions.AffectsRender));
 		public static readonly DependencyProperty BorderThicknessProperty = DependencyProperty.Register("BorderThickness", typeof(double), typeof(ThreeDElement), new FrameworkPropertyMetadata(VisualParameters.ThreeDBorderThickness, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
 		public static readonly DependencyProperty FlatBorderBrushProperty = DependencyProperty.Register("FlatBorderBrush", typeof(Brush), typeof(ThreeDElement), new FrameworkPropertyMetadata(VisualParameters.ThreeFlatBorderBrush, FrameworkPropertyMetadataOptions.AffectsRender));
+		public static readonly DependencyProperty HighlightBorderBrushProperty = DependencyProperty.Register("HighlightBorderBrush", typeof(Brush), typeof(ThreeDElement), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 		public static readonly DependencyProperty ThreeDStyleProperty = DependencyProperty.Register("ThreeDStyle", typeof(ThreeDStyle), typeof(ThreeDElement), new FrameworkPropertyMetadata(ThreeDStyle.Raised, FrameworkPropertyMetadataOptions.AffectsRender));
 		#endregion
 		#endregion
@@ -44,6 +45,11 @@ namespace Mono.WindowsPresentationFoundation {
 			set { SetValue(FlatBorderBrushProperty, value); }
 		}
 
+		public Brush HighlightBorderBrush {
+			get { return (Brush)GetValue(HighlightBorderBrushProperty); }
+			set { SetValue(HighlightBorderBrushProperty, value); }
+		}
+
 		public ThreeDStyle ThreeDStyle {
 			get { return (ThreeDStyle)GetValue(ThreeDStyleProperty); }
 			set { SetValue(ThreeDStyleProperty, value); }
@@ -53,11 +59,11 @@ namespace Mono.WindowsPresentationFoundation {
 
 		#region Protected Methods
 		protected override Size ArrangeOverride(Size arrangeSize) {
-			return Utility.ArrangeDecoratorChild(Child, arrangeSize, BorderThickness);
+			return Utility.ArrangeDecoratorChild(Child, arrangeSize, 2 * BorderThickness);
 		}
 
 		protected override Size MeasureOverride(Size constraint) {
-			return Utility.MeasureDecoratorChild(Child, constraint, BorderThickness);
+			return Utility.MeasureDecoratorChild(Child, constraint, 2 * BorderThickness);
 		}
 
 		protected override void OnRender(DrawingContext drawingContext) {
@@ -124,8 +130,18 @@ namespace Mono.WindowsPresentationFoundation {
 			#endregion
 			#region Backround
 			Brush background_brush = BackgroundBrush;
+			Rect background_rect = Utility.GetArrangeRectToPassToDecoratorChild(new Size(actual_width, actual_height), actual_border_thickness);
 			if (background_brush != null)
-				drawingContext.DrawRectangle(background_brush, null, Utility.GetArrangeRectToPassToDecoratorChild(new Size(actual_width, actual_height), actual_border_thickness));
+				drawingContext.DrawRectangle(background_brush, null, background_rect);
+			#endregion
+			#region Highlight border
+			Brush highlight_border_brush = HighlightBorderBrush;
+			if (highlight_border_brush != null) {
+				Rect highlight_border_rect = background_rect;
+				double highlight_border_thickness = Utility.GetActualDecoratorBorderThickness(BorderThickness, highlight_border_rect.Width, highlight_border_rect.Height);
+				highlight_border_rect.Inflate(-highlight_border_thickness / 2, -highlight_border_thickness / 2);
+				drawingContext.DrawRectangle(null, new Pen(highlight_border_brush, highlight_border_thickness), highlight_border_rect);
+			}
 			#endregion
 		}
 		#endregion

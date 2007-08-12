@@ -151,10 +151,10 @@ namespace Mono.WindowsPresentationFoundation {
 		}
 
 		public static Size ArrangeDecoratorChild(UIElement child, Size constraint, double borderThickness) {
-			if (child == null)
-				return Size.Empty;
-			double actualBorderThickness = Utility.GetActualDecoratorBorderThickness(borderThickness, constraint.Width, constraint.Height);
-			child.Arrange(GetArrangeRectToPassToDecoratorChild(constraint, actualBorderThickness));
+			if (child != null) {
+				double actualBorderThickness = Utility.GetActualDecoratorBorderThickness(borderThickness, constraint.Width, constraint.Height);
+				child.Arrange(GetArrangeRectToPassToDecoratorChild(constraint, actualBorderThickness));
+			}
 			return constraint;
 		}
 
