@@ -5,9 +5,13 @@
 	xmlns:mono_system_windows_controls_primitives="clr-namespace:Mono.System.Windows.Controls.Primitives"
 	xmlns:mono_windowspresentationfoundation="clr-namespace:Mono.WindowsPresentationFoundation"
 	>
+	<Brush x:Key="ButtonBackgroundColor">LightYellow</Brush>
+	<Brush x:Key="ButtonBorderColor">Black</Brush>
 	<Brush x:Key="SelectionBorderColor">Blue</Brush>
 	<Brush x:Key="HoverBorderColor">Red</Brush>
-	
+	<Brush x:Key="PressedButtonBackgroundColor">LightGray</Brush>
+	<Brush x:Key="DisabledColor">LightGray</Brush>
+		
 	<Style x:Key="ButtonBaseStyle"
 		TargetType="{x:Type mono_system_windows_controls_primitives:ButtonBase}"
 		>
@@ -206,6 +210,31 @@
 	                        HorizontalAlignment="Left"
 							/>
 					</mono_system_windows_controls:Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="{x:Type mono_system_windows_controls:Expander}"
+		TargetType="mono_system_windows_controls:Expander"
+		>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="mono_system_windows_controls:Expander">
+					<StackPanel>
+						<ToggleButton
+							Content="{TemplateBinding Header}"
+							ContentTemplate="{TemplateBinding HeaderTemplate}"
+							ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+							>
+						</ToggleButton>
+						<ContentPresenter
+							Content="{TemplateBinding Header}"
+							ContentTemplate="{TemplateBinding HeaderTemplate}"
+							ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+							>
+						</ContentPresenter>
+					</StackPanel>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
