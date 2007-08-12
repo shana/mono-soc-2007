@@ -28,9 +28,17 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 		#endregion
 
+		#region Static Constructor
+		static ToggleButton() {
+#if Implementation
+			Theme.Load();
+#endif
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(ToggleButton), new FrameworkPropertyMetadata(typeof(ToggleButton)));
+		}
+		#endregion
+
 		#region Public Constructors
 		public ToggleButton() {
-			//WDTDH
 		}
 		#endregion
 
