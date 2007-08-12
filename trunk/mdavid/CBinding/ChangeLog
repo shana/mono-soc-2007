@@ -1,3 +1,8 @@
+2007-08-12  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* CBinding.addin.xml: Added the paste command to the packages folder node's
+	  context menu and the copy command to the package node's context menu.
+
 2007-08-11  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Project/CProjectConfiguration.cs: Make paths relative to project folder.
