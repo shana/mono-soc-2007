@@ -1,3 +1,7 @@
+2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* ToggleButton.cs: Fixed theme loading.
+
 2007-08-11  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* DragCompletedEventArgs.cs, DragCompletedEventHandler.cs, DragDeltaEventArgs.cs, DragDeltaEventHandler.cs, DragStartedEventArgs.cs, DragStartedEventHandler.cs: Disabled (they cause a test to fail).
