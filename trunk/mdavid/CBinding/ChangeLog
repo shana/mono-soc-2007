@@ -1,3 +1,10 @@
+2007-08-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/DataProvider.cs, CBinding.addin.xml, Navigation/UnionNodeBuilder.cs:
+	  Added the  union icons to the stock icons so I don't have to create my
+	  own pixbuf in the union node builder and now I can use the proper union
+	  icon in the completion widget.
+
 2007-08-12  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Parser/TagDatabaseManager.cs: Parse functions from it's prototype if

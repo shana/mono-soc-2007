@@ -178,8 +178,8 @@ namespace CBinding
 				image = Stock.Class;
 			else if (item is Structure)
 				image = Stock.Struct;
-			else if (item is Union) // TODO: Use my own icon
-				image = Stock.Struct;
+			else if (item is Union)
+				image = "md-union";
 			else if (item is Enumeration)
 				image = Stock.Enum;
 			else if (item is Enumerator)

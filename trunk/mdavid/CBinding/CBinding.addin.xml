@@ -2,7 +2,7 @@
        namespace   = "MonoDevelop"
        name		   = "C/C++ Language Binding"
        author      = "Marcos David Marín Amador"
-       copyright   = "X11"
+       copyright   = "MIT X11"
        url         = "http://www.monodevelop.com"
        description = "C/C++ Language binding"
        category    = "Language bindings"
@@ -21,6 +21,12 @@
 		<Addin id = "Components" version = "0.15.0"/>
 		<Addin id = "SourceEditor" version = "0.15.0"/>
 	</Dependencies>
+	
+	<Extension path = "/MonoDevelop/Core/StockIcons">
+		<StockIcon stockid = "md-union" resource = "Icons.16x16.Union"/>
+		<StockIcon stockid = "md-protected-union" resource = "Icons.16x16.ProtectedUnion"/>
+		<StockIcon stockid = "md-private-union" resource = "Icons.16x16.PrivateUnion"/>
+	</Extension>
 
 	<Extension path = "/MonoDevelop/Ide/FileFilters">
 		<FileFilter
