@@ -156,7 +156,7 @@ namespace CBinding.ProjectPad
 				
 				CProjectConfiguration config = (CProjectConfiguration)project.ActiveConfiguration;
 				
-				if (config.CompileTarget == CBinding.CompileTarget.StaticLibrary)
+				if (config.CompileTarget != CBinding.CompileTarget.Bin)
 					return true;
 			}
 			

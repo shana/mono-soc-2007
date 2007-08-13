@@ -1,5 +1,12 @@
 2007-08-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Gui/EditPackagesDialog.cs, ProjectPad/ProjectPackagesFolderNodeBuilder.cs,
+	  Project/CProjectConfiguration.cs, Project/CProject.cs: Allow CProjects
+	  to depend on other CProjects that compile into a shared object as well
+	  as static libraries.
+
+2007-08-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Gui/DataProvider.cs, CBinding.addin.xml, Navigation/UnionNodeBuilder.cs:
 	  Added the  union icons to the stock icons so I don't have to create my
 	  own pixbuf in the union node builder and now I can use the proper union

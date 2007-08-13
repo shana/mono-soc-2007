@@ -87,12 +87,13 @@ namespace CBinding
 			set { compilationParameters = value; }
 		}
 		
+		// TODO: If MD is ported to Windows, this should be revisited
 		public string CompiledOutputName {
 			get {
 				string ext;
 				string suf;
 				
-				if (Output.EndsWith (".so")) {
+				if (Output.EndsWith (".so") && Output.StartsWith ("lib")) {
 					ext = string.Empty;
 					suf = string.Empty;
 				}
@@ -109,7 +110,7 @@ namespace CBinding
 						break;
 					case CBinding.CompileTarget.SharedLibrary:
 						ext = ".so";
-						suf = string.Empty;
+						suf = "lib";
 						break;
 					case CBinding.CompileTarget.StaticLibrary:
 						ext = ".a";
