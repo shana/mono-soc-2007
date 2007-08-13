@@ -32,6 +32,17 @@ namespace Ribbons
 		
 		public event EventHandler Clicked;
 		
+		/// <summary>Theme used to draw the widget.</summary>
+		public Theme Theme
+		{
+			set
+			{
+				theme = value;
+				QueueDraw ();
+			}
+			get { return theme; }
+		}
+		
 		/// <summary>Default constructor.</summary>
 		public Tile ()
 		{
@@ -64,11 +75,12 @@ namespace Ribbons
 			Context cr = Gdk.CairoHelper.Create (this.GdkWindow);
 			
 			Cairo.Rectangle area = new Cairo.Rectangle (evnt.Area.X, evnt.Area.Y, evnt.Area.Width, evnt.Area.Height);
-			Cairo.Rectangle contentArea = new Cairo.Rectangle (area.X + BorderWidth, area.Y + BorderWidth, area.Width - 2 * BorderWidth, area.Height - 2 * BorderWidth);
+			Cairo.Rectangle allocation = new Cairo.Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
+			Cairo.Rectangle contentArea = new Cairo.Rectangle (allocation.X + BorderWidth, allocation.Y + BorderWidth, allocation.Width - 2 * BorderWidth, allocation.Height - 2 * BorderWidth);
 			
 			cr.Rectangle (area);
 			cr.Clip ();
-			theme.DrawTile (cr, area, contentArea, this);
+			theme.DrawTile (cr, allocation, contentArea, this);
 			
 			DrawContent (cr, contentArea);
 			
