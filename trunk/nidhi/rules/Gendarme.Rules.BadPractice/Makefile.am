@@ -9,7 +9,7 @@ DISTCLEANFILES = Makefile.in Gendarme.Rules.BadPractice.xml TestResult.xml
 
 badPractice_rules_sources_in = ../../AssemblyInfo.cs.in
 badPractice_rules_generated_sources = $(badPractice_rules_sources_in:.in=)
-badPractice_rules_sources = ImplementingEqualsButNotGetHashCodeAndViceVersaRule.cs CloneMethodShouldNotReturnNullRule.cs \ ToStringReturnsNullRule.cs
+badPractice_rules_sources = ImplementingEqualsButNotGetHashCodeAndViceVersaRule.cs CloneMethodShouldNotReturnNullRule.cs \ ToStringReturnsNullRule.cs EqualShouldHandleNullArgRule.cs
 
 badPractice_rules_build_sources = $(addprefix $(srcdir)/, $(badPractice_rules_sources))
 badPractice_rules_build_sources += $(badPractice_rules_generated_sources)
@@ -32,7 +32,7 @@ uninstall-hook:
 	done;
 
 badPractice_test_sources = ImplementingEqualsButNotGetHashCodeAndViceVersaTest.cs CloneMethodShouldNotReturnNullTest.cs \
-ToStringReturnsNullTest.cs
+ToStringReturnsNullTest.cs EqualShouldHandleNullArgTest.cs
 badPractice_test_build_sources = $(addprefix $(srcdir)/Test/, $(badPractice_test_sources))
 
 Test.Rules.BadPractice.dll: $(badPractice_rules_build_sources)

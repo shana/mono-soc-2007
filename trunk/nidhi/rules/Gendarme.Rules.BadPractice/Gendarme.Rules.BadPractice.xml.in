@@ -17,4 +17,10 @@
 		<problem>The method '{0}' contains ToString () conversion that returns null.</problem>
 		<solution>Return an empty string or other appropriate string rather than returning null.</solution>
 	</rule>
+	<rule	Name="EqualShouldHandleNullArgRule" 
+		Type="Gendarme.Rules.BadPractice.EqualShouldHandleNullArgRule, Gendarme.Rules.BadPractice, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#EqualShouldHandleNullArgRule" >
+		<problem>The method '{0}' does not handle null argument as it should be.</problem>
+		<solution>Modify the method implementation to return false if null argument found.</solution>
+	</rule>
 </rules>
