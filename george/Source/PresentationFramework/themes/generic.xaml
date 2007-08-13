@@ -300,4 +300,44 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<Style x:Key="{x:Type mono_system_windows_controls:GroupBox}"
+		TargetType="{x:Type mono_system_windows_controls:GroupBox}"
+		>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:GroupBox}">
+					<mono_windowspresentationfoundation:ThreeDElement ThreeDStyle="Sunken">
+						<StackPanel>
+							<ContentPresenter
+								Content="{TemplateBinding Header}"
+								ContentTemplate="{TemplateBinding HeaderTemplate}"
+								ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+								/>
+							<ContentPresenter
+								Content="{TemplateBinding Content}"
+								ContentTemplate="{TemplateBinding ContentTemplate}"
+								ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+								/>
+						</StackPanel>
+					</mono_windowspresentationfoundation:ThreeDElement>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="{x:Type mono_system_windows_controls:Label}"
+		TargetType="{x:Type mono_system_windows_controls:Label}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:Label}">
+					<Border
+						Padding="4"
+						>
+						<ContentPresenter
+							RecognizesAccessKey="True"
+							/>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 </ResourceDictionary>

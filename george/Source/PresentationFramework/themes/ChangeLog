@@ -1,3 +1,7 @@
+2007-08-13  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* generic.xaml: Added GroupBox and Label styles.
+
 2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* generic.xaml: Added Expander style (and supporting ExpanderHeader style). Fixed ButtonBase style.
