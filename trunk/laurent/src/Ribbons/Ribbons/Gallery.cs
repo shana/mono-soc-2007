@@ -70,6 +70,17 @@ namespace Ribbons
 			get { return selectedTile; }
 		}
 		
+		/// <summary>Theme used to draw the widget.</summary>
+		public Theme Theme
+		{
+			set
+			{
+				theme = value;
+				QueueDraw ();
+			}
+			get { return theme; }
+		}
+		
 		public Gallery()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
@@ -131,7 +142,7 @@ namespace Ribbons
 				tiles.Insert (TileIndex, t);
 			}
 			
-			t.Parent = this;
+			//t.Parent = this;
 			t.Visible = true;
 			t.Clicked += Tile_Clicked;
 		}
@@ -178,7 +189,7 @@ namespace Ribbons
 				firstDisplayedTileIndex = -1;
 				lastDisplayedTileIndex = firstDisplayedTileIndex - 1;
 			}
-			UpdateTilesLayour ();
+			UpdateTilesLayout ();
 			QueueDraw ();
 		}
 		
@@ -189,7 +200,7 @@ namespace Ribbons
 				firstDisplayedTileIndex = lastDisplayedTileIndex + 1;
 				lastDisplayedTileIndex = -1;
 			}
-			UpdateTilesLayour ();
+			UpdateTilesLayout ();
 			QueueDraw ();
 		}
 		
@@ -200,7 +211,7 @@ namespace Ribbons
 			if(TileSelected != null) TileSelected (this, new TileSelectedEventArgs (SelectedTile));
 		}
 		
-		private void UpdateTilesLayour ()
+		private void UpdateTilesLayout ()
 		{
 			Gdk.Rectangle tileAlloc;
 			tileAlloc.X = tilesAlloc.X;
@@ -234,18 +245,19 @@ namespace Ribbons
 			
 			for(int tileIndex = 0 ; tileIndex < firstDisplayedTileIndex ; ++tileIndex)
 			{
-				if(tiles[tileIndex].IsMapped) tiles[tileIndex].Unmap ();
+				if(tiles[tileIndex].Parent != null) tiles[tileIndex].Unparent ();
 			}
 			for(int tileIndex = lastDisplayedTileIndex + 1 ; tileIndex < tiles.Count ; ++tileIndex)
 			{
-				if(tiles[tileIndex].IsMapped) tiles[tileIndex].Unmap ();
+				if(tiles[tileIndex].Parent != null) tiles[tileIndex].Unparent ();
 			}
 			
+			Console.WriteLine (firstDisplayedTileIndex + "  " + lastDisplayedTileIndex);
 			for(int tileIndex = firstDisplayedTileIndex ; tileIndex <= lastDisplayedTileIndex ; ++tileIndex)
 			{
-				Widget t = tiles[tileIndex];
+				Tile t = tiles[tileIndex];
 				
-				if(!t.IsMapped) t.Map ();
+				if(t.Parent == null) t.Parent = this;
 				
 				t.SizeRequest ();
 				
@@ -263,7 +275,7 @@ namespace Ribbons
 				callback (expand);
 			}
 			
-			for(int i = 0 ; i < tiles.Count ; ++i)
+			for(int i = firstDisplayedTileIndex ; i <= lastDisplayedTileIndex ; ++i)
 			{
 				callback (tiles[i]);
 			}
@@ -318,7 +330,7 @@ namespace Ribbons
 			tilesAlloc.Width = btnAlloc.X - tilesAlloc.X - tileSpacing - (int)space - 2 * (int)lineWidth;
 			tilesAlloc.Height = allocation.Height - 2 * (tileSpacing + (int)lineWidth); 
 			
-			UpdateTilesLayour ();
+			UpdateTilesLayout ();
 		}
 		
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)

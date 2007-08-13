@@ -127,6 +127,17 @@ namespace Ribbons
 			}
 		}
 		
+		/// <summary>Theme used to draw the widget.</summary>
+		public Theme Theme
+		{
+			set
+			{
+				theme = value;
+				QueueDraw ();
+			}
+			get { return theme; }
+		}
+		
 		/// <summary>Default constructor.</summary>
 		public Button ()
 		{
