@@ -211,6 +211,16 @@ namespace CBinding
 				writer.WriteLine ("Libs: -L{0} -l{1}", config.OutputDirectory, config.Output);
 				writer.WriteLine ("Cflags: -I{0}", BaseDirectory);
 			}
+			
+			// If this project compiles into a shared object we need to
+			// export the output path to the LD_LIBRARY_PATH
+			string literal = "LD_LIBRARY_PATH";
+			string ld_library_path = Environment.GetEnvironmentVariable (literal);
+			
+			if (!ld_library_path.Contains (config.OutputDirectory)) {
+				ld_library_path = string.Format ("{0}:{1}", config.OutputDirectory, ld_library_path);
+				Environment.SetEnvironmentVariable (literal, ld_library_path);
+			}
 		}
 		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)

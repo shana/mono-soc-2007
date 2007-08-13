@@ -156,7 +156,7 @@ namespace CBinding
 				if (c is CProject) {
 					CProject cproj = (CProject)c;
 					CProjectConfiguration conf = (CProjectConfiguration)cproj.ActiveConfiguration;
-					if (conf.CompileTarget == CBinding.CompileTarget.StaticLibrary) {
+					if (conf.CompileTarget != CBinding.CompileTarget.Bin) {
 						cproj.WritePkgPackage ();
 						packages.Add (new ProjectPackage (cproj));
 					}
