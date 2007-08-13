@@ -72,13 +72,13 @@ namespace CBinding.Navigation
 			switch (u.Access)
 			{
 			case AccessModifier.Public:
-				icon = new Gdk.Pixbuf (Assembly.GetExecutingAssembly (), "Icons.16x16.Union");
+				icon = Context.GetIcon ("md-union");
 				break;
 			case AccessModifier.Protected:
-				icon = new Gdk.Pixbuf (Assembly.GetExecutingAssembly (), "Icons.16x16.ProtectedUnion");
+				icon = Context.GetIcon ("md-protected-union");
 				break;
 			case AccessModifier.Private:
-				icon = new Gdk.Pixbuf (Assembly.GetExecutingAssembly (), "Icons.16x16.PrivateUnion");
+				icon = Context.GetIcon ("md-private-union");
 				break;
 			}
 		}
