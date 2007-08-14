@@ -339,6 +339,8 @@ namespace CBinding
 		
 		protected override void OnFileChangedInProject (ProjectFileEventArgs e)
 		{
+			base.OnFileChangedInProject (e);
+			
 			TagDatabaseManager.Instance.UpdateFileTags (this, e.ProjectFile.Name);
 		}
 		

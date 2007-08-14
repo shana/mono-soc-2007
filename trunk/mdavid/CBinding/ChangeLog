@@ -1,3 +1,8 @@
+2007-08-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProjectServiceExtension.cs: Update the project's pkg package
+	  every time it is compiled.
+
 2007-08-13  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/EditPackagesDialog.cs, ProjectPad/ProjectPackagesFolderNodeBuilder.cs,
