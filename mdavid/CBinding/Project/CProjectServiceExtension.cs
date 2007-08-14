@@ -54,6 +54,9 @@ namespace CBinding
 				p.Build (monitor, true);
 			}
 			
+			if (((CProjectConfiguration)project.ActiveConfiguration).CompileTarget != CompileTarget.Bin)
+				project.WritePkgPackage ();
+			
 			return base.Build (monitor, entry);
 		}
 		
