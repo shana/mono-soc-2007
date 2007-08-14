@@ -1,3 +1,7 @@
+2007-08-14  George Giolfan  <georgegiolfan@yahoo.com>
+	
+	* PlatformCulture.cs, ProgressBarBrushConverter.cs: Reformatted the code a little.
+
 2007-07-19  George Giolfan  <georgegiolfan@yahoo.com>
 	
 	* BulletChrome.cs: Minor refactoring.

@@ -138,6 +138,7 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region Public Properties
 		#region Dependency Properties
 		[Bindable(true)]
 		public global::System.Windows.Controls.Primitives.AutoToolTipPlacement AutoToolTipPlacement {
@@ -223,7 +224,6 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-		#region Public Static Properties
 		#region Commands
 		public static RoutedCommand DecreaseLarge {
 			get { return decrease_large; }
@@ -251,7 +251,7 @@ namespace System.Windows.Controls {
 		#endregion
 		#endregion
 
-		#region Public Override Methods
+		#region Public Methods
 		public override void OnApplyTemplate() {
 			base.OnApplyTemplate();
 			track = (Track)GetTemplateChild("PART_Track");
@@ -295,47 +295,6 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
-		#region Protected Override Methods
-		protected override Size ArrangeOverride(Size arrangeBounds) {
-			Size result = base.ArrangeOverride(arrangeBounds);
-			SetSelectionRangeBounds();
-			return result;
-		}
-
-		protected override AutomationPeer OnCreateAutomationPeer() {
-#if Implementation
-			return null;
-#else
-			return new SliderAutomationPeer(this);
-#endif
-		}
-
-		protected override void OnMaximumChanged(double oldMaximum, double newMaximum) {
-			base.OnMaximumChanged(oldMaximum, newMaximum);
-			AdjustSelectionProperties();
-		}
-
-		protected override void OnMinimumChanged(double oldMinimum, double newMinimum) {
-			base.OnMinimumChanged(oldMinimum, newMinimum);
-			AdjustSelectionProperties();
-		}
-
-		protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e) {
-			base.OnPreviewMouseLeftButtonDown(e);
-			if (IsMoveToPointEnabled) {
-				if (!track.Thumb.IsMouseOver) {
-					Value = track.ValueFromPoint(e.MouseDevice.GetPosition(track));
-					e.Handled = true;
-				}
-			}
-		}
-
-		protected override void OnValueChanged(double oldValue, double newValue) {
-			//WDTDH
-			base.OnValueChanged(oldValue, newValue);
-		}
-		#endregion
-
 		#region Protected Methods
 		#region Commands
 		protected virtual void OnDecreaseLarge() {
@@ -375,6 +334,40 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		protected override Size ArrangeOverride(Size arrangeBounds) {
+			Size result = base.ArrangeOverride(arrangeBounds);
+			SetSelectionRangeBounds();
+			return result;
+		}
+
+		protected override AutomationPeer OnCreateAutomationPeer() {
+#if Implementation
+			return null;
+#else
+			return new SliderAutomationPeer(this);
+#endif
+		}
+
+		protected override void OnMaximumChanged(double oldMaximum, double newMaximum) {
+			base.OnMaximumChanged(oldMaximum, newMaximum);
+			AdjustSelectionProperties();
+		}
+
+		protected override void OnMinimumChanged(double oldMinimum, double newMinimum) {
+			base.OnMinimumChanged(oldMinimum, newMinimum);
+			AdjustSelectionProperties();
+		}
+
+		protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e) {
+			base.OnPreviewMouseLeftButtonDown(e);
+			if (IsMoveToPointEnabled) {
+				if (!track.Thumb.IsMouseOver) {
+					Value = track.ValueFromPoint(e.MouseDevice.GetPosition(track));
+					e.Handled = true;
+				}
+			}
+		}
+
 		protected virtual void OnThumbDragCompleted(global::System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
 			if (auto_tool_tip != null)
 				auto_tool_tip.IsOpen = false;
@@ -397,6 +390,11 @@ namespace System.Windows.Controls {
 				auto_tool_tip.IsOpen = true;
 				SetAutoToolTipContent();
 			}
+		}
+
+		protected override void OnValueChanged(double oldValue, double newValue) {
+			//WDTDH
+			base.OnValueChanged(oldValue, newValue);
 		}
 		#endregion
 

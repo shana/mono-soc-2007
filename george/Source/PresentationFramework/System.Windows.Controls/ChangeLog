@@ -1,3 +1,7 @@
+2007-08-14  George Giolfan  <georgegiolfan@yahoo.com>
+	
+	* BooleanToVisibilityConverter.cs, Panel.cs, ProgressBar.cs, RadioButton.cs, Slider.cs: Reformatted the code a little.
+
 2007-08-11  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* ContentControl.cs, HeaderedContentControl.cs: Fixed property metadata type.

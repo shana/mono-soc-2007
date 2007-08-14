@@ -17,7 +17,6 @@ namespace System.Windows.Controls {
 		#region Dependency Properties
 		public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register("IsIndeterminate", typeof(bool), typeof(ProgressBar), new FrameworkPropertyMetadata());
 		public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(ProgressBar), new FrameworkPropertyMetadata());
-
 		#endregion
 		#endregion
 
@@ -44,6 +43,7 @@ namespace System.Windows.Controls {
 		}
 		#endregion
 
+		#region Public Properties
 		#region Dependency Properties
 		public bool IsIndeterminate {
 			get { return (bool)GetValue(IsIndeterminateProperty); }
@@ -54,6 +54,7 @@ namespace System.Windows.Controls {
 			get { return (Orientation)GetValue(OrientationProperty); }
 			set { SetValue(OrientationProperty, value); }
 		}
+		#endregion
 		#endregion
 
 		#region Public Methods

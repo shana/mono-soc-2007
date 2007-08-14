@@ -1,3 +1,7 @@
+2007-08-14  George Giolfan  <georgegiolfan@yahoo.com>
+	
+	* Thumb.cs: Reformatted the code a little.
+
 2007-08-12  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* BulletDecorator.cs: Cleaned up the code a little.
