@@ -12,8 +12,10 @@ namespace System.Windows.Controls {
 #endif
 	[Localizability(LocalizationCategory.RadioButton)]
 	public class RadioButton : ToggleButton {
-		#region Dependency Property Fields
+		#region Public Fields
+		#region Dependency Properties
 		static public readonly DependencyProperty GroupNameProperty = DependencyProperty.Register("GroupName", typeof(string), typeof(RadioButton), new FrameworkPropertyMetadata(string.Empty));
+		#endregion
 		#endregion
 
 		#region Static Contstructor
@@ -31,11 +33,13 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Public Properties
+		#region Dependency Properties
 		[Localizability(LocalizationCategory.NeverLocalize)]
 		public string GroupName {
 			get { return (string)GetValue(GroupNameProperty); }
 			set { SetValue(GroupNameProperty, value); }
 		}
+		#endregion
 		#endregion
 
 		#region Protected Methods

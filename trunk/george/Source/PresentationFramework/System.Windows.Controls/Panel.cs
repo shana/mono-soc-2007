@@ -75,12 +75,6 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Protected Properties
-		protected override int VisualChildrenCount {
-			get { return children.Count; }
-		}
-		#endregion
-
-		#region Protected Internal Properties
 		protected internal virtual bool HasLogicalOrientation {
 			get { return false; }
 		}
@@ -95,6 +89,10 @@ namespace System.Windows.Controls {
 
 		protected internal virtual Orientation LogicalOrientation {
 			get { return Orientation.Vertical; }
+		}
+
+		protected override int VisualChildrenCount {
+			get { return children.Count; }
 		}
 		#endregion
 

@@ -11,7 +11,6 @@ namespace System.Windows.Controls {
 	public sealed class BooleanToVisibilityConverter : IValueConverter {
 		#region Public Constructors
 		public BooleanToVisibilityConverter() {
-
 		}
 		#endregion
 

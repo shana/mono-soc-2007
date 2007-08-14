@@ -9,6 +9,7 @@ namespace Mono.Microsoft.Windows.Themes {
 namespace Microsoft.Windows.Themes {
 #endif
 	public class ProgressBarBrushConverter : IMultiValueConverter {
+		#region Public Methods
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
 			Brush foreground;
 			//FIXME: How is it used?
@@ -45,5 +46,6 @@ namespace Microsoft.Windows.Themes {
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
 			return null;
 		}
+		#endregion
 	}
 }
