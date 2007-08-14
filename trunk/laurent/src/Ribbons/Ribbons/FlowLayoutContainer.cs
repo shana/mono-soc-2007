@@ -68,6 +68,42 @@ namespace Ribbons
 				}
 				else
 				{
+#if !EXPERIMENTAL
+					int n = children.Count;
+					Requisition[] childReqs = new Requisition[n];
+					int totalWidth = 0;
+					for(int i = 0 ; i < n ; ++i)
+					{
+						childReqs[i] = children[i].SizeRequest ();
+						totalWidth += childReqs[i].Width;
+					}
+					
+					// TODO: the following algorithm a dichotomic-like search approach (lower bound: 1, upper bound: number of widgets)
+					
+					int lineCount = -1;
+					int totalHeight = 0;
+					do
+					{
+						++lineCount;
+						int lineWidth = (int)Math.Ceiling ((double)totalWidth / lineCount);
+						int currentLineWidth = 0, currentLineHeight = 0;
+						for(int i = 0 ; i < n ; ++i)
+						{
+							currentLineWidth += childReqs[i].Width;
+							if(currentLineWidth > lineWidth)
+							{
+								totalHeight += currentLineHeight;
+								currentLineWidth = 0;
+								currentLineHeight = 0;
+							}
+							currentLineHeight = Math.Max (childReqs[i].Height, currentLineHeight);
+						}
+						totalHeight += currentLineHeight;
+					} while(totalHeight < HeightRequest);
+					
+					if(totalHeight > HeightRequest) --lineCount;
+					requisition.Width = (int)Math.Ceiling ((double)totalWidth / lineCount);
+#else
 					int n = children.Count;
 					Requisition[] childReqs = new Requisition[n];
 					int height = 0;
@@ -115,11 +151,13 @@ namespace Ribbons
 						}
 						currentSegmentWidth += childReqs[i].Width;
 					}
-					WidthRequest = Math.Max (currentSegmentNr, WidthRequest);
+					requisition.Width = Math.Max (currentSegmentNr, WidthRequest);
+#endif
 				}
 			}
 		}
 		
+#if EXPERIMENTAL
 		private int SplitWidgetsInTwo (Requisition[] Requisitions, int Index, int Length, out int PreviousSum, out int NewSum)
 		{
 			int[] maxLeft = new int[Length], maxRight = new int[Length];
@@ -147,6 +185,7 @@ namespace Ribbons
 			NewSum = smallestSum;
 			return ret;
 		}
+#endif
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{

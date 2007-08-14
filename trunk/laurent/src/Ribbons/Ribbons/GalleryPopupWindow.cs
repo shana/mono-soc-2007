@@ -7,6 +7,9 @@ namespace Ribbons
 	{
 		private Gallery underlyingGallery;
 
+		private uint rows, columns;
+
+		private ScrolledWindow internalWindow;
 		private Table tileTable;
 		
 		public Gallery UnderlyingGallery
@@ -17,12 +20,12 @@ namespace Ribbons
 		public GalleryPopupWindow (Gallery UnderlyingGallery) : base (WindowType.Popup)
 		{
 			this.underlyingGallery = UnderlyingGallery;
-			this.tileTable = new Table ();
 			
-			HBox hbox = new HBox ();
-			Scrollbar sbar = new Scrollbar ();
+			this.tileTable = new Table (rows, columns, true);
+			this.internalWindow = new ScrolledWindow ();
+			this.internalWindow.Child = this.tileTable;
 			
-			this.Child = tileTable;
+			this.Child = internalWindow;
 		}
 		
 		
