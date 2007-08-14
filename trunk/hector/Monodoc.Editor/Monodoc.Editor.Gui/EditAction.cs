@@ -15,6 +15,8 @@ namespace Monodoc.Editor.Gui {
 	{
 		void Undo (TextBuffer buffer);
 		void Redo (TextBuffer  buffer);
+		void Merge (EditAction action);
+		bool CanMerge (EditAction action);
 		void Destroy ();
 	}
 }

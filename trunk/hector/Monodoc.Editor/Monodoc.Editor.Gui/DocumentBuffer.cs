@@ -52,7 +52,7 @@ public class DocumentBuffer : TextBuffer {
 			
 			TextTag lastEnd = DocumentUtils.GetLastTag (endIter);
 			TextTag lastPrevious =  DocumentUtils.GetLastTag (previousIter);
-
+			
 			if (endIter.BeginsTag (lastEnd) && lastEnd.Editable) {
 				#if DEBUG
 				Console.WriteLine ("DEBUG: Inserting text at start of editable region.");

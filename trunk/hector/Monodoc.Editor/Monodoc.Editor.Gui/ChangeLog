@@ -1,3 +1,23 @@
+2007-08-14  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui.mdp: Added DocumentActions file that contains the
+	  implementations of the interface EditAction.
+	* EditAction.cs: Added two methods to the contract of EditAction.
+	  CanMerge tells if the calling action is capable to be merged with
+	  the action passed. The Merge method does the need work to combine
+	  the two actions modifications of the buffer in the calling action.
+	* DocumentUndoManager.cs: Added ChopBuffer class that is like a buffer
+	  the DocumentUndoManager uses to save the states of the buffer. It
+	  plugs two handlers to the events of inseting and deleting text in
+	  the target buffer and creates depending in the action and
+	  EditAction object that will handle the Undo or Redo.
+	* DocumentActions.cs: Class that contains several implementation of
+	  interface EditAction. Added InsertAction that represents an
+	  insertion action in buffer and EraseAction that represents an erase
+	  action in the buffer. Each of this Actions handle the undo and redo
+	  functionality.
+	* DocumentBuffer.cs: Minor change.
+
 2007-08-10  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Test/TestDocumentBufferArchiver.cs: Minor name changes of tests.
