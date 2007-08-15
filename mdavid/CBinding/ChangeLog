@@ -1,3 +1,8 @@
+2007-08-15  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProject.cs: Write all directories with header files to the
+	  project's pkg-config package.
+
 2007-08-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* gtk-gui/CBinding.OutputOptionsPanel.cs, gtk-gui/gui.stetic: Make output
