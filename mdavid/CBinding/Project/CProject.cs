@@ -45,6 +45,7 @@ using MonoDevelop.Core.ProgressMonitoring;
 using MonoDevelop.Projects;
 using MonoDevelop.Projects.Serialization;
 using MonoDevelop.Ide.Gui;
+using MonoDevelop.Deployment;
 
 using CBinding.Parser;
 
@@ -61,7 +62,7 @@ namespace CBinding
 	}
 	
 	[DataInclude(typeof(CProjectConfiguration))]
-	public class CProject : Project
+	public class CProject : Project, IDeployable
 	{
 		[ItemProperty ("compiler", ValueType = typeof(CCompiler))]
 		private ICompiler compiler_manager;
@@ -240,10 +241,6 @@ namespace CBinding
 		{
 			CProjectConfiguration pc = (CProjectConfiguration)ActiveConfiguration;
 			pc.SourceDirectory = BaseDirectory;
-			foreach (ProjectFile f in ProjectFiles) {
-				if (f.BuildAction == BuildAction.FileCopy)
-					Runtime.FileService.CopyFile (f.Name, Path.Combine (pc.OutputDirectory, Path.GetFileName (f.Name)));
-			}
 			
 			return compiler_manager.Compile (
 				ProjectFiles, packages,
@@ -365,6 +362,24 @@ namespace CBinding
 		internal void NotifyPackageAddedToProject (ProjectPackage package)
 		{
 			PackageAddedToProject (this, new ProjectPackageEventArgs (this, package));
+		}
+
+		public DeployFileCollection GetDeployFiles ()
+		{
+			DeployFileCollection deployFiles = new DeployFileCollection ();
+			
+			foreach (ProjectFile f in ProjectFiles) {
+				if (f.BuildAction == BuildAction.FileCopy) {
+					deployFiles.Add (new DeployFile (this, f.FilePath, f.RelativePath, TargetDirectory.ProgramFilesRoot));
+				}
+			}
+			
+			string output = GetOutputFileName ();		
+			if (!string.IsNullOrEmpty (output)) {
+				deployFiles.Add (new DeployFile (this, output, Path.GetFileName (output), TargetDirectory.Binaries));
+			}
+			
+			return deployFiles;
 		}
 	}
 }
