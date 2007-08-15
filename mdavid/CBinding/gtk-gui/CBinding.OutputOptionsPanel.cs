@@ -63,7 +63,7 @@ namespace CBinding {
             this.outputPathTextEntry = new Gtk.Entry();
             this.outputPathTextEntry.CanFocus = true;
             this.outputPathTextEntry.Name = "outputPathTextEntry";
-            this.outputPathTextEntry.IsEditable = false;
+            this.outputPathTextEntry.IsEditable = true;
             this.outputPathTextEntry.InvisibleChar = '●';
             this.hbox1.Add(this.outputPathTextEntry);
             Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.hbox1[this.outputPathTextEntry]));

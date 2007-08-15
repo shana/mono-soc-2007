@@ -1408,7 +1408,7 @@ Example:
                   <widget class="Gtk.Entry" id="outputPathTextEntry">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
-                    <property name="IsEditable">False</property>
+                    <property name="IsEditable">True</property>
                     <property name="InvisibleChar">●</property>
                   </widget>
                   <packing>
