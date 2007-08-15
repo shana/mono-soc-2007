@@ -50,7 +50,7 @@ namespace Ribbons
 		
 		/// <summary>Removes the widget at the specified index.</summary>
 		/// <param name="WidgetIndex">Index of the widget to remove.</param>
-		public void RemoveButton (int WidgetIndex)
+		public void Remove (int WidgetIndex)
 		{
 			widgets[WidgetIndex].Parent = null;
 			
@@ -87,6 +87,7 @@ namespace Ribbons
 					rowHeight = Math.Max (rowHeight, w.SizeRequest ().Height);
 				}
 			}
+			
 			int i = 0;
 			foreach(Widget w in widgets)
 			{
