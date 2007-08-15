@@ -7,6 +7,7 @@ namespace Ribbons
 	public class FlowLayoutContainer : Container
 	{
 		private List<Widget> children;
+		private Requisition[] childReqs;
 		
 		public int NChildren
 		{
@@ -35,6 +36,13 @@ namespace Ribbons
 		protected override void OnSizeRequested (ref Requisition requisition)
 		{
 			base.OnSizeRequested (ref requisition);
+			
+			int n = children.Count;
+			childReqs = new Requisition[n];
+			for(int i = 0 ; i < n ; ++i)
+			{
+				childReqs[i] = children[i].SizeRequest ();
+			}
 			
 			if(WidthRequest != -1)
 			{
@@ -69,12 +77,9 @@ namespace Ribbons
 				else
 				{
 #if !EXPERIMENTAL
-					int n = children.Count;
-					Requisition[] childReqs = new Requisition[n];
 					int totalWidth = 0;
 					for(int i = 0 ; i < n ; ++i)
 					{
-						childReqs[i] = children[i].SizeRequest ();
 						totalWidth += childReqs[i].Width;
 					}
 					
@@ -104,12 +109,9 @@ namespace Ribbons
 					if(totalHeight > HeightRequest) --lineCount;
 					requisition.Width = (int)Math.Ceiling ((double)totalWidth / lineCount);
 #else
-					int n = children.Count;
-					Requisition[] childReqs = new Requisition[n];
 					int height = 0;
 					for(int i = 0 ; i < n ; ++i)
 					{
-						childReqs[i] = children[i].SizeRequest ();
 						height = Math.Max (childReqs[i].Height, height);
 					}
 					
@@ -189,7 +191,25 @@ namespace Ribbons
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
-			
+			int n = children.Count;
+			Gdk.Rectangle childAlloc = allocation;
+			int lineHeight = 0;
+			for(int i = 0 ; i < n ; ++i)
+			{
+				childAlloc.Width = childReqs[i].Width;
+				childAlloc.Height = childReqs[i].Height;
+				
+				if(childAlloc.X != allocation.X && childAlloc.Right > allocation.Right)
+				{
+					childAlloc.X = allocation.X;
+					childAlloc.Y += lineHeight;
+					lineHeight = 0;
+				}
+				
+				children[i].SizeAllocate (childAlloc);
+				childAlloc.X += childAlloc.Width;
+				lineHeight = Math.Max (childAlloc.Height, lineHeight);
+			}
 		}
 	}
 }
