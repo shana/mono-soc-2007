@@ -1,5 +1,10 @@
 2007-08-15  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* CBinding.addin.xml, CBinding.mdp, Project/CProject.cs, Makefile.am:
+	  Implemented IDeployable.
+
+2007-08-15  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Project/CProject.cs: Write all directories with header files to the
 	  project's pkg-config package.
 

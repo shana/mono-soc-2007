@@ -20,6 +20,7 @@
 		<Addin id = "Ide" version = "0.15.0"/>
 		<Addin id = "Components" version = "0.15.0"/>
 		<Addin id = "SourceEditor" version = "0.15.0"/>
+		<Addin id = "Deployment" version = "0.15.0"/>
 	</Dependencies>
 	
 	<Extension path = "/MonoDevelop/Core/StockIcons">

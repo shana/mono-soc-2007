@@ -5,6 +5,7 @@ ASSEMBLY = $(ADDIN_BUILD)/CBinding.dll
 REFS =  \
 	-pkg:glib-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \
+	-r:../../build/AddIns/MonoDevelop.Deployment.dll \
 	-r:../../build/AddIns/MonoDevelop.SourceEditor.dll \
 	-r:../../build/bin/MonoDevelop.Components.dll \
 	-r:../../build/bin/MonoDevelop.Core.dll \
