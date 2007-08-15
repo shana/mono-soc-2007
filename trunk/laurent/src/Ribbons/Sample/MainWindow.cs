@@ -32,22 +32,31 @@ namespace Sample
 			group0.Expand += onClick;
 			
 			Menu openMenu = new Menu ();
+			MenuItem abc_txt = new MenuItem ("abc.txt");
+			openMenu.Append (abc_txt);
+			MenuItem foo_txt = new MenuItem ("foo.txt");
+			openMenu.Append (foo_txt);
 			
 			Ribbons.Button open = Ribbons.Button.FromStockIcon (Gtk.Stock.Open, "Open", false);
 			open.DropDownMenu = openMenu;
 			open.Clicked += onClick;
 			
-			Ribbons.ToolPack toolPack = new Ribbons.ToolPack ();
-			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
-			toolPack.AppendButton (open);
-			toolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, "Save", false));
+			Ribbons.ToolPack fileToolPack = new Ribbons.ToolPack ();
+			fileToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
+			fileToolPack.AppendButton (open);
+			fileToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Save, "Save", false));
 			
-			Ribbons.ToolBox box0 = new ToolBox ();
-			box0.Append (toolPack);
+			Ribbons.ToolPack printerToolPack = new Ribbons.ToolPack ();
+			printerToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Print, "Print", false));
+			
+			//Ribbons.FlowLayoutContainer flow0 = new FlowLayoutContainer ();
+			Ribbons.ToolBox flow0 = new ToolBox ();
+			flow0.Append (fileToolPack);
+			flow0.Append (printerToolPack);
 			
 			group1 = new RibbonGroup ();
 			group1.Label = "I will be back";
-			group1.Child = box0;
+			group1.Child = flow0;
 			
 			Gallery gallery = new Gallery ();
 			gallery.AppendTile (new SampleTile ("1"));
