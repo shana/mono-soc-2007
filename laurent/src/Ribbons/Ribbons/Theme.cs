@@ -291,6 +291,8 @@ namespace Ribbons
 				
 				double roundSizeMinusLineWidth = roundSize - lineWidth;
 				
+				if(widget.GroupStyle != GroupStyle.Left) x0 -= lineWidth;
+				
 				if(upLeft) cr.MoveTo (x0 + roundSizeMinusLineWidth, y0);
 				else cr.MoveTo (x0, y0);
 				if(upRight) cr.Arc (x1 - roundSizeMinusLineWidth, y0 + roundSizeMinusLineWidth, roundSizeMinusLineWidth, 1.5*Math.PI, 0);
@@ -301,6 +303,8 @@ namespace Ribbons
 				else cr.LineTo (x0, y1);
 				if(upLeft) cr.Arc (x0 + roundSizeMinusLineWidth, y0 + roundSizeMinusLineWidth, roundSizeMinusLineWidth, Math.PI, 1.5*Math.PI);
 				else cr.LineTo (x0, y0);
+				
+				if(widget.GroupStyle != GroupStyle.Left) x0 += lineWidth;
 				
 				cr.Pattern = innerBorderPattern;
 				cr.Stroke ();
@@ -316,8 +320,11 @@ namespace Ribbons
 				else cr.LineTo (x1, y1);
 				if(downLeft) cr.Arc (x0 + roundSize, y1 - roundSize, roundSize, 0.5*Math.PI, Math.PI);
 				else cr.LineTo (x0, y1);
-				if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
-				else cr.LineTo (x0, y0);
+				if(widget.GroupStyle == GroupStyle.Left)
+				{
+					if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
+					else cr.LineTo (x0, y0);
+				}
 				
 				cr.Color = borderColor;
 				cr.Stroke ();
@@ -347,24 +354,32 @@ namespace Ribbons
 				cr.Pattern = bodyPattern;
 				cr.Fill ();
 				
+				if(widget.GroupStyle != GroupStyle.Left)
+				{
+					if(downLeft) cr.Arc (x0 + roundSize, y1 - roundSize, roundSize, 0.5*Math.PI, Math.PI);
+					else cr.MoveTo (x0, y1);
+					if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
+					else cr.LineTo (x0, y0);
+					
+					cr.Color = new Color (1, 1, 1, 0.8);
+					cr.Stroke ();
+				}
+				
+				if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
+				else cr.MoveTo (x0, y0);
 				if(upRight) cr.Arc (x1 - roundSize, y0 + roundSize, roundSize, 1.5*Math.PI, 0);
 				else cr.LineTo (x1, y0);
 				if(downRight) cr.Arc (x1 - roundSize, y1 - roundSize, roundSize, 0, 0.5*Math.PI);
 				else cr.LineTo (x1, y1);
-				
-				cr.Color = new Color (0, 0, 0, 0.3);
-				cr.Stroke ();
-				
-				if(downRight) cr.LineTo (x1, y1 + roundSize);
-				else cr.LineTo (x1, y1);
 				if(downLeft) cr.Arc (x0 + roundSize, y1 - roundSize, roundSize, 0.5*Math.PI, Math.PI);
 				else cr.LineTo (x0, y1);
-				if(upLeft) cr.Arc (x0 + roundSize, y0 + roundSize, roundSize, Math.PI, 1.5*Math.PI);
-				else cr.LineTo (x0, y0);
-				if(upRight) cr.LineTo (x1, y0 - roundSize);
-				else cr.LineTo (x1, y0);
+				if(widget.GroupStyle == GroupStyle.Left)
+				{
+					if(upLeft) cr.LineTo (x0, y0 + roundSize);
+					else cr.LineTo (x0, y0);
+				}
 				
-				cr.Color = new Color (1, 1, 1, 0.8);
+				cr.Color = new Color (0, 0, 0, 0.2);
 				cr.Stroke ();
 			}
 			
