@@ -36,7 +36,11 @@ using System.Net.Sockets;
 using System.Xml;
 using System.Web;
 using System.Web.Hosting;
+#if NET_2_0
+using System.Collections.Generic;
+#else
 using System.Collections;
+#endif
 using System.Text;
 using System.Threading;
 using System.IO;
@@ -61,7 +65,11 @@ namespace Mono.WebServer
 		WebSource web_source;
 
 		// This is much faster than hashtable for typical cases.
+		#if NET_2_0
+		List<VPathToHost> vpathToHost = new List<VPathToHost> ();
+		#else
 		ArrayList vpathToHost = new ArrayList ();
+		#endif
 		
 		[Obsolete]
 		public ApplicationManager (Type hostType) :
@@ -249,51 +257,122 @@ namespace Mono.WebServer
 		                                          string vpath,
 		                                          string realPath)
 		{
-			// Check if auto-mapping is enabled and "realPath"
-			// contains is not null. If so, we need to perform
-			// extra mapping operations.
-			bool mapping = auto_map && realPath != null;
+			VPathToHost host = GetApplicationForPath_mapping (
+				vhost, vport, vpath, realPath);
 			
-			// If mapping is enabled, we'll have to add an
-			// additional check to make sure that the right path is
-			// returned.
-			// For example, if the virtual path is "/~user/" and the
-			// physical path is "/home/usr/public_html", then the
-			// host "/:/srv/www/htdocs" must not be used, to avoid a
-			// 404 error.
-			// As such, we will verify that the host not only
-			// matches, but it falls in the correct subdirectory.
-			string topVPath = null;
-			if (mapping) {
-				char sep = Path.DirectorySeparatorChar;
-				string [] vSplit = vpath.Split ('/');
-				string [] rSplit = realPath.Split (sep);
-				int vLength = vSplit.Length;
-				int rLength = rSplit.Length;
+			return host == null ? GetApplicationForPath_existing (
+				vhost, vport, vpath) : host;
+		}
+		
+		private VPathToHost GetApplicationForPath_mapping (string vhost,
+		                                                   int vport,
+		                                                   string vpath,
+		                                                   string realPath)
+		{
+			// If we can't automap, abort.
+			if (!auto_map || realPath == null)
+				return null;
+			
+			#if NET_2_0
+			List<VPathToHost> hosts =
+				new List<VPathToHost> (vpathToHost);
+			#else
+			ArrayList hosts = new ArrayList (vpathToHost);
+			#endif
+			
+			char sep = Path.DirectorySeparatorChar;
+			string [] parts = vpath.Split ('/');
+			int length = parts.Length;
+			DirectoryInfo dir = new DirectoryInfo (realPath);
+			
+			while (true) {
 				
-				while (vLength > 0 &&
-					vSplit [vLength - 1].Length == 0)
-					vLength --;
-					
-				while (rLength > 0 &&
-					rSplit [rLength - 1].Length == 0)
-					rLength --;
-					
-				while (vLength > 0 && rLength > 0 &&
-					vSplit [vLength - 1] ==
-					rSplit [rLength - 1] &&
-					! new DirectoryInfo (Path.Combine (realPath, "bin")).Exists
-				) {
-					rLength --;
-					vLength --;
-					realPath = string.Join (sep.ToString (),
-						rSplit, 0, rLength) + sep;
+				// Remove any extra blank parts from the path.
+				while (length > 0 && parts [length - 1].Length == 0)
+					length --;
+				
+				// If we run out of directories, there is
+				// nothing left to map.
+				if (dir == null || length < 0)
+					return null;
+				
+				// We can't map to a non-existent directory. If
+				// we find one, move up a level and try again.
+				if (!dir.Exists) {
+					length --;
+					dir = dir.Parent;
+					continue;
 				}
 				
-				topVPath = string.Join ("/", vSplit, 0,
-					vLength) + "/";
+				// Get the directory name with the trailing
+				// slash.
+				realPath = dir.FullName;
+				if (realPath [realPath.Length - 1] != sep)
+					realPath += sep;
+				
+				// Search through existing hosts. If their real
+				// path is longer than our real path, we have an
+				// application we can't use. If their path is
+				// the same as ours, return that host.
+				for (int i = hosts.Count - 1; i > 0; i--) {
+					#if NET_2_0
+					VPathToHost h = hosts [i];
+					#else
+					VPathToHost h = hosts [i] as VPathToHost;
+					#endif
+					
+					if (!h.realPath.StartsWith (realPath)) {
+						hosts.RemoveAt (i);
+					} else if (realPath == h.realPath) {
+						CreateHost (h);
+						return h;
+					}
+				}
+				
+				// If the paths differ, we've reached the end of
+				// the map and must escape so it can be built.
+				if (length == 0 || parts [length - 1].Equals (
+					dir.Name))
+					break;
+				
+				// If the directory contains a "Web.Config"
+				// file, it must be an application. IIS requires
+				// such a file, so this provides matching
+				// behavior.
+				foreach (FileInfo info in dir.GetFiles ())
+					#if NET_2_0
+					if (info.Name.Equals ("web.config",
+						StringComparison.InvariantCultureIgnoreCase))
+					#else
+					if (info.Name.ToLower () == "web.config")
+					#endif
+						break;
+				
+				// Move up a level and try again.
+				length --;
+				dir = dir.Parent;
 			}
 			
+			// We must now have a valid directory and path.
+			string vPath = string.Join ("/", parts, 0, length) + "/";
+			
+			// For now, don't care about host or port. It is safe to
+			// assume that if two hosts have an identical root
+			// directory, they are the same application.
+			lock (vpathToHost) {
+				AddApplication (null, -1, vPath,
+					realPath);
+				VPathToHost host = vpathToHost [
+					vpathToHost.Count - 1] as VPathToHost;
+				CreateHost (host);
+				return host;
+			}
+		}
+		
+		private VPathToHost GetApplicationForPath_existing (string vhost,
+		                                                    int vport,
+		                                                    string vpath)
+		{
 			VPathToHost bestMatch = null;
 			int bestMatchLength = 0;
 			
@@ -305,10 +384,9 @@ namespace Mono.WebServer
 				VPathToHost v = (VPathToHost) vpathToHost [i];
 				int matchLength = v.vpath.Length;
 				if (matchLength <= bestMatchLength ||
-					!v.Match (vhost, vport, vpath) ||
-					(mapping && !v.vpath.StartsWith (topVPath)))
+					!v.Match (vhost, vport, vpath))
 					continue;
-
+				
 				bestMatchLength = matchLength;
 				bestMatch = v;
 			}
@@ -319,24 +397,11 @@ namespace Mono.WebServer
 				return bestMatch;
 			}
 			
-			// If no host was found, and we're mapping, we add and
-			// use a new host for the top matching directory.
-			if (mapping) {
-				lock (vpathToHost) {
-					AddApplication (vhost, vport, topVPath,
-						realPath);
-					VPathToHost v = vpathToHost [
-						vpathToHost.Count - 1] as VPathToHost;
-					CreateHost (v);
-					return v;
-				}
-			}
-			
 			if (verbose)
 				Console.WriteLine (
 					"No application defined for: {0}:{1}{2}",
 					vhost, vport, vpath);
-
+			
 			return null;
 		}
 		

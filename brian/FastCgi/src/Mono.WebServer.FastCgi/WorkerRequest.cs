@@ -45,7 +45,6 @@ namespace Mono.WebServer.FastCgi
 	public class WorkerRequest : MonoWorkerRequest
 	{
 		private static string [] indexFiles = { "index.aspx",
-							"Default.aspx",
 							"default.aspx",
 							"index.html",
 							"index.htm" };
@@ -61,54 +60,91 @@ namespace Mono.WebServer.FastCgi
 			#endif
 		}
 		
-		private static void SetDefaultIndexFiles (string list)
-		{
-			if (list == null)
-				return;
-			
-			#if NET_2_0
-			List<string> files = new List<string> ();
-			#else
-			ArrayList files = new ArrayList ();
-			#endif
-			
-			string [] fs = list.Split (',');
-			foreach (string f in fs) {
-				string trimmed = f.Trim ();
-				if (trimmed == "") 
-					continue;
-
-				files.Add (trimmed);
-			}
-
-			#if NET_2_0
-			indexFiles = files.ToArray ();
-			#else
-			indexFiles = (string []) files.ToArray (typeof (string));
-			#endif
-		}
-
-
 		private StringBuilder headers = new StringBuilder ();
 		private Responder responder;
 		private byte [] input_data;
-		private string extra_path;
+		private string file_path;
+		string raw_url = null;
+		private bool closed = false;
+		string uri_path = null;
+		private string [][] unknownHeaders = null;
+		private string [] knownHeaders = null;
+		
 		public WorkerRequest (Responder responder, ApplicationHost appHost) : base (appHost)
 		{
 			this.responder = responder;
 			input_data = responder.InputData;
 		}
 		
+		#region Overrides
+		
+		#region Overrides: Transaction Oriented
+		
 		public override int RequestId {
 			get {return responder.RequestID;}
 		}
+		
+		protected override bool GetRequestData ()
+		{
+			return true;
+		}
+		
+		public override bool HeadersSent ()
+		{
+			return headers == null;
+		}
+		
+		public override void FlushResponse (bool finalFlush)
+		{
+			if (finalFlush)
+				CloseConnection ();
+		}
+		public override void CloseConnection ()
+		{
+			if (closed)
+				return;
+			
+			closed = true;
+			this.EnsureHeadersSent ();
+			responder.CompleteRequest (0);
+		}
+		public override void SendResponseFromMemory (byte [] data, int length)
+		{
+			EnsureHeadersSent ();
+			responder.SendOutput (data, length);
+		}
+
+		public override void SendStatus (int statusCode, string statusDescription)
+		{
+			AppendHeaderLine ("Status: {0} {1}",
+				statusCode, statusDescription);
+		}
+
+		public override void SendUnknownResponseHeader (string name, string value)
+		{
+			AppendHeaderLine ("{0}: {1}", name, value);
+		}
+		
+		public override bool IsClientConnected ()
+		{
+			return responder.IsConnected;
+		}
+		
+		public override bool IsEntireEntityBodyIsPreloaded ()
+		{
+			return true;
+		}
+		
+		#endregion
+		
+		#region Overrides: Request Oriented
+		
 
 		public override string GetPathInfo ()
 		{
 			return responder.GetParameter ("PATH_INFO");
 		}
 		
-		string raw_url = null;
 		public override string GetRawUrl ()
 		{
 			if (raw_url != null)
@@ -125,58 +161,13 @@ namespace Mono.WebServer.FastCgi
 			return raw_url;
 		}
 
-		protected override bool GetRequestData ()
-		{
-			// This checks if the current path is a directory and
-			// tries to determine the appropriate file.
-			string path = responder.PhysicalPath;
-			
-			if (!Directory.Exists (path))
-				return true;
-			
-			foreach (string file in indexFiles)
-				if (File.Exists (Path.Combine (path, file))) {
-					extra_path = (responder.Path.EndsWith ("/") ?
-						"" : "/") + file;
-					return true;
-				}
-			
-			return true;
-		}
 		
-		public override bool HeadersSent ()
-		{
-			return headers == null;
-		}
-		
-		public override void FlushResponse (bool finalFlush)
-		{
-			if (finalFlush)
-				CloseConnection ();
-		}
 
 		public override bool IsSecure ()
 		{
 			return false;
 		}
 		
-		private bool closed = false;
-		public override void CloseConnection ()
-		{
-			if (closed)
-				return;
-			
-			if (headers != null) {
-				headers.Append ("\r\n");
-				responder.SendOutput (headers.ToString (),
-					HeaderEncoding);
-				headers = null;
-			}
-			
-			responder.CompleteRequest (0);
-			
-			closed = true;
-		}
 
 		public override string GetHttpVerbName ()
 		{
@@ -277,41 +268,7 @@ namespace Mono.WebServer.FastCgi
 			return value != null ? value : base.GetServerVariable (name);
 		}
 		
-		public override void SendResponseFromMemory (byte [] data, int length)
-		{
-			if (headers != null) {
-				headers.Append ("\r\n");
-				responder.SendOutput (headers.ToString (),
-					HeaderEncoding);
-				headers = null;
-			}
-			
-			responder.SendOutput (data, length);
-		}
 
-		public override void SendStatus (int statusCode, string statusDescription)
-		{
-			if (headers != null)
-				headers.AppendFormat (
-					CultureInfo.InvariantCulture,
-					"Status: {0} {1}\r\n",
-					statusCode, statusDescription);
-		}
-
-		public override void SendUnknownResponseHeader (string name, string value)
-		{
-			if (headers != null)
-				headers.AppendFormat (
-					CultureInfo.InvariantCulture,
-					"{0}: {1}\r\n", name, value);
-		}
-
-		public override bool IsClientConnected ()
-		{
-			return responder.IsConnected;
-		}
-
-		string uri_path = null;
 		public override string GetUriPath ()
 		{
 			if (uri_path != null)
@@ -323,10 +280,43 @@ namespace Mono.WebServer.FastCgi
 
 		public override string GetFilePath ()
 		{
-			if (extra_path != null)
-				return responder.Path + extra_path;
+			if (file_path != null)
+				return file_path;
 			
-			return responder.Path;
+			file_path = responder.Path;
+			
+			// The following will check if the request was made to a
+			// directory, and if so, if attempts to find the correct
+			// index file from the list. Case is ignored to improve
+			// Windows compatability.
+			
+			string path = responder.PhysicalPath;
+			
+			DirectoryInfo dir = new DirectoryInfo (path);
+			
+			if (!dir.Exists)
+				return file_path;
+			
+			if (!file_path.EndsWith ("/"))
+				file_path += "/";
+			
+			FileInfo [] files = dir.GetFiles ();
+			
+			foreach (string file in indexFiles) {
+				foreach (FileInfo info in files) {
+					#if NET_2_0
+					if (file.Equals (info.Name,
+						StringComparison.InvariantCultureIgnoreCase)) {
+					#else
+					if (file.ToLower () == info.Name.ToLower ()) {
+					#endif
+						file_path += info.Name;
+						return file_path;
+					}
+				}
+			}
+			
+			return file_path;
 		}
 		
 		public override string GetUnknownRequestHeader (string name)
@@ -341,8 +331,6 @@ namespace Mono.WebServer.FastCgi
 			return base.GetUnknownRequestHeader (name);
 		}
 		
-		private string [][] unknownHeaders = null;
-		private string [] knownHeaders = null;
 		public override string [][] GetUnknownRequestHeaders ()
 		{
 			if (unknownHeaders != null)
@@ -379,17 +367,6 @@ namespace Mono.WebServer.FastCgi
 			
 			return unknownHeaders;
 		}
-		
-		string ReformatHttpHeader (string header)
-		{
-			string [] parts = header.Substring (5).Split ('_');
-			for (int i = 0; i < parts.Length; i ++)
-				parts [i] = parts [i].Substring (0, 1).ToUpper ()
-					+ parts [i].Substring (1).ToLower ();
-			
-			return string.Join ("-", parts);
-		}
-		
 		
 		public override string GetKnownRequestHeader (int index)
 		{
@@ -433,26 +410,36 @@ namespace Mono.WebServer.FastCgi
 			return input_data;
 		}
 		
-		public override bool IsEntireEntityBodyIsPreloaded ()
+		#endregion
+		
+		#endregion
+		
+		#region Private Methods
+		
+		private void AppendHeaderLine (string format, params object [] args)
 		{
-			return true;
+			if (headers == null)
+				return;
+			
+			headers.AppendFormat (CultureInfo.InvariantCulture,
+				format, args);
+			headers.Append ("\r\n");
 		}
 		
-		private static string HostNameFromString (string host)
+		private void EnsureHeadersSent ()
 		{
-			if (host == null || host.Length == 0)
-				return null;
-			
-			int colon_index = host.IndexOf (':');
-			
-			if (colon_index == -1)
-				return host;
-			
-			if (colon_index == 0)
-				return null;
-			
-			return host.Substring (0, colon_index);
+			if (headers != null) {
+				headers.Append ("\r\n");
+				string str = headers.ToString ();
+				responder.SendOutput (str,
+					HeaderEncoding);
+				headers = null;
+			}
 		}
+		
+		#endregion
+		
+		#region Private Static Methods
 		
 		private static string AddressFromHostName (string host)
 		{
@@ -479,5 +466,60 @@ namespace Mono.WebServer.FastCgi
 			
 			return addresses [0].ToString ();
 		}
+		
+		private static string HostNameFromString (string host)
+		{
+			if (host == null || host.Length == 0)
+				return null;
+			
+			int colon_index = host.IndexOf (':');
+			
+			if (colon_index == -1)
+				return host;
+			
+			if (colon_index == 0)
+				return null;
+			
+			return host.Substring (0, colon_index);
+		}
+		
+		private static string ReformatHttpHeader (string header)
+		{
+			string [] parts = header.Substring (5).Split ('_');
+			for (int i = 0; i < parts.Length; i ++)
+				parts [i] = parts [i].Substring (0, 1).ToUpper ()
+					+ parts [i].Substring (1).ToLower ();
+			
+			return string.Join ("-", parts);
+		}
+
+		private static void SetDefaultIndexFiles (string list)
+		{
+			if (list == null)
+				return;
+			
+			#if NET_2_0
+			List<string> files = new List<string> ();
+			#else
+			ArrayList files = new ArrayList ();
+			#endif
+			
+			string [] fs = list.Split (',');
+			foreach (string f in fs) {
+				string trimmed = f.Trim ();
+				if (trimmed == "") 
+					continue;
+
+				files.Add (trimmed);
+			}
+
+			#if NET_2_0
+			indexFiles = files.ToArray ();
+			#else
+			indexFiles = (string []) files.ToArray (typeof (string));
+			#endif
+		}
+		
+		#endregion
 	}
 }

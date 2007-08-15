@@ -29,6 +29,9 @@
 using System;
 using Mono.FastCgi;
 using Mono.WebServer;
+using System.Web;
+using System.IO;
+using System.Text;
 
 namespace Mono.WebServer.FastCgi
 {
@@ -40,7 +43,41 @@ namespace Mono.WebServer.FastCgi
 		
 		public void ProcessRequest (Responder responder)
 		{
-			ProcessRequest (new WorkerRequest (responder, this));
+			WorkerRequest worker = new WorkerRequest (responder,
+				this);
+			
+			string path = responder.Path;
+			if (path [path.Length - 1] != '/' && Directory.Exists (
+				worker.MapPath (path))) {
+				Redirect (worker, path + '/');
+				return;
+			}
+			
+			ProcessRequest (worker);
+		}
+		
+		private static string content301 =
+			"<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n" +
+			"<html><head>\n<title>301 Moved Permanently</title>\n</head><body>\n" +
+			"<h1>Moved Permanently</h1>\n" +
+			"<p>The document has moved to <a href='http://{0}{1}'>http://{0}{1}</a>.</p>\n" +
+			"</body></html>\n";
+		
+		private static void Redirect (MonoWorkerRequest wr, string location)
+		{
+			string host = wr.GetKnownRequestHeader (HttpWorkerRequest.HeaderHost);
+			wr.SendStatus (301, "Moved Permanently");
+			wr.SendUnknownResponseHeader ("Connection", "close");
+			wr.SendUnknownResponseHeader ("Date", DateTime.Now.ToUniversalTime ().ToString ("r"));
+			wr.SendUnknownResponseHeader ("Location", String.Format ("http://{0}{1}", host, location));
+			Encoding enc = Encoding.ASCII;
+			wr.SendUnknownResponseHeader ("Content-Type", "text/html; charset=" + enc.WebName);
+			string content = String.Format (content301, host, location);
+			byte [] contentBytes = enc.GetBytes (content);
+			wr.SendUnknownResponseHeader ("Content-Length", contentBytes.Length.ToString ());
+			wr.SendResponseFromMemory (contentBytes, contentBytes.Length);
+			wr.FlushResponse (true);
+			wr.CloseConnection ();
 		}
 	}
 }
