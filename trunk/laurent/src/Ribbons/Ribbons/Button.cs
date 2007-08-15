@@ -209,6 +209,7 @@ namespace Ribbons
 			if(enable && dropDownMenu != null)
 			{
 				dropDownMenu.Popup ();
+				dropDownMenu.ShowAll ();
 			}
 		}
 		
