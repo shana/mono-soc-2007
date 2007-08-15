@@ -340,4 +340,31 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<Style x:Key="{x:Type mono_system_windows_controls:ContentControl}"
+		TargetType="{x:Type mono_system_windows_controls:ContentControl}"
+		>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:ContentControl}">
+					<StackPanel>
+						<ContentPresenter/>
+					</StackPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style x:Key="{x:Type mono_system_windows_controls:HeaderedContentControl}"
+		TargetType="{x:Type mono_system_windows_controls:HeaderedContentControl}"
+		>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type mono_system_windows_controls:HeaderedContentControl}">
+					<StackPanel>
+						<ContentPresenter ContentSource="Header"/>
+						<ContentPresenter/>
+					</StackPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 </ResourceDictionary>
