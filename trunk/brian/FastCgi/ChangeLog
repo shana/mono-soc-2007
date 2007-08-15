@@ -1,3 +1,17 @@
+2007-08-15 Brian Nickel <brian.nickel@gmail.com>
+
+	* src/Mono.WebServer.FastCgi/ApplicationHost.cs: Redirect requests from
+	directories without slashes to directories with slashes, eg.
+	/test -> /test/. Failure to do so caused some nastiness with paths.
+	
+	* src/Mono.WebServer.FastCgi/WorkerRequest.cs: Reorganize a bit and
+	rework index checking to be case insensitive.
+	
+	* src/Mono.WebServer/ApplicationManager.cs: Rework application checking
+	to look for Web.Config instread of bin, as applications require
+	Web.Config to work on IIS. Use case insensitive checking and
+	DirectoryInfo to improve checking.
+
 2007-08-12 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/index.html: Add explanation of request.
