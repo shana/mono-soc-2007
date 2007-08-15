@@ -204,12 +204,25 @@ namespace CBinding
 			
 			CProjectConfiguration config = (CProjectConfiguration)ActiveConfiguration;
 			
+			List<string> headerDirectories = new List<string> ();
+			
+			foreach (ProjectFile f in ProjectFiles) {
+				if (IsHeaderFile (f.Name)) {
+					string dir = Path.GetDirectoryName (f.FilePath);
+					
+					if (!headerDirectories.Contains (dir)) {
+						headerDirectories.Add (dir);
+					}
+				}
+			}
+			
 			using (StreamWriter writer = new StreamWriter (pkgfile)) {
 				writer.WriteLine ("Name: {0}", Name);
 				writer.WriteLine ("Description: {0}", Description);
 				writer.WriteLine ("Version: {0}", Version);
 				writer.WriteLine ("Libs: -L{0} -l{1}", config.OutputDirectory, config.Output);
-				writer.WriteLine ("Cflags: -I{0}", BaseDirectory);
+//				writer.WriteLine ("Cflags: -I{0}", BaseDirectory);
+				writer.WriteLine ("Cflags: -I{0}", string.Join (" -I", headerDirectories.ToArray ()));
 			}
 			
 			// If this project compiles into a shared object we need to
