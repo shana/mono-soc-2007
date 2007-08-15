@@ -1,5 +1,10 @@
 2007-08-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* gtk-gui/CBinding.OutputOptionsPanel.cs, gtk-gui/gui.stetic: Make output
+	  entry editable.
+
+2007-08-14  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Project/CProjectServiceExtension.cs: Update the project's pkg package
 	  every time it is compiled.
 
