@@ -1,3 +1,7 @@
+2007-08-15  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* generic.xaml: Added ContentControl and HeaderedContentControl styles.
+
 2007-08-13  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* generic.xaml: Added GroupBox and Label styles.
