@@ -20,28 +20,60 @@ namespace Ribbons
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
-			this.children = new List<Gtk.Widget> ();
+			this.children = new List<Widget> ();
 		}
 		
-		public void AddWidget (Widget w)
+		/// <summary>Adds a widget before all existing widgetw.</summary>
+		/// <param name="w">The widget to add.</param>
+		public void Prepend (Widget w)
 		{
-			children.Add (w);
+			Insert (w, 0);
 		}
 		
-		public void RemoveWidget (Widget w)
+		/// <summary>Adds a widget after all existing widgets.</summary>
+		/// <param name="w">The widget to add.</param>
+		public void Append (Widget w)
 		{
-			children.Remove (w);
+			Insert (w, -1);
+		}
+		
+		/// <summary>Inserts a widget at the specified location.</summary>
+		/// <param name="w">The widget to add.</param>
+		/// <param name="WidgetIndex">The index (starting at 0) at which the widget must be inserted, or -1 to insert the widget after all existing widgets.</param>
+		public void Insert (Widget w, int WidgetIndex)
+		{
+			w.Parent = this;
+			w.Visible = true;
+			
+			if(WidgetIndex == -1)
+				children.Add (w);
+			else
+				children.Insert (WidgetIndex, w);
+			
+			QueueDraw ();
+		}
+		
+		protected override void ForAll (bool include_internals, Callback callback)
+		{
+			foreach(Widget w in children)
+			{
+				if(w.Visible) callback (w);
+			}
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
 		{
 			base.OnSizeRequested (ref requisition);
 			
-			int n = children.Count;
+			int n = children.Count, nVisible = 0;
 			childReqs = new Requisition[n];
 			for(int i = 0 ; i < n ; ++i)
 			{
-				childReqs[i] = children[i].SizeRequest ();
+				if(children[i].Visible)
+				{
+					childReqs[i] = children[i].SizeRequest ();
+					++nVisible;
+				}
 			}
 			
 			if(WidthRequest != -1)
@@ -51,13 +83,16 @@ namespace Ribbons
 					int currentLineHeight = 0, currentLineWidth = 0;
 					foreach(Widget w in children)
 					{
-						Requisition childReq = w.SizeRequest ();
-						currentLineHeight = Math.Max (childReq.Height, currentLineHeight);
-						currentLineWidth += childReq.Width;
-						if(currentLineWidth >= WidthRequest)
+						if(w.Visible)
 						{
-							currentLineHeight = 0;
-							currentLineWidth = 0;
+							Requisition childReq = w.SizeRequest ();
+							currentLineHeight = Math.Max (childReq.Height, currentLineHeight);
+							currentLineWidth += childReq.Width;
+							if(currentLineWidth >= WidthRequest)
+							{
+								currentLineHeight = 0;
+								currentLineWidth = 0;
+							}
 						}
 					}
 					requisition.Height = currentLineHeight;
@@ -69,45 +104,59 @@ namespace Ribbons
 				{
 					foreach(Widget w in children)
 					{
-						Requisition childReq = w.SizeRequest ();
-						requisition.Height = Math.Max (childReq.Height, requisition.Height);
-						requisition.Width += childReq.Width;
+						if(w.Visible)
+						{
+							Requisition childReq = w.SizeRequest ();
+							requisition.Height = Math.Max (childReq.Height, requisition.Height);
+							requisition.Width += childReq.Width;
+						}
 					}
 				}
 				else
 				{
 #if !EXPERIMENTAL
-					int totalWidth = 0;
+					int totalWidth = 0, maxWidth = 0;
 					for(int i = 0 ; i < n ; ++i)
 					{
-						totalWidth += childReqs[i].Width;
+						if(children[i].Visible)
+						{
+							totalWidth += childReqs[i].Width;
+							maxWidth = Math.Max (childReqs[i].Width, maxWidth);
+						}
 					}
 					
 					// TODO: the following algorithm a dichotomic-like search approach (lower bound: 1, upper bound: number of widgets)
 					
-					int lineCount = -1;
+					int lineCount = 0;
 					int totalHeight = 0;
+					
 					do
 					{
 						++lineCount;
 						int lineWidth = (int)Math.Ceiling ((double)totalWidth / lineCount);
+						if(lineWidth < maxWidth) break;
 						int currentLineWidth = 0, currentLineHeight = 0;
 						for(int i = 0 ; i < n ; ++i)
 						{
-							currentLineWidth += childReqs[i].Width;
-							if(currentLineWidth > lineWidth)
+							if(children[i].Visible)
 							{
-								totalHeight += currentLineHeight;
-								currentLineWidth = 0;
-								currentLineHeight = 0;
+								currentLineWidth += childReqs[i].Width;
+								if(currentLineWidth > lineWidth)
+								{
+									totalHeight += currentLineHeight;
+									currentLineWidth = childReqs[i].Width;
+									currentLineHeight = 0;
+								}
+								currentLineHeight = Math.Max (childReqs[i].Height, currentLineHeight);
 							}
-							currentLineHeight = Math.Max (childReqs[i].Height, currentLineHeight);
 						}
 						totalHeight += currentLineHeight;
-					} while(totalHeight < HeightRequest);
-					
-					if(totalHeight > HeightRequest) --lineCount;
-					requisition.Width = (int)Math.Ceiling ((double)totalWidth / lineCount);
+						
+						if(totalHeight <= HeightRequest)
+						{
+							requisition.Width = lineWidth;
+						}
+					} while(totalHeight < HeightRequest && lineCount < nVisible);
 #else
 					int height = 0;
 					for(int i = 0 ; i < n ; ++i)
@@ -191,24 +240,29 @@ namespace Ribbons
 		
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
+			base.OnSizeAllocated (allocation);
+			
 			int n = children.Count;
 			Gdk.Rectangle childAlloc = allocation;
 			int lineHeight = 0;
 			for(int i = 0 ; i < n ; ++i)
 			{
-				childAlloc.Width = childReqs[i].Width;
-				childAlloc.Height = childReqs[i].Height;
-				
-				if(childAlloc.X != allocation.X && childAlloc.Right > allocation.Right)
+				if(children[i].Visible)
 				{
-					childAlloc.X = allocation.X;
-					childAlloc.Y += lineHeight;
-					lineHeight = 0;
+					childAlloc.Width = childReqs[i].Width;
+					childAlloc.Height = childReqs[i].Height;
+					
+					if(childAlloc.X != allocation.X && childAlloc.Right > allocation.Right)
+					{
+						childAlloc.X = allocation.X;
+						childAlloc.Y += lineHeight;
+						lineHeight = 0;
+					}
+					
+					children[i].SizeAllocate (childAlloc);
+					childAlloc.X += childAlloc.Width;
+					lineHeight = Math.Max (childAlloc.Height, lineHeight);
 				}
-				
-				children[i].SizeAllocate (childAlloc);
-				childAlloc.X += childAlloc.Width;
-				lineHeight = Math.Max (childAlloc.Height, lineHeight);
 			}
 		}
 	}

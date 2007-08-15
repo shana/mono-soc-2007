@@ -252,7 +252,6 @@ namespace Ribbons
 				if(tiles[tileIndex].Parent != null) tiles[tileIndex].Unparent ();
 			}
 			
-			Console.WriteLine (firstDisplayedTileIndex + "  " + lastDisplayedTileIndex);
 			for(int tileIndex = firstDisplayedTileIndex ; tileIndex <= lastDisplayedTileIndex ; ++tileIndex)
 			{
 				Tile t = tiles[tileIndex];
@@ -303,7 +302,7 @@ namespace Ribbons
 		protected override void OnSizeAllocated (Gdk.Rectangle allocation)
 		{
 			base.OnSizeAllocated (allocation);
-			Console.WriteLine(allocation.Width);
+			
 			allocation.X += (int)BorderWidth;
 			allocation.Y += (int)BorderWidth;
 			allocation.Width -= 2 * (int)BorderWidth;
