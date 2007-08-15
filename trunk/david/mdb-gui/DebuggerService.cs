@@ -191,7 +191,7 @@ namespace Mono.Debugger.Frontend
 		{
 			// Try to get the filename for current location
 			try {
-				return interpreter.CurrentThread.GetBacktrace().CurrentFrame.SourceAddress.Location.FileName;
+				return interpreter.CurrentThread.GetBacktrace().CurrentFrame.SourceAddress.SourceFile.FileName;
 			} catch {
 				return null;
 			}
@@ -200,7 +200,7 @@ namespace Mono.Debugger.Frontend
 		public int GetCurrentLine()
 		{
 			try {
-				return interpreter.CurrentThread.GetBacktrace().CurrentFrame.SourceAddress.Location.Line;
+				return interpreter.CurrentThread.GetBacktrace().CurrentFrame.SourceAddress.Row;
 			} catch {
 				return -1;
 			}
@@ -208,7 +208,7 @@ namespace Mono.Debugger.Frontend
 		
 		public string[] ReadFile(string filename)
 		{
-			SourceBuffer buffer = interpreter.ReadFile(interpreter.CurrentThread.GetBacktrace().CurrentFrame.SourceAddress.Location.FileName);
+			SourceBuffer buffer = interpreter.ReadFile(interpreter.CurrentThread.GetBacktrace().CurrentFrame.SourceAddress.SourceFile.FileName);
 			return buffer.Contents;
 		}
 		
@@ -234,7 +234,7 @@ namespace Mono.Debugger.Frontend
 			if (interpreter.HasTarget && interpreter.HasCurrentThread) {
 				try {
 					SourceLocation newLocation;
-					ExpressionParser.ParseLocation(interpreter.CurrentThread, line.ToString(), out newLocation);
+					ExpressionParser.ParseLocation(interpreter.CurrentThread, interpreter.CurrentThread.CurrentFrame, line.ToString(), out newLocation);
 					Event newBreakpoint = interpreter.Session.InsertBreakpoint(ThreadGroup.Global, newLocation);
 					newBreakpoint.Activate(interpreter.CurrentThread);
 				} catch {

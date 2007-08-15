@@ -26,10 +26,6 @@ namespace Mono.Debugger.Frontend.TreeModel
 				return new ErrorVariable(name, "Object is null");
 			}
 			
-			if (obj.IsNull) {
-				return new NullVariable(name);
-			}
-			
 			try {
 				switch (obj.Kind) {
 					case TargetObjectKind.Array:
