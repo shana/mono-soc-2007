@@ -35,7 +35,18 @@ using Gendarme.Framework;
 using Gendarme.Rules.Smells;
 
 namespace Test.Rules.Smells {
-	
+
+	public abstract class AbstractClass {
+		public abstract void MakeStuff ();
+	}
+
+	public class OverriderClass : AbstractClass {
+		public override void MakeStuff () 
+		{
+		
+		}
+	}
+
 	[TestFixture]
 	public class AvoidSpeculativeGeneralityTest {
 		private ITypeRule rule;
@@ -50,6 +61,15 @@ namespace Test.Rules.Smells {
 			assembly = AssemblyFactory.GetAssembly (unit);
 			rule = new AvoidSpeculativeGeneralityRule ();
 			messageCollection = null;
+		}
+
+		[Test]
+		public void AbstractClassesWithoutResponsabilityTest () 
+		{
+			type = assembly.MainModule.Types["Test.Rules.Smells"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
 		}
 	}
 }
