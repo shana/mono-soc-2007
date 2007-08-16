@@ -1,3 +1,10 @@
+2007-08-16 Brian Nickel <brian.nickel@gmail.com>
+
+	* src/Mono.WebServer/ApplicationManager.cs: New application mapping code
+	was rife with mistakes (though several of them cancelled eachother out
+	so it wasn't immediately noticable). They are fixed now and applications
+	are mapping like nobody's business.
+
 2007-08-15 Brian Nickel <brian.nickel@gmail.com>
 
 	* doc/linux/cherokee.html: Add documentation for paths with Cherokee.

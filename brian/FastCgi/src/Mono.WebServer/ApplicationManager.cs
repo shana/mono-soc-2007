@@ -331,7 +331,7 @@ namespace Mono.WebServer
 				
 				// If the paths differ, we've reached the end of
 				// the map and must escape so it can be built.
-				if (length == 0 || parts [length - 1].Equals (
+				if (length == 0 || !parts [length - 1].Equals (
 					dir.Name))
 					break;
 				
@@ -342,24 +342,30 @@ namespace Mono.WebServer
 				bool webConfigFound = false;
 				bool binFound = false;
 				
-				foreach (FileInfo info in dir.GetFiles ()) {
+				foreach (DirectoryInfo info in dir.GetDirectories ())
 					#if NET_2_0
-					if (!webConfigFound && info.Name.Equals ("web.config",
-						StringComparison.InvariantCultureIgnoreCase))
-						webConfigFound = true;
-					else if (!binFound && info.Name.Equals ("bin",
-						StringComparison.InvariantCultureIgnoreCase))
-						binFound = true;
+					if (info.Name.Equals ("bin",
+						StringComparison.InvariantCultureIgnoreCase)) {
 					#else
-					if (!webConfigFound && info.Name.ToLower () == "web.config")
-						webConfigFound = true;
-					else if (!binFound && info.Name.ToLower () == "bin")
-						binFound = true;
+					if (info.Name.ToLower () == "bin") {
 					#endif
-					
-					if (binFound && webConfigFound)
+						binFound = true;
 						break;
-				}
+					}
+				
+				foreach (FileInfo info in dir.GetFiles ())
+					#if NET_2_0
+					if (info.Name.Equals ("web.config",
+						StringComparison.InvariantCultureIgnoreCase)) {
+					#else
+					if (info.Name.ToLower () == "Web.Config") {
+					#endif
+						webConfigFound = true;
+						break;
+					}
+				
+				if (binFound && webConfigFound)
+					break;
 				
 				// Move up a level and try again.
 				length --;
