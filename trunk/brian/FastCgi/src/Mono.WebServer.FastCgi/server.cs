@@ -136,6 +136,20 @@ namespace Mono.WebServer.FastCgi
 			}
 			
 			try {
+				string log_level = (string)
+					configmanager ["loglevels"];
+				
+				if (log_level != null)
+					Logger.Level = (LogLevel)
+						Enum.Parse (typeof (LogLevel),
+							log_level);
+			} catch {
+				Console.WriteLine ("Failed to parse log levels.");
+				Console.WriteLine ("Using default levels: {0}",
+					Logger.Level);
+			}
+			
+			try {
 				string log_file = (string)
 					configmanager ["logfile"];
 				
@@ -147,6 +161,8 @@ namespace Mono.WebServer.FastCgi
 				Console.WriteLine ("Events will not be logged.");
 			}
 			
+			Logger.WriteToConsole = (bool) configmanager ["printlog"];
+
 			// Send the trace to the console.
 			Trace.Listeners.Add (
 				new TextWriterTraceListener (Console.Out));
@@ -315,7 +331,7 @@ namespace Mono.WebServer.FastCgi
 			Console.WriteLine ("Root directory: {0}", root_dir);
 			Mono.FastCgi.Server server = new Mono.FastCgi.Server (
 				socket);
-			Logger.Level = LogLevel.All;
+			
 			server.SetResponder (typeof (Responder));
 			
 			server.MaxConnections = (ushort)

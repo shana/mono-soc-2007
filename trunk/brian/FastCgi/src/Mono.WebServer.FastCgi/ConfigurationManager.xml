@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ConfigurationManager>
+	
+	<!-- SERVER SETTINGS -->
+	
 	<Setting Name="?" Type="Bool" />
 	
 	<Setting Name="help" Type="Bool" ConsoleVisible="True">
@@ -13,6 +16,30 @@
 			<para>Displays version information and exits.</para>
 		</Description>
 	</Setting>
+	
+	<Setting Name="stopable" Type="Bool" ConsoleVisible="True">
+		<Description>
+			<para>Allows the user to stop the server by if "Enter"
+			is pressed. This should not be used when the server has
+			no controlling terminal.</para>
+		</Description>
+	</Setting>
+	
+	<Setting Name="verbose" Type="Bool" ConsoleVisible="True">
+		<Description>
+			<para>Prints extra messages. Mainly useful for
+			debugging.</para>
+		</Description>
+	</Setting>
+	
+	<Setting Name="configfile" Type="File" ConsoleVisible="True">
+		<Description>
+			<para>Specifies a file containing configuration options
+			identical to those available in he command line.</para>
+		</Description>
+	</Setting>
+	
+	<!-- SOCKET SETTINGS -->
 	
 	<Setting Name="socket" Type="String" AppSetting="MonoSocketType"
 		ConsoleVisible="True">
@@ -76,11 +103,17 @@
 		</Description>
 	</Setting>
 	
+	<!-- APPLICATION SETTINGS -->
+	
 	<Setting Name="root" AppSetting="MonoServerRootDir" Type="Directory"
 		ConsoleVisible="True" WebVisible="True">
 		<Description>
 			<para>Specifies the root directory the server changes to
 			before doing performing any operations.</para>
+			
+			<para>This value is only used when "appconfigfile",
+			"appconfigdir", or "applications", is set to provide a
+			relative base path.</para>
 		</Description>
 	</Setting>
 	
@@ -152,25 +185,21 @@
 		</Description>
 	</Setting>
 	
-	<Setting Name="stopable" Type="Bool" ConsoleVisible="True">
+	<Setting Name="automappaths" AppSetting="MonoAutomapPaths"
+		Type="Bool" ConsoleVisible="True">
 		<Description>
-			<para>Allows the user to stop the server by if "Enter"
-			is pressed. This should not be used when the server has
-			no controlling terminal.</para>
+			<para>Automatically registers applications as they are
+			encountered, provided pages exist in standard
+			locations.</para>
 		</Description>
 	</Setting>
 	
-	<Setting Name="verbose" Type="Bool" ConsoleVisible="True">
-		<Description>
-			<para>Prints extra messages. Mainly useful for
-			debugging.</para>
-		</Description>
-	</Setting>
+	<!-- FASTCGI SETTINGS -->
 	
 	<Setting Name="maxconns" AppSetting="FastCgiMaxConnections"
 		Type="UInt16" ConsoleVisible="True" WebVisible="True">
 		<Description>
-			<para>Specified the maximum number of concurrent
+			<para>Specifies the maximum number of concurrent
 			connections the server should accept.</para>
 		</Description>
 	</Setting>
@@ -191,19 +220,24 @@
 		</Description>
 	</Setting>
 	
-	<Setting Name="automappaths" AppSetting="MonoAutomapPaths"
-		Type="Bool" ConsoleVisible="True">
-		<Description>
-			<para>Automatically registers applications as they are
-			encountered, provided pages exist in standard
-			locations.</para>
-		</Description>
-	</Setting>
+	<!-- LOG SETTINGS -->
 	
-	<Setting Name="configfile" Type="File" ConsoleVisible="True">
+	<Setting Name="loglevels" AppSetting="FastCgiLogLevels"
+		Type="String" ConsoleVisible="True">
 		<Description>
-			<para>Specified a file containing configuration options
-			identical to those available in he command line.</para>
+			<para>Specifies what log levels to log. It can be any
+			of the following values, or multiple if comma
+			separated:</para>
+			
+			<para>Debug<br />
+			Notice<br />
+			Warning<br />
+			Error<br />
+			Standard (Notice,Warning,Error)<br />
+			All (Debug,Standard)</para>
+			
+			<para>This value is only used when "logfile" or
+			"printlog" are set.</para>
 		</Description>
 	</Setting>
 	
@@ -214,50 +248,9 @@
 		</Description>
 	</Setting>
 	
-	<!--
-	<Setting Name="editconfig" Type="Bool" ConsoleVisible="True">
+	<Setting Name="printlog" Type="Bool" ConsoleVisible="True">
 		<Description>
-			<para>Adds a configuration application to the server.
-			The application allows users to modify the configuration
-			file specified in "configfile". It should be used when
-			fine-tuning the configuration but removed when the
-			server is running in in a production environment.</para>
+			<para>Prints log messages to the console.</para>
 		</Description>
 	</Setting>
-	
-	<Setting Name="configableapps" AppSetting="MonoConfigableApplication"
-		Type="String" ConsoleVisible="True">
-		<Description>
-			<para>Specifies which applications will permit the
-			modification of the configuration application to use, in
-			the same format as "applications", minus
-			"realPath":</para>
-			
-			<example>
-				<code>[hostname:[port:]]VPath,...</code>
-			</example>
-			
-			<para>If not set, all applications will be
-			configurable.<br/>
-			To use this argument, "editconfig" must be set.</para>
-		</Description>
-	</Setting>
-	
-	<Setting Name="configpage" Type="String" ConsoleVisible="True">
-		<Description>
-			<para>Specifies the name of the configuration page to
-			create on the server, minus the extension. If not set, no
-			page will be created and you will need to add your own
-			configuration page. See
-			"/usr/lib/fastcgi-mono-server/config.aspx" for the default
-			page.</para>
-			
-			<para>For example, if "settings" is specified, a file will
-			and "/" is a virtual path, "http://localhost/settings.aspx"
-			will be the configuration file.</para>
-			
-			<para>To use this argument, "editconfig" must be set.</para>
-		</Description>
-	</Setting>
-	-->
 </ConfigurationManager>

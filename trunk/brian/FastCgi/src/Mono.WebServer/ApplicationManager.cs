@@ -335,18 +335,31 @@ namespace Mono.WebServer
 					dir.Name))
 					break;
 				
-				// If the directory contains a "Web.Config"
-				// file, it must be an application. IIS requires
-				// such a file, so this provides matching
-				// behavior.
-				foreach (FileInfo info in dir.GetFiles ())
+				// Check that if the directory contains both a
+				// "Web.Config" file and a "Bin" directory. If
+				// so, it is most likely an application.
+				
+				bool webConfigFound = false;
+				bool binFound = false;
+				
+				foreach (FileInfo info in dir.GetFiles ()) {
 					#if NET_2_0
-					if (info.Name.Equals ("web.config",
+					if (!webConfigFound && info.Name.Equals ("web.config",
 						StringComparison.InvariantCultureIgnoreCase))
+						webConfigFound = true;
+					else if (!binFound && info.Name.Equals ("bin",
+						StringComparison.InvariantCultureIgnoreCase))
+						binFound = true;
 					#else
-					if (info.Name.ToLower () == "web.config")
+					if (!webConfigFound && info.Name.ToLower () == "web.config")
+						webConfigFound = true;
+					else if (!binFound && info.Name.ToLower () == "bin")
+						binFound = true;
 					#endif
+					
+					if (binFound && webConfigFound)
 						break;
+				}
 				
 				// Move up a level and try again.
 				length --;
