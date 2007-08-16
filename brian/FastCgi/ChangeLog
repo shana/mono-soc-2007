@@ -1,5 +1,25 @@
 2007-08-15 Brian Nickel <brian.nickel@gmail.com>
 
+	* doc/linux/cherokee.html: Add documentation for paths with Cherokee.
+	Still a little buggy.
+	
+	* src/Mono.FastCgi/Logger.cs: Add support for writing to the standard
+	output.
+
+	* src/Mono.WebServer.FastCgi/ConfigurationManager.xml: Added new logging
+	commands and reordered values.
+	
+	* src/Mono.WebServer.FastCgi/server.cs: Added support for setting the
+	log level and outputing log events to the standard output.
+	
+	* src/Mono.WebServer/ApplicationManager.cs: Previous revision did a bad
+	reverse implication (~web.config -> ~application) != (web.config ->
+	application). Bad negation, bad. I've reworked the test again so now it
+	requires both "Web.Config" and "Bin" (still case insensitive). Thanks to
+	Daniel Nauck for point this out.
+
+2007-08-15 Brian Nickel <brian.nickel@gmail.com>
+
 	* src/Mono.WebServer.FastCgi/ApplicationHost.cs: Redirect requests from
 	directories without slashes to directories with slashes, eg.
 	/test -> /test/. Failure to do so caused some nastiness with paths.

@@ -1,16 +1,29 @@
 <html>
 	<head>
-		<title>[LINUX] Configuring Cherokee HTTP Server to use fastcgi-mono-server</title>
+		<title>[Linux] Configuring Cherokee HTTP Server to use the FastCGI Mono Server</title>
 		<link rel="stylesheet" type="text/css" href="../style.css" />
 	</head>
 	<body>
-		<h1>Configuring Cherokee HTTP Server to use <tt>fastcgi-mono-server</tt></h1>
+		<h1>Configuring Cherokee HTTP Server to use the FastCGI Mono Server</h1>
 		
 		<h2>Table of Contents</h2>
 		<ul>
 			<li><a href="#intro">Introduction</a></li>
-			<li><a href="#step1">Step 1: Setting Up the Handler</a></li>
-			<li><a href="#step2">Step 2: Adding Index Pages</a></li>
+			
+			<li><a href="#warnings">General Warnings</a></li>
+			
+			<li><a href="#paths">Using Paths [Recommended]</a></li>
+			<ul>
+				<li><a href="#paths-warn">Warnings</a></li>
+				<li><a href="#paths1">Step 1: Setting Up the Handler</a></li>
+			</ul>
+			
+			<li><a href="#exts">Using Extensions</a></li>
+			<ul>
+				<li><a href="#exts-warn">Warnings</a></li>
+				<li><a href="#exts1">Step 1: Setting Up the Handler</a></li>
+				<li><a href="#exts2">Step 2: Adding Index Pages</a></li>
+			</ul>
 		</ul>
 		
 		<a name="intro"></a>
@@ -22,49 +35,67 @@
 		<tt>fastcgi-mono-server</tt> is very simple and requires
 		modification of only one file.</p>
 		
-		<h3>NOTE</h3>
-		
-		<p style="color:red">As late as Cherokee 0.5.6, the FastCGI
+		<p>As late as Cherokee 0.5.6, the FastCGI
 		extension fails to send and empty Record when the request
 		contains no input. <tt>fastcgi-mono-server</tt> does not
 		currently work around this. <b>This documentation is for the <a
 		href="http://www.cherokee-project.com/download/0.6/0.6.0/">0.6.0
 		series</a>.</b></p>
 		
-		<p>These configurations have been tested with the following
-		systems:</p>
+		<h3>Configuration Tested On...</h3>
 		
 		<ul>
 			<li><a href="http://en.opensuse.org/OpenSUSE_News/10.2-Release">OpenSuSE
-			10.2</a> (Cherokee 0.6.0b700 from its YaST
-			repository)</li>
+			10.2</a> (Cherokee 0.6.0b700 from its YaST repository)</li>
 			<li><i>If you have tested an additional configuration,
 			please email me at
 			<a href="mailto:brian.nickel@gmail.com">brian.nickel@gmail.com</a>.</i></li>
 		</ul>
 		
-		<a name="step1"></a>
-		<h2>Step 1: Setting Up the Handler</h2>
+		
+		<a name="warnings"></a>
+		<h2>General Warnings</h2>
+		
+		<p>Before doing anthing else, you should read "<a
+		href="../index.html#info">Important Information</a>" on the main
+		page.</p>
+		
+		
+		<a name="paths"></a>
+		<h2>Using Paths [Recommended]</h2>
+
+		<a name="paths-warn"></a>
+		<h3>Warnings</h3>
+		
+		<p><b>Not all the kinks of using the FastCGI Mono Server as a
+		directory handler have been worked out.</b> Notably some test
+		pages still aren't working and there appears to be some problems
+		with running several concurrent requests.</p>
+		
+		<a name="paths1"></a>
+		<h3>Step 1: Setting Up the Handler</h3>
 		
 		<p>All configuration is done in <a
 		href="file:///etc/cherokee/cherokee.conf"
 		>/etc/cherokee/cherokee.conf</a> or <a
 		href="file:///usr/etc/cherokee/cherokee.conf"
-		>/usr/etc/cherokee/cherokee.conf</a>.</p>
+		>/usr/etc/cherokee/cherokee.conf</a>. The following block can
+		be inserted anywhere, but most appropriately near the
+		bottom of the file.</p>
 		
-		<pre>vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler = fcgi
-vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer = round_robin
-vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!type = interpreter
-vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!local1!host = localhost:8002
-vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!local1!interpreter = /usr/bin/fastcgi-mono-server /socket=tcp:8002
-vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!priority = 99999</pre>
+		<pre>vserver!default!directory!/!handler = fcgi
+vserver!default!directory!/!handler!balancer = round_robin
+vserver!default!directory!/!handler!balancer!type = interpreter
+vserver!default!directory!/!handler!balancer!local1!host = localhost:8002
+vserver!default!directory!/!handler!balancer!local1!interpreter = /usr/bin/fastcgi-mono-server /socket=tcp:8002
+vserver!default!directory!/!priority = 99999</pre>
 		
 		<p>Yep, Cherokee's new format does take a few more bytes than it
 		used to, but what can you do? This configuration tells Cherokee
 		to look for the server at localhost:8002 and if it doesn't find
 		it, spawn a new server using the command line:</p>
 		
-		<pre>/usr/bin/fastcgi-mono-server /socket=tcp:8002 /nonstop</pre>
+		<pre>/usr/bin/fastcgi-mono-server /socket=tcp:8002</pre>
 		
 		<p>A few changes can be made to this. First, you can switch to the
 		<b>.NET 2.0</b> runtime by calling "<tt>fastcgi-mono-server2</tt>"
@@ -83,8 +114,65 @@ vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!p
 		"<tt>192.168.0.123:8002</tt>" or
 		"<tt>monohost.localnetwork:8002</tt>".</p>
 		
-		<a name="step2"></a>
-		<h2>Step 2: Adding Index Pages</h2>
+		
+		<a name="exts"></a>
+		<h2>Using Extensions</h2>
+		
+		<a name="exts-warn"></a>
+		<h3>Warnings</h3>
+		
+		<p><b>Using Extensions in place place of paths is NOT
+		recommended.</b> Please consult "<a
+		href="../index.html#info1">Paths vs. Extensions</a>" on the main
+		page for an in depth explanation. If you decide to use this
+		configuration, please bear in mind that it is less secure
+		suffers additional disadvantages when compared to using
+		paths.</p>
+		
+		<a name="exts1"></a>
+		<h3>Step 1: Setting Up the Handler</h3>
+		
+		<p>All configuration is done in <a
+		href="file:///etc/cherokee/cherokee.conf"
+		>/etc/cherokee/cherokee.conf</a> or <a
+		href="file:///usr/etc/cherokee/cherokee.conf"
+		>/usr/etc/cherokee/cherokee.conf</a>. The following block can
+		be inserted anywhere, but most appropriately near the
+		bottom of the file.</p>
+		
+		<pre>vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler = fcgi
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer = round_robin
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!type = interpreter
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!local1!host = localhost:8002
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!handler!balancer!local1!interpreter = /usr/bin/fastcgi-mono-server /socket=tcp:8002
+vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!priority = 99999</pre>
+		
+		<p>Yep, Cherokee's new format does take a few more bytes than it
+		used to, but what can you do? This configuration tells Cherokee
+		to look for the server at localhost:8002 and if it doesn't find
+		it, spawn a new server using the command line:</p>
+		
+		<pre>/usr/bin/fastcgi-mono-server /socket=tcp:8002</pre>
+		
+		<p>A few changes can be made to this. First, you can switch to the
+		<b>.NET 2.0</b> runtime by calling "<tt>fastcgi-mono-server2</tt>"
+		instead in the "<tt>local1!interpreter</tt>" line. Second, you can
+		change the port. You may have another server using 8002, so you can
+		change the port to whatever number you want (less than 65536). Just make
+		sure, you update the port on both the "<tt>local1!host</tt>"
+		line and "<tt>local1!interpreter</tt>" line otherwise you'll
+		keep trying to spawn a host you can't use.</p>
+		
+		<p>The third and biggest change is to not spawn a host at all, but
+		instead use an existing host. To do this, you must manually start the
+		Mono server as shown above, remove the "<tt>local1!interpreter</tt>"
+		line, and update the "<tt>local1!host</tt>" line to the resolvable
+		hostname or IP address and port of the server. For example,
+		"<tt>192.168.0.123:8002</tt>" or
+		"<tt>monohost.localnetwork:8002</tt>".</p>
+		
+		<a name="exts2"></a>
+		<h3>Step 2: Adding Index Pages</h3>
 		
 		<p>Once you have finished Step 1, you should have a working
 		ASP.NET server with one exception, if you look at a folder like
@@ -99,11 +187,22 @@ vserver!default!extensions!aspx,asmx,ashx,asax,ascx,soap,rem,axd,cs,config,dll!p
 		"default.aspx". For example,
 		
 		<pre>vserver!default!directory_index = index.php,index.html<b>,index.aspx,default.aspx</b></pre>
-
+		
+		
 		<h2>Bada Bing!</h2>
 		
 		<p>You should now have ASP.NET working with Cherokee. Enjoy!</p>
 		
 		<p>- Brian Nickel &lt;<a href="http://kerrick.wordpress.com">http://kerrick.wordpress.com</a>&gt;</p>
+		
+		
+		<div id="navigation">
+			<a href="http://www.mono-project.com" id="logo"><img src="../mono-logo.png" width="93" height="112" /></a>
+			<ul id="indices">
+				<li><a href="../index.html">Introduction</a>
+				<li><a href="../linux/index.html">Linux</a>
+				<li><a href="../mac/index.html">Macintosh</a>
+				<li><a href="../windows/index.html">Windows</a></ul>
+		</div>
 	</body>
 </html>

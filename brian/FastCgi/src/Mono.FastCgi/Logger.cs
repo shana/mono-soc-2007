@@ -89,9 +89,14 @@ namespace Mono.FastCgi {
 		private StreamWriter writer;
 		
 		/// <summary>
+		///    Indicates whether or not to write to the console.
+		/// </summary>
+		private bool write_to_console;
+		
+		/// <summary>
 		///    Contains the bitwise combined log levels to write.
 		/// </summary>
-		private LogLevel level = LogLevel.All;
+		private LogLevel level = LogLevel.Standard;
 		
 		/// <summary>
 		///    Contains the lock object to use on the writer.
@@ -133,6 +138,19 @@ namespace Mono.FastCgi {
 		public static LogLevel Level {
 			get {return logger.level;}
 			set {logger.level = value;}
+		}
+		
+		/// <summary>
+		///    Gets and sets whether or not to write log messages to the
+		///    console.
+		/// </summary>
+		/// <value>
+		///    A <see cref="bool" /> indicating whether or not log
+		///    messages will be displayed in the console.
+		/// </value>
+		public static bool WriteToConsole {
+			get {return logger.write_to_console;}
+			set {logger.write_to_console = value;}
 		}
 		
 		#endregion
@@ -256,7 +274,7 @@ namespace Mono.FastCgi {
 		/// </remarks>
 		public static void Write (LogLevel level, string message)
 		{
-			if (logger.writer == null)
+			if (logger.writer == null && !logger.write_to_console)
 				return;
 			
 			if ((Level & level) == LogLevel.None)
@@ -269,8 +287,13 @@ namespace Mono.FastCgi {
 				message);
 			
 			lock (logger.write_lock) {
-				logger.writer.WriteLine (text);
-				logger.writer.Flush ();
+				if (logger.write_to_console)
+					Console.WriteLine (text);
+				
+				if (logger.writer != null) {
+					logger.writer.WriteLine (text);
+					logger.writer.Flush ();
+				}
 			}
 		}
 		
