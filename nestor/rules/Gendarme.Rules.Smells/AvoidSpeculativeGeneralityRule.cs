@@ -101,15 +101,18 @@ namespace Gendarme.Rules.Smells {
 			}
 		}
 
+		private void CheckMethods (IMethodRule rule, ICollection methods, Runner runner) 
+		{
+			foreach (MethodDefinition method in methods) {
+				AddExistingMessages (rule.CheckMethod (method, runner));
+			}
+		}
+
 		private void CheckUnusedParameters (TypeDefinition type, Runner runner) 
 		{
 			IMethodRule avoidUnusedParameters = new AvoidUnusedParametersRule ();
-			foreach (MethodDefinition method in type.Methods) {
-				AddExistingMessages (avoidUnusedParameters.CheckMethod (method, runner));
-			}
-			foreach (MethodDefinition method in type.Constructors) {
-				AddExistingMessages (avoidUnusedParameters.CheckMethod (method, runner));
-			}
+			CheckMethods (avoidUnusedParameters, type.Methods, runner);
+			CheckMethods (avoidUnusedParameters, type.Constructors, runner);
 		}
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
