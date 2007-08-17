@@ -78,14 +78,6 @@ namespace Test.Rules.Smells {
 	}
 
 	//
-	public class OtherPerson {
-		int age;
-		string name;
-		int areaCode;
-		int phone;
-	}
-	
-	//
 	public class KeyBoard {
 		Key pressedKey;
 	}
@@ -134,18 +126,10 @@ namespace Test.Rules.Smells {
 		[Test]
 		public void ClassWithUnnecesaryDelegationTest () 
 		{
-			type = assembly.MainModule.Types ["Test.Rules.Smells.Person"];
+			type = assembly.MainModule.Types ["Test.Rules.Smells.Telephone"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (1, messageCollection.Count);
-		}
-
-		[Test]
-		public void InlinedClassTest ()
-		{
-			type = assembly.MainModule.Types ["Test.Rules.Smells.OtherPerson"];
-			messageCollection = rule.CheckType (type, new MinimalRunner ());
-			Assert.IsNull (messageCollection);
 		}
 
 		[Test]
