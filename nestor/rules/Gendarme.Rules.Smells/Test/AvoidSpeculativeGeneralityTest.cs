@@ -35,7 +35,8 @@ using Gendarme.Framework;
 using Gendarme.Rules.Smells;
 
 namespace Test.Rules.Smells {
-
+	
+	//
 	public abstract class AbstractClass {
 		public abstract void MakeStuff ();
 	}
@@ -47,6 +48,7 @@ namespace Test.Rules.Smells {
 		}
 	}
 
+	//
 	public abstract class OtherAbstractClass {
 		public abstract void MakeStuff ();
 	}
@@ -61,6 +63,39 @@ namespace Test.Rules.Smells {
 		public override void MakeStuff () 
 		{
 		}
+	}
+
+	//
+	public class Person {
+		int age;
+		string name;
+		Telephone phone;
+	}
+
+	public class Telephone {
+		int areaCode;
+		int phone;
+	}
+
+	//
+	public class OtherPerson {
+		int age;
+		string name;
+		int areaCode;
+		int phone;
+	}
+	
+	//
+	public class KeyBoard {
+		Key pressedKey;
+	}
+
+	public class Calculator {
+		Key pointKey;
+	}
+
+	public class Key {
+
 	}
 
 	[TestFixture]
@@ -92,6 +127,31 @@ namespace Test.Rules.Smells {
 		public void AbstractClassesWithResponsabilityTest ()
 		{
 			type = assembly.MainModule.Types["Test.Rules.Smells.OtherAbstractClass"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void ClassWithUnnecesaryDelegationTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.Person"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void InlinedClassTest ()
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.OtherPerson"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void ClassWithoutUnnecesaryDelegationTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.Key"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
