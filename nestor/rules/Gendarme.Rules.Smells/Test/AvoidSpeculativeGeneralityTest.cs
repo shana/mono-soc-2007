@@ -98,6 +98,28 @@ namespace Test.Rules.Smells {
 	public class Wheel {
 	}
 
+	//
+	public class ClassWithUnusedParameter {
+		public void Foo (int x) 
+		{
+		}
+	}
+
+	public class ClassWithFourUnusedParameters {
+		public void Foo (int x) 
+		{
+		}
+
+		public void Bar (int x, char f) 
+		{
+		}
+
+		public void Baz (float f) 
+		{
+		}
+
+	}
+
 	[TestFixture]
 	public class AvoidSpeculativeGeneralityTest {
 		private ITypeRule rule;
@@ -154,6 +176,24 @@ namespace Test.Rules.Smells {
 			type = assembly.MainModule.Types ["Test.Rules.Smells.Wheel"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void ClassWithUnusedParameterTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.ClassWithUnusedParameter"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+		
+		[Test]
+		public void ClassWithFourUnusedParametersTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.ClassWithFourUnusedParameters"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (4, messageCollection.Count);
 		}
 	}
 }

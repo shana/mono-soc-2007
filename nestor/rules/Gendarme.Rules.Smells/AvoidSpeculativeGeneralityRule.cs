@@ -31,6 +31,7 @@ using System.Collections;
 
 using Mono.Cecil;
 using Gendarme.Framework;
+using Gendarme.Rules.Performance;
 
 namespace Gendarme.Rules.Smells {
 	public class AvoidSpeculativeGeneralityRule : ITypeRule {
@@ -81,12 +82,44 @@ namespace Gendarme.Rules.Smells {
 				AddMessage (type.Name, "This class has only one client.  This unnecesary delegation is a sign for the Speculative Generality smell.");
 		}
 
+		private bool ContainsAvoidUnusedParametersRule (Runner runner)
+		{
+			foreach (IMethodRule rule in runner.Rules.Method) {
+				if (rule is AvoidUnusedParametersRule)
+					return true;
+			}
+			return false;
+		}
+
+		private void AddExistingMessages (MessageCollection existingMessages) {
+			if (existingMessages == null)
+				return;
+
+			foreach (Message violation in existingMessages) {
+				Message message = new Message ("This method contains unused parameters.  This is a sign for the Speculative Generality smell.",violation.Location, MessageType.Error);
+				messageCollection.Add (message);
+			}
+		}
+
+		private void CheckUnusedParameters (TypeDefinition type, Runner runner) 
+		{
+			IMethodRule avoidUnusedParameters = new AvoidUnusedParametersRule ();
+			foreach (MethodDefinition method in type.Methods) {
+				AddExistingMessages (avoidUnusedParameters.CheckMethod (method, runner));
+			}
+			foreach (MethodDefinition method in type.Constructors) {
+				AddExistingMessages (avoidUnusedParameters.CheckMethod (method, runner));
+			}
+		}
+
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
 		{
 			messageCollection = new MessageCollection ();
 			
 			CheckAbstractClassWithoutResponsability (type);
 			CheckUnnecesaryDelegation (type);
+			if (!ContainsAvoidUnusedParametersRule (runner))
+				CheckUnusedParameters (type, runner);
 
 			if (messageCollection.Count != 0)
 				return messageCollection;
