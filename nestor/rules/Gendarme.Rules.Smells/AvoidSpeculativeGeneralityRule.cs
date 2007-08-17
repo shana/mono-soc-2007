@@ -51,12 +51,16 @@ namespace Gendarme.Rules.Smells {
 		{
 			if (type.IsAbstract) {
 				ICollection inheritedClasses = GetInheritedClassesFrom (type);
-				if (inheritedClasses.Count == 1) {
-					Location location = new Location (type.Name, String.Empty, 0);
-					Message message = new Message ("This abstract class only has one class inheritting from.  This is a sign for the Speculative Generality smell.",location, MessageType.Error);
-					messageCollection.Add (message);
-				}
+				if (inheritedClasses.Count == 1) 
+					AddMessage (type.Name, "This abstract class only has one class inheritting from.  This is a sign for the Speculative Generality smell.");
 			}
+		}
+
+		private void AddMessage (string typeName, string summary) 
+		{
+			Location location = new Location (typeName, String.Empty, 0);
+			Message message = new Message (summary, location, MessageType.Error);
+			messageCollection.Add (message);
 		}
 		
 		private int CountClientsFrom (TypeDefinition type) 
@@ -73,11 +77,8 @@ namespace Gendarme.Rules.Smells {
 	
 		private void CheckUnnecesaryDelegation (TypeDefinition type) 
 		{
-			if (CountClientsFrom (type) == 1) {
-				Location location = new Location (type.Name, String.Empty, 0);
-				Message message = new Message ("This class has one or less clients.  This is a sign for the Speculative Generality smell.", location, MessageType.Error);
-				messageCollection.Add (message);
-			}
+			if (CountClientsFrom (type) == 1) 
+				AddMessage (type.Name, "This class has one or less clients.  This is a sign for the Speculative Generality smell.");
 		}
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
