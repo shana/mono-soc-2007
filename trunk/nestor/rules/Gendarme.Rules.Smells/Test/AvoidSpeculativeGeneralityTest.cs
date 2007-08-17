@@ -66,7 +66,7 @@ namespace Test.Rules.Smells {
 		[Test]
 		public void AbstractClassesWithoutResponsabilityTest () 
 		{
-			type = assembly.MainModule.Types["Test.Rules.Smells"];
+			type = assembly.MainModule.Types["Test.Rules.Smells.AbstractClass"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (1, messageCollection.Count);
