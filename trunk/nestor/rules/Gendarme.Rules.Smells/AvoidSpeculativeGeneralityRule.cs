@@ -58,12 +58,34 @@ namespace Gendarme.Rules.Smells {
 				}
 			}
 		}
+		
+		private int CountClientsFrom (TypeDefinition type) 
+		{
+			int counter = 0;
+			foreach (TypeDefinition client in type.Module.Types) {
+				foreach (FieldDefinition field in client.Fields) {
+					if (field.FieldType.Equals (type)) 
+						counter++;
+				}
+			}
+			return counter;
+		}
+	
+		private void CheckUnnecesaryDelegation (TypeDefinition type) 
+		{
+			if (CountClientsFrom (type) == 1) {
+				Location location = new Location (type.Name, String.Empty, 0);
+				Message message = new Message ("This class has one or less clients.  This is a sign for the Speculative Generality smell.", location, MessageType.Error);
+				messageCollection.Add (message);
+			}
+		}
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
 		{
 			messageCollection = new MessageCollection ();
 			
 			CheckAbstractClassWithoutResponsability (type);
+			CheckUnnecesaryDelegation (type);
 
 			if (messageCollection.Count != 0)
 				return messageCollection;
