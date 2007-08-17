@@ -78,7 +78,7 @@ namespace Test.Rules.Smells {
 	}
 
 	//
-	public class KeyBoard {
+	public class Keyboard {
 		Key pressedKey;
 	}
 
@@ -87,7 +87,15 @@ namespace Test.Rules.Smells {
 	}
 
 	public class Key {
+	}
+	
+	//
+	public class Motorbike {
+		Wheel first;
+		Wheel last;
+	}
 
+	public class Wheel {
 	}
 
 	[TestFixture]
@@ -136,6 +144,14 @@ namespace Test.Rules.Smells {
 		public void ClassWithoutUnnecesaryDelegationTest () 
 		{
 			type = assembly.MainModule.Types ["Test.Rules.Smells.Key"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
+
+		[Test]
+		public void OtherClassWithUnnecesaryDelegationTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.Wheel"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNull (messageCollection);
 		}
