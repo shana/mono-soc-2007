@@ -47,6 +47,22 @@ namespace Test.Rules.Smells {
 		}
 	}
 
+	public abstract class OtherAbstractClass {
+		public abstract void MakeStuff ();
+	}
+
+	public class OtherOverriderClass : OtherAbstractClass {
+		public override void MakeStuff () 
+		{
+		}
+	}
+
+	public class YetAnotherOverriderClass : OtherAbstractClass {
+		public override void MakeStuff () 
+		{
+		}
+	}
+
 	[TestFixture]
 	public class AvoidSpeculativeGeneralityTest {
 		private ITypeRule rule;
@@ -70,6 +86,14 @@ namespace Test.Rules.Smells {
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
 			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void AbstractClassesWithResponsabilityTest ()
+		{
+			type = assembly.MainModule.Types["Test.Rules.Smells.OtherAbstractClass"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
 		}
 	}
 }
