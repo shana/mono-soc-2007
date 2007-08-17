@@ -26,6 +26,7 @@ FILES =  \
 	Compiler/GNUCompiler.cs \
 	Compiler/GppCompiler.cs \
 	Compiler/ICompiler.cs \
+	CppLanguageBinding.cs \
 	gtk-gui/CBinding.AddLibraryDialog.cs \
 	gtk-gui/CBinding.AddPathDialog.cs \
 	gtk-gui/CBinding.CodeGenerationPanel.cs \
@@ -86,12 +87,16 @@ FILES =  \
 	ProjectPad/ProjectPackageNodeBuilder.cs \
 	ProjectPad/ProjectPackagesFolderNodeBuilder.cs \
 	ProjectPad/ProjectReferencesExtension.cs \
-	ProjectPad/ProjectResourcesExtension.cs
+	ProjectPad/ProjectResourcesExtension.cs \
+	README
 
 RES =  \
 	CBinding.addin.xml \
 	gtk-gui/gui.stetic \
+	icons/C.Project.ConsoleProject \
 	icons/C.Project.Empty \
+	icons/C.Project.SharedLibrary \
+	icons/C.Project.StaticLibrary \
 	icons/Cpp.Project.Empty \
 	icons/Icons.16x16.PrivateUnion \
 	icons/Icons.16x16.ProjectReference \
@@ -114,12 +119,18 @@ RES =  \
 	icons/text-x-csrc.32x32.png \
 	icons/text-x-csrc.48x48.png \
 	icons/update \
+	templates/ConsoleCppProject.xpt.xml \
+	templates/ConsoleCProject.xpt.xml \
 	templates/EmptyCHeaderFile.xft.xml \
 	templates/EmptyCppHeaderFile.xft.xml \
 	templates/EmptyCppProject.xpt.xml \
 	templates/EmptyCppSourceFile.xft.xml \
 	templates/EmptyCProject.xpt.xml \
-	templates/EmptyCSourceFile.xft.xml
+	templates/EmptyCSourceFile.xft.xml \
+	templates/SharedLibraryCppProject.xpt.xml \
+	templates/SharedLibraryCProject.xpt.xml \
+	templates/StaticLibraryCppProject.xpt.xml \
+	templates/StaticLibraryCProject.xpt.xml
 
 all: $(ASSEMBLY)
 

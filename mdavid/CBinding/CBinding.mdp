@@ -114,6 +114,17 @@
     <File name="./templates/EmptyCppHeaderFile.xft.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./templates/EmptyCppSourceFile.xft.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./ProjectPad/ProjectResourcesExtension.cs" subtype="Code" buildaction="Compile" />
+    <File name="./icons/C.Project.ConsoleProject" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/C.Project.SharedLibrary" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./icons/C.Project.StaticLibrary" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./templates/SharedLibraryCProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./templates/SharedLibraryCppProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./CppLanguageBinding.cs" subtype="Code" buildaction="Compile" />
+    <File name="./templates/StaticLibraryCProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./templates/StaticLibraryCppProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./templates/ConsoleCProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./templates/ConsoleCppProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
+    <File name="./README" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

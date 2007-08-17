@@ -44,7 +44,6 @@ namespace CBinding
 	public class CLanguageBinding : ILanguageBinding
 	{
 		public string Language {
-			// FIXME
 			get { return "C"; }
 		}
 		
@@ -54,8 +53,7 @@ namespace CBinding
 		
 		public bool IsSourceCodeFile (string fileName)
 		{
-			return (Path.GetExtension (fileName.ToUpper ()) == ".CPP" ||
-			        Path.GetExtension (fileName.ToUpper ()) == ".C");
+			return Path.GetExtension (fileName.ToUpper ()) == ".C";
 		}
 		
 		public IParser Parser {
