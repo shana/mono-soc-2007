@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Collections;
 
 using Mono.Cecil;
 using Gendarme.Framework;
@@ -35,11 +36,35 @@ namespace Gendarme.Rules.Smells {
 	public class AvoidSpeculativeGeneralityRule : ITypeRule {
 
 		private MessageCollection messageCollection;
+		
+		private ICollection GetInheritedClassesFrom (TypeDefinition baseType)
+		{
+			ArrayList inheritedClasses = new ArrayList ();
+			foreach (TypeDefinition type in baseType.Module.Types) {
+				if ((type.BaseType != null) && type.BaseType.Equals (baseType))
+					inheritedClasses.Add (type);
+			}
+			return inheritedClasses;
+		}
+
+		private void CheckAbstractClassWithoutResponsability (TypeDefinition type) 
+		{
+			if (type.IsAbstract) {
+				ICollection inheritedClasses = GetInheritedClassesFrom (type);
+				if (inheritedClasses.Count == 1) {
+					Location location = new Location (type.Name, String.Empty, 0);
+					Message message = new Message ("This abstract class only has one class inheritting from.  This is a sign for the Speculative Generality smell.",location, MessageType.Error);
+					messageCollection.Add (message);
+				}
+			}
+		}
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
 		{
 			messageCollection = new MessageCollection ();
 			
+			CheckAbstractClassWithoutResponsability (type);
+
 			if (messageCollection.Count != 0)
 				return messageCollection;
 			return null;
