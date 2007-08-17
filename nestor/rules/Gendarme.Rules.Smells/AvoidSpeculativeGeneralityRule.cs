@@ -52,7 +52,7 @@ namespace Gendarme.Rules.Smells {
 			if (type.IsAbstract) {
 				ICollection inheritedClasses = GetInheritedClassesFrom (type);
 				if (inheritedClasses.Count == 1) 
-					AddMessage (type.Name, "This abstract class only has one class inheritting from.  This is a sign for the Speculative Generality smell.");
+					AddMessage (type.Name, "This abstract class only has one class inheritting from.  The abstract classes without responsability are a sign for the Speculative Generality smell.");
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace Gendarme.Rules.Smells {
 		private void CheckUnnecesaryDelegation (TypeDefinition type) 
 		{
 			if (CountClientsFrom (type) == 1) 
-				AddMessage (type.Name, "This class has one or less clients.  This is a sign for the Speculative Generality smell.");
+				AddMessage (type.Name, "This class has only one client.  This unnecesary delegation is a sign for the Speculative Generality smell.");
 		}
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
