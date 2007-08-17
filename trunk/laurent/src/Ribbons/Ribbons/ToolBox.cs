@@ -8,6 +8,17 @@ namespace Ribbons
 	{
 		private List<Widget> widgets;
 		private Gtk.Requisition[] requisitions;
+		private int spacing;
+		
+		public int Spacing
+		{
+			set
+			{
+				spacing = value;
+				QueueDraw ();
+			}
+			get { return spacing; }
+		}
 		
 		public ToolBox ()
 		{
@@ -16,6 +27,8 @@ namespace Ribbons
 			this.SetFlag (WidgetFlags.NoWindow);
 			
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
+			
+			spacing = 2;
 		}
 		
 		/// <summary>Adds a widget before all existing widgetw.</summary>
@@ -107,7 +120,7 @@ namespace Ribbons
 			}
 			else if(WidthRequest != -1)
 			{
-				int totalHeight = 0, curWidth = 0;
+				int totalHeight = rowHeight, curWidth = 0;
 				int availWidth = WidthRequest - 2*(int)BorderWidth;
 				
 				i = 0;
@@ -120,10 +133,11 @@ namespace Ribbons
 						if(curWidth == 0 || curWidth + r.Width <= availWidth)
 						{	// Continue current line
 							curWidth += r.Width;
+							if(curWidth != 0) curWidth += spacing;
 						}
 						else
 						{	// Start new line
-							totalHeight += rowHeight;
+							totalHeight += rowHeight + spacing;
 							curWidth = 0;
 						}
 					}
@@ -135,12 +149,14 @@ namespace Ribbons
 			}
 			else
 			{
-				int rowsLeft = (int)Math.Ceiling ((double)HeightRequest / (double)rowHeight);
+				int rowsLeft = (int)Math.Floor ((double)(HeightRequest + spacing) / (double)(rowHeight + spacing));
+				if(rowsLeft == 0) rowsLeft = 1;
 				int widthLeft = totalWidth;
 				int curWidth = 0, maxWidth = 0;
 				int minWidth = widthLeft / rowsLeft;
 				
 				i = 0;
+				int currentWidgetCounter = 0;
 				foreach(Widget w in widgets)
 				{
 					if(w.Visible)
@@ -149,13 +165,17 @@ namespace Ribbons
 						
 						widthLeft -= r.Width;
 						curWidth += r.Width;
+						++currentWidgetCounter;
 						
 						if(curWidth >= minWidth)
 						{	// Start new line
+							curWidth += (currentWidgetCounter - 1) * spacing;
 							maxWidth = Math.Max (maxWidth, curWidth);
 							curWidth = 0;
 							--rowsLeft;
+							if(rowsLeft == 0) break;
 							minWidth = widthLeft / rowsLeft;
+							currentWidgetCounter = 0;
 						}
 					}
 					++i;
@@ -187,7 +207,7 @@ namespace Ribbons
 					
 					if(x > left && x + r.Width > right)
 					{
-						rowY += maxHeight;
+						rowY += maxHeight + spacing;
 						maxHeight = 0;
 						x = left;
 					}
@@ -198,7 +218,7 @@ namespace Ribbons
 					r.Height = Math.Min (bottom, r.Y + r.Height) - r.Y;
 					w.SizeAllocate (r);
 					
-					x += r.Width;
+					x += r.Width + spacing;
 					maxHeight = Math.Max (maxHeight, r.Height);
 				}
 				++i;
