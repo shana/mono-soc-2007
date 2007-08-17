@@ -1,0 +1,26 @@
+<rules>
+	<rule	Name="BadRecursiveInvocationRule" 
+		Type="Gendarme.Rules.Correctness.BadRecursiveInvocationRule, Gendarme.Rules.Correctness, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#BadRecursiveInvocationRule" >
+		<problem>Method or property '{0}' invokes itself recursively in a suspcious way.</problem>
+		<solution>Ensure that the parameters vary in such a way that the recursion will terminate.</solution>
+	</rule>
+	<rule	Name="MethodCanBeMadeStaticRule" 
+		Type="Gendarme.Rules.Correctness.MethodCanBeMadeStaticRule, Gendarme.Rules.Correctness, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#MethodCanBeMadeStaticRule" >
+		<problem>Method '{0}' can be made static.</problem>
+		<solution>Make the method static.</solution>
+	</rule>
+	<rule	Name="NullDerefRule"
+		Type="Gendarme.Rules.Correctness.NullDerefRule, Gendarme.Rules.Correctness, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#NullDerefRule" >
+		<problem>Method or property '{0}' might dereference a null pointer, or cause other code to do so.</problem>
+		<solution>Examine the detailed listing of problem locations, and ensure that the variables in question cannot be null.</solution>
+	</rule>
+	<rule	Name="CallingEqualsWithNullArgRule"
+		Type="Gendarme.Rules.Correctness.CallingEqualsWithNullArgRule, Gendarme.Rules.Correctness, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#CallingEqualsWithNullArgRule" >
+		<problem>Method '{0}' calls Object.Equals (Object) with null argument.</problem>
+		<solution>Pass some other appropriate argument than null, as passing null parameter should always return false.</solution>
+	</rule>
+</rules>
