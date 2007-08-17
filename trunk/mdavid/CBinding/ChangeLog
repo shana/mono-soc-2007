@@ -1,3 +1,26 @@
+2007-08-16  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* CLanguageBinding.cs: Made C specific.
+	* CppLanguageBinding.cs: Needed so that templates can have C++ files.
+	* CBinding.addin.xml: Bumped version to 0.15.0
+	
+	  Seperated file filter for C and C++.
+	
+	  Added project templates for Shared Library, Static Library and Console
+	  Project for both C and C++.
+	
+	  Added a seperate language binding for C and one for C++ (this was
+	  necessary to have project templates that include C++ files).
+	* CBinding.mdp, templates/StaticLibraryCProject.xpt.xml,
+	  templates/StaticLibraryCppProject.xpt.xml,
+	  templates/ConsoleCProject.xpt.xml, templates/ConsoleCppProject.xpt.xml,
+	  templates/SharedLibraryCProject.xpt.xml,
+	  templates/SharedLibraryCppProject.xpt.xml, Makefile.am,
+	  icons/C.Project.ConsoleProject, icons/C.Project.SharedLibrary,
+	  icons/C.Project.StaticLibrary: New templates for Shared Library, Static
+	  Library and Console Project for C and C++.
+	* README: Added icon licence information.
+
 2007-08-15  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* CBinding.addin.xml, CBinding.mdp, Project/CProject.cs, Makefile.am:

@@ -6,7 +6,7 @@
        url         = "http://www.monodevelop.com"
        description = "C/C++ Language binding"
        category    = "Language bindings"
-       version     = "0.1">
+       version     = "0.15.0">
 
 	<Runtime>
 		<Import assembly = "CBinding.dll"/>
@@ -28,13 +28,18 @@
 		<StockIcon stockid = "md-protected-union" resource = "Icons.16x16.ProtectedUnion"/>
 		<StockIcon stockid = "md-private-union" resource = "Icons.16x16.PrivateUnion"/>
 	</Extension>
-
+	
 	<Extension path = "/MonoDevelop/Ide/FileFilters">
+		<FileFilter
+			id = "CPP"
+			insertbefore = "AllFiles"
+			_label = "C++ Files"
+			extensions = "*.cpp,*.h,*.hpp,*.cxx"/>
 		<FileFilter
 			id = "C"
 			insertbefore = "AllFiles"
-			_label = "C/C++ Files"
-			extensions = "*.c,*.cpp,*.h,*.hpp,*.cxx"/>
+			_label = "C Files"
+			extensions = "*.c,*.h"/>
 	</Extension>
 
 	<Extension path = "/MonoDevelop/Ide/FileTemplates">
@@ -45,8 +50,17 @@
 	</Extension>
 
 	<Extension path = "/MonoDevelop/Ide/ProjectTemplates">
+		<!-- C -->
 		<ProjectTemplate id = "EmptyCProject" resource = "EmptyCProject.xpt.xml"/>
+		<ProjectTemplate id = "SharedLibraryCProject" resource = "SharedLibraryCProject.xpt.xml"/>
+		<ProjectTemplate id = "StaticLibraryCProject" resource = "StaticLibraryCProject.xpt.xml"/>
+		<ProjectTemplate id = "ConsoleCProject" resource = "ConsoleCProject.xpt.xml"/>
+		
+		<!-- C++ -->
 		<ProjectTemplate id = "EmptyCppProject" resource = "EmptyCppProject.xpt.xml"/>
+		<ProjectTemplate id = "SharedLibraryCppProject" resource = "SharedLibraryCppProject.xpt.xml"/>
+		<ProjectTemplate id = "StaticLibraryCppProject" resource = "StaticLibraryCppProject.xpt.xml"/>
+		<ProjectTemplate id = "ConsoleCppProject" resource = "ConsoleCppProject.xpt.xml"/>
 	</Extension>
 	
 	<Extension path = "/MonoDevelop/ProjectModel/Gui/Icons">
@@ -71,8 +85,12 @@
 	<Extension path = "/MonoDevelop/ProjectModel/LanguageBindings">
 		<LanguageBinding
 			id = "C"
-		    supportedextensions = ".c,.cpp,.h,.hpp"
+		    supportedextensions = ".c,.h"
 		    class = "CBinding.CLanguageBinding"/>
+		<LanguageBinding
+			id = "CPP"
+		    supportedextensions = ".cpp,.cxx,.h,.hpp"
+		    class = "CBinding.CppLanguageBinding"/>
     </Extension>
 
 	<Extension path = "/MonoDevelop/ProjectModel/Gui/ProjectOptions/ConfigurationOptions">
