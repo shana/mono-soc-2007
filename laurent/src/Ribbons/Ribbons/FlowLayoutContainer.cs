@@ -50,7 +50,21 @@ namespace Ribbons
 			else
 				children.Insert (WidgetIndex, w);
 			
-			QueueDraw ();
+			ShowAll ();
+		}
+		
+		/// <summary>Removes the widget at the specified index.</summary>
+		/// <param name="WidgetIndex">Index of the widget to remove.</param>
+		public void Remove (int WidgetIndex)
+		{
+			children[WidgetIndex].Parent = null;
+			
+			if(WidgetIndex == -1)
+				children.RemoveAt (children.Count - 1);
+			else
+				children.RemoveAt (WidgetIndex);
+			
+			ShowAll ();
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)

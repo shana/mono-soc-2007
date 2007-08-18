@@ -58,7 +58,7 @@ namespace Ribbons
 			else
 				widgets.Insert (WidgetIndex, w);
 			
-			QueueDraw ();
+			ShowAll ();
 		}
 		
 		/// <summary>Removes the widget at the specified index.</summary>
@@ -72,7 +72,7 @@ namespace Ribbons
 			else
 				widgets.RemoveAt (WidgetIndex);
 			
-			QueueDraw ();
+			ShowAll ();
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)

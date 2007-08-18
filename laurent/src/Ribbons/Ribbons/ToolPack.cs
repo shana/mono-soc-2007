@@ -82,6 +82,8 @@ namespace Ribbons
 				}
 				buttons.Insert (ButtonIndex, Widget);
 			}
+			
+			ShowAll ();
 		}
 		
 		/// <summary>Removes the button at the specified index.</summary>
@@ -119,6 +121,8 @@ namespace Ribbons
 				}
 			}
 			buttons.RemoveAt (ButtonIndex);
+			
+			ShowAll ();
 		}
 		
 		protected override void ForAll (bool include_internals, Callback callback)
