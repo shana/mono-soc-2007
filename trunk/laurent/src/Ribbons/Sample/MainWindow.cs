@@ -49,10 +49,16 @@ namespace Sample
 			Ribbons.ToolPack printerToolPack = new Ribbons.ToolPack ();
 			printerToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Print, "Print", false));
 			
+			Ribbons.ToolPack fontToolPack = new Ribbons.ToolPack ();
+			fontToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Bold, false));
+			fontToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Italic, false));
+			fontToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Underline, false));
+			
 			//Ribbons.FlowLayoutContainer flow0 = new FlowLayoutContainer ();
 			Ribbons.ToolBox flow0 = new ToolBox ();
 			flow0.Append (fileToolPack);
 			flow0.Append (printerToolPack);
+			flow0.Append (fontToolPack);
 			
 			group1 = new RibbonGroup ();
 			group1.Label = "I will be back";
@@ -75,6 +81,9 @@ namespace Sample
 			page0.PackStart (group2, false, false, 0);
 			
 			HBox page1 = new HBox (false, 2);
+			RibbonGroup group10 = new RibbonGroup ();
+			group10.Label = "Welcome on the second page";
+			page1.PackStart (group10, false, false, 0);
 			
 			HBox page2 = new HBox (false, 2);
 			

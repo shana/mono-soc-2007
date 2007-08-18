@@ -6,12 +6,18 @@ namespace Sample
 {
 	public class SampleTile : Tile
 	{
-		private Color a, b;
+		private string txt;
 		private Pango.Layout textLayout;
 		
 		public SampleTile (string Text)
 		{
+			txt = Text;
 			textLayout = CreatePangoLayout (Text);
+		}
+		
+		public override Tile Copy ()
+		{
+			return new SampleTile (txt);
 		}
 		
 		public override void DrawContent (Cairo.Context Context, Cairo.Rectangle Area)
