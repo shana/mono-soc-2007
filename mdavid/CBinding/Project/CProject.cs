@@ -257,16 +257,17 @@ namespace CBinding
 				writer.WriteLine ("exec_prefix=${prefix}");
 				writer.WriteLine ("libdir=${exec_prefix}/lib");
 				writer.WriteLine ("includedir=${prefix}/include");
-				
+				writer.WriteLine ();
 				writer.WriteLine ("Name: {0}", Name);
 				writer.WriteLine ("Description: {0}", Description);
 				writer.WriteLine ("Version: {0}", Version);
-				// FIXME: Add depended on projects and included packages here
-				writer.WriteLine ("Requires: {0}", string.Empty);
+				writer.WriteLine ("Requires: {0}", string.Join (" ", Packages.ToStringArray ()));
 				// TODO: How should I get this?
 				writer.WriteLine ("Conflicts: {0}", string.Empty);
-				writer.WriteLine ("Libs: {0} {1}", config.OutputDirectory, config.Output);
-				writer.WriteLine ("Cflags: -I{0}", Name);
+				writer.Write ("Libs: -L${libdir} ");
+				writer.WriteLine ("-l{0}", config.Output);
+				writer.Write ("Cflags: -I${includedir}/");
+				writer.WriteLine ("{0} {1}", Name, Compiler.GetDefineFlags (config));
 			}
 			
 			return pkgfile;
@@ -409,7 +410,7 @@ namespace CBinding
 			foreach (ProjectFile f in ProjectFiles) {
 				if (f.BuildAction == BuildAction.FileCopy) {
 					string targetDirectory =
-						(IsHeaderFile (f.Name) ? TargetDirectory.IncludeRoot : TargetDirectory.ProgramFilesRoot);
+						(IsHeaderFile (f.Name) ? TargetDirectory.Include : TargetDirectory.CommonApplicationData);
 					
 					deployFiles.Add (new DeployFile (this, f.FilePath, f.RelativePath, targetDirectory));
 				}

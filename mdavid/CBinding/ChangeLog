@@ -1,3 +1,14 @@
+2007-08-18  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Project/ProjectPackageCollection.cs: Added a ToStringArray method to
+	  easily get an array of the names of the packages the collection
+	  contains.
+	* Project/CProject.cs: Fixed up the deployment pkg-config package and
+	  improved deployment.
+	* Compiler/CCompiler.cs, Compiler/ICompiler.cs, Compiler/GNUCompiler.cs:
+	  Added a GenerateDefineFlags method which is used to write the deployed
+	  pkg-config package.
+
 2007-08-17  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Project/CProject.cs: Fixed a null pointer exception and changed library

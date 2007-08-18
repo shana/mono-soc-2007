@@ -151,6 +151,12 @@ namespace CBinding
 			return args.ToString ();
 		}
 		
+		public override string GetDefineFlags (CProjectConfiguration configuration)
+		{
+			string defines = ((CCompilationParameters)configuration.CompilationParameters).DefineSymbols;
+			return ProcessDefineSymbols (defines);
+		}
+		
 		private bool NeedsCompiling (ProjectFile file)
 		{
 			string objectFile = Path.ChangeExtension (file.Name, ".o");
