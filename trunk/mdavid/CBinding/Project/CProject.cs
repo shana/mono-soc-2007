@@ -262,9 +262,9 @@ namespace CBinding
 				writer.WriteLine ("Description: {0}", Description);
 				writer.WriteLine ("Version: {0}", Version);
 				// FIXME: Add depended on projects and included packages here
-				writer.WriteLine ("Requires: {0}", null);
+				writer.WriteLine ("Requires: {0}", string.Empty);
 				// TODO: How should I get this?
-				writer.WriteLine ("Conflicts: {0}", null);
+				writer.WriteLine ("Conflicts: {0}", string.Empty);
 				writer.WriteLine ("Libs: {0} {1}", config.OutputDirectory, config.Output);
 				writer.WriteLine ("Cflags: -I{0}", Name);
 			}
@@ -425,10 +425,10 @@ namespace CBinding
 					targetDirectory = TargetDirectory.Binaries;
 					break;
 				case CompileTarget.SharedLibrary:
-					targetDirectory = TargetDirectory.ProgramFiles;
+					targetDirectory = TargetDirectory.ProgramFilesRoot;
 					break;
 				case CompileTarget.StaticLibrary:
-					targetDirectory = TargetDirectory.ProgramFiles;
+					targetDirectory = TargetDirectory.ProgramFilesRoot;
 					break;
 				}					
 				
