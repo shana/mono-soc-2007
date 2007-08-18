@@ -8,6 +8,11 @@
     <widget-library name="../../../build/bin/MonoDevelop.Components.dll" />
     <widget-library name="../../../build/bin/MonoDevelop.Ide.dll" />
     <widget-library name="../../../build/bin/MonoDevelop.Projects.Gui.dll" />
+    <widget-library name="../../../build/AddIns/MonoDevelop.Deployment.dll" />
+    <widget-library name="../../../build/AddIns/MonoDevelop.Deployment.dll" />
+    <widget-library name="../../../build/bin/MonoDevelop.Projects.Gui.dll" />
+    <widget-library name="../../../build/bin/MonoDevelop.Components.dll" />
+    <widget-library name="../../../build/bin/MonoDevelop.Ide.dll" />
   </import>
   <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="505 431">
     <property name="MemberName" />
@@ -194,7 +199,6 @@ Shared Object</property>
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="Label" translatable="yes">no warnings</property>
-                        <property name="Active">True</property>
                         <property name="DrawIndicator">True</property>
                         <property name="HasLabel">True</property>
                         <property name="UseUnderline">True</property>

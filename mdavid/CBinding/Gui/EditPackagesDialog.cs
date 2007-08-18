@@ -157,7 +157,7 @@ namespace CBinding
 					CProject cproj = (CProject)c;
 					CProjectConfiguration conf = (CProjectConfiguration)cproj.ActiveConfiguration;
 					if (conf.CompileTarget != CBinding.CompileTarget.Bin) {
-						cproj.WritePkgPackage ();
+						cproj.WriteMDPkgPackage ();
 						packages.Add (new ProjectPackage (cproj));
 					}
 				}
@@ -197,9 +197,6 @@ namespace CBinding
 				project.Packages.RemoveAt (0);
 			}
 
-//			foreach (ProjectPackage p in selectedPackages) {
-//				project.Packages.Add (p);
-//			}
 			project.Packages.AddRange (selectedPackages);
 			
 			Destroy ();
@@ -331,7 +328,7 @@ namespace CBinding
 			
 			if (old == false) {
 				selectedPackagesListStore.AppendValues (name, version);
-//				selectedPackages.Add (new ProjectPackage (name));
+				
 				foreach (ProjectPackage p in projectPackages) {
 					if (p.Name == name) {
 						selectedPackages.Add (p);

@@ -6,12 +6,21 @@ REFS =  \
 	-pkg:glib-sharp-2.0 \
 	-pkg:gtk-sharp-2.0 \
 	-r:../../build/AddIns/MonoDevelop.Deployment.dll \
+	-r:../../build/AddIns/MonoDevelop.Deployment.dll \
+	-r:../../build/AddIns/MonoDevelop.Deployment.Linux.dll \
+	-r:../../build/AddIns/MonoDevelop.SourceEditor.dll \
 	-r:../../build/AddIns/MonoDevelop.SourceEditor.dll \
 	-r:../../build/bin/MonoDevelop.Components.dll \
+	-r:../../build/bin/MonoDevelop.Components.dll \
+	-r:../../build/bin/MonoDevelop.Core.dll \
 	-r:../../build/bin/MonoDevelop.Core.dll \
 	-r:../../build/bin/MonoDevelop.Core.Gui.dll \
+	-r:../../build/bin/MonoDevelop.Core.Gui.dll \
+	-r:../../build/bin/MonoDevelop.Ide.dll \
 	-r:../../build/bin/MonoDevelop.Ide.dll \
 	-r:../../build/bin/MonoDevelop.Projects.dll \
+	-r:../../build/bin/MonoDevelop.Projects.dll \
+	-r:../../build/bin/MonoDevelop.Projects.Gui.dll \
 	-r:../../build/bin/MonoDevelop.Projects.Gui.dll \
 	-r:../../contrib/Mono.Addins.dll \
 	-r:Mono.Posix \
@@ -87,8 +96,7 @@ FILES =  \
 	ProjectPad/ProjectPackageNodeBuilder.cs \
 	ProjectPad/ProjectPackagesFolderNodeBuilder.cs \
 	ProjectPad/ProjectReferencesExtension.cs \
-	ProjectPad/ProjectResourcesExtension.cs \
-	README
+	ProjectPad/ProjectResourcesExtension.cs
 
 RES =  \
 	CBinding.addin.xml \

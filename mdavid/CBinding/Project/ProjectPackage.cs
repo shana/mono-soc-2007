@@ -59,7 +59,7 @@ namespace CBinding
 		public ProjectPackage (CProject project)
 		{
 			name = project.Name;
-			file = Path.Combine (project.BaseDirectory, name + ".pc");
+			file = Path.Combine (project.BaseDirectory, name + ".md.pc");
 			is_project = true;
 		}
 		
