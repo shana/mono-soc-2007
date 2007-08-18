@@ -97,6 +97,17 @@ namespace CBinding
 			List.Remove (package);
 		}
 		
+		public string[] ToStringArray ()
+		{
+			string[] array = new string[Count];
+			int i = 0;
+			
+			foreach (ProjectPackage p in List)
+				array[i++] = p.Name;
+			
+			return array;
+		}
+		
 		public new ProjectPackageEnumerator GetEnumerator ()
 		{
 			return new ProjectPackageEnumerator (this);
