@@ -1,3 +1,7 @@
+2007-08-18  George Giolfan  <georgegiolfan@yahoo.com>
+
+	* AssemblyInfo.cs: Added some comments.
+	
 2007-05-26  George Giolfan  <georgegiolfan@yahoo.com>
 
 	* AssemblyInfo.cs: Disabled unused attribute.
