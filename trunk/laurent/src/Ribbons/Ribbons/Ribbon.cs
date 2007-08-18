@@ -51,6 +51,7 @@ namespace Ribbons
 					CurrentPage.Page.Parent = this;
 				}
 				
+				ShowAll ();
 				QueueDraw ();
 			}
 			get
@@ -138,6 +139,10 @@ namespace Ribbons
 		public void InsertPage (Widget Child, Widget Label, int Position)
 		{
 			RibbonPage p = new RibbonPage (this, Child, Label);
+			
+			/*Child.Parent = this;
+			Console.WriteLine (Child.SizeRequest().Height);
+			Child.Unparent ();*/
 			
 			if(Position == -1)
 			{
@@ -341,6 +346,7 @@ namespace Ribbons
 			if(page != null)
 			{
 				pageRequisition = page.Page.SizeRequest ();
+				Console.WriteLine (pageRequisition.Height + " " + pageRequisition.Width);
 				pageWidth = pageRequisition.Width + 2 * pagePadding;
 				pageHeight = pageRequisition.Height + 2 * pagePadding;
 			}

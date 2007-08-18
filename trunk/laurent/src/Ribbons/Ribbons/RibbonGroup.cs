@@ -32,6 +32,8 @@ namespace Ribbons
 					lbl_layout = CreatePangoLayout (this.lbl);
 				else
 					lbl_layout.SetText (lbl);
+				
+				QueueRedraw ();
 			}
 			get { return lbl; }
 		}
