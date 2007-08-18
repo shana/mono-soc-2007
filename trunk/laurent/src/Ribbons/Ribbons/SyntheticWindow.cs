@@ -19,7 +19,7 @@ namespace Ribbons
 		{
 			// This method is hooked to block the event as soon as possible if required
 			
-			if(evnt.Window.Equals(this.GdkWindow))
+			if(evnt.Window.Equals (this.GdkWindow))
 			{
 				switch(evnt.Type)
 				{
@@ -49,7 +49,6 @@ namespace Ribbons
 		private bool PropagateEventGivenCoordinate (Gdk.Event evnt, double X, double XRoot, double Y, double YRoot)
 		{
 			int x = (int)X, y = (int)Y;
-			
 			Container current = this;	// Current container containing the coordinate
 			Widget match = this;	// Current match for the position
 			int matchedPos = 0;	// Current position in lastHoveredWidgets

@@ -54,6 +54,9 @@ namespace Ribbons
 			this.BorderWidth = 4;
 		}
 		
+		/// <summary>Creates a carbon copy of the current Tile.</summary>
+		public abstract Tile Copy ();
+		
 		/// <summary>Fires the Click event.</summary>
 		public void Click ()
 		{
