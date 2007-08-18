@@ -55,7 +55,7 @@ namespace CBinding
 			}
 			
 			if (((CProjectConfiguration)project.ActiveConfiguration).CompileTarget != CompileTarget.Bin)
-				project.WritePkgPackage ();
+				project.WriteMDPkgPackage ();
 			
 			return base.Build (monitor, entry);
 		}

@@ -124,7 +124,7 @@
     <File name="./templates/StaticLibraryCppProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./templates/ConsoleCProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
     <File name="./templates/ConsoleCppProject.xpt.xml" subtype="Code" buildaction="EmbedAsResource" />
-    <File name="./README" subtype="Code" buildaction="Compile" />
+    <File name="./README" subtype="Code" buildaction="Nothing" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -144,6 +144,15 @@
     <ProjectReference type="Project" localcopy="False" refto="MonoDevelop.Projects.Gui" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Core" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Deployment" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/bin/MonoDevelop.Core.Gui.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/AddIns/MonoDevelop.SourceEditor.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/AddIns/MonoDevelop.Deployment.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/bin/MonoDevelop.Projects.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/bin/MonoDevelop.Projects.Gui.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/bin/MonoDevelop.Components.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/bin/MonoDevelop.Core.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../build/bin/MonoDevelop.Ide.dll" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Deployment.Linux" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" SyncReferences="True">
     <BuildFilesVar Sync="True" Name="FILES" />

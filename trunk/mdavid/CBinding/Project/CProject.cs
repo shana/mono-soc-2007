@@ -46,6 +46,7 @@ using MonoDevelop.Projects;
 using MonoDevelop.Projects.Serialization;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Deployment;
+using MonoDevelop.Deployment.Linux;
 
 using CBinding.Parser;
 
@@ -199,9 +200,12 @@ namespace CBinding
 			        Path.GetExtension (filename.ToUpper ()) == ".HPP");
 		}
 		
-		public void WritePkgPackage ()
+		/// <summary>
+		/// Ths pkg-config package is for internal MonoDevelop use only, it is not deployed.
+		/// </summary>
+		public void WriteMDPkgPackage ()
 		{
-			string pkgfile = Path.Combine (BaseDirectory, Name + ".pc");
+			string pkgfile = Path.Combine (BaseDirectory, Name + ".md.pc");
 			
 			CProjectConfiguration config = (CProjectConfiguration)ActiveConfiguration;
 			
@@ -235,6 +239,37 @@ namespace CBinding
 				ld_library_path = string.Format ("{0}:{1}", config.OutputDirectory, ld_library_path);
 				Environment.SetEnvironmentVariable (literal, ld_library_path);
 			}
+		}
+		
+		/// <summary>
+		/// This is the pkg-config package that gets deployed.
+		/// <returns>The pkg-config package's filename</returns>
+		/// </summary>
+		private string WriteDeployablePgkPackage ()
+		{
+			// FIXME: This should probably be grabed from somewhere.
+			string prefix = "/usr/local";
+			string pkgfile = Path.Combine (BaseDirectory, Name + ".pc");
+			CProjectConfiguration config = (CProjectConfiguration)ActiveConfiguration;
+			
+			using (StreamWriter writer = new StreamWriter (pkgfile)) {
+				writer.WriteLine ("prefix={0}", prefix);
+				writer.WriteLine ("exec_prefix=${prefix}");
+				writer.WriteLine ("libdir=${exec_prefix}/lib");
+				writer.WriteLine ("includedir=${prefix}/include");
+				
+				writer.WriteLine ("Name: {0}", Name);
+				writer.WriteLine ("Description: {0}", Description);
+				writer.WriteLine ("Version: {0}", Version);
+				// FIXME: Add depended on projects and included packages here
+				writer.WriteLine ("Requires: {0}", null);
+				// TODO: How should I get this?
+				writer.WriteLine ("Conflicts: {0}", null);
+				writer.WriteLine ("Libs: {0} {1}", config.OutputDirectory, config.Output);
+				writer.WriteLine ("Cflags: -I{0}", Name);
+			}
+			
+			return pkgfile;
 		}
 		
 		protected override ICompilerResult DoBuild (IProgressMonitor monitor)
@@ -368,15 +403,42 @@ namespace CBinding
 		{
 			DeployFileCollection deployFiles = new DeployFileCollection ();
 			
+			CompileTarget target = ((CProjectConfiguration)ActiveConfiguration).CompileTarget;
+			
+			// Headers and resources
 			foreach (ProjectFile f in ProjectFiles) {
 				if (f.BuildAction == BuildAction.FileCopy) {
-					deployFiles.Add (new DeployFile (this, f.FilePath, f.RelativePath, TargetDirectory.ProgramFilesRoot));
+					string targetDirectory =
+						(IsHeaderFile (f.Name) ? TargetDirectory.IncludeRoot : TargetDirectory.ProgramFilesRoot);
+					
+					deployFiles.Add (new DeployFile (this, f.FilePath, f.RelativePath, targetDirectory));
 				}
 			}
 			
+			// Output
 			string output = GetOutputFileName ();		
 			if (!string.IsNullOrEmpty (output)) {
-				deployFiles.Add (new DeployFile (this, output, Path.GetFileName (output), TargetDirectory.Binaries));
+				string targetDirectory = string.Empty;
+				
+				switch (target) {
+				case CompileTarget.Bin:
+					targetDirectory = TargetDirectory.Binaries;
+					break;
+				case CompileTarget.SharedLibrary:
+					targetDirectory = TargetDirectory.ProgramFiles;
+					break;
+				case CompileTarget.StaticLibrary:
+					targetDirectory = TargetDirectory.ProgramFiles;
+					break;
+				}					
+				
+				deployFiles.Add (new DeployFile (this, output, Path.GetFileName (output), targetDirectory));
+			}
+			
+			// PkgPackage
+			if (target != CompileTarget.Bin) {
+				string pkgfile = WriteDeployablePgkPackage ();
+				deployFiles.Add (new DeployFile (this, Path.Combine (BaseDirectory, pkgfile), pkgfile, LinuxTargetDirectory.PkgConfig));
 			}
 			
 			return deployFiles;

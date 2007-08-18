@@ -1,3 +1,7 @@
+2007-08-17  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Project/CProject.cs: Enhanced deployment.
+
 2007-08-16  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* CLanguageBinding.cs: Made C specific.

@@ -189,7 +189,7 @@ namespace CBinding.ProjectPad
 				CProject draggedProject = (CProject)dataObject;
 				CProject destProject = (CurrentNode.DataItem as ProjectPackageCollection).Project;
 				
-				draggedProject.WritePkgPackage ();
+				draggedProject.WriteMDPkgPackage ();
 				
 				ProjectPackage package = new ProjectPackage (draggedProject);
 				
