@@ -67,7 +67,33 @@ namespace Ribbons
 		
 		public Tile SelectedTile
 		{
+			set
+			{
+				if(selectedTile != null) selectedTile.Selected = false;
+				selectedTile = value;
+				if(selectedTile != null)
+				{
+					selectedTile.Selected = true;
+					
+					int idx = tiles.FindIndex (delegate (Tile t) { return t == selectedTile; });
+					if(idx != -1)
+					{
+						firstDisplayedTileIndex = idx;
+						lastDisplayedTileIndex = -1;
+						UpdateTilesLayout ();
+						QueueDraw ();
+					}
+				}
+			}
 			get { return selectedTile; }
+		}
+		
+		public IEnumerable<Tile> Tiles
+		{
+			get
+			{
+				return tiles;
+			}
 		}
 		
 		/// <summary>Theme used to draw the widget.</summary>
@@ -171,7 +197,15 @@ namespace Ribbons
 		
 		private void expand_Clicked(object Sender, EventArgs e)
 		{
+			GalleryPopupWindow popup = new GalleryPopupWindow (this);
+			popup.ShowAll ();
 			
+			int x, y;
+			ParentWindow.GetRootOrigin (out x, out y);
+			x += Allocation.X;
+			y += Allocation.Y;
+			
+			popup.GdkWindow.Move (x, y);
 		}
 		
 		private void Tile_Clicked(object Sender, EventArgs e)

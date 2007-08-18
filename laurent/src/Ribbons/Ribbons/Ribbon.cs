@@ -140,10 +140,6 @@ namespace Ribbons
 		{
 			RibbonPage p = new RibbonPage (this, Child, Label);
 			
-			/*Child.Parent = this;
-			Console.WriteLine (Child.SizeRequest().Height);
-			Child.Unparent ();*/
-			
 			if(Position == -1)
 			{
 				pages.Add (p);
@@ -346,7 +342,6 @@ namespace Ribbons
 			if(page != null)
 			{
 				pageRequisition = page.Page.SizeRequest ();
-				Console.WriteLine (pageRequisition.Height + " " + pageRequisition.Width);
 				pageWidth = pageRequisition.Width + 2 * pagePadding;
 				pageHeight = pageRequisition.Height + 2 * pagePadding;
 			}

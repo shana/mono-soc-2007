@@ -33,7 +33,7 @@ namespace Ribbons
 				else
 					lbl_layout.SetText (lbl);
 				
-				QueueRedraw ();
+				QueueDraw ();
 			}
 			get { return lbl; }
 		}
@@ -94,7 +94,7 @@ namespace Ribbons
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
 			base.ForAll (include_internals, callback);
-			if(expandButton.Visible) callback (expandButton);
+			if(expandButton != null && expandButton.Visible) callback (expandButton);
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
