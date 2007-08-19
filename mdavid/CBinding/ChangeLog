@@ -1,3 +1,11 @@
+2007-08-19  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* templates/EmptyCSourceFile.xft.xml, templates/EmptyCppSourceFile.xft.xml,
+	  templates/EmptyCHeaderFile.xft.xml,
+	  templates/EmptyCppHeaderFile.xft.xml: Fixed some default values.
+	* Project/CProject.cs: Fixed a bug where the deploy state of files was not
+	  persistent.
+
 2007-08-18  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Project/ProjectPackageCollection.cs: Added a ToStringArray method to
