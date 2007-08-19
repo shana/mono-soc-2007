@@ -4,6 +4,7 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>Foundation of all buttons.</summary>
 	public abstract class BaseButton : Bin
 	{
 		protected Theme theme = new Theme ();
@@ -113,21 +114,27 @@ namespace Ribbons
 			get { return theme; }
 		}
 		
+		/// <summary>Binds a widget to listen to all button events.</summary>
 		protected void BindWidget (Widget w)
 		{
 			w.ButtonPressEvent += BindedWidget_ButtonPressEvent;
 			w.ButtonReleaseEvent += BindedWidget_ButtonReleaseEvent;
 		}
 		
+		/// <summary>Unbinds a widget to no longer listen to button events.</summary>
 		protected void UnbindWidget (Widget w)
 		{
 			w.ButtonPressEvent -= BindedWidget_ButtonPressEvent;
 			w.ButtonReleaseEvent -= BindedWidget_ButtonReleaseEvent;
 		}
 		
+		/// <summary>Called when a mouse button has been pressed on a binded widget.</summary>
 		protected abstract void BindedWidget_ButtonPressEvent (object sender, ButtonPressEventArgs evnt);
+		
+		/// <summary>Called when a mouse button has been release on a binded widget.</summary>
 		protected abstract void BindedWidget_ButtonReleaseEvent (object sender, ButtonReleaseEventArgs evnt);
 		
+		/// <summary>Updates the child widget containing the label and/or image.</summary>
 		protected void UpdateImageLabel ()
 		{
 			if(Child != null)

@@ -5,6 +5,7 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>Gallery of Tiles.</summary>
 	public class Gallery : Container
 	{
 		protected Theme theme = new Theme ();
@@ -23,8 +24,10 @@ namespace Ribbons
 		private const double space = 2.0;
 		private const double lineWidth = 1.0;
 		
-		public TileSelectedHandler TileSelected;
+		/// <summary>Fired when a Tile has been selected.</summary>
+		public event TileSelectedHandler TileSelected;
 		
+		/// <summary>Gets or sets the width of Tiles.</summary>
 		public int TileWidth
 		{
 			set
@@ -35,6 +38,7 @@ namespace Ribbons
 			get { return tileWidth; }	
 		}
 		
+		/// <summary>Gets or sets the height of Tiles.</summary>
 		public int TileHeight
 		{
 			set
@@ -45,6 +49,7 @@ namespace Ribbons
 			get { return tileHeight; }
 		}
 		
+		/// <summary>Gets or sets the spacing between Tiles.</summary>
 		public int TileSpacing
 		{
 			set
@@ -55,6 +60,7 @@ namespace Ribbons
 			get { return tileSpacing; }
 		}
 		
+		/// <summary>Gets or sets the default number of Tiles per row.</summary>
 		public int DefaultTilesPerRow
 		{
 			set
@@ -65,6 +71,7 @@ namespace Ribbons
 			get { return defaultTilesPerRow; }
 		}
 		
+		/// <summary>Gets or sets the selected Tile.</summary>
 		public Tile SelectedTile
 		{
 			set
@@ -88,6 +95,7 @@ namespace Ribbons
 			get { return selectedTile; }
 		}
 		
+		/// <summary>Returns all Tiles.</summary>
 		public IEnumerable<Tile> Tiles
 		{
 			get
@@ -107,6 +115,7 @@ namespace Ribbons
 			get { return theme; }
 		}
 		
+		/// <summary>Default constructor.</summary>
 		public Gallery()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);

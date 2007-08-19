@@ -17,8 +17,10 @@ namespace Ribbons
 		protected const double smallArrowSize = 5.0;
 		protected const double bigArrowSize = 8.0;
 		
+		/// <summary>Fired when the button is clicked.</summary>
 		public event EventHandler Clicked;
 		
+		/// <summary>Drop down menu displayed when the arrow is pressed.</summary>
 		public Menu DropDownMenu
 		{
 			set
