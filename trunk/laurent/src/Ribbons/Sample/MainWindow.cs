@@ -41,6 +41,13 @@ namespace Sample
 			open.DropDownMenu = openMenu;
 			open.Clicked += onClick;
 			
+			Ribbons.Button button1 = new Ribbons.Button ("Menu Test");
+			button1.Clicked += onClick;
+			Menu button1_menu = new Menu ();
+			MenuItem option1 = new MenuItem ("Option 1");
+			button1_menu.Append (option1);
+			button1.DropDownMenu = button1_menu;
+			
 			Ribbons.ToolPack fileToolPack = new Ribbons.ToolPack ();
 			fileToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.New, "New", false));
 			fileToolPack.AppendButton (open);
@@ -54,15 +61,29 @@ namespace Sample
 			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Italic, false));
 			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Underline, false));
 			
+			ComboBox font = new ComboBox (new string[] { "Arial", "Verdana" });
+			font.Active = 0;
+			
 			//Ribbons.FlowLayoutContainer flow0 = new FlowLayoutContainer ();
 			Ribbons.ToolBox flow0 = new ToolBox ();
 			flow0.Append (fileToolPack);
 			flow0.Append (printerToolPack);
 			flow0.Append (fontToolPack);
+			flow0.Append (font);
+			
+			HBox btnFlowBox = new HBox (false, 2);
+			btnFlowBox.Add (button1);
+			btnFlowBox.Add (flow0);
+			
+			// Little hack because Gtk+ is not designed to support size negociations
+			btnFlowBox.SizeAllocated += delegate(object Sender, SizeAllocatedArgs e)
+			{
+				flow0.HeightRequest = e.Allocation.Height;
+			};
 			
 			group1 = new RibbonGroup ();
 			group1.Label = "I will be back";
-			group1.Child = flow0;
+			group1.Child = btnFlowBox;
 			
 			Gallery gallery = new Gallery ();
 			gallery.AppendTile (new SampleTile ("1"));
@@ -94,21 +115,35 @@ namespace Sample
 			Ribbons.Button shortcuts = new Ribbons.Button ("Menu");
 			shortcuts.Child.ModifyFg (Gtk.StateType.Normal, new Gdk.Color(255, 255, 255));
 			
+			Menu mainMenu = new Menu ();
+			MenuItem mainMenu_quit = new MenuItem ("Quit");
+			mainMenu_quit.Activated += delegate (object Sender, EventArgs e)
+			{
+				Application.Quit ();
+			};
+			mainMenu.Append (mainMenu_quit);
+			
+			shortcuts.Clicked += delegate (object Sender, EventArgs e)
+			{
+				mainMenu.Popup ();
+				mainMenu.ShowAll ();
+			};
+			
 			ribbon = new Ribbon ();
 			ribbon.Shortcuts = shortcuts;
 			ribbon.AppendPage (page0, pageLabel0);
 			ribbon.AppendPage (page1, pageLabel1);
 			ribbon.AppendPage (page2, pageLabel2);
 			pageLabel1.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
-			pageLabel1.ButtonPressEvent += delegate(object sender, ButtonPressEventArgs e)
+			pageLabel1.ButtonPressEvent += delegate (object sender, ButtonPressEventArgs e)
 			{
 				Console.WriteLine("label1 press");
 			};
-			pageLabel1.EnterNotifyEvent += delegate(object sender, EnterNotifyEventArgs e)
+			pageLabel1.EnterNotifyEvent += delegate (object sender, EnterNotifyEventArgs e)
 			{
 				Console.WriteLine("label1 enter");
 			};
-			pageLabel1.LeaveNotifyEvent += delegate(object sender, LeaveNotifyEventArgs e)
+			pageLabel1.LeaveNotifyEvent += delegate (object sender, LeaveNotifyEventArgs e)
 			{
 				Console.WriteLine("label1 leave");
 			};
@@ -129,7 +164,7 @@ namespace Sample
 			this.ShowAll ();
 		}
 
-		private void onClick(object Sender, EventArgs e)
+		private void onClick (object Sender, EventArgs e)
 		{
 			Dialog d = new Dialog ("Test", this, DialogFlags.DestroyWithParent);
 			d.Modal = true;
@@ -139,7 +174,7 @@ namespace Sample
 		}
 		
 		[GLib.ConnectBefore]
-		private void Window_OnExpose(object sender, ExposeEventArgs args)
+		private void Window_OnExpose (object sender, ExposeEventArgs args)
 		{
 			Gdk.EventExpose evnt = args.Event;
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
@@ -155,7 +190,7 @@ namespace Sample
 			args.RetVal = false;
 		}
 		
-		private void Window_OnScreenChanged(object Send, ScreenChangedArgs args)
+		private void Window_OnScreenChanged (object Send, ScreenChangedArgs args)
 		{
 			Gdk.Colormap cm = Screen.RgbaColormap;
 			composeAvailable = cm != null;	// FIX: Do not seem to detect compose support in all cases 
@@ -163,10 +198,10 @@ namespace Sample
 			if(!composeAvailable) cm = Screen.RgbColormap;
 			Colormap = cm;
 			
-			Console.WriteLine("Compose Support: " + composeAvailable);
+			Console.WriteLine ("Compose Support: " + composeAvailable);
 		}
 		
-		private void Window_OnDelete(object send, DeleteEventArgs args)
+		private void Window_OnDelete (object send, DeleteEventArgs args)
 		{
 			Application.Quit ();
 			args.RetVal = true;
