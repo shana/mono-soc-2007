@@ -8,13 +8,13 @@ namespace Ribbons
 	/// <summary>Set of ribbon buttons packed together.</summary>
 	public class ToolPack : Container
 	{
-		private List<Button> buttons;
+		private List<BaseButton> buttons;
 		private int[] widths;
 		
 		/// <summary>Default constructor.</summary>
 		public ToolPack ()
 		{
-			this.buttons = new List<Ribbons.Button> ();
+			this.buttons = new List<BaseButton> ();
 			
 			this.SetFlag (WidgetFlags.NoWindow);
 			
@@ -23,14 +23,14 @@ namespace Ribbons
 		
 		/// <summary>Adds a button before all existing buttons.</summary>
 		/// <param name="Widget">The button to add.</param>
-		public void PrependButton (Button Widget)
+		public void PrependButton (BaseButton Widget)
 		{
 			InsertButton (Widget, 0);
 		}
 		
 		/// <summary>Adds a button after all existing buttons.</summary>
 		/// <param name="Widget">The button to add.</param>
-		public void AppendButton (Button Widget)
+		public void AppendButton (BaseButton Widget)
 		{
 			InsertButton (Widget, -1);
 		}
@@ -38,7 +38,7 @@ namespace Ribbons
 		/// <summary>Inserts a button at the specified location.</summary>
 		/// <param name="Widget">The button to add.</param>
 		/// <param name="ButtonIndex">The index (starting at 0) at which the button must be inserted, or -1 to insert the button after all existing buttons.</param>
-		public void InsertButton (Button Widget, int ButtonIndex)
+		public void InsertButton (BaseButton Widget, int ButtonIndex)
 		{
 			Widget.Parent = this;
 			Widget.Visible = true;
@@ -127,7 +127,7 @@ namespace Ribbons
 		
 		protected override void ForAll (bool include_internals, Callback callback)
 		{
-			foreach(Button b in buttons)
+			foreach(BaseButton b in buttons)
 			{
 				if(b.Visible) callback (b);
 			}
@@ -144,7 +144,7 @@ namespace Ribbons
 			
 			requisition.Height = requisition.Width = 0;
 			int i = 0;
-			foreach(Button b in buttons)
+			foreach(BaseButton b in buttons)
 			{
 				Gtk.Requisition req = b.SizeRequest ();
 				if(requisition.Height < req.Height) requisition.Height = req.Height;
@@ -160,7 +160,7 @@ namespace Ribbons
 			base.OnSizeAllocated (allocation);
 			
 			int i = 0, x = allocation.X;
-			foreach(Button b in buttons)
+			foreach(BaseButton b in buttons)
 			{
 				Gdk.Rectangle r;
 				r.X = x;
