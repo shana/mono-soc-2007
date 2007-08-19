@@ -185,7 +185,11 @@ namespace Ribbons
 				}
 				
 				requisition.Width = maxWidth + 2*(int)BorderWidth;
-				requisition.Height = HeightRequest;
+				
+				if(HeightRequest == -1)
+					requisition.Height = rowHeight;
+				else
+					requisition.Height = HeightRequest;
 			}
 		}
 		
