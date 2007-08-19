@@ -50,9 +50,9 @@ namespace Sample
 			printerToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Print, "Print", false));
 			
 			Ribbons.ToolPack fontToolPack = new Ribbons.ToolPack ();
-			fontToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Bold, false));
-			fontToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Italic, false));
-			fontToolPack.AppendButton (Ribbons.Button.FromStockIcon (Gtk.Stock.Underline, false));
+			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Bold, false));
+			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Italic, false));
+			fontToolPack.AppendButton (Ribbons.ToggleButton.FromStockIcon (Gtk.Stock.Underline, false));
 			
 			//Ribbons.FlowLayoutContainer flow0 = new FlowLayoutContainer ();
 			Ribbons.ToolBox flow0 = new ToolBox ();
