@@ -2,32 +2,37 @@ using NUnit.Framework;
 #if Implementation
 using System;
 using System.Windows;
-namespace Mono.System.Windows.Controls {
+namespace Mono.System.Windows.Controls
+{
 #else
 namespace System.Windows.Controls {
 #endif
 	[TestFixture]
-	public class ItemsPanelTemplateTest {
+	public class ItemsPanelTemplateTest
+	{
 		#region ValidateTemplatedParent
 		[Test]
-		public void ValidateTemplatedParent() {
-			new ValidateTemplatedParentItemsPanelTemplate();
+		public void ValidateTemplatedParent ()
+		{
+			new ValidateTemplatedParentItemsPanelTemplate ();
 		}
 
-		class ValidateTemplatedParentItemsPanelTemplate : ItemsPanelTemplate {
-			public ValidateTemplatedParentItemsPanelTemplate() {
-				ValidateTemplatedParent(new ItemsPresenter());
+		class ValidateTemplatedParentItemsPanelTemplate : ItemsPanelTemplate
+		{
+			public ValidateTemplatedParentItemsPanelTemplate ()
+			{
+				ValidateTemplatedParent (new ItemsPresenter ());
 				try {
-					ValidateTemplatedParent(null);
-					Assert.Fail("1");
+					ValidateTemplatedParent (null);
+					Assert.Fail ("1");
 				} catch (ArgumentNullException ex) {
-					Assert.AreEqual(ex.ParamName, "templatedParent", "2");
+					Assert.AreEqual (ex.ParamName, "templatedParent", "2");
 				}
 				try {
-					ValidateTemplatedParent(new FrameworkElement());
-					Assert.Fail("3");
+					ValidateTemplatedParent (new FrameworkElement ());
+					Assert.Fail ("3");
 				} catch (ArgumentException ex) {
-				    Assert.AreEqual(ex.Message, "'ItemsPresenter' ControlTemplate TargetType does not match templated type 'FrameworkElement'.", "4");
+					Assert.AreEqual (ex.Message, "'ItemsPresenter' ControlTemplate TargetType does not match templated type 'FrameworkElement'.", "4");
 				}
 			}
 		}

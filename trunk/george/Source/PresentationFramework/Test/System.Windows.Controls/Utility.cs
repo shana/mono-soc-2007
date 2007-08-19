@@ -1,16 +1,19 @@
-namespace System.Windows.Controls {
-	static class Utility {
+namespace System.Windows.Controls
+{
+	static class Utility
+	{
 		static double empty_button_size = -1;
-		public static double GetEmptyButtonSize() {
+		public static double GetEmptyButtonSize ()
+		{
 			if (empty_button_size == -1) {
-				Window window = new Window();
-				Canvas canvas = new Canvas();
+				Window window = new Window ();
+				Canvas canvas = new Canvas ();
 				window.Content = canvas;
-				Button button = new Button();
-				canvas.Children.Add(button);
-				window.Show();
+				Button button = new Button ();
+				canvas.Children.Add (button);
+				window.Show ();
 				empty_button_size = button.DesiredSize.Width;
-				window.Close();
+				window.Close ();
 			}
 			return empty_button_size;
 		}
@@ -22,11 +25,13 @@ namespace System.Windows.Controls {
 		/// <param name="value2"></param>
 		/// <returns></returns>
 		/// <remarks>Designed for pixel values.</remarks>
-		public static bool AreCloseEnough(double value1, double value2) {
-			return Math.Abs(value1 - value2) < 0.1;
+		public static bool AreCloseEnough (double value1, double value2)
+		{
+			return Math.Abs (value1 - value2) < 0.1;
 		}
 
-		public static FrameworkPropertyMetadataOptions GetOptions(FrameworkPropertyMetadata value) {
+		public static FrameworkPropertyMetadataOptions GetOptions (FrameworkPropertyMetadata value)
+		{
 			FrameworkPropertyMetadataOptions result = FrameworkPropertyMetadataOptions.None;
 			if (value.AffectsArrange)
 				result |= FrameworkPropertyMetadataOptions.AffectsArrange;

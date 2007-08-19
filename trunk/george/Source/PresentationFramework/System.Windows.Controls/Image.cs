@@ -1,3 +1,30 @@
+//
+// Image.cs
+//
+// Author:
+//   George Giolfan (georgegiolfan@yahoo.com)
+//
+// Copyright (C) 2007 George Giolfan
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 using System.Windows.Automation.Peers;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -6,21 +33,23 @@ using System.Windows.Media.Imaging;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-namespace Mono.System.Windows.Controls {
+namespace Mono.System.Windows.Controls
+{
 #else
 namespace System.Windows.Controls {
 #endif
-	[Localizability(LocalizationCategory.None, Readability = Readability.Unreadable)]
-	public class Image : FrameworkElement, IUriContext {
+	[Localizability (LocalizationCategory.None, Readability = Readability.Unreadable)]
+	public class Image : FrameworkElement, IUriContext
+	{
 		#region Public Fields
 		#region Dependency Properties
-		public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(ImageSource), typeof(Image), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
-		public static readonly DependencyProperty StretchDirectionProperty = DependencyProperty.Register("StretchDirection", typeof(StretchDirection), typeof(Image), new FrameworkPropertyMetadata(StretchDirection.Both, FrameworkPropertyMetadataOptions.AffectsMeasure));
-		public static readonly DependencyProperty StretchProperty = DependencyProperty.Register("Stretch", typeof(Stretch), typeof(Image), new FrameworkPropertyMetadata(Stretch.Uniform, FrameworkPropertyMetadataOptions.AffectsMeasure));
+		public static readonly DependencyProperty SourceProperty = DependencyProperty.Register ("Source", typeof (ImageSource), typeof (Image), new FrameworkPropertyMetadata (null, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+		public static readonly DependencyProperty StretchDirectionProperty = DependencyProperty.Register ("StretchDirection", typeof (StretchDirection), typeof (Image), new FrameworkPropertyMetadata (StretchDirection.Both, FrameworkPropertyMetadataOptions.AffectsMeasure));
+		public static readonly DependencyProperty StretchProperty = DependencyProperty.Register ("Stretch", typeof (Stretch), typeof (Image), new FrameworkPropertyMetadata (Stretch.Uniform, FrameworkPropertyMetadataOptions.AffectsMeasure));
 		#endregion
 
 		#region Routed Events
-		public static readonly RoutedEvent ImageFailedEvent = EventManager.RegisterRoutedEvent("ImageFailed", RoutingStrategy.Bubble, typeof(EventHandler<ExceptionRoutedEventArgs>), typeof(Image));
+		public static readonly RoutedEvent ImageFailedEvent = EventManager.RegisterRoutedEvent ("ImageFailed", RoutingStrategy.Bubble, typeof (EventHandler<ExceptionRoutedEventArgs>), typeof (Image));
 		#endregion
 		#endregion
 
@@ -29,25 +58,26 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Public Constructors
-		public Image() {
+		public Image ()
+		{
 		}
 		#endregion
 
 		#region Public Properties
 		#region Dependency Properties
 		public ImageSource Source {
-			get { return (ImageSource)GetValue(SourceProperty); }
-			set { SetValue(SourceProperty, value); }
+			get { return (ImageSource)GetValue (SourceProperty); }
+			set { SetValue (SourceProperty, value); }
 		}
 
 		public Stretch Stretch {
-			get { return (Stretch)GetValue(StretchProperty); }
-			set { SetValue(StretchProperty, value); }
+			get { return (Stretch)GetValue (StretchProperty); }
+			set { SetValue (StretchProperty, value); }
 		}
 
 		public StretchDirection StretchDirection {
-			get { return (StretchDirection)GetValue(StretchDirectionProperty); }
-			set { SetValue(StretchDirectionProperty, value); }
+			get { return (StretchDirection)GetValue (StretchDirectionProperty); }
+			set { SetValue (StretchDirectionProperty, value); }
 		}
 		#endregion
 		#endregion
@@ -60,62 +90,65 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Protected Methods
-		protected override Size ArrangeOverride(Size finalSize) {
+		protected override Size ArrangeOverride (Size finalSize)
+		{
 			ImageSource source = Source;
 			if (source == null)
-				return new Size(0, 0);
+				return new Size (0, 0);
 			try {
 				Stretch stretch = Stretch;
 				if (stretch == Stretch.None)
-					return new Size(source.Width, source.Height);
+					return new Size (source.Width, source.Height);
 				if (stretch == Stretch.Fill)
 					return finalSize;
 				double width_ratio = finalSize.Width / source.Width;
 				double height_ratio = finalSize.Height / source.Height;
 				double ratio;
 				if (stretch == Stretch.UniformToFill)
-					ratio = Math.Max(width_ratio, height_ratio);
+					ratio = Math.Max (width_ratio, height_ratio);
 				else
-					ratio = Math.Min(width_ratio, height_ratio);
-				return new Size(source.Width * ratio, source.Height * ratio);
+					ratio = Math.Min (width_ratio, height_ratio);
+				return new Size (source.Width * ratio, source.Height * ratio);
 			} catch {
-				return new Size(0, 0);
+				return new Size (0, 0);
 			}
 		}
 
-		protected override Size MeasureOverride(Size availableSize) {
+		protected override Size MeasureOverride (Size availableSize)
+		{
 			ImageSource source = Source;
 			if (source == null)
-				return new Size(0, 0);
+				return new Size (0, 0);
 			try {
 				Stretch stretch = Stretch;
 				if (stretch == Stretch.None)
-					return new Size(source.Width, source.Height);
-				if (stretch == Stretch.Fill && !double.IsPositiveInfinity(availableSize.Width) && !double.IsPositiveInfinity(availableSize.Height))
+					return new Size (source.Width, source.Height);
+				if (stretch == Stretch.Fill && !double.IsPositiveInfinity (availableSize.Width) && !double.IsPositiveInfinity (availableSize.Height))
 					return availableSize;
-				double width_ratio = double.IsPositiveInfinity(availableSize.Width) ? double.NaN : availableSize.Width / source.Width;
-				double height_ratio = double.IsPositiveInfinity(availableSize.Height) ? double.NaN : availableSize.Height / source.Height;
+				double width_ratio = double.IsPositiveInfinity (availableSize.Width) ? double.NaN : availableSize.Width / source.Width;
+				double height_ratio = double.IsPositiveInfinity (availableSize.Height) ? double.NaN : availableSize.Height / source.Height;
 				double ratio;
-				if (double.IsNaN(width_ratio))
-					if (double.IsNaN(height_ratio))
+				if (double.IsNaN (width_ratio))
+					if (double.IsNaN (height_ratio))
 						ratio = 1;
 					else
 						ratio = height_ratio;
 				else
-					if (double.IsNaN(height_ratio))
+					if (double.IsNaN (height_ratio))
 						ratio = width_ratio;
 					else
 						if (stretch == Stretch.UniformToFill)
-							ratio = Math.Max(width_ratio, height_ratio);
+							ratio = Math.Max (width_ratio, height_ratio);
 						else
-							ratio = Math.Min(width_ratio, height_ratio);
-				return new Size(source.Width * ratio, source.Height * ratio);
+							ratio = Math.Min (width_ratio, height_ratio);
+				return new Size (source.Width * ratio, source.Height * ratio);
 			} catch {
-				return new Size(0, 0);
+				return new Size (0, 0);
 			}
 		}
 
-		protected override AutomationPeer OnCreateAutomationPeer() {
+		protected override AutomationPeer OnCreateAutomationPeer ()
+		{
 #if Implementation
 			return null;
 #else
@@ -123,22 +156,24 @@ namespace System.Windows.Controls {
 #endif
 		}
 
-		protected override void OnRender(DrawingContext drawingContext) {
-			base.OnRender(drawingContext);
+		protected override void OnRender (DrawingContext drawingContext)
+		{
+			base.OnRender (drawingContext);
 			ImageSource source = Source;
 			if (source == null)
 				return;
 			try {
-				drawingContext.DrawImage(source, new Rect(0, 0, ActualWidth, ActualHeight));
+				drawingContext.DrawImage (source, new Rect (0, 0, ActualWidth, ActualHeight));
 			} catch {
 			}
 		}
 		#endregion
 
 		#region Public Events
-		public event EventHandler<ExceptionRoutedEventArgs> ImageFailed {
-			add { AddHandler(ImageFailedEvent, value); }
-			remove { RemoveHandler(ImageFailedEvent, value); }
+		public event EventHandler<ExceptionRoutedEventArgs> ImageFailed
+		{
+			add { AddHandler (ImageFailedEvent, value); }
+			remove { RemoveHandler (ImageFailedEvent, value); }
 		}
 		#endregion
 

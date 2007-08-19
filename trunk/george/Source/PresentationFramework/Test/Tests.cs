@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 [TestFixture]
-public class Tests {
+public class Tests
+{
 	[Test]
-	public void PropertyMetadataForPresentationFrameworkDependencyPropertiesIsFrameworkPropertyMetadata() {
-		List<string> excluded = new List<string>(new string[] {
+	public void PropertyMetadataForPresentationFrameworkDependencyPropertiesIsFrameworkPropertyMetadata ()
+	{
+		List<string> excluded = new List<string> (new string [] {
 			"System.Windows.Controls.ContextMenu.CustomPopupPlacementCallbackProperty",
 			"System.Windows.Controls.ContextMenu.StaysOpenProperty",
 			"System.Windows.Controls.HeaderedItemsControl.HasHeaderProperty",
@@ -60,25 +62,25 @@ public class Tests {
 			"System.Windows.Controls.Validation.HasErrorProperty",
 			"System.Windows.Controls.Validation.ErrorTemplateProperty",
 		});
-		Assembly presentation_framework_assembly = typeof(
+		Assembly presentation_framework_assembly = typeof (
 #if Implementation
-		Mono.
+Mono.
 #endif
-		System.Windows.Controls.Button).Assembly;
-		foreach(Type type in presentation_framework_assembly.GetExportedTypes()) {
+System.Windows.Controls.Button).Assembly;
+		foreach (Type type in presentation_framework_assembly.GetExportedTypes ()) {
 			string namespace_name = type.Namespace;
 #if Implementation
-			namespace_name = namespace_name.Remove(0, "Mono.".Length);
+			namespace_name = namespace_name.Remove (0, "Mono.".Length);
 #endif
 			if (namespace_name == "System.Windows.Controls" || namespace_name == "System.Windows.Controls.Primitives")
-				foreach(FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
-					if (field.Name.EndsWith("Property") && field.FieldType == typeof(DependencyProperty)) {
+				foreach (FieldInfo field in type.GetFields (BindingFlags.Public | BindingFlags.Static))
+					if (field.Name.EndsWith ("Property") && field.FieldType == typeof (DependencyProperty)) {
 						string field_name = type.FullName + "." + field.Name;
 #if Implementation
-						field_name = field_name.Remove(0, "Mono.".Length);
+						field_name = field_name.Remove (0, "Mono.".Length);
 #endif
-						if (!excluded.Contains(field_name))
-							Assert.IsTrue(((DependencyProperty)field.GetValue(null)).GetMetadata(type).GetType() == typeof(FrameworkPropertyMetadata), field_name);
+						if (!excluded.Contains (field_name))
+							Assert.IsTrue (((DependencyProperty)field.GetValue (null)).GetMetadata (type).GetType () == typeof (FrameworkPropertyMetadata), field_name);
 					}
 		}
 	}

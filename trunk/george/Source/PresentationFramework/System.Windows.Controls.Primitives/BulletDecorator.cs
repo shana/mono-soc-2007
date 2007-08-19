@@ -1,3 +1,30 @@
+//
+// BulletDecorator.cs
+//
+// Author:
+//   George Giolfan (georgegiolfan@yahoo.com)
+//
+// Copyright (C) 2007 George Giolfan
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 using System.Collections;
 using System.Windows.Media;
 #if Implementation
@@ -5,11 +32,13 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-namespace Mono.System.Windows.Controls.Primitives {
+namespace Mono.System.Windows.Controls.Primitives
+{
 #else
 namespace System.Windows.Controls.Primitives {
 #endif
-	public class BulletDecorator : Decorator {
+	public class BulletDecorator : Decorator
+	{
 		#region Public Fields
 		#region Dependency Property Fields
 		static public readonly DependencyProperty BackgroundProperty = Panel.BackgroundProperty;
@@ -18,25 +47,27 @@ namespace System.Windows.Controls.Primitives {
 
 		#region Private Fields
 		UIElement bullet;
-		static IEnumerator empty_enumerator = new ArrayList().GetEnumerator();
+		static IEnumerator empty_enumerator = new ArrayList ().GetEnumerator ();
 		#endregion
 
 		#region Static Constructor
-		static BulletDecorator() {
-			BackgroundProperty.OverrideMetadata(typeof(BulletDecorator), new FrameworkPropertyMetadata());
+		static BulletDecorator ()
+		{
+			BackgroundProperty.OverrideMetadata (typeof (BulletDecorator), new FrameworkPropertyMetadata ());
 		}
 		#endregion
 
 		#region Public Constructors
-		public BulletDecorator() {
+		public BulletDecorator ()
+		{
 		}
 		#endregion
 
 		#region Public Properties
 		#region Dependency Properties
 		public Brush Background {
-			get { return (Brush)GetValue(BackgroundProperty); }
-			set { SetValue(BackgroundProperty, value); }
+			get { return (Brush)GetValue (BackgroundProperty); }
+			set { SetValue (BackgroundProperty, value); }
 		}
 		#endregion
 
@@ -44,13 +75,13 @@ namespace System.Windows.Controls.Primitives {
 			get { return bullet; }
 			set {
 				if (bullet != null) {
-					RemoveLogicalChild(bullet);
-					RemoveVisualChild(bullet);
+					RemoveLogicalChild (bullet);
+					RemoveVisualChild (bullet);
 				}
 				bullet = value;
 				if (bullet != null) {
-					AddLogicalChild(bullet);
-					AddVisualChild(bullet);
+					AddLogicalChild (bullet);
+					AddVisualChild (bullet);
 				}
 			}
 		}
@@ -61,12 +92,12 @@ namespace System.Windows.Controls.Primitives {
 			get {
 				if (Bullet == null && Child == null)
 					return empty_enumerator;
-				ArrayList list = new ArrayList(2);
+				ArrayList list = new ArrayList (2);
 				if (Bullet != null)
-					list.Add(Bullet);
+					list.Add (Bullet);
 				if (Child != null)
-					list.Add(Child);
-				return list.GetEnumerator();
+					list.Add (Child);
+				return list.GetEnumerator ();
 			}
 		}
 
@@ -78,7 +109,8 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Protected Methods
-		protected override Size ArrangeOverride(Size arrangeSize) {
+		protected override Size ArrangeOverride (Size arrangeSize)
+		{
 			double used_width;
 			if (Bullet != null) {
 				//HACK
@@ -90,41 +122,44 @@ namespace System.Windows.Controls.Primitives {
 					double height_to_center_to = text_block == null ? Child.DesiredSize.Height : text_block.FontSize;
 					bullet_top = height_to_center_to < Bullet.DesiredSize.Height ? 0 : ((height_to_center_to - Bullet.DesiredSize.Height) / 2);
 				}
-				Bullet.Arrange(new Rect(new Point(0, bullet_top), Bullet.DesiredSize));
+				Bullet.Arrange (new Rect (new Point (0, bullet_top), Bullet.DesiredSize));
 				used_width = Bullet.DesiredSize.Width;
 			} else
 				used_width = 0;
 			if (Child != null)
-				Child.Arrange(new Rect(new Point(used_width, 0), Child.DesiredSize));
+				Child.Arrange (new Rect (new Point (used_width, 0), Child.DesiredSize));
 			return arrangeSize;
 		}
 
-		protected override Visual GetVisualChild(int index) {
+		protected override Visual GetVisualChild (int index)
+		{
 			int visual_children_count = VisualChildrenCount;
 			if (visual_children_count == 0 || index < 0 || index >= visual_children_count)
-				throw new ArgumentOutOfRangeException("index", index, "Specified index is out of range or child at index is null. Do not call this method if VisualChildrenCount returns zero, indicating that the Visual has no children.");
+				throw new ArgumentOutOfRangeException ("index", index, "Specified index is out of range or child at index is null. Do not call this method if VisualChildrenCount returns zero, indicating that the Visual has no children.");
 			return index == 0 ? (Bullet == null ? Child : Bullet) : Child;
 		}
 
-		protected override Size MeasureOverride(Size constraint) {
+		protected override Size MeasureOverride (Size constraint)
+		{
 			Size result;
 			if (Bullet != null) {
-				Bullet.Measure(constraint);
+				Bullet.Measure (constraint);
 				result = Bullet.DesiredSize;
 			} else
-				result = new Size();
+				result = new Size ();
 			if (Child != null) {
-				Child.Measure(constraint);
+				Child.Measure (constraint);
 				result.Width += Child.DesiredSize.Width;
-				result.Height = Math.Max(result.Height, Child.DesiredSize.Height);
+				result.Height = Math.Max (result.Height, Child.DesiredSize.Height);
 			}
 			return result;
 		}
 
-		protected override void OnRender(DrawingContext drawingContext) {
-			base.OnRender(drawingContext);
+		protected override void OnRender (DrawingContext drawingContext)
+		{
+			base.OnRender (drawingContext);
 			if (Background != null)
-				drawingContext.DrawRectangle(Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
+				drawingContext.DrawRectangle (Background, null, new Rect (0, 0, ActualWidth, ActualHeight));
 		}
 		#endregion
 	}

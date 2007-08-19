@@ -1,13 +1,16 @@
 #if !Implementation
 using NUnit.Framework;
-namespace System.Windows.Controls.Primitives {
+namespace System.Windows.Controls.Primitives
+{
 	[SetUpFixture]
-	public class SetUpFixture {
+	public class SetUpFixture
+	{
 		[SetUp]
-		public void SetUp() {
+		public void SetUp ()
+		{
 			if (Application.Current == null)
-				new Application();
-			Mono.WindowsPresentationFoundation.Utility.LoadLunaTheme();
+				new Application ();
+			Mono.WindowsPresentationFoundation.Utility.LoadLunaTheme ();
 		}
 	}
 }
