@@ -29,7 +29,7 @@ Index: class/WindowsBase/Test/System.Windows/RectTest.cs
 ===================================================================
 --- class/WindowsBase/Test/System.Windows/RectTest.cs	(revision 0)
 +++ class/WindowsBase/Test/System.Windows/RectTest.cs	(revision 0)
-@@ -0,0 +1,263 @@
+@@ -0,0 +1,300 @@
 +// RectTest.cs - NUnit Test Cases for System.Windows.Rect
 +//
 +// George Giolfan (georgegiolfan@yahoo.com)
@@ -46,251 +46,288 @@ Index: class/WindowsBase/Test/System.Windows/RectTest.cs
 +namespace MonoTests.System.Windows
 +{
 +
-+[TestFixture]
-+public class RectTest {
-+	
-+	[SetUp]
-+	public void GetReady() {
-+	}
++	[TestFixture]
++	public class RectTest
++	{
 +
-+	[TearDown]
-+	public void Clean() {
-+	}
-+
-+	[Test]
-+	public void X() {
-+		double x = new Rect().X;
-+	}
-+
-+	[Test]
-+	public void ConstructorZero() {
-+		new Rect(0, 0, 0, 0);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Width and Height must be non-negative.")]
-+	public void ConstructorNegativeWidth() {
-+		new Rect(0, 0, -1, 0);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Width and Height must be non-negative.")]
-+	public void ConstructorNegativeHeight() {
-+		new Rect(0, 0, 0, -1);
-+	}
-+
-+	[Test]
-+	public void Empty() {
-+		Rect empty = Rect.Empty;
-+		Assert.IsTrue(double.IsPositiveInfinity(empty.X), "X");
-+		Assert.IsTrue(double.IsPositiveInfinity(empty.Y), "Y");
-+		Assert.IsTrue(double.IsNegativeInfinity(empty.Width), "Width");
-+		Assert.IsTrue(double.IsNegativeInfinity(empty.Height), "Height");
-+	}
-+
-+	[Test]
-+	public void IsEmpty() {
-+		Assert.IsTrue(Rect.Empty.IsEmpty, "Empty");
-+		Assert.IsFalse(new Rect(0, 0, 0, 0).IsEmpty, "(0, 0, 0, 0)");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Width must be non-negative.")]
-+	public void WidthNegative() {
-+		Rect rect = new Rect();
-+		rect.Width = -1;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Height must be non-negative.")]
-+	public void HeightNegative() {
-+		Rect rect = new Rect();
-+		rect.Height = -1;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
-+	public void EmptyReadOnlyWidth() {
-+		Rect empty = Rect.Empty;
-+		empty.Width = 0;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
-+	public void EmptyReadOnlyHeight() {
-+		Rect empty = Rect.Empty;
-+		empty.Height = 0;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
-+	public void EmptyReadOnlyX() {
-+		Rect empty = Rect.Empty;
-+		empty.X = 0;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
-+	public void EmptyReadOnlyY() {
-+		Rect empty = Rect.Empty;
-+		empty.Y = 0;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
-+	public void EmptyReadOnlyWidthNegativeInfinity() {
-+		Rect empty = Rect.Empty;
-+		empty.Width = double.NegativeInfinity;
-+	}
-+
-+	[Test]
-+	public void InflateCausesRectangleToBecomeEmpty() {
-+		Rect rect = new Rect();
-+		rect.Inflate(-1, 0);
-+		Assert.IsTrue(rect.IsEmpty);
-+	}
-+
-+	[Test]
-+	public void IntersectCausesRectangleToBecomeEmpty() {
-+		Rect rect = new Rect(0, 0, 1, 1);
-+		rect.Intersect(new Rect(2, 2, 3, 3));
-+		Assert.IsTrue(rect.IsEmpty);
-+	}
-+
-+	[Test]
-+	public void ConstructorSizeEmpty() {
-+		Rect rect_from_empty_size = new Rect(Size.Empty);
-+		Assert.IsTrue(rect_from_empty_size.IsEmpty, "1");
-+		Assert.AreEqual(rect_from_empty_size.X, double.PositiveInfinity, "2");
-+
-+	}
-+
-+	[Test]
-+	public void ConstructorPointSizeEmpty() {
-+		Rect rect_from_empty_size = new Rect(new Point(), Size.Empty);
-+		Assert.IsTrue(rect_from_empty_size.IsEmpty, "1");
-+		Assert.AreEqual(rect_from_empty_size.X, double.PositiveInfinity, "2");
-+
-+	}
-+
-+	[Test]
-+	public void Intersect() {
-+		Rect rect = new Rect(1, 1, 2, 2);
-+		rect.Intersect(new Rect(2, 2, 2, 2));
-+		Assert.AreEqual(rect, new Rect(2, 2, 1, 1));
-+	}
-+
-+	[Test]
-+	public void IntersectEmpty() {
-+		Assert.IsTrue(Rect.Intersect(Rect.Empty, new Rect(0, 0, 1, 1)).IsEmpty);
-+	}
-+
-+	[Test]
-+	public void IntersectsWith() {
-+		Assert.IsTrue(new Rect().IntersectsWith(new Rect()));
-+	}
-+
-+	[Test]
-+	public void IntersectsWithEmpty() {
-+		Assert.IsFalse(Rect.Empty.IntersectsWith(Rect.Empty));
-+	}
-+
-+	[Test]
-+	public void Parse() {
-+		Assert.AreEqual(Rect.Parse("1 2 3 4"), new Rect(1, 2, 3, 4));
-+	}
-+
-+	[Test]
-+	public void ParseDecimalPlaces() {
-+		Assert.AreEqual(Rect.Parse("1.1 2.2 3.3 4.4"), new Rect(1.1, 2.2, 3.3, 4.4));
-+	}
-+
-+	[Test]
-+	public void ParseDecimalPlacesComma() {
-+		Assert.AreEqual(Rect.Parse("1.1,2.2,3.3,4.4"), new Rect(1.1, 2.2, 3.3, 4.4));
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
-+	public void ParseNull() {
-+		Rect.Parse(null);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
-+	public void ParseEmpty() {
-+		Rect.Parse(string.Empty);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
-+	public void ParseOneNumber() {
-+		Rect.Parse("0");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(FormatException), ExpectedMessage = "Input string was not in a correct format.")]
-+	public void ParseOneLetter() {
-+		Rect.Parse("a");
-+	}
-+
-+	[Test]
-+	public void ScaleEmpty() {
-+		Rect rect = Rect.Empty;
-+		rect.Scale(0, 0);
-+		Assert.IsTrue(rect.IsEmpty);
-+	}
-+
-+	[Test]
-+	public void Union() {
-+		Rect rect = new Rect(0, 0, 1, 1);
-+		rect.Union(new Rect(-1, -1, 1, 1));
-+		Assert.AreEqual(rect, new Rect(-1, -1, 2, 2));
-+	}
-+
-+	[Test]
-+	public void UnionEmpty() {
-+		Rect rect = new Rect(0, 0, 1, 1);
-+		rect.Union(Rect.Empty);
-+		Assert.AreEqual(rect, new Rect(0, 0, 1, 1), "1");
-+
-+		rect = Rect.Empty;
-+		rect.Union(new Rect(0, 0, 1, 1));
-+		Assert.AreEqual(rect, new Rect(0, 0, 1, 1), "2");
-+	}
-+
-+	[Test]
-+	public void SizeEmpty() {
-+		Rect rect = new Rect();
-+		rect.Size = Size.Empty;
-+		Assert.AreEqual(rect.X, double.PositiveInfinity);
-+	}
-+
-+	[Test]
-+	public void ToStringInvariantCulture() {
-+		Culture = CultureInfo.InvariantCulture;
-+		Assert.AreEqual(new Rect().ToString(), "0,0,0,0", "1");
-+		Assert.AreEqual(new Rect(1.1, 2.2, double.PositiveInfinity, 0).ToString(), "1.1,2.2,Infinity,0", "2");
-+		Assert.AreEqual(Rect.Empty.ToString(), "Empty", "4");
-+	}
-+
-+	[Test]
-+	public void ToStringRomanianCulture() {
-+		Culture = new CultureInfo("ro-RO");
-+		Assert.AreEqual(new Rect().ToString(), "0;0;0;0", "1");
-+		Assert.AreEqual(new Rect(1.1, 2.2, double.PositiveInfinity, 0).ToString(), "1,1;2,2;Infinity;0", "2");
-+		Assert.AreEqual(Rect.Empty.ToString(), "Empty", "4");
-+	}
-+
-+	CultureInfo Culture {
-+		set {
-+			Thread current_thread = Thread.CurrentThread;
-+			current_thread.CurrentCulture = value;
-+			current_thread.CurrentUICulture = value;
++		[SetUp]
++		public void GetReady ()
++		{
 +		}
-+	}
 +
-+}
++		[TearDown]
++		public void Clean ()
++		{
++		}
++
++		[Test]
++		public void X ()
++		{
++			double x = new Rect ().X;
++		}
++
++		[Test]
++		public void ConstructorZero ()
++		{
++			new Rect (0, 0, 0, 0);
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Width and Height must be non-negative.")]
++		public void ConstructorNegativeWidth ()
++		{
++			new Rect (0, 0, -1, 0);
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Width and Height must be non-negative.")]
++		public void ConstructorNegativeHeight ()
++		{
++			new Rect (0, 0, 0, -1);
++		}
++
++		[Test]
++		public void Empty ()
++		{
++			Rect empty = Rect.Empty;
++			Assert.IsTrue (double.IsPositiveInfinity (empty.X), "X");
++			Assert.IsTrue (double.IsPositiveInfinity (empty.Y), "Y");
++			Assert.IsTrue (double.IsNegativeInfinity (empty.Width), "Width");
++			Assert.IsTrue (double.IsNegativeInfinity (empty.Height), "Height");
++		}
++
++		[Test]
++		public void IsEmpty ()
++		{
++			Assert.IsTrue (Rect.Empty.IsEmpty, "Empty");
++			Assert.IsFalse (new Rect (0, 0, 0, 0).IsEmpty, "(0, 0, 0, 0)");
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Width must be non-negative.")]
++		public void WidthNegative ()
++		{
++			Rect rect = new Rect ();
++			rect.Width = -1;
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Height must be non-negative.")]
++		public void HeightNegative ()
++		{
++			Rect rect = new Rect ();
++			rect.Height = -1;
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
++		public void EmptyReadOnlyWidth ()
++		{
++			Rect empty = Rect.Empty;
++			empty.Width = 0;
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
++		public void EmptyReadOnlyHeight ()
++		{
++			Rect empty = Rect.Empty;
++			empty.Height = 0;
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
++		public void EmptyReadOnlyX ()
++		{
++			Rect empty = Rect.Empty;
++			empty.X = 0;
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
++		public void EmptyReadOnlyY ()
++		{
++			Rect empty = Rect.Empty;
++			empty.Y = 0;
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Cannot modify this property on the Empty Rect.")]
++		public void EmptyReadOnlyWidthNegativeInfinity ()
++		{
++			Rect empty = Rect.Empty;
++			empty.Width = double.NegativeInfinity;
++		}
++
++		[Test]
++		public void InflateCausesRectangleToBecomeEmpty ()
++		{
++			Rect rect = new Rect ();
++			rect.Inflate (-1, 0);
++			Assert.IsTrue (rect.IsEmpty);
++		}
++
++		[Test]
++		public void IntersectCausesRectangleToBecomeEmpty ()
++		{
++			Rect rect = new Rect (0, 0, 1, 1);
++			rect.Intersect (new Rect (2, 2, 3, 3));
++			Assert.IsTrue (rect.IsEmpty);
++		}
++
++		[Test]
++		public void ConstructorSizeEmpty ()
++		{
++			Rect rect_from_empty_size = new Rect (Size.Empty);
++			Assert.IsTrue (rect_from_empty_size.IsEmpty, "1");
++			Assert.AreEqual (rect_from_empty_size.X, double.PositiveInfinity, "2");
++
++		}
++
++		[Test]
++		public void ConstructorPointSizeEmpty ()
++		{
++			Rect rect_from_empty_size = new Rect (new Point (), Size.Empty);
++			Assert.IsTrue (rect_from_empty_size.IsEmpty, "1");
++			Assert.AreEqual (rect_from_empty_size.X, double.PositiveInfinity, "2");
++
++		}
++
++		[Test]
++		public void Intersect ()
++		{
++			Rect rect = new Rect (1, 1, 2, 2);
++			rect.Intersect (new Rect (2, 2, 2, 2));
++			Assert.AreEqual (rect, new Rect (2, 2, 1, 1));
++		}
++
++		[Test]
++		public void IntersectEmpty ()
++		{
++			Assert.IsTrue (Rect.Intersect (Rect.Empty, new Rect (0, 0, 1, 1)).IsEmpty);
++		}
++
++		[Test]
++		public void IntersectsWith ()
++		{
++			Assert.IsTrue (new Rect ().IntersectsWith (new Rect ()));
++		}
++
++		[Test]
++		public void IntersectsWithEmpty ()
++		{
++			Assert.IsFalse (Rect.Empty.IntersectsWith (Rect.Empty));
++		}
++
++		[Test]
++		public void Parse ()
++		{
++			Assert.AreEqual (Rect.Parse ("1 2 3 4"), new Rect (1, 2, 3, 4));
++		}
++
++		[Test]
++		public void ParseDecimalPlaces ()
++		{
++			Assert.AreEqual (Rect.Parse ("1.1 2.2 3.3 4.4"), new Rect (1.1, 2.2, 3.3, 4.4));
++		}
++
++		[Test]
++		public void ParseDecimalPlacesComma ()
++		{
++			Assert.AreEqual (Rect.Parse ("1.1,2.2,3.3,4.4"), new Rect (1.1, 2.2, 3.3, 4.4));
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
++		public void ParseNull ()
++		{
++			Rect.Parse (null);
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
++		public void ParseEmpty ()
++		{
++			Rect.Parse (string.Empty);
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
++		public void ParseOneNumber ()
++		{
++			Rect.Parse ("0");
++		}
++
++		[Test]
++		[ExpectedException (typeof (FormatException), ExpectedMessage = "Input string was not in a correct format.")]
++		public void ParseOneLetter ()
++		{
++			Rect.Parse ("a");
++		}
++
++		[Test]
++		public void ScaleEmpty ()
++		{
++			Rect rect = Rect.Empty;
++			rect.Scale (0, 0);
++			Assert.IsTrue (rect.IsEmpty);
++		}
++
++		[Test]
++		public void Union ()
++		{
++			Rect rect = new Rect (0, 0, 1, 1);
++			rect.Union (new Rect (-1, -1, 1, 1));
++			Assert.AreEqual (rect, new Rect (-1, -1, 2, 2));
++		}
++
++		[Test]
++		public void UnionEmpty ()
++		{
++			Rect rect = new Rect (0, 0, 1, 1);
++			rect.Union (Rect.Empty);
++			Assert.AreEqual (rect, new Rect (0, 0, 1, 1), "1");
++
++			rect = Rect.Empty;
++			rect.Union (new Rect (0, 0, 1, 1));
++			Assert.AreEqual (rect, new Rect (0, 0, 1, 1), "2");
++		}
++
++		[Test]
++		public void SizeEmpty ()
++		{
++			Rect rect = new Rect ();
++			rect.Size = Size.Empty;
++			Assert.AreEqual (rect.X, double.PositiveInfinity);
++		}
++
++		[Test]
++		public void ToStringInvariantCulture ()
++		{
++			Culture = CultureInfo.InvariantCulture;
++			Assert.AreEqual (new Rect ().ToString (), "0,0,0,0", "1");
++			Assert.AreEqual (new Rect (1.1, 2.2, double.PositiveInfinity, 0).ToString (), "1.1,2.2,Infinity,0", "2");
++			Assert.AreEqual (Rect.Empty.ToString (), "Empty", "4");
++		}
++
++		[Test]
++		public void ToStringRomanianCulture ()
++		{
++			Culture = new CultureInfo ("ro-RO");
++			Assert.AreEqual (new Rect ().ToString (), "0;0;0;0", "1");
++			Assert.AreEqual (new Rect (1.1, 2.2, double.PositiveInfinity, 0).ToString (), "1,1;2,2;Infinity;0", "2");
++			Assert.AreEqual (Rect.Empty.ToString (), "Empty", "4");
++		}
++
++		CultureInfo Culture  {
++			set {
++				Thread current_thread = Thread.CurrentThread;
++				current_thread.CurrentCulture = value;
++				current_thread.CurrentUICulture = value;
++			}
++		}
++
++	}
 +
 +}
 \ No newline at end of file
@@ -304,7 +341,7 @@ Index: class/WindowsBase/Test/System.Windows/SizeTest.cs
 ===================================================================
 --- class/WindowsBase/Test/System.Windows/SizeTest.cs	(revision 0)
 +++ class/WindowsBase/Test/System.Windows/SizeTest.cs	(revision 0)
-@@ -0,0 +1,255 @@
+@@ -0,0 +1,291 @@
 +// SizeTest.cs - NUnit Test Cases for System.Windows.Size
 +//
 +// George Giolfan (georgegiolfan@yahoo.com)
@@ -322,242 +359,278 @@ Index: class/WindowsBase/Test/System.Windows/SizeTest.cs
 +namespace MonoTests.System.Windows
 +{
 +
-+[TestFixture]
-+public class SizeTest {
-+	
-+	[SetUp]
-+	public void GetReady() {
-+	}
++	[TestFixture]
++	public class SizeTest
++	{
 +
-+	[TearDown]
-+	public void Clean() {
-+	}
-+
-+	[Test]
-+	public void ConstructorZero() {
-+		new Size(0, 0);
-+	}
-+
-+	[Test]
-+	public void ConstructorPositiveInfinity() {
-+		new Size(double.PositiveInfinity, 0);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage="Width and Height must be non-negative.")]
-+	public void ConstructorNegativeInfinity() {
-+		new Size(double.NegativeInfinity, 0);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Width and Height must be non-negative.")]
-+	public void ConstructorNegative() {
-+		new Size(-1, 0);
-+	}
-+
-+	[Test]
-+	public void Empty() {
-+		Assert.IsTrue(double.IsNegativeInfinity(Size.Empty.Width), "Empty width");
-+		Assert.IsTrue(double.IsNegativeInfinity(Size.Empty.Height), "Empty height");
-+	}
-+
-+	[Test]
-+	public void IsEmpty() {
-+		Assert.IsTrue(Size.Empty.IsEmpty, "Empty");
-+		Assert.IsFalse(new Size(0, 0).IsEmpty, "(0, 0)");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Width must be non-negative.")]
-+	public void WidthNegative() {
-+		Size size = new Size();
-+		size.Width = -1;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(ArgumentException), ExpectedMessage = "Height must be non-negative.")]
-+	public void HeightNegative() {
-+		Size size = new Size();
-+		size.Height = -1;
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage="Premature string termination encountered.")]
-+	public void ParseNull() {
-+		Size.Parse(null);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
-+	public void ParseEmpty() {
-+		Size.Parse(string.Empty);
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
-+	public void ParseSpace() {
-+		Size.Parse(" ");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
-+	public void ParseNumber() {
-+		Size.Parse("0");
-+	}
-+
-+	[Test]
-+	public void ParseTwoNumbers() {
-+		Assert.AreEqual(Size.Parse("0 0"), new Size());
-+	}
-+
-+	[Test]
-+	public void ParseTwoNumbersSeparatedByComma() {
-+		Assert.AreEqual(Size.Parse("0,0"), new Size());
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(FormatException), ExpectedMessage = "Input string was not in a correct format.")]
-+	public void ParseTwoNumbersSeparatedBySemicolon() {
-+		Size.Parse("0;0");
-+	}
-+
-+	[Test]
-+	public void ParseTwoNumbersSeparatedByCommaAndSpace() {
-+		Assert.AreEqual(Size.Parse(" 0 , 0 "), new Size());
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(FormatException), ExpectedMessage = "Input string was not in a correct format.")]
-+	public void ParseTwoNumbersWithBrackets() {
-+		Size.Parse("(0, 0)");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(FormatException), ExpectedMessage = "Input string was not in a correct format.")]
-+	public void ParseLetters() {
-+		Size.Parse("a");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Extra data encountered after token while parsing.")]
-+	public void ParseThreeNumbers() {
-+		Size.Parse("0 0 0");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(FormatException), ExpectedMessage = "Input string was not in a correct format.")]
-+	public void ParseThreeLetters() {
-+		Size.Parse("a a a");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(FormatException), ExpectedMessage = "Input string was not in a correct format.")]
-+	public void ParsePointWithSpaces() {
-+		Size.Parse("0 . 0");
-+	}
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Extra data encountered after token while parsing.")]
-+	public void ParsePointAndComma() {
-+		Size.Parse("1.000,00 0");
-+	}
-+
-+	[Test]
-+	public void ParsePoint() {
-+		Assert.AreEqual(Size.Parse("0.1,0.0"), new Size(0.1, 0));
-+	}
-+
-+
-+	[Test]
-+	[ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Extra data encountered after token while parsing.")]
-+	public void ParseComma() {
-+		Assert.AreEqual(Size.Parse("0,0 0,0"), new Size());
-+	}
-+
-+	[Test]
-+	public void IFormattableToStringInvariantCulture() {
-+		Culture = CultureInfo.InvariantCulture;
-+		Assert.AreEqual(((IFormattable)new Size()).ToString(null, null), "0,0", "1");
-+		Assert.AreEqual(((IFormattable)new Size(1.1, 2.2)).ToString(null, null), "1.1,2.2", "2");
-+		Assert.AreEqual(((IFormattable)new Size(double.PositiveInfinity, 0)).ToString(null, null), "Infinity,0", "3");
-+		Assert.AreEqual(((IFormattable)Size.Empty).ToString(null, null), "Empty", "4");
-+	}
-+
-+	[Test]
-+	public void IFormattableToStringRomanianCulture() {
-+		Culture = new CultureInfo("ro-RO");
-+		Assert.AreEqual(((IFormattable)new Size()).ToString(null, null), "0;0", "1");
-+		Assert.AreEqual(((IFormattable)new Size(1.1, 2.2)).ToString(null, null), "1,1;2,2", "2");
-+		Assert.AreEqual(((IFormattable)new Size(double.PositiveInfinity, 0)).ToString(null, null), "Infinity;0", "3");
-+		Assert.AreEqual(((IFormattable)Size.Empty).ToString(null, null), "Empty", "4");
-+	}
-+
-+	[Test]
-+	public void IFormattableToStringFormatProviderUsage() {
-+		Culture = CultureInfo.InvariantCulture;
-+		TestFormatProvider test_format_provider = new TestFormatProvider();
-+		((IFormattable)new Size()).ToString(null, test_format_provider);
-+		Assert.AreEqual(test_format_provider.Calls.Count, 4, "1");
-+		Assert.AreEqual(test_format_provider.Calls[0], typeof(NumberFormatInfo), "2");
-+		Assert.AreEqual(test_format_provider.Calls[1], typeof(ICustomFormatter), "3");
-+		Assert.AreEqual(test_format_provider.Calls[2], typeof(NumberFormatInfo), "4");	
-+		Assert.AreEqual(test_format_provider.Calls[3], typeof(NumberFormatInfo), "5");
-+	}
-+
-+	[Test]
-+	public void ToStringInvariantCulture() {
-+		Culture = CultureInfo.InvariantCulture;
-+		Assert.AreEqual(new Size().ToString(), "0,0", "1");
-+		Assert.AreEqual(new Size(1.1, 2.2).ToString(), "1.1,2.2", "2");
-+		Assert.AreEqual(new Size(double.PositiveInfinity, 0).ToString(), "Infinity,0", "3");
-+		Assert.AreEqual(Size.Empty.ToString(), "Empty", "4");
-+	}
-+
-+	[Test]
-+	public void ToStringRomanianCulture() {
-+		Culture = new CultureInfo("ro-RO");
-+		Assert.AreEqual(new Size().ToString(), "0;0", "1");
-+		Assert.AreEqual(new Size(1.1, 2.2).ToString(), "1,1;2,2", "2");
-+		Assert.AreEqual(new Size(double.PositiveInfinity, 0).ToString(), "Infinity;0", "3");
-+		Assert.AreEqual(Size.Empty.ToString(), "Empty", "4");
-+	}
-+
-+	[Test]
-+	public void ToStringIFormatProviderInvariantCulture() {
-+		Culture = CultureInfo.InvariantCulture;
-+		Assert.AreEqual(new Size().ToString(null), "0,0", "1");
-+		Assert.AreEqual(new Size(1.1, 2.2).ToString(null), "1.1,2.2", "2");
-+		Assert.AreEqual(new Size(double.PositiveInfinity, 0).ToString(null), "Infinity,0", "3");
-+		Assert.AreEqual(Size.Empty.ToString(null), "Empty", "4");
-+	}
-+
-+	[Test]
-+	public void ToStringIFormatProviderRomanianCulture() {
-+		Culture = new CultureInfo("ro-RO");
-+		Assert.AreEqual(new Size().ToString(null), "0;0", "1");
-+		Assert.AreEqual(new Size(1.1, 2.2).ToString(null), "1,1;2,2", "2");
-+		Assert.AreEqual(new Size(double.PositiveInfinity, 0).ToString(null), "Infinity;0", "3");
-+		Assert.AreEqual(Size.Empty.ToString(null), "Empty", "4");
-+	}
-+
-+	CultureInfo Culture {
-+		set {
-+			Thread current_thread = Thread.CurrentThread;
-+			current_thread.CurrentCulture = value;
-+			current_thread.CurrentUICulture = value;
++		[SetUp]
++		public void GetReady ()
++		{
 +		}
-+	}
 +
-+	class TestFormatProvider : IFormatProvider {
-+		public List<Type> Calls = new List<Type>();
-+		
-+		public object GetFormat(Type formatType) {
-+			Calls.Add(formatType);
-+			return null;
++		[TearDown]
++		public void Clean ()
++		{
 +		}
-+	}
 +
-+}
++		[Test]
++		public void ConstructorZero ()
++		{
++			new Size (0, 0);
++		}
++
++		[Test]
++		public void ConstructorPositiveInfinity ()
++		{
++			new Size (double.PositiveInfinity, 0);
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Width and Height must be non-negative.")]
++		public void ConstructorNegativeInfinity ()
++		{
++			new Size (double.NegativeInfinity, 0);
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Width and Height must be non-negative.")]
++		public void ConstructorNegative ()
++		{
++			new Size (-1, 0);
++		}
++
++		[Test]
++		public void Empty ()
++		{
++			Assert.IsTrue (double.IsNegativeInfinity (Size.Empty.Width), "Empty width");
++			Assert.IsTrue (double.IsNegativeInfinity (Size.Empty.Height), "Empty height");
++		}
++
++		[Test]
++		public void IsEmpty ()
++		{
++			Assert.IsTrue (Size.Empty.IsEmpty, "Empty");
++			Assert.IsFalse (new Size (0, 0).IsEmpty, "(0, 0)");
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Width must be non-negative.")]
++		public void WidthNegative ()
++		{
++			Size size = new Size ();
++			size.Width = -1;
++		}
++
++		[Test]
++		[ExpectedException (typeof (ArgumentException), ExpectedMessage = "Height must be non-negative.")]
++		public void HeightNegative ()
++		{
++			Size size = new Size ();
++			size.Height = -1;
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
++		public void ParseNull ()
++		{
++			Size.Parse (null);
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
++		public void ParseEmpty ()
++		{
++			Size.Parse (string.Empty);
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
++		public void ParseSpace ()
++		{
++			Size.Parse (" ");
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Premature string termination encountered.")]
++		public void ParseNumber ()
++		{
++			Size.Parse ("0");
++		}
++
++		[Test]
++		public void ParseTwoNumbers ()
++		{
++			Assert.AreEqual (Size.Parse ("0 0"), new Size ());
++		}
++
++		[Test]
++		public void ParseTwoNumbersSeparatedByComma ()
++		{
++			Assert.AreEqual (Size.Parse ("0,0"), new Size ());
++		}
++
++		[Test]
++		[ExpectedException (typeof (FormatException), ExpectedMessage = "Input string was not in a correct format.")]
++		public void ParseTwoNumbersSeparatedBySemicolon ()
++		{
++			Size.Parse ("0;0");
++		}
++
++		[Test]
++		public void ParseTwoNumbersSeparatedByCommaAndSpace ()
++		{
++			Assert.AreEqual (Size.Parse (" 0 , 0 "), new Size ());
++		}
++
++		[Test]
++		[ExpectedException (typeof (FormatException), ExpectedMessage = "Input string was not in a correct format.")]
++		public void ParseTwoNumbersWithBrackets ()
++		{
++			Size.Parse ("(0, 0)");
++		}
++
++		[Test]
++		[ExpectedException (typeof (FormatException), ExpectedMessage = "Input string was not in a correct format.")]
++		public void ParseLetters ()
++		{
++			Size.Parse ("a");
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Extra data encountered after token while parsing.")]
++		public void ParseThreeNumbers ()
++		{
++			Size.Parse ("0 0 0");
++		}
++
++		[Test]
++		[ExpectedException (typeof (FormatException), ExpectedMessage = "Input string was not in a correct format.")]
++		public void ParseThreeLetters ()
++		{
++			Size.Parse ("a a a");
++		}
++
++		[Test]
++		[ExpectedException (typeof (FormatException), ExpectedMessage = "Input string was not in a correct format.")]
++		public void ParsePointWithSpaces ()
++		{
++			Size.Parse ("0 . 0");
++		}
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Extra data encountered after token while parsing.")]
++		public void ParsePointAndComma ()
++		{
++			Size.Parse ("1.000,00 0");
++		}
++
++		[Test]
++		public void ParsePoint ()
++		{
++			Assert.AreEqual (Size.Parse ("0.1,0.0"), new Size (0.1, 0));
++		}
++
++
++		[Test]
++		[ExpectedException (typeof (InvalidOperationException), ExpectedMessage = "Extra data encountered after token while parsing.")]
++		public void ParseComma ()
++		{
++			Assert.AreEqual (Size.Parse ("0,0 0,0"), new Size ());
++		}
++
++		[Test]
++		public void IFormattableToStringInvariantCulture ()
++		{
++			Culture = CultureInfo.InvariantCulture;
++			Assert.AreEqual (((IFormattable)new Size ()).ToString (null, null), "0,0", "1");
++			Assert.AreEqual (((IFormattable)new Size (1.1, 2.2)).ToString (null, null), "1.1,2.2", "2");
++			Assert.AreEqual (((IFormattable)new Size (double.PositiveInfinity, 0)).ToString (null, null), "Infinity,0", "3");
++			Assert.AreEqual (((IFormattable)Size.Empty).ToString (null, null), "Empty", "4");
++		}
++
++		[Test]
++		public void IFormattableToStringRomanianCulture ()
++		{
++			Culture = new CultureInfo ("ro-RO");
++			Assert.AreEqual (((IFormattable)new Size ()).ToString (null, null), "0;0", "1");
++			Assert.AreEqual (((IFormattable)new Size (1.1, 2.2)).ToString (null, null), "1,1;2,2", "2");
++			Assert.AreEqual (((IFormattable)new Size (double.PositiveInfinity, 0)).ToString (null, null), "Infinity;0", "3");
++			Assert.AreEqual (((IFormattable)Size.Empty).ToString (null, null), "Empty", "4");
++		}
++
++		[Test]
++		public void IFormattableToStringFormatProviderUsage ()
++		{
++			Culture = CultureInfo.InvariantCulture;
++			TestFormatProvider test_format_provider = new TestFormatProvider ();
++			((IFormattable)new Size ()).ToString (null, test_format_provider);
++			Assert.AreEqual (test_format_provider.Calls.Count, 4, "1");
++			Assert.AreEqual (test_format_provider.Calls [0], typeof (NumberFormatInfo), "2");
++			Assert.AreEqual (test_format_provider.Calls [1], typeof (ICustomFormatter), "3");
++			Assert.AreEqual (test_format_provider.Calls [2], typeof (NumberFormatInfo), "4");
++			Assert.AreEqual (test_format_provider.Calls [3], typeof (NumberFormatInfo), "5");
++		}
++
++		[Test]
++		public void ToStringInvariantCulture ()
++		{
++			Culture = CultureInfo.InvariantCulture;
++			Assert.AreEqual (new Size ().ToString (), "0,0", "1");
++			Assert.AreEqual (new Size (1.1, 2.2).ToString (), "1.1,2.2", "2");
++			Assert.AreEqual (new Size (double.PositiveInfinity, 0).ToString (), "Infinity,0", "3");
++			Assert.AreEqual (Size.Empty.ToString (), "Empty", "4");
++		}
++
++		[Test]
++		public void ToStringRomanianCulture ()
++		{
++			Culture = new CultureInfo ("ro-RO");
++			Assert.AreEqual (new Size ().ToString (), "0;0", "1");
++			Assert.AreEqual (new Size (1.1, 2.2).ToString (), "1,1;2,2", "2");
++			Assert.AreEqual (new Size (double.PositiveInfinity, 0).ToString (), "Infinity;0", "3");
++			Assert.AreEqual (Size.Empty.ToString (), "Empty", "4");
++		}
++
++		[Test]
++		public void ToStringIFormatProviderInvariantCulture ()
++		{
++			Culture = CultureInfo.InvariantCulture;
++			Assert.AreEqual (new Size ().ToString (null), "0,0", "1");
++			Assert.AreEqual (new Size (1.1, 2.2).ToString (null), "1.1,2.2", "2");
++			Assert.AreEqual (new Size (double.PositiveInfinity, 0).ToString (null), "Infinity,0", "3");
++			Assert.AreEqual (Size.Empty.ToString (null), "Empty", "4");
++		}
++
++		[Test]
++		public void ToStringIFormatProviderRomanianCulture ()
++		{
++			Culture = new CultureInfo ("ro-RO");
++			Assert.AreEqual (new Size ().ToString (null), "0;0", "1");
++			Assert.AreEqual (new Size (1.1, 2.2).ToString (null), "1,1;2,2", "2");
++			Assert.AreEqual (new Size (double.PositiveInfinity, 0).ToString (null), "Infinity;0", "3");
++			Assert.AreEqual (Size.Empty.ToString (null), "Empty", "4");
++		}
++
++		CultureInfo Culture {
++			set {
++				Thread current_thread = Thread.CurrentThread;
++				current_thread.CurrentCulture = value;
++				current_thread.CurrentUICulture = value;
++			}
++		}
++
++		class TestFormatProvider : IFormatProvider
++		{
++			public List<Type> Calls = new List<Type> ();
++
++			public object GetFormat (Type formatType)
++			{
++				Calls.Add (formatType);
++				return null;
++			}
++		}
++
++	}
 +
 +}
 \ No newline at end of file
@@ -840,7 +913,16 @@ Index: class/WindowsBase/Mono/DoubleListParser.cs
 ===================================================================
 --- class/WindowsBase/Mono/DoubleListParser.cs	(revision 0)
 +++ class/WindowsBase/Mono/DoubleListParser.cs	(revision 0)
-@@ -0,0 +1,65 @@
+@@ -0,0 +1,73 @@
++//
++// DoubleListParser.cs: Used by methods such as Size.Parse, Rect.Parse to get
++// double instances from a string.
++//
++// Author:
++//   George Giolfan (georgegiolfan@yahoo.com)
++//
++// Copyright (C) 2007 George Giolfan
++// 
 +// Permission is hereby granted, free of charge, to any person obtaining
 +// a copy of this software and associated documentation files (the
 +// "Software"), to deal in the Software without restriction, including
@@ -860,49 +942,48 @@ Index: class/WindowsBase/Mono/DoubleListParser.cs
 +// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 +// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 +//
-+// Copyright (c) 2007 Novell, Inc. (http://www.novell.com)
-+//
-+// Authors:
-+//	George Giolfan (georgegiolfan@yahoo.com)
-+//
-+
 +using System;
 +using System.Globalization;
-+namespace Mono {
++namespace Mono
++{
 +	/// <summary>
 +	/// Used by methods such as <see cref="Size.Parse"/>, <see cref="Rect.Parse"/> to get <see cref="double"/> instances from a string.
 +	/// </summary>
-+	class DoubleListParser {
++	class DoubleListParser
++	{
 +		string text;
 +		int current_character_index;
-+		char[] separators = new char[] { ' ', ',' };
-+		
-+		public DoubleListParser(string text) {
++		char [] separators = new char [] { ' ', ',' };
++
++		public DoubleListParser (string text)
++		{
 +			this.text = text ?? string.Empty;
 +		}
 +
-+		public double GetDouble() {
++		public double GetDouble ()
++		{
 +			string part = string.Empty;
 +			while (part.Length == 0) {
 +				if (current_character_index == text.Length)
-+					throw new InvalidOperationException("Premature string termination encountered.");
-+				int next_separator_index = text.IndexOfAny(separators, current_character_index);
++					throw new InvalidOperationException ("Premature string termination encountered.");
++				int next_separator_index = text.IndexOfAny (separators, current_character_index);
 +				bool has_reached_the_end = next_separator_index == -1;
-+				part = (has_reached_the_end ? text.Substring(current_character_index) : text.Substring(current_character_index, next_separator_index - current_character_index)).Trim();
++				part = (has_reached_the_end ? text.Substring (current_character_index) : text.Substring (current_character_index, next_separator_index - current_character_index)).Trim ();
 +				current_character_index = has_reached_the_end ? text.Length : next_separator_index + 1;
 +			}
 +			double result;
-+			if (double.TryParse(part, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out result))
++			if (double.TryParse (part, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out result))
 +				return result;
 +			else
-+				throw new FormatException("Input string was not in a correct format.");
++				throw new FormatException ("Input string was not in a correct format.");
 +		}
 +
-+		public void CheckForExtraData() {
++		public void CheckForExtraData ()
++		{
 +			if (current_character_index == text.Length)
 +				return;
-+			if (text.Substring(current_character_index).Trim().Length != 0)
-+				throw new InvalidOperationException("Extra data encountered after token while parsing.");
++			if (text.Substring (current_character_index).Trim ().Length != 0)
++				throw new InvalidOperationException ("Extra data encountered after token while parsing.");
 +		}
 +	}
 +}
