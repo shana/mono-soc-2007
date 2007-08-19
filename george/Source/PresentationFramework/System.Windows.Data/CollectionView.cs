@@ -1,3 +1,30 @@
+//
+// CollectionView.cs
+//
+// Author:
+//   George Giolfan (georgegiolfan@yahoo.com)
+//
+// Copyright (C) 2007 George Giolfan
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -8,11 +35,13 @@ using System.Windows.Threading;
 #if Implementation
 using System;
 using System.Windows;
-namespace Mono.System.Windows.Data {
+namespace Mono.System.Windows.Data
+{
 #else
 namespace System.Windows.Data {
 #endif
-	public class CollectionView : DispatcherObject, ICollectionView, IEnumerable, INotifyCollectionChanged, INotifyPropertyChanged {
+	public class CollectionView : DispatcherObject, ICollectionView, IEnumerable, INotifyCollectionChanged, INotifyPropertyChanged
+	{
 		#region Private Fields
 		const int CachedCountNotComputed = -1;
 		int cached_count = CachedCountNotComputed;
@@ -28,13 +57,14 @@ namespace System.Windows.Data {
 		#endregion
 
 		#region Public Constructors
-		public CollectionView(IEnumerable collection) {
+		public CollectionView (IEnumerable collection)
+		{
 			if (collection == null)
-				throw new ArgumentNullException("collection");
+				throw new ArgumentNullException ("collection");
 			this.source_collection = collection;
 
-			IEnumerator enumerator = collection.GetEnumerator();
-			if (enumerator.MoveNext()) {
+			IEnumerator enumerator = collection.GetEnumerator ();
+			if (enumerator.MoveNext ()) {
 				current_item = enumerator.Current;
 				current_position = 0;
 				is_current_after_last = false;
@@ -58,7 +88,7 @@ namespace System.Windows.Data {
 		public virtual bool CanSort {
 			get { return false; }
 		}
-		
+
 		public virtual IComparer Comparer {
 			get { return null; }
 		}
@@ -67,8 +97,8 @@ namespace System.Windows.Data {
 			get {
 				if (cached_count == CachedCountNotComputed) {
 					cached_count = 0;
-					IEnumerator enumerator = source_collection.GetEnumerator();
-					while (enumerator.MoveNext()) {
+					IEnumerator enumerator = source_collection.GetEnumerator ();
+					while (enumerator.MoveNext ()) {
 						object dummy = enumerator.Current;
 						cached_count++;
 					}
@@ -77,7 +107,7 @@ namespace System.Windows.Data {
 			}
 		}
 
-		[TypeConverter(typeof(CultureInfoIetfLanguageTagConverter))]
+		[TypeConverter (typeof (CultureInfoIetfLanguageTagConverter))]
 		public virtual CultureInfo Culture {
 			get { return culture; }
 			set { culture = value; }
@@ -85,15 +115,15 @@ namespace System.Windows.Data {
 
 		public virtual Object CurrentItem {
 			get {
-				VerifyRefreshNotDeferred();
-				return current_item; 
+				VerifyRefreshNotDeferred ();
+				return current_item;
 			}
 		}
 
 		public virtual int CurrentPosition {
 			get {
-				VerifyRefreshNotDeferred();
-				return current_position; 
+				VerifyRefreshNotDeferred ();
+				return current_position;
 			}
 		}
 
@@ -101,8 +131,8 @@ namespace System.Windows.Data {
 			get { return filter; }
 			set {
 				if (!CanFilter)
-					throw new NotSupportedException();
-				filter = value; 
+					throw new NotSupportedException ();
+				filter = value;
 			}
 		}
 
@@ -125,10 +155,10 @@ namespace System.Windows.Data {
 		public virtual bool IsEmpty {
 			get {
 				if (!cached_is_empty.HasValue) {
-					IEnumerator enumerator = source_collection.GetEnumerator();
-					cached_is_empty = !enumerator.MoveNext();
+					IEnumerator enumerator = source_collection.GetEnumerator ();
+					cached_is_empty = !enumerator.MoveNext ();
 				}
-				return cached_is_empty.Value; 
+				return cached_is_empty.Value;
 			}
 		}
 
@@ -176,63 +206,69 @@ namespace System.Windows.Data {
 		#endregion
 
 		#region Public Methods
-		public virtual bool Contains(object item) {
+		public virtual bool Contains (object item)
+		{
 			if (item == null)
 				return false;
-			if (!PassesFilter(item))
+			if (!PassesFilter (item))
 				return false;
 			foreach (object collection_item in source_collection)
-				if (item.Equals(collection_item))
+				if (item.Equals (collection_item))
 					return true;
 			return false;
 		}
 
-		public virtual IDisposable DeferRefresh() {
-			return new DeferHelper(this);
+		public virtual IDisposable DeferRefresh ()
+		{
+			return new DeferHelper (this);
 		}
 
-		public virtual Object GetItemAt(int index) {
+		public virtual Object GetItemAt (int index)
+		{
 			if (index < 0)
-				throw new ArgumentOutOfRangeException("index");
+				throw new ArgumentOutOfRangeException ("index");
 			int current_collection_item_index = 0;
 			foreach (object collection_item in source_collection) {
 				if (current_collection_item_index == index)
 					return collection_item;
 				current_collection_item_index++;
 			}
-			throw new IndexOutOfRangeException();
+			throw new IndexOutOfRangeException ();
 		}
 
-		public virtual int IndexOf(object item) {
+		public virtual int IndexOf (object item)
+		{
 			int current_collection_item_index = 0;
 			foreach (object collection_item in source_collection) {
-				if (!PassesFilter(collection_item))
+				if (!PassesFilter (collection_item))
 					continue;
-				if (object.Equals(item, collection_item))
+				if (object.Equals (item, collection_item))
 					return current_collection_item_index;
 				current_collection_item_index++;
 			}
 			return -1;
 		}
 
-		public virtual bool MoveCurrentTo(object item) {
-			VerifyRefreshNotDeferred();
-			if (object.Equals(current_item, item))
+		public virtual bool MoveCurrentTo (object item)
+		{
+			VerifyRefreshNotDeferred ();
+			if (object.Equals (current_item, item))
 				return true;
 			int current_collection_item_index = 0;
 			foreach (object collection_item in source_collection) {
-				if (object.Equals(item, collection_item))
-					return MoveCurrentToPosition(current_collection_item_index);
+				if (object.Equals (item, collection_item))
+					return MoveCurrentToPosition (current_collection_item_index);
 				current_collection_item_index++;
 			}
-			return MoveCurrentToPosition(-1);
+			return MoveCurrentToPosition (-1);
 		}
 
-		public virtual bool MoveCurrentToFirst() {
-			VerifyRefreshNotDeferred();
+		public virtual bool MoveCurrentToFirst ()
+		{
+			VerifyRefreshNotDeferred ();
 			current_position = 0;
-			IEnumerator enumerator = source_collection.GetEnumerator();
-			if (enumerator.MoveNext()) {
+			IEnumerator enumerator = source_collection.GetEnumerator ();
+			if (enumerator.MoveNext ()) {
 				current_item = enumerator.Current;
 				is_current_after_last = false;
 				is_current_before_first = false;
@@ -245,8 +281,9 @@ namespace System.Windows.Data {
 			}
 		}
 
-		public virtual bool MoveCurrentToLast() {
-			VerifyRefreshNotDeferred();
+		public virtual bool MoveCurrentToLast ()
+		{
+			VerifyRefreshNotDeferred ();
 			current_item = null;
 			current_position = -1;
 			foreach (object item in source_collection) {
@@ -258,131 +295,150 @@ namespace System.Windows.Data {
 			return !is_current_after_last;
 		}
 
-		public virtual bool MoveCurrentToNext() {
-			VerifyRefreshNotDeferred();
-			return is_current_after_last ? false : MoveCurrentToPosition(current_position + 1);
+		public virtual bool MoveCurrentToNext ()
+		{
+			VerifyRefreshNotDeferred ();
+			return is_current_after_last ? false : MoveCurrentToPosition (current_position + 1);
 		}
 
-		public virtual bool MoveCurrentToPosition(int position) {
-			VerifyRefreshNotDeferred();
+		public virtual bool MoveCurrentToPosition (int position)
+		{
+			VerifyRefreshNotDeferred ();
 			CurrentChangingEventArgs e;
 			is_current_after_last = false;
 			is_current_before_first = false;
 			if (position < 0) {
-				e = new CurrentChangingEventArgs();
-				OnCurrentChanging(e);
+				e = new CurrentChangingEventArgs ();
+				OnCurrentChanging (e);
 				if (e.Cancel)
 					return true;
 				current_position = -1;
 				current_item = null;
 				is_current_before_first = true;
-				OnCurrentChanged();
+				OnCurrentChanged ();
 				return false;
 			}
 			current_position = 0;
 			foreach (object item in source_collection) {
 				if (current_position == position) {
-					e = new CurrentChangingEventArgs();
-					OnCurrentChanging(e);
+					e = new CurrentChangingEventArgs ();
+					OnCurrentChanging (e);
 					if (e.Cancel)
 						return true;
 					current_item = item;
-					OnCurrentChanged();
+					OnCurrentChanged ();
 					return true;
 				}
 				current_position++;
 			}
 			if (position <= current_position) {
-				e = new CurrentChangingEventArgs();
-				OnCurrentChanging(e);
+				e = new CurrentChangingEventArgs ();
+				OnCurrentChanging (e);
 				if (e.Cancel)
 					return true;
 			}
 			current_item = null;
 			is_current_after_last = true;
 			if (position > current_position)
-				throw new ArgumentOutOfRangeException("position");
-			OnCurrentChanged();
+				throw new ArgumentOutOfRangeException ("position");
+			OnCurrentChanged ();
 			return false;
 		}
 
-		public virtual bool MoveCurrentToPrevious() {
-			VerifyRefreshNotDeferred();
-			return is_current_before_first ? false : MoveCurrentToPosition(current_position - 1);
+		public virtual bool MoveCurrentToPrevious ()
+		{
+			VerifyRefreshNotDeferred ();
+			return is_current_before_first ? false : MoveCurrentToPosition (current_position - 1);
 		}
 
-		public virtual bool PassesFilter(object item) {
-			return filter == null ? true : filter(item);
+		public virtual bool PassesFilter (object item)
+		{
+			return filter == null ? true : filter (item);
 		}
 
-		public virtual void Refresh() {
-			RefreshOverride();
+		public virtual void Refresh ()
+		{
+			RefreshOverride ();
 		}
 		#endregion
 
 		#region Protected Methods
-		protected void ClearChangeLog() {
+		protected void ClearChangeLog ()
+		{
 			//WDTDH
 		}
 
-		protected virtual IEnumerator GetEnumerator() {
-			return SourceCollection.GetEnumerator();
+		protected virtual IEnumerator GetEnumerator ()
+		{
+			return SourceCollection.GetEnumerator ();
 		}
 
-		protected bool OKToChangeCurrent() {
+		protected bool OKToChangeCurrent ()
+		{
 			//WDTDH
 			return true;
 		}
 
-		protected virtual void OnBeginChangeLogging(NotifyCollectionChangedEventArgs args) {
+		protected virtual void OnBeginChangeLogging (NotifyCollectionChangedEventArgs args)
+		{
 			//LAMESPEC?: Documentation says it should throw ArgumentNullException if args is null. It seems it does not.
 		}
 
-		protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args) {
+		protected virtual void OnCollectionChanged (NotifyCollectionChangedEventArgs args)
+		{
 			if (CollectionChanged != null)
-				CollectionChanged(this, args);
+				CollectionChanged (this, args);
 		}
 
-		protected void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args) {
+		protected void OnCollectionChanged (object sender, NotifyCollectionChangedEventArgs args)
+		{
 			//FIXME
 			//LAMESPEC?
 			if (Dispatcher.Thread != Thread.CurrentThread)
-				throw new NotSupportedException("This type of CollectionView does not support changes to its SourceCollection from a thread different from the Dispatcher thread.");
-			ProcessCollectionChanged(args);
+				throw new NotSupportedException ("This type of CollectionView does not support changes to its SourceCollection from a thread different from the Dispatcher thread.");
+			ProcessCollectionChanged (args);
 		}
 
-		protected virtual void OnCurrentChanged() {
+		protected virtual void OnCurrentChanged ()
+		{
 			if (CurrentChanged != null)
-				CurrentChanged(this, EventArgs.Empty);
+				CurrentChanged (this, EventArgs.Empty);
 		}
 
-		protected void OnCurrentChanging() {
+		protected void OnCurrentChanging ()
+		{
 			current_position = -1;
-			OnCurrentChanging(new CurrentChangingEventArgs(false));
+			OnCurrentChanging (new CurrentChangingEventArgs (false));
 		}
 
-		protected virtual void OnCurrentChanging(CurrentChangingEventArgs args) {
+		protected virtual void OnCurrentChanging (CurrentChangingEventArgs args)
+		{
 			if (CurrentChanging != null)
-				CurrentChanging(this, args);
+				CurrentChanging (this, args);
 		}
 
-		protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) {
+		protected virtual void OnPropertyChanged (PropertyChangedEventArgs e)
+		{
 			if (PropertyChanged != null)
-				PropertyChanged(this, e);
+				PropertyChanged (this, e);
 		}
 
-		protected virtual void ProcessCollectionChanged(NotifyCollectionChangedEventArgs args) {
+		protected virtual void ProcessCollectionChanged (NotifyCollectionChangedEventArgs args)
+		{
 		}
 
-		protected void RefreshOrDefer() {
+		protected void RefreshOrDefer ()
+		{
 			//WDTDH
 		}
 
-		protected virtual void RefreshOverride() {
+		protected virtual void RefreshOverride ()
+		{
 			//WDTDH
 		}
 
-		protected void SetCurrent (object newItem, int newPosition) {
+		protected void SetCurrent (object newItem, int newPosition)
+		{
 			current_item = newItem;
 			current_position = newPosition;
 			is_current_before_first = current_position < 0;
@@ -402,20 +458,23 @@ namespace System.Windows.Data {
 
 		#region Explicit Interface Implementations
 		#region IEnumerable
-		IEnumerator IEnumerable.GetEnumerator() {
-			return GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator ()
+		{
+			return GetEnumerator ();
 		}
 		#endregion
 
 		#region INotifyCollectionChanged
-		event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged {
+		event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
+		{
 			add { CollectionChanged += value; }
 			remove { CollectionChanged -= value; }
 		}
 		#endregion
 
 		#region INotifyPropertyChanged
-		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged {
+		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+		{
 			add { PropertyChanged += value; }
 			remove { PropertyChanged -= value; }
 		}
@@ -423,24 +482,28 @@ namespace System.Windows.Data {
 		#endregion
 
 		#region Private Methods
-		void VerifyRefreshNotDeferred() {
+		void VerifyRefreshNotDeferred ()
+		{
 			if (is_refresh_deferred)
-				throw new InvalidOperationException("Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.");
+				throw new InvalidOperationException ("Cannot change or check the contents or Current position of CollectionView while Refresh is being deferred.");
 		}
 		#endregion
 
 		#region Private Classes
-		class DeferHelper : IDisposable {
+		class DeferHelper : IDisposable
+		{
 			CollectionView owner;
 
-			public DeferHelper(CollectionView owner) {
+			public DeferHelper (CollectionView owner)
+			{
 				this.owner = owner;
 				owner.is_refresh_deferred = true;
 			}
 
-			public void Dispose() {
+			public void Dispose ()
+			{
 				owner.is_refresh_deferred = false;
-				owner.Refresh();
+				owner.Refresh ();
 			}
 		}
 		#endregion

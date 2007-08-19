@@ -1,3 +1,30 @@
+//
+// ItemCollection.cs
+//
+// Author:
+//   George Giolfan (georgegiolfan@yahoo.com)
+//
+// Copyright (C) 2007 George Giolfan
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -5,26 +32,29 @@ using System.Windows.Data;
 #if Implementation
 using System;
 using System.Windows;
-namespace Mono.System.Windows.Controls {
+namespace Mono.System.Windows.Controls
+{
 #else
 namespace System.Windows.Controls {
 #endif
-	[Localizability(LocalizationCategory.Ignore)]
-	public sealed class ItemCollection : Mono.System.Windows.Data.CollectionView, IList, ICollection, IEnumerable, IWeakEventListener {
+	[Localizability (LocalizationCategory.Ignore)]
+	public sealed class ItemCollection : Mono.System.Windows.Data.CollectionView, IList, ICollection, IEnumerable, IWeakEventListener
+	{
 		#region Internal Fields
 		internal IEnumerable source_collection;
 		#endregion
 
 		#region Private Fields
 		ArrayList data;
-		ObservableCollection<GroupDescription> group_descriptions = new ObservableCollection<GroupDescription>();
+		ObservableCollection<GroupDescription> group_descriptions = new ObservableCollection<GroupDescription> ();
 		Predicate<object> filter;
 		ArrayList filtered_data;
 		#endregion
 
 		#region Internal Constructors
-		internal ItemCollection(ItemsControl owner)
-			: base(owner.items_data) {
+		internal ItemCollection (ItemsControl owner)
+			: base (owner.items_data)
+		{
 			data = owner.items_data;
 			source_collection = this;
 		}
@@ -72,10 +102,10 @@ namespace System.Windows.Controls {
 				if (filter == null)
 					filtered_data = null;
 				else {
-					filtered_data = new ArrayList();
+					filtered_data = new ArrayList ();
 					foreach (object item in data)
-						if (filter(item))
-							filtered_data.Add(item);
+						if (filter (item))
+							filtered_data.Add (item);
 				}
 			}
 		}
@@ -129,98 +159,116 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Public Indexers
-		public object this[int index] {
-			get { return data[index]; }
-			set { data[index] = value; }
+		public object this [int index] {
+			get { return data [index]; }
+			set { data [index] = value; }
 		}
 		#endregion
 
 		#region Public Methods
-		public int Add(object newItem) {
-			if (filter != null && filter(newItem))
-				filtered_data.Add(newItem);
-			return data.Add(newItem);
+		public int Add (object newItem)
+		{
+			if (filter != null && filter (newItem))
+				filtered_data.Add (newItem);
+			return data.Add (newItem);
 		}
 
-		public void Clear() {
-			filtered_data.Clear();
-			data.Clear();
+		public void Clear ()
+		{
+			filtered_data.Clear ();
+			data.Clear ();
 		}
 
-		public override bool Contains(object item) {
-			return data.Contains(item);
+		public override bool Contains (object item)
+		{
+			return data.Contains (item);
 		}
 
-		public void CopyTo(Array array, int index) {
-			data.CopyTo(array, index);
+		public void CopyTo (Array array, int index)
+		{
+			data.CopyTo (array, index);
 		}
 
-		public override IDisposable DeferRefresh() {
+		public override IDisposable DeferRefresh ()
+		{
 			//WDTDH
-			return base.DeferRefresh();
+			return base.DeferRefresh ();
 		}
 
-		public override object GetItemAt(int index) {
+		public override object GetItemAt (int index)
+		{
 			//WDTDH
-			return base.GetItemAt(index);
+			return base.GetItemAt (index);
 		}
 
-		public override int IndexOf(object item) {
-			return data.IndexOf(item);
+		public override int IndexOf (object item)
+		{
+			return data.IndexOf (item);
 		}
 
-		public void Insert (int insertIndex, object insertItem) {
-			data.Insert(insertIndex, insertItem);
+		public void Insert (int insertIndex, object insertItem)
+		{
+			data.Insert (insertIndex, insertItem);
 		}
 
-		public override bool MoveCurrentTo(object item) {
+		public override bool MoveCurrentTo (object item)
+		{
 			//WDTDH
-			return base.MoveCurrentTo(item);
+			return base.MoveCurrentTo (item);
 		}
 
-		public override bool MoveCurrentToFirst() {
+		public override bool MoveCurrentToFirst ()
+		{
 			//WDTDH
-			return base.MoveCurrentToFirst();
+			return base.MoveCurrentToFirst ();
 		}
 
-		public override bool MoveCurrentToLast() {
+		public override bool MoveCurrentToLast ()
+		{
 			//WDTDH
-			return base.MoveCurrentToLast();
+			return base.MoveCurrentToLast ();
 		}
 
-		public override bool MoveCurrentToNext() {
+		public override bool MoveCurrentToNext ()
+		{
 			//WDTDH
-			return base.MoveCurrentToNext();
+			return base.MoveCurrentToNext ();
 		}
 
-		public override bool MoveCurrentToPosition(int position) {
+		public override bool MoveCurrentToPosition (int position)
+		{
 			//WDTDH
-			return base.MoveCurrentToPosition(position);
+			return base.MoveCurrentToPosition (position);
 		}
 
-		public override bool MoveCurrentToPrevious() {
+		public override bool MoveCurrentToPrevious ()
+		{
 			//WDTDH
-			return base.MoveCurrentToPrevious();
+			return base.MoveCurrentToPrevious ();
 		}
 
-		public override bool PassesFilter(object item) {
+		public override bool PassesFilter (object item)
+		{
 			//WDTDH
-			return base.PassesFilter(item);
+			return base.PassesFilter (item);
 		}
 
-		public void Remove(object removeItem) {
-			filtered_data.Remove(removeItem);
-			data.Remove(removeItem);
+		public void Remove (object removeItem)
+		{
+			filtered_data.Remove (removeItem);
+			data.Remove (removeItem);
 		}
 
-		public void RemoveAt(int removeIndex) {
-			data.RemoveAt(removeIndex);
+		public void RemoveAt (int removeIndex)
+		{
+			data.RemoveAt (removeIndex);
 		}
 		#endregion
 
 		#region Explicit Interface Implementations
 		#region IWeakEventListener
-		bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e) {
+		bool IWeakEventListener.ReceiveWeakEvent (Type managerType, object sender, EventArgs e)
+		{
 			return false;
 		}
 		#endregion
@@ -247,22 +295,23 @@ namespace System.Windows.Controls {
 		#endregion
 
 		#region Internal Methods
-		internal void SetItemsSource(IEnumerable value) {
+		internal void SetItemsSource (IEnumerable value)
+		{
 			if (value == null) {
-				data = new ArrayList();
+				data = new ArrayList ();
 				source_collection = this;
 			} else {
-				ArrayList writeable_data = new ArrayList();
+				ArrayList writeable_data = new ArrayList ();
 				source_collection = value;
 				foreach (object item in source_collection)
-					writeable_data.Add(item);
-				data = ArrayList.FixedSize(ArrayList.ReadOnly(writeable_data));
+					writeable_data.Add (item);
+				data = ArrayList.FixedSize (ArrayList.ReadOnly (writeable_data));
 			}
 		}
 
 		internal IEnumerator LogicalChildren {
 			get {
-				return data.GetEnumerator();
+				return data.GetEnumerator ();
 			}
 		}
 		#endregion

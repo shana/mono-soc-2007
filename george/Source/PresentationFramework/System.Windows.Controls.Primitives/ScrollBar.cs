@@ -1,3 +1,30 @@
+//
+// ScrollBar.cs
+//
+// Author:
+//   George Giolfan (georgegiolfan@yahoo.com)
+//
+// Copyright (C) 2007 George Giolfan
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+// 
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 //FIXME: The Thumb and the RepeatButtons are displayed only when there is enough room.
 using Mono.WindowsPresentationFoundation;
 using System.Windows.Automation.Peers;
@@ -7,41 +34,43 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-namespace Mono.System.Windows.Controls.Primitives {
+namespace Mono.System.Windows.Controls.Primitives
+{
 #else
 namespace System.Windows.Controls.Primitives {
 #endif
-	[Localizability(LocalizationCategory.NeverLocalize)]
-	[TemplatePart(Name="PART_Track", Type=typeof(Track))]
-	public class ScrollBar : RangeBase {
+	[Localizability (LocalizationCategory.NeverLocalize)]
+	[TemplatePart (Name = "PART_Track", Type = typeof (Track))]
+	public class ScrollBar : RangeBase
+	{
 		#region Public Fields
 		#region Commands
-		public static readonly RoutedCommand LineDownCommand = new RoutedCommand("LineDown", typeof(ScrollBar));
-		public static readonly RoutedCommand LineLeftCommand = new RoutedCommand("LineLeft", typeof(ScrollBar));
-		public static readonly RoutedCommand LineRightCommand = new RoutedCommand("LineRight", typeof(ScrollBar));
-		public static readonly RoutedCommand LineUpCommand = new RoutedCommand("LineUp", typeof(ScrollBar));
-		public static readonly RoutedCommand PageDownCommand = new RoutedCommand("PageDown", typeof(ScrollBar));
-		public static readonly RoutedCommand PageLeftCommand = new RoutedCommand("PageLeft", typeof(ScrollBar));
-		public static readonly RoutedCommand PageRightCommand = new RoutedCommand("PageRight", typeof(ScrollBar));
-		public static readonly RoutedCommand PageUpCommand = new RoutedCommand("PageUp", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollHereCommand = new RoutedCommand("ScrollHere", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToBottomCommand = new RoutedCommand("ScrollToBottom", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToEndCommand = new RoutedCommand("ScrollToEnd", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToHomeCommand = new RoutedCommand("ScrollToHome", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToHorizontalOffsetCommand = new RoutedCommand("ScrollToHorizontalOffset", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToLeftEndCommand = new RoutedCommand("ScrollToLeftEnd", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToRightEndCommand = new RoutedCommand("ScrollToRightEnd", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToTopCommand = new RoutedCommand("ScrollToTop", typeof(ScrollBar));
-		public static readonly RoutedCommand ScrollToVerticalOffsetCommand = new RoutedCommand("ScrollToVerticalOffset", typeof(ScrollBar));
+		public static readonly RoutedCommand LineDownCommand = new RoutedCommand ("LineDown", typeof (ScrollBar));
+		public static readonly RoutedCommand LineLeftCommand = new RoutedCommand ("LineLeft", typeof (ScrollBar));
+		public static readonly RoutedCommand LineRightCommand = new RoutedCommand ("LineRight", typeof (ScrollBar));
+		public static readonly RoutedCommand LineUpCommand = new RoutedCommand ("LineUp", typeof (ScrollBar));
+		public static readonly RoutedCommand PageDownCommand = new RoutedCommand ("PageDown", typeof (ScrollBar));
+		public static readonly RoutedCommand PageLeftCommand = new RoutedCommand ("PageLeft", typeof (ScrollBar));
+		public static readonly RoutedCommand PageRightCommand = new RoutedCommand ("PageRight", typeof (ScrollBar));
+		public static readonly RoutedCommand PageUpCommand = new RoutedCommand ("PageUp", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollHereCommand = new RoutedCommand ("ScrollHere", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToBottomCommand = new RoutedCommand ("ScrollToBottom", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToEndCommand = new RoutedCommand ("ScrollToEnd", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToHomeCommand = new RoutedCommand ("ScrollToHome", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToHorizontalOffsetCommand = new RoutedCommand ("ScrollToHorizontalOffset", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToLeftEndCommand = new RoutedCommand ("ScrollToLeftEnd", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToRightEndCommand = new RoutedCommand ("ScrollToRightEnd", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToTopCommand = new RoutedCommand ("ScrollToTop", typeof (ScrollBar));
+		public static readonly RoutedCommand ScrollToVerticalOffsetCommand = new RoutedCommand ("ScrollToVerticalOffset", typeof (ScrollBar));
 		#endregion
-		
+
 		#region Dependency Properties
-		public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(ScrollBar), new FrameworkPropertyMetadata());
-		public static readonly DependencyProperty ViewportSizeProperty = DependencyProperty.Register("ViewportSize", typeof(double), typeof(ScrollBar), new FrameworkPropertyMetadata());
+		public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register ("Orientation", typeof (Orientation), typeof (ScrollBar), new FrameworkPropertyMetadata ());
+		public static readonly DependencyProperty ViewportSizeProperty = DependencyProperty.Register ("ViewportSize", typeof (double), typeof (ScrollBar), new FrameworkPropertyMetadata ());
 		#endregion
-		
+
 		#region Routed Events
-		public static readonly RoutedEvent ScrollEvent = EventManager.RegisterRoutedEvent("Scroll", RoutingStrategy.Bubble, typeof(ScrollEventHandler), typeof(ScrollBar));
+		public static readonly RoutedEvent ScrollEvent = EventManager.RegisterRoutedEvent ("Scroll", RoutingStrategy.Bubble, typeof (ScrollEventHandler), typeof (ScrollBar));
 		#endregion
 		#endregion
 
@@ -52,61 +81,66 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Static Constructor
-		static ScrollBar() {
+		static ScrollBar ()
+		{
 #if Implementation
-			Theme.Load();
+			Theme.Load ();
 #endif
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(ScrollBar), new FrameworkPropertyMetadata(typeof(ScrollBar)));
+			DefaultStyleKeyProperty.OverrideMetadata (typeof (ScrollBar), new FrameworkPropertyMetadata (typeof (ScrollBar)));
 			#region Command bindings
-			Type type = typeof(ScrollBar);
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(LineDownCommand, ExecuteIncreaseSmall, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(LineLeftCommand, ExecuteDecreaseSmall, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(LineRightCommand, ExecuteIncreaseSmall, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(LineUpCommand, ExecuteDecreaseSmall, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(PageDownCommand, ExecuteIncreaseLarge, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(PageLeftCommand, ExecuteDecreaseLarge, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(PageRightCommand, ExecuteIncreaseLarge, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(PageUpCommand, ExecuteDecreaseLarge, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollHereCommand, delegate(object sender, ExecutedRoutedEventArgs e) {
+			Type type = typeof (ScrollBar);
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (LineDownCommand, ExecuteIncreaseSmall, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (LineLeftCommand, ExecuteDecreaseSmall, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (LineRightCommand, ExecuteIncreaseSmall, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (LineUpCommand, ExecuteDecreaseSmall, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (PageDownCommand, ExecuteIncreaseLarge, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (PageLeftCommand, ExecuteDecreaseLarge, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (PageRightCommand, ExecuteIncreaseLarge, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (PageUpCommand, ExecuteDecreaseLarge, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollHereCommand, delegate (object sender, ExecutedRoutedEventArgs e)
+			{
 				ScrollBar i = (ScrollBar)sender;
 				i.Value = i.scroll_here_value;
 			}, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToBottomCommand, ExecuteSetToMaximum, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToEndCommand, ExecuteSetToMaximum, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToHomeCommand, ExecuteSetToMinimum, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToHorizontalOffsetCommand, ExecuteScrollToOffset, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToLeftEndCommand, ExecuteSetToMinimum, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToRightEndCommand, ExecuteSetToMaximum, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToTopCommand, ExecuteSetToMaximum, True));
-			CommandManager.RegisterClassCommandBinding(type, new CommandBinding(ScrollToVerticalOffsetCommand, ExecuteScrollToOffset, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToBottomCommand, ExecuteSetToMaximum, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToEndCommand, ExecuteSetToMaximum, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToHomeCommand, ExecuteSetToMinimum, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToHorizontalOffsetCommand, ExecuteScrollToOffset, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToLeftEndCommand, ExecuteSetToMinimum, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToRightEndCommand, ExecuteSetToMaximum, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToTopCommand, ExecuteSetToMaximum, True));
+			CommandManager.RegisterClassCommandBinding (type, new CommandBinding (ScrollToVerticalOffsetCommand, ExecuteScrollToOffset, True));
 			#endregion
 		}
 		#endregion
 
 		#region Public Constructors
-		public ScrollBar() {
+		public ScrollBar ()
+		{
 			Maximum = 1;
 			Orientation = Orientation.Vertical;
 			Focusable = false;
 		}
 		#endregion
-		
+
 		#region Public Methods
-		public override void OnApplyTemplate() {
-			base.OnApplyTemplate();
-			track = (Track)GetTemplateChild("PART_Track");
+		public override void OnApplyTemplate ()
+		{
+			base.OnApplyTemplate ();
+			track = (Track)GetTemplateChild ("PART_Track");
 			if (track == null)
 				return;
 			track.in_scroll_bar = true;
 			//FIXME: Move binding to Track.
-			Utility.SetBinding(track, Track.MaximumProperty, this, "Maximum");
-			Utility.SetBinding(track, Track.MinimumProperty, this, "Minimum");
-			Utility.SetBinding(track, Track.ValueProperty, this, "Value");
-			Utility.SetBinding(track, Track.OrientationProperty, this, "Orientation");
-			Utility.SetBinding(track, Track.ViewportSizeProperty, this, "ViewportSize");
-			track.Thumb.DragDelta += delegate(object sender, DragDeltaEventArgs e) {
-				double value_from_distance = track.ValueFromDistance(e.HorizontalChange, e.VerticalChange);
-				if (double.IsNaN(value_from_distance))
+			Utility.SetBinding (track, Track.MaximumProperty, this, "Maximum");
+			Utility.SetBinding (track, Track.MinimumProperty, this, "Minimum");
+			Utility.SetBinding (track, Track.ValueProperty, this, "Value");
+			Utility.SetBinding (track, Track.OrientationProperty, this, "Orientation");
+			Utility.SetBinding (track, Track.ViewportSizeProperty, this, "ViewportSize");
+			track.Thumb.DragDelta += delegate (object sender, DragDeltaEventArgs e)
+			{
+				double value_from_distance = track.ValueFromDistance (e.HorizontalChange, e.VerticalChange);
+				if (double.IsNaN (value_from_distance))
 					return;
 				Value += value_from_distance;
 			};
@@ -116,13 +150,13 @@ namespace System.Windows.Controls.Primitives {
 		#region Public Properties
 		#region Dependency Properties
 		public Orientation Orientation {
-			get { return (Orientation)GetValue(OrientationProperty); }
-			set { SetValue(OrientationProperty, value); }
+			get { return (Orientation)GetValue (OrientationProperty); }
+			set { SetValue (OrientationProperty, value); }
 		}
 
 		public double ViewportSize {
-			get { return (double)GetValue(ViewportSizeProperty); }
-			set { SetValue(ViewportSizeProperty, value); }
+			get { return (double)GetValue (ViewportSizeProperty); }
+			set { SetValue (ViewportSizeProperty, value); }
 		}
 		#endregion
 
@@ -141,21 +175,24 @@ namespace System.Windows.Controls.Primitives {
 		#endregion
 
 		#region Protected Methods
-		protected override void OnContextMenuClosing(ContextMenuEventArgs e) {
-			base.OnContextMenuClosing(e);
+		protected override void OnContextMenuClosing (ContextMenuEventArgs e)
+		{
+			base.OnContextMenuClosing (e);
 
 		}
 
-		protected override void OnContextMenuOpening(ContextMenuEventArgs e) {
-			base.OnContextMenuOpening(e);
+		protected override void OnContextMenuOpening (ContextMenuEventArgs e)
+		{
+			base.OnContextMenuOpening (e);
 			//FIXME: If you right-click on the scroll bar when the menu is open, it is shown in the new position. It should happen only after a certain amount of time.
 			if (context_menu == null)
-				context_menu = new ScrollBarContextMenu();
+				context_menu = new ScrollBarContextMenu ();
 			context_menu.Owner = this;
 			context_menu.IsOpen = true;
 		}
 
-		protected override AutomationPeer OnCreateAutomationPeer() {
+		protected override AutomationPeer OnCreateAutomationPeer ()
+		{
 #if Implementation
 			return null;
 #else
@@ -163,118 +200,140 @@ namespace System.Windows.Controls.Primitives {
 #endif
 		}
 
-		protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e) {
-			base.OnPreviewMouseLeftButtonDown(e);
+		protected override void OnPreviewMouseLeftButtonDown (MouseButtonEventArgs e)
+		{
+			base.OnPreviewMouseLeftButtonDown (e);
 			if (Keyboard.PrimaryDevice.Modifiers == ModifierKeys.Shift) {
-				Value = GetValueFromPoint(e);
+				Value = GetValueFromPoint (e);
 				e.Handled = true;
 			}
 		}
 
-		protected override void OnPreviewMouseRightButtonUp(MouseButtonEventArgs e) {
-			base.OnPreviewMouseRightButtonUp(e);
-			scroll_here_value = GetValueFromPoint(e);
+		protected override void OnPreviewMouseRightButtonUp (MouseButtonEventArgs e)
+		{
+			base.OnPreviewMouseRightButtonUp (e);
+			scroll_here_value = GetValueFromPoint (e);
 		}
 
 		#endregion
 
 		#region Public Events
 		//FIXME: Raise
-		public event ScrollEventHandler Scroll {
-			add { AddHandler(ScrollEvent, value); }
-			remove { RemoveHandler(ScrollEvent, value); }
+		public event ScrollEventHandler Scroll
+		{
+			add { AddHandler (ScrollEvent, value); }
+			remove { RemoveHandler (ScrollEvent, value); }
 		}
 		#endregion
 
 		#region Private Methods
-		double GetValueFromPoint(MouseButtonEventArgs e) {
-			return track.ValueFromPoint(e.MouseDevice.GetPosition(track));
+		double GetValueFromPoint (MouseButtonEventArgs e)
+		{
+			return track.ValueFromPoint (e.MouseDevice.GetPosition (track));
 		}
 
-		void DecreaseSmall() {
-			Value = Math.Max(Value - SmallChange, Minimum);
+		void DecreaseSmall ()
+		{
+			Value = Math.Max (Value - SmallChange, Minimum);
 		}
 
-		static void ExecuteDecreaseSmall(object sender, ExecutedRoutedEventArgs e) {
-			((ScrollBar)sender).DecreaseSmall();		
+		static void ExecuteDecreaseSmall (object sender, ExecutedRoutedEventArgs e)
+		{
+			((ScrollBar)sender).DecreaseSmall ();
 		}
 
-		void IncreaseSmall() {
-			Value = Math.Min(Value + SmallChange, Maximum);
+		void IncreaseSmall ()
+		{
+			Value = Math.Min (Value + SmallChange, Maximum);
 		}
 
-		static void ExecuteIncreaseSmall(object sender, ExecutedRoutedEventArgs e) {
-			((ScrollBar)sender).IncreaseSmall();
+		static void ExecuteIncreaseSmall (object sender, ExecutedRoutedEventArgs e)
+		{
+			((ScrollBar)sender).IncreaseSmall ();
 		}
 
-		void DecreaseLarge() {
-			Value = Math.Max(Value - LargeChange, Minimum);
+		void DecreaseLarge ()
+		{
+			Value = Math.Max (Value - LargeChange, Minimum);
 		}
 
-		static void ExecuteDecreaseLarge(object sender, ExecutedRoutedEventArgs e) {
-			((ScrollBar)sender).DecreaseLarge();
+		static void ExecuteDecreaseLarge (object sender, ExecutedRoutedEventArgs e)
+		{
+			((ScrollBar)sender).DecreaseLarge ();
 		}
 
-		void IncreaseLarge() {
-			Value = Math.Min(Value + LargeChange, Maximum);
+		void IncreaseLarge ()
+		{
+			Value = Math.Min (Value + LargeChange, Maximum);
 		}
 
-		static void ExecuteIncreaseLarge(object sender, ExecutedRoutedEventArgs e) {
-			((ScrollBar)sender).IncreaseLarge();
+		static void ExecuteIncreaseLarge (object sender, ExecutedRoutedEventArgs e)
+		{
+			((ScrollBar)sender).IncreaseLarge ();
 		}
 
-		void SetToMinimum() {
+		void SetToMinimum ()
+		{
 			Value = Minimum;
 		}
 
-		static void ExecuteSetToMinimum(object sender, ExecutedRoutedEventArgs e) {
-			((ScrollBar)sender).SetToMinimum();
+		static void ExecuteSetToMinimum (object sender, ExecutedRoutedEventArgs e)
+		{
+			((ScrollBar)sender).SetToMinimum ();
 		}
 
-		void SetToMaximum() {
+		void SetToMaximum ()
+		{
 			Value = Maximum;
 		}
 
-		static void ExecuteSetToMaximum(object sender, ExecutedRoutedEventArgs e) {
-			((ScrollBar)sender).SetToMaximum();
+		static void ExecuteSetToMaximum (object sender, ExecutedRoutedEventArgs e)
+		{
+			((ScrollBar)sender).SetToMaximum ();
 		}
 
-		static void ExecuteScrollToOffset(object sender, ExecutedRoutedEventArgs e) {
+		static void ExecuteScrollToOffset (object sender, ExecutedRoutedEventArgs e)
+		{
 			((ScrollBar)sender).Value = (double)e.Parameter;
 		}
 
-		static void True(object sender, CanExecuteRoutedEventArgs e) {
+		static void True (object sender, CanExecuteRoutedEventArgs e)
+		{
 			e.CanExecute = true;
 		}
 		#endregion
 
 		#region Private Classes
-		class ScrollBarContextMenu : ContextMenu {
-			MenuItem scroll_here = new MenuItem();
-			MenuItem top_left_edge = new MenuItem();
-			MenuItem bottom_right_edge = new MenuItem();
-			MenuItem page_up_left = new MenuItem();
-			MenuItem page_down_right = new MenuItem();
-			MenuItem scroll_up_left = new MenuItem();
-			MenuItem scroll_down_right = new MenuItem();
+		class ScrollBarContextMenu : ContextMenu
+		{
+			MenuItem scroll_here = new MenuItem ();
+			MenuItem top_left_edge = new MenuItem ();
+			MenuItem bottom_right_edge = new MenuItem ();
+			MenuItem page_up_left = new MenuItem ();
+			MenuItem page_down_right = new MenuItem ();
+			MenuItem scroll_up_left = new MenuItem ();
+			MenuItem scroll_down_right = new MenuItem ();
 
-			public ScrollBarContextMenu() {
+			public ScrollBarContextMenu ()
+			{
 				scroll_here.Header = "Scroll Here";
 				scroll_here.Command = ScrollHereCommand;
-				Items.Add(scroll_here);
-				Items.Add(new Separator());
-				Items.Add(top_left_edge);
-				Items.Add(bottom_right_edge);
-				Items.Add(new Separator());
-				Items.Add(page_up_left);
-				Items.Add(page_down_right);
-				Items.Add(new Separator());
-				Items.Add(scroll_up_left);
-				Items.Add(scroll_down_right);
+				Items.Add (scroll_here);
+				Items.Add (new Separator ());
+				Items.Add (top_left_edge);
+				Items.Add (bottom_right_edge);
+				Items.Add (new Separator ());
+				Items.Add (page_up_left);
+				Items.Add (page_down_right);
+				Items.Add (new Separator ());
+				Items.Add (scroll_up_left);
+				Items.Add (scroll_down_right);
 			}
-			
-			public ScrollBar Owner {
-				set {
+
+			public ScrollBar Owner
+			{
+				set
+				{
 					scroll_here.CommandTarget = value;
 					top_left_edge.CommandTarget = value;
 					bottom_right_edge.CommandTarget = value;
@@ -303,7 +362,7 @@ namespace System.Windows.Controls.Primitives {
 						page_down_right.Header = "Page Right";
 						scroll_up_left.Header = "Scroll Left";
 						scroll_down_right.Header = "Scroll Right";
-						
+
 						top_left_edge.Command = ScrollToLeftEndCommand;
 						bottom_right_edge.Command = ScrollToRightEndCommand;
 						page_up_left.Command = PageLeftCommand;

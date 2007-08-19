@@ -3,61 +3,71 @@ using System.Windows.Media;
 #if Implementation
 using System;
 using System.Windows;
-namespace Mono.System.Windows.Controls {
+namespace Mono.System.Windows.Controls
+{
 #else
 namespace System.Windows.Controls {
 #endif
 	[TestFixture]
 #if Implementation
-	[Ignore("Not implementable now")]
+	[Ignore ("Not implementable now")]
 #endif
-	public class ItemsPresenterTest {
+	public class ItemsPresenterTest
+	{
 		#region OnApplyTemplate
 		#region OnApplyTemplateCallsGetVisualChild
 		[Test]
-		public void OnApplyTemplateCallsGetVisualChild() {
-			new OnApplyTemplateCallsGetVisualChildItemsPresenter();
+		public void OnApplyTemplateCallsGetVisualChild ()
+		{
+			new OnApplyTemplateCallsGetVisualChildItemsPresenter ();
 		}
 
-		class OnApplyTemplateCallsGetVisualChildItemsPresenter : ItemsPresenter {
+		class OnApplyTemplateCallsGetVisualChildItemsPresenter : ItemsPresenter
+		{
 			int calls;
 			int argument;
 
-			public OnApplyTemplateCallsGetVisualChildItemsPresenter() {
-				Assert.AreEqual(calls, 0, "1");
+			public OnApplyTemplateCallsGetVisualChildItemsPresenter ()
+			{
+				Assert.AreEqual (calls, 0, "1");
 				try {
-					OnApplyTemplate();
+					OnApplyTemplate ();
 				} catch {
 				}
-				Assert.AreEqual(calls, 1, "2");
-				Assert.AreEqual(argument, 0, "3");
+				Assert.AreEqual (calls, 1, "2");
+				Assert.AreEqual (argument, 0, "3");
 			}
 
-			protected override Visual GetVisualChild(int index) {
+			protected override Visual GetVisualChild (int index)
+			{
 				calls++;
 				argument = index;
-				return base.GetVisualChild(index);
+				return base.GetVisualChild (index);
 			}
 		}
 		#endregion
 
 		#region VisualTreeMustBeASingleElement
 		[Test]
-		public void VisualTreeMustBeASingleElement() {
-			new VisualTreeMustBeASingleElementItemsPresenter();
+		public void VisualTreeMustBeASingleElement ()
+		{
+			new VisualTreeMustBeASingleElementItemsPresenter ();
 		}
 
-		class VisualTreeMustBeASingleElementItemsPresenter : ItemsPresenter {
-			public VisualTreeMustBeASingleElementItemsPresenter() {
+		class VisualTreeMustBeASingleElementItemsPresenter : ItemsPresenter
+		{
+			public VisualTreeMustBeASingleElementItemsPresenter ()
+			{
 				try {
-					OnApplyTemplate();
-					Assert.Fail("1");
+					OnApplyTemplate ();
+					Assert.Fail ("1");
 				} catch (InvalidOperationException ex) {
-					Assert.AreEqual(ex.Message, "VisualTree of ItemsPanelTemplate must be a single element.", "2");
+					Assert.AreEqual (ex.Message, "VisualTree of ItemsPanelTemplate must be a single element.", "2");
 				}
 			}
 
-			protected override Visual GetVisualChild(int index) {
+			protected override Visual GetVisualChild (int index)
+			{
 				return null;
 			}
 		}
@@ -65,39 +75,46 @@ namespace System.Windows.Controls {
 
 		#region VisualTreeMustBeASingleElement2
 		[Test]
-		public void VisualTreeMustBeASingleElement2() {
-			new VisualTreeMustBeASingleElement2ItemsPresenter();
+		public void VisualTreeMustBeASingleElement2 ()
+		{
+			new VisualTreeMustBeASingleElement2ItemsPresenter ();
 		}
 
-		class VisualTreeMustBeASingleElement2ItemsPresenter : ItemsPresenter {
-			public VisualTreeMustBeASingleElement2ItemsPresenter() {
+		class VisualTreeMustBeASingleElement2ItemsPresenter : ItemsPresenter
+		{
+			public VisualTreeMustBeASingleElement2ItemsPresenter ()
+			{
 				try {
-					OnApplyTemplate();
-					Assert.Fail("1");
+					OnApplyTemplate ();
+					Assert.Fail ("1");
 				} catch (InvalidOperationException ex) {
-					Assert.AreEqual(ex.Message, "VisualTree of ItemsPanelTemplate must be a single element.", "2");
+					Assert.AreEqual (ex.Message, "VisualTree of ItemsPanelTemplate must be a single element.", "2");
 				}
 			}
 
-			protected override Visual GetVisualChild(int index) {
-				return new FrameworkElement();
+			protected override Visual GetVisualChild (int index)
+			{
+				return new FrameworkElement ();
 			}
 		}
 		#endregion
 
 		#region VisualTreeMustBeASingleElement3
 		[Test]
-		public void VisualTreeMustBeASingleElement3() {
-			new VisualTreeMustBeASingleElement3ItemsPresenter();
+		public void VisualTreeMustBeASingleElement3 ()
+		{
+			new VisualTreeMustBeASingleElement3ItemsPresenter ();
 		}
 
-		class VisualTreeMustBeASingleElement3ItemsPresenter : ItemsPresenter {
-			public VisualTreeMustBeASingleElement3ItemsPresenter() {
+		class VisualTreeMustBeASingleElement3ItemsPresenter : ItemsPresenter
+		{
+			public VisualTreeMustBeASingleElement3ItemsPresenter ()
+			{
 				try {
-					OnApplyTemplate();
-					Assert.Fail("1");
+					OnApplyTemplate ();
+					Assert.Fail ("1");
 				} catch (InvalidOperationException ex) {
-					Assert.AreEqual(ex.Message, "VisualTree of ItemsPanelTemplate must be a single element.", "2");
+					Assert.AreEqual (ex.Message, "VisualTree of ItemsPanelTemplate must be a single element.", "2");
 				}
 			}
 
@@ -107,22 +124,26 @@ namespace System.Windows.Controls {
 				}
 			}
 
-			protected override Visual GetVisualChild(int index) {
-				return new FrameworkElement();
+			protected override Visual GetVisualChild (int index)
+			{
+				return new FrameworkElement ();
 			}
 		}
 		#endregion
 
 		#region VisualTreeMustBeASingleElement4
 		[Test]
-		public void VisualTreeMustBeASingleElement4() {
-			new VisualTreeMustBeASingleElement4ItemsPresenter();
+		public void VisualTreeMustBeASingleElement4 ()
+		{
+			new VisualTreeMustBeASingleElement4ItemsPresenter ();
 		}
 
-		class VisualTreeMustBeASingleElement4ItemsPresenter : ItemsPresenter {
-			public VisualTreeMustBeASingleElement4ItemsPresenter() {
-				AddVisualChild(new StackPanel());
-				Assert.AreEqual(VisualChildrenCount, 0, "1");
+		class VisualTreeMustBeASingleElement4ItemsPresenter : ItemsPresenter
+		{
+			public VisualTreeMustBeASingleElement4ItemsPresenter ()
+			{
+				AddVisualChild (new StackPanel ());
+				Assert.AreEqual (VisualChildrenCount, 0, "1");
 			}
 		}
 		#endregion
