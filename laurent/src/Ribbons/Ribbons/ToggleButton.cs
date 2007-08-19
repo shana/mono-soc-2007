@@ -4,36 +4,30 @@ using Gtk;
 
 namespace Ribbons
 {
-	/// <summary>Button to be used in Ribbons.</summary>
-	public class Button : BaseButton
+	/// <summary>Toggle button to be used in Ribbons.</summary>
+	public class ToggleButton : BaseButton
 	{
-		private Menu dropDownMenu;
-		
-		private double arrowSize;
-		private Gdk.Rectangle arrowAllocation;
+		private bool value;
 		
 		protected const double lineWidth = 1.0;
-		protected const double arrowPadding = 2.0;
-		protected const double smallArrowSize = 5.0;
-		protected const double bigArrowSize = 8.0;
 		
-		public event EventHandler Clicked;
+		public event EventHandler ValueChanged;
 		
-		public Menu DropDownMenu
+		public bool Value
 		{
 			set
 			{
-				dropDownMenu = value;
-				QueueDraw ();
+				if(this.value != value)
+				{
+					this.value = value;
+					OnValueChanged ();
+				}
 			}
-			get
-			{
-				return dropDownMenu;
-			}
+			get { return value; }
 		}
 		
 		/// <summary>Default constructor.</summary>
-		public Button ()
+		public ToggleButton ()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);
 			
@@ -43,18 +37,19 @@ namespace Ribbons
 			this.ImagePosition = PositionType.Top;
 			this.isSmall = false;
 			this.enable = true;
+			this.value = false;
 		}
 		
 		/// <summary>Constructor given a label to display.</summary>
 		/// <param name="Label">Label to display.</param>
-		public Button (string Label) : this ()
+		public ToggleButton (string Label) : this ()
 		{
 			this.Label = Label;
 		}
 		
 		/// <summary>Constructor given an image to display.</summary>
 		/// <param name="Image">Image to display</param>
-		public Button (Image Image) : this ()
+		public ToggleButton (Image Image) : this ()
 		{
 			this.Image = Image;
 		}
@@ -62,7 +57,7 @@ namespace Ribbons
 		/// <summary>Constructor given a label and an image to display.</summary>
 		/// <param name="Image">Image to display.</param>
 		/// <param name="Label">Label to display.</param>
-		public Button (Image Image, string Label) : this ()
+		public ToggleButton (Image Image, string Label) : this ()
 		{
 			this.Image = Image;
 			this.Label = Label;
@@ -71,10 +66,10 @@ namespace Ribbons
 		/// <summary>Constructs a Button from a stock.</summary>
 		/// <param name="Name">Name of the stock.</param>
 		/// <param name="Large"><b>true</b> if the image should be large, <b>false</b> otherwise.</param>
-		public static Button FromStockIcon (string Name, bool Large)
+		public static ToggleButton FromStockIcon (string Name, bool Large)
 		{
 			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
-			Button btn = new Button (img);
+			ToggleButton btn = new ToggleButton (img);
 			if(!Large) btn.ImagePosition = PositionType.Left;
 			return btn;
 		}
@@ -83,28 +78,12 @@ namespace Ribbons
 		/// <param name="Name">Name of the stock.</param>
 		/// <param name="Label">Label to display.</param>
 		/// <param name="Large"><b>true</b> if the image should be large, <b>false</b> otherwise.</param>
-		public static Button FromStockIcon (string Name, string Label, bool Large)
+		public static ToggleButton FromStockIcon (string Name, string Label, bool Large)
 		{
 			Image img = new Image (Name, Large ? IconSize.LargeToolbar : IconSize.SmallToolbar);
-			Button btn = new Button (img, Label);
+			ToggleButton btn = new ToggleButton (img, Label);
 			if(!Large) btn.ImagePosition = PositionType.Left;
 			return btn;
-		}
-		
-		/// <summary>Fires the Click event.</summary>
-		public void Click ()
-		{
-			if(enable && Clicked != null) Clicked (this, EventArgs.Empty);
-		}
-		
-		/// <summary>Displays the drop down menu if any.</summary>
-		public void Popup ()
-		{
-			if(enable && dropDownMenu != null)
-			{
-				dropDownMenu.Popup ();
-				dropDownMenu.ShowAll ();
-			}
 		}
 		
 		protected override void BindedWidget_ButtonPressEvent (object sender, ButtonPressEventArgs evnt)
@@ -115,7 +94,8 @@ namespace Ribbons
 		protected override void BindedWidget_ButtonReleaseEvent (object sender, ButtonReleaseEventArgs evnt)
 		{
 			ProcessEvent (evnt.Event);
-			Click ();
+			Value = !Value;
+			QueueDraw ();
 		}
 		
 		protected override void OnSizeRequested (ref Requisition requisition)
@@ -126,20 +106,6 @@ namespace Ribbons
 			if(Child != null && Child.Visible)
 			{
 				childRequisition = Child.SizeRequest ();
-			}
-			
-			if(dropDownMenu != null)
-			{
-				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * (lineWidth + arrowPadding));
-				
-				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
-				{
-					childRequisition.Height += arrowSpace;
-				}
-				else
-				{
-					childRequisition.Width += arrowSpace;
-				}
 			}
 			
 			if(HeightRequest == -1)
@@ -156,55 +122,10 @@ namespace Ribbons
 		{
 			base.OnSizeAllocated (allocation);
 			
-			if(dropDownMenu != null)
-			{
-				arrowSize = isSmall ? smallArrowSize : bigArrowSize;
-				
-				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
-				{
-					if(Clicked != null)
-						arrowAllocation.Height = (int)(arrowSize + 2 * arrowPadding);
-					else
-						arrowAllocation.Height = (int)(allocation.Height - 4 * lineWidth);
-					
-					arrowAllocation.Width = (int)(allocation.Width - 4 * lineWidth);
-				}
-				else
-				{
-					if(Clicked != null)
-						arrowAllocation.Width = (int)(arrowSize + 2 * arrowPadding);
-					else
-						arrowAllocation.Width = (int)(allocation.Width - 4 * lineWidth);
-					
-					arrowAllocation.Height = (int)(allocation.Height - 4 * lineWidth);
-				}
-				
-				arrowAllocation.X = (int)(allocation.Right - arrowAllocation.Width - 2 * lineWidth);
-				arrowAllocation.Y = (int)(allocation.Bottom - arrowAllocation.Height - 2 * lineWidth);
-			}
-			else
-			{
-				arrowSize = 0;
-			}
-			
 			allocation.X += (int)(lineWidth * 2 + padding);
 			allocation.Y += (int)(lineWidth * 2 + padding);
 			allocation.Height -= (int)(lineWidth * 4 + padding * 2);
 			allocation.Width -= (int)(lineWidth * 4 + padding * 2);
-			
-			if(dropDownMenu != null)
-			{
-				int arrowSpace = (int)((isSmall ? smallArrowSize : bigArrowSize) + 2 * (lineWidth + arrowPadding));
-				
-				if(imgPos == PositionType.Top || imgPos == PositionType.Bottom)
-				{
-					allocation.Height -= arrowSpace;
-				}
-				else
-				{
-					allocation.Width -= arrowSpace;
-				}
-			}
 			
 			if(allocation.Height < 0) allocation.Height = 0;
 			if(allocation.Width < 0) allocation.Width = 0;
@@ -230,8 +151,14 @@ namespace Ribbons
 		{
 			Rectangle rect = new Rectangle (Allocation.X, Allocation.Y, Allocation.Width, Allocation.Height);
 			double roundSize = isSmall ? 2.0 : 3.0;
-			bool drawSeparator = (Clicked != null) && (dropDownMenu != null);
-			theme.DrawButton (cr, rect, state, roundSize, lineWidth, arrowSize, arrowPadding, drawSeparator, this);
+			Theme.ButtonState s = this.state;
+			if(this.value) s = Theme.ButtonState.Pressed;
+			theme.DrawButton (cr, rect, s, roundSize, lineWidth, 0, 0, false, this);
+		}
+		
+		protected virtual void OnValueChanged ()
+		{
+			if(ValueChanged != null) ValueChanged (this, EventArgs.Empty);
 		}
 		
 		protected override bool OnButtonPressEvent (Gdk.EventButton evnt)
@@ -240,12 +167,6 @@ namespace Ribbons
 			state = Theme.ButtonState.Pressed;
 			if(!enable) state = Theme.ButtonState.Default;
 			this.QueueDraw ();
-			
-			if(dropDownMenu != null && arrowAllocation.Contains ((int)evnt.X, (int)evnt.Y))
-			{
-				Popup ();
-			}
-			
 			return ret;
 		}
 		
