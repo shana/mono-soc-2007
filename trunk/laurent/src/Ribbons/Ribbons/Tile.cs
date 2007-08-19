@@ -4,12 +4,14 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>The Tile widget.</summary>
 	public abstract class Tile : Widget
 	{
 		protected Theme theme = new Theme ();
 		private bool selected;
 		private uint borderWidth;
 		
+		/// <summary>Gets or sets the width of the border.</summary>
 		public uint BorderWidth
 		{
 			set
@@ -20,6 +22,7 @@ namespace Ribbons
 			get { return borderWidth; }
 		}
 		
+		/// <summary>Gets or sets the state of the Tile.</summary>
 		public bool Selected
 		{
 			set
@@ -30,6 +33,7 @@ namespace Ribbons
 			get { return selected; }
 		}
 		
+		/// <summary>Fired when the Tile has been clicked.</summary>
 		public event EventHandler Clicked;
 		
 		/// <summary>Theme used to draw the widget.</summary>

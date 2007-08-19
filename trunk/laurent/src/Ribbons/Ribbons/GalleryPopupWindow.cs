@@ -4,7 +4,8 @@ using Gtk;
 
 namespace Ribbons
 {
-	public class GalleryPopupWindow : Window
+	/// <summary>Popup gallery.</summary>
+	internal class GalleryPopupWindow : Window
 	{
 		private const int MAX_HEIGHT = 200;
 		private const int SCROLLBAR_SIZE = 20;
@@ -18,11 +19,14 @@ namespace Ribbons
 		private ScrolledWindow internalWindow;
 		private Table tileTable;
 		
+		/// <summary>Returns the underlying gallery.</summary>
 		public Gallery UnderlyingGallery
 		{
 			get { return underlyingGallery; }
 		}
 		
+		/// <summary>Default constructor.</summary>
+		/// <param name="UnderlyingGallery">The underlying gallery.</param>
 		public GalleryPopupWindow (Gallery UnderlyingGallery) : base (WindowType.Popup)
 		{
 			this.underlyingGallery = UnderlyingGallery;

@@ -4,12 +4,14 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>ToolBox containing several widgets displayed in rows.</summary>
 	public class ToolBox : Container
 	{
 		private List<Widget> widgets;
 		private Gtk.Requisition[] requisitions;
 		private int spacing;
 		
+		/// <summary>Gets or sets the spacing between children.</summary>
 		public int Spacing
 		{
 			set
@@ -20,6 +22,7 @@ namespace Ribbons
 			get { return spacing; }
 		}
 		
+		/// <summary>Default constructor.</summary>
 		public ToolBox ()
 		{
 			this.widgets = new List<Widget> ();

@@ -4,16 +4,19 @@ using Gtk;
 
 namespace Ribbons
 {
+	/// <summary>Container displaying children using a flow layout.</summary>
 	public class FlowLayoutContainer : Container
 	{
 		private List<Widget> children;
 		private Requisition[] childReqs;
 		
+		/// <summary>Returns the number of children.</summary>
 		public int NChildren
 		{
 			get { return children.Count; }
 		}
 		
+		/// <summary>Default constructor.</summary>
 		public FlowLayoutContainer()
 		{
 			this.SetFlag (WidgetFlags.NoWindow);

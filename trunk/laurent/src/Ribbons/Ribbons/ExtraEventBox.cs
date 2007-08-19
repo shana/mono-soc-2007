@@ -3,6 +3,7 @@ using System;
 
 namespace Ribbons
 {
+	/// <summary>EventBox extended to transmit all events.</summary>
 	public class ExtraEventBox : EventBox
 	{
 		protected override bool OnWidgetEvent (Gdk.Event evnt)
