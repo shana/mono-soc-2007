@@ -74,7 +74,7 @@ namespace Ribbons
 			this.AddEvents ((int)(Gdk.EventMask.ButtonPressMask | Gdk.EventMask.ButtonReleaseMask | Gdk.EventMask.PointerMotionMask));
 			
 			Label = null;
-			HeightRequest = 90;
+			HeightRequest = 92;
 			
 			expandButton = new Button ("\u21F2");
 			expandButton.Padding = 0;
@@ -104,22 +104,7 @@ namespace Ribbons
 			int lw, lh;
 			lbl_layout.GetPixelSize (out lw, out lh);
 			
-			Requisition childRequisition = new Requisition ();
-			if(Child != null && Child.Visible)
-			{
-				if(HeightRequest != -1)
-				{
-					int left = HeightRequest - (int)(2 * (2*lineWidth + space)) + (int)(2 * childPadding);
-					Child.HeightRequest = left;
-				}
-				if(WidthRequest != -1)
-				{
-					int left = HeightRequest - (int)(2 * (2*lineWidth + childPadding));
-					Child.WidthRequest = left;
-				}
-				childRequisition = Child.SizeRequest ();
-			}
-			
+			double frameSize = 2*lineWidth + childPadding;
 			barHeight = lh + 2 * space;
 			if(expandButton != null && expandButton.Visible)
 			{
@@ -127,11 +112,27 @@ namespace Ribbons
 				expandButton.SizeRequest ();
 			}
 			
+			Requisition childRequisition = new Requisition ();
+			if(Child != null && Child.Visible)
+			{
+				if(HeightRequest != -1)
+				{
+					int left = HeightRequest - (int)(2 * frameSize + barHeight);
+					Child.HeightRequest = left;
+				}
+				if(WidthRequest != -1)
+				{
+					int left = WidthRequest - (int)(2 * frameSize);
+					Child.WidthRequest = left;
+				}
+				childRequisition = Child.SizeRequest ();
+			}
+			
 			if(WidthRequest == -1)
 			{
 				if(Child != null && Child.Visible)
 				{
-					requisition.Width = childRequisition.Width + (int)(2 * (2*lineWidth + childPadding));
+					requisition.Width = childRequisition.Width + (int)(2 * frameSize);
 				}
 				else
 				{
@@ -145,10 +146,10 @@ namespace Ribbons
 			
 			if(HeightRequest == -1)
 			{
-				requisition.Height = (int)(4 * lineWidth + barHeight);
+				requisition.Height = (int)(2 * frameSize + barHeight);
 				if(Child != null && Child.Visible)
 				{
-					requisition.Height += childRequisition.Height + (int)(2 * childPadding);
+					requisition.Height += childRequisition.Height;
 				}
 			}
 		}
