@@ -39,10 +39,17 @@ namespace Gendarme.Rules.Smells {
 	
 	internal class CodeDuplicatedLocator {
 		private StringCollection checkedMethods = new StringCollection ();
+		private StringCollection checkedTypes = new StringCollection ();
 		
 		internal StringCollection CheckedMethods {
 			get {
 				return checkedMethods;
+			}
+		}
+
+		internal StringCollection CheckedTypes {
+			get {
+				return checkedTypes;
 			}
 		}
 
@@ -93,11 +100,13 @@ namespace Gendarme.Rules.Smells {
 		internal MessageCollection CompareMethodAgainstTypeMethods (MethodDefinition currentMethod, TypeDefinition targetTypeDefinition) 
 		{
 			MessageCollection messageCollection = new MessageCollection ();
-			foreach (MethodDefinition targetMethod in targetTypeDefinition.Methods) {
-				if (ContainsDuplicatedCode (currentMethod, targetMethod)) {
-					Location location = new Location (currentMethod.DeclaringType.Name, currentMethod.Name, 0);
-					Message message = new Message (String.Format ("Exists code duplicated with {0}.{1}", targetTypeDefinition.Name, targetMethod.Name), location, MessageType.Error);
-					messageCollection.Add (message);
+			if (!CheckedTypes.Contains (targetTypeDefinition.Name)) {
+				foreach (MethodDefinition targetMethod in targetTypeDefinition.Methods) {
+					if (ContainsDuplicatedCode (currentMethod, targetMethod)) {
+						Location location = new Location (currentMethod.DeclaringType.Name, currentMethod.Name, 0);
+						Message message = new Message (String.Format ("Exists code duplicated with {0}.{1}", targetTypeDefinition.Name, targetMethod.Name), location, MessageType.Error);
+						messageCollection.Add (message);
+					}
 				}
 			}
 			return messageCollection;
