@@ -1,0 +1,57 @@
+2007-06-10  Ivan N. Zlatev <contact@i-nZ.net> 
+	* DesignSurfaceTest.cs: Add DT NestedContainer tests.
+
+2007-06-10  Ivan N. Zlatev <contact@i-nZ.net> 
+	* DesignSurfaceTest.cs: import.
+
+2007-06-09  Ivan N. Zlatev <contact@i-nZ.net> 
+	* NestedContainerTest.cs: import.
+
+2007-06-09  Ivan N. Zlatev <contact@i-nZ.net> 
+	* System.Windows.Forms.Design/:
+	 - DocumentDesignerTest.cs: MS compitability fixes.
+	 - DesignerTestHelper.cs: Fix 1.1 profile.
+
+2007-06-09  Ivan N. Zlatev <contact@i-nZ.net> 
+	* System.Windows.Forms.Design/:
+	 - DocumentDesignerTest.cs: import.
+	 - DesignerTestHelper.cs: Add an overload to specify with what root 
+	 control type the DesignSurface to be loaded.
+	 - DesignerHost.cs: Fixed to add the designer to the designer and then 
+	 initialize it, not the other way round.
+
+2007-06-08  Ivan N. Zlatev <contact@i-nZ.net> 
+	 * System.Windows.Forms.Design/:
+	  - ParentControlDesignerTest.cs: import.
+	  - DesignerTestHelper.cs: Improved GetValue/SetValue to throw
+	  nice exceptions with information.
+
+2007-06-08  Ivan N. Zlatev <contact@i-nZ.net> 
+	 * ControlDesignerTest.cs, ComponentDesignerTest.cs:
+	 Fixed tests on msnet. They were crashing during dispose, probably
+	 due to the test environment.
+
+2007-06-07  Ivan N. Zlatev <contact@i-nZ.net> 
+	* System.Windows.Forms.Design/:
+	 - ControlDesignerTest.cs, DesignerHost.cs:
+	 Fixed tests on 1.1. Was missing site and filter service impls.
+
+2007-06-06  Ivan N. Zlatev <contact@i-nZ.net> 
+
+	* Makefile: Added 1.1 target and moved msnet target to the slickedit 
+	project.
+	* System.ComponentModel.Design/:
+	 - ComponentDesignerTest.cs: More tests.
+	 - ControlDesignerTest.cs: Initial import.
+	 - DesignerTestHelper.cs, DesignerHost.cs: Initial import.
+	* System.Windows.Forms.Design/:
+	 - ControlDesignerTest.cs: Initial import.
+
+2007-06-02  Ivan N. Zlatev <contact@i-nZ.net> 
+
+	* System.ComponentModel.Design/ComponentDesignerTest.cs
+	Initial import.
+
+2007-06-02  Ivan N. Zlatev <contact@i-nZ.net> 
+
+	* Initial import

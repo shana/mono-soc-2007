@@ -1,0 +1,108 @@
+Index: mcs/class/System/System.ComponentModel/TypeDescriptor.cs
+===================================================================
+--- mcs/class/System/System.ComponentModel/TypeDescriptor.cs	(revision 84301)
++++ mcs/class/System/System.ComponentModel/TypeDescriptor.cs	(working copy)
+@@ -1018,8 +1018,8 @@
+ 			bool cache = true;
+ 			PropertyInfo[] props = _component.GetType().GetProperties (BindingFlags.Instance | BindingFlags.Public);
+ 			Hashtable t = new Hashtable ();
+-			foreach (PropertyInfo pr in props)
+-				t [pr.Name] = new ReflectionPropertyDescriptor (pr);
++			for (int i = props.Length-1; i >= 0; i--)
++				t [props[i].Name] = new ReflectionPropertyDescriptor (props[i]);
+ 					
+ 			if (_component.Site != null) 
+ 			{
+@@ -1071,12 +1071,14 @@
+ 				return _properties;
+ 			
+ 			PropertyInfo[] props = InfoType.GetProperties (BindingFlags.Instance | BindingFlags.Public);
+-			ArrayList descs = new ArrayList (props.Length);
+-			for (int n=0; n<props.Length; n++)
++			Hashtable descs = new Hashtable ();
++			for (int n= props.Length-1; n >= 0; n--)
+ 				if (props [n].GetIndexParameters ().Length == 0)
+-					descs.Add (new ReflectionPropertyDescriptor (props[n]));
++					descs[props[n].Name] = new ReflectionPropertyDescriptor (props[n]);
+ 
+-			_properties = new PropertyDescriptorCollection ((PropertyDescriptor[]) descs.ToArray (typeof (PropertyDescriptor)), true);
++			PropertyDescriptor[] descriptors = new PropertyDescriptor[descs.Values.Count];
++			descs.Values.CopyTo (descriptors, 0);
++			_properties = new PropertyDescriptorCollection (descriptors, true);
+ 			return _properties;
+ 		}
+ 	}
+Index: mcs/class/System/System.ComponentModel/ChangeLog
+===================================================================
+--- mcs/class/System/System.ComponentModel/ChangeLog	(revision 84301)
++++ mcs/class/System/System.ComponentModel/ChangeLog	(working copy)
+@@ -1,3 +1,8 @@
++2007-08-19  Ivan N. Zlatev  <contact@i-nz.net>
++
++	* TypeDescriptor.cs: GetProperties should return only the last type's 
++	implementation of a property with a matching name in the base types.
++
+ 2007-08-03  Jb Evain  <jbevain@novell.com>
+ 
+ 	* ComponentCollection.cs: use our own collection base
+Index: mcs/class/System/Test/System.ComponentModel/TypeDescriptorTests.cs
+===================================================================
+--- mcs/class/System/Test/System.ComponentModel/TypeDescriptorTests.cs	(revision 84301)
++++ mcs/class/System/Test/System.ComponentModel/TypeDescriptorTests.cs	(working copy)
+@@ -248,6 +248,14 @@
+ 			get { return prop; }
+ 			set { prop = value; }
+ 		}
++
++
++		[DescriptionAttribute ("test derived")]
++		public new string AnotherProperty
++		{
++			get { return base.AnotherProperty; }
++			set { base.AnotherProperty = value; }
++		}
+ 	}
+ 	
+ 
+@@ -379,6 +387,7 @@
+ 	}
+ 
+ 	[TestFixture]
++	[NUnit.Framework.Category ("inz")]
+ 	public class TypeDescriptorTests
+ 	{
+ 		MyComponent com = new MyComponent ();
+@@ -720,6 +729,19 @@
+ 			col = TypeDescriptor.GetProperties (nfscom, filter);
+ 			Assert.IsNotNull (col.Find ("TestProperty", true), "#F1");
+ 			Assert.IsNull (col.Find ("AnotherProperty", true), "#F2");
++
++
++			// GetProperties should return only the last type's implementation of a
++			// property with a matching name in the base types. E.g in the case where 
++			// the "new" keyword is used.
++			//
++			PropertyDescriptorCollection derivedCol = TypeDescriptor.GetProperties (typeof(MyDerivedComponent));
++			Assert.IsNotNull (derivedCol["AnotherProperty"].Attributes[typeof (DescriptionAttribute)], "#G1");
++			int propsFound = 0;
++			foreach (PropertyDescriptor props in derivedCol)
++				if (props.Name == "AnotherProperty")
++					propsFound++;
++			Assert.AreEqual (1, propsFound, "#G2");
+ 		}
+ 
+ 		[Test]
+Index: mcs/class/System/Test/System.ComponentModel/ChangeLog
+===================================================================
+--- mcs/class/System/Test/System.ComponentModel/ChangeLog	(revision 84301)
++++ mcs/class/System/Test/System.ComponentModel/ChangeLog	(working copy)
+@@ -1,3 +1,9 @@
++2007-08-19  Ivan N. Zlatev  <contact@i-nz.net>
++
++	* TypeDescriptorTest.cs: new test to verify that GetProperties returns 
++	only the last type's implementation of a property with a matching name 
++	in the base types.
++
+ 2007-08-01  Atsushi Enomoto  <atsushi@ximian.com>
+ 
+ 	* BackgroundWorkerTest.cs : new test to clear some doubts on impl.

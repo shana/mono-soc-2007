@@ -1,0 +1,56 @@
+<Addin id          = "WinFormsAddin"
+       namespace   = "MonoDevelop"
+       name        = "WinForms Project Support"
+       author      = "Ivan N. Zlatev"
+       copyright   = "MIT X11"
+       url         = "http://www.monodevelop.com/"
+       description = "Support for Windows.Forms projects."
+	   category    = "IDE extensions"
+       version     = "0.0.1">
+	
+	<Runtime>
+		<Import assembly = "WinFormsAddin.dll"/>
+	</Runtime>
+
+	<Dependencies>
+	    <Addin id="Core" version="0.15.0"/>
+	    <Addin id="Core.Gui" version="0.15.0"/>
+    	<Addin id="Projects" version="0.15.0"/>
+		<Addin id="Projects.Gui" version="0.15.0"/>
+		<Addin id="Ide" version="0.15.0"/>
+		<Addin id="SourceEditor" version="0.15.0"/>
+		<Addin id="DesignerSupport" version="0.15.0"/>
+		<Addin id="Deployment" version="0.15.0"/>
+	</Dependencies>
+
+<!--<Extension path = "/MonoDevelop/FileTemplates">                                                -->
+<!--    <FileTemplate id = "Form" resource = "EmptyWebForm.xft.xml"/>                              -->
+<!--</Extension>                                                                                   -->
+<!--                                                                                               -->
+<!--<Extension path = "/MonoDevelop/FileTemplateTypes">                                            -->
+<!--    <FileTemplateType name = "AspNetFile" class = "AspNetAddIn.AspNetFileDescriptionTemplate"/>-->
+<!--</Extension>                                                                                   -->
+
+	<Extension path = "/MonoDevelop/ProjectTemplates">
+		<ProjectTemplate id = "WinForms2Project" resource = "WinForms2Project.xpt.xml"/>
+	</Extension>
+	
+<!--<Extension path = "/SharpDevelop/Workbench/ProjectBindings">                                    -->
+<!--    <ProjectBinding id = "WinFormsApplication" class = "WinFormsAddIn.WinFormsProjectBinding" />-->
+<!--</Extension>                                                                                    -->
+	
+<!--<Extension path = "/MonoDevelop/DesignerSupport/CodeBehindProviders">                  -->
+<!--    <Class id="AspNetCodeBehindProvider" class="AspNetAddIn.AspNetCodeBehindProvider"/>-->
+<!--</Extension>                                                                           -->
+	
+	<Extension path = "/SharpDevelop/Workbench/DisplayBindings">
+		<DisplayBinding id    = "DesignSurfaceDisplayBinding"
+		                supportedformats = "Source Code"
+		                class = "WinFormsAddin.DesignSurfaceDisplayBinding"/>
+	</Extension>	
+    
+<!--<Extension path = "/MonoDevelop/DesignerSupport/ToolboxProviders">                           -->
+<!--    <Class id="WinFormsDefaultControlToolboxProvider" class="WinFormsAddin.ToolboxProvider"/>-->
+<!--</Extension>                                                                                 -->
+	
+</Addin>

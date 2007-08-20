@@ -1,0 +1,84 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+	Version="10.0"
+	VendorName="SlickEdit"
+	WorkingDir="."
+	VCSProject="Subversion:">
+	<Config
+		Name="Release"
+		CompilerConfigName="GCC-4.1.2-i586-suse-linux"
+		OutputFile="">
+		<Menu>
+			<Target
+				Name="Build"
+				MenuCaption="&amp;Build"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw"
+				DependsRef="Release"
+				ClearProcessBuffer="1">
+				<Exec CmdLine="make"/>
+			</Target>
+			<Target
+				Name="Execute"
+				MenuCaption="E&amp;xecute"
+				SaveOption="SaveNone"
+				RunFromDir="%rp"
+				CaptureOutputWith="ProcessBuffer"
+				BuildFirst="1"
+				ClearProcessBuffer="1">
+				<Exec CmdLine="make run"/>
+			</Target>
+			<Target
+				Name="Install"
+				MenuCaption="&amp;Install"
+				RunFromDir="%rp"
+				CaptureOutputWith="ProcessBuffer"
+				ClearProcessBuffer="1"
+				SaveOption="SaveWorkspaceFiles"
+				BuildFirst="1">
+				<Exec CmdLine="make install"/>
+			</Target>
+			<Target
+				Name="Kill MonoDevelop"
+				MenuCaption="&amp;Kill MonoDevelop"
+				CaptureOutputWith="ProcessBuffer"
+				ClearProcessBuffer="1">
+				<Exec CmdLine="pkill -9 mono"/>
+			</Target>
+		</Menu>
+		<Includes>
+			<Include Dir="&lt;double click here to add another entry&gt;"/>
+		</Includes>
+		<Dependencies Name="Release">
+			<Dependency Project="../Mono.Design/Mono.Design.vpj"/>
+		</Dependencies>
+	</Config>
+	<CustomFolders>
+	</CustomFolders>
+	<Files AutoFolders="DirectoryView">
+		<Folder Name="deps">
+			<F N="deps/ICSharpCode.NRefactory.dll"/>
+		</Folder>
+		<Folder Name="src">
+			<F N="src/CodeBehind.cs"/>
+			<F N="src/CodeProviderFactory.cs"/>
+			<F N="src/DesignSurfaceDisplayBinding.cs"/>
+			<F N="src/DesignSurfaceViewContent.cs"/>
+			<F N="src/EditorProcess.cs"/>
+			<F N="src/EventBindingService.cs"/>
+			<F N="src/MDDesignerLoader.cs"/>
+			<F N="src/MonoDevelopProxy.cs"/>
+			<F N="src/PropertyGrid.cs"/>
+			<F N="src/ToolboxProvider.cs"/>
+			<F N="src/TypeResolutionService.cs"/>
+		</Folder>
+		<Folder Name="templates">
+			<F N="templates/WinForms2Project.xpt.xml"/>
+		</Folder>
+		<F
+			N="Makefile"
+			Type="Makefile"/>
+		<F N="WinForms.addin.xml"/>
+	</Files>
+</Project>

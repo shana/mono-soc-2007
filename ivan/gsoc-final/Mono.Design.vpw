@@ -1,0 +1,9 @@
+<!DOCTYPE Workspace SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpw.dtd">
+<Workspace Version="10.0" VendorName="SlickEdit">
+	<Projects>
+		<Project File="Mono.Design/Mono.Design.vpj" />
+		<Project File="mwf-designer/mwf-designer.vpj" />
+		<Project File="Test/Test.vpj" />
+		<Project File="WinFormsAddin/WinFormsAddin.vpj" />
+	</Projects>
+</Workspace>
