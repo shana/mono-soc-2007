@@ -16,12 +16,16 @@ using Monodoc.Editor.Utils;
 namespace Monodoc.Editor {
 public partial class EditorWindow : Gtk.Window {
 	private DocumentTab current_tab;
+	private DocumentUndoManager current_manager;
 	private Notebook nb_tabs;
 	private uint id = 1;
 	
 	public EditorWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		this.Build ();
+		
+		GLib.LogFunc logfunc = new GLib.LogFunc (GLib.Log.PrintTraceLogFunction);
+		GLib.Log.SetLogHandler ("Gtk", GLib.LogLevelFlags.All, logfunc);
 		
 		nb_tabs = new Notebook ();
 		nb_tabs.CanFocus = true;
@@ -36,6 +40,8 @@ public partial class EditorWindow : Gtk.Window {
 	private void AddTab ()
 	{
 		current_tab = new DocumentTab (nb_tabs);
+		current_manager = current_tab.Buffer.Undoer;
+		current_manager.UndoChanged += UndoChanged;
 		nb_tabs.AppendPage (current_tab, current_tab.TabLabel);
 		nb_tabs.ShowTabs = (nb_tabs.NPages > 1);
 		nb_tabs.ShowAll ();
@@ -110,6 +116,10 @@ public partial class EditorWindow : Gtk.Window {
 	private void OnChangeTab (object sender, SwitchPageArgs args)
 	{
 		current_tab = (DocumentTab) nb_tabs.GetNthPage((int) args.PageNum);
+		current_manager = current_tab.Buffer.Undoer;
+		
+		Undo.Sensitive = current_manager.CanUndo;
+		Redo.Sensitive = current_manager.CanRedo;
 	}
 
 	private void OnCloseFileActivated (object sender, System.EventArgs e)
@@ -131,6 +141,28 @@ public partial class EditorWindow : Gtk.Window {
 	{
 		Clipboard cb = Clipboard.Get (Gdk.Selection.Clipboard);
 		current_tab.Buffer.CopyClipboard (cb);
+	}
+	
+	private void OnUndoActivated (object sender, System.EventArgs e)
+	{
+		if (current_manager.CanUndo) {
+			Console.WriteLine ("Running Undo");
+			current_manager.Undo ();
+		}
+	}
+	
+	private void OnRedoActivated (object sender, System.EventArgs e)
+	{
+		if (current_manager.CanRedo) {
+			Console.WriteLine ("Running Redo");
+			current_manager.Redo ();
+		}
+	}
+	
+	private void UndoChanged (object sender, System.EventArgs e)
+	{
+		Undo.Sensitive = current_manager.CanUndo;
+		Redo.Sensitive = current_manager.CanRedo;
 	}
 }
 }
