@@ -49,7 +49,6 @@ namespace Gendarme.Rules.Smells {
 						messageCollection.Add (message);
 					}
 				}
-				codeDuplicatedLocator.CheckedMethods.Add (method.Name);
 			}
 		}
 
@@ -57,6 +56,7 @@ namespace Gendarme.Rules.Smells {
 		{
 			foreach (TypeDefinition type in siblingClasses) {
 				FindCodeDuplicated (type, siblingClasses);
+				codeDuplicatedLocator.CheckedTypes.Add (type.Name);
 			}
 		}
 
