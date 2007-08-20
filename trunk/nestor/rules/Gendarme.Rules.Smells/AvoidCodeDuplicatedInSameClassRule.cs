@@ -127,71 +127,17 @@ namespace Gendarme.Rules.Smells {
 	}
 	
 	public class AvoidCodeDuplicatedInSameClassRule : ITypeRule {
-		private StringCollection checkedMethods;
 		private MessageCollection messageCollection;
-
-		private bool ExistsExpressionsReplied (ICollection currentExpressions, ICollection targetExpressions)
-		{
-			IEnumerator currentEnumerator = currentExpressions.GetEnumerator ();
-			IEnumerator targetEnumerator = targetExpressions.GetEnumerator ();
-			bool equality = false;
-
-			while (currentEnumerator.MoveNext () & targetEnumerator.MoveNext ()) {
-				Expression currentExpression = (Expression) currentEnumerator.Current;
-				Expression targetExpression = (Expression) targetEnumerator.Current;
-
-				if (equality && currentExpression.Equals (targetExpression))
-					return true;
-				else {
-					equality = currentExpression.Equals (targetExpression);
-				}
-			}
-			return false;
-		}
-
-		private ICollection GetExpressionsFrom (MethodBody methodBody) 
-		{
-			ExpressionFillerVisitor expressionFillerVisitor = new ExpressionFillerVisitor ();
-			methodBody.Accept (expressionFillerVisitor);
-			return expressionFillerVisitor.Expressions;
-		}
-
-		private bool CanCompareMethods (MethodDefinition currentMethod, MethodDefinition targetMethod) 
-		{
-			return currentMethod.HasBody && targetMethod.HasBody &&
-				!checkedMethods.Contains (targetMethod.Name) && 
-				currentMethod != targetMethod;
-		}
-
-		private bool ContainsDuplicatedCode (MethodDefinition currentMethod, MethodDefinition targetMethod) 
-		{
-			if (CanCompareMethods (currentMethod, targetMethod)) {
-				ICollection currentExpressions = GetExpressionsFrom (currentMethod.Body);
-				ICollection targetExpressions = GetExpressionsFrom (targetMethod.Body);
-										
-				return ExistsExpressionsReplied (currentExpressions, targetExpressions);
-			}
-			return false;
-		}
-
-		private void CompareMethodAgainstTypeMethods (MethodDefinition currentMethod, TypeDefinition targetTypeDefinition) 
-		{
-			foreach (MethodDefinition targetMethod in targetTypeDefinition.Methods) {
-				if (ContainsDuplicatedCode (currentMethod, targetMethod)) {
-					Location location = new Location (currentMethod.DeclaringType.Name, currentMethod.Name, 0);
-					Message message = new Message (String.Format ("Exists code duplicated with {0}.{1}", targetTypeDefinition.Name, targetMethod.Name), location, MessageType.Error);
-					messageCollection.Add (message);
-				}
-			}
-		}
 
 		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner) 
 		{
-			checkedMethods = new StringCollection ();
 			messageCollection = new MessageCollection ();
+			CodeDuplicatedLocator codeDuplicatedLocator = new CodeDuplicatedLocator ();
 			foreach (MethodDefinition currentMethod in typeDefinition.Methods) {
-				CompareMethodAgainstTypeMethods (currentMethod, typeDefinition);
-				checkedMethods.Add (currentMethod.Name);
+				foreach (Message message in codeDuplicatedLocator.CompareMethodAgainstTypeMethods (currentMethod, typeDefinition)) {
+					messageCollection.Add (message);
+				}
+				codeDuplicatedLocator.CheckedMethods.Add (currentMethod.Name);
 			}
 			
 			if (messageCollection.Count == 0)

@@ -40,12 +40,17 @@ namespace Gendarme.Rules.Smells {
 	public class AvoidCodeDuplicatedInSiblingClassesRule : ITypeRule {
 		private MessageCollection messageCollection;
 
+		private void CompareSiblingClasses (ICollection siblingClasses) 
+		{
+		}
 
-		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner) 
+		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
 		{
 			messageCollection = new MessageCollection ();
 			
-			if (Utilities.GetInheritedClassesFrom (typeDefinition).Count >= 2) {
+			ICollection siblingClasses = Utilities.GetInheritedClassesFrom (type);
+			if (siblingClasses.Count >= 2) {
+				CompareSiblingClasses (siblingClasses);
 			}
 
 			if (messageCollection.Count == 0)
