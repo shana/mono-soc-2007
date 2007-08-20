@@ -38,20 +38,10 @@ namespace Gendarme.Rules.Smells {
 
 		private MessageCollection messageCollection;
 		
-		private ICollection GetInheritedClassesFrom (TypeDefinition baseType)
-		{
-			ArrayList inheritedClasses = new ArrayList ();
-			foreach (TypeDefinition type in baseType.Module.Types) {
-				if ((type.BaseType != null) && type.BaseType.Equals (baseType))
-					inheritedClasses.Add (type);
-			}
-			return inheritedClasses;
-		}
-
 		private void CheckAbstractClassWithoutResponsability (TypeDefinition type) 
 		{
 			if (type.IsAbstract) {
-				ICollection inheritedClasses = GetInheritedClassesFrom (type);
+				ICollection inheritedClasses = Utilities.GetInheritedClassesFrom (type);
 				if (inheritedClasses.Count == 1) 
 					AddMessage (type.Name, "This abstract class only has one class inheritting from.  The abstract classes without responsability are a sign for the Speculative Generality smell.");
 			}
