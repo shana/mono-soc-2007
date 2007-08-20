@@ -36,6 +36,24 @@ using NUnit.Framework;
 
 namespace Test.Rules.Smells {
 
+	public class BaseClassWithCodeDuplicated {
+	}
+
+	public class OverriderClassWithCodeDuplicated : BaseClassWithCodeDuplicated {
+	}
+
+	public class OtherOverriderWithCodeDuplicated : BaseClassWithCodeDuplicated {
+	}
+
+	public class BaseClassWithoutCodeDuplicated {
+	}
+
+	public class OverriderClassWithoutCodeDuplicated : BaseClassWithoutCodeDuplicated {
+	}
+
+	public class OtherOverriderWithoutCodeDuplicated : BaseClassWithoutCodeDuplicated {
+	}
+
 	[TestFixture]
 	public class AvoidCodeDuplicatedInSiblingClassesTest {
 		private ITypeRule rule;
@@ -50,6 +68,22 @@ namespace Test.Rules.Smells {
 			assembly = AssemblyFactory.GetAssembly (unit);
 			rule = new AvoidCodeDuplicatedInSiblingClassesRule ();
 			messageCollection = null;
+		}
+
+		[Test]
+		public void BaseClassWithCodeDuplicatedTest () 
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.BaseClassWithCodeDuplicated"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+		}
+
+		[Test]
+		public void BaseClassWithoutCodeDuplicatedTest ()
+		{
+			type = assembly.MainModule.Types ["Test.Rules.Smells.BaseClassWithoutCodeDuplicated"];
+			messageCollection = rule.CheckType (type, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
 		}
 	}
 }
