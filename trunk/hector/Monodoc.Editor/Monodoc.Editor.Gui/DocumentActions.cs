@@ -15,10 +15,6 @@ namespace Monodoc.Editor.Gui {
 public abstract class SplitterAction : EditAction {
 	protected TextRange chop;
 	
-	protected SplitterAction ()
-	{
-	}
-	
 	public TextRange Chop {
 		get {
 			return chop;
@@ -38,15 +34,31 @@ public class InsertAction : SplitterAction {
 	
 	public InsertAction (TextIter start, string text, int length, ChopBuffer chop_buf)
 	{
+		#if DEBUG
+		Console.WriteLine ("DEBUG: InsertAction: {0}", text);
+		Console.WriteLine ("DEBUG: Start Offset: {0}", start.Offset);
+		#endif
+		
 		this.index = start.Offset - length;
 		this.is_paste = length > 1;
 		
 		TextIter indexIter = start.Buffer.GetIterAtOffset (index);
+		#if DEBUG
+		Console.WriteLine ("DEBUG: indexIter Offset: {0} Char: {1}", indexIter.Offset, indexIter.Char);
+		#endif
 		this.chop = chop_buf.AddChop (indexIter, start);
+		#if DEBUG
+		Console.WriteLine ("DEBUG: Buffer Text: {0}", start.Buffer.Text);
+		Console.WriteLine ("DEBUG: Chop Text: {0}", chop.Text);
+		#endif
 	}
 	
 	public override void Undo (TextBuffer buffer)
 	{
+		#if DEBUG
+		Console.WriteLine ("DEBUG: Chop Text: {0} Length: {1}", chop.Text, chop.Length);
+		#endif
+		
 		TextIter startIter = buffer.GetIterAtOffset (index);
 		TextIter endIter = buffer.GetIterAtOffset (index + chop.Length);
 		buffer.Delete (ref startIter, ref endIter);

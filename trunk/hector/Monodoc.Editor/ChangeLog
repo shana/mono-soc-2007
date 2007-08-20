@@ -1,3 +1,14 @@
+2007-08-20  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor/EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/Monodoc.Editor.EditorWindow.cs,
+	  Monodoc.Editor/gtk-gui/gui.stetic: Added Undo and Redo actions to
+	  GUI.
+	* Monodoc.Editor.Gui/DocumentActions.cs: Added some code lines to help
+	  debugging undo functionality
+	* Monodoc.Editor.Gui/DocumentBuffer.cs: Using UndoManager in
+	  DocumentBuffer.
+
 2007-08-02  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui/Test/TestUtils.cs: Minor change.
