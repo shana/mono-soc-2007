@@ -27,6 +27,7 @@
 //
 
 using System;
+using System.Collections;
 using System.Reflection;
 
 using Gendarme.Framework;
@@ -37,12 +38,27 @@ using NUnit.Framework;
 namespace Test.Rules.Smells {
 
 	public class BaseClassWithCodeDuplicated {
+		protected IList list;
 	}
 
 	public class OverriderClassWithCodeDuplicated : BaseClassWithCodeDuplicated {
+		public void CodeDuplicated () 
+		{
+			foreach (int i in list) {
+				Console.WriteLine (i);
+			}
+			list.Add (1);
+		}
 	}
 
 	public class OtherOverriderWithCodeDuplicated : BaseClassWithCodeDuplicated {
+		public void OtherMethod ()
+		{
+			foreach (int i in list) {
+				Console.WriteLine (i);
+			}
+			list.Remove (1);
+		}
 	}
 
 	public class BaseClassWithoutCodeDuplicated {
@@ -76,6 +92,7 @@ namespace Test.Rules.Smells {
 			type = assembly.MainModule.Types ["Test.Rules.Smells.BaseClassWithCodeDuplicated"];
 			messageCollection = rule.CheckType (type, new MinimalRunner ());
 			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
 		}
 
 		[Test]
