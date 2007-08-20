@@ -28,8 +28,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
-using System.Text;
 
 using Mono.Cecil;
 using Mono.Cecil.Cil;
