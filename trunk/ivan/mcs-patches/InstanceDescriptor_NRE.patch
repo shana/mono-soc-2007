@@ -1,0 +1,25 @@
+Index: ChangeLog
+===================================================================
+--- ChangeLog	(revision 82206)
++++ ChangeLog	(working copy)
+@@ -1,3 +1,7 @@
++2007-07-18  Ivan N. Zlatev <contact@i-nz.net>
++	
++	* InstanceDescriptor.cs: Fix a NRE.
++
+ 2007-05-15  Adar Wesley <adarw@mainsoft.com>
+ 
+ 	* ContextStack.cs: added missing method Append.
+Index: InstanceDescriptor.cs
+===================================================================
+--- InstanceDescriptor.cs	(revision 82206)
++++ InstanceDescriptor.cs	(working copy)
+@@ -97,7 +97,7 @@
+ 				if (arguments == null) // null counts as no arguments
+ 					if (PIM.GetParameters().Length != 0)
+ 						throw new ArgumentException ("Invalid number of arguments for this property", "arguments");
+-				if (arguments.Count != PIM.GetParameters().Length)
++				if (arguments != null && arguments.Count != PIM.GetParameters().Length)
+ 					throw new ArgumentException ("Invalid number of arguments for this property", "arguments");
+ 				return true;
+ 			}

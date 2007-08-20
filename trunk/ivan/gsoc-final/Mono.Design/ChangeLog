@@ -1,0 +1,259 @@
+2007-07-19  Ivan N. Zlatev <contact@i-nz.net>
+	* Fix defaultvalue attributes for the redirected properties.
+
+2007-07-18  Ivan N. Zlatev <contact@i-nz.net>
+	* Fix serialization and deserialization
+	* Workaround for redirecting designer types to Mono.Design
+	* a *lot* of other changes
+
+2007-07-11  Ivan N. Zlatev <contact@i-nz.net>
+	* CodeDomDesignerLoader.cs, CodeDomSerializerBase.cs, 
+	RootCodeDomSerializer.cs: Implement Deserialization
+	* PropertyCodeDomSerializer.cs: Implement serialization for
+	DesignerSerializationVisiblity.Content.
+	* ParentControlDesigner.cs: access DefaultControlLocation directly
+	* DesignSurface.cs: Fire OnLoading before loading the surface.
+	* DesignerSerializationManager.cs: Fix a few SetName bugs. Get the 
+	name from Site if IComponent and sited.
+
+2007-07-07  Ivan N. Zlatev <contact@i-nz.net>
+	* Serialization Part 3
+
+2007-07-07  Ivan N. Zlatev <contact@i-nz.net>
+	* Serialization Part 2 (primitives, properties)
+
+2007-07-06  Ivan N. Zlatev <contact@i-nz.net>
+	* Serialization Part 1
+
+2007-07-01  Ivan N. Zlatev <contact@i-nz.net>
+	* DesignerHost.cs: Generate a name for the component when siteing if
+	none was specified.
+	* ComponentCodeDomSerializer.cs: Added.
+	* CodeDomSerializationProvider.cs: Added.
+
+2007-06-27  Ivan N. Zlatev <contact@i-nz.net>
+	* CodeDomComponentSerializationService.cs: Stubbed.
+	* CodeDomDesignerLoader.cs: Implemented.
+
+2007-06-27  Ivan N. Zlatev <contact@i-nz.net>
+	* CodeDomSerializer.cs: Implemented SerializeAbsolute 
+	and SerializeMember.
+
+2007-06-26  Ivan N. Zlatev <contact@i-nz.net>
+	* CodeDomDesignerLoader.cs: Fix CreateName not to
+	require a valid container.
+	* CodeDomSerializerBase.cs: implement GetUniqueName.
+	I've missed out this method by accident.
+	* CodeDomSerializer.cs: implemented serialization methods.
+
+2007-06-25  Ivan N. Zlatev <contact@i-nz.net>
+	* CodeDomSerializerBase.cs: Implemented the rest of the serialization.
+
+2007-06-20  Ivan N. Zlatev <contact@i-nz.net>
+	* CodeDomSerializer.cs: Added stubs.
+	* CodeDomSerializerBase.cs: Added. Implemented some stuff.
+
+2007-06-18  Ivan N. Zlatev <contact@i-nz.net>
+	* MemberCodeDomSerializer.cs: Added.
+	* SerializeAbsoluteContext.cs: Added.
+
+2007-06-15  Ivan N. Zlatev <contact@i-nz.net>
+	ComponentSerializationService.cs: Added.
+	CodeDomDesignerLoader.cs: Implement INameCreationService.
+
+2007-06-14  Ivan N. Zlatev <contact@i-nz.net>
+	* DesignerHost.cs: 
+	  - Fix Reload/Unload behaviour >_<.
+
+2007-06-14  Ivan N. Zlatev <contact@i-nz.net>
+	* BasicDesignerLoader.cs: Added.
+	* DesignerHost.cs: 
+	  - implement Reload.
+	  - Fix Loading property to reflect loading status.
+	* DesignSurface.cs, DesignerHost.cs:
+	  - Make IDesignerLoadHost fire (un)load (ing) events, which
+	  are cought by DesignSurface and which fires the corresponding
+	  DesignSurface events.
+
+2007-06-13  Ivan N. Zlatev <contact@i-nz.net>
+	* MemberRelantionship.cs: Added.
+	* MemberRelationshipService.cs: Added.
+
+2007-06-12  Ivan N. Zlatev <contact@i-nZ.net>
+	* DesignModeNestedContainer.cs:
+	Fix OwnerName property to override base.
+	* SerializationStore.cs: Added.
+	* RootContext.cs: Added.
+	* ObjectStatementCollection.cs: Added.
+	* StatementContext.cs: Added.
+	* ExpressionContext.cs: Added.
+
+2007-06-10  Ivan N. Zlatev <contact@i-nZ.net>
+	* ReferenceService.cs: Add implementation.
+	* DesignModeNestedContainer.cs: Add implementation.
+	* DesignModeSite.cs, DesignSurface.cs: Utilize 
+	DesignModeNestedContainer.
+
+2007-06-10  Ivan N. Zlatev <contact@i-nZ.net> 
+	* DesignSurfaceServiceContainer.cs:
+	  - Get rid of NET_1_1 compitability.
+	  - Throw an InvalidOperation
+	  exception when trying to remove a non-removeable service. 
+	  MS compitability fix.
+	* DesignerHost.cs: Activate the host/surface once the root component
+	(Add)ed and its designer have been loaded.
+	* DesignerSite: Renamed to DesignModeSite. After all it doesn't have
+	any relation to the designers. MS compitaiblity fixes
+	* DesignSurface.cs: It appears that MS doesn't initialize the surface
+	with a DesignerOptionService and IReferenceService
+
+2007-06-09  Ivan N. Zlatev <contact@i-nZ.net> 
+	* NestedContainer.cs: notes changed.
+
+2007-06-09  Ivan N. Zlatev <contact@i-nZ.net> 
+	* System.Windows.Forms.Design/:
+	 - DocumentDesigner.cs: MS compitability fixes.
+
+2007-06-09  Ivan N. Zlatev <contact@i-nZ.net> 
+	* System.ComponentModel.Design/:
+	 - DesignerHost.cs: Fixed to add the designer to the designer and then 
+	 initialize it, not the other way round.
+	* System.Windows.Forms.Design/:
+	 - ParentControlDesigner.cs: Added a short note to self on why I have those
+	 try-catch blocks in OnPaintAdornments.
+	 - DocumentDesigner.cs: Rename DesignerViewFrame.Control to DesignedControl -
+	 makes more sense.
+
+2007-06-08  Ivan N. Zlatev <contact@i-nZ.net> 
+	 * System.Windows.Forms.Design/:
+	  - ControlDesigner.cs, ParentControlDesigner.cs: 
+	  Get/Set DT properties indirectly in case of a designer
+	  redirecting the already redirected DT properties.
+
+2007-06-08  Ivan N. Zlatev <contact@i-nZ.net> 
+	 * System.Windows.Forms.Design/:
+	  - ParentControlDesigner.cs: Fixed CreateTool to take in account
+	  the DefaultControlLocation.
+	  - ControlDesigner.cs: Improved GetValue/SetValue to throw
+	  nice exceptions with information.
+
+2007-06-06  Ivan N. Zlatev <contact@i-nZ.net> 
+
+	* Makefile: Added 1.1 targets.
+	* System.ComponentModel.Design/:
+	 - ComponentDesigner.cs: Added short note on code flow for IDesignerFilter.
+	* System.Windows.Forms.Design/:
+	 - ControlDesigner.cs: Many compitability and bug fixes. Some 2.0 updates.
+	 - SelectionService.cs: Replaced NET_1_1 with NET_2_0 and swapped.
+	 - DocumentDesigner.cs: A hack to temporaly workaround the missing 
+	 FormDocumentDesigner, which also includes a workaround for a MWF bug.
+	 - ParentControlDesigner.cs: Removed AssociatedComponents property,
+	 because it's not part of the class.
+
+
+2007-06-02  Ivan N. Zlatev <contact@i-nZ.net> 
+
+	* New SlickEdit projects and simple makefiles replacement.
+
+2007-03-21  Ivan N. Zlatev <contact i-nZ.net> 
+
+	* System/System.ComponentModel.Design.Serialization/DefaultSerializationProviderAttribute.cs: 
+	   implemented.
+	* System.Design/System.ComponentModel.Design.Serialization/DesignerSerializationManager.cs: 
+	   implemented GetSerializer.
+
+2007-03-21  Ivan N. Zlatev <contact i-nZ.net>
+
+	* System/System.ComponentModel.Design.Serialization/DefaultSerializationProviderAttribute.cs: 
+    implemented.
+	* System.Design/System.ComponentModel.Design.Serialization/DesignerSerializationManager.cs: 
+	implemented GetSerializer.
+
+2007-03-20  Ivan N. Zlatev <contact i-nZ.net>
+
+	* System/System.ComponentModel.Design.Serialization/DefaultSerializationProviderAttribute.cs: 
+	implemented.
+
+
+2007-03-20  Ivan N. Zlatev <contact i-nZ.net>
+
+	* all: got rid of {} for one-liners.  
+
+2007-03-19  Ivan N. Zlatev <contact i-nZ.net> 
+
+	2007-03-19  Ivan N. Zlatev <contact i-nZ.net>
+	    
+	    * System.Design/System.ComponentModel.Design.Serialization/DesignerSerializationManager.cs:
+		implemented several more methods.
+
+2007-03-19  Ivan N. Zlatev <contact i-nZ.net>
+    
+    * System.Design/System.ComponentModel.Design.Serialization/DesignerSerializationManager.cs:
+	implemented several more methods.
+
+2007-03-19  Ivan N. Zlatev <contact i-nZ.net>
+
+	* System.Design/System.ComponentModel.Design.Serialization:
+	initial import. Half way through completing DesignerSerializationManager.
+
+2007-03-14  Ivan N. Zlatev <contact i-nZ.net>
+
+	* System.Design/System.ComponentModel.Design/ActiveDesignSurfaceChangedEventArgs.cs: 
+	* System.Design/System.ComponentModel.Design/ActiveDesignSurfaceChangedEventHandler.cs: 
+	* System.Design/System.ComponentModel.Design/DesignerEventService.cs: 
+	* System.Design/System.ComponentModel.Design/DesignSurfaceCollection.cs: 
+	* System.Design/System.ComponentModel.Design/DesignSurfaceEventArgs.cs: 
+	* System.Design/System.ComponentModel.Design/DesignSurfaceEventHandler.cs: 
+	* System.Design/System.ComponentModel.Design/DesignSurfaceManager.cs: 
+	    initial implementation.
+
+2007-02-16  Ivan N. Zlatev <contact i-nZ.net>
+    
+   * SelectionFrame.cs: Fancier drawing. Make it aware of SelectionRules.
+     Changes to support batch resizing. Get rid of the frame dragging stuff.
+   * UISelectionService.cs: Fix misaligned dnd by starting the drag operation
+     after the first DragOver, because it is fired by the ParentControlDesigner 
+     and is SnappedToGrid. Implement grouped controls resizing.
+   * ParentControlDesigner.cs: Implement middle button dragging for containers.
+   * SelectionFrame.cs, ParentControlDesigner.cs, ControlDesigner.cs, 
+     UISelectionService: SetCursor behaviour refactored.
+
+2007-02-16  Ivan N. Zlatev <contact i-nZ.net>
+    
+   * SelectionService.cs: Fix changing of primary selection when multiple
+     Components are selected.
+   * IUISelectionService.cs, UISelectionService.cs: Implement hit testing 
+     for adornments
+   * UISelectionService.cs: Fix drawing.
+   * ControlDesigner.cs: Fix resizing.
+
+
+2007-02-15  Ivan N. Zlatev <contact i-nZ.net>
+    * Native.cs: Fix Lparam and hi/loword parsing methods.
+    * ControlDesigner.cs, ParentControlDesigner.cs, UISelectionService.cs:
+      Fix DnD and selection behaviour.
+
+2007-02-13  Ivan N. Zlatev <contact i-nZ.net>
+
+    * ControlDesigner.cs: Implement DefWndProc and BaseWndProc.
+    * DesignerHost: Fix build.
+	
+2007-02-12  Ivan N. Zlatev <contact i-nZ.net> 
+
+    * all: Gah! Fixed indentation to spaces.
+
+2007-02-12  Ivan N. Zlatev <contact i-nZ.net> 
+
+    * all: svn:eol-style
+    * ParentControlDesigner.cs: fix type resulting SnapPointToGrid to fail for Y.
+    * ParentControlDesigner.cs: fix IUISelectionService.PaintAdornments to be invoked.
+    * IUISelectionService.cs, UISelectionService.cs: Refactored PaintAdornments
+    * ControlDesigner.cs: Route messages back to system.
+    * Native.cs: Swap LoWord and HiWord. -.-
+    * DesignSurface: Change CreateInstance to add the component in the designe container.
+
+
+2007-02-11  Ivan N. Zlatev <contact i-nZ.net> 
+
+    * Initial import.
+    

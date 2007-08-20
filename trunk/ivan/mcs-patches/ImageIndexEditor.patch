@@ -1,0 +1,74 @@
+Modified: trunk/mcs/class/System.Design/System.Design.dll.sources
+===================================================================
+--- trunk/mcs/class/System.Design/System.Design.dll.sources	2007-08-15 10:46:38 UTC (rev 84141)
++++ trunk/mcs/class/System.Design/System.Design.dll.sources	2007-08-15 10:49:27 UTC (rev 84142)
+@@ -112,6 +112,7 @@
+ System.Windows.Forms.Design/EventHandlerService.cs
+ System.Windows.Forms.Design/FileNameEditor.cs
+ System.Windows.Forms.Design/FolderNameEditor.cs
++System.Windows.Forms.Design/ImageIndexEditor.cs
+ System.Windows.Forms.Design/IMenuEditorService.cs
+ System.Windows.Forms.Design/ImageCollectionEditor.cs
+ System.Windows.Forms.Design/IOleDragClient.cs
+
+Modified: trunk/mcs/class/System.Design/System.Windows.Forms.Design/ChangeLog
+===================================================================
+--- trunk/mcs/class/System.Design/System.Windows.Forms.Design/ChangeLog	2007-08-15 10:46:38 UTC (rev 84141)
++++ trunk/mcs/class/System.Design/System.Windows.Forms.Design/ChangeLog	2007-08-15 10:49:27 UTC (rev 84142)
+@@ -1,3 +1,7 @@
++2007-08-15  Ivan N. Zlatev  <contact at i-nz.net>
++
++	* ImageIndexEditor.cs: empty class to prevent propertygrid crash.
++
+ 2006-12-28  Raja R Harinath  <harinath at gmail.com>
+ 
+ 	* ControlDesigner.cs: Merge with Miguel's version.
+
+Added: trunk/mcs/class/System.Design/System.Windows.Forms.Design/ImageIndexEditor.cs
+===================================================================
+--- trunk/mcs/class/System.Design/System.Windows.Forms.Design/ImageIndexEditor.cs	2007-08-15 10:46:38 UTC (rev 84141)
++++ trunk/mcs/class/System.Design/System.Windows.Forms.Design/ImageIndexEditor.cs	2007-08-15 10:49:27 UTC (rev 84142)
+@@ -0,0 +1,43 @@
++//
++// System.Windows.Forms.Design.ImageIndexEditor.cs
++//
++// Author:
++//   Ivan N. Zlatev <contact at i-nz.net>
++//
++// (C) 2007 Ivan N. Zlatev
++//
++
++//
++// Permission is hereby granted, free of charge, to any person obtaining
++// a copy of this software and associated documentation files (the
++// "Software"), to deal in the Software without restriction, including
++// without limitation the rights to use, copy, modify, merge, publish,
++// distribute, sublicense, and/or sell copies of the Software, and to
++// permit persons to whom the Software is furnished to do so, subject to
++// the following conditions:
++// 
++// The above copyright notice and this permission notice shall be
++// included in all copies or substantial portions of the Software.
++// 
++// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++//
++
++using System.ComponentModel;
++using System.Drawing.Design;
++
++namespace System.Windows.Forms.Design
++{
++	[MonoTODO]
++	internal sealed class ImageIndexEditor : UITypeEditor
++	{
++		public ImageIndexEditor ()
++		{
++		}
++	}
++}

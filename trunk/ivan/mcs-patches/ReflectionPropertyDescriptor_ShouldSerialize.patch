@@ -1,0 +1,101 @@
+Index: mcs/class/System/System.ComponentModel/ReflectionPropertyDescriptor.cs
+===================================================================
+--- mcs/class/System/System.ComponentModel/ReflectionPropertyDescriptor.cs	(revision 84301)
++++ mcs/class/System/System.ComponentModel/ReflectionPropertyDescriptor.cs	(working copy)
+@@ -231,7 +231,7 @@
+ 				MethodInfo mi = FindPropertyMethod (component, "ShouldSerialize");
+ 				if (mi != null)
+ 					return (bool) mi.Invoke (component, null);
+-				return false;
++				return Attributes.Contains (DesignerSerializationVisibilityAttribute.Content);
+ 			}
+ 
+ 			DefaultValueAttribute attrib = ((DefaultValueAttribute) Attributes[typeof (DefaultValueAttribute)]);
+Index: mcs/class/System/System.ComponentModel/ChangeLog
+===================================================================
+--- mcs/class/System/System.ComponentModel/ChangeLog	(revision 84397)
++++ mcs/class/System/System.ComponentModel/ChangeLog	(working copy)
+@@ -1,5 +1,11 @@
+ 2007-08-19  Ivan N. Zlatev  <contact@i-nz.net>
+ 
++	ReflectionPropertyDescriptor.cs: For read-only properties,
++	ShouldSerializeValue must also check for 
++	DesignerSerializationVisibility.Content and if presetn return true.
++
++2007-08-19  Ivan N. Zlatev  <contact@i-nz.net>
++
+ 	* EnumConverter.cs: Implement conversion to and from Enum[]
+ 
+ 2007-08-19  Ivan N. Zlatev  <contact@i-nz.net>
+Index: mcs/class/System/Test/System.ComponentModel/PropertyDescriptorTests.cs
+===================================================================
+--- mcs/class/System/Test/System.ComponentModel/PropertyDescriptorTests.cs	(revision 84301)
++++ mcs/class/System/Test/System.ComponentModel/PropertyDescriptorTests.cs	(working copy)
+@@ -193,6 +193,18 @@
+ 				set { _prop7 = value; }
+ 			}
+ 
++			[ReadOnly (true)]
++			[DesignerSerializationVisibility (DesignerSerializationVisibility.Content)]
++			public string Prop8 {
++				get { return null; }
++			}
++
++			[ReadOnly (true)]
++			[DesignerSerializationVisibility (DesignerSerializationVisibility.Content)]
++			public string Prop9 {
++				get { return null; }
++			}
++
+ 			public bool SerializeProp3 {
+ 				get { return _serializeProp3; }
+ 				set { _serializeProp3 = value; }
+@@ -243,6 +255,11 @@
+ 				return _serializeProp7;
+ 			}
+ 
++			public bool ShouldSerializeProp8 ()
++			{
++				return false;
++			}
++
+ 			private string _prop1;
+ 			private string _prop2;
+ 			private string _prop3;
+@@ -412,6 +429,8 @@
+ 			PropertyDescriptor prop5PD = properties ["Prop5"];
+ 			PropertyDescriptor prop6PD = properties ["Prop6"];
+ 			PropertyDescriptor prop7PD = properties ["Prop7"];
++			PropertyDescriptor prop8PD = properties ["Prop8"];
++			PropertyDescriptor prop9PD = properties ["Prop9"];
+ 
+ 			Assert.IsFalse (prop1PD.ShouldSerializeValue (test), "#A1");
+ 			Assert.IsTrue (prop2PD.ShouldSerializeValue (test), "#A2");
+@@ -448,6 +467,11 @@
+ 			Assert.IsTrue (prop7PD.ShouldSerializeValue (test), "#C7");
+ 			test.Prop7 = "good";
+ 			Assert.IsTrue (prop7PD.ShouldSerializeValue (test), "#C8");
++
++			// has both DesignerSerializationVisibility.Content and ShouldSerialize { return false }
++			Assert.IsFalse (prop8PD.ShouldSerializeValue (test), "#D1");
++			// has DesignerSerializationVisibility.Content, no ShouldSerialize
++			Assert.IsTrue (prop9PD.ShouldSerializeValue (test), "#D2");
+ 		}
+ 
+ 		[Test]
+Index: mcs/class/System/Test/System.ComponentModel/ChangeLog
+===================================================================
+--- mcs/class/System/Test/System.ComponentModel/ChangeLog	(revision 84375)
++++ mcs/class/System/Test/System.ComponentModel/ChangeLog	(working copy)
+@@ -1,5 +1,11 @@
+ 2007-08-19  Ivan N. Zlatev  <contact@i-nz.net>
+ 
++	PropertyDescriptorTests.cs: For read-only properties,
++	ShouldSerializeValue must also check for 
++	DesignerSerializationVisibility.Content and if presetn return true.
++
++2007-08-19  Ivan N. Zlatev  <contact@i-nz.net>
++
+ 	* TypeDescriptorTest.cs: new test to verify that GetProperties returns 
+ 	only the last type's implementation of a property with a matching name 
+ 	in the base types.

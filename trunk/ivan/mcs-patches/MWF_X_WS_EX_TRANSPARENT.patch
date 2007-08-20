@@ -1,0 +1,108 @@
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/X11Structs.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/X11Structs.cs	(revision 82534)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/X11Structs.cs	(working copy)
+@@ -1659,4 +1659,19 @@
+ 		public int nimage;     /* number of images */
+ 		public IntPtr images;   /* array of XcursorImage pointers */
+ 	}
++
++	[StructLayout(LayoutKind.Sequential)]
++	internal struct XVisualInfo
++	{
++		internal IntPtr visual;
++		internal int visualid;
++		internal int screen;
++		internal uint depth;
++		internal int klass;
++		internal uint red_mask;
++		internal uint green_mask;
++		internal uint blue_mask;
++		internal int colormap_size;
++		internal int bits_per_rgb;		
++	}
+ }
+Index: mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11.cs
+===================================================================
+--- mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11.cs	(revision 82534)
++++ mcs/class/Managed.Windows.Forms/System.Windows.Forms/XplatUIX11.cs	(working copy)
+@@ -2617,15 +2617,23 @@
+ 			Rectangle XClientRect = TranslateClientRectangleToXClientRectangle (hwnd, cp.control);
+ 				
+ 			lock (XlibLock) {
+-				WholeWindow = XCreateWindow(DisplayHandle, ParentHandle, X, Y, XWindowSize.Width, XWindowSize.Height, 0, (int)CreateWindowArgs.CopyFromParent, (int)CreateWindowArgs.InputOutput, IntPtr.Zero, new UIntPtr ((uint)ValueMask), ref Attributes);
++
++				int depth = (int)CreateWindowArgs.CopyFromParent;
++				IntPtr colormap = CustomColormap;
++				IntPtr visual = CustomVisual;
++
++				if (ExStyleSet (cp.ExStyle, WindowExStyles.WS_EX_TRANSPARENT))
++					GetRGBAInfo (Display, RootWindowHandle, Screen, out colormap, out visual, out depth);
++				
++				if (colormap != IntPtr.Zero) {
++					ValueMask |= SetWindowValuemask.ColorMap;
++					Attributes.colormap = colormap;
++				}
++
++				WholeWindow = XCreateWindow(DisplayHandle, ParentHandle, X, Y, XWindowSize.Width, XWindowSize.Height, 0, depth, (int)CreateWindowArgs.InputOutput, visual, new UIntPtr ((uint)ValueMask), ref Attributes);
+ 				if (WholeWindow != IntPtr.Zero) {
+ 					ValueMask &= ~(SetWindowValuemask.OverrideRedirect | SetWindowValuemask.SaveUnder);
+-
+-					if (CustomVisual != IntPtr.Zero && CustomColormap != IntPtr.Zero) {
+-						ValueMask = SetWindowValuemask.ColorMap;
+-						Attributes.colormap = CustomColormap;
+-					}
+-					ClientWindow = XCreateWindow(DisplayHandle, WholeWindow, XClientRect.X, XClientRect.Y, XClientRect.Width, XClientRect.Height, 0, (int)CreateWindowArgs.CopyFromParent, (int)CreateWindowArgs.InputOutput, CustomVisual, new UIntPtr ((uint)ValueMask), ref Attributes);
++					ClientWindow = XCreateWindow(DisplayHandle, WholeWindow, XClientRect.X, XClientRect.Y, XClientRect.Width, XClientRect.Height, 0, depth, (int)CreateWindowArgs.InputOutput, visual, new UIntPtr ((uint)ValueMask), ref Attributes);
+ 				}
+ 			}
+ 
+@@ -2711,6 +2719,33 @@
+ 			return hwnd.Handle;
+ 		}
+ 
++		private void GetRGBAInfo (IntPtr display, IntPtr rootWindow, int screenNo, out IntPtr colormap, 
++								  out IntPtr visual, out int depth)
++		{
++			visual = colormap = IntPtr.Zero;
++			depth = (int)CreateWindowArgs.CopyFromParent; /* 0 */
++
++			XVisualInfo visualInfo = new XVisualInfo ();
++			visualInfo.screen = screenNo;
++			visualInfo.depth = 32;
++			visualInfo.red_mask = 0xff0000;
++			visualInfo.green_mask = 0x00ff00;
++			visualInfo.blue_mask = 0x0000ff;
++			visualInfo.klass = 4; /* TrueColor */
++			int mask = 0x2  /* VisualScreenMask */ | 0x04  /* VisualDepthMask */ | 0x10 /* VisualRedMaskMask */ | 
++				0x20 /* VisualGreenMaskMask */ | 0x40 /* VisualBlueMaskMask */ | 0x8 /* VisualClassMask */;
++
++			int nitems = 0;
++			IntPtr vPtr = XGetVisualInfo (display, mask, ref visualInfo, ref nitems);
++			if (vPtr != IntPtr.Zero && nitems > 0) {
++				visualInfo = (XVisualInfo) Marshal.PtrToStructure (vPtr, typeof (XVisualInfo));
++				visual = visualInfo.visual;
++				depth = (int) visualInfo.depth;
++				colormap = XCreateColormap (display, rootWindow, visual, 0x0 /* AllocNone */);
++				XFree (vPtr);
++			}
++		}
++
+ 		internal override IntPtr CreateWindow(IntPtr Parent, int X, int Y, int Width, int Height) {
+ 			CreateParams create_params = new CreateParams();
+ 
+@@ -5998,7 +6033,13 @@
+ 		internal extern static void XkbSetDetectableAutoRepeat (IntPtr display, bool detectable, IntPtr supported);
+ 
+ 		[DllImport ("libX11")]
+-		internal extern static void XPeekEvent (IntPtr display, ref XEvent xevent);
++		internal extern static void XPeekEvent (IntPtr display, ref XEvent xevent);		
++
++		[DllImport ("libX11")]
++		internal extern static IntPtr XGetVisualInfo (IntPtr display, int vinfo_mask, ref XVisualInfo vinfo_template, ref int nitems);
++
++		[DllImport ("libX11")]
++		internal extern static IntPtr XCreateColormap (IntPtr display, IntPtr window, IntPtr visual, int alloc);
+ 		#endregion
+ 	}
+ }
