@@ -37,61 +37,6 @@ using Gendarme.Framework;
 
 namespace Gendarme.Rules.Smells {
 	
-	class ExpressionFiller : BaseCodeVisitor {
-		private IList expressionContainer;
-		private Expression currentExpression;
-
-		public ExpressionFiller () : base () {}
-	
-		public override void VisitMethodBody (MethodBody methodBody) 
-		{
-			expressionContainer = new ArrayList ();
-			currentExpression = null;
-		}
-		
-		private bool IsAcceptable (Instruction instruction) 
-		{
-			return instruction.OpCode.FlowControl == FlowControl.Call || 
-				instruction.OpCode.FlowControl == FlowControl.Branch || 
-				instruction.OpCode.FlowControl == FlowControl.Cond_Branch;
-		}
-
-		private void CreateExpressionAndAddToExpressionContainer () 
-		{
-			currentExpression = new Expression ();
-			expressionContainer.Add (currentExpression);
-		}
-
-		private bool IsDelimiter (Instruction instruction) 
-		{
-			return instruction.OpCode.Name == "ldarg.0" ||
-				instruction.OpCode.FlowControl == FlowControl.Branch;
-		}
-
-		private void AddToExpression (Instruction instruction) 
-		{
-			if (currentExpression == null)
-				CreateExpressionAndAddToExpressionContainer ();
-			currentExpression.Add (instruction);
-		}
-
-		public override void VisitInstructionCollection (InstructionCollection instructionCollection) 
-		{
-			foreach (Instruction instruction in instructionCollection) {
-				if (IsDelimiter (instruction)) 
-					CreateExpressionAndAddToExpressionContainer ();
-				if (IsAcceptable (instruction)) 
-					AddToExpression (instruction);
-			}
-		}
-
-		public ICollection Expressions {
-			get {
-				return expressionContainer;
-			}
-		}
-	}
-
 	class Expression : CollectionBase {
 
 		public Expression () : base () {}
@@ -206,9 +151,9 @@ namespace Gendarme.Rules.Smells {
 
 		private ICollection GetExpressionsFrom (MethodBody methodBody) 
 		{
-			ExpressionFiller expressionFiller = new ExpressionFiller ();
-			methodBody.Accept (expressionFiller);
-			return expressionFiller.Expressions;
+			ExpressionFillerVisitor expressionFillerVisitor = new ExpressionFillerVisitor ();
+			methodBody.Accept (expressionFillerVisitor);
+			return expressionFillerVisitor.Expressions;
 		}
 
 		private bool CanCompareMethods (MethodDefinition currentMethod, MethodDefinition targetMethod) 
