@@ -62,12 +62,30 @@ namespace Test.Rules.Smells {
 	}
 
 	public class BaseClassWithoutCodeDuplicated {
+		protected IList list;
+
+		protected void PrintValuesInList () 
+		{
+			foreach (int i in list) {
+				Console.WriteLine (i);
+			}
+		}
 	}
 
 	public class OverriderClassWithoutCodeDuplicated : BaseClassWithoutCodeDuplicated {
+		public void SomeCode () 
+		{
+			PrintValuesInList ();
+			list.Add (1);
+		}
 	}
 
 	public class OtherOverriderWithoutCodeDuplicated : BaseClassWithoutCodeDuplicated {
+		public void MoreCode ()
+		{
+			PrintValuesInList ();
+			list.Remove (1);
+		}
 	}
 
 	[TestFixture]
