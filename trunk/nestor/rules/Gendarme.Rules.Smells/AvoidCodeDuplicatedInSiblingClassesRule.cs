@@ -39,19 +39,35 @@ namespace Gendarme.Rules.Smells {
 	
 	public class AvoidCodeDuplicatedInSiblingClassesRule : ITypeRule {
 		private MessageCollection messageCollection;
+		private CodeDuplicatedLocator codeDuplicatedLocator;
+
+		private void FindCodeDuplicated (TypeDefinition type, ICollection siblingClasses) 
+		{
+			foreach (MethodDefinition method in type.Methods) {
+				foreach (TypeDefinition sibling in siblingClasses) {
+					foreach (Message message in codeDuplicatedLocator.CompareMethodAgainstTypeMethods (method, sibling)) {
+						messageCollection.Add (message);
+					}
+				}
+				codeDuplicatedLocator.CheckedMethods.Add (method.Name);
+			}
+		}
 
 		private void CompareSiblingClasses (ICollection siblingClasses) 
 		{
+			foreach (TypeDefinition type in siblingClasses) {
+				FindCodeDuplicated (type, siblingClasses);
+			}
 		}
 
 		public MessageCollection CheckType (TypeDefinition type, Runner runner) 
 		{
 			messageCollection = new MessageCollection ();
+			codeDuplicatedLocator = new CodeDuplicatedLocator ();
 			
 			ICollection siblingClasses = Utilities.GetInheritedClassesFrom (type);
-			if (siblingClasses.Count >= 2) {
+			if (siblingClasses.Count >= 2) 
 				CompareSiblingClasses (siblingClasses);
-			}
 
 			if (messageCollection.Count == 0)
 				return null;
