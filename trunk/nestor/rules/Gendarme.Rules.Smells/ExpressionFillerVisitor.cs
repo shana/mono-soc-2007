@@ -60,7 +60,7 @@ namespace Gendarme.Rules.Smells {
 
 		private bool IsDelimiter (Instruction instruction) 
 		{
-			return instruction.OpCode.Name == "ldarg.0" ||
+			return instruction.OpCode.Code == Code.Ldarg_0 ||
 				instruction.OpCode.FlowControl == FlowControl.Branch;
 		}
 
