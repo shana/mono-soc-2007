@@ -22,4 +22,26 @@
 		<problem>There are same code structure in various methods in the same class.  Your code will be better if you can unify them.</problem>
 		<solution>You should apply the Extract Method refactoring and invoke the method from the places.</solution>
 	</rule>
+
+	<rule 	Name="AvoidCodeDuplicatedInSiblingClassesRule"
+		Type="Gendarme.Rules.Smells.AvoidCodeDuplicatedInSiblingClassesRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
+		Uri="">
+		<problem>There are same code structure in various methods in sibling classes.  Your code will be better if you can unify them.</problem>
+		<solution>You can apply the Pull Up Method refactoring.</solution>
+	</rule>
+
+	<rule 	Name="AvoidLargeClassesRule"
+		Type="Gendarme.Rules.Smells.AvoidLargeClassesRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
+		Uri="">
+		<problem>The class is trying to do too much.  Generally if a class is too large, duplicated code will not be far.</problem>
+		<solution>You can apply the Extract Class or Extract Subclass refactoring.</solution>
+	</rule>
+
+	<rule 	Name="AvoidSpeculativeGeneralityRule"
+		Type="Gendarme.Rules.Smells.AvoidSpeculativeGeneralityRule, Gendarme.Rules.Smells, Version=@VERSION@, Culture=neutral, PublicKeyToken=null"
+		Uri="">
+		<problem>If you will need the feature in the future then you should implement it in the future.</problem>
+		<solution>You can apply various refactorings: Collapse Hierarchy, Inline Class, Remove Parameter or Rename Method.</solution>
+	</rule>
+
 </rules>
