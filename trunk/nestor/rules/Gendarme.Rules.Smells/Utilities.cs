@@ -1,5 +1,5 @@
 //
-// Gendarme.Rules.Smells.AvoidCodeDuplicatedInSiblingClassesRule class
+// Gendarme.Rules.Smells.Utilities class
 //
 // Authors:
 //	Néstor Salceda <nestor.salceda@gmail.com>
@@ -28,29 +28,20 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
-using System.Text;
 
 using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Gendarme.Framework;
 
 namespace Gendarme.Rules.Smells {
 	
-	public class AvoidCodeDuplicatedInSiblingClassesRule : ITypeRule {
-		private MessageCollection messageCollection;
-
-
-		public MessageCollection CheckType (TypeDefinition typeDefinition, Runner runner) 
+	internal class Utilities {
+		internal static ICollection GetInheritedClassesFrom (TypeDefinition baseType)
 		{
-			messageCollection = new MessageCollection ();
-			
-			if (Utilities.GetInheritedClassesFrom (typeDefinition).Count >= 2) {
+			ArrayList inheritedClasses = new ArrayList ();
+			foreach (TypeDefinition type in baseType.Module.Types) {
+				if ((type.BaseType != null) && type.BaseType.Equals (baseType))
+					inheritedClasses.Add (type);
 			}
-
-			if (messageCollection.Count == 0)
-				return null;
-			return messageCollection;
+			return inheritedClasses;
 		}
 	}
 }
