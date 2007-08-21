@@ -17,6 +17,8 @@ namespace CBinding {
         
         private Gtk.ComboBox compilerComboBox;
         
+        private Gtk.CheckButton useCcacheCheckBox;
+        
         protected virtual void Build() {
             Stetic.Gui.Initialize();
             // Widget CBinding.CompilerPanel
@@ -38,11 +40,27 @@ namespace CBinding {
             w1.RightAttach = ((uint)(2));
             w1.XOptions = ((Gtk.AttachOptions)(4));
             w1.YOptions = ((Gtk.AttachOptions)(4));
+            // Container child table2.Gtk.Table+TableChild
+            this.useCcacheCheckBox = new Gtk.CheckButton();
+            this.useCcacheCheckBox.CanFocus = true;
+            this.useCcacheCheckBox.Name = "useCcacheCheckBox";
+            this.useCcacheCheckBox.Label = Mono.Unix.Catalog.GetString("Use ccache");
+            this.useCcacheCheckBox.DrawIndicator = true;
+            this.useCcacheCheckBox.UseUnderline = true;
+            this.table2.Add(this.useCcacheCheckBox);
+            Gtk.Table.TableChild w2 = ((Gtk.Table.TableChild)(this.table2[this.useCcacheCheckBox]));
+            w2.TopAttach = ((uint)(2));
+            w2.BottomAttach = ((uint)(3));
+            w2.LeftAttach = ((uint)(1));
+            w2.RightAttach = ((uint)(2));
+            w2.XOptions = ((Gtk.AttachOptions)(4));
+            w2.YOptions = ((Gtk.AttachOptions)(4));
             this.Add(this.table2);
             if ((this.Child != null)) {
                 this.Child.ShowAll();
             }
             this.Show();
+            this.compilerComboBox.Changed += new System.EventHandler(this.OnCompilerComboBoxChanged);
         }
     }
 }

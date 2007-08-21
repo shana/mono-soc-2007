@@ -56,6 +56,10 @@ namespace CBinding
 			get { return compilerCommand; }
 		}
 		
+		public abstract bool SupportsCcache {
+			get;
+		}
+		
 		public abstract string GetCompilerFlags (CProjectConfiguration configuration);
 		
 		public abstract string GetDefineFlags (CProjectConfiguration configuration);

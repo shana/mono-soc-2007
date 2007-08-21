@@ -72,6 +72,9 @@ namespace CBinding
 		[ProjectPathItemProperty ("SourceDirectory")]
 		private string source_directory_path;
 		
+		[ItemProperty ("UseCcache", DefaultValue=false)]
+		private bool use_ccache = false;
+		
 		public string Output {
 			get { return output; }
 			set { output = value; }
@@ -147,6 +150,11 @@ namespace CBinding
 			set { libs = value; }
 		}
 		
+		public bool UseCcache {
+			get { return use_ccache; }
+			set { use_ccache = value; }
+		}
+		
 		public override void CopyFrom (IConfiguration configuration)
 		{
 			base.CopyFrom (configuration);
@@ -158,6 +166,7 @@ namespace CBinding
 			libpaths = conf.libpaths;
 			libs = conf.libs;
 			source_directory_path = conf.source_directory_path;
+			use_ccache = conf.use_ccache;
 			
 			if (conf.CompilationParameters == null) {
 				compilationParameters = null;
