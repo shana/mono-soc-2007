@@ -44,7 +44,8 @@ namespace CBinding
 	public partial class CompilerPanel : Gtk.Bin
 	{
 		private CProject project;
-		object[] compilers;
+		private object[] compilers;
+		private ICompiler active_compiler;
 		
 		public CompilerPanel (IProperties customizationObject)
 		{
@@ -71,6 +72,10 @@ namespace CBinding
 			}
 
 			compilerComboBox.Active = active;
+			
+			useCcacheCheckBox.Active = ((CProjectConfiguration)project.ActiveConfiguration).UseCcache;
+			
+			Update ();
 		}
 		
 		public bool Store ()
@@ -78,19 +83,38 @@ namespace CBinding
 			if (project == null)
 				return false;
 			
-			if (compilers != null) {
-				foreach (CCompiler compiler in compilers) {
-					if (compilerComboBox.ActiveText == compiler.Name) {
-						project.Compiler = compiler;
-						break;
-					}
-				}
+			if (active_compiler != null) {
+				project.Compiler = active_compiler;
 			} else {
 				// Use default compiler depending on language.
 				project.Compiler = null;
 			}
+			
+			// Update use_ccache for all configurations
+			foreach (CProjectConfiguration conf in project.Configurations)
+				conf.UseCcache = useCcacheCheckBox.Active;
 
 			return true;
+		}
+
+		protected virtual void OnCompilerComboBoxChanged (object sender, EventArgs e)
+		{
+			Update ();
+		}
+		
+		private void Update ()
+		{
+			foreach (ICompiler compiler in compilers) {
+				if (compilerComboBox.ActiveText == compiler.Name) {
+					active_compiler = compiler;
+					break;
+				}
+			}
+			
+			if (active_compiler.SupportsCcache)
+				useCcacheCheckBox.Sensitive = true;
+			else
+				useCcacheCheckBox.Sensitive = false;
 		}
 	}
 	

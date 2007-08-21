@@ -78,7 +78,7 @@ namespace CBinding
 				
 				if (f.BuildAction == BuildAction.Compile) {
 					if (NeedsCompiling (f))
-						res = DoCompilation (f, args, packages, monitor, cr);
+						res = DoCompilation (f, args, packages, monitor, cr, configuration.UseCcache);
 				}
 				else
 					res = true;
@@ -105,6 +105,10 @@ namespace CBinding
 			}
 			
 			return new DefaultCompilerResult (cr, "");
+		}
+		
+		public override bool SupportsCcache {
+			get { return true; }
 		}
 		
 		public override string GetCompilerFlags (CProjectConfiguration configuration)
@@ -420,12 +424,14 @@ namespace CBinding
 		private bool DoCompilation (ProjectFile file, string args,
 		                            ProjectPackageCollection packages,
 		                            IProgressMonitor monitor,
-		                            CompilerResults cr)
+		                            CompilerResults cr,
+		                            bool use_ccache)
 		{			
 			string outputName = Path.ChangeExtension (file.Name, ".o");
 			string pkgargs = GeneratePkgCompilerArgs (packages);
 			
-			string command = String.Format("{0} -MMD {1} {2} -c -o {3} {4}",
+			string command = String.Format("{0}{1} -MMD {2} {3} -c -o {4} {5}",
+			    (use_ccache ? "ccache " : string.Empty),
 			    compilerCommand, file.Name, args,outputName, pkgargs);
 			
 			monitor.Log.WriteLine ("using: " + command);
