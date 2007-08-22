@@ -23,12 +23,17 @@ namespace FieldStat
 
         public void ExportResults()
         {
-            m_results.AnalysisResults.TableName = "Results";
+            //m_results.AnalysisResults.TableName = "Results";
             if (!Directory.Exists(m_outputDirectory))
             {
                 Directory.CreateDirectory(m_outputDirectory);
             }
             m_results.AnalysisResults.WriteXml(m_outputDirectory + "\\Results.xml", XmlWriteMode.WriteSchema);
+
+            foreach (DataTable dtPlugin in m_results.PluginTables)
+            {
+                dtPlugin.WriteXml(m_outputDirectory + "\\"+ dtPlugin.TableName+".xml", XmlWriteMode.WriteSchema);
+            }
         }
     }
 }

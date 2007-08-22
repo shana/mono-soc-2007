@@ -158,5 +158,30 @@ namespace FieldStat
                 view.DefaultCellStyle.BackColor = Color.FromArgb(0, (int)(coverage * 255), 0);
             }
         }
+
+        private void btnPluginImportResults_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                DataTable dt = new DataTable();
+                dt.ReadXml(ofd.FileName);
+                m_dgPluginResults.DataSource = dt;
+            }
+        }
+
+        int m_currentIndex = -1;
+        private void btnNextPluginResult_Click(object sender, EventArgs e)
+        {
+            if (m_parameterData.Results.PluginTables.Count == 0)
+                return;
+            m_currentIndex += 1;
+            if( m_currentIndex >= m_parameterData.Results.PluginTables.Count )
+            {
+                m_currentIndex = 0;
+            }
+            DataTable dt = (DataTable)m_parameterData.Results.PluginTables[m_currentIndex];
+            m_dgPluginResults.DataSource = dt;
+        }
     }
 }
