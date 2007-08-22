@@ -104,8 +104,8 @@ namespace FieldStat.DataCollection
             {
                 if (CodeProperties.IsMethodCall(i))
                 {
-                    if (i.Operand is Mono.Cecil.CallSite || i.Operand is Mono.Cecil.FieldReference)
-                        continue;
+                    //if (i.Operand is Mono.Cecil.CallSite || i.Operand is Mono.Cecil.FieldReference)
+                    //    continue;
 
                     MethodReference rf = (MethodReference)i.Operand;
                     string typeName = CodeProperties.GetClassName(rf.DeclaringType);
