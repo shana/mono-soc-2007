@@ -11,10 +11,9 @@ namespace FieldStat.CodeModel
     {
         public static bool IsMethodCall(Mono.Cecil.Cil.Instruction i)
         {
-            CallSite s;
-            
             if (i.Operand is Mono.Cecil.CallSite || i.Operand is Mono.Cecil.FieldReference)
                 return false;
+
             return i.OpCode == Mono.Cecil.Cil.OpCodes.Call ||
                    i.OpCode == Mono.Cecil.Cil.OpCodes.Calli ||
                    i.OpCode == Mono.Cecil.Cil.OpCodes.Callvirt ||
