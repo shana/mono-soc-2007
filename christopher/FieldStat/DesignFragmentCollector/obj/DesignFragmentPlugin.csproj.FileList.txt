@@ -1,9 +1,0 @@
-bin\Debug\DesignFragmentPlugin.dll
-bin\Debug\DesignFragmentPlugin.pdb
-bin\Debug\FieldStat.exe
-bin\Debug\Mono.Cecil.dll
-bin\Debug\Mono.GetOptions.dll
-bin\Debug\FieldStat.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\DesignFragmentPlugin.dll
-obj\Debug\DesignFragmentPlugin.pdb
