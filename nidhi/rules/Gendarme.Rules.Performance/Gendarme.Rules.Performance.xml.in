@@ -1,0 +1,32 @@
+<rules>
+	<rule	Name="EmptyDestructorRule" 
+		Type="Gendarme.Rules.Performance.EmptyDestructorRule, Gendarme.Rules.Performance, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#EmptyDestructorRule" >
+		<problem>The type '{0}' has an empty destructor (or Finalize method).</problem>
+		<solution>Remove the empty destructor (or Finalize method) from the class.</solution>
+	</rule>
+	<rule	Name="IDisposableWithDestructorWithoutSuppressFinalizeRule" 
+		Type="Gendarme.Rules.Performance.IDisposableWithDestructorWithoutSuppressFinalizeRule, Gendarme.Rules.Performance, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#IDisposableWithDestructorWithoutSuppressFinalizeRule" >
+		<problem>The type '{0}' has a destructor and implements IDisposable. However it doesn't call System.GC.SuppressFinalize inside it's Dispose method.</problem>
+		<solution>Add a call to GC.SuppressFinalize inside your Dispose method.</solution>
+	</rule>
+	<rule	Name="UseStringEmptyRule" 
+		Type="Gendarme.Rules.Performance.UseStringEmptyRule, Gendarme.Rules.Performance, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#UseStringEmptyRule" >
+		<problem>The method '{0}' use literal "" instead of String.Empty.</problem>
+		<solution>Change the empty string for String.Empty.</solution>
+	</rule>
+	<rule	Name="UsingStringLengthInsteadOfCheckingEmptyStringRule" 
+		Type="Gendarme.Rules.Performance.UsingStringLengthInsteadOfCheckingEmptyStringRule, Gendarme.Rules.Performance, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#UsingStringLengthInsteadOfCheckingEmptyStringRule" >
+		<problem>The method '{0}' compares the empty string by using Equals ("").</problem>
+		<solution>use String.Length instead.</solution>
+	</rule>
+	<rule	Name="AvoidUninstantiatedInternalClassesRule" 
+		Type="Gendarme.Rules.Performance.AvoidUninstantiatedInternalClassesRule, Gendarme.Rules.Performance, Version=0.0.3.1, Culture=neutral, PublicKeyToken=null"
+		Uri="http://www.mono-project.com/Gendarme#AvoidUninstantiatedInternalClassesRule" >
+		<problem>The internal type '{0}' is not instantiated by code within the assembly.</problem>
+		<solution>Remove the type or add the code that uses it.  If the type contains only static methods then either add the static modifier to the type or add the private construtor to the type to prevent the compiler from emitting a default public instance constructor.</solution>
+	</rule>
+</rules>
