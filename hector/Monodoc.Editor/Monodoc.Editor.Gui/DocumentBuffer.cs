@@ -82,8 +82,6 @@ public class DocumentBuffer : TextBuffer {
 		TextIter endIter = GetIterAtOffset (args.Start.Offset);
 		#if DEBUG
 		Console.WriteLine ("DEBUG: Deleting range");
-		Console.WriteLine ("DEBUG: Start Offset: {0} Char: {1}", startIter.Offset, startIter.Char);
-		Console.WriteLine ("DEBUG: End Offset: {0} Char: {1}", endIter.Offset, endIter.Char);
 		#endif
 		
 		bool startsRegion = startIter.Char.Equals ("[");
@@ -95,7 +93,9 @@ public class DocumentBuffer : TextBuffer {
 			#endif
 			
 			TextTag last = DocumentUtils.GetAssociatedTextTag (this, DocumentUtils.GetLastTag (startIter));
+			Undoer.FreezeUndo ();
 			InsertWithTags (ref endIter, "Documentation for this section has not yet been entered.", last);
+			Undoer.ThrawUndo ();
 		}
 	}
 	

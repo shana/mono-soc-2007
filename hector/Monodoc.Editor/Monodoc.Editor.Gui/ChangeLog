@@ -1,3 +1,11 @@
+2007-08-23  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* DocumentUndoManager.cs: Deleted commented code.
+	* DocumentActions.cs: Modified EraseAction so it handles the case when
+	  a whole editable region is deleted.
+	* DocumentBuffer.cs: Freeze undo action creation when inserting stub
+	  text when deleting a whole editable region.
+
 2007-08-14  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor.Gui.mdp: Added DocumentActions file that contains the

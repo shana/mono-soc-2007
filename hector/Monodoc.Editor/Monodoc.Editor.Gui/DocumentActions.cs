@@ -36,7 +36,7 @@ public class InsertAction : SplitterAction {
 	{
 		#if DEBUG
 		Console.WriteLine ("DEBUG: InsertAction: {0}", text);
-		Console.WriteLine ("DEBUG: Start Offset: {0}", start.Offset);
+		Console.WriteLine ("DEBUG: Insert Offset: {0} Char {1}", start.Offset, start.Char);
 		#endif
 		
 		this.index = start.Offset - length;
@@ -44,11 +44,10 @@ public class InsertAction : SplitterAction {
 		
 		TextIter indexIter = start.Buffer.GetIterAtOffset (index);
 		#if DEBUG
-		Console.WriteLine ("DEBUG: indexIter Offset: {0} Char: {1}", indexIter.Offset, indexIter.Char);
+		Console.WriteLine ("DEBUG: Start Offset: {0} Char: {1}", indexIter.Offset, indexIter.Char);
 		#endif
 		this.chop = chop_buf.AddChop (indexIter, start);
 		#if DEBUG
-		Console.WriteLine ("DEBUG: Buffer Text: {0}", start.Buffer.Text);
 		Console.WriteLine ("DEBUG: Chop Text: {0}", chop.Text);
 		#endif
 	}
@@ -119,12 +118,24 @@ public class EraseAction : SplitterAction {
 	private int end;
 	private bool is_forward;
 	private bool is_cut;
+	private bool whole_region;
 	
 	public EraseAction (TextIter startIter, TextIter endIter, ChopBuffer chop_buf)
 	{
+		#if DEBUG
+		Console.WriteLine ("DEBUG: EraseAction: {0}", startIter.GetText (endIter));
+		Console.WriteLine ("DEBUG: Start Offset: {0} Char: {1}", startIter.Offset, startIter.Char);
+		Console.WriteLine ("DEBUG: End Offset: {0} Char: {1}", endIter.Offset, endIter.Char);
+		#endif
+		
 		this.start = startIter.Offset;
 		this.end = endIter.Offset;
 		this.is_cut = end - start > 1;
+		
+		TextIter previousIter = startIter.Buffer.GetIterAtOffset (start - 1);
+		bool startsRegion = previousIter.Char.Equals ("[");
+		bool endsRegion = endIter.Char.Equals ("]");
+		this.whole_region = startsRegion && endsRegion;
 		
 		TextIter insert = startIter.Buffer.GetIterAtMark (startIter.Buffer.InsertMark);
 		this.is_forward = insert.Offset <= start;
@@ -134,8 +145,20 @@ public class EraseAction : SplitterAction {
 	
 	public override void Undo (TextBuffer buffer)
 	{
-		TextIter startIter = buffer.GetIterAtOffset (start);
+		TextIter startIter, endIter;
+		
+		#if DEBUG
+		Console.WriteLine ("DEBUG: Whole Region {0}", whole_region);
+		#endif
+		
+		startIter = buffer.GetIterAtOffset (start);
 		buffer.InsertRange (ref startIter, chop.Start, chop.End);
+		
+		if (whole_region) {
+			endIter = buffer.GetIterAtOffset (startIter.Offset + 56);
+			buffer.Delete (ref startIter, ref endIter);
+		}
+		
 		buffer.MoveMark (buffer.InsertMark, buffer.GetIterAtOffset (is_forward ? start : end));
 		buffer.MoveMark (buffer.SelectionBound, buffer.GetIterAtOffset (is_forward ? end : start));
 	}
@@ -144,7 +167,9 @@ public class EraseAction : SplitterAction {
 	{
 		TextIter startIter = buffer.GetIterAtOffset (start);
 		TextIter endIter = buffer.GetIterAtOffset (end);
+		
 		buffer.Delete (ref startIter, ref endIter);
+		
 		buffer.MoveMark (buffer.InsertMark, buffer.GetIterAtOffset (start));
 		buffer.MoveMark (buffer.SelectionBound, buffer.GetIterAtOffset (start));
 	}
