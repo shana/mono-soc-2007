@@ -1,5 +1,11 @@
 2007-08-23  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
+	* Test/TestDocumentActions.cs, Test/TestDocumentUndoManager.cs,
+	  Monodoc.Editor.Gui.mdp: Added stub files for test units for
+	  DocumentAction and DocumentUndoManager classes.
+
+2007-08-23  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
 	* DocumentUndoManager.cs: Deleted commented code.
 	* DocumentActions.cs: Modified EraseAction so it handles the case when
 	  a whole editable region is deleted.
