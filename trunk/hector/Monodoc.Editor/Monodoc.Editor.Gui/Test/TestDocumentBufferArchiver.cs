@@ -62,12 +62,14 @@ public class TestDocumentBufferArchiver {
 	{
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
-			TextBuffer buffer = editor.Buffer;
+			DocumentBuffer buffer = (DocumentBuffer) editor.Buffer;
 			
 			MonoDocument document = new MonoDocument (file);
 			string filename = Path.GetFileName (file);
 			
+			buffer.Undoer.FreezeUndo ();
 			DocumentBufferArchiver.Deserialize (buffer, document.Xml);
+			buffer.Undoer.ThrawUndo ();
 			
 			DateTime startTime = DateTime.Now;
 			DocumentBufferArchiver.Serialize (buffer);

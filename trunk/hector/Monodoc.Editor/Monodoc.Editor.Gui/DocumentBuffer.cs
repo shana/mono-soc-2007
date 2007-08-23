@@ -20,6 +20,7 @@ public class DocumentBuffer : TextBuffer {
 	{
 		undo_manager = new DocumentUndoManager (this);
 		InsertText += OnInsertText;
+		DeleteRange += OnDeleteRange;
 		TagRemoved += OnRemoved;
 		document_loaded = false;
 	}
@@ -75,33 +76,29 @@ public class DocumentBuffer : TextBuffer {
 		}
 	}
 	
-	protected override void OnDeleteRange (TextIter startIter, TextIter endIter)
+	private void OnDeleteRange (object sender, DeleteRangeArgs args)
 	{
+		TextIter startIter = GetIterAtOffset (args.Start.Offset -1);
+		TextIter endIter = GetIterAtOffset (args.Start.Offset);
+		#if DEBUG
 		Console.WriteLine ("DEBUG: Deleting range");
-		if (startIter.Offset == endIter.Offset)
-			Console.WriteLine ("DEBUG: Zero length range.");
 		Console.WriteLine ("DEBUG: Start Offset: {0} Char: {1}", startIter.Offset, startIter.Char);
 		Console.WriteLine ("DEBUG: End Offset: {0} Char: {1}", endIter.Offset, endIter.Char);
+		#endif
 		
-		int startOffset = startIter.Offset;
-		TextIter regionStart = GetIterAtOffset (startOffset - 1);
-		TextIter regionEnd = GetIterAtOffset (endIter.Offset);
-		
-		Console.WriteLine ("DEBUG: Previous Start Offset: {0} Char: {1}", regionStart.Offset, regionStart.Char);
-		Console.WriteLine ("DEBUG: Next End Offset: {0} Char: {1}", regionEnd.Offset, regionEnd.Char);
-		
-		TextTag last = DocumentUtils.GetLastTag (startIter);
-		bool startsRegion = regionStart.Char.Equals ("[");
-		bool endsRegion = regionEnd.Char.Equals ("]");
-		base.OnDeleteRange (startIter, endIter);
+		bool startsRegion = startIter.Char.Equals ("[");
+		bool endsRegion = endIter.Char.Equals ("]");
 		
 		if (startsRegion && endsRegion) {
-			Console.WriteLine ("Deleting whole editing region");
-			TextIter insertIter = GetIterAtOffset (startOffset);
-			InsertWithTags (ref insertIter, "Documentation for this section has not yet been entered.", last);
+			#if DEBUG
+			Console.WriteLine ("DEBUG: Deleting whole editing region.");
+			#endif
+			
+			TextTag last = DocumentUtils.GetAssociatedTextTag (this, DocumentUtils.GetLastTag (startIter));
+			InsertWithTags (ref endIter, "Documentation for this section has not yet been entered.", last);
 		}
 	}
-
+	
 	private void OnRemoved (object o, TagRemovedArgs args)
 	{
 		Console.WriteLine ("DEBUG: Deleting Tag {0}", args.Tag.Name);
