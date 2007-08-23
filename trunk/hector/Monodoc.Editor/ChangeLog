@@ -1,3 +1,9 @@
+2007-08-23  Hector E. Gomez Morales <hectoregm@gmail.com> 
+
+	* Monodoc.Editor.Gui/Test/TestDocumentBufferArchiver.cs: Need to freeze
+	  the creation of undo actions when calling Deserialize method.
+	* Monodoc.Editor.Gui/DocumentBuffer.cs: Deleted commented code.
+
 2007-08-20  Hector E. Gomez Morales <hectoregm@gmail.com> 
 
 	* Monodoc.Editor/EditorWindow.cs,

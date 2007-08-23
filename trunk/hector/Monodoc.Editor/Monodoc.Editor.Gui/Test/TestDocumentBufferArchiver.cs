@@ -42,13 +42,15 @@ public class TestDocumentBufferArchiver {
 		
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
-			TextBuffer buffer = editor.Buffer;
+			DocumentBuffer buffer = (DocumentBuffer) editor.Buffer;
 			
 			MonoDocument document = new MonoDocument (file);
 			filename = Path.GetFileName (file);
 			originalXml= document.Xml;
 			
+			buffer.Undoer.FreezeUndo ();
 			DocumentBufferArchiver.Deserialize (buffer, originalXml);
+			buffer.Undoer.ThrawUndo ();
 			newXml = DocumentBufferArchiver.Serialize (buffer);
 			
 			Assert.AreEqual (originalXml, newXml, "SR:" + filename);
@@ -64,12 +66,13 @@ public class TestDocumentBufferArchiver {
 			
 			MonoDocument document = new MonoDocument (file);
 			string filename = Path.GetFileName (file);
-
+			
 			DocumentBufferArchiver.Deserialize (buffer, document.Xml);
+			
 			DateTime startTime = DateTime.Now;
 			DocumentBufferArchiver.Serialize (buffer);
 			DateTime stopTime = DateTime.Now;
-
+			
 			TimeSpan duration = stopTime - startTime;			
 			Assert.Less (duration.TotalMilliseconds, 3000, "SP:" + filename);
 		}
@@ -80,15 +83,17 @@ public class TestDocumentBufferArchiver {
 	{
 		foreach (string file in files) {
 			DocumentEditor editor = new DocumentEditor ();
-			TextBuffer buffer = editor.Buffer;
+			DocumentBuffer buffer = (DocumentBuffer) editor.Buffer;
 			
 			MonoDocument document = new MonoDocument (file);
 			string filename = Path.GetFileName (file);
 			
+			buffer.Undoer.FreezeUndo ();
 			DateTime startTime = DateTime.Now;
 			DocumentBufferArchiver.Deserialize (buffer, document.Xml);
 			DateTime stopTime = DateTime.Now;
-
+			buffer.Undoer.ThrawUndo ();
+			
 			TimeSpan duration = stopTime - startTime;			
 			Assert.Less (duration.TotalMilliseconds, 1000, "SP:" + filename);
 		}
