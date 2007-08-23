@@ -159,7 +159,6 @@ public class DocumentUndoManager {
 	
 	// Action-creating event handlers...
 	
-//	[GLib.ConnectBefore]
 	private void OnInsertText (object sender, InsertTextArgs args)
 	{
 		if (frozen_cnt == 0) {
