@@ -1,6 +1,7 @@
 SUBDIRS= Gendarme.Rules.Naming \
 Gendarme.Rules.Exceptions \
 Gendarme.Rules.Performance \
+Gendarme.Rules.Security \
 Gendarme.Rules.Smells 
 
 EXTRA_DIST = rules.xml 
