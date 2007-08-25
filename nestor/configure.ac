@@ -63,6 +63,8 @@ rules/Gendarme.Rules.Smells/Gendarme.Rules.Smells.xml
 rules/Gendarme.Rules.Performance/Makefile
 rules/Gendarme.Rules.Performance/Test/Makefile
 rules/Gendarme.Rules.Performance/Gendarme.Rules.Performance.xml
+rules/Gendarme.Rules.Security/Makefile
+rules/Gendarme.Rules.Security/Test/Makefile
 measurement/Makefile
 measurement/src/Makefile
 measurement/src/AssemblyInfo.cs
