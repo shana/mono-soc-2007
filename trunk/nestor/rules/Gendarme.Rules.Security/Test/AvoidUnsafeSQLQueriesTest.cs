@@ -29,6 +29,9 @@
 using System;
 using System.Reflection;
 
+using System.Data;
+using System.Data.SqlClient;
+
 using Mono.Cecil;
 using NUnit.Framework;
 using Gendarme.Framework;
@@ -42,6 +45,39 @@ namespace Test.Rules.Security {
 		private AssemblyDefinition assembly;
 		private MethodDefinition method;
 		private MessageCollection messageCollection;
+
+		private void PrintAllValuesInReader (IDataReader reader) 
+		{
+			while (reader.Read ()) 
+				Console.WriteLine ("User with name {0} has bank account {1}", reader.GetString (0), reader.GetString (1));
+		}
+		
+		public void UnsafeQuery (string name) 
+		{
+			IDbConnection dbConnection = new SqlConnection ();
+			dbConnection.Open ();
+			IDbCommand dbCommand = dbConnection.CreateCommand ();
+			dbCommand.CommandText = "SELECT name, bank_account FROM customers WHERE name = '" + name + "'";
+			IDataReader dataReader = dbCommand.ExecuteReader ();
+			PrintAllValuesInReader (dataReader);
+			dataReader.Close ();
+			dbCommand.Dispose ();
+			dbConnection.Close ();
+		}
+
+		public void SafeQuery (string name) 
+		{
+			IDbConnection dbConnection = new SqlConnection ();
+			dbConnection.Open ();
+			IDbCommand dbCommand = dbConnection.CreateCommand ();
+			dbCommand.CommandText = "SELECT name, bank_account FROM customers WHERE name = @name";
+			dbCommand.Parameters.Add (new SqlParameter ("@name", DbType.String).Value = name);
+			IDataReader dataReader = dbCommand.ExecuteReader ();
+			PrintAllValuesInReader (dataReader);
+			dataReader.Close ();
+			dbCommand.Dispose ();
+			dbConnection.Close ();
+		}
 
 		[TestFixtureSetUp]
 		public void FixtureSetUp () 
@@ -62,5 +98,21 @@ namespace Test.Rules.Security {
 			return null;
 		}
 
+		[Test]
+		public void UnsafeQueryTest () 
+		{
+			method = GetMethodForTest ("UnsafeQuery");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNotNull (messageCollection);
+			Assert.AreEqual (1, messageCollection.Count);
+		}
+
+		[Test]
+		public void SafeQueryTest () 
+		{
+			method = GetMethodForTest ("SafeQuery");
+			messageCollection = rule.CheckMethod (method, new MinimalRunner ());
+			Assert.IsNull (messageCollection);
+		}
 	}
 }

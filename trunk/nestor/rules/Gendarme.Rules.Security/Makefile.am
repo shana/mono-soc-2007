@@ -35,7 +35,7 @@ security_test_sources = *.cs
 security_test_build_sources = $(addprefix $(srcdir)/Test/, $(security_test_sources))
 
 Test.Rules.Security.dll: $(security_rules_build_sources)
-	$(MCS) -target:library -pkg:mono-cecil -pkg:mono-nunit -r:../lib/Gendarme.Framework.dll \
+	$(MCS) -target:library -pkg:mono-cecil -pkg:mono-nunit -r:System.Data.dll -r:../lib/Gendarme.Framework.dll \
 		-r:Gendarme.Rules.Security.dll -out:$@ $(security_test_build_sources)
 
 test: Gendarme.Rules.Security.dll Test.Rules.Security.dll
