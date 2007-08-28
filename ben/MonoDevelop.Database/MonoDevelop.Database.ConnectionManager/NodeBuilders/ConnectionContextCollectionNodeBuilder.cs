@@ -59,7 +59,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		}
 		
 		public override string ContextMenuAddinPath {
-			get { return "/SharpDevelop/Views/ConnectionManagerPad/ContextMenu/ConnectionsNode"; }
+			get { return "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ConnectionsNode"; }
 		}
 		
 		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
