@@ -1,10 +1,6 @@
 ADDIN_BUILD = $(top_builddir)/build/AddIns/MonoDevelop.Database
 ASSEMBLY = $(ADDIN_BUILD)/MonoDevelop.Database.Sql.dll
 REFS =  \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Components.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Core.Gui.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Ide.dll \
-	-r:$(top_builddir)/build/AddIns/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
 	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Components.dll \
 	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Core.Gui.dll \
@@ -92,6 +88,7 @@ FILES =  \
 	MetaData/DatabaseMetaData.cs \
 	MetaData/DataTypeMetaData.cs \
 	MetaData/ForeignKeyConstraintMetaData.cs \
+	MetaData/IndexMetaData.cs \
 	MetaData/MetaDataService.cs \
 	MetaData/ParameterMetaData.cs \
 	MetaData/PrimaryKeyConstraintMetaData.cs \
@@ -116,10 +113,12 @@ FILES =  \
 	Schema/DatabaseSchema.cs \
 	Schema/DataTypeCategory.cs \
 	Schema/DataTypeSchema.cs \
+	Schema/ForeignKeyAction.cs \
 	Schema/ForeignKeyConstraintSchema.cs \
 	Schema/GroupSchema.cs \
 	Schema/IndexSchema.cs \
 	Schema/IndexSortType.cs \
+	Schema/IndexType.cs \
 	Schema/ISchema.cs \
 	Schema/LanguageSchema.cs \
 	Schema/OperatorSchema.cs \

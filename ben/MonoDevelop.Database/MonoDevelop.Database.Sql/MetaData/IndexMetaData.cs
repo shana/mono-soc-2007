@@ -28,35 +28,31 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum ForeignKeyConstraintMetaData
+	public enum IndexMetaData
 	{
 		Name,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
+		TableName,
+		IndexType,
 		Columns,
-		IsColumnConstraint,
-		ReferenceTable,
-		ReferenceColumns,
-		Cascade,
-		Restrict,
-		NoAction,
-		SetDefault,
-		SetNull
+		ColumnLength,
+		ColumnSort
 	}
 	
 	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class ForeignKeyConstraintMetaDataAttribute : Attribute
+	public sealed class IndexMetaDataAttribute : Attribute
 	{
-		private ForeignKeyConstraintMetaData meta;
+		private IndexMetaData meta;
 		
-		public ForeignKeyConstraintMetaDataAttribute (ForeignKeyConstraintMetaData meta)
+		public IndexMetaDataAttribute (IndexMetaData meta)
 		{
 			this.meta = meta;
 		}
 		
-		public ForeignKeyConstraintMetaData ForeignKeyConstraintMetaData {
+		public IndexMetaData IndexMetaData {
 			get { return meta; }
 		}
 	}

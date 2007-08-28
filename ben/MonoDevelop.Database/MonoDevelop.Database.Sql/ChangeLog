@@ -1,3 +1,15 @@
+2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
+
+	* MetaData/MetaDataService.cs: support for IndexMetaDataAttribute
+	* MetaData/ForeignKeyConstraintMetaData.cs,
+	  Schema/ForeignKeyConstraintSchema.cs: added reference columns property
+	  to foreign keys
+	* MetaData/IndexMetaData.cs: Index metadata attribute
+	* Schema/ForeignKeyAction.cs: available foreign key actions
+	* Schema/IndexType.cs: available index types
+	* Schema/IndexSchema.cs: added IndexType property
+	* Makefile.am: updated makefile
+
 2007-08-03  Ben Motmans <ben.motmans@gmail.com>
 
 	* ConnectionContextService.cs: initialize the correct configFile field

@@ -63,6 +63,18 @@ namespace MonoDevelop.Database.Sql
 			return null;
 		}
 		
+		public static bool IsIndexMetaDataSupported (object obj, IndexMetaData meta)
+		{
+			if (obj == null)
+				throw new ArgumentNullException ("obj");
+			
+			object[] attributes = obj.GetType ().GetCustomAttributes (typeof (IndexMetaDataAttribute), true);
+			foreach (IndexMetaDataAttribute attrib in attributes)
+				if ((attrib.IndexMetaData & meta) == meta)
+					return true;
+			return false;
+		}
+		
 		public static bool IsTriggerMetaDataSupported (object obj, TriggerMetaData meta)
 		{
 			if (obj == null)
