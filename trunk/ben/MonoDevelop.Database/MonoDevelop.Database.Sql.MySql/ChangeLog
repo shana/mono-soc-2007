@@ -1,3 +1,7 @@
+2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
+
+	* Makefile.am: updated makefile
+
 2007-08-03  Ben Motmans <ben.motmans@gmail.com>
 
 	* MySqlConnectionProvider.cs: added support for an error message
