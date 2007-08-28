@@ -33,18 +33,21 @@ namespace MonoDevelop.Database.Sql
 	public class IndexSchema : AbstractSchema
 	{
 		protected string tableName;
-		protected IndexSortType sortType;
+		protected IndexType type;
+		protected ColumnSchemaCollection columns; //TODO: create col subclass, to include sort order and length
 
 		public IndexSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider)
 		{
+			columns = new ColumnSchemaCollection ();
 		}
 		
 		public IndexSchema (IndexSchema index)
 			: base (index)
 		{
 			this.tableName = index.tableName;
-			this.sortType = index.sortType;
+			this.type = index.type;
+			this.columns = index.columns;
 		}
 		
 		public string TableName {
@@ -57,14 +60,18 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public IndexSortType SortType {
-			get { return sortType; }
+		public IndexType IndexType {
+			get { return type; }
 			set {
-				if (sortType != value) {
-					sortType = value;
+				if (type != value) {
+					type = value;
 					OnChanged ();
 				}
 			}
+		}
+		
+		public ColumnSchemaCollection Columns {
+			get { return columns; }
 		}
 		
 		public override object Clone ()

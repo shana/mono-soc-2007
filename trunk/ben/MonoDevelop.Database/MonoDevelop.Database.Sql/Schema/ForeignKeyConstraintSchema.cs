@@ -35,6 +35,8 @@ namespace MonoDevelop.Database.Sql
 	{
 		protected string referenceTable;
 		protected ColumnSchemaCollection referenceColumns;
+		protected ForeignKeyAction deleteAction;
+		protected ForeignKeyAction updateAction;
 		
 		public ForeignKeyConstraintSchema (ISchemaProvider schemaProvider)
 			: base (schemaProvider, ConstraintType.ForeignKey)
@@ -47,6 +49,18 @@ namespace MonoDevelop.Database.Sql
 		{
 			referenceTable = constraint.referenceTable;
 			referenceColumns = new ColumnSchemaCollection (constraint.referenceColumns);
+			deleteAction = constraint.deleteAction;
+			updateAction = constraint.updateAction;
+		}
+		
+		public string ReferenceTableName {
+			get { return referenceTable; }
+			set {
+				if (referenceTable != value) {
+					referenceTable = value;
+					OnChanged();
+				}
+			}
 		}
 		
 		public TableSchema ReferenceTable {
@@ -57,9 +71,24 @@ namespace MonoDevelop.Database.Sql
 			}
 		}
 		
-		public string ReferenceTableName {
-			get { return referenceTable; }
-			set { referenceTable = value; }
+		public ForeignKeyAction DeleteAction {
+			get { return deleteAction; }
+			set {
+				if (deleteAction != value) {
+					deleteAction = value;
+					OnChanged();
+				}
+			}
+		}
+		
+		public ForeignKeyAction UpdateAction {
+			get { return updateAction; }
+			set {
+				if (updateAction != value) {
+					updateAction = value;
+					OnChanged();
+				}
+			}
 		}
 		
 		public ColumnSchemaCollection ReferenceColumns {
