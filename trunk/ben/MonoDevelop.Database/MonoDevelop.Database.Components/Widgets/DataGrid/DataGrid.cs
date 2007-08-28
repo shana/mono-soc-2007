@@ -86,7 +86,7 @@ namespace MonoDevelop.Database.Components
 			visualizers.Add (new XmlTextVisualizer ());
 			visualizers.Add (new XmlTreeVisualizer ());
 
-			foreach (DataGridContentRendererCodon codon in AddinManager.GetExtensionNodes (/MonoDevelop/Database/DataGrid/Renderers"))
+			foreach (DataGridContentRendererCodon codon in AddinManager.GetExtensionNodes ("/MonoDevelop/Database/DataGrid/Renderers"))
 				AddContentRenderer (codon.ContentRenderer);
 		}
 		
@@ -413,7 +413,7 @@ namespace MonoDevelop.Database.Components
 					if (store.GetIter (out iter, path)) {
 						//dataObject = store.GetValue (iter, dgCol.ColumnIndex);
 							
-						IdeApp.CommandService.ShowContextMenu (/MonoDevelop/Database/ContextMenu/DataGrid");
+						IdeApp.CommandService.ShowContextMenu ("/MonoDevelop/Database/ContextMenu/DataGrid");
 					}
 				}
 			}

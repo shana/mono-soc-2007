@@ -29,21 +29,17 @@
     <ProjectReference type="Gac" localcopy="True" refto="atk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gdk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="True" refto="gtk-sharp, Version=2.10.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Projects" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Core" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Ide" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Core.Gui" />
-    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Components" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Assembly" localcopy="True" refto="../libs/MySql.Data.dll" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Sql" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Components" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Database.Designer" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Projects.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/bin/MonoDevelop.Core.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Ide.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Core.Gui.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../build/AddIns/MonoDevelop.Components.dll" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Core.Gui" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Components" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Ide" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Projects" />
+    <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Projects.Gui" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />

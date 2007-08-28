@@ -1,5 +1,13 @@
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
 
+	* Widgets/ConstraintsEditorWidget.cs: use correct parameters for
+	  ForeignKeyConstraintEditorWidget ctor
+	* Widgets/ForeignKeyConstraintEditorWidget.cs: fixed some copy paste errors
+	* gtk-gui/gui.stetic, MonoDevelop.Database.Designer.mdp, Makefile.am: use
+	  project references instead of assembly references
+
+2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
+
 	* Widgets/ForeignKeyConstraintEditorWidget.cs,
 	  gtk-gui/MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget.cs,
 	  gtk-gui/gui.stetic: GUI implementation
