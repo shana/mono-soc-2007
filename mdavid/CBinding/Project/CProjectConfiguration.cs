@@ -90,43 +90,31 @@ namespace CBinding
 			set { compilationParameters = value; }
 		}
 		
-		// TODO: If MD is ported to Windows, this should be revisited
+		// TODO: This should be revised to use the naming conventions depending on OS
 		public string CompiledOutputName {
 			get {
-				string ext;
-				string suf;
+				string suffix = string.Empty;
+				string prefix = string.Empty;
 				
-				if (Output.EndsWith (".so") && Output.StartsWith ("lib")) {
-					ext = string.Empty;
-					suf = string.Empty;
+				switch (target)
+				{
+				case CompileTarget.Bin:
+					break;
+				case CompileTarget.StaticLibrary:
+					if (!Output.StartsWith ("lib"))
+						prefix = "lib";
+					if (!Output.EndsWith (".a"))
+						suffix = ".a";
+					break;
+				case CompileTarget.SharedLibrary:
+					if (!Output.StartsWith ("lib"))
+						prefix = "lib";
+					if (!Output.EndsWith (".so"))
+						suffix = ".so";
+					break;
 				}
-				else if (Output.EndsWith (".a") && Output.StartsWith ("lib")) {
-					ext = string.Empty;
-					suf = string.Empty;
-				}
-				else {
-					switch (CompileTarget)
-					{
-					case CBinding.CompileTarget.Bin:
-						ext = string.Empty;
-						suf = string.Empty;
-						break;
-					case CBinding.CompileTarget.SharedLibrary:
-						ext = ".so";
-						suf = "lib";
-						break;
-					case CBinding.CompileTarget.StaticLibrary:
-						ext = ".a";
-						suf = "lib";
-						break;
-					default:
-						ext = string.Empty;
-						suf = string.Empty;
-						break;
-					}
-				}	
 				
-				return string.Format("{0}{1}{2}", suf, Output, ext);
+				return string.Format("{0}{1}{2}", prefix, Output, suffix);
 			}
 		}
 		
