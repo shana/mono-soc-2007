@@ -18,19 +18,19 @@
 		<Addin id="Database.Sql" version="0.15.0"/>
 	</Dependencies>
 	
-	<ExtensionPoint path = "/SharpDevelop/Components/DataGrid/Renderers">
+	<ExtensionPoint path = "/MonoDevelop/Database/DataGrid/Renderers">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Components/DataGrid/ContextMenu">
+	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/DataGrid">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<ExtensionPoint path = "/SharpDevelop/Components/SqlEditor/ContextMenu">
+	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/SqlEditor">
 		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
 	</ExtensionPoint>
 	
-	<Extension path = "/SharpDevelop/Commands">
+	<Extension path = "/MonoDevelop/Ide/Commands">
 		<Command id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsText"
 			_label = "Display content as text"/>
 		<Command id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsXmlText"
@@ -48,14 +48,14 @@
 			icon = "gtk-save"/>
 	</Extension>
 	
-	<Extension path = "/SharpDevelop/Components/DataGrid/ContextMenu">
+	<Extension path = "/MonoDevelop/Database/ContextMenu/DataGrid">
 		<CommandItem id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsText"/>
 		<CommandItem id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsXmlText"/>
 		<CommandItem id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsXmlTree"/>
 		<CommandItem id = "MonoDevelop.Database.Components.DataGridCommands.VisualizeAsImage"/>
 	</Extension>
 	
-	<Extension path = "/SharpDevelop/Components/SqlEditor/ContextMenu">
+	<Extension path = "/MonoDevelop/Database/ContextMenu/SqlEditor">
 		<CommandItem id = "MonoDevelop.Database.Components.SqlEditorCommands.ImportFromFile"/>
 		<CommandItem id = "MonoDevelop.Database.Components.SqlEditorCommands.ExportToFile"/>
 	</Extension>
