@@ -1,5 +1,11 @@
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
 
+	* Widgets/DataGrid/DataGrid.cs: added a missing " char
+	* gtk-gui/gui.stetic, Makefile.am, MonoDevelop.Database.Components.mdp: use
+	  project references instead of assembly references
+
+2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
+
 	* Widgets/DataGrid/DataGrid.cs, Widgets/SqlEditorWidget.cs,
 	  MonoDevelop.Database.Components.addin.xml: updated addin paths
 	* Makefile.am: updated makefile

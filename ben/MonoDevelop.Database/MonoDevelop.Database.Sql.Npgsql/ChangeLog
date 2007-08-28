@@ -1,5 +1,10 @@
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
 
+	* Makefile.am, MonoDevelop.Database.Sql.Npgsql.mdp: use project references
+	  instead of assembly references
+
+2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
+
 	* NpgsqlSchemaProvider.cs: some tweaks in the sql queries
 
 2007-08-03  Ben Motmans <ben.motmans@gmail.com>

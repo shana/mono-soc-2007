@@ -5,13 +5,12 @@ REFS =  \
 	$(GTK_SHARP_LIBS) \
 	$(GTKSOURCEVIEW_SHARP_LIBS) \
 	-r:$(top_builddir)/build/AddIns/MonoDevelop.Database/MonoDevelop.Database.Sql.dll \
+	-r:$(top_builddir)/build/bin/MonoDevelop.Components.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.dll \
-	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Components.dll \
-	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Core.Gui.dll \
-	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Ide.dll \
-	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Projects.dll \
-	-r:$(top_srcdir)/build/AddIns/MonoDevelop.Projects.Gui.dll \
-	-r:$(top_srcdir)/build/bin/MonoDevelop.Core.dll \
+	-r:$(top_builddir)/build/bin/MonoDevelop.Core.Gui.dll \
+	-r:$(top_builddir)/build/bin/MonoDevelop.Ide.dll \
+	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.dll \
+	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.Gui.dll \
 	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
 	-r:Mono.Posix \
 	-r:System \

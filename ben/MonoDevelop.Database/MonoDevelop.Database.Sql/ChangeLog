@@ -1,5 +1,10 @@
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
 
+	* MonoDevelop.Database.Sql.mdp, Makefile.am: use project references instead
+	  of assembly references
+
+2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
+
 	* MetaData/MetaDataService.cs: support for IndexMetaDataAttribute
 	* MetaData/ForeignKeyConstraintMetaData.cs,
 	  Schema/ForeignKeyConstraintSchema.cs: added reference columns property

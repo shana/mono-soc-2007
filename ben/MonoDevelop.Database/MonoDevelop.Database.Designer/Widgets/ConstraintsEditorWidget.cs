@@ -65,7 +65,6 @@ namespace MonoDevelop.Database.Designer
 		
 		public void Initialize (TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
 		{
-			Runtime.LoggingService.Error ("COEW: Initialize");
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
 			if (constraints == null)
@@ -73,6 +72,7 @@ namespace MonoDevelop.Database.Designer
 			if (table == null)
 				throw new ArgumentNullException ("table");
 
+			TableSchemaCollection tables = null; //TODO: 
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.PrimaryKeyConstraint)) {
 				//not for column constraints, since they are already editable in the column editor
 				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, table, columns, constraints);
@@ -82,7 +82,7 @@ namespace MonoDevelop.Database.Designer
 			
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.ForeignKeyConstraint)
 				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.ForeignKeyConstraint)) {
-				fkEditor = new ForeignKeyConstraintEditorWidget ();
+				fkEditor = new ForeignKeyConstraintEditorWidget (schemaProvider, tables, table, columns, constraints);
 				fkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (fkEditor, new Label (GettextCatalog.GetString ("Foreign Key")));
 			}

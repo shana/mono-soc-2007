@@ -41,6 +41,7 @@ namespace MonoDevelop.Database.Designer
 		
 		private ISchemaProvider schemaProvider;
 		private TableSchema table;
+		private TableSchemaCollection tables;
 		private ColumnSchemaCollection columns;
 		private ConstraintSchemaCollection constraints;
 		
@@ -73,6 +74,7 @@ namespace MonoDevelop.Database.Designer
 			
 			this.schemaProvider = schemaProvider;
 			this.table = table;
+			this.tables = tables;
 			this.columns = columns;
 			this.constraints = constraints;
 			
@@ -153,15 +155,15 @@ namespace MonoDevelop.Database.Designer
 			colDeleteAction.AddAttribute (deleteActionRenderer, "text", colDeleteActionIndex);			
 			colUpdateAction.AddAttribute (updateActionRenderer, "text", colUpdateActionIndex);
 			
-			listTriggers.AppendColumn (colName);
-			listTriggers.AppendColumn (colRefTable);
-			listTriggers.AppendColumn (colIsColumnConstraint);
-			listTriggers.AppendColumn (colDeleteAction);
-			listTriggers.AppendColumn (colUpdateAction);
+			listFK.AppendColumn (colName);
+			listFK.AppendColumn (colRefTable);
+			listFK.AppendColumn (colIsColumnConstraint);
+			listFK.AppendColumn (colDeleteAction);
+			listFK.AppendColumn (colUpdateAction);
 			
 			columnSelecter.ColumnToggled += new EventHandler (ColumnToggled);
 			referenceColumnSelecter.ColumnToggled += new EventHandler (ReferenceColumnToggled);
-			listFK.Selection.Changed += new EventHandler (OnSelectionChanged);
+			listFK.Selection.Changed += new EventHandler (SelectionChanged);
 			
 			ShowAll ();
 		}
@@ -180,7 +182,7 @@ namespace MonoDevelop.Database.Designer
 		protected virtual void RemoveClicked (object sender, EventArgs e)
 		{
 			TreeIter iter;
-			if (listCheck.Selection.GetSelected (out iter)) {
+			if (listFK.Selection.GetSelected (out iter)) {
 				ForeignKeyConstraintSchema fk = store.GetValue (iter, colObjIndex) as ForeignKeyConstraintSchema;
 				
 				if (Services.MessageService.AskQuestion (
@@ -199,7 +201,7 @@ namespace MonoDevelop.Database.Designer
 			columnSelecter.DeselectAll ();
 			
 			TreeIter iter;
-			if (listUnique.Selection.GetSelected (out iter)) {
+			if (listFK.Selection.GetSelected (out iter)) {
 				columnSelecter.Sensitive = true;
 				SetSelectionFromIter (iter);
 			} else {
@@ -241,7 +243,7 @@ namespace MonoDevelop.Database.Designer
 		private void ColumnToggled (object sender, EventArgs args)
 		{
 			TreeIter iter;
-			if (listUnique.Selection.GetSelected (out iter)) {
+			if (listFK.Selection.GetSelected (out iter)) {
 				store.SetValue (iter, colColumnsIndex, GetColumnsString (columnSelecter.CheckedColumns));
 				EmitContentChanged ();
 			}
@@ -250,7 +252,7 @@ namespace MonoDevelop.Database.Designer
 		private void ReferenceColumnToggled (object sender, EventArgs args)
 		{
 			TreeIter iter;
-			if (listUnique.Selection.GetSelected (out iter)) {
+			if (listFK.Selection.GetSelected (out iter)) {
 				store.SetValue (iter, colReferenceColumnsIndex, GetColumnsString (referenceColumnSelecter.CheckedColumns));
 				EmitContentChanged ();
 			}
@@ -357,7 +359,7 @@ namespace MonoDevelop.Database.Designer
 
 					fk.Name = store.GetValue (iter, colNameIndex) as string;
 					fk.IsColumnConstraint = (bool)store.GetValue (iter, colIsColumnConstraintIndex);
-					fk.ReferenceTable = store.GetValue (iter, colReferenceTableIndex) as string;
+					fk.ReferenceTableName = store.GetValue (iter, colReferenceTableIndex) as string;
 					
 					fk.DeleteAction = GetForeignKeyAction (iter, colDeleteActionIndex);
 					fk.UpdateAction = GetForeignKeyAction (iter, colUpdateActionIndex);
