@@ -57,17 +57,16 @@ using MonoDevelop.Core;
 			
 			IPooledDbConnection conn = connectionPool.Request ();
 			IDbCommand command = conn.CreateCommand (
-				"SELECT c.relname, n.nspname, u.usename, d.description "
-				+ "FROM pg_class c "
-				+ " LEFT JOIN pg_description d ON c.oid = d.objoid, "
-				+ "pg_namespace n, pg_user u "
+				"SELECT DISTINCT c.relname, n.nspname, u.usename "
+				+ "FROM pg_class c, pg_namespace n, pg_user u "
 				+ "WHERE c.relnamespace = n.oid "
 				+ "AND c.relowner = u.usesysid "
 				+ "AND c.relkind='r' AND NOT EXISTS "
 				+ "   (SELECT 1 FROM pg_rewrite r "
 				+ "      WHERE r.ev_class = c.oid AND r.ev_type = '1') "
 				+ "ORDER BY relname;"
-			);
+			);		
+			
 			try {
 				using (command) {
 					using (IDataReader r = command.ExecuteReader()) {
@@ -78,32 +77,31 @@ using MonoDevelop.Core;
 							table.IsSystemTable = table.Name.StartsWith ("pg_") || table.Name.StartsWith ("sql_");
 							table.SchemaName = r.GetString (1);
 							table.OwnerName = r.GetString (2);
-							table.Comment = r.GetString (3);
 							
-							StringBuilder sb = new StringBuilder();
-							sb.AppendFormat ("-- Table: {0}\n", table.Name);
-							sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
-							sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
-							
-							ColumnSchemaCollection columns = table.Columns;
-							string[] parts = new string[columns.Count];
-							int i = 0;
-							foreach (ColumnSchema col in columns)
-								parts[i++] = col.Definition;
-							sb.Append (String.Join (",\n", parts));
-							
-							ConstraintSchemaCollection constraints = table.Constraints;
-							parts = new string[constraints.Count];
-							if (constraints.Count > 0)
-								sb.Append (",\n");
-							i = 0;
-							foreach (ConstraintSchema constr in constraints)
-								parts[i++] = "\t" + constr.Definition;
-							sb.Append (String.Join (",\n", parts));
-							
-							sb.Append ("\n);\n");
-							sb.AppendFormat ("COMMENT ON TABLE {0} IS '{1}';", table.Name, table.Comment);
-							table.Definition = sb.ToString();
+//							StringBuilder sb = new StringBuilder();
+//							sb.AppendFormat ("-- Table: {0}\n", table.Name);
+//							sb.AppendFormat ("-- DROP TABLE {0};\n\n", table.Name);
+//							sb.AppendFormat ("CREATE TABLE {0} (\n", table.Name);
+//							
+//							ColumnSchema[] columns = table.Columns;
+//							string[] parts = new string[columns.Length];
+//							for (int i = 0; i < parts.Length; i++) {
+//								parts[i] = "\t" + columns[i].Definition;
+//							}
+//							sb.Append (String.Join (",\n", parts));
+//							
+//							ConstraintSchema[] cons = table.Constraints;
+//							parts = new string[cons.Length];
+//							if (cons.Length > 0)
+//								sb.Append (",\n");
+//							for (int i = 0; i < parts.Length; i++) {
+//								parts[i] = "\t" + cons[i].Definition;
+//							}
+//							sb.Append (String.Join (",\n", parts));
+//							
+//							sb.Append ("\n);\n");
+//							sb.AppendFormat ("COMMENT ON TABLE {0} IS '{1}';", table.Name, table.Comment);
+//							table.Definition = sb.ToString();
 							
 							tables.Add (table);
 						}
@@ -152,15 +150,15 @@ using MonoDevelop.Core;
 							column.DefaultValue = r.GetString (4);
 							column.DataType.LengthRange.Default = r.GetInt32 (2);
 					
-							StringBuilder sb = new StringBuilder();
-							sb.AppendFormat("{0} {1}{2}",
-								column.Name,
-								column.DataTypeName,
-								(column.DataType.LengthRange.Default > 0) ? ("(" + column.DataType.LengthRange.Default + ")") : "");
-							sb.AppendFormat(" {0}", column.IsNullable ? "NULL" : "NOT NULL");
-							if (column.DefaultValue.Length > 0)
-								sb.AppendFormat(" DEFAULT {0}", column.DefaultValue);
-							column.Definition = sb.ToString();
+//							StringBuilder sb = new StringBuilder();
+//							sb.AppendFormat("{0} {1}{2}",
+//								column.Name,
+//								column.DataTypeName,
+//								(column.DataType.LengthRange.Default > 0) ? ("(" + column.DataType.LengthRange.Default + ")") : "");
+//							sb.AppendFormat(" {0}", column.IsNullable ? "NULL" : "NOT NULL");
+//							if (column.DefaultValue.Length > 0)
+//								sb.AppendFormat(" DEFAULT {0}", column.DefaultValue);
+//							column.Definition = sb.ToString();
 			
 							columns.Add (column);
 						}
@@ -203,13 +201,13 @@ using MonoDevelop.Core;
 							view.IsSystemView = r.GetBoolean (4);
 							view.Comment = r.GetString (5);
 							
-							StringBuilder sb = new StringBuilder();
-							sb.AppendFormat ("-- View: {0}\n", view.Name);
-							sb.AppendFormat ("-- DROP VIEW {0};\n\n", view.Name);
-							sb.AppendFormat ("CREATE VIEW {0} AS (\n", view.Name);
-							string core = r.GetString(3);
-							sb.AppendFormat ("  {0}\n);", core.Substring (0, core.Length-1));
-							view.Definition = sb.ToString ();
+//							StringBuilder sb = new StringBuilder();
+//							sb.AppendFormat ("-- View: {0}\n", view.Name);
+//							sb.AppendFormat ("-- DROP VIEW {0};\n\n", view.Name);
+//							sb.AppendFormat ("CREATE VIEW {0} AS (\n", view.Name);
+//							string core = r.GetString(3);
+//							sb.AppendFormat ("  {0}\n);", core.Substring (0, core.Length-1));
+//							view.Definition = sb.ToString ();
 							
 							views.Add (view);
 						}
@@ -394,7 +392,7 @@ using MonoDevelop.Core;
 						while (r.Read ()) {	
 							ConstraintSchema constraint = null;
 											
-							// XXX: Add support for Check constraints.
+							//TODO: Add support for Check constraints.
 							switch (r.GetString (2)) {
 								case "f":
 									string match = @".*REFERENCES (.+)\(.*\).*";
@@ -414,6 +412,17 @@ using MonoDevelop.Core;
 						
 							constraint.Name = r.GetString (0);
 							constraint.Definition = r.GetString (1);
+							
+							int parenOpen = constraint.Definition.IndexOf ('(');
+							if (parenOpen > 0) {
+								int parenClose = constraint.Definition.IndexOf (')');
+								string colstr = constraint.Definition.Substring (parenOpen + 1, parenClose - parenOpen - 1);
+								foreach (string col in colstr.Split (',')) {
+									ColumnSchema column = new ColumnSchema (this, table);
+									column.Name = col.Trim ();
+									constraint.Columns.Add (column);
+								}
+							}
 							
 							constraints.Add (constraint);
 						}
@@ -477,25 +486,25 @@ using MonoDevelop.Core;
 			return users;
 		}
 
-		public override DataTypeSchema GetDataType (string name)
-		{
-			if (name == null)
-				throw new ArgumentNullException ("name");
-			name = name.ToUpper ();
-
-			DataTypeSchema dts = new DataTypeSchema (this);
-			dts.Name = name;
-			switch (name) {
-					//TODO: IMPLEMENT
-				case "":
-					break;
-				default:
-					dts = null;
-					break;
-			}
-			
-			return dts;
-		}
+//		public override DataTypeSchema GetDataType (string name)
+//		{
+//			if (name == null)
+//				throw new ArgumentNullException ("name");
+//			name = name.ToUpper ();
+//
+//			DataTypeSchema dts = new DataTypeSchema (this);
+//			dts.Name = name;
+//			switch (name) {
+//					//TODO: IMPLEMENT
+//				case "":
+//					break;
+//				default:
+//					dts = null;
+//					break;
+//			}
+//			
+//			return dts;
+//		}
 		
 		//http://www.postgresql.org/docs/8.2/interactive/sql-createdatabase.html
 		public override void CreateDatabase (DatabaseSchema database)
