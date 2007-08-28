@@ -26,6 +26,7 @@
 using Gtk;
 using System;
 using System.Text;
+using System.Collections.Generic;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Gui;
 using MonoDevelop.Components;
@@ -38,15 +39,289 @@ namespace MonoDevelop.Database.Designer
 	{
 		public event EventHandler ContentChanged;
 		
-		public ForeignKeyConstraintEditorWidget()
+		private ISchemaProvider schemaProvider;
+		private TableSchema table;
+		private ColumnSchemaCollection columns;
+		private ConstraintSchemaCollection constraints;
+		
+		private const int colNameIndex = 0;
+		private const int colReferenceTableIndex = 1;
+		private const int colIsColumnConstraintIndex = 2;
+		private const int colColumnsIndex = 3;
+		private const int colReferenceColumnsIndex = 4;
+		private const int colDeleteActionIndex = 5;
+		private const int colUpdateActionIndex = 6;
+		private const int colObjIndex = 7;
+		
+		private ListStore store;
+		private ListStore storeActions;
+		private ListStore storeTables;
+
+		//TODO: difference between columns and reference columns + combo events
+		public ForeignKeyConstraintEditorWidget (ISchemaProvider schemaProvider, TableSchemaCollection tables, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
 		{
+			if (columns == null)
+				throw new ArgumentNullException ("columns");
+			if (table == null)
+				throw new ArgumentNullException ("table");
+			if (constraints == null)
+				throw new ArgumentNullException ("constraints");
+			if (schemaProvider == null)
+				throw new ArgumentNullException ("schemaProvider");
+			if (tables == null)
+				throw new ArgumentNullException ("tables");
+			
+			this.schemaProvider = schemaProvider;
+			this.table = table;
+			this.columns = columns;
+			this.constraints = constraints;
+			
 			this.Build();
+			
+			store = new ListStore (typeof (string), typeof (string), typeof (bool), typeof (string), typeof (string), typeof (string), typeof (string), typeof (object));
+			listFK.Model = store;
+			
+			storeActions = new ListStore (typeof (string), typeof (long));
+			storeTables = new ListStore (typeof (string));
+			
+			
+			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.Cascade))
+				storeActions.AppendValues ("Cascade", ForeignKeyConstraintMetaData.Cascade);
+			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.Restrict))
+				storeActions.AppendValues ("Restrict", ForeignKeyConstraintMetaData.Restrict);
+			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.NoAction))
+				storeActions.AppendValues ("No Action", ForeignKeyConstraintMetaData.NoAction);
+			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.SetNull))
+				storeActions.AppendValues ("Set Null", ForeignKeyConstraintMetaData.SetNull);
+			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.SetDefault))
+				storeActions.AppendValues ("Set Default", ForeignKeyConstraintMetaData.SetDefault);
+
+			foreach (TableSchema tbl in tables)
+				if (tbl.Name != table.Name)
+					storeTables.AppendValues (tbl.Name);
+			
+			TreeViewColumn colName = new TreeViewColumn ();
+			TreeViewColumn colRefTable = new TreeViewColumn ();
+			TreeViewColumn colIsColumnConstraint = new TreeViewColumn ();
+			TreeViewColumn colDeleteAction = new TreeViewColumn ();
+			TreeViewColumn colUpdateAction = new TreeViewColumn ();
+			
+			colName.Title = GettextCatalog.GetString ("Name");
+			colRefTable.Title = GettextCatalog.GetString ("Reference Table");
+			colIsColumnConstraint.Title = GettextCatalog.GetString ("Column Constraint");
+			colDeleteAction.Title = GettextCatalog.GetString ("Delete Action");
+			colUpdateAction.Title = GettextCatalog.GetString ("Update Action");
+			
+			colRefTable.MinWidth = 120;
+			
+			CellRendererText nameRenderer = new CellRendererText ();
+			CellRendererCombo refTableRenderer = new CellRendererCombo ();
+			CellRendererToggle isColumnConstraintRenderer = new CellRendererToggle ();
+			CellRendererCombo deleteActionRenderer = new CellRendererCombo ();
+			CellRendererCombo updateActionRenderer = new CellRendererCombo ();
+			
+			nameRenderer.Editable = true;
+			nameRenderer.Edited += new EditedHandler (NameEdited);
+			
+			refTableRenderer.Model = storeTables;
+			refTableRenderer.TextColumn = 0;
+			refTableRenderer.Editable = true;
+			refTableRenderer.Edited += new EditedHandler (RefTableEdited);
+			
+			isColumnConstraintRenderer.Activatable = true;
+			isColumnConstraintRenderer.Toggled += new ToggledHandler (IsColumnConstraintToggled);
+			
+			deleteActionRenderer.Model = storeActions;
+			deleteActionRenderer.TextColumn = 0;
+			deleteActionRenderer.Editable = true;
+			deleteActionRenderer.Edited += new EditedHandler (DeleteActionEdited);
+			
+			updateActionRenderer.Model = storeActions;
+			updateActionRenderer.TextColumn = 0;
+			updateActionRenderer.Editable = true;
+			updateActionRenderer.Edited += new EditedHandler (UpdateActionEdited);
+
+			colName.PackStart (nameRenderer, true);
+			colRefTable.PackStart (refTableRenderer, true);
+			colIsColumnConstraint.PackStart (isColumnConstraintRenderer, true);
+			colDeleteAction.PackStart (deleteActionRenderer, true);
+			colUpdateAction.PackStart (updateActionRenderer, true);
+
+			colName.AddAttribute (nameRenderer, "text", colNameIndex);
+			colRefTable.AddAttribute (refTableRenderer, "text", colReferenceTableIndex);
+			colIsColumnConstraint.AddAttribute (isColumnConstraintRenderer, "active", colIsColumnConstraintIndex);
+			colDeleteAction.AddAttribute (deleteActionRenderer, "text", colDeleteActionIndex);			
+			colUpdateAction.AddAttribute (updateActionRenderer, "text", colUpdateActionIndex);
+			
+			listTriggers.AppendColumn (colName);
+			listTriggers.AppendColumn (colRefTable);
+			listTriggers.AppendColumn (colIsColumnConstraint);
+			listTriggers.AppendColumn (colDeleteAction);
+			listTriggers.AppendColumn (colUpdateAction);
+			
+			columnSelecter.ColumnToggled += new EventHandler (ColumnToggled);
+			referenceColumnSelecter.ColumnToggled += new EventHandler (ReferenceColumnToggled);
+			listFK.Selection.Changed += new EventHandler (OnSelectionChanged);
+			
+			ShowAll ();
 		}
 		
-		public virtual bool ValidateSchemaObjects (out string msg)
+		protected virtual void AddClicked (object sender, EventArgs e)
 		{
-			msg = null;
-			return true;
+			ForeignKeyConstraintSchema fk = schemaProvider.GetNewForeignKeyConstraintSchema ("fk_new");
+			int index = 1;
+			while (constraints.Contains (fk.Name))
+				fk.Name = "fk_new" + (index++); 
+			constraints.Add (fk);
+			AddConstraint (fk);
+			EmitContentChanged ();
+		}
+
+		protected virtual void RemoveClicked (object sender, EventArgs e)
+		{
+			TreeIter iter;
+			if (listCheck.Selection.GetSelected (out iter)) {
+				ForeignKeyConstraintSchema fk = store.GetValue (iter, colObjIndex) as ForeignKeyConstraintSchema;
+				
+				if (Services.MessageService.AskQuestion (
+					GettextCatalog.GetString ("Are you sure you want to remove constraint '{0}'?", fk.Name),
+					GettextCatalog.GetString ("Remove Constraint")
+				)) {
+					store.Remove (ref iter);
+					constraints.Remove (fk);
+					EmitContentChanged ();
+				}
+			}
+		}
+		
+		private void SelectionChanged (object sender, EventArgs args)
+		{
+			columnSelecter.DeselectAll ();
+			
+			TreeIter iter;
+			if (listUnique.Selection.GetSelected (out iter)) {
+				columnSelecter.Sensitive = true;
+				SetSelectionFromIter (iter);
+			} else {
+				columnSelecter.Sensitive = false;
+			}
+		}
+		
+		private void SetSelectionFromIter (TreeIter iter)
+		{
+			bool iscolc = (bool)store.GetValue (iter, colIsColumnConstraintIndex);
+			columnSelecter.SingleCheck = iscolc;
+			
+			string colstr = store.GetValue (iter, colColumnsIndex) as string;
+			string[] cols = colstr.Split (',');
+			foreach (string col in cols)
+				columnSelecter.Select (col);
+			
+			colstr = store.GetValue (iter, colReferenceColumnsIndex) as string;
+			cols = colstr.Split (',');
+			foreach (string col in cols)
+				referenceColumnSelecter.Select (col);
+		}
+		
+		private void RefTableEdited (object sender, EditedArgs args)
+		{
+			TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+				if (tables.Contains (args.NewText)) {
+					store.SetValue (iter, colReferenceTableIndex, args.NewText);
+					SetSelectionFromIter (iter);
+					EmitContentChanged ();
+				} else {
+					string oldText = store.GetValue (iter, colReferenceTableIndex) as string;
+					(sender as CellRendererText).Text = oldText;
+				}
+			}
+		}
+		
+		private void ColumnToggled (object sender, EventArgs args)
+		{
+			TreeIter iter;
+			if (listUnique.Selection.GetSelected (out iter)) {
+				store.SetValue (iter, colColumnsIndex, GetColumnsString (columnSelecter.CheckedColumns));
+				EmitContentChanged ();
+			}
+		}
+		
+		private void ReferenceColumnToggled (object sender, EventArgs args)
+		{
+			TreeIter iter;
+			if (listUnique.Selection.GetSelected (out iter)) {
+				store.SetValue (iter, colReferenceColumnsIndex, GetColumnsString (referenceColumnSelecter.CheckedColumns));
+				EmitContentChanged ();
+			}
+		}
+		
+		private void IsColumnConstraintToggled (object sender, ToggledArgs args)
+		{
+	 		TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+	 			bool val = (bool) store.GetValue (iter, colIsColumnConstraintIndex);
+	 			store.SetValue (iter, colIsColumnConstraintIndex, !val);
+				EmitContentChanged ();
+	 		}
+		}
+		
+		private void NameEdited (object sender, EditedArgs args)
+		{
+			TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+				if (!string.IsNullOrEmpty (args.NewText)) {
+					store.SetValue (iter, colNameIndex, args.NewText);
+					EmitContentChanged ();
+				} else {
+					string oldText = store.GetValue (iter, colNameIndex) as string;
+					(sender as CellRendererText).Text = oldText;
+				}
+			}
+		}
+		
+		private void UpdateActionEdited (object sender, EditedArgs args)
+		{
+			TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+				if (IsValidForeignKeyAction (args.NewText)) {
+					store.SetValue (iter, colUpdateActionIndex, args.NewText);
+					EmitContentChanged ();
+				} else {
+					string oldText = store.GetValue (iter, colUpdateActionIndex) as string;
+					(sender as CellRendererText).Text = oldText;
+				}
+			}
+		}
+		
+		private void DeleteActionEdited (object sender, EditedArgs args)
+		{
+			TreeIter iter;
+			if (store.GetIterFromString (out iter, args.Path)) {
+				if (IsValidForeignKeyAction (args.NewText)) {
+					store.SetValue (iter, colDeleteActionIndex, args.NewText);
+					EmitContentChanged ();
+				} else {
+					string oldText = store.GetValue (iter, colDeleteActionIndex) as string;
+					(sender as CellRendererText).Text = oldText;
+				}
+			}
+		}
+		
+		private bool IsValidForeignKeyAction (string name)
+		{
+			foreach (string item in Enum.GetNames (typeof (ForeignKeyAction))) {
+				if (item == name)
+					return true;
+			}
+			return false;
+		}
+		
+		private void AddConstraint (ForeignKeyConstraintSchema fk)
+		{
+			store.AppendValues (fk.Name, String.Empty, false, String.Empty, String.Empty,
+				fk.DeleteAction.ToString (), fk.UpdateAction.ToString (), fk
+			);
 		}
 		
 		protected virtual void EmitContentChanged ()
@@ -55,9 +330,85 @@ namespace MonoDevelop.Database.Designer
 				ContentChanged (this, EventArgs.Empty);
 		}
 		
+		public virtual bool ValidateSchemaObjects (out string msg)
+		{ 
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					string name = store.GetValue (iter, colNameIndex) as string;
+					string columns = store.GetValue (iter, colColumnsIndex) as string;
+					
+					if (String.IsNullOrEmpty (columns)) {
+						msg = GettextCatalog.GetString ("Unique Key constraint '{0}' must be applied to one or more columns.", name);
+						return false;
+					}
+				} while (store.IterNext (ref iter));
+			}
+			msg = null;
+			return true;
+		}
+		
 		public virtual void FillSchemaObjects ()
 		{
-			
+			TreeIter iter;
+			if (store.GetIterFirst (out iter)) {
+				do {
+					ForeignKeyConstraintSchema fk = store.GetValue (iter, colObjIndex) as ForeignKeyConstraintSchema;
+
+					fk.Name = store.GetValue (iter, colNameIndex) as string;
+					fk.IsColumnConstraint = (bool)store.GetValue (iter, colIsColumnConstraintIndex);
+					fk.ReferenceTable = store.GetValue (iter, colReferenceTableIndex) as string;
+					
+					fk.DeleteAction = GetForeignKeyAction (iter, colDeleteActionIndex);
+					fk.UpdateAction = GetForeignKeyAction (iter, colUpdateActionIndex);
+					
+					string colstr = store.GetValue (iter, colColumnsIndex) as string;
+					string[] cols = colstr.Split (',');
+					foreach (string col in cols) {
+						ColumnSchema column = columns.Search (col);
+						fk.Columns.Add (column);
+					}
+					
+					colstr = store.GetValue (iter, colReferenceColumnsIndex) as string;
+					cols = colstr.Split (',');
+					foreach (string col in cols) {
+						ColumnSchema column = columns.Search (col);
+						fk.ReferenceColumns.Add (column);
+					}
+					
+					table.Constraints.Add (fk);
+				} while (store.IterNext (ref iter));
+			}
+		}
+		
+		private string GetColumnsString (IEnumerable<ColumnSchema> collection)
+		{
+			bool first = true;
+			StringBuilder sb = new StringBuilder ();
+			foreach (ColumnSchema column in collection) {
+				if (first)
+					first = false;
+				else
+					sb.Append (',');
+				
+				sb.Append (column.Name);
+			}
+			return sb.ToString ();
+		}
+		
+		private ForeignKeyAction GetForeignKeyAction (TreeIter colIter, int colIndex)
+		{
+			string name = store.GetValue (colIter, colIndex) as string;
+
+			TreeIter iter;
+			if (storeActions.GetIterFirst (out iter)) {
+				do {
+					string actionName = storeActions.GetValue (iter, 0) as string;
+					if (actionName == name)
+						return (ForeignKeyAction)storeActions.GetValue (iter, 1);
+				} while (storeActions.IterNext (ref iter));
+			}
+			return ForeignKeyAction.None;
 		}
 	}
 }

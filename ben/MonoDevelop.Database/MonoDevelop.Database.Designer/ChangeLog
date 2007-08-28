@@ -1,3 +1,9 @@
+2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
+
+	* Widgets/ForeignKeyConstraintEditorWidget.cs,
+	  gtk-gui/MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget.cs,
+	  gtk-gui/gui.stetic: GUI implementation
+
 2007-08-03  Ben Motmans <ben.motmans@gmail.com>
 
 	* Dialogs/TableEditorDialog.cs, Dialogs/ViewEditorDialog.cs, Dialogs/ProcedureEditorDialog.cs:
