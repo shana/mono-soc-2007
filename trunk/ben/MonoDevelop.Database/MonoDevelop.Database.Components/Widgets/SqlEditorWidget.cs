@@ -63,7 +63,7 @@ namespace MonoDevelop.Database.Components
 
 		protected virtual void OnPopulatePopup (object sender, PopulatePopupArgs args)
 		{
-			CommandEntrySet cset = IdeApp.CommandService.CreateCommandEntrySet ("/SharpDevelop/Components/SqlEditor/ContextMenu");
+			CommandEntrySet cset = IdeApp.CommandService.CreateCommandEntrySet ("/MonoDevelop/Database/ContextMenu/SqlEditor");
 			if (cset.Count > 0) {
 				cset.AddItem (Command.Separator);
 				IdeApp.CommandService.InsertOptions (args.Menu, cset, 0);
