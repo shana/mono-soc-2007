@@ -1,5 +1,12 @@
 2007-08-29  Ben Motmans <ben.motmans@gmail.com> 
 
+	* Dialogs/TableEditorDialog.cs: retrieve and store the list of database
+	  tables for use in the constraint editor dialog
+	* Widgets/ConstraintsEditorWidget.cs: use the correct list of database
+	  tables
+
+2007-08-29  Ben Motmans <ben.motmans@gmail.com> 
+
 	* gtk-gui/gui.stetic: changes in auto generated code
 
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
