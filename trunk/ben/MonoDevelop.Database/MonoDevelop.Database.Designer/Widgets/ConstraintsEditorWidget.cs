@@ -63,7 +63,7 @@ namespace MonoDevelop.Database.Designer
 			Add (notebook);
 		}
 		
-		public void Initialize (TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
+		public void Initialize (TableSchemaCollection tables, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints, DataTypeSchemaCollection dataTypes)
 		{
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
@@ -71,8 +71,9 @@ namespace MonoDevelop.Database.Designer
 				throw new ArgumentNullException ("constraints");
 			if (table == null)
 				throw new ArgumentNullException ("table");
+			if (tables == null)
+				throw new ArgumentNullException ("tables");
 
-			TableSchemaCollection tables = null; //TODO: 
 			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.PrimaryKeyConstraint)) {
 				//not for column constraints, since they are already editable in the column editor
 				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, table, columns, constraints);

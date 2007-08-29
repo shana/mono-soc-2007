@@ -57,107 +57,107 @@
 	</Extension>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/AggregatesNode" name = "Aggregates context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ColumnsNode" name = "Columns context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ColumnNode" name = "Column context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ConnectionsNode" name = "Connections context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ConnectionNode" name = "Connection context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ConstraintNode" name = "Constraint context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ConstraintsNode" name = "Constraints context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/GroupsNode" name = "Groups context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/LanguagesNode" name = "Languages context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/OperatorsNode" name = "Operators context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ParameterNode" name = "Parameter context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ParametersNode" name = "Parameters context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ProcedureNode" name = "Procedure context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ProceduresNode" name = "Procedures context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/RolesNode" name = "Roles context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/RulesNode" name = "Rules context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/SequencesNode" name = "Sequences context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/TableNode" name = "Table context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/TablesNode" name = "Tables context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/TriggerNode" name = "Trigger context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/TriggersNode" name = "Triggers context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/TypesNode" name = "Types context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/UserNode" name = "User context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/UsersNode" name = "Users context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ViewNode" name = "View context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 	
 	<ExtensionPoint path = "/MonoDevelop/Database/ContextMenu/ConnectionManagerPad/ViewsNode" name = "Views context menu">
-		<ExtensionNodeSet id="MonoDevelop.Core.Gui.ItemSet"/>
+		<ExtensionNodeSet id="MonoDevelop.Components.Commands.ItemSet"/>
 	</ExtensionPoint>
 
 	<Extension path = "/MonoDevelop/Ide/Commands">

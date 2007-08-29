@@ -40,6 +40,7 @@ namespace MonoDevelop.Database.Designer
 		private bool create;
 		
 		private ISchemaProvider schemaProvider;
+		private TableSchemaCollection tables;
 		private TableSchema table;
 		private TableSchema originalTable;
 		private ColumnSchemaCollection columns;
@@ -121,6 +122,7 @@ namespace MonoDevelop.Database.Designer
 		
 		private void InitializeThreaded (object state)
 		{
+			tables = schemaProvider.GetTables ();
 			dataTypes = schemaProvider.GetDataTypes ();
 			columns = originalTable.Columns;
 			constraints = originalTable.Constraints;
@@ -159,7 +161,7 @@ namespace MonoDevelop.Database.Designer
 			
 			columnEditor.Initialize (table, columns, constraints, dataTypes);
 			if (constraintEditor != null)
-				constraintEditor.Initialize (table, columns, constraints, dataTypes);
+				constraintEditor.Initialize (tables, table, columns, constraints, dataTypes);
 			if (triggerEditor != null)
 				triggerEditor.Initialize (table, triggers);
 			Runtime.LoggingService.Error ("TED: InitializeGui 2");
