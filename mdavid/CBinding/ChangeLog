@@ -1,3 +1,8 @@
+2007-08-29  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* gtk-gui/CBinding.CodeGenerationPanel.cs, gtk-gui/gui.stetic: Improved UI,
+	  could still use more improvement.
+
 2007-08-28  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Project/CProjectConfiguration.cs: rewrote naming convetion handling.
