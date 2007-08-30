@@ -36,8 +36,19 @@ using NUnit.Framework;
 using Gendarme.Framework;
 using Gendarme.Rules.Smells;
 
-using Gtk;
 using System.Windows.Forms;
+
+//Stubs for the Gtk testing.
+namespace Gtk {
+	public class Bin {
+	}
+
+	public class Dialog {
+	}
+
+	public class Window {
+	}
+}
 
 namespace Test.Rules.Smells {
 
@@ -330,7 +341,6 @@ namespace Test.Rules.Smells {
 	}
 
 	public class MainWindow : Gtk.Window {
-		public MainWindow () : base ("Test") {}
 
 		protected virtual void Build () 
 		{
