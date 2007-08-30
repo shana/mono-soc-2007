@@ -26,6 +26,9 @@ namespace CBinding {
             this.Name = "CBinding.CompilerPanel";
             // Container child CBinding.CompilerPanel.Gtk.Container+ContainerChild
             this.table2 = new Gtk.Table(((uint)(3)), ((uint)(3)), false);
+            this.table2.Name = "table2";
+            this.table2.RowSpacing = ((uint)(6));
+            this.table2.ColumnSpacing = ((uint)(6));
             // Container child table2.Gtk.Table+TableChild
             this.compilerComboBox = Gtk.ComboBox.NewText();
             this.compilerComboBox.Name = "compilerComboBox";
