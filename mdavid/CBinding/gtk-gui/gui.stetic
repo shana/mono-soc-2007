@@ -15,69 +15,25 @@
     <widget-library name="../../../build/bin/MonoDevelop.Ide.dll" />
     <widget-library name="../../../build/AddIns/MonoDevelop.Deployment.Linux.dll" />
   </import>
-  <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="578 431">
+  <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="578 360">
     <property name="MemberName" />
     <child>
       <widget class="Gtk.Notebook" id="notebook1">
         <property name="MemberName" />
         <property name="CanFocus">True</property>
-        <property name="CurrentPage">2</property>
+        <property name="CurrentPage">0</property>
         <child>
           <widget class="Gtk.VBox" id="vbox6">
             <property name="MemberName" />
-            <property name="Spacing">6</property>
+            <property name="Spacing">3</property>
             <child>
               <widget class="Gtk.Table" id="table1">
                 <property name="MemberName" />
-                <property name="NRows">4</property>
+                <property name="NRows">3</property>
                 <property name="NColumns">2</property>
-                <property name="RowSpacing">10</property>
-                <property name="ColumnSpacing">10</property>
-                <property name="BorderWidth">3</property>
-                <child>
-                  <widget class="Gtk.Entry" id="defineSymbolsTextEntry">
-                    <property name="MemberName" />
-                    <property name="Tooltip" translatable="yes">A space seperated list of symbols to define.</property>
-                    <property name="CanFocus">True</property>
-                    <property name="IsEditable">True</property>
-                    <property name="InvisibleChar">●</property>
-                  </widget>
-                  <packing>
-                    <property name="TopAttach">3</property>
-                    <property name="BottomAttach">4</property>
-                    <property name="LeftAttach">1</property>
-                    <property name="RightAttach">2</property>
-                    <property name="AutoSize">False</property>
-                    <property name="YOptions">Fill</property>
-                    <property name="XExpand">True</property>
-                    <property name="XFill">True</property>
-                    <property name="XShrink">False</property>
-                    <property name="YExpand">False</property>
-                    <property name="YFill">True</property>
-                    <property name="YShrink">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="Gtk.Label" id="label12">
-                    <property name="MemberName" />
-                    <property name="Xpad">10</property>
-                    <property name="Xalign">0</property>
-                    <property name="LabelProp" translatable="yes">Define Symbols:</property>
-                  </widget>
-                  <packing>
-                    <property name="TopAttach">3</property>
-                    <property name="BottomAttach">4</property>
-                    <property name="AutoSize">True</property>
-                    <property name="XOptions">Fill</property>
-                    <property name="YOptions">Fill</property>
-                    <property name="XExpand">False</property>
-                    <property name="XFill">True</property>
-                    <property name="XShrink">False</property>
-                    <property name="YExpand">False</property>
-                    <property name="YFill">True</property>
-                    <property name="YShrink">False</property>
-                  </packing>
-                </child>
+                <property name="RowSpacing">5</property>
+                <property name="ColumnSpacing">5</property>
+                <property name="BorderWidth">2</property>
                 <child>
                   <widget class="Gtk.Label" id="label4">
                     <property name="MemberName" />
@@ -269,10 +225,54 @@ Shared Object</property>
               </packing>
             </child>
             <child>
+              <widget class="Gtk.HBox" id="hbox1">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Label" id="label12">
+                    <property name="MemberName" />
+                    <property name="Xpad">13</property>
+                    <property name="Xalign">0</property>
+                    <property name="LabelProp" translatable="yes">Define Symbols:</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Entry" id="defineSymbolsTextEntry">
+                    <property name="MemberName" />
+                    <property name="Tooltip" translatable="yes">A space seperated list of symbols to define.</property>
+                    <property name="CanFocus">True</property>
+                    <property name="IsEditable">True</property>
+                    <property name="InvisibleChar">●</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">False</property>
+                    <property name="Padding">14</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder />
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
               <widget class="Gtk.Frame" id="frame2">
                 <property name="MemberName" />
                 <property name="ShadowType">None</property>
                 <property name="LabelXalign">0</property>
+                <property name="LabelYalign">0</property>
                 <child>
                   <widget class="Gtk.Alignment" id="GtkAlignment">
                     <property name="MemberName" />
@@ -284,6 +284,7 @@ Shared Object</property>
                         <property name="MemberName" />
                         <property name="NRows">2</property>
                         <property name="NColumns">2</property>
+                        <property name="RowSpacing">6</property>
                         <property name="ColumnSpacing">9</property>
                         <property name="BorderWidth">6</property>
                         <child>
@@ -384,11 +385,10 @@ Example:
                             <property name="LeftAttach">1</property>
                             <property name="RightAttach">2</property>
                             <property name="AutoSize">False</property>
-                            <property name="YOptions">Fill</property>
                             <property name="XExpand">True</property>
                             <property name="XFill">True</property>
                             <property name="XShrink">False</property>
-                            <property name="YExpand">False</property>
+                            <property name="YExpand">True</property>
                             <property name="YFill">True</property>
                             <property name="YShrink">False</property>
                           </packing>
@@ -409,14 +409,9 @@ Example:
                 </child>
               </widget>
               <packing>
-                <property name="Position">1</property>
-                <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
+                <property name="Position">2</property>
+                <property name="AutoSize">False</property>
               </packing>
-            </child>
-            <child>
-              <placeholder />
             </child>
           </widget>
           <packing>
@@ -436,6 +431,7 @@ Example:
           <widget class="Gtk.Table" id="table2">
             <property name="MemberName" />
             <property name="NRows">2</property>
+            <property name="NColumns">3</property>
             <property name="RowSpacing">10</property>
             <property name="ColumnSpacing">10</property>
             <property name="BorderWidth">3</property>
@@ -616,6 +612,7 @@ Example:
               <widget class="Gtk.Table" id="table4">
                 <property name="MemberName" />
                 <property name="NRows">2</property>
+                <property name="NColumns">3</property>
                 <property name="RowSpacing">10</property>
                 <property name="ColumnSpacing">10</property>
                 <child>
@@ -781,6 +778,7 @@ Example:
               <widget class="Gtk.Table" id="table3">
                 <property name="MemberName" />
                 <property name="NRows">2</property>
+                <property name="NColumns">3</property>
                 <property name="RowSpacing">10</property>
                 <property name="ColumnSpacing">10</property>
                 <child>
@@ -968,6 +966,10 @@ Example:
     <child>
       <widget class="Gtk.Table" id="table2">
         <property name="MemberName" />
+        <property name="NRows">3</property>
+        <property name="NColumns">3</property>
+        <property name="RowSpacing">6</property>
+        <property name="ColumnSpacing">6</property>
         <child>
           <placeholder />
         </child>
@@ -1264,6 +1266,8 @@ Example:
                 <property name="MemberName" />
                 <property name="NRows">2</property>
                 <property name="NColumns">2</property>
+                <property name="RowSpacing">6</property>
+                <property name="ColumnSpacing">6</property>
                 <child>
                   <placeholder />
                 </child>
@@ -1430,6 +1434,8 @@ Example:
             <property name="MemberName" />
             <property name="NRows">4</property>
             <property name="NColumns">2</property>
+            <property name="RowSpacing">6</property>
+            <property name="ColumnSpacing">6</property>
             <property name="BorderWidth">3</property>
             <child>
               <placeholder />
