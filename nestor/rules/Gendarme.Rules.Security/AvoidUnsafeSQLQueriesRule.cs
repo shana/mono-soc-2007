@@ -29,15 +29,77 @@
 using System;
 
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Gendarme.Framework;
 
 namespace Gendarme.Rules.Security {
 	
 	public class AvoidUnsafeSQLQueriesRule : IMethodRule {
+		private MessageCollection messageCollection;
+	
+		private bool IsCallingInstruction (Instruction instruction)
+		{
+			return ((instruction.OpCode.Code == Code.Call) || (instruction.OpCode.Code == Code.Callvirt));
+		}
+
+		private bool SetSqlQueryInstruction (Instruction instruction) 
+		{
+			//This only works with calls to IDbCommand, I will add
+			//the checking with different providers.
+			return String.Compare (instruction.Operand.ToString () ,"System.Void System.Data.IDbCommand::set_CommandText(System.String)") == 0;
+		}
+
+		private Instruction GetSetCommandTextInstruction (MethodDefinition method) 
+		{
+			if (method.HasBody) {
+				foreach (Instruction instruction in method.Body.Instructions) {
+					if (IsCallingInstruction (instruction) && SetSqlQueryInstruction (instruction)) 
+						return instruction;
+				}
+			}
+			return null;
+		}
+
+		private bool QueryIsConcatenatedWithArguments (MethodDefinition method, Instruction instruction) 
+		{
+			Instruction iterationInstruction = instruction;
+			while (iterationInstruction.Previous != null) {
+				iterationInstruction = iterationInstruction.Previous;
+				
+				if (IsCallingInstruction (iterationInstruction)) {
+					if (iterationInstruction.Operand.ToString ().StartsWith ("System.String System.String::Concat"))
+						return true;
+				}
+				
+				if (iterationInstruction.OpCode.Code == Code.Ldstr)
+					return false;
+
+			}
+			return false;
+		}
+
+		private bool ContainsPotentialInjectionCode (MethodDefinition method) 
+		{
+			Instruction setDbQuery = GetSetCommandTextInstruction (method);
+			if (setDbQuery != null) 
+				return QueryIsConcatenatedWithArguments (method, setDbQuery);
+			return false;
+		}
+		
+		private void CheckForUnsafeQueries (MethodDefinition method) 
+		{
+			if (ContainsPotentialInjectionCode (method)) {
+				Location location = new Location (method.DeclaringType.Name, method.Name, 0);
+				Message message = new Message ("The method contains potential SQL injection code.",location, MessageType.Error);
+				messageCollection.Add (message);
+			}
+		}
 
 		public MessageCollection CheckMethod (MethodDefinition method, Runner runner) 
 		{
-			MessageCollection messageCollection = new MessageCollection ();
+			messageCollection = new MessageCollection ();
+			
+			CheckForUnsafeQueries (method);
 
 			if (messageCollection.Count == 0)
 				return null;
