@@ -298,16 +298,13 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Generating binary...");
 			
-			string command = string.Format ("{0} -o {1} {2} {3} {4}",
-			    linkerCommand, outputName, objectFiles, args.ToString (), pkgargs);
+			string linker_args = string.Format ("-o {0} {1} {2} {3}",
+			    outputName, objectFiles, args.ToString (), pkgargs);
 			
-			monitor.Log.WriteLine ("using: " + command);
+			monitor.Log.WriteLine ("using: " + linkerCommand + " " + linker_args);
 			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-			    "bash", null, null, (ProcessEventHandler)null, null, null, true);
+			ProcessWrapper p = Runtime.ProcessService.StartProcess (linkerCommand, linker_args, null, null);
 			
-			p.StandardInput.WriteLine (command);
-			p.StandardInput.Close ();
 			p.WaitForExit ();
 			
 			string line;
@@ -370,16 +367,16 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Generating shared object...");
 			
-			string command = string.Format ("{0} -shared -o {1} {2} {3} {4}",
-			    linkerCommand, outputName, objectFiles, args.ToString (), pkgargs);
+//			string command = string.Format ("{0} -shared -o {1} {2} {3} {4}",
+//			    linkerCommand, outputName, objectFiles, args.ToString (), pkgargs);
 			
-			monitor.Log.WriteLine ("using: " + command);
+			string linker_args = string.Format ("-shared -o {0} {1} {2} {3}",
+			    outputName, objectFiles, args.ToString (), pkgargs);
 			
-			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-			    "bash", null, null, (ProcessEventHandler)null, null, null, true);
+			monitor.Log.WriteLine ("using: " + linkerCommand + " " + linker_args);
 			
-			p.StandardInput.WriteLine (command);
-			p.StandardInput.Close ();
+			ProcessWrapper p = Runtime.ProcessService.StartProcess (linkerCommand, linker_args, null, null);
+
 			p.WaitForExit ();
 			
 			string line;
@@ -430,20 +427,18 @@ namespace CBinding
 			string outputName = Path.ChangeExtension (file.Name, ".o");
 			string pkgargs = GeneratePkgCompilerArgs (packages);
 			
-			string command = String.Format("{0}{1} -MMD {2} {3} -c -o {4} {5}",
-			    (use_ccache ? "ccache " : string.Empty),
-			    compilerCommand, file.Name, args,outputName, pkgargs);
+			string compiler_args = string.Format ("{0} -MMD {1} {2} -c -o {3} {4}",
+			    (use_ccache ? compilerCommand : string.Empty), file.Name, args, outputName, pkgargs);
 			
-			monitor.Log.WriteLine ("using: " + command);
+			monitor.Log.WriteLine ("using: " + compilerCommand + " " + compiler_args);
 			
 			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-			    "bash", null, null, (ProcessEventHandler)null, null, null, true);
-			
-			p.StandardInput.WriteLine (command);
-			p.StandardInput.Close ();
+			    compilerCommand, compiler_args, null, null);
+
 			p.WaitForExit ();
 			
 			string line;
+			
 			StringWriter error = new StringWriter ();
 			
 			while ((line = p.StandardError.ReadLine ()) != null)

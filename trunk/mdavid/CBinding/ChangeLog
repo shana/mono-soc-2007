@@ -1,3 +1,10 @@
+2007-08-31  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Gui/EditPackagesDialog.cs, gtk-gui/CBinding.EditPackagesDialog.cs,
+	  gtk-gui/gui.stetic: Ignore case when searching for a pkg-pcackages
+	  version.
+	* Compiler/CCompiler.cs, Compiler/GNUCompiler.cs: No longer call bash.
+
 2007-08-30  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* gtk-gui/CBinding.CodeGenerationPanel.cs, gtk-gui/gui.stetic: Still more

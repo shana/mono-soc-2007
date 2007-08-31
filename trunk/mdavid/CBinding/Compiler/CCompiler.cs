@@ -29,12 +29,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System;
+using System.IO;
 using System.Text;
 using System.CodeDom.Compiler;
 
 using Mono.Addins;
 
 using MonoDevelop.Core;
+using MonoDevelop.Core.Execution;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Projects;
 
 namespace CBinding
@@ -84,7 +88,25 @@ namespace CBinding
 			foreach (ProjectPackage p in packages)
 				libs.Append (p.File + " ");
 			
-			return string.Format ("`pkg-config --libs {0}`", libs.ToString ().Trim ());
+			string args = string.Format ("--libs {0}", libs.ToString ().Trim ());
+			
+			StringWriter output = new StringWriter ();			
+			ProcessWrapper proc = new ProcessWrapper ();
+			
+			try {			
+				proc = Runtime.ProcessService.StartProcess ("pkg-config", args, null, null);
+				proc.WaitForExit ();
+				
+				string line;
+				while ((line = proc.StandardOutput.ReadLine ()) != null)
+					output.WriteLine (line);
+			} catch (Exception ex) {
+				IdeApp.Services.MessageService.ShowError (ex, "You need to have pkg-config installed");
+			} finally {
+				proc.Close ();
+			}
+			
+			return output.ToString ();
 		}
 		
 		protected string GeneratePkgCompilerArgs (ProjectPackageCollection packages)
@@ -97,7 +119,25 @@ namespace CBinding
 			foreach (ProjectPackage p in packages)
 				libs.Append (p.File + " ");
 			
-			return string.Format ("`pkg-config --cflags {0}`", libs.ToString ().Trim ());
+			string args = string.Format ("--cflags {0}", libs.ToString ().Trim ());
+			
+			StringWriter output = new StringWriter ();			
+			ProcessWrapper proc = new ProcessWrapper ();
+			
+			try {			
+				proc = Runtime.ProcessService.StartProcess ("pkg-config", args, null, null);
+				proc.WaitForExit ();
+				
+				string line;
+				while ((line = proc.StandardOutput.ReadLine ()) != null)
+					output.WriteLine (line);
+			} catch (Exception ex) {
+				IdeApp.Services.MessageService.ShowError (ex, "You need to have pkg-config installed");
+			} finally {
+				proc.Close ();
+			}
+			
+			return output.ToString ();
 		}
 	}
 }
