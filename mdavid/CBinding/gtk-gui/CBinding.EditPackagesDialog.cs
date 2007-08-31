@@ -65,7 +65,7 @@ namespace CBinding {
             this.notebook1 = new Gtk.Notebook();
             this.notebook1.CanFocus = true;
             this.notebook1.Name = "notebook1";
-            this.notebook1.CurrentPage = 1;
+            this.notebook1.CurrentPage = 0;
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.scrolledwindow1 = new Gtk.ScrolledWindow();
             this.scrolledwindow1.CanFocus = true;
@@ -85,7 +85,7 @@ namespace CBinding {
             // Notebook tab
             this.label1 = new Gtk.Label();
             this.label1.Name = "label1";
-            this.label1.LabelProp = Mono.Unix.Catalog.GetString("Normal Packages");
+            this.label1.LabelProp = Mono.Unix.Catalog.GetString("System Packages");
             this.notebook1.SetTabLabel(this.scrolledwindow1, this.label1);
             // Container child notebook1.Gtk.Notebook+NotebookChild
             this.scrolledwindow3 = new Gtk.ScrolledWindow();

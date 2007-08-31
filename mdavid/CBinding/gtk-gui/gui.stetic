@@ -1198,7 +1198,7 @@ Example:
               <widget class="Gtk.Notebook" id="notebook1">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
-                <property name="CurrentPage">1</property>
+                <property name="CurrentPage">0</property>
                 <child>
                   <widget class="Gtk.ScrolledWindow" id="scrolledwindow1">
                     <property name="MemberName" />
@@ -1221,7 +1221,7 @@ Example:
                 <child>
                   <widget class="Gtk.Label" id="label1">
                     <property name="MemberName" />
-                    <property name="LabelProp" translatable="yes">Normal Packages</property>
+                    <property name="LabelProp" translatable="yes">System Packages</property>
                   </widget>
                   <packing>
                     <property name="type">tab</property>

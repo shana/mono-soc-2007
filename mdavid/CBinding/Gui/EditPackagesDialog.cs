@@ -371,7 +371,7 @@ namespace CBinding
 			string version = string.Empty;
 			
 			while ((line = reader.ReadLine ()) != null) {
-				if (line.StartsWith ("Version:")) {
+				if (line.StartsWith ("Version:", true, null)) {
 					version = line.Split(':')[1].TrimStart ();
 				}
 			}
