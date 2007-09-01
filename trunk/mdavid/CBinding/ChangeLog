@@ -1,5 +1,11 @@
 2007-09-01  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
+	* Gui/CompilerPanel.cs, Project/CProject.cs: Allow changing the project's
+	  language from C to C++ and vice versa by changing the compiler in the
+	  compiler panel.
+
+2007-09-01  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
 	* Compiler/GNUCompiler.cs: Fixed ccache implementation, though I'm still not
 	  sure if ccache should be used in the linking stage (Its currently not
 	  used, and I think thats correct).

@@ -349,6 +349,7 @@ namespace CBinding
 		
 		public Language Language {
 			get { return language; }
+			set { language = value; }
 		}
 		
 		public ICompiler Compiler {

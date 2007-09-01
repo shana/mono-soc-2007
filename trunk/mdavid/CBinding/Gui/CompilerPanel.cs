@@ -56,18 +56,18 @@ namespace CBinding
 			compilers = AddinManager.GetExtensionObjects ("/CBinding/Compilers");
 			
 			foreach (ICompiler compiler in compilers) {
-				if (compiler.Language == project.Language)
-					compilerComboBox.AppendText (compiler.Name);
+				compilerComboBox.AppendText (compiler.Name);
 			}
 			
 			int active = 0;
 			Gtk.TreeIter iter;
 			Gtk.ListStore store = (Gtk.ListStore)compilerComboBox.Model;
-			compilerComboBox.Model.GetIterFirst (out iter);
+			store.GetIterFirst (out iter);
 			while (store.IterIsValid (iter)) {
 				if ((string)store.GetValue (iter, 0) == project.Compiler.Name) {
 					break;
 				}
+				store.IterNext (ref iter);
 				active++;
 			}
 
@@ -83,11 +83,9 @@ namespace CBinding
 			if (project == null)
 				return false;
 			
-			if (active_compiler != null) {
+			if (!active_compiler.Equals (project.Compiler)) {
 				project.Compiler = active_compiler;
-			} else {
-				// Use default compiler depending on language.
-				project.Compiler = null;
+				project.Language = active_compiler.Language;
 			}
 			
 			// Update use_ccache for all configurations
