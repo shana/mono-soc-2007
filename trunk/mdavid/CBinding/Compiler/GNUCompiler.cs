@@ -77,7 +77,7 @@ namespace CBinding
 				if (f.Subtype == Subtype.Directory) continue;
 				
 				if (f.BuildAction == BuildAction.Compile) {
-					if (NeedsCompiling (f))
+					if (configuration.UseCcache || NeedsCompiling (f))
 						res = DoCompilation (f, args, packages, monitor, cr, configuration.UseCcache);
 				}
 				else
@@ -252,7 +252,7 @@ namespace CBinding
 						continue;
 					}
 					
-					if (File.GetLastWriteTime (file.Name) > File.GetLastWriteTime (precomp)) {
+					if (configuration.UseCcache || File.GetLastWriteTime (file.Name) > File.GetLastWriteTime (precomp)) {
 						DoPrecompileHeader (file, precomp, args);
 					}
 				}
@@ -367,9 +367,6 @@ namespace CBinding
 			
 			monitor.Log.WriteLine ("Generating shared object...");
 			
-//			string command = string.Format ("{0} -shared -o {1} {2} {3} {4}",
-//			    linkerCommand, outputName, objectFiles, args.ToString (), pkgargs);
-			
 			string linker_args = string.Format ("-shared -o {0} {1} {2} {3}",
 			    outputName, objectFiles, args.ToString (), pkgargs);
 			
@@ -433,7 +430,7 @@ namespace CBinding
 			monitor.Log.WriteLine ("using: " + compilerCommand + " " + compiler_args);
 			
 			ProcessWrapper p = Runtime.ProcessService.StartProcess (
-			    compilerCommand, compiler_args, null, null);
+			    (use_ccache ? "ccache" : compilerCommand), compiler_args, null, null);
 
 			p.WaitForExit ();
 			
