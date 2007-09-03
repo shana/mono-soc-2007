@@ -20,9 +20,9 @@ using System.IO;
 using System.Text;
 using Mono.GetOptions;
 #if GUI_qt
-//using MonoCov.Gui.Qt;
+using MonoCov.Gui.Qt;
 #else
-//using MonoCov.Gui.Gtk;
+using MonoCov.Gui.Gtk;
 #endif
 
 [assembly: AssemblyTitle("monocov")]
@@ -42,6 +42,9 @@ public class MonoCovOptions : Options
 
 	[Option("Export coverage data as HTML into directory PARAM", "export-html")]
 		public string exportHtmlDir;
+
+	[Option("Export coverage data for FieldStat into directory PARAM","export-fieldstat")]
+		public string exportFieldStatDir;
 
 	[Option("Use the XSL stylesheet PARAM for XML->HTML conversion", "stylesheet")]
 		public string styleSheet;
@@ -67,7 +70,6 @@ public class MonoCovMain {
 		options.ProcessArgs (args);
 		args = options.RemainingArguments;
 
-		return handleExportEasy(options, args);
 
 		if (options.exportXmlDir != null)
 			return handleExportXml (options, args);
@@ -75,37 +77,39 @@ public class MonoCovMain {
 		if (options.exportHtmlDir != null)
 			return handleExportHtml (options, args);
 
+		if (options.exportFieldStatDir != null )
+			return handleExportFieldStat(options, args);
 		#if GUI_qt
-		//return MonoCov.Gui.Qt.MonoCov.GuiMain (args);
+		return MonoCov.Gui.Qt.MonoCov.GuiMain (args);
 		#else
-		//return MonoCov.Gui.Gtk.MonoCovGui.GuiMain (args);
+		return MonoCov.Gui.Gtk.MonoCovGui.GuiMain (args);
 		#endif
-		return 0;
+		//return 0;
 	}
 
 	private static void progressListener (object sender, XmlExporter.ProgressEventArgs e) {
 		Console.Write ("\rExporting Data: " + (e.pos * 100 / e.itemCount) + "%");
 	}
-	private static int handleExportEasy (MonoCovOptions opts, string[] args) {
+	private static int handleExportFieldStat(MonoCovOptions opts, string[] args) {
 		if (args.Length == 0) {
-			Console.WriteLine ("Error: Datafile name is required when using --export-xml");
+			Console.WriteLine ("Error: Datafile name is required when using --export-fieldstat");
 			return 1;
 		}
 
-		if (!Directory.Exists (opts.exportXmlDir)) {
+		if (!Directory.Exists (opts.exportFieldStatDir)) {
 			try {
-				Directory.CreateDirectory (opts.exportXmlDir);
+				Directory.CreateDirectory (opts.exportFieldStatDir);
 			}
 			catch (Exception ex) {
-				Console.WriteLine ("Error: Destination directory '" + opts.exportXmlDir + "' does not exist and could not be created: " + ex);
+				Console.WriteLine ("Error: Destination directory '" + opts.exportFieldStatDir + "' does not exist and could not be created: " + ex);
 				return 1;
 			}
 		}
 		
 		CoverageModel model = new CoverageModel ();
 		model.ReadFromFile (args [0]);
-		EasyExporter exporter = new EasyExporter ();
-		exporter.DestinationDir = opts.exportXmlDir;
+		FieldStatExporter exporter = new FieldStatExporter();
+		exporter.DestinationDir = opts.exportFieldStatDir;
 		exporter.StyleSheet = opts.styleSheet;
 		exporter.Export (model);
 		if (!opts.quiet) {

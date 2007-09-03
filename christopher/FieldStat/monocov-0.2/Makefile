@@ -32,10 +32,10 @@ SRCS = \
 	CoverageModel.cs \
 	SourceFileCoverageData.cs \
 	XmlExporter.cs \
-	EasyExporter.cs \
+	FieldStatExporter.cs \
 	HtmlExporter.cs \
 	MonoCovMain.cs \
-	#$(GUI_SRCS)
+	$(GUI_SRCS)
 
 monocov.exe: $(SRCS) style.xsl .gui-$(GUI) $(GUI_DEPS)
 	gmcs -debug /target:exe /out:$@ -define:GUI_$(GUI) $(LIBS) -r:Mono.CompilerServices.SymbolWriter -r:Mono.GetOptions $(SRCS) -resource:style.xsl,style.xsl -resource:trans.gif,trans.gif
