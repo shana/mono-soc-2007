@@ -41,9 +41,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FieldStat\FieldStat.csproj">
+    <ProjectReference Include="..\FieldStat\FieldStatLib.csproj">
       <Project>{57068CE4-273E-4118-B03F-79B86C582B6F}</Project>
-      <Name>FieldStat</Name>
+      <Name>FieldStatLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

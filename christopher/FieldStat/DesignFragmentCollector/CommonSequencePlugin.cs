@@ -57,11 +57,11 @@ namespace FieldStat.Plugins
             }
         }
 
-        public override void ComputeResults(Results results, ICollection files, Hashtable htBin)
+        public override void ComputeResults(Results results, ICollection files, Hashtable htBin, ICollection filters)
         {
             Visit scan = new Visit();
             scan.Collectors.Register("DesignFragment", new DesignFragmentCollector());
-            scan.DoScan( files, htBin);
+            scan.DoScan( files, htBin,filters);
             DesignFragmentCollector seqs = (DesignFragmentCollector)scan.Collectors["DesignFragment"];
 
             MakeDataTable();
