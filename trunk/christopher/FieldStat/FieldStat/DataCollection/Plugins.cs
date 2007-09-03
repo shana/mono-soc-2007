@@ -34,7 +34,7 @@ namespace FieldStat.DataCollection
 
             foreach (AbstractPlugin plugin in customVisit)
             {
-                plugin.ComputeResults(results, files, htBin);
+                plugin.ComputeResults(results, files, htBin, results.Filters);
             }
             if (communityVisit.Count > 0)
             {
@@ -47,7 +47,7 @@ namespace FieldStat.DataCollection
                 }
 
                 // Visit Assemblies.
-                visit.DoScan(files, htBin);
+                visit.DoScan(files, htBin, results.Filters);
 
                 // Give Plugin results of scanning
                 foreach (AbstractPlugin plugin in communityVisit)
@@ -97,7 +97,7 @@ namespace FieldStat.DataCollection
         {
             m_useCommunityVisitor = useCommunityVisitor;
         }
-        public virtual void ComputeResults(Results results, ICollection files, Hashtable htBin) { }
+        public virtual void ComputeResults(Results results, ICollection files, Hashtable htBin, ICollection filters) { }
 
         // Override the following two methods if (UsesCommunityVisitor == true)
         public virtual AbstractCollector CreateCollector() { return null; }

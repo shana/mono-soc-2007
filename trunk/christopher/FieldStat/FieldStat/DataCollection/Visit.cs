@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Text;
-using System.Windows.Forms;
 
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -26,15 +25,15 @@ namespace FieldStat.DataCollection
             get { return m_collectors;  }
         }
 
-        public void DoScan(ICollection files, Hashtable htBin)
+        public void DoScan(ICollection files, Hashtable htBin, ICollection filters )
         {
             if (files != null)
             {
-                this.ScanAssemblies(files, null);
+                this.ScanAssemblies(files, filters);
             }
             else
             {
-                this.ScanApps(htBin, null);
+                this.ScanApps(htBin, filters);
             }
         }
 
@@ -74,24 +73,24 @@ namespace FieldStat.DataCollection
             {
                 foreach (TypeDefinition td in md.Types)
                 {
-                    ScanTypes(app, td);
+                    ScanTypes(app, td, filters);
                 }
             }
         }
 
-        public void ScanTypes(string app, TypeDefinition td)
+        public void ScanTypes(string app, TypeDefinition td, ICollection filters)
         {
             foreach (TypeDefinition inner in td.NestedTypes)
             {
-                ScanTypes(app, inner);
+                ScanTypes(app, inner, filters);
             }
             foreach (MethodDefinition methd in td.Methods)
             {
-                ScanMethodBody(app, methd);
+                ScanMethodBody(app, methd, filters);
             }
         }
 
-        public void ScanMethodBody(string app, MethodDefinition methd)
+        public void ScanMethodBody(string app, MethodDefinition methd, ICollection filters)
         {
             if (methd.Body == null)
             {
@@ -111,15 +110,42 @@ namespace FieldStat.DataCollection
                     string typeName = CodeProperties.GetClassName(rf.DeclaringType);
                     string methName = CodeProperties.GetMethodNameWithParameters(((MethodReference)i.Operand));
 
-                    bool isSystem   = CodeProperties.IsSystem(rf);
-                    bool isExternal = CodeProperties.IsExternalCall(rf);
-
-                    Collectors.OnMethodCall(methd, rf, typeName, methName, isSystem, isExternal);
-                    if (isSystem)
+                    if( filters.Count > 0 )
                     {
-                        Collectors.OnSystemMethodCall(methd, rf, typeName, methName);
+                        if (IsIncluded(filters, typeName))
+                        {
+                            ProcessMethod(methd, rf, typeName, methName);
+                        }
+                    }
+                    else
+                    {
+                        ProcessMethod(methd, rf, typeName, methName);
                     }
                 }
+            }
+        }
+
+        private bool IsIncluded(ICollection filters, string type)
+        {
+            foreach (string filter in filters)
+            {
+                if (type.StartsWith(filter))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ProcessMethod(MethodDefinition methd, MethodReference rf, string typeName, string methName)
+        {
+            bool isSystem = CodeProperties.IsSystem(rf);
+            bool isExternal = CodeProperties.IsExternalCall(rf);
+
+            Collectors.OnMethodCall(methd, rf, typeName, methName, isSystem, isExternal);
+            if (isSystem)
+            {
+                Collectors.OnSystemMethodCall(methd, rf, typeName, methName);
             }
         }
     }

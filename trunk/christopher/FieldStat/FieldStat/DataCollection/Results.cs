@@ -10,7 +10,7 @@ namespace FieldStat.DataCollection
     public class Results
     {
         DataTable m_dtAssemblies;
-        DataTable m_dtFilters;
+        ArrayList m_Filters = new ArrayList();
         DataTable m_dtResults;
         DataTable m_dtCoverage;
         DataTable m_dtAppStats;
@@ -26,9 +26,9 @@ namespace FieldStat.DataCollection
         {
             get { return m_dtAssemblies;  }
         }
-        public DataTable Filters
+        public ArrayList Filters
         {
-            get { return m_dtFilters; }
+            get { return m_Filters; }
         }
         public DataTable AnalysisResults
         {
@@ -62,9 +62,6 @@ namespace FieldStat.DataCollection
             m_dtAssemblies.Columns.Add("Stats", typeof(string));
             m_dtAssemblies.Columns.Add("Assembly", typeof(object));
 
-            m_dtFilters = new DataTable("Filter");
-            m_dtFilters.Columns.Add("Filter", typeof(string));
-
             m_dtCoverage = new DataTable("Coverage");
             m_dtCoverage.Columns.Add("Type", typeof(string));
             m_dtCoverage.Columns.Add("Method", typeof(string));
@@ -94,7 +91,7 @@ namespace FieldStat.DataCollection
             m_dtResults.PrimaryKey = new DataColumn[2] { m_dtResults.Columns["Type"], m_dtResults.Columns["Method"] };
         }
 
-        public void ComputeResults(ICollection m_Files, Hashtable htAppBin )
+        public void ComputeResults(ICollection m_Files, Hashtable htAppBin, ICollection filters )
         {
             // First Pass
             Visit scan = new Visit();
@@ -102,7 +99,7 @@ namespace FieldStat.DataCollection
             scan.Collectors.Register("App", new AppCollector());
             scan.Collectors.Register("CallGraph", new CallGraphCollector());
 
-            scan.DoScan (m_Files, htAppBin);
+            scan.DoScan (m_Files, htAppBin, filters);
 
             AppCollector appresult = (AppCollector)scan.Collectors["App"];
             CallGraphCollector callgraph = (CallGraphCollector)scan.Collectors["CallGraph"];
@@ -135,7 +132,7 @@ namespace FieldStat.DataCollection
             // Second Pass
             Visit scantype = new Visit();
             scantype.Collectors.Register("Type", new TypeCollector( m_dtCodeRank ));
-            scantype.DoScan( m_Files, htAppBin);
+            scantype.DoScan( m_Files, htAppBin, filters);
             TypeCollector typeresult = (TypeCollector)scantype.Collectors["Type"];
 
             // Type Usage + Coverage

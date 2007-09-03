@@ -10,7 +10,7 @@ using FieldStat.DataCollection;
 namespace FieldStat
 {
     
-    class ExportData
+    public class ExportData
     {
         Results m_results;
         string m_outputDirectory;
