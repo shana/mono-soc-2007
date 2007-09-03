@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldStat", "FieldStat\FieldStat.csproj", "{57068CE4-273E-4118-B03F-79B86C582B6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldStatLib", "FieldStat\FieldStatLib.csproj", "{57068CE4-273E-4118-B03F-79B86C582B6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignFragmentPlugin", "DesignFragmentCollector\DesignFragmentPlugin.csproj", "{969ABEF7-BA40-4FFF-A6DB-90AF16BC2730}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldStatConsole", "FieldStatConsole\FieldStatConsole.csproj", "{8141D7D6-FBB1-43E3-A99C-7BE598DFFA45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldStatsGUI", "FieldStatsGUI\FieldStatsGUI.csproj", "{CAD5DA7F-B0BD-4163-98A7-70999B3833F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +23,14 @@ Global
 		{969ABEF7-BA40-4FFF-A6DB-90AF16BC2730}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{969ABEF7-BA40-4FFF-A6DB-90AF16BC2730}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{969ABEF7-BA40-4FFF-A6DB-90AF16BC2730}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8141D7D6-FBB1-43E3-A99C-7BE598DFFA45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8141D7D6-FBB1-43E3-A99C-7BE598DFFA45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8141D7D6-FBB1-43E3-A99C-7BE598DFFA45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8141D7D6-FBB1-43E3-A99C-7BE598DFFA45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD5DA7F-B0BD-4163-98A7-70999B3833F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD5DA7F-B0BD-4163-98A7-70999B3833F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD5DA7F-B0BD-4163-98A7-70999B3833F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD5DA7F-B0BD-4163-98A7-70999B3833F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
