@@ -9,7 +9,7 @@ using FieldStat.DataCollection;
 
 namespace FieldStat
 {
-    class ParameterData
+    public class ParameterData
     {
         private Results m_results = new Results();
         private Hashtable htGlobalBin = new Hashtable();
@@ -53,10 +53,7 @@ namespace FieldStat
 
         public void LoadFilters(string[] filters)
         {
-            foreach (string filter in filters)
-            {
-                m_results.Filters.Rows.Add(filter);
-            }
+            m_results.Filters.AddRange(filters);
         }
 
         public void LoadApplicationRepository(string baseDirectory)
@@ -70,7 +67,7 @@ namespace FieldStat
 
         public void ComputeResults()
         {
-            m_results.ComputeResults(m_Files, htAppBin);
+            m_results.ComputeResults(m_Files, htAppBin, m_results.Filters);
         }
 
         public void ImportCachedResults(string file)
