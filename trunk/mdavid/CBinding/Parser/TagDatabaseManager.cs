@@ -154,8 +154,7 @@ namespace CBinding.Parser
 		
 		private void FillFileInformation (FileInformation fileInfo)
 		{
-			PropertyService propertyService = (PropertyService)ServiceManager.GetService (typeof (PropertyService));
-			string confdir = propertyService.ConfigDirectory;
+			string confdir = PropertyService.ConfigPath;
 			string tagFileName = Path.GetFileName (fileInfo.FileName) + ".tag";
 			string tagdir = Path.Combine (confdir, "system-tags");
 			string tagFullFileName = Path.Combine (tagdir, tagFileName);

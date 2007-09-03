@@ -14,6 +14,7 @@
     <widget-library name="../../../build/bin/MonoDevelop.Components.dll" />
     <widget-library name="../../../build/bin/MonoDevelop.Ide.dll" />
     <widget-library name="../../../build/AddIns/MonoDevelop.Deployment.Linux.dll" />
+    <widget-library name="../../../build/AddIns/MonoDevelop.Deployment.Linux.dll" />
   </import>
   <widget class="Gtk.Bin" id="CBinding.CodeGenerationPanel" design-size="578 360">
     <property name="MemberName" />

@@ -36,7 +36,6 @@ using System.Collections;
 using Mono.Addins;
 
 using MonoDevelop.Core;
-using MonoDevelop.Core.Properties;
 using MonoDevelop.Core.Gui.Dialogs;
 
 namespace CBinding
@@ -49,11 +48,11 @@ namespace CBinding
 		private Gtk.ListStore libPathStore = new Gtk.ListStore (typeof(string));
 		private Gtk.ListStore includePathStore = new Gtk.ListStore (typeof(string));
 		
-		public CodeGenerationPanel (IProperties customizationObject)
+		public CodeGenerationPanel (Properties customizationObject)
 		{
 			this.Build ();
 			
-			configuration = (CProjectConfiguration)customizationObject.GetProperty ("Config");
+			configuration = customizationObject.Get<CProjectConfiguration> ("Config");
 			compilationParameters = (CCompilationParameters)configuration.CompilationParameters;
 			
 			Gtk.CellRendererText textRenderer = new Gtk.CellRendererText ();
@@ -333,7 +332,7 @@ namespace CBinding
 		
 		public override void LoadPanelContents ()
 		{
-			panel = new CodeGenerationPanel ((IProperties)CustomizationObject);
+			panel = new CodeGenerationPanel ((Properties)CustomizationObject);
 			Add (panel);
 		}
 
