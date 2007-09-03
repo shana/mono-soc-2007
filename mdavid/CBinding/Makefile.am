@@ -8,6 +8,7 @@ REFS =  \
 	-r:../../build/AddIns/MonoDevelop.Deployment.dll \
 	-r:../../build/AddIns/MonoDevelop.Deployment.dll \
 	-r:../../build/AddIns/MonoDevelop.Deployment.Linux.dll \
+	-r:../../build/AddIns/MonoDevelop.Deployment.Linux.dll \
 	-r:../../build/AddIns/MonoDevelop.SourceEditor.dll \
 	-r:../../build/AddIns/MonoDevelop.SourceEditor.dll \
 	-r:../../build/bin/MonoDevelop.Components.dll \

@@ -33,7 +33,7 @@ using System;
 
 using Mono.Addins;
 
-using MonoDevelop.Core.Properties;
+using MonoDevelop.Core;
 using MonoDevelop.Core.Gui.Dialogs;
 
 namespace CBinding
@@ -42,13 +42,13 @@ namespace CBinding
 	{
 		private CProjectConfiguration configuration;
 		
-		public OutputOptionsPanel (IProperties customizationObject)
+		public OutputOptionsPanel (Properties customizationObject)
 		{
 			this.Build ();
 			
 			table1.RowSpacing = 3;
 			
-			configuration = (CProjectConfiguration)customizationObject.GetProperty ("Config");
+			configuration = customizationObject.Get<CProjectConfiguration> ("Config");
 			
 			outputNameTextEntry.Text = configuration.Output;
 			outputPathTextEntry.Text = configuration.OutputDirectory;
@@ -97,7 +97,7 @@ namespace CBinding
 		
 		public override void LoadPanelContents ()
 		{
-			panel = new OutputOptionsPanel ((IProperties)CustomizationObject);
+			panel = new OutputOptionsPanel ((Properties)CustomizationObject);
 			Add (panel);
 		}
 		

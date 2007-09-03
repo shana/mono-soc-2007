@@ -36,7 +36,6 @@ using System.Collections;
 using Mono.Addins;
 
 using MonoDevelop.Core;
-using MonoDevelop.Core.Properties;
 using MonoDevelop.Core.Gui.Dialogs;
 
 namespace CBinding
@@ -47,11 +46,11 @@ namespace CBinding
 		private object[] compilers;
 		private ICompiler active_compiler;
 		
-		public CompilerPanel (IProperties customizationObject)
+		public CompilerPanel (Properties customizationObject)
 		{
 			this.Build ();
 			
-			project = (CProject)customizationObject.GetProperty ("Project");
+			project = customizationObject.Get<CProject> ("Project");
 			
 			compilers = AddinManager.GetExtensionObjects ("/CBinding/Compilers");
 			
@@ -122,7 +121,7 @@ namespace CBinding
 		
 		public override void LoadPanelContents ()
 		{
-			panel = new CompilerPanel ((IProperties)CustomizationObject);
+			panel = new CompilerPanel ((Properties)CustomizationObject);
 			Add (panel);
 		}
 

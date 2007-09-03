@@ -1,3 +1,9 @@
+2007-09-03  Michael Hutchinson <m.j.hutchinson@gmail.com> 
+
+	* Gui/OutputOptionsPanel.cs, Gui/CodeGenerationPanel.cs,
+	  Gui/CompilerPanel.cs, Parser/TagDatabaseManager.cs: Adapt to new api
+	  changes.
+
 2007-09-01  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/CompilerPanel.cs, Project/CProject.cs: Allow changing the project's
