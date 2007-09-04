@@ -97,11 +97,9 @@ namespace CBinding
 				break;
 			}
 			
-			extraCompilerTextView.Buffer.Text = SingleLineToMultiline (
-			    compilationParameters.ExtraCompilerArguments);
+			extraCompilerTextView.Buffer.Text = compilationParameters.ExtraCompilerArguments;
 			
-			extraLinkerTextView.Buffer.Text = SingleLineToMultiline (
-			    compilationParameters.ExtraLinkerArguments);
+			extraLinkerTextView.Buffer.Text = compilationParameters.ExtraLinkerArguments;
 			
 			defineSymbolsTextEntry.Text = compilationParameters.DefineSymbols;
 			
@@ -113,16 +111,6 @@ namespace CBinding
 			
 			foreach (string includePath in configuration.Includes)
 				includePathStore.AppendValues (includePath);
-		}
-		
-		private string SingleLineToMultiline (string line)
-		{
-			return line.Replace (' ', '\n');
-		}
-		
-		private string MultilineToSingle (string multiline)
-		{
-			return multiline.Replace ('\n', ' ');
 		}
 		
 		private void OnIncludePathAdded (object sender, EventArgs e)
@@ -221,11 +209,9 @@ namespace CBinding
 				break;
 			}
 			
-			compilationParameters.ExtraCompilerArguments = MultilineToSingle (
-			    extraCompilerTextView.Buffer.Text);
+			compilationParameters.ExtraCompilerArguments = extraCompilerTextView.Buffer.Text;
 			
-			compilationParameters.ExtraLinkerArguments = MultilineToSingle (
-			    extraLinkerTextView.Buffer.Text);
+			compilationParameters.ExtraLinkerArguments = extraLinkerTextView.Buffer.Text;
 			
 			compilationParameters.DefineSymbols = defineSymbolsTextEntry.Text;
 			

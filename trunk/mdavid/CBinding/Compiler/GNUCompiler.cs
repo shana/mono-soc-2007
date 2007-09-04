@@ -140,8 +140,10 @@ namespace CBinding
 			
 			args.Append ("-O" + cp.OptimizationLevel + " ");
 			
-			if (cp.ExtraCompilerArguments != null && cp.ExtraCompilerArguments.Length > 0)
-				args.Append (cp.ExtraCompilerArguments + " ");
+			if (cp.ExtraCompilerArguments != null && cp.ExtraCompilerArguments.Length > 0) {
+				string extraCompilerArgs = cp.ExtraCompilerArguments.Replace ('\n', ' ');
+				args.Append (extraCompilerArgs + " ");
+			}
 			
 			if (cp.DefineSymbols != null && cp.DefineSymbols.Length > 0)
 				args.Append (ProcessDefineSymbols (cp.DefineSymbols) + " ");
@@ -285,8 +287,10 @@ namespace CBinding
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
 			
-			if (cp.ExtraLinkerArguments != null && cp.ExtraLinkerArguments.Length > 0)
-				args.Append (cp.ExtraLinkerArguments + " ");
+			if (cp.ExtraLinkerArguments != null && cp.ExtraLinkerArguments.Length > 0) {
+				string extraLinkerArgs = cp.ExtraLinkerArguments.Replace ('\n', ' ');
+				args.Append (extraLinkerArgs + " ");
+			}
 			
 			if (configuration.LibPaths != null)
 				foreach (string libpath in configuration.LibPaths)
@@ -354,8 +358,10 @@ namespace CBinding
 			CCompilationParameters cp =
 				(CCompilationParameters)configuration.CompilationParameters;
 			
-			if (cp.ExtraLinkerArguments != null && cp.ExtraLinkerArguments.Length > 0)
-				args.Append (cp.ExtraLinkerArguments + " ");
+			if (cp.ExtraLinkerArguments != null && cp.ExtraLinkerArguments.Length > 0) {
+				string extraLinkerArgs = cp.ExtraLinkerArguments.Replace ('\n', ' ');
+				args.Append (extraLinkerArgs + " ");
+			}
 			
 			if (configuration.LibPaths != null)
 				foreach (string libpath in configuration.LibPaths)
