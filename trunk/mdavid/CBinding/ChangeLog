@@ -1,3 +1,8 @@
+2007-09-05  Marcos David Marín Amador <MarcosMarin@gmail.com> 
+
+	* Navigation/ProjectNodeBuilderExtension.cs: Update ClassPad when the
+	  project starts without having to save a file.
+
 2007-09-04  Marcos David Marín Amador <MarcosMarin@gmail.com> 
 
 	* Gui/CodeGenerationPanel.cs, Compiler/GNUCompiler.cs: Change newlines into
