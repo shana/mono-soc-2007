@@ -67,6 +67,18 @@ namespace CBinding.Navigation
 			TagDatabaseManager.Instance.FileUpdated += finishedBuildingTreeHandler;
 		}
 		
+		public override void OnNodeAdded (object dataObject)
+		{
+			CProject p = dataObject as CProject;
+			
+			if (p == null) return;
+			
+			Thread builderThread = new Thread (new ParameterizedThreadStart (CreatePadTree));
+			builderThread.Name = "PadBuilder";
+			builderThread.IsBackground = true;
+			builderThread.Start (p);
+		}
+		
 		public override void Dispose ()
 		{
 //			FinishedBuildingTree -= finishedBuildingTreeHandler;
