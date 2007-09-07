@@ -48,12 +48,15 @@ namespace MonoDevelop.Database.Designer
 		private CheckConstraintEditorWidget checkEditor;
 		private UniqueConstraintEditorWidget uniqueEditor;
 		
-		public ConstraintsEditorWidget (ISchemaProvider schemaProvider)
+		private SchemaActions action;
+		
+		public ConstraintsEditorWidget (ISchemaProvider schemaProvider, SchemaActions action)
 		{
 			if (schemaProvider == null)
 				throw new ArgumentNullException ("schemaProvider");
 			
 			this.schemaProvider = schemaProvider;
+			this.action = action;
 			
 			//TODO: enable/disable features based on schema provider metadata
 			
@@ -74,37 +77,36 @@ namespace MonoDevelop.Database.Designer
 			if (tables == null)
 				throw new ArgumentNullException ("tables");
 
-			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.PrimaryKeyConstraint)) {
+			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.PrimaryKeyConstraint)) {
 				//not for column constraints, since they are already editable in the column editor
-				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, table, columns, constraints);
+				pkEditor = new PrimaryKeyConstraintEditorWidget (schemaProvider, action, table, columns, constraints);
 				pkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (pkEditor, new Label (GettextCatalog.GetString ("Primary Key")));
 			}
 			
-			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.ForeignKeyConstraint)
-				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.ForeignKeyConstraint)) {
-				fkEditor = new ForeignKeyConstraintEditorWidget (schemaProvider, tables, table, columns, constraints);
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.ForeignKeyConstraint)
+				|| fac.IsCapabilitySupported ("TableColumn", action, TableCapabilities.ForeignKeyConstraint)) {
+				fkEditor = new ForeignKeyConstraintEditorWidget (schemaProvider, action, tables, table, columns, constraints);
 				fkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (fkEditor, new Label (GettextCatalog.GetString ("Foreign Key")));
 			}
 			
-			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CheckConstraint)
-				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.CheckConstraint)) {
-				checkEditor = new CheckConstraintEditorWidget (schemaProvider, table, columns, constraints);
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.CheckConstraint)
+				|| fac.IsCapabilitySupported ("TableColumn", action, TableCapabilities.CheckConstraint)) {
+				checkEditor = new CheckConstraintEditorWidget (schemaProvider, action, table, columns, constraints);
 				checkEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (checkEditor, new Label (GettextCatalog.GetString ("Check")));
 			}
 			
-			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.UniqueConstraint)
-				|| MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.UniqueConstraint)) {
-				uniqueEditor = new UniqueConstraintEditorWidget (schemaProvider, table, columns, constraints);
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.UniqueConstraint)
+				|| fac.IsCapabilitySupported ("TableColumn", action, TableCapabilities.CheckConstraint)) {
+				uniqueEditor = new UniqueConstraintEditorWidget (schemaProvider, action, table, columns, constraints);
 				uniqueEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (uniqueEditor, new Label (GettextCatalog.GetString ("Unique")));
 			}
 
 			ShowAll ();
-			
-			Runtime.LoggingService.Error ("COEW: Initialize 2");
 		}
 		
 		private void OnContentChanged (object sender, EventArgs args)

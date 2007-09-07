@@ -80,7 +80,7 @@ namespace MonoDevelop.Database.Components {
         private Gtk.Button buttonOk;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Components.DatabaseConnectionSettingsDialog
             this.Name = "MonoDevelop.Database.Components.DatabaseConnectionSettingsDialog";
             this.TypeHint = ((Gdk.WindowTypeHint)(1));
@@ -328,6 +328,7 @@ namespace MonoDevelop.Database.Components {
             this.label1.Name = "label1";
             this.label1.LabelProp = Mono.Unix.Catalog.GetString("General");
             this.notebook.SetTabLabel(this.tableGeneral, this.label1);
+            this.label1.ShowAll();
             // Container child notebook.Gtk.Notebook+NotebookChild
             this.tableAdvanced = new Gtk.Table(((uint)(4)), ((uint)(2)), false);
             this.tableAdvanced.Name = "tableAdvanced";
@@ -425,6 +426,7 @@ namespace MonoDevelop.Database.Components {
             this.label2.Name = "label2";
             this.label2.LabelProp = Mono.Unix.Catalog.GetString("Advanced");
             this.notebook.SetTabLabel(this.tableAdvanced, this.label2);
+            this.label2.ShowAll();
             w1.Add(this.notebook);
             Gtk.Box.BoxChild w30 = ((Gtk.Box.BoxChild)(w1[this.notebook]));
             w30.Position = 0;

@@ -28,30 +28,15 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum ParameterMetaData
+	public enum PrimaryKeyConstraintCapabilities
 	{
+		None = 0,
+		
 		Name,
 		Owner,
-		Comment,
 		Definition,
 		Schema,
-		DataType,
-		Position,
-		Direction
-	}
-	
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class ParameterMetaDataAttribute : Attribute
-	{
-		private ParameterMetaData meta;
-		
-		public ParameterMetaDataAttribute (ParameterMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public ParameterMetaData ParameterMetaData {
-			get { return meta; }
-		}
+		IsColumnConstraint,
+		Columns
 	}
 }

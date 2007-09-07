@@ -154,7 +154,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Create);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("View", SchemaActions.Create);
 		}
 	}
 }

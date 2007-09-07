@@ -41,12 +41,15 @@ namespace MonoDevelop.Database.Designer
 		
 		private ISchemaProvider schemaProvider;
 		
-		public IndicesEditorWidget(ISchemaProvider schemaProvider)
+		private SchemaActions action;
+		
+		public IndicesEditorWidget(ISchemaProvider schemaProvider, SchemaActions action)
 		{
 			if (schemaProvider == null)
 				throw new ArgumentNullException ("schemaProvider");
 			
 			this.schemaProvider = schemaProvider;
+			this.action = action;
 
 			this.Build();
 		}

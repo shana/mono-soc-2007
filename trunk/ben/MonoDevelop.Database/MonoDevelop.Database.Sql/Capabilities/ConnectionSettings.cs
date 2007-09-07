@@ -28,44 +28,15 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum TableMetaData
+	public enum ConnectionSettingsCapabilities
 	{
-		Create,
-		Alter,
-		Drop,
-		Rename,
+		None = 0,
 		
-		Name,
-		TableSpaceName,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		IsSystem,
-		Columns,
-		PrimaryKeyConstraint,
-		ForeignKeyConstraint,
-		CheckConstraint,
-		UniqueConstraint,
-		Triggers,
-		
-		CanAppendColumn,
-		CanInsertColumn,
-		CanRemoveColumn
-	}
-
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class TableMetaDataAttribute : Attribute
-	{
-		private TableMetaData meta;
-		
-		public TableMetaDataAttribute (TableMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public TableMetaData TableMetaData {
-			get { return meta; }
-		}
+		Username,
+		Password,
+		Server,
+		Port,
+		ListDatabases,
+		SelectDatabase
 	}
 }

@@ -26,33 +26,55 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
+using Mono.Addins;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface IDbFactory
+	public static class CapabilitiesUtility
 	{
-		string Identifier { get; }
-		
-		string Name { get; }
-		
-		ISqlDialect Dialect { get; }
-		
-		IConnectionProvider ConnectionProvider { get; }
-		
-		IGuiProvider GuiProvider { get; }
+		private static Dictionary<string, Type> types;
 
-		DatabaseConnectionSettings GetDefaultConnectionSettings ();
+		static CapabilitiesUtility ()
+		{
+			types = new Dictionary<string, Type> ();
+		}
 
-		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
+		public static void Register (string category, Type type)
+		{
+			if (category == null)
+				throw new ArgumentNullException ("category");
+			if (type == null)
+				throw new ArgumentNullException ("type");
+
+			if (types.ContainsKey (category)) {
+				types[category] = type;
+				Runtime.LoggingService.WarnFormat ("Duplicate CapabilityFlags for category {0}.", category);
+			} else {
+				types.Add (category, type);
+			}
+		}
+
+		public static int Parse (string category, string flags)
+		{
+			if (category == null)
+				throw new ArgumentNullException ("category");
+			
+			Type type = null;
+			if (!string.IsNullOrEmpty (flags) && types.TryGetValue (category, out type))
+				return (int)Enum.Parse (type, flags, true);
+			return 0;
+		}
 		
-		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
-		
-		SchemaActions GetSupportedActions (string category);
-		void SetSupportedActions (string category, SchemaActions actions);
-		bool IsActionSupported (string category, SchemaActions action);
-		
-		int GetCapabilities (string category, SchemaActions action);
-		void SetCapabilities (string category, SchemaActions action, int flags);
-		bool IsCapabilitySupported (string category, SchemaActions action, Enum capability);
+		public static Type GetType (string category)
+		{
+			if (category == null)
+				throw new ArgumentNullException ("category");
+			
+			Type type = null;
+			if (types.TryGetValue (category, out type))
+				return type;
+			return null;
+		}
 	}
 }

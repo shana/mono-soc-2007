@@ -30,7 +30,7 @@ namespace MonoDevelop.Database.Designer {
         private MonoDevelop.Database.Components.SelectColumnWidget columnSelecter;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.UniqueConstraintEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.UniqueConstraintEditorWidget";

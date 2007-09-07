@@ -18,7 +18,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.TextView textComment;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.CommentEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.CommentEditorWidget";

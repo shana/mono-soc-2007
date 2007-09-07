@@ -37,14 +37,6 @@ namespace MonoDevelop.Database.Sql
 {
 	// see: http://www.sqlite.org/faq.html
 	// http://www.sqlite.org/google-talk-slides/page-021.html
-	[DatabaseMetaData (DatabaseMetaData.Create | DatabaseMetaData.Drop)]
-	[TableMetaData (TableMetaData.Create | TableMetaData.Alter | TableMetaData.Drop | TableMetaData.Rename | TableMetaData.Name | TableMetaData.Schema | TableMetaData.Columns | TableMetaData.Definition | TableMetaData.Triggers | TableMetaData.IsSystem | TableMetaData.PrimaryKeyConstraint | TableMetaData.CheckConstraint | TableMetaData.UniqueConstraint | TableMetaData.CanAppendColumn)]
-	[ViewMetaData (ViewMetaData.Create | ViewMetaData.Drop | ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
-	[TableColumnMetaData (ColumnMetaData.Name | ColumnMetaData.Definition | ColumnMetaData.Schema | ColumnMetaData.DataType | ColumnMetaData.DefaultValue | ColumnMetaData.Nullable | ColumnMetaData.Position | ColumnMetaData.PrimaryKeyConstraint | ColumnMetaData.CheckConstraint | ColumnMetaData.UniqueConstraint)]
-	[PrimaryKeyConstraintMetaData (PrimaryKeyConstraintMetaData.Name | PrimaryKeyConstraintMetaData.Columns | PrimaryKeyConstraintMetaData.IsColumnConstraint)]
-	[CheckConstraintMetaData (CheckConstraintMetaData.Name | CheckConstraintMetaData.Columns | CheckConstraintMetaData.IsColumnConstraint | CheckConstraintMetaData.Source)]
-	[UniqueConstraintMetaData (UniqueConstraintMetaData.Name | UniqueConstraintMetaData.Columns | UniqueConstraintMetaData.IsColumnConstraint)]
-	[TriggerMetaData (TriggerMetaData.Name | TriggerMetaData.TableName | TriggerMetaData.TriggerType | TriggerMetaData.TriggerEvent | TriggerMetaData.Position | TriggerMetaData.IsActive | TriggerMetaData.Source | TriggerMetaData.Create | TriggerMetaData.Drop)]
 	public class SqliteSchemaProvider : AbstractSchemaProvider
 	{
 		public SqliteSchemaProvider (IConnectionPool connectionPool)

@@ -28,35 +28,19 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum UserMetaData
+	public enum IndexCapabilities
 	{
-		Create,
-		Alter,
-		Drop,
-		Rename,
+		None = 0,
 		
 		Name,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
-		Username,
-		Password,
-		PasswordExpiration
-	}
-
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class UserMetaDataAttribute : Attribute
-	{
-		private UserMetaData meta;
-		
-		public UserMetaDataAttribute (UserMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public UserMetaData UserMetaData {
-			get { return meta; }
-		}
+		TableName,
+		IndexType,
+		Columns,
+		ColumnLength,
+		ColumnSort
 	}
 }

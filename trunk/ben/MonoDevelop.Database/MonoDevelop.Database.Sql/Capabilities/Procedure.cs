@@ -28,32 +28,21 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum IndexMetaData
+	public enum ProcedureCapabilities
 	{
+		None = 0,
+		
 		Name,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
-		TableName,
-		IndexType,
-		Columns,
-		ColumnLength,
-		ColumnSort
-	}
-	
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class IndexMetaDataAttribute : Attribute
-	{
-		private IndexMetaData meta;
-		
-		public IndexMetaDataAttribute (IndexMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public IndexMetaData IndexMetaData {
-			get { return meta; }
-		}
+		IsSystem,
+		Language,
+		Parameters,
+
+		InsertParameter,
+		AppendParameter,
+		RemoveParameter
 	}
 }

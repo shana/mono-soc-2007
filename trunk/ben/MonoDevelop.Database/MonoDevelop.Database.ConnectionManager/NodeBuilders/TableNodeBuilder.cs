@@ -94,23 +94,23 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			TableNode node = state as TableNode;
 			ITreeBuilder builder = Context.GetTreeBuilder (state);
-			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
 		
-			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute)))
+			if (fac.IsCapabilitySupported ("Table", SchemaActions.Schema, TableCapabilities.Columns))
 				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ColumnsNode (node.ConnectionContext, node.Table));
 				});
 			
-			if (MetaDataService.IsApplied (provider, typeof (CheckConstraintMetaDataAttribute))
-				|| MetaDataService.IsApplied (provider, typeof (ForeignKeyConstraintMetaDataAttribute))
-				|| MetaDataService.IsApplied (provider, typeof (PrimaryKeyConstraintMetaDataAttribute))
-				|| MetaDataService.IsApplied (provider, typeof (UniqueConstraintMetaDataAttribute))
+			if (fac.IsCapabilitySupported ("Table", SchemaActions.Schema, TableCapabilities.PrimaryKeyConstraint)
+				|| fac.IsCapabilitySupported ("Table", SchemaActions.Schema, TableCapabilities.ForeignKeyConstraint)
+				|| fac.IsCapabilitySupported ("Table", SchemaActions.Schema, TableCapabilities.CheckConstraint)
+				|| fac.IsCapabilitySupported ("Table", SchemaActions.Schema, TableCapabilities.UniqueConstraint)
 			)
 				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ConstraintsNode (node.ConnectionContext, node.Table));
 				});
 			
-			if (MetaDataService.IsApplied (provider, typeof (TriggerMetaDataAttribute)))
+			if (fac.IsCapabilitySupported ("Table", SchemaActions.Schema, TableCapabilities.Trigger))
 				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new TriggersNode (node.ConnectionContext));
 				});
@@ -338,21 +338,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Drop);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Table", SchemaActions.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Rename);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Table", SchemaActions.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterTable)]
 		protected void OnUpdateAlterTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Alter);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Table", SchemaActions.Alter);
 		}
 	}
 }

@@ -32,10 +32,27 @@ namespace MonoDevelop.Database.Sql
 {
 	public class DbFactoryCodon : TypeExtensionNode
 	{
+		private void BuildChildren (IDbFactory fac)
+		{
+			foreach (ExtensionNode ob in ChildNodes) {
+				ActionCodon actionCodon = ob as ActionCodon;
+				if (actionCodon != null) {
+					fac.SetSupportedActions (actionCodon.Category, actionCodon.Actions);
+				} else {
+					CapabilitiesCodon capabilitiesCodon = ob as CapabilitiesCodon;
+					if (capabilitiesCodon != null)
+						fac.SetCapabilities (capabilitiesCodon.Category, capabilitiesCodon.Actions, capabilitiesCodon.ParsedFlags);				
+				}
+			}
+		}
+		
 		public IDbFactory DbFactory {
 			get {
 				try {
-					return (IDbFactory)base.CreateInstance ();
+					IDbFactory fac = (IDbFactory)base.CreateInstance ();
+					BuildChildren (fac);
+					return fac;
+					
 				} catch {
 					return null;
 				}

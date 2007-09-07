@@ -193,21 +193,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Drop);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("User", SchemaActions.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Rename);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("User", SchemaActions.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterUser)]
 		protected void OnUpdateAlterUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Alter);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("User", SchemaActions.Alter);
 		}
 	}
 }

@@ -44,6 +44,8 @@ namespace MonoDevelop.Database.Designer
 		private ConstraintSchemaCollection constraints;
 		private TableSchema table;
 		
+		private SchemaActions action;
+		
 		private ListStore store;
 		
 		private const int colNameIndex = 0;
@@ -51,7 +53,7 @@ namespace MonoDevelop.Database.Designer
 		private const int colColumnsIndex = 2;
 		private const int colObjIndex = 3;
 		
-		public UniqueConstraintEditorWidget (ISchemaProvider schemaProvider, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
+		public UniqueConstraintEditorWidget (ISchemaProvider schemaProvider, SchemaActions action, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
 		{
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
@@ -66,6 +68,7 @@ namespace MonoDevelop.Database.Designer
 			this.table = table;
 			this.columns = columns;
 			this.constraints = constraints;
+			this.action = action;
 			
 			this.Build();
 			

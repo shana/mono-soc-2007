@@ -22,7 +22,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.Button buttonOk;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.PreviewDialog
             this.Name = "MonoDevelop.Database.Designer.PreviewDialog";
             this.Title = Mono.Unix.Catalog.GetString("Preview");

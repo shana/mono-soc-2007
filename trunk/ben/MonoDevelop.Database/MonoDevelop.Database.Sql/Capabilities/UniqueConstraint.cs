@@ -28,30 +28,15 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum CheckConstraintMetaData
+	public enum UniqueConstraintCapabilities
 	{
+		None = 0,
+		
 		Name,
 		Owner,
-		Comment,
 		Definition,
 		Schema,
-		Columns,
 		IsColumnConstraint,
-		Source
-	}
-
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class CheckConstraintMetaDataAttribute : Attribute
-	{
-		private CheckConstraintMetaData meta;
-		
-		public CheckConstraintMetaDataAttribute (CheckConstraintMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public CheckConstraintMetaData CheckConstraintMetaData {
-			get { return meta; }
-		}
+		Columns
 	}
 }

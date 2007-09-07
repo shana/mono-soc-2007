@@ -28,29 +28,21 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum PrimaryKeyConstraintMetaData
+	public enum ViewCapabilities
 	{
+		None = 0,
+		
 		Name,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
+		IsSystem,
+		Statement,
 		Columns,
-		IsColumnConstraint
-	}
-	
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class PrimaryKeyConstraintMetaDataAttribute : Attribute
-	{
-		private PrimaryKeyConstraintMetaData meta;
 		
-		public PrimaryKeyConstraintMetaDataAttribute (PrimaryKeyConstraintMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public PrimaryKeyConstraintMetaData PrimaryKeyConstraintMetaData {
-			get { return meta; }
-		}
+		AppendColumn,
+		InsertColumn,
+		RemoveColumn
 	}
 }

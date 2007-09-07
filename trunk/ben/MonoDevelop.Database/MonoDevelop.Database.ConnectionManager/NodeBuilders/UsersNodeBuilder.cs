@@ -149,7 +149,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateUser (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsUserMetaDataSupported (node.ConnectionContext.SchemaProvider, UserMetaData.Create);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("User", SchemaActions.Create);
 		}
 	}
 }

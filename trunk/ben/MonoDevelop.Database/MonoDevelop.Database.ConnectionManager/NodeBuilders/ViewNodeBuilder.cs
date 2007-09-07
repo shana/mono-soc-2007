@@ -89,9 +89,9 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			ViewNode node = state as ViewNode;
 			ITreeBuilder builder = Context.GetTreeBuilder (state);
-			ISchemaProvider provider = node.ConnectionContext.SchemaProvider;
-			
-			if (MetaDataService.IsApplied (provider, typeof (ColumnMetaDataAttribute))) {
+			IDbFactory fac = node.ConnectionContext.DbFactory;
+
+			if (fac.IsActionSupported ("ViewColumn", SchemaActions.Schema)) {
 				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ColumnsNode (node.ConnectionContext, node.View));
 					builder.Expanded = true;
@@ -212,21 +212,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Drop);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("View", SchemaActions.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Rename);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("View", SchemaActions.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterView)]
 		protected void OnUpdateAlterView (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsViewMetaDataSupported (node.ConnectionContext.SchemaProvider, ViewMetaData.Alter);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("View", SchemaActions.Alter);
 		}
 	}
 }

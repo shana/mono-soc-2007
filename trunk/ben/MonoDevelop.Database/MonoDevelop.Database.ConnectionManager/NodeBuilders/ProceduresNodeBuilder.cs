@@ -154,7 +154,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Create);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Procedure", SchemaActions.Create);
 		}
 	}
 }

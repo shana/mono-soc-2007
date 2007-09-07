@@ -1,3 +1,15 @@
+2007-09-07  Ben Motmans <ben.motmans@gmail.com> 
+
+	* Dialogs/TableEditorDialog.cs, Dialogs/ProcedureEditorDialog.cs,
+	  Dialogs/ViewEditorDialog.cs, Dialogs/UserEditorDialog.cs,
+	  Dialogs/CreateDatabaseDialog.cs, Widgets/ColumnsEditorWidget.cs,
+	  Widgets/PrimaryKeyConstraintEditorWidget.cs,
+	  Widgets/CheckConstraintEditorWidget.cs, Widgets/TriggersEditorWidget.cs,
+	  Widgets/ConstraintsEditorWidget.cs,
+	  Widgets/ForeignKeyConstraintEditorWidget.cs,
+	  Widgets/UniqueConstraintEditorWidget.cs, Widgets/IndicesEditorWidget.cs:
+	  improved capabilities system
+
 2007-08-29  Ben Motmans <ben.motmans@gmail.com> 
 
 	* Dialogs/TableEditorDialog.cs: retrieve and store the list of database

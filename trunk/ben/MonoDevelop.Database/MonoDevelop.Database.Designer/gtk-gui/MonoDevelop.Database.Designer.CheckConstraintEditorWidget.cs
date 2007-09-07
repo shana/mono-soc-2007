@@ -36,7 +36,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.Label GtkLabel2;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.CheckConstraintEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.CheckConstraintEditorWidget";

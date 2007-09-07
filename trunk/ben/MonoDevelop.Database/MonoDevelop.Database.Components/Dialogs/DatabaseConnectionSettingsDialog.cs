@@ -392,14 +392,14 @@ namespace MonoDevelop.Database.Components
 		
 		protected virtual void SetWidgetStates (IDbFactory fac)
 		{
-			ConnectionSettingsMetaDataAttribute attrib = MetaDataService.GetConnectionSettingsMetaData (fac);
+			ConnectionSettingsCapabilities csc = (ConnectionSettingsCapabilities)fac.GetCapabilities ("ConnectionSettings", SchemaActions.Schema);
 			
-			enableServerEntry = attrib == null ? false : attrib.RequiresServer;
-			enablePortEntry = attrib == null ? false : attrib.RequiresPort;
-			enableUsernameEntry = attrib == null ? false : attrib.RequiresUsername;
-			enablePasswordEntry = attrib == null ? false : attrib.RequiresPassword;
-			enableOpenButton = attrib == null ? false : attrib.CanSelectDatabase;
-			enableRefreshButton = attrib == null ? false : attrib.CanListDatabases;
+			enableServerEntry = (csc & ConnectionSettingsCapabilities.Server) == ConnectionSettingsCapabilities.Server;
+			enablePortEntry = (csc & ConnectionSettingsCapabilities.Port) == ConnectionSettingsCapabilities.Port;
+			enableUsernameEntry = (csc & ConnectionSettingsCapabilities.Username) == ConnectionSettingsCapabilities.Username;
+			enablePasswordEntry = (csc & ConnectionSettingsCapabilities.Password) == ConnectionSettingsCapabilities.Password;
+			enableOpenButton = (csc & ConnectionSettingsCapabilities.SelectDatabase) == ConnectionSettingsCapabilities.SelectDatabase;
+			enableRefreshButton = (csc & ConnectionSettingsCapabilities.ListDatabases) == ConnectionSettingsCapabilities.ListDatabases;
 			
 			entryServer.Sensitive = enableServerEntry;
 			spinPort.Sensitive = enablePortEntry;

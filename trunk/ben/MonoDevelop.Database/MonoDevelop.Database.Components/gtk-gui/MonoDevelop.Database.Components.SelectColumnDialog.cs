@@ -26,7 +26,7 @@ namespace MonoDevelop.Database.Components {
         private Gtk.Button buttonOk;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Components.SelectColumnDialog
             this.Name = "MonoDevelop.Database.Components.SelectColumnDialog";
             this.Title = Mono.Unix.Catalog.GetString("Select Column");

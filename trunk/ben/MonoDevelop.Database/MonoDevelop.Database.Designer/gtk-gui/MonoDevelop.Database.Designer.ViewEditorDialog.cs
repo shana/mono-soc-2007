@@ -32,7 +32,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.Button buttonOk;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.ViewEditorDialog
             this.Name = "MonoDevelop.Database.Designer.ViewEditorDialog";
             this.WindowPosition = ((Gtk.WindowPosition)(4));

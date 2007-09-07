@@ -28,56 +28,21 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum ColumnMetaData
+	public enum TriggerCapabilities
 	{
+		None = 0,
+		
 		Name,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
-		DataType,
-		DefaultValue,
-		Nullable,
-		Length,
-		Precision,
-		Scale,
+		TableName,
+		TriggerType,
+		TriggerEvent,
+		TriggerFireType,
 		Position,
-		PrimaryKeyConstraint,
-		ForeignKeyConstraint,
-		CheckConstraint,
-		UniqueConstraint
-	}
-	
-	[AttributeUsage (AttributeTargets.Class)]
-	public abstract class ColumnMetaDataAttribute : Attribute
-	{
-		private ColumnMetaData meta;
-		
-		public ColumnMetaDataAttribute (ColumnMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public ColumnMetaData ColumnMetaData {
-			get { return meta; }
-		}
-	}
-		
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class TableColumnMetaDataAttribute : ColumnMetaDataAttribute
-	{
-		public TableColumnMetaDataAttribute (ColumnMetaData meta)
-			: base (meta)
-		{
-		}
-	}
-		
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class ViewColumnMetaDataAttribute : ColumnMetaDataAttribute
-	{
-		public ViewColumnMetaDataAttribute (ColumnMetaData meta)
-			: base (meta)
-		{
-		}
+		IsActive,
+		Source
 	}
 }

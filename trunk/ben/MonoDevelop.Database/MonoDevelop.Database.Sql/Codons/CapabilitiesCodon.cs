@@ -26,33 +26,44 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
+using Mono.Addins;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface IDbFactory
+	[ExtensionNode (Description="The list of supported flags for each database object.")]
+	public class CapabilitiesCodon : ExtensionNode
 	{
-		string Identifier { get; }
+		[NodeAttribute("category", true, "The database object category, eg: Table.")]
+		string category = null;
 		
-		string Name { get; }
-		
-		ISqlDialect Dialect { get; }
-		
-		IConnectionProvider ConnectionProvider { get; }
-		
-		IGuiProvider GuiProvider { get; }
+		[NodeAttribute("action", true, "The database operation for which the flags are valid, eg: Create.")]
+		string action = null;
 
-		DatabaseConnectionSettings GetDefaultConnectionSettings ();
+		[NodeAttribute("flags", true, "Comma seperated list of SchemaAction flags.")]
+		string flags = null;
 
-		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
+		private SchemaActions actions;
+		private int parsedFlags;
+
+		public string Category {
+			get { return category; }
+		}
+
+		public SchemaActions Actions {
+			get { return actions; }	
+		}
 		
-		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
-		
-		SchemaActions GetSupportedActions (string category);
-		void SetSupportedActions (string category, SchemaActions actions);
-		bool IsActionSupported (string category, SchemaActions action);
-		
-		int GetCapabilities (string category, SchemaActions action);
-		void SetCapabilities (string category, SchemaActions action, int flags);
-		bool IsCapabilitySupported (string category, SchemaActions action, Enum capability);
+		public int ParsedFlags {
+			get { return parsedFlags; }	
+		}
+
+		protected override void Read (NodeElement elem)
+		{
+			base.Read (elem);
+			
+			actions = (SchemaActions)Enum.Parse (typeof (SchemaActions), action);
+			parsedFlags = CapabilitiesUtility.Parse (category, flags);
+		}
 	}
 }

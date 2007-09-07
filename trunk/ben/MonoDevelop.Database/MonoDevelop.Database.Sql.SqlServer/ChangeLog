@@ -1,3 +1,9 @@
+2007-09-07  Ben Motmans <ben.motmans@gmail.com> 
+
+	* SqlServerSchemaProvider.cs, SqlServerDbFactory.cs,
+	  MonoDevelop.Database.Sql.SqlServer.addin.xml: improved capabilities
+	  system
+
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
 
 	* Makefile.am, MonoDevelop.Database.Sql.SqlServer.mdp: use project
