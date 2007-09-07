@@ -34,7 +34,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.ScrolledWindow scrolledwindowRight;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.ColumnsEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.ColumnsEditorWidget";

@@ -26,33 +26,35 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
+using Mono.Addins;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Database.Sql
 {
-	public interface IDbFactory
+	[ExtensionNode (Description="The list of supported actions for each database object.")]
+	public class ActionCodon : ExtensionNode
 	{
-		string Identifier { get; }
-		
-		string Name { get; }
-		
-		ISqlDialect Dialect { get; }
-		
-		IConnectionProvider ConnectionProvider { get; }
-		
-		IGuiProvider GuiProvider { get; }
+		[NodeAttribute("category", true, "The database object category, eg: Table.")]
+		string category = null;
 
-		DatabaseConnectionSettings GetDefaultConnectionSettings ();
+		[NodeAttribute("flags", true, "Comma seperated list of SchemaAction flags.")]
+		string flags = null;
 
-		IConnectionPool CreateConnectionPool (DatabaseConnectionContext context);
-		
-		ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool);
-		
-		SchemaActions GetSupportedActions (string category);
-		void SetSupportedActions (string category, SchemaActions actions);
-		bool IsActionSupported (string category, SchemaActions action);
-		
-		int GetCapabilities (string category, SchemaActions action);
-		void SetCapabilities (string category, SchemaActions action, int flags);
-		bool IsCapabilitySupported (string category, SchemaActions action, Enum capability);
+		private SchemaActions actions;
+
+		public string Category {
+			get { return category; }
+		}
+
+		public SchemaActions Actions {
+			get { return actions; }	
+		}
+
+		protected override void Read (NodeElement elem)
+		{
+			base.Read (elem);
+			
+			actions = (SchemaActions)Enum.Parse (typeof (SchemaActions), flags);
+		}
 	}
 }

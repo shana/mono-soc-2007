@@ -28,36 +28,32 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum ForeignKeyConstraintMetaData
+	public enum ColumnCapabilities
 	{
+		None = 0,
+		
 		Name,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
-		Columns,
-		IsColumnConstraint,
-		ReferenceTable,
-		ReferenceColumns,
-		Cascade,
-		Restrict,
-		NoAction,
-		SetDefault,
-		SetNull
-	}
-	
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class ForeignKeyConstraintMetaDataAttribute : Attribute
-	{
-		private ForeignKeyConstraintMetaData meta;
+		DataType,
+		DefaultValue,
+		Nullable,
+		Length,
+		Precision,
+		Scale,
+		Position,
+
+		PrimaryKeyConstraint,
+		ForeignKeyConstraint,
+		CheckConstraint,
+		UniqueConstraint,
 		
-		public ForeignKeyConstraintMetaDataAttribute (ForeignKeyConstraintMetaData meta)
-		{
-			this.meta = meta;
-		}
+		Constraints = PrimaryKeyConstraint | ForeignKeyConstraint | CheckConstraint | UniqueConstraint,
 		
-		public ForeignKeyConstraintMetaData ForeignKeyConstraintMetaData {
-			get { return meta; }
-		}
+		AppendConstraint,
+		InsertConstraint,
+		RemoveConstraint
 	}
 }

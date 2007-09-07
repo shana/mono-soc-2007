@@ -1,3 +1,27 @@
+2007-09-07  Ben Motmans <ben.motmans@gmail.com> 
+
+	* MetaData, MetaData/ViewMetaData.cs, MetaData/DataTypeMetaData.cs,
+	  MetaData/UniqueConstraintMetaData.cs, MetaData/UserMetaData.cs,
+	  MetaData/ConnectionSettingsMetaData.cs, MetaData/ParameterMetaData.cs,
+	  MetaData/CheckConstraintMetaData.cs, MetaData/TableMetaData.cs,
+	  MetaData/ProcedureMetaData.cs, MetaData/ColumnMetaData.cs,
+	  MetaData/MetaDataService.cs, MetaData/PrimaryKeyConstraintMetaData.cs,
+	  MetaData/TriggerMetaData.cs, MetaData/DatabaseMetaData.cs,
+	  MetaData/ForeignKeyConstraintMetaData.cs, MetaData/IndexMetaData.cs,
+	  Codons/CapabilitiesCodon.cs, Codons/DbFactoryCodon.cs,
+	  Codons/ActionCodon.cs, Codons/CapabilityFlagsCodon.cs, Capabilities,
+	  Capabilities/UniqueConstraint.cs, Capabilities/CapabilitiesUtility.cs,
+	  Capabilities/User.cs, Capabilities/Parameter.cs,
+	  Capabilities/ConnectionSettings.cs, Capabilities/SchemaActions.cs,
+	  Capabilities/CheckConstraint.cs, Capabilities/Table.cs,
+	  Capabilities/Procedure.cs, Capabilities/Column.cs,
+	  Capabilities/PrimaryKeyConstraint.cs, Capabilities/Trigger.cs,
+	  Capabilities/ForeignKeyConstraint.cs, Capabilities/Index.cs,
+	  Capabilities/View.cs, ConnectionContextService.cs, IDbFactory.cs,
+	  QueryService.cs, AbstractDbFactory.cs,
+	  MonoDevelop.Database.Sql.addin.xml, MonoDevelop.Database.Sql.mdp:
+	  improved capabilities system
+
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
 
 	* MonoDevelop.Database.Sql.mdp, Makefile.am: use project references instead

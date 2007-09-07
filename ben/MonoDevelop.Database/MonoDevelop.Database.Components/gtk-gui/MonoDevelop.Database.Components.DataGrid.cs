@@ -36,7 +36,7 @@ namespace MonoDevelop.Database.Components {
         private Gtk.Button buttonLast;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Components.DataGrid
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Components.DataGrid";

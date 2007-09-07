@@ -88,9 +88,9 @@ namespace MonoDevelop.Database.ConnectionManager
 		{
 			ProcedureNode node = state as ProcedureNode;
 			ITreeBuilder builder = Context.GetTreeBuilder (state);
-			ISchemaProvider schemaProvider = node.ConnectionContext.SchemaProvider;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
 
-			if (MetaDataService.IsApplied (schemaProvider, typeof (ParameterMetaDataAttribute))) {
+			if (fac.IsCapabilitySupported ("Procedure", SchemaActions.Schema, ProcedureCapabilities.Parameters)) {
 				DispatchService.GuiDispatch (delegate {
 					builder.AddChild (new ParametersNode (node.ConnectionContext, node.Procedure));
 					builder.Expanded = true;
@@ -211,21 +211,21 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Drop);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Procedure", SchemaActions.Drop);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.Rename)]
 		protected void OnUpdateRenameProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Rename);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Procedure", SchemaActions.Rename);
 		}
 		
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterProcedure)]
 		protected void OnUpdateAlterProcedure (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsProcedureMetaDataSupported (node.ConnectionContext.SchemaProvider, ProcedureMetaData.Alter);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Procedure", SchemaActions.Alter);
 		}
 	}
 }

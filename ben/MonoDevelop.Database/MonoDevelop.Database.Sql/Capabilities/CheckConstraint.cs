@@ -28,40 +28,16 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum TriggerMetaData
+	public enum CheckConstraintCapabilities
 	{
-		Create,
-		Alter,
-		Drop,
-		Rename,
-
+		None = 0,
+		
 		Name,
-		TableSpaceName,
 		Owner,
-		Comment,
 		Definition,
 		Schema,
-		TableName,
-		TriggerType,
-		TriggerEvent,
-		TriggerFireType,
-		Position,
-		IsActive,
+		IsColumnConstraint,
+		Columns,
 		Source
-	}
-
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class TriggerMetaDataAttribute : Attribute
-	{
-		private TriggerMetaData meta;
-		
-		public TriggerMetaDataAttribute (TriggerMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public TriggerMetaData TriggerMetaData {
-			get { return meta; }
-		}
 	}
 }

@@ -116,10 +116,8 @@ namespace MonoDevelop.Database.Designer
 		private void CheckOkState ()
 		{
 			DatabaseConnectionContext context = comboConnections.DatabaseConnection;
-			if (context != null) {
-				ConnectionSettingsMetaDataAttribute meta = MetaDataService.GetConnectionSettingsMetaData (context.DbFactory);
-				buttonSelect.Sensitive = meta == null ? false : meta.CanSelectDatabase;
-			}
+			if (context != null)
+				buttonSelect.Sensitive = context.DbFactory.IsCapabilitySupported ("ConnectionSettings", SchemaActions.Schema, ConnectionSettingsCapabilities.SelectDatabase);
 			buttonOk.Sensitive = context != null &&
 				entryDatabase.Text.Length > 0 && entryName.Text.Length > 0;
 		}

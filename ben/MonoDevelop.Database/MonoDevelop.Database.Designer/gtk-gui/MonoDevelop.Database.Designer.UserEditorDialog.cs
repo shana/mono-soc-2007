@@ -26,7 +26,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.Button buttonOk;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.UserEditorDialog
             this.Name = "MonoDevelop.Database.Designer.UserEditorDialog";
             this.WindowPosition = ((Gtk.WindowPosition)(4));

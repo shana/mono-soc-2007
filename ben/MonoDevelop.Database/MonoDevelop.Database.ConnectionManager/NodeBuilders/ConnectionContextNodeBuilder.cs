@@ -110,18 +110,18 @@ namespace MonoDevelop.Database.ConnectionManager
 			
 			builder.Update ();
 			if (connected) {
-				ISchemaProvider provider = context.SchemaProvider;
+				IDbFactory fac = context.DbFactory;
 
-				if (MetaDataService.IsApplied (provider, typeof (TableMetaDataAttribute)))
+				if (fac.IsActionSupported ("Table", SchemaActions.Schema))
 					builder.AddChild (new TablesNode (context));
 
-				if (MetaDataService.IsApplied (provider, typeof (ViewMetaDataAttribute)))
+				if (fac.IsActionSupported ("View", SchemaActions.Schema))
 					builder.AddChild (new ViewsNode (context));
 				
-				if (MetaDataService.IsApplied (provider, typeof (ProcedureMetaDataAttribute)))
+				if (fac.IsActionSupported ("Procedure", SchemaActions.Schema))
 					builder.AddChild (new ProceduresNode (context));
 
-				if (MetaDataService.IsApplied (provider, typeof (UserMetaDataAttribute)))
+				if (fac.IsActionSupported ("User", SchemaActions.Schema))
 					builder.AddChild (new UsersNode (context));
 				
 				//TODO: custom datatypes, sequences, roles, operators, languages, groups and aggregates
@@ -265,14 +265,14 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateDropDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsDatabaseMetaDataSupported (context.SchemaProvider, DatabaseMetaData.Drop);
+			info.Enabled = context.DbFactory.IsActionSupported ("Database", SchemaActions.Drop);
 		}
 
 		[CommandUpdateHandler (ConnectionManagerCommands.AlterDatabase)]
 		protected void OnUpdateAlterDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsDatabaseMetaDataSupported (context.SchemaProvider, DatabaseMetaData.Alter);
+			info.Enabled = context.DbFactory.IsActionSupported ("Database", SchemaActions.Alter);
 		}
 		
 		[CommandHandler (ConnectionManagerCommands.RenameDatabase)]
@@ -285,7 +285,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateRenameDatabase (CommandInfo info)
 		{
 			DatabaseConnectionContext context = (DatabaseConnectionContext) CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsDatabaseMetaDataSupported (context.SchemaProvider, DatabaseMetaData.Rename);
+			info.Enabled = context.DbFactory.IsActionSupported ("Database", SchemaActions.Rename);
 		}
 	}
 }

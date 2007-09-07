@@ -67,9 +67,7 @@ namespace MonoDevelop.Database.Sql
 			}
 			
 			IDbFactory fac = DbFactoryService.GetDbFactory (context.ConnectionSettings);
-
-			ConnectionSettingsMetaDataAttribute attrib = MetaDataService.GetConnectionSettingsMetaData (fac);
-			bool requiresPassword = attrib == null ? false : attrib.RequiresPassword;
+			bool requiresPassword = fac.GetCapabilities ("ConnectionSettings", SchemaActions.Schema) == (int)ConnectionSettingsCapabilities.Password;
 			
 			if (!context.ConnectionSettings.SavePassword && String.IsNullOrEmpty (context.ConnectionSettings.Password) && requiresPassword) {
 				string password = Services.MessageService.GetPassword (

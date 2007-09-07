@@ -18,7 +18,7 @@ namespace MonoDevelop.Database.Components {
         private Gtk.Button button462;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Components.ShowTextDialog
             this.Name = "MonoDevelop.Database.Components.ShowTextDialog";
             this.Title = Mono.Unix.Catalog.GetString("Text");

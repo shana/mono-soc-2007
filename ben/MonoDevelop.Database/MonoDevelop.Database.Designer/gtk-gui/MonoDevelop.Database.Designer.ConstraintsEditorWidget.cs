@@ -14,7 +14,7 @@ namespace MonoDevelop.Database.Designer {
     public partial class ConstraintsEditorWidget {
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.ConstraintsEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.ConstraintsEditorWidget";

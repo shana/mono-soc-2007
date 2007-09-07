@@ -36,16 +36,6 @@ using System.Collections.Generic;
 using MonoDevelop.Core;
 namespace MonoDevelop.Database.Sql
 {
-	[DatabaseMetaData (DatabaseMetaData.Create | DatabaseMetaData.Alter | DatabaseMetaData.Drop | DatabaseMetaData.Rename)]
-	[TableMetaData (TableMetaData.Create | TableMetaData.Alter | TableMetaData.Drop | TableMetaData.Rename | TableMetaData.Name | TableMetaData.Schema | TableMetaData.Columns | TableMetaData.Definition | TableMetaData.Triggers | TableMetaData.IsSystem | TableMetaData.PrimaryKeyConstraint | TableMetaData.CheckConstraint | TableMetaData.UniqueConstraint | TableMetaData.ForeignKeyConstraint | TableMetaData.CanAppendColumn)]
-	[ViewMetaData (ViewMetaData.Create | ViewMetaData.Alter | ViewMetaData.Drop | ViewMetaData.Rename | ViewMetaData.Name | ViewMetaData.Schema | ViewMetaData.Definition)]
-	[ProcedureMetaData (ProcedureMetaData.Create | ProcedureMetaData.Alter | ProcedureMetaData.Drop | ProcedureMetaData.Rename | ProcedureMetaData.Name | ProcedureMetaData.Schema | ProcedureMetaData.Definition)]
-	[TableColumnMetaData (ColumnMetaData.Name | ColumnMetaData.Definition | ColumnMetaData.Schema | ColumnMetaData.DataType | ColumnMetaData.DefaultValue | ColumnMetaData.Nullable | ColumnMetaData.Position | ColumnMetaData.PrimaryKeyConstraint | ColumnMetaData.CheckConstraint | ColumnMetaData.UniqueConstraint | ColumnMetaData.ForeignKeyConstraint)]
-	[ParameterMetaData (ParameterMetaData.Name | ParameterMetaData.DataType | ParameterMetaData.Direction)]   
-	[PrimaryKeyConstraintMetaData (PrimaryKeyConstraintMetaData.Name | PrimaryKeyConstraintMetaData.Columns | PrimaryKeyConstraintMetaData.IsColumnConstraint)]
-	[CheckConstraintMetaData (CheckConstraintMetaData.Name | CheckConstraintMetaData.Columns | CheckConstraintMetaData.IsColumnConstraint | CheckConstraintMetaData.Source)]
-	[UniqueConstraintMetaData (UniqueConstraintMetaData.Name | UniqueConstraintMetaData.Columns | UniqueConstraintMetaData.IsColumnConstraint)]
-	[TriggerMetaData (TriggerMetaData.Name | TriggerMetaData.TableName | TriggerMetaData.TriggerType | TriggerMetaData.TriggerEvent | TriggerMetaData.Position | TriggerMetaData.IsActive | TriggerMetaData.Source | TriggerMetaData.Create | TriggerMetaData.Alter | TriggerMetaData.Drop | TriggerMetaData.Rename)]
 	public class MySqlSchemaProvider : AbstractSchemaProvider
 	{
 		public MySqlSchemaProvider (IConnectionPool connectionPool)

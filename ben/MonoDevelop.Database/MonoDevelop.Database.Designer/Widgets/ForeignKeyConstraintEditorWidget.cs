@@ -57,9 +57,11 @@ namespace MonoDevelop.Database.Designer
 		private ListStore store;
 		private ListStore storeActions;
 		private ListStore storeTables;
+		
+		private SchemaActions action;
 
 		//TODO: difference between columns and reference columns + combo events
-		public ForeignKeyConstraintEditorWidget (ISchemaProvider schemaProvider, TableSchemaCollection tables, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
+		public ForeignKeyConstraintEditorWidget (ISchemaProvider schemaProvider, SchemaActions action, TableSchemaCollection tables, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
 		{
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
@@ -77,26 +79,27 @@ namespace MonoDevelop.Database.Designer
 			this.tables = tables;
 			this.columns = columns;
 			this.constraints = constraints;
+			this.action = action;
 			
 			this.Build();
 			
 			store = new ListStore (typeof (string), typeof (string), typeof (bool), typeof (string), typeof (string), typeof (string), typeof (string), typeof (object));
 			listFK.Model = store;
 			
-			storeActions = new ListStore (typeof (string), typeof (long));
+			storeActions = new ListStore (typeof (string), typeof (int));
 			storeTables = new ListStore (typeof (string));
 			
-			
-			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.Cascade))
-				storeActions.AppendValues ("Cascade", ForeignKeyConstraintMetaData.Cascade);
-			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.Restrict))
-				storeActions.AppendValues ("Restrict", ForeignKeyConstraintMetaData.Restrict);
-			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.NoAction))
-				storeActions.AppendValues ("No Action", ForeignKeyConstraintMetaData.NoAction);
-			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.SetNull))
-				storeActions.AppendValues ("Set Null", ForeignKeyConstraintMetaData.SetNull);
-			if (MetaDataService.IsForeignKeyConstraintMetaDataSupported (schemaProvider, ForeignKeyConstraintMetaData.SetDefault))
-				storeActions.AppendValues ("Set Default", ForeignKeyConstraintMetaData.SetDefault);
+			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
+			if (fac.IsCapabilitySupported ("ForeignKeyConstraint", action,  ForeignKeyConstraintCapabilities.Cascade))
+				storeActions.AppendValues ("Cascade", ForeignKeyAction.Cascade);
+			if (fac.IsCapabilitySupported ("ForeignKeyConstraint", action,  ForeignKeyConstraintCapabilities.Restrict))
+				storeActions.AppendValues ("Restrict", ForeignKeyAction.Restrict);
+			if (fac.IsCapabilitySupported ("ForeignKeyConstraint", action,  ForeignKeyConstraintCapabilities.NoAction))
+				storeActions.AppendValues ("No Action", ForeignKeyAction.NoAction);
+			if (fac.IsCapabilitySupported ("ForeignKeyConstraint", action,  ForeignKeyConstraintCapabilities.SetNull))
+				storeActions.AppendValues ("Set Null", ForeignKeyAction.SetNull);
+			if (fac.IsCapabilitySupported ("ForeignKeyConstraint", action,  ForeignKeyConstraintCapabilities.SetDefault))
+				storeActions.AppendValues ("Set Default", ForeignKeyAction.SetDefault);
 
 			foreach (TableSchema tbl in tables)
 				if (tbl.Name != table.Name)

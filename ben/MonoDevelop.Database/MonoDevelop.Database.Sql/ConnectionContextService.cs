@@ -48,7 +48,7 @@ namespace MonoDevelop.Database.Sql
 
 		static ConnectionContextService ()
 		{
-			configFile = Path.Combine (Runtime.Properties.ConfigDirectory, "MonoDevelop.Database.ConnectionManager.xml");
+			configFile = Path.Combine (PropertyService.ConfigPath, "MonoDevelop.Database.ConnectionManager.xml");
 			Initialize (configFile);
 		}
 		

@@ -121,27 +121,46 @@
     <File name="./Schema/ConstraintType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Collections/DataTypeSchemaCollection.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ParameterType.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/TableMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/ViewMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/ProcedureMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/UserMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/UniqueConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/CheckConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/PrimaryKeyConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/ForeignKeyConstraintMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/TriggerMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/ColumnMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/ParameterMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/MetaDataService.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/ConnectionSettingsMetaData.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/DataTypeMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/TableMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/ViewMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/ProcedureMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/UserMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/UniqueConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/CheckConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/PrimaryKeyConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/ForeignKeyConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/TriggerMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/ColumnMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/ParameterMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/MetaDataService.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/ConnectionSettingsMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./MetaData/DataTypeMetaData.cs" subtype="Code" buildaction="Nothing" />
     <File name="./Collections/SortedCollectionItemEventArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/DatabaseMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/DatabaseMetaData.cs" subtype="Code" buildaction="Nothing" />
     <File name="./Providers/IGuiProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/TriggerFireType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/IndexType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ForeignKeyAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/IndexMetaData.cs" subtype="Code" buildaction="Compile" />
+    <File name="./MetaData/IndexMetaData.cs" subtype="Code" buildaction="Nothing" />
+    <File name="./Capabilities/Table.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/View.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/Procedure.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/PrimaryKeyConstraint.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/ForeignKeyConstraint.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/CheckConstraint.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/UniqueConstraint.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/Trigger.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/Column.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/Parameter.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Codons/ActionCodon.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Codons/CapabilityFlagsCodon.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/CapabilitiesUtility.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/ConnectionSettings.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/Index.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/SchemaActions.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Capabilities/User.cs" subtype="Code" buildaction="Compile" />
+    <File name="./Codons/CapabilitiesCodon.cs" subtype="Code" buildaction="Compile" />
+    <File name="./AbstractDbFactory.cs" subtype="Code" buildaction="Compile" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

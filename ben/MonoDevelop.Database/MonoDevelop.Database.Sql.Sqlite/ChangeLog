@@ -1,3 +1,8 @@
+2007-09-07  Ben Motmans <ben.motmans@gmail.com> 
+
+	* SqliteSchemaProvider.cs, SqliteDbFactory.cs,
+	  MonoDevelop.Database.Sql.Sqlite.addin.xml: improved capabilities system
+
 2007-08-28  Ben Motmans <ben.motmans@gmail.com> 
 
 	* MonoDevelop.Database.Sql.Sqlite.mdp, Makefile.am: use project references

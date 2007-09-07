@@ -46,7 +46,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.Label GtkLabel3;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Designer.ForeignKeyConstraintEditorWidget";

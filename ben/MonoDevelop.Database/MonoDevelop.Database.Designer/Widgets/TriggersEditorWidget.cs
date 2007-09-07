@@ -43,6 +43,8 @@ namespace MonoDevelop.Database.Designer
 		private TableSchema table;
 		private TriggerSchemaCollection triggers;
 		
+		private SchemaActions action;
+		
 		private ListStore store;
 		private ListStore storeTypes;
 		private ListStore storeEvents;
@@ -57,12 +59,13 @@ namespace MonoDevelop.Database.Designer
 		private const int colSourceIndex = 7;
 		private const int colObjIndex = 8;
 		
-		public TriggersEditorWidget (ISchemaProvider schemaProvider)
+		public TriggersEditorWidget (ISchemaProvider schemaProvider, SchemaActions action)
 		{
 			if (schemaProvider == null)
 				throw new ArgumentNullException ("schemaProvider");
 			
 			this.schemaProvider = schemaProvider;
+			this.action = action;
 			
 			this.Build();
 			

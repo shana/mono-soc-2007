@@ -26,7 +26,7 @@ namespace MonoDevelop.Database.Components {
         private Gtk.Button buttonClose;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Components.ShowImageDialog
             this.Name = "MonoDevelop.Database.Components.ShowImageDialog";
             this.Title = Mono.Unix.Catalog.GetString("Image");

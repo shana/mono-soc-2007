@@ -37,7 +37,7 @@ namespace MonoDevelop.Database.Designer
 {
 	public partial class TableEditorDialog : Gtk.Dialog
 	{
-		private bool create;
+		private SchemaActions action;
 		
 		private ISchemaProvider schemaProvider;
 		private TableSchemaCollection tables;
@@ -67,7 +67,7 @@ namespace MonoDevelop.Database.Designer
 			this.schemaProvider = schemaProvider;
 			this.originalTable = table;
 			this.table = table;
-			this.create = create;
+			this.action = create ? SchemaActions.Create : SchemaActions.Alter;
 			
 			this.Build();
 			
@@ -79,15 +79,14 @@ namespace MonoDevelop.Database.Designer
 			notebook = new Notebook ();
 			vboxContent.PackStart (notebook, true, true, 0);
 			
-			columnEditor = new ColumnsEditorWidget (schemaProvider, create);
+			columnEditor = new ColumnsEditorWidget (schemaProvider, action);
 			columnEditor.ContentChanged += new EventHandler (OnContentChanged);
 			notebook.AppendPage (columnEditor, new Label (GettextCatalog.GetString ("Columns")));
 			
 			//TODO: there is a diff between col and table constraints
-			if (MetaDataService.IsApplied (schemaProvider, typeof (PrimaryKeyConstraintMetaDataAttribute),
-				typeof (ForeignKeyConstraintMetaDataAttribute), typeof (CheckConstraintMetaDataAttribute),
-				typeof (UniqueConstraintMetaDataAttribute))) {
-				constraintEditor = new ConstraintsEditorWidget (schemaProvider);
+			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.Constraints)) {
+				constraintEditor = new ConstraintsEditorWidget (schemaProvider, action);
 				constraintEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (constraintEditor, new Label (GettextCatalog.GetString ("Constraints")));
 			}
@@ -96,13 +95,13 @@ namespace MonoDevelop.Database.Designer
 			//indexEditor = new IndicesEditorWidget (schemaProvider);
 			//notebook.AppendPage (indexEditor, new Label (GettextCatalog.GetString ("Indexes")));
 			
-			if (MetaDataService.IsApplied (schemaProvider, typeof (TriggerMetaDataAttribute))) {
-				triggerEditor = new TriggersEditorWidget (schemaProvider);
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.Trigger)) {
+				triggerEditor = new TriggersEditorWidget (schemaProvider, action);
 				triggerEditor.ContentChanged += new EventHandler (OnContentChanged);
 				notebook.AppendPage (triggerEditor, new Label (GettextCatalog.GetString ("Triggers")));
 			}
 			
-			if (MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.Comment)) {
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.Comment)) {
 				commentEditor = new CommentEditorWidget ();
 				notebook.AppendPage (commentEditor, new Label (GettextCatalog.GetString ("Comment")));
 			}
@@ -144,10 +143,10 @@ namespace MonoDevelop.Database.Designer
 				Runtime.LoggingService.Error (ee.StackTrace);
 			}
 
-			if (!create) //make a duplicate if we are going to alter the table
+			if (action == SchemaActions.Alter) //make a duplicate if we are going to alter the table
 				this.table = originalTable.Clone () as TableSchema;
 
-		DispatchService.GuiDispatch (delegate () {
+			DispatchService.GuiDispatch (delegate () {
 				InitializeGui ();
 			});
 		}
@@ -183,7 +182,7 @@ namespace MonoDevelop.Database.Designer
 			if (commentEditor != null)
 				table.Comment = commentEditor.Comment;
 			
-			if (create)
+			if (action == SchemaActions.Create)
 				table.Definition = schemaProvider.GetTableCreateStatement (table);
 			else
 				table.Definition = schemaProvider.GetTableAlterStatement (table);

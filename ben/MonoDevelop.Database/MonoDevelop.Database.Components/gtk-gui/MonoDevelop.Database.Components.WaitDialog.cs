@@ -24,7 +24,7 @@ namespace MonoDevelop.Database.Components {
         private Gtk.ProgressBar progressbar;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Components.WaitDialog
             this.Name = "MonoDevelop.Database.Components.WaitDialog";
             this.Title = Mono.Unix.Catalog.GetString("WaitDialog");

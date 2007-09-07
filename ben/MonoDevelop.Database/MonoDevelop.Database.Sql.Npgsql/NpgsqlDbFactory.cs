@@ -31,22 +31,21 @@ using MonoDevelop.Core.Gui;
 using MonoDevelop.Database.Components;
 namespace MonoDevelop.Database.Sql
 {
-	[ConnectionSettingsMetaData (true, true, true, true, false, false)]
-	public class NpgsqlDbFactory : IDbFactory
+	public class NpgsqlDbFactory : AbstractDbFactory
 	{
 		private ISqlDialect dialect;
 		private IConnectionProvider connectionProvider;
 		private IGuiProvider guiProvider;
 		
-		public string Identifier {
+		public override string Identifier {
 			get { return "Npgsql"; }
 		}
 		
-		public string Name {
+		public override string Name {
 			get { return "PostgreSQL database"; }
 		}
 		
-		public ISqlDialect Dialect {
+		public override ISqlDialect Dialect {
 			get {
 				if (dialect == null)
 					dialect = new NpgsqlDialect ();
@@ -54,7 +53,7 @@ using MonoDevelop.Database.Components;
 			}
 		}
 		
-		public IConnectionProvider ConnectionProvider {
+		public override IConnectionProvider ConnectionProvider {
 			get {
 				if (connectionProvider == null)
 					connectionProvider = new NpgsqlConnectionProvider ();
@@ -62,7 +61,7 @@ using MonoDevelop.Database.Components;
 			}
 		}
 		
-		public IGuiProvider GuiProvider {
+		public override IGuiProvider GuiProvider {
 			get {
 				if (guiProvider == null)
 					guiProvider = new NpgsqlGuiProvider ();
@@ -70,17 +69,17 @@ using MonoDevelop.Database.Components;
 			}
 		}
 		
-		public IConnectionPool CreateConnectionPool (DatabaseConnectionContext context)
+		public override IConnectionPool CreateConnectionPool (DatabaseConnectionContext context)
 		{
 			return new DefaultConnectionPool (this, ConnectionProvider, context);
 		}
 		
-		public ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool)
+		public override ISchemaProvider CreateSchemaProvider (IConnectionPool connectionPool)
 		{
 			return new NpgsqlSchemaProvider (connectionPool);
 		}
 		
-		public DatabaseConnectionSettings GetDefaultConnectionSettings ()
+		public override DatabaseConnectionSettings GetDefaultConnectionSettings ()
 		{
 			DatabaseConnectionSettings settings = new DatabaseConnectionSettings ();
 			settings.ProviderIdentifier = Identifier;

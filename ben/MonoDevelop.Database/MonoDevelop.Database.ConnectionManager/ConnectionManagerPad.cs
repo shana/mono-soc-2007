@@ -29,7 +29,6 @@
 using System;
 using System.IO;
 using MonoDevelop.Core;
-using MonoDevelop.Core.Properties;
 using MonoDevelop.Ide.Gui.Pads;
 using MonoDevelop.Components.Commands;
 

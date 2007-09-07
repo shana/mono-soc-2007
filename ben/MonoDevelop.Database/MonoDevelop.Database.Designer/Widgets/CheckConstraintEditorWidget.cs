@@ -54,7 +54,9 @@ namespace MonoDevelop.Database.Designer
 		private bool columnConstraintsSupported;
 		private bool tableConstraintsSupported;
 		
-		public CheckConstraintEditorWidget (ISchemaProvider schemaProvider, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
+		private SchemaActions action;
+		
+		public CheckConstraintEditorWidget (ISchemaProvider schemaProvider, SchemaActions action, TableSchema table, ColumnSchemaCollection columns, ConstraintSchemaCollection constraints)
 		{
 			if (columns == null)
 				throw new ArgumentNullException ("columns");
@@ -69,6 +71,7 @@ namespace MonoDevelop.Database.Designer
 			this.table = table;
 			this.columns = columns;
 			this.constraints = constraints;
+			this.action = action;
 			
 			this.Build();
 
@@ -110,8 +113,9 @@ namespace MonoDevelop.Database.Designer
 			colColumn.AddAttribute (columnRenderer, "text", colColumnNameIndex);
 			colIsColumnConstraint.AddAttribute (isColumnConstraintRenderer, "active", colIsColumnConstraintIndex);
 
-			columnConstraintsSupported = MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.CheckConstraint);
-			tableConstraintsSupported = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CheckConstraint);
+			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
+			columnConstraintsSupported = fac.IsCapabilitySupported ("TableColumn", action, TableCapabilities.CheckConstraint);
+			tableConstraintsSupported = fac.IsCapabilitySupported ("Table", action, TableCapabilities.CheckConstraint);
 			
 			listCheck.AppendColumn (colName);
 			if (columnConstraintsSupported)

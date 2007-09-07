@@ -56,12 +56,15 @@ namespace MonoDevelop.Database.Designer
 		private ISchemaProvider schemaProvider;
 		private TableSchema table;
 		
-		public ColumnsEditorWidget (ISchemaProvider schemaProvider, bool create)
+		private SchemaActions action;
+		
+		public ColumnsEditorWidget (ISchemaProvider schemaProvider, SchemaActions action)
 		{
 			if (schemaProvider == null)
 				throw new ArgumentNullException ("schemaProvider");
 			
 			this.schemaProvider = schemaProvider;
+			this.action = action;
 
 			this.Build();
 			
@@ -128,15 +131,16 @@ namespace MonoDevelop.Database.Designer
 			colNullable.AddAttribute (nullableRenderer, "active", colNullableIndex);
 			colComment.AddAttribute (commentRenderer, "text", colCommentIndex);
 
-			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.PrimaryKeyConstraint))
+			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
+			if (fac.IsCapabilitySupported ("TableColumn", action, ColumnCapabilities.PrimaryKeyConstraint))
 				treeColumns.AppendColumn (colPK);
 			treeColumns.AppendColumn (colName);
 			treeColumns.AppendColumn (colType);
-			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.Length))
+			if (fac.IsCapabilitySupported ("TableColumn", action, ColumnCapabilities.Length))
 				treeColumns.AppendColumn (colLength);
-			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.Nullable))
+			if (fac.IsCapabilitySupported ("TableColumn", action, ColumnCapabilities.Nullable))
 				treeColumns.AppendColumn (colNullable);
-			if (MetaDataService.IsTableColumnMetaDataSupported (schemaProvider, ColumnMetaData.Comment))
+			if (fac.IsCapabilitySupported ("TableColumn", action, ColumnCapabilities.Comment))
 				treeColumns.AppendColumn (colComment);
 
 			treeColumns.Reorderable = false;
@@ -145,10 +149,10 @@ namespace MonoDevelop.Database.Designer
 			//Gtk# 2.10:treeColumns.EnableGridLines = TreeViewGridLines.Both;
 			treeColumns.EnableSearch = false;
 			
-			if (!create) {
-				buttonAdd.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanAppendColumn);
-				buttonRemove.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanRemoveColumn);
-				buttonUp.Sensitive = buttonDown.Sensitive = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanInsertColumn);
+			if (action == SchemaActions.Alter) {
+				buttonAdd.Sensitive = fac.IsCapabilitySupported ("Table", action, TableCapabilities.AppendColumn);
+				buttonRemove.Sensitive = fac.IsCapabilitySupported ("Table", action, TableCapabilities.RemoveColumn);
+				buttonUp.Sensitive = fac.IsCapabilitySupported ("Table", action, TableCapabilities.InsertColumn);
 			}
 
 			ShowAll ();
@@ -337,9 +341,11 @@ namespace MonoDevelop.Database.Designer
 		
 		private void OnSelectionChanged (object sender, EventArgs e)
 		{
+			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
+			//TODO: check Append if "next" is the last row
 			TreeIter iter;
-			bool sel = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanRemoveColumn);
-			bool next = MetaDataService.IsTableMetaDataSupported (schemaProvider, TableMetaData.CanInsertColumn);
+			bool sel = fac.IsCapabilitySupported ("Table", action, TableCapabilities.RemoveColumn);
+			bool next = fac.IsCapabilitySupported ("Table", action, TableCapabilities.InsertColumn);
 			bool prev = next;
 			
 			if (treeColumns.Selection.GetSelected (out iter)) {

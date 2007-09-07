@@ -13,6 +13,25 @@ REFS =  \
 	-r:System.Xml
 
 FILES =  \
+	AbstractDbFactory.cs \
+	Capabilities/CapabilitiesUtility.cs \
+	Capabilities/CheckConstraint.cs \
+	Capabilities/Column.cs \
+	Capabilities/ConnectionSettings.cs \
+	Capabilities/ForeignKeyConstraint.cs \
+	Capabilities/Index.cs \
+	Capabilities/Parameter.cs \
+	Capabilities/PrimaryKeyConstraint.cs \
+	Capabilities/Procedure.cs \
+	Capabilities/SchemaActions.cs \
+	Capabilities/Table.cs \
+	Capabilities/Trigger.cs \
+	Capabilities/UniqueConstraint.cs \
+	Capabilities/User.cs \
+	Capabilities/View.cs \
+	Codons/ActionCodon.cs \
+	Codons/CapabilitiesCodon.cs \
+	Codons/CapabilityFlagsCodon.cs \
 	Codons/DbFactoryCodon.cs \
 	Collections/ColumnSchemaCollection.cs \
 	Collections/ConstraintSchemaCollection.cs \
@@ -82,22 +101,6 @@ FILES =  \
 	Dialect/Statements/TruncateStatement.cs \
 	Dialect/Statements/UpdateStatement.cs \
 	IDbFactory.cs \
-	MetaData/CheckConstraintMetaData.cs \
-	MetaData/ColumnMetaData.cs \
-	MetaData/ConnectionSettingsMetaData.cs \
-	MetaData/DatabaseMetaData.cs \
-	MetaData/DataTypeMetaData.cs \
-	MetaData/ForeignKeyConstraintMetaData.cs \
-	MetaData/IndexMetaData.cs \
-	MetaData/MetaDataService.cs \
-	MetaData/ParameterMetaData.cs \
-	MetaData/PrimaryKeyConstraintMetaData.cs \
-	MetaData/ProcedureMetaData.cs \
-	MetaData/TableMetaData.cs \
-	MetaData/TriggerMetaData.cs \
-	MetaData/UniqueConstraintMetaData.cs \
-	MetaData/UserMetaData.cs \
-	MetaData/ViewMetaData.cs \
 	Providers/AbstractConnectionProvider.cs \
 	Providers/AbstractSchemaProvider.cs \
 	Providers/IConnectionProvider.cs \

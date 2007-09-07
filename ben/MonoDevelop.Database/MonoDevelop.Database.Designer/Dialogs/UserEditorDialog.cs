@@ -37,7 +37,7 @@ namespace MonoDevelop.Database.Designer
 {
 	public partial class UserEditorDialog : Gtk.Dialog
 	{
-		private bool create;
+		private SchemaActions action;
 		
 		private Notebook notebook;
 		
@@ -55,7 +55,7 @@ namespace MonoDevelop.Database.Designer
 			
 			this.schemaProvider = schemaProvider;
 			this.user = user;
-			this.create = create;
+			this.action = create ? SchemaActions.Create : SchemaActions.Alter;
 			
 			this.Build();
 			

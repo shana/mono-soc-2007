@@ -38,7 +38,7 @@ namespace MonoDevelop.Database.Designer
 {
 	public partial class ViewEditorDialog : Gtk.Dialog
 	{
-		private bool create;
+		private SchemaActions action;
 		
 		private Notebook notebook;
 		
@@ -57,7 +57,7 @@ namespace MonoDevelop.Database.Designer
 			
 			this.schemaProvider = schemaProvider;
 			this.view = view;
-			this.create = create;
+			this.action = create ? SchemaActions.Create : SchemaActions.Alter;
 			
 			this.Build();
 			
@@ -72,7 +72,8 @@ namespace MonoDevelop.Database.Designer
 			sqlEditor.TextChanged += new EventHandler (SqlChanged);
 			notebook.AppendPage (sqlEditor, new Label (GettextCatalog.GetString ("Definition")));
 			
-			if (MetaDataService.IsViewMetaDataSupported (schemaProvider, ViewMetaData.Comment)) {
+			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
+			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.Comment)) {
 				commentEditor = new CommentEditorWidget ();
 				notebook.AppendPage (commentEditor, new Label (GettextCatalog.GetString ("Comment")));
 			}

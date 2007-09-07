@@ -16,7 +16,7 @@ namespace MonoDevelop.Database.Components {
         private Gtk.ScrolledWindow scrolledwindow;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Components.SqlEditorWidget
             Stetic.BinContainer.Attach(this);
             this.Name = "MonoDevelop.Database.Components.SqlEditorWidget";

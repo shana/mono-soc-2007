@@ -160,7 +160,7 @@ namespace MonoDevelop.Database.ConnectionManager
 		protected void OnUpdateCreateTable (CommandInfo info)
 		{
 			BaseNode node = (BaseNode)CurrentNode.DataItem;
-			info.Enabled = MetaDataService.IsTableMetaDataSupported (node.ConnectionContext.SchemaProvider, TableMetaData.Create);
+			info.Enabled = node.ConnectionContext.DbFactory.IsActionSupported ("Table", SchemaActions.Create);
 		}
 	}
 }

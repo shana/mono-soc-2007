@@ -28,35 +28,17 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum ViewMetaData
+	public enum SchemaActions
 	{
+		None = 0,
+		
+		Schema,
+
 		Create,
 		Alter,
 		Drop,
 		Rename,
 
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		IsSystem,
-		Statement,
-		Columns
-	}
-
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class ViewMetaDataAttribute : Attribute
-	{
-		private ViewMetaData meta;
-		
-		public ViewMetaDataAttribute (ViewMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public ViewMetaData ViewMetaData {
-			get { return meta; }
-		}
+		All = Schema | Create | Alter | Drop | Rename
 	}
 }

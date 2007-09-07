@@ -28,39 +28,38 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum DataTypeMetaData
+	public enum TableCapabilities
 	{
+		None = 0,
+		
 		Name,
+		TableSpaceName,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
-		DotNetType,
-		MinLength,
-		DefaultLength,
-		MaxLength,
-		MinPrecision,
-		DefaultPrecision,
-		MaxPrecision,
-		MinScale,
-		DefaultScale,
-		MaxScale,
-		IsNullable,
-		CreateFormat,
-		CreateParameters
-	}
+		IsSystem,
+		Columns,
+
+		PrimaryKeyConstraint,
+		ForeignKeyConstraint,
+		CheckConstraint,
+		UniqueConstraint,
 		
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class DataTypeMetaDataAttribute : Attribute
-	{
-		private DataTypeMetaData meta;
-	
-		public DataTypeMetaDataAttribute (DataTypeMetaData meta)
-		{
-		}
-			
-		public DataTypeMetaData DataTypeMetaData {
-			get { return meta; }
-		}
+		Constraints = PrimaryKeyConstraint | ForeignKeyConstraint | CheckConstraint | UniqueConstraint,
+		
+		AppendConstraint,
+		InsertConstraint,
+		RemoveConstraint,
+
+		Trigger,
+
+		AppendTrigger,
+		InsertTrigger,
+		RemoveTrigger,
+		
+		AppendColumn,
+		InsertColumn,
+		RemoveColumn
 	}
 }

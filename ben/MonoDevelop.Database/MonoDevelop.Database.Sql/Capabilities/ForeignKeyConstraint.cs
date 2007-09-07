@@ -28,26 +28,22 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum DatabaseMetaData
+	public enum ForeignKeyConstraintCapabilities
 	{
-		Create,
-		Alter,
-		Drop,
-		Rename
-	}
-
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class DatabaseMetaDataAttribute : Attribute
-	{
-		private DatabaseMetaData meta;
+		None = 0,
 		
-		public DatabaseMetaDataAttribute (DatabaseMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public DatabaseMetaData DatabaseMetaData {
-			get { return meta; }
-		}
+		Name,
+		Owner,
+		Definition,
+		Schema,
+		IsColumnConstraint,
+		Columns,
+		ReferenceTable,
+		ReferenceColumns,
+		Cascade,
+		Restrict,
+		NoAction,
+		SetDefault,
+		SetNull
 	}
 }

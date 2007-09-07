@@ -28,35 +28,17 @@ using System;
 namespace MonoDevelop.Database.Sql
 {
 	[Flags]
-	public enum ProcedureMetaData
+	public enum UserCapabilities
 	{
-		Create,
-		Alter,
-		Drop,
-		Rename,
-
+		None = 0,
+		
 		Name,
 		Owner,
 		Comment,
 		Definition,
 		Schema,
-		IsSystem,
-		Language,
-		Parameters
-	}
-
-	[AttributeUsage (AttributeTargets.Class)]
-	public sealed class ProcedureMetaDataAttribute : Attribute
-	{
-		private ProcedureMetaData meta;
-		
-		public ProcedureMetaDataAttribute (ProcedureMetaData meta)
-		{
-			this.meta = meta;
-		}
-		
-		public ProcedureMetaData ProcedureMetaData {
-			get { return meta; }
-		}
+		Username,
+		Password,
+		PasswordExpiration
 	}
 }

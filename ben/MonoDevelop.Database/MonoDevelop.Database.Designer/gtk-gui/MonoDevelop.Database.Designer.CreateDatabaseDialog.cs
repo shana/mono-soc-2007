@@ -36,7 +36,7 @@ namespace MonoDevelop.Database.Designer {
         private Gtk.Button buttonOk;
         
         protected virtual void Build() {
-            Stetic.Gui.Initialize();
+            Stetic.Gui.Initialize(this);
             // Widget MonoDevelop.Database.Designer.CreateDatabaseDialog
             this.Name = "MonoDevelop.Database.Designer.CreateDatabaseDialog";
             this.Title = Mono.Unix.Catalog.GetString("Create Database");
