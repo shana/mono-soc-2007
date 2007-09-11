@@ -1,7 +1,11 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
 using System.Text;
 using System.Threading;
 
@@ -45,7 +49,54 @@ namespace Mono.Debugger.Frontend
 			get { return threadsStore; }
 		}
 		
-		public DebuggerService(string[] args)
+		public static DebuggerService Connect(string uri)
+		{
+			Console.WriteLine("Connecting to " + uri);
+			ChannelServices.RegisterChannel(new TcpChannel(0));
+			DebuggerService debuggerService = (DebuggerService)Activator.GetObject(typeof(DebuggerService), uri);
+			return debuggerService;
+		}
+		
+		public static string StartServer(int port, string[] args)
+		{
+			TcpServerChannel channel = new TcpServerChannel(port);
+			ChannelServices.RegisterChannel(channel);
+			string uri = channel.GetChannelUri() + "/DebuggerService";
+			
+			DebuggerService debuggerService = new DebuggerService(args);
+			RemotingServices.Marshal(debuggerService, "DebuggerService");
+			
+			Console.WriteLine("Listening at " + uri);
+			
+			return uri;
+		}
+		
+		public static DebuggerService StartInRemoteProcess(string[] args)
+		{
+			Console.WriteLine("Starting remote process...");
+			System.Diagnostics.Process process = new System.Diagnostics.Process();
+			string shArg = String.Format("-c \"mono --debug {0} --listen 0 {1}\"", typeof(MdbGui).Assembly.Location, String.Join(" ", args));
+			process.StartInfo = new ProcessStartInfo("sh", shArg);
+			process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.RedirectStandardOutput = true;
+			process.Start ();
+			string uriLine;
+			while(true) {
+				uriLine = process.StandardOutput.ReadLine();
+				if (uriLine.StartsWith("Listening at ")) break;
+			}
+			string uri = uriLine.Replace("Listening at ", "");
+			Console.WriteLine("Started remote process: " + uri);
+			
+			return Connect(uri);
+		}
+		
+		private DebuggerService():this(new string[0])
+		{
+		}
+		
+		private DebuggerService(string[] args)
 		{
 			mono_debugger_server_static_init ();
 			
@@ -84,6 +135,32 @@ namespace Mono.Debugger.Frontend
 			}
 			
 			NotifyStateChange();
+		}
+		
+		public bool IsRunning {
+			get {
+				if (interpreter.HasCurrentThread) {
+					return interpreter.CurrentThread.IsRunning;
+				} else {
+					return true;
+				}
+			}
+		}
+
+		public bool IsDebugging {
+			get {
+				return interpreter.HasCurrentProcess;
+			}
+		}
+		
+		public int CurrentProcessID {
+			get {
+				if (interpreter.HasCurrentProcess) {
+					return interpreter.CurrentProcess.ID;
+				} else {
+					return -1;
+				}
+			}
 		}
 		
 		public string GetNewConsoleOutput()

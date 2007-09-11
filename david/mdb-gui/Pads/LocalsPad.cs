@@ -16,9 +16,9 @@ namespace Mono.Debugger.Frontend
 		
 		Hashtable expandedNodes = new Hashtable();
 		
-		public LocalsPad(MdbGui mdbGui): base(mdbGui, LocalsStore.ColumnTypes)
+		public LocalsPad(DebuggerService debuggerService): base(debuggerService, LocalsStore.ColumnTypes)
 		{
-			this.remoteStore = mdbGui.DebuggerService.LocalsStore;
+			this.remoteStore = debuggerService.LocalsStore;
 			
 			AddImageTextColumn("Name", LocalsStore.ColumnImage, LocalsStore.ColumnName);
 			AddTextColumn("Value", LocalsStore.ColumnValue);

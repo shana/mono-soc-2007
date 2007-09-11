@@ -84,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\mono\lib\monodevelop\AddIns\MonoDevelop.Debugger\DebuggingService.cs">
+      <Link>DebuggingService.cs</Link>
+    </None>
     <Compile Include="DebuggerService.cs" />
     <Compile Include="ExceptionWindow.cs" />
     <Compile Include="MdbGui.cs" />
@@ -91,6 +94,7 @@
     <Compile Include="Pads\CallstackPad.cs" />
     <Compile Include="Pads\DebuggerPad.cs" />
     <Compile Include="Pads\LocalsPad.cs" />
+    <Compile Include="Pads\MdbConsolePad.cs" />
     <Compile Include="Pads\Stores\BreakpointsStore.cs" />
     <Compile Include="Pads\Stores\CallstackStore.cs" />
     <Compile Include="Pads\Stores\LocalsStore.cs" />

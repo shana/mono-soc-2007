@@ -15,9 +15,9 @@ namespace Mono.Debugger.Frontend
 	{
 		BreakpointsStore remoteStore;
 		
-		public BreakpointsPad(MdbGui mdbGui): base(mdbGui, BreakpointsStore.ColumnTypes)
+		public BreakpointsPad(DebuggerService debuggerService): base(debuggerService, BreakpointsStore.ColumnTypes)
 		{
-			this.remoteStore = mdbGui.DebuggerService.BreakpointsStore;
+			this.remoteStore = debuggerService.BreakpointsStore;
 			
 			AddImageColumn(String.Empty, BreakpointsStore.ColumnImage);
 			AddTextColumn("ID", BreakpointsStore.ColumnID);

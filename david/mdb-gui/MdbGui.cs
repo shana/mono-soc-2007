@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -6,6 +7,7 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Text;
+using System.Threading;
 
 using Glade;
 using Gtk;
@@ -26,15 +28,14 @@ namespace Mono.Debugger.Frontend
 		[Widget] protected ToolButton toolbuttonBreakpoint;
 		
 		[Widget] protected Viewport viewportSourceView;
+		[Widget] protected Viewport viewportConsole;
 		[Widget] protected Viewport viewportLocalVariables;
 		[Widget] protected Viewport viewportCallstack;
 		[Widget] protected Viewport viewportThreads;
 		[Widget] protected Viewport viewportBreakpoints;
 		
-		[Widget] protected Entry consoleIn;
-		[Widget] protected TextView consoleOut;
-		
 		SourceView sourceView;
+		MdbConsolePad mdbConsolePad;
 		LocalsPad localsPad;
 		CallstackPad callstackPad;
 		ThreadPad threadPad;
@@ -54,18 +55,15 @@ namespace Mono.Debugger.Frontend
 					newArgs, 0,
 					newArgs.Length
 				);
-				DebuggerService debuggerService = new DebuggerService(newArgs);
-				
-				ChannelServices.RegisterChannel(new TcpChannel(port));
-				RemotingServices.Marshal(debuggerService, "DebuggerService");
+				string uri = DebuggerService.StartServer(port, newArgs);
+				Console.WriteLine("Press Enter to exit");
+				Console.ReadLine();
 			} else if (args.Length >= 2 && args[0] == "--connect") {
-				string url = args[1];
-				
-				ChannelServices.RegisterChannel(new TcpChannel());
-				DebuggerService debuggerService = (DebuggerService)Activator.GetObject(typeof(DebuggerService), url);
+				DebuggerService debuggerService = DebuggerService.Connect(args[1]);
 				new MdbGui(debuggerService);
 			} else {
-				new MdbGui(new DebuggerService(args));
+				DebuggerService debuggerService = DebuggerService.StartInRemoteProcess(args);
+				new MdbGui(debuggerService);
 			}
 		}
 		
@@ -100,19 +98,20 @@ namespace Mono.Debugger.Frontend
 			sourceView.Show();
 			
 			// Load pads
-			callstackPad = new CallstackPad(this);
+			mdbConsolePad = new MdbConsolePad(debuggerService);
+			viewportConsole.Add(mdbConsolePad);
+			callstackPad = new CallstackPad(debuggerService);
 			viewportCallstack.Add(callstackPad);
-			threadPad = new ThreadPad(this);
+			threadPad = new ThreadPad(debuggerService);
 			viewportThreads.Add(threadPad);
-			localsPad = new LocalsPad(this);
+			localsPad = new LocalsPad(debuggerService);
 			viewportLocalVariables.Add(localsPad);
-			breakpointsPad = new BreakpointsPad(this);
+			breakpointsPad = new BreakpointsPad(debuggerService);
 			viewportBreakpoints.Add(breakpointsPad);
 			
-			consoleIn.GrabFocus();
+			mdbConsolePad.GrabFocus();
 			
 			// Regularly update the GUI
-			ReceiveGUIUpdates();
 			GLib.Timeout.Add(50, ReceiveGUIUpdates);
 		}
 		
@@ -167,41 +166,12 @@ namespace Mono.Debugger.Frontend
 			sourceView.ToggleBreakpoint();
 		}
 		
-		/// <summary> Execute entered command </summary>
-		protected void OnConsoleIn_activate(object o, EventArgs e) 
-		{
-			debuggerService.ExecuteConsoleCommand(consoleIn.Text);
-			consoleIn.Text = String.Empty;
-		}
-		
 		bool ReceiveGUIUpdates()
 		{
-			UpdateConsoleOut();
-			
-			// Update pads
-			breakpointsPad.ReceiveUpdates();
-			callstackPad.ReceiveUpdates();
-			localsPad.ReceiveUpdates();
-			threadPad.ReceiveUpdates();
-			
 			// Update the source view
 			sourceView.UpdateDisplay(breakpointsPad.GetBreakpoints());
 			
 			return true;
-		}
-		
-		/// <summary> Add any new output to the TextView </summary>
-		void UpdateConsoleOut()
-		{
-			string newOutput = debuggerService.GetNewConsoleOutput();
-			if (newOutput.Length > 0) {
-				// Append new text
-				consoleOut.Buffer.Text += newOutput;
-				
-				// Scroll the window to the end
-				TextMark endMark = consoleOut.Buffer.CreateMark(null, consoleOut.Buffer.EndIter, false);
-				consoleOut.ScrollToMark(endMark, 0, false, 0, 0);
-			}
 		}
 	}
 	
