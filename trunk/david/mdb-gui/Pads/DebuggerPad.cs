@@ -6,12 +6,12 @@ namespace Mono.Debugger.Frontend
 {
 	public abstract class DebuggerPad: Gtk.ScrolledWindow
 	{
-		MdbGui mdbGui;
+		DebuggerService debuggerService;
 		Gtk.TreeStore gtkStore;
 		Gtk.TreeView gtkTree;
 		
-		protected MdbGui MdbGui {
-			get { return mdbGui; }
+		protected DebuggerService DebuggerService {
+			get { return debuggerService; }
 		}
 		
 		protected TreeStore GtkStore {
@@ -22,9 +22,9 @@ namespace Mono.Debugger.Frontend
 			get { return gtkTree; }
 		}
 		
-		public DebuggerPad(MdbGui mdbGui, Type[] columnTypes)
+		public DebuggerPad(DebuggerService debuggerService, Type[] columnTypes)
 		{
-			this.mdbGui = mdbGui;
+			this.debuggerService = debuggerService;
 			this.gtkStore = new Gtk.TreeStore(columnTypes);
 			this.gtkTree = new Gtk.TreeView(gtkStore);
 			
@@ -34,6 +34,9 @@ namespace Mono.Debugger.Frontend
 			
 			Add(gtkTree);
 			ShowAll();
+			
+			// Regularly update the GUI
+			GLib.Timeout.Add(50, ReceiveUpdatesTimer);
 		}
 		
 		protected TreeViewColumn AddImageColumn(string columnHeader, int columnIndex)
@@ -79,6 +82,12 @@ namespace Mono.Debugger.Frontend
 			gtkTree.AppendColumn(column);
 			
 			return column;
+		}
+		
+		bool ReceiveUpdatesTimer()
+		{
+			ReceiveUpdates();
+			return true;
 		}
 		
 		public abstract void ReceiveUpdates();

@@ -15,9 +15,9 @@ namespace Mono.Debugger.Frontend
 	{
 		ThreadsStore remoteStore;
 		
-		public ThreadPad(MdbGui mdbGui): base(mdbGui, ThreadsStore.ColumnTypes)
+		public ThreadPad(DebuggerService debuggerService): base(debuggerService, ThreadsStore.ColumnTypes)
 		{
-			this.remoteStore = mdbGui.DebuggerService.ThreadsStore;
+			this.remoteStore = debuggerService.ThreadsStore;
 			
 			AddImageColumn(String.Empty, ThreadsStore.ColumnSelected);
 			AddTextColumn("ID", ThreadsStore.ColumnID);
