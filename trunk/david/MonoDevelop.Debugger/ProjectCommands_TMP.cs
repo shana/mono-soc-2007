@@ -1,0 +1,42 @@
+namespace MonoDevelop.Ide.Commands
+{
+	public enum ProjectCommands_TMP
+	{
+		AddNewProject,
+		AddNewCombine,
+		AddProject,
+		AddCombine,
+		RemoveFromProject,
+		Options,
+		AddResource,
+		AddReference,
+		AddNewFiles,
+		AddFiles,
+		NewFolder,
+		IncludeToProject,
+		Build,
+		BuildSolution,
+		Rebuild,
+		RebuildSolution,
+		SetAsStartupProject,
+		GenerateMakefiles,
+		RunEntry,
+		Run,
+		IncludeInBuild,
+		IncludeInDeploy,
+		Deploy,
+		ConfigurationSelector,
+		Debug,
+		DebugEntry,
+		DebugApplication,
+		Stop,
+		Clean,
+		CleanSolution,
+		LocalCopyReference,
+		DeployTargetList,
+		ConfigureDeployTargets,
+		CustomCommandList,
+		Reload,
+		ExportProject
+	}
+}

@@ -1,0 +1,192 @@
+﻿<Addin id = "MonoDevelop.Debugger"
+       namespace = "MonoDevelop"
+       name = "MonoDevelop Debugger"
+       author = "David Srbecký"
+       copyright = "GPL"
+       url =  "http://www.monodevelop.com/"
+       description = "Provides debugging features"
+       category = "IDE extensions"
+       version = "0.15">
+
+	<Runtime>
+		<Import assembly="mdb-gui.exe"/>
+		<Import assembly="MonoDevelop.Debugger.dll"/>
+	</Runtime>
+
+	<Dependencies>
+		<Addin id="Core" version="0.15.0"/>
+		<Addin id="Core.Gui" version="0.15.0"/>
+		<Addin id="Ide" version="0.15.0"/>
+	</Dependencies>
+
+	<Extension path = "/MonoDevelop/Core/StockIcons">
+		<StockIcon stockid = "md-debug-Arrow" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Arrow.png"/>
+		<StockIcon stockid = "md-debug-Breakpoint"
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Breakpoint.png"/>
+		<StockIcon stockid = "md-debug-Break"
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.Break.png"/>
+		<StockIcon stockid = "md-debug-Continue" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.Continue.png"/>
+		<StockIcon stockid = "md-debug-Start" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.Start.png"/>
+		<StockIcon stockid = "md-debug-StartWithoutDebugging" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.StartWithoutDebugging.png"/>
+		<StockIcon stockid = "md-debug-StepInto" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.StepInto.png"/>
+		<StockIcon stockid = "md-debug-StepOut" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.StepOut.png"/>
+		<StockIcon stockid = "md-debug-StepOver" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.StepOver.png"/>
+		<StockIcon stockid = "md-debug-StopProcess" 
+		           resource = "Mono.Debugger.Frontend.pixmaps.Icons.16x16.Debug.StopProcess.png"/>
+	</Extension>
+
+	<Extension path="/MonoDevelop/Core/Services">
+		<Class id = "DebuggingService"
+		    class = "MonoDevelop.Debugger.DebuggingService"/>
+	</Extension>
+
+	<Extension path = "/MonoDevelop/Ide/Commands">
+
+		<!-- DebugCommands;  Temporary just to add icons -->
+
+		<Category _name = "Debug_TMP" id = "Debug_TMP">
+		
+		<Command id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.DebugApplication"
+				defaultHandler = "MonoDevelop.Ide.Commands.DebugApplicationHandler"
+				icon = "md-debug-Start"
+				_label = "Debug Application..." />
+		<Command id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.Pause"
+				defaultHandler = "MonoDevelop.Ide.Commands.PauseDebugHandler"
+				icon = "md-debug-Break"
+				_label = "Pause"
+				shortcut = "Control|F8" />
+		<Command id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepOver"
+				defaultHandler = "MonoDevelop.Ide.Commands.StepOverHandler"
+				icon = "md-debug-StepOver"
+				_label = "Step Over"
+				shortcut = "F11" />
+		<Command id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepInto"
+				defaultHandler = "MonoDevelop.Ide.Commands.StepIntoHandler"
+				icon = "md-debug-StepInto"
+				_label = "Step Into"
+				shortcut = "Control|F11" />
+		<Command id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepOut"
+				defaultHandler = "MonoDevelop.Ide.Commands.StepOutHandler"
+				icon = "md-debug-StepOut"
+				_label = "Step Out"
+				shortcut = "Shift|F11" />
+		<Command id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.ToggleBreakpoint"
+				icon = "md-debug-Breakpoint"
+				_label = "Toggle Breakpoint"
+				shortcut = "F9" />
+		<Command id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.ClearAllBreakpoints"
+				defaultHandler = "MonoDevelop.Ide.Commands.ClearAllBreakpointsHandler"
+				_label = "Clear All Breakpoints" />
+		</Category>
+
+		<!-- ProjectCommands -->
+		<Category _name = "Project" id = "Project">
+		
+		<Command id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Run"
+				defaultHandler = "MonoDevelop.Ide.Commands.RunHandler"
+				icon = "md-debug-StartWithoutDebugging"
+				shortcut = "F5"
+				_description = "Run without debugger"
+				_label = "Run" />
+	
+		<Command id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Debug"
+				defaultHandler = "MonoDevelop.Ide.Commands.DebugHandler"
+				icon = "md-debug-Start"
+				shortcut = "Control|F5"
+				description = "Debug"
+				_label = "Debug" />
+	
+		<Command id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Stop"
+				defaultHandler = "MonoDevelop.Ide.Commands.StopHandler"
+				icon = "md-debug-StopProcess"
+				shortcut = "Shift|F5"
+				_description = "Stop current build or application execution"
+				_label = "Stop" />
+	
+
+		</Category>
+
+	</Extension>
+
+	<Extension path = "/MonoDevelop/Ide/MainMenu">
+		<ItemSet id = "Debug" _label = "_Debug" insertafter = "Run">
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.DebugApplication" />
+			<SeparatorItem id = "Separator1" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Debug" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Run" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Stop" />
+			<SeparatorItem id = "Separator2" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.Pause" />
+			<SeparatorItem id = "Separator3" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepOver" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepInto" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepOut" />
+			<SeparatorItem id = "Separator4" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.ToggleBreakpoint" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.ClearAllBreakpoints" />
+		</ItemSet>
+	</Extension>
+	
+	<Extension path = "/MonoDevelop/Ide/Toolbar">
+		<ItemSet id = "Debug" _label = "_Debug">
+			<CommandItem id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Debug" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Run" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.ProjectCommands_TMP.Stop" />
+			<SeparatorItem id = "Separator2" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.Pause" />
+			<SeparatorItem id = "Separator3" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepOver" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepInto" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.StepOut" />
+			<SeparatorItem id = "Separator4" />
+			<CommandItem id = "MonoDevelop.Ide.Commands.DebugCommands_TMP.ToggleBreakpoint" />
+		</ItemSet>
+	</Extension>
+
+	<Extension path = "/MonoDevelop/Ide/Pads">
+		<Pad id = "MonoDevelop.Debugger.Gui.Pads.BreakpointsPad"     
+		     _label = "BreakpointsPad"
+		     class = "MonoDevelop.Debugger.Gui.Pads.BreakpointsPad"/>
+
+		<Pad id = "MonoDevelop.Debugger.Gui.Pads.CallstackPad"     
+		     _label = "CallstackPad"
+		     class = "MonoDevelop.Debugger.Gui.Pads.CallstackPad"/>
+
+		<Pad id = "MonoDevelop.Debugger.Gui.Pads.LocalsPad"     
+		     _label = "LocalsPad"
+		     class = "MonoDevelop.Debugger.Gui.Pads.LocalsPad"/>
+
+		<Pad id = "MonoDevelop.Debugger.Gui.Pads.ThreadPad"     
+		     _label = "ThreadPad"
+		     class = "MonoDevelop.Debugger.Gui.Pads.ThreadPad"/>
+
+	     	<Pad id = "MonoDevelop.Debugger.Gui.Pads.MdbConsolePad"     
+		     _label = "MdbConsolePad"
+		     class = "MonoDevelop.Debugger.Gui.Pads.MdbConsolePad"/>
+	</Extension>
+
+	<Extension path = "/MonoDevelop/Ide/WorkbenchContexts">
+		<WorkbenchContext id = "Edit">
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.MdbConsolePad"/>
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.BreakpointsPad" />
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.CallstackPad" />
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.LocalsPad"/>
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.ThreadPad"/>
+		</WorkbenchContext>
+		<WorkbenchContext id = "Debug">
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.MdbConsolePad"/>
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.BreakpointsPad" />
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.CallstackPad" />
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.LocalsPad"/>
+			<ContextPad id = "MonoDevelop.Debugger.Gui.Pads.ThreadPad"/>
+		</WorkbenchContext>
+	</Extension>
+</Addin>
+
