@@ -14,18 +14,19 @@
 	<ExtensionPoint path = "/MonoDevelop/Database/Sql" name = "MonoDevelop database providers">
 		<Description>MonoDevelop database factory addins.</Description>
 		<ExtensionNode name="DatabaseFactory" type="MonoDevelop.Database.Sql.DbFactoryCodon">
-			<ExtensionNode name="Action" type="MonoDevelop.Database.Sql.ActionCodon"/>
+			<ExtensionNode name="Actions" type="MonoDevelop.Database.Sql.ActionCodon"/>
 			<ExtensionNode name="Capabilities" type="MonoDevelop.Database.Sql.CapabilitiesCodon"/>
 		</ExtensionNode>
 	</ExtensionPoint>
 
-	<ExtensionPoint path = "/MonoDevelop/Database/Sql/Capabilities" name = "Capability flags">
-		<ExtensionNode name="CapabilityFlags" type="MonoDevelop.Database.Sql.CapabilityFlagsCodon">
+	<ExtensionPoint path = "/MonoDevelop/Database/Capabilities" name = "Capability flags">
+		<ExtensionNode name="CapabilityFlags" type="MonoDevelop.Database.Sql.CapabilityFlagsCodon"/>
 	</ExtensionPoint>
 	
-	<Extension path = "/MonoDevelop/Database/Sql/Capabilities">
+	<Extension path = "/MonoDevelop/Database/Capabilities">
+		<CapabilityFlags category="ConnectionSettings" class="MonoDevelop.Database.Sql.ConnectionSettingsCapabilities" />
 		<CapabilityFlags category="CheckConstraint" class="MonoDevelop.Database.Sql.CheckConstraintCapabilities" />
-		<CapabilityFlags category="Column" class="MonoDevelop.Database.Sql.ColumnCapabilities" />
+		<CapabilityFlags category="TableColumn" class="MonoDevelop.Database.Sql.ColumnCapabilities" />
 		<CapabilityFlags category="ForeignKeyConstraint" class="MonoDevelop.Database.Sql.ForeignKeyConstraintCapabilities" />
 		<CapabilityFlags category="Index" class="MonoDevelop.Database.Sql.IndexCapabilities" />
 		<CapabilityFlags category="Parameter" class="MonoDevelop.Database.Sql.ParameterCapabilities" />

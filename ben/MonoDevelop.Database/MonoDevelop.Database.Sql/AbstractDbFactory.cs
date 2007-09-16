@@ -109,10 +109,10 @@ namespace MonoDevelop.Database.Sql
 				throw new ArgumentException ("flags must be >= 0");
 			
 			foreach (int val in Enum.GetValues (typeof (SchemaActions))) {
-				if (val == 0)
+				if (val == 0) //skip SchemaActions.None
 					continue;
 				
-				if ((val & (int)action) == (int)action) {
+				if ((val & (int)action) == val) {
 					if (!capabilities.ContainsKey (category))
 						capabilities.Add (category, new Dictionary<SchemaActions, int> ());
 					
