@@ -1,3 +1,14 @@
+2007-09-16  Ben Motmans <ben.motmans@gmail.com> 
+
+	* Codons/DbFactoryCodon.cs: log errors
+	* Codons/CapabilityFlagsCodon.cs: Read overload is no longer needed, this is
+	  done in the CapabilitiesUtility
+	* Capabilities/CapabilitiesUtility.cs: register capability flags on load and
+	  correctly parse the flags
+	* AbstractDbFactory.cs: small bugfix in SetCapabilities method
+	* MonoDevelop.Database.Sql.addin.xml: small changes in the extension points
+	* Makefile.am: link to the correct Mono.Addins dll
+
 2007-09-07  Ben Motmans <ben.motmans@gmail.com> 
 
 	* MetaData, MetaData/ViewMetaData.cs, MetaData/DataTypeMetaData.cs,

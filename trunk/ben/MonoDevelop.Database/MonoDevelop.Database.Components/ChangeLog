@@ -1,3 +1,7 @@
+2007-09-16  Ben Motmans <ben.motmans@gmail.com> 
+
+	* Makefile.am: link to the correct Mono.Addins dll
+
 2007-09-07  Ben Motmans <ben.motmans@gmail.com> 
 
 	* Dialogs/DatabaseConnectionSettingsDialog.cs: improved capabilities system

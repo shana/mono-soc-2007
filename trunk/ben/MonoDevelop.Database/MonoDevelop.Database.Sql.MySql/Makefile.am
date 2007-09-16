@@ -11,7 +11,7 @@ REFS =  \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.Gui.dll \
-	-r:$(top_srcdir)/contrib/Mono.Addins.dll \
+	-r:$(top_srcdir)/build/bin/contrib/Mono.Addins.dll \
 	-r:$(top_srcdir)/Extras/MonoDevelop.Database/libs/MySql.Data.dll \
 	-r:System \
 	-r:System.Data

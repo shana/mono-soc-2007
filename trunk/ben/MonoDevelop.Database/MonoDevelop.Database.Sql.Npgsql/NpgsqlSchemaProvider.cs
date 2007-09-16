@@ -137,7 +137,7 @@ using MonoDevelop.Core;
 							column.Name = r.GetString (0);
 							column.DataTypeName = r.GetString (3);
 							column.IsNullable = r.GetBoolean (1);
-							column.DefaultValue = r.GetString (4);
+							column.DefaultValue = r.IsDBNull (4) ? null : r.GetString (4);
 							column.DataType.LengthRange.Default = r.GetInt32 (2);
 					
 //							StringBuilder sb = new StringBuilder();
@@ -189,7 +189,7 @@ using MonoDevelop.Core;
 							view.OwnerName = r.GetString (2);
 							view.SchemaName = r.GetString (0);
 							view.IsSystemView = r.GetBoolean (4);
-							view.Comment = r.GetString (5);
+							view.Comment = r.IsDBNull (5) ? null : r.GetString (5);
 							
 //							StringBuilder sb = new StringBuilder();
 //							sb.AppendFormat ("-- View: {0}\n", view.Name);

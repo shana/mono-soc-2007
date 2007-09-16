@@ -40,12 +40,12 @@ namespace MonoDevelop.Database.Sql
 		[NodeAttribute("class", true, "The type of the enumeration.")]
 		string cls = null;
 
-		protected override void Read (NodeElement elem)
-		{
-			base.Read (elem);
-			
-			Type type = Addin.GetType (cls, true);
-			CapabilitiesUtility.Register (category, type);
+		public string Category {
+			get { return category; }
+		}
+
+		public Type Type {
+			get { return Addin.GetType (cls, true); }
 		}
 	}
 }

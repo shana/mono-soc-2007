@@ -38,6 +38,9 @@ namespace MonoDevelop.Database.Sql
 		static CapabilitiesUtility ()
 		{
 			types = new Dictionary<string, Type> ();
+
+			foreach (CapabilityFlagsCodon codon in AddinManager.GetExtensionNodes ("/MonoDevelop/Database/Capabilities"))
+				Register (codon.Category, codon.Type);
 		}
 
 		public static void Register (string category, Type type)
@@ -61,8 +64,10 @@ namespace MonoDevelop.Database.Sql
 				throw new ArgumentNullException ("category");
 			
 			Type type = null;
-			if (!string.IsNullOrEmpty (flags) && types.TryGetValue (category, out type))
-				return (int)Enum.Parse (type, flags, true);
+			if (!string.IsNullOrEmpty (flags) && types.TryGetValue (category, out type)) {
+				object obj = Enum.Parse (type, flags, true);
+				return (int)obj;
+			}
 			return 0;
 		}
 		
