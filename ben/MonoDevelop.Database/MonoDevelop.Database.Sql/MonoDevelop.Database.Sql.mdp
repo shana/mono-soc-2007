@@ -121,27 +121,11 @@
     <File name="./Schema/ConstraintType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Collections/DataTypeSchemaCollection.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ParameterType.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/TableMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/ViewMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/ProcedureMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/UserMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/UniqueConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/CheckConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/PrimaryKeyConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/ForeignKeyConstraintMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/TriggerMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/ColumnMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/ParameterMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/MetaDataService.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/ConnectionSettingsMetaData.cs" subtype="Code" buildaction="Nothing" />
-    <File name="./MetaData/DataTypeMetaData.cs" subtype="Code" buildaction="Nothing" />
     <File name="./Collections/SortedCollectionItemEventArgs.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/DatabaseMetaData.cs" subtype="Code" buildaction="Nothing" />
     <File name="./Providers/IGuiProvider.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/TriggerFireType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/IndexType.cs" subtype="Code" buildaction="Compile" />
     <File name="./Schema/ForeignKeyAction.cs" subtype="Code" buildaction="Compile" />
-    <File name="./MetaData/IndexMetaData.cs" subtype="Code" buildaction="Nothing" />
     <File name="./Capabilities/Table.cs" subtype="Code" buildaction="Compile" />
     <File name="./Capabilities/View.cs" subtype="Code" buildaction="Compile" />
     <File name="./Capabilities/Procedure.cs" subtype="Code" buildaction="Compile" />
@@ -167,12 +151,12 @@
     <ProjectReference type="Gac" localcopy="True" refto="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Gac" localcopy="True" refto="System.Xml, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <ProjectReference type="Project" localcopy="False" refto="MonoDevelop.Core" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/Mono.Addins.dll" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Components" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Ide" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Projects" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Projects.Gui" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Core.Gui" />
+    <ProjectReference type="Project" localcopy="True" refto="Mono.Addins" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
