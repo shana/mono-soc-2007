@@ -1,6 +1,6 @@
 Index: Extras.mds
 ===================================================================
---- Extras.mds	(revision 83316)
+--- Extras.mds	(revision 85957)
 +++ Extras.mds	(working copy)
 @@ -21,7 +21,7 @@
        <Entry build="True" name="MonoDevelop.WebReferences" configuration="Debug" />
@@ -11,7 +11,7 @@ Index: Extras.mds
        <Entry build="True" name="CSharpBinding" configuration="" />
        <Entry build="True" name="MonoDevelop.Gettext" configuration="Debug" />
        <Entry build="True" name="MonoDevelop.RegexToolkit" configuration="Debug" />
-@@ -47,7 +47,7 @@
+@@ -48,7 +48,7 @@
        <Entry build="True" name="MonoDevelop.WebReferences" configuration="Release" />
        <Entry build="True" name="Deployment" configuration="" />
        <Entry build="True" name="BooBinding" configuration="Release" />
@@ -20,7 +20,7 @@ Index: Extras.mds
        <Entry build="True" name="CSharpBinding" configuration="" />
        <Entry build="True" name="MonoDevelop.Gettext" configuration="Release" />
        <Entry build="True" name="MonoDevelop.RegexToolkit" configuration="Release" />
-@@ -74,9 +74,9 @@
+@@ -76,9 +76,9 @@
      <Execute type="None" entry="MonoDevelop.Autotools" />
      <Execute type="None" entry="MonoDevelop.WebReferences" />
      <Execute type="None" entry="Deployment" />
@@ -32,15 +32,16 @@ Index: Extras.mds
      <Execute type="None" entry="CSharpBinding" />
      <Execute type="None" entry="MonoDevelop.Gettext" />
      <Execute type="None" entry="MonoDevelop.RegexToolkit" />
-@@ -102,9 +102,9 @@
+@@ -105,10 +105,10 @@
      <Entry filename="./MonoDevelop.WebReferences/MonoDevelop.WebReferences.mdp" />
      <Entry filename="./Deployment/Deployment.mds" />
      <Entry filename="./BooBinding/BooBinding.mds" />
 -    <Entry filename="./MonoQuery/Mono.Data.Sql.mds" />
-+    <Entry filename="./MonoDevelop.Database/MonoDevelop.Database.mds" />
++    <Entry filename="./MonoDevelop.Database/Mono.Data.Sql.mds" />
      <Entry filename="./CSharpBinding/CSharpBinding.mds" />
      <Entry filename="./MonoDevelop.Gettext/MonoDevelop.Gettext.mdp" />
      <Entry filename="./MonoDevelop.RegexToolkit/MonoDevelop.RegexToolkit.mdp" />
+     <Entry filename="./CBinding/CBinding.mds" />
    </Entries>
 -</Combine>
 \ No newline at end of file
