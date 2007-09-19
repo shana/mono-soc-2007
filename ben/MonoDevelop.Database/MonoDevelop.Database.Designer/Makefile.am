@@ -15,7 +15,6 @@ REFS =  \
 	-r:System
 
 FILES =  \
-	Commands/temp.cs \
 	Dialogs/CreateDatabaseDialog.cs \
 	Dialogs/PreviewDialog.cs \
 	Dialogs/ProcedureEditorDialog.cs \

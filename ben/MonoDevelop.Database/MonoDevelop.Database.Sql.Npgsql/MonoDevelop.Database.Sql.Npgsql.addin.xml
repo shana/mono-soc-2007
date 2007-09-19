@@ -24,7 +24,7 @@
 		<DatabaseFactory id = "Npgsql" class = "MonoDevelop.Database.Sql.NpgsqlDbFactory">
 			<!-- action flags -->
 			<Actions category="Database" flags="All" />
-			<Actions category="Table" flags="Create,Drop,Rename,Schema" />
+			<Actions category="Table" flags="Drop,Rename,Schema" /> <!-- TODO: Create when GetSchema ("DataTypes") is implemented -->
 			<Actions category="View" flags="All" />
 			<Actions category="TableColumn" flags="All" />
 			<Actions category="Parameter" flags="Schema" />
