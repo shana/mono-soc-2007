@@ -37,7 +37,7 @@ Index: Extras.mds
      <Entry filename="./Deployment/Deployment.mds" />
      <Entry filename="./BooBinding/BooBinding.mds" />
 -    <Entry filename="./MonoQuery/Mono.Data.Sql.mds" />
-+    <Entry filename="./MonoDevelop.Database/Mono.Data.Sql.mds" />
++    <Entry filename="./MonoDevelop.Database/MonoDevelop.Database.mds" />
      <Entry filename="./CSharpBinding/CSharpBinding.mds" />
      <Entry filename="./MonoDevelop.Gettext/MonoDevelop.Gettext.mdp" />
      <Entry filename="./MonoDevelop.RegexToolkit/MonoDevelop.RegexToolkit.mdp" />
