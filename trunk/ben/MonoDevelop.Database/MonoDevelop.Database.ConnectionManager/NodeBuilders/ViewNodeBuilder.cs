@@ -101,7 +101,9 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return true;
+			ViewNode node = dataObject as ViewNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
+			return fac.IsActionSupported ("ViewColumn", SchemaActions.Schema);
 		}
 		
 		private void OnRefreshEvent (object sender, EventArgs args)

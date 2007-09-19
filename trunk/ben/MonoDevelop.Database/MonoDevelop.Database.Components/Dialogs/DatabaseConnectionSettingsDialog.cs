@@ -218,7 +218,7 @@ namespace MonoDevelop.Database.Components
 				DatabaseSchemaCollection databases = prov.GetDatabases ();
 				
 				foreach (DatabaseSchema db in databases) {
-				DispatchService.GuiDispatch (delegate () {
+					DispatchService.GuiDispatch (delegate () {
 						storeDatabases.AppendValues (db.Name);
 					});
 				}

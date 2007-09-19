@@ -205,7 +205,7 @@ namespace MonoDevelop.Database.Sql
 		protected virtual bool CreateNewConnection ()
 		{
 			IPooledDbConnection conn = connectionProvider.CreateConnection (this, context.ConnectionSettings, out error);
-			if (conn == null) {
+			if (conn == null || !conn.IsOpen) {
 				hasErrors = true;
 				return false;
 			}
@@ -249,7 +249,7 @@ namespace MonoDevelop.Database.Sql
 				if (HasFreeConnection) {
 					lock (sync) {
 						IPooledDbConnection conn = freeConnections.Dequeue ();
-						conn.Destroy ();
+						conn.Dispose ();
 					}
 				}
 			}

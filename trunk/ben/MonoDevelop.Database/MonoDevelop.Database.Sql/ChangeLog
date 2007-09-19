@@ -1,5 +1,11 @@
 2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
 
+	* ConnectionPool/DefaultConnectionPool.cs: improved detection of connection
+	  errors
+	* QueryService.cs: removed the obsolete attempt parameter
+
+2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
+
 	* Capabilities/UniqueConstraint.cs, Capabilities/User.cs,
 	  Capabilities/Parameter.cs, Capabilities/ConnectionSettings.cs,
 	  Capabilities/SchemaActions.cs, Capabilities/CheckConstraint.cs,

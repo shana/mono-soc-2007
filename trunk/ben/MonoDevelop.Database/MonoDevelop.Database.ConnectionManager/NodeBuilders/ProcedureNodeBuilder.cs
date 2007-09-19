@@ -100,7 +100,9 @@ namespace MonoDevelop.Database.ConnectionManager
 		
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			return true;
+			ProcedureNode node = dataObject as ProcedureNode;
+			IDbFactory fac = node.ConnectionContext.DbFactory;
+			return fac.IsCapabilitySupported ("Procedure", SchemaActions.Schema, ProcedureCapabilities.Parameters);
 		}
 		
 		private void OnRefreshEvent (object sender, EventArgs args)

@@ -1,5 +1,9 @@
 2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
 
+	* Dialogs/ViewEditorDialog.cs: use the correct capabilities
+
+2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
+
 	* Commands/temp.cs, MonoDevelop.Database.Designer.mdp, Makefile.am: removed
 	  empty file
 

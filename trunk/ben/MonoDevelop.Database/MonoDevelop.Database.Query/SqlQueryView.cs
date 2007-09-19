@@ -86,6 +86,7 @@ namespace MonoDevelop.Database.Query
 			buttonClear.Clicked += new EventHandler (ClearClicked);
 			
 			comboConnections = new DatabaseConnectionContextComboBox ();
+			selectedConnection = comboConnections.DatabaseConnection;
 			comboConnections.Changed += new EventHandler (ConnectionChanged);
 
 			buttonExecute.IsImportant = true;
@@ -271,6 +272,7 @@ namespace MonoDevelop.Database.Query
 			buttonStop.Sensitive = exec;
 			buttonClear.Sensitive = !exec;
 			sqlEditor.Editable = !exec;
+			notebook.Show ();
 			
 			status.Buffer.Text = msg + Environment.NewLine;
 		}

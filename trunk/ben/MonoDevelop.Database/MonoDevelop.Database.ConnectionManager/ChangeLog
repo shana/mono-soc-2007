@@ -1,3 +1,8 @@
+2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
+
+	* NodeBuilders/ViewNodeBuilder.cs, NodeBuilders/ProcedureNodeBuilder.cs:
+	  only show child nodes if supported by the provider
+
 2007-09-16  Ben Motmans <ben.motmans@gmail.com> 
 
 	* Makefile.am: link to the correct Mono.Addins dll

@@ -45,7 +45,7 @@ using System.Collections.Generic;
 					builder.UserID = settings.Username;
 					builder.Password = settings.Password;
 					builder.DataSource = String.Concat (settings.Server, ",", settings.Port);
-					builder.NetworkLibrary = "DBMSSOCN";
+					//builder.NetworkLibrary = "DBMSSOCN";
 				}
 				builder.Pooling = false;
 				SqlConnection connection = new SqlConnection (builder.ToString ());

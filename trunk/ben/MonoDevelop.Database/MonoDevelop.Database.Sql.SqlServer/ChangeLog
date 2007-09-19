@@ -1,3 +1,11 @@
+2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
+
+	* SqlServerConnectionProvider.cs: commented the NetworkLibrary property in
+	  the connection string
+	* SqlServerSchemaProvider.cs: catch errors and several bugfixes
+	* MonoDevelop.Database.Sql.SqlServer.addin.xml: SqlServer doesn't support
+	  procedure parameters yet
+
 2007-09-16  Ben Motmans <ben.motmans@gmail.com> 
 
 	* Makefile.am: link to the correct Mono.Addins dll
