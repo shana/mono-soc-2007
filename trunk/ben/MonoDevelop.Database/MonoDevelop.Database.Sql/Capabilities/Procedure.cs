@@ -30,19 +30,19 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum ProcedureCapabilities
 	{
-		None = 0,
+		None = 0x000,
 		
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		IsSystem,
-		Language,
-		Parameters,
+		Name = 0x001,
+		Owner = 0x002,
+		Comment = 0x004,
+		Definition = 0x008,
+		Schema = 0x010,
+		IsSystem = 0x020,
+		Language = 0x040,
+		Parameters = 0x080,
 
-		InsertParameter,
-		AppendParameter,
-		RemoveParameter
+		InsertParameter = 0x100,
+		AppendParameter = 0x200,
+		RemoveParameter = 0x400
 	}
 }

@@ -30,19 +30,19 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum TriggerCapabilities
 	{
-		None = 0,
+		None = 0x000,
 		
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		TableName,
-		TriggerType,
-		TriggerEvent,
-		TriggerFireType,
-		Position,
-		IsActive,
-		Source
+		Name = 0x001,
+		Owner = 0x002,
+		Comment = 0x004,
+		Definition = 0x008,
+		Schema = 0x010,
+		TableName = 0x020,
+		TriggerType = 0x040,
+		TriggerEvent = 0x080,
+		TriggerFireType = 0x100,
+		Position = 0x200,
+		IsActive = 0x400,
+		Source = 0x800
 	}
 }

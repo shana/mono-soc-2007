@@ -30,13 +30,13 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum ConnectionSettingsCapabilities
 	{
-		None = 0,
+		None = 0x00,
 		
-		Username,
-		Password,
-		Server,
-		Port,
-		ListDatabases,
-		SelectDatabase
+		Username = 0x01,
+		Password = 0x02,
+		Server = 0x04,
+		Port = 0x08,
+		ListDatabases = 0x10,
+		SelectDatabase = 0x20
 	}
 }

@@ -30,30 +30,30 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum ColumnCapabilities
 	{
-		None = 0,
+		None = 0x00000,
 		
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		DataType,
-		DefaultValue,
-		Nullable,
-		Length,
-		Precision,
-		Scale,
-		Position,
+		Name = 0x00001,
+		Owner = 0x00002,
+		Comment = 0x00004,
+		Definition = 0x00008,
+		Schema = 0x00010,
+		DataType = 0x00020,
+		DefaultValue = 0x00040,
+		Nullable = 0x00080,
+		Length = 0x00100,
+		Precision = 0x00200,
+		Scale = 0x00400,
+		Position = 0x00800,
 
-		PrimaryKeyConstraint,
-		ForeignKeyConstraint,
-		CheckConstraint,
-		UniqueConstraint,
+		PrimaryKeyConstraint = 0x01000,
+		ForeignKeyConstraint = 0x02000,
+		CheckConstraint = 0x04000,
+		UniqueConstraint = 0x08000,
 		
 		Constraints = PrimaryKeyConstraint | ForeignKeyConstraint | CheckConstraint | UniqueConstraint,
 		
-		AppendConstraint,
-		InsertConstraint,
-		RemoveConstraint
+		AppendConstraint = 0x10000,
+		InsertConstraint = 0x20000,
+		RemoveConstraint = 0x40000
 	}
 }

@@ -1,3 +1,13 @@
+2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
+
+	* Capabilities/UniqueConstraint.cs, Capabilities/User.cs,
+	  Capabilities/Parameter.cs, Capabilities/ConnectionSettings.cs,
+	  Capabilities/SchemaActions.cs, Capabilities/CheckConstraint.cs,
+	  Capabilities/Table.cs, Capabilities/Procedure.cs,
+	  Capabilities/Column.cs, Capabilities/PrimaryKeyConstraint.cs,
+	  Capabilities/Trigger.cs, Capabilities/ForeignKeyConstraint.cs,
+	  Capabilities/Index.cs, Capabilities/View.cs: added values to the enum
+
 2007-09-17  Ben Motmans <ben.motmans@gmail.com> 
 
 	
