@@ -30,20 +30,20 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum ForeignKeyConstraintCapabilities
 	{
-		None = 0,
+		None = 0x0000,
 		
-		Name,
-		Owner,
-		Definition,
-		Schema,
-		IsColumnConstraint,
-		Columns,
-		ReferenceTable,
-		ReferenceColumns,
-		Cascade,
-		Restrict,
-		NoAction,
-		SetDefault,
-		SetNull
+		Name = 0x0001,
+		Owner = 0x0002,
+		Definition = 0x0004,
+		Schema = 0x0008,
+		IsColumnConstraint = 0x0010,
+		Columns = 0x0020,
+		ReferenceTable = 0x0040,
+		ReferenceColumns = 0x0080,
+		Cascade = 0x0100,
+		Restrict = 0x0200,
+		NoAction = 0x0400,
+		SetDefault = 0x0800,
+		SetNull = 0x1000
 	}
 }

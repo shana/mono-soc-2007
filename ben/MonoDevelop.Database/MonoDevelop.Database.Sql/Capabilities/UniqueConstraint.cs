@@ -30,13 +30,13 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum UniqueConstraintCapabilities
 	{
-		None = 0,
+		None = 0x00,
 		
-		Name,
-		Owner,
-		Definition,
-		Schema,
-		IsColumnConstraint,
-		Columns
+		Name = 0x01,
+		Owner = 0x02,
+		Definition = 0x04,
+		Schema = 0x08,
+		IsColumnConstraint = 0x10,
+		Columns = 0x20
 	}
 }

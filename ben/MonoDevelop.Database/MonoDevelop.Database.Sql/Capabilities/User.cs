@@ -30,15 +30,15 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum UserCapabilities
 	{
-		None = 0,
+		None = 0x000,
 		
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		Username,
-		Password,
-		PasswordExpiration
+		Name = 0x001,
+		Owner = 0x002,
+		Comment = 0x004,
+		Definition = 0x008,
+		Schema = 0x010,
+		Username = 0x020,
+		Password = 0x040,
+		PasswordExpiration = 0x080
 	}
 }

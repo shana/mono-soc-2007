@@ -30,36 +30,36 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum TableCapabilities
 	{
-		None = 0,
+		None = 0x000000,
 		
-		Name,
-		TableSpaceName,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		IsSystem,
-		Columns,
+		Name = 0x000001,
+		TableSpaceName = 0x000002,
+		Owner = 0x000004,
+		Comment = 0x000008,
+		Definition = 0x000010,
+		Schema = 0x000020,
+		IsSystem = 0x000040,
+		Columns = 0x000080,
 
-		PrimaryKeyConstraint,
-		ForeignKeyConstraint,
-		CheckConstraint,
-		UniqueConstraint,
+		PrimaryKeyConstraint = 0x000100,
+		ForeignKeyConstraint = 0x000200,
+		CheckConstraint = 0x000400,
+		UniqueConstraint = 0x000800,
 		
 		Constraints = PrimaryKeyConstraint | ForeignKeyConstraint | CheckConstraint | UniqueConstraint,
 		
-		AppendConstraint,
-		InsertConstraint,
-		RemoveConstraint,
+		AppendConstraint = 0x001000,
+		InsertConstraint = 0x002000,
+		RemoveConstraint = 0x004000,
 
-		Trigger,
+		Trigger = 0x008000,
 
-		AppendTrigger,
-		InsertTrigger,
-		RemoveTrigger,
+		AppendTrigger = 0x010000,
+		InsertTrigger = 0x020000,
+		RemoveTrigger = 0x040000,
 		
-		AppendColumn,
-		InsertColumn,
-		RemoveColumn
+		AppendColumn = 0x080000,
+		InsertColumn = 0x100000,
+		RemoveColumn = 0x200000
 	}
 }

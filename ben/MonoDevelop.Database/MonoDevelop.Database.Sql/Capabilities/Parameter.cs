@@ -30,13 +30,15 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum ParameterCapabilities
 	{
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		DataType,
-		Position,
-		Direction
+		None = 0x00,
+		
+		Name = 0x01,
+		Owner = 0x02,
+		Comment = 0x04,
+		Definition = 0x08,
+		Schema = 0x10,
+		DataType = 0x20,
+		Position = 0x40,
+		Direction = 0x80
 	}
 }

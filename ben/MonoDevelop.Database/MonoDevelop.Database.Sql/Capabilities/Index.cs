@@ -30,17 +30,17 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum IndexCapabilities
 	{
-		None = 0,
+		None = 0x000,
 		
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		TableName,
-		IndexType,
-		Columns,
-		ColumnLength,
-		ColumnSort
+		Name = 0x001,
+		Owner = 0x002,
+		Comment = 0x004,
+		Definition = 0x008,
+		Schema = 0x010,
+		TableName = 0x020,
+		IndexType = 0x040,
+		Columns = 0x080,
+		ColumnLength = 0x100,
+		ColumnSort = 0x200
 	}
 }

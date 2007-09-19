@@ -30,19 +30,19 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum ViewCapabilities
 	{
-		None = 0,
+		None = 0x00,
 		
-		Name,
-		Owner,
-		Comment,
-		Definition,
-		Schema,
-		IsSystem,
-		Statement,
-		Columns,
+		Name = 0x001,
+		Owner = 0x002,
+		Comment = 0x004,
+		Definition = 0x008,
+		Schema = 0x010,
+		IsSystem = 0x020,
+		Statement = 0x040,
+		Columns = 0x080,
 		
-		AppendColumn,
-		InsertColumn,
-		RemoveColumn
+		AppendColumn = 0x100,
+		InsertColumn = 0x200,
+		RemoveColumn = 0x400
 	}
 }

@@ -30,14 +30,14 @@ namespace MonoDevelop.Database.Sql
 	[Flags]
 	public enum SchemaActions
 	{
-		None = 0,
+		None = 0x00,
 		
-		Schema,
+		Schema = 0x01,
 
-		Create,
-		Alter,
-		Drop,
-		Rename,
+		Create = 0x02,
+		Alter = 0x04,
+		Drop = 0x08,
+		Rename = 0x10,
 
 		All = Schema | Create | Alter | Drop | Rename
 	}
