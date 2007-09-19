@@ -34,7 +34,11 @@ BUILD_MYSQL_FILES = $(addprefix $(ADDIN_BUILD)/, $(notdir $(MYSQL_FILES)))
 
 ADDIN = MonoDevelop.Database.Sql.MySql.addin.xml
 
+if ENABLE_MYSQL
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN) $(BUILD_MYSQL_FILES)
+else
+all:
+endif
 
 $(ADDIN_BUILD)/$(ADDIN): $(srcdir)/$(ADDIN)
 	mkdir -p $(ADDIN_BUILD)
@@ -53,8 +57,10 @@ $(ASSEMBLY): $(FILES) $(build_resources)
 	$(CSC) $(CSC_FLAGS) $(REFS) $(build_resources:%=/resource:%) $(build_sources) -out:$@ -target:library
 
 
+if ENABLE_MYSQL
 assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN) $(SRC_MYSQL_FILES)
+endif
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb $(BUILD_MYSQL_FILES)
 EXTRA_DIST = $(SRC_MYSQL_FILES)

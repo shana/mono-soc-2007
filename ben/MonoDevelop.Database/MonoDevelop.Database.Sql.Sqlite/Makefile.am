@@ -34,7 +34,11 @@ BUILD_SQLITE_FILES = $(addprefix $(ADDIN_BUILD)/, $(notdir $(SQLITE_FILES)))
 
 ADDIN = MonoDevelop.Database.Sql.Sqlite.addin.xml
 
+if ENABLE_SQLITE
 all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN) $(BUILD_SQLITE_FILES)
+else
+all:
+endif
 
 $(ADDIN_BUILD)/$(ADDIN): $(srcdir)/$(ADDIN)
 	mkdir -p $(ADDIN_BUILD)
@@ -52,9 +56,10 @@ $(ASSEMBLY): $(FILES) $(build_resources)
 	mkdir -p $(ADDIN_BUILD)
 	$(CSC) $(CSC_FLAGS) $(REFS) $(build_resources:%=/resource:%) $(build_sources) -out:$@ -target:library
 
-
+if ENABLE_SQLITE
 assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
 assembly_DATA = $(ASSEMBLY) $(ADDIN) $(SRC_SQLITE_FILES)
+endif
 
 CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb $(BUILD_SQLITE_FILES)
 EXTRA_DIST = $(SRC_SQLITE_FILES)
