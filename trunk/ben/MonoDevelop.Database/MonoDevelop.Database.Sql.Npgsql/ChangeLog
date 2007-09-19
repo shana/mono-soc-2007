@@ -1,3 +1,8 @@
+2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
+
+	* MonoDevelop.Database.Sql.Npgsql.addin.xml: temporarily disabled the Create
+	  table command due to a missing feature in the database provider
+
 2007-09-16  Ben Motmans <ben.motmans@gmail.com> 
 
 	* NpgsqlSchemaProvider.cs: IsDBNull check for columns that can have 'null'

@@ -1,3 +1,8 @@
+2007-09-19  Ben Motmans <ben.motmans@gmail.com> 
+
+	* Commands/temp.cs, MonoDevelop.Database.Designer.mdp, Makefile.am: removed
+	  empty file
+
 2007-09-16  Ben Motmans <ben.motmans@gmail.com> 
 
 	* Makefile.am: link to the correct Mono.Addins dll
