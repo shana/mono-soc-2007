@@ -84,7 +84,7 @@ namespace MonoDevelop.Database.Sql
 				}
 			}
 			
-			EnsureConnectionState internalState = new EnsureConnectionState (context, callback, state, 1);
+			EnsureConnectionState internalState = new EnsureConnectionState (context, callback, state);
 			ThreadPool.QueueUserWorkItem (new WaitCallback (EnsureConnectionThreaded), internalState);
 		}
 				                   
@@ -94,9 +94,9 @@ namespace MonoDevelop.Database.Sql
 			IConnectionPool pool = internalState.ConnectionContext.ConnectionPool;
 
 			try {
-				pool.Initialize ();
+				bool connected = pool.Initialize ();
 				DispatchService.GuiDispatch (delegate () {
-					internalState.Callback (internalState.ConnectionContext, true, internalState.State);
+					internalState.Callback (internalState.ConnectionContext, connected, internalState.State);
 				});
 			} catch (Exception e) {
 				Runtime.LoggingService.Debug (e);
@@ -114,7 +114,7 @@ namespace MonoDevelop.Database.Sql
 		public DatabaseConnectionContext ConnectionContext;
 		public DatabaseConnectionContextCallback Callback;
 		
-		public EnsureConnectionState (DatabaseConnectionContext context, DatabaseConnectionContextCallback callback, object state, int attempt)
+		public EnsureConnectionState (DatabaseConnectionContext context, DatabaseConnectionContextCallback callback, object state)
 		{
 			ConnectionContext = context;
 			Callback = callback;

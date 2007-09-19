@@ -46,7 +46,6 @@
 			<Capabilities category="TableColumn" action="Alter" flags="AppendConstraint,InsertConstraint,RemoveConstraint" />
 			<!-- Procedure capabilities -->
 			<Capabilities category="Procedure" action="All" flags="Name,Definition,Schema,IsSystem" />
-			<Capabilities category="Procedure" action="Schema" flags="Parameters" />
 			<Capabilities category="Procedure" action="Alter" flags="InsertParameter,AppendParameter,RemoveParameter" />
 			<!-- View capabilities -->
 			<Capabilities category="View" action="All" flags="Name,Definition,Schema,Statement,IsSystem" />

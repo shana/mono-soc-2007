@@ -73,7 +73,7 @@ namespace MonoDevelop.Database.Designer
 			notebook.AppendPage (sqlEditor, new Label (GettextCatalog.GetString ("Definition")));
 			
 			IDbFactory fac = schemaProvider.ConnectionPool.DbFactory;
-			if (fac.IsCapabilitySupported ("Table", action, TableCapabilities.Comment)) {
+			if (fac.IsCapabilitySupported ("View", action, ViewCapabilities.Comment)) {
 				commentEditor = new CommentEditorWidget ();
 				notebook.AppendPage (commentEditor, new Label (GettextCatalog.GetString ("Comment")));
 			}
