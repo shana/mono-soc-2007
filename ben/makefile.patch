@@ -1,6 +1,6 @@
 Index: Makefile.am
 ===================================================================
---- Makefile.am	(revision 85857)
+--- Makefile.am	(revision 86058)
 +++ Makefile.am	(working copy)
 @@ -1,2 +1,2 @@
  

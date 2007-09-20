@@ -1,8 +1,8 @@
 Index: configure.in
 ===================================================================
---- configure.in	(revision 85957)
+--- configure.in	(revision 86058)
 +++ configure.in	(working copy)
-@@ -180,121 +180,50 @@
+@@ -180,120 +180,50 @@
  
  AM_CONDITIONAL(ENABLE_SUBVERSION, test x$enable_subversion = xyes)
  
@@ -31,10 +31,7 @@ Index: configure.in
 -enable_oracle=no
 -enable_sqlserv=no
 -enable_sybase=no
-+test_sqlite=$(gacutil -l | grep "Mono.Data.SqliteClient, Version=2")
-+test_sqlserver=$(gacutil -l | grep "System.Data, Version=2")
-+test_postgres=$(gacutil -l | grep "Npgsql, Version=2")
-+test_mysql=$(gacutil -l | grep "MySql.Data")
++AM_CONDITIONAL(ENABLE_DATABASE, [test x$enable_database = xyes])
  
 -if test "x$enable_monoquery" = "xyes"; then
 -   monoquery_try_compile () {
@@ -42,18 +39,17 @@ Index: configure.in
 -using System;
 -using System.Data;
 -using System.Collections;
++test_sqlite=$(gacutil -l | grep "Mono.Data.SqliteClient, Version=2")
++test_sqlserver=$(gacutil -l | grep "System.Data, Version=2")
++test_postgres=$(gacutil -l | grep "Npgsql, Version=2")
++test_mysql=$(gacutil -l | grep "MySql.Data")
+ 
+-using ${Using};
 +if test "x$test_sqlite" != "x"; then
 +	enable_sqlite="yes"
 +else
 +	enable_sqlite="no (missing Mono.Data.SqliteClient)"
-+fi;
- 
--using ${Using};
-+if test "x$test_sqlserver" != "x"; then
-+	enable_sqlserver="yes"
-+else
-+	enable_sqlserver="no (missing System.Data, Version 2)"
-+fi;
++fi
  
 -namespace Autoconf.Try.Compile {
 -	public class Program {
@@ -128,12 +124,11 @@ Index: configure.in
 -   if test $monoquery_avail -eq 0; then
 -      enable_monoquery="no"
 -   fi
--fi
-+if test "x$test_postgres" != "x"; then
-+	enable_postgres="yes"
++if test "x$test_sqlserver" != "x"; then
++	enable_sqlserver="yes"
 +else
-+	enable_postgres="no (missing Npgsql, Version 2)"
-+fi;
++	enable_sqlserver="no (missing System.Data, Version 2)"
+ fi
  
 -AM_CONDITIONAL(ENABLE_MONOQUERY, [test $enable_monoquery = yes])
 -AM_CONDITIONAL(ENABLE_POSTGRES, [test $enable_postgres = yes])
@@ -142,26 +137,29 @@ Index: configure.in
 -AM_CONDITIONAL(ENABLE_ORACLE, [test $enable_oracle = yes])
 -AM_CONDITIONAL(ENABLE_SQLSERV, [test $enable_sqlserv = yes])
 -AM_CONDITIONAL(ENABLE_SYBASE, [test $enable_sybase = yes])
-+if test "x$test_mysql" != "x"; then
-+	enable_mysql="yes"
++if test "x$test_postgres" != "x"; then
++	enable_postgres="yes"
 +else
-+	enable_mysql="no (missing MySql.Data)"
-+fi;
++	enable_postgres="no (missing Npgsql, Version 2)"
++fi
  
 -sed -e "s/@SQLProviderAttributes@/$SQL_PROVIDER_ATTRIBUTES/" \
 -    $srcdir/Extras/MonoQuery/MonoQuery/Gui/DbProviderCollection.cs.in \
 -    > $srcdir/Extras/MonoQuery/MonoQuery/Gui/DbProviderCollection.cs
-+AM_CONDITIONAL(ENABLE_DATABASE, [test x$enable_database = xyes])
++if test "x$test_mysql" != "x"; then
++	enable_mysql="yes"
++else
++	enable_mysql="no (missing MySql.Data)"
++fi
+ 
 +AM_CONDITIONAL(ENABLE_POSTGRES, [test x$enable_postgres = xyes])
 +AM_CONDITIONAL(ENABLE_MYSQL, [test x$enable_mysql = xyes])
 +AM_CONDITIONAL(ENABLE_SQLITE, [test x$enable_sqlite = xyes])
 +AM_CONDITIONAL(ENABLE_SQLSERVER, [test x$enable_sqlserver = xyes])
  
--
  dnl ASP.NET project addin
  XSP_VERSION=0.1
- XSP2_VERSION=0.2
-@@ -494,9 +423,16 @@
+@@ -496,9 +426,16 @@
  Extras/Makefile
  Extras/MonoDeveloperExtensions/Makefile
  Extras/MonoDeveloperExtensions/NUnit/Makefile
@@ -181,7 +179,7 @@ Index: configure.in
  Extras/NUnit/Makefile
  Extras/VersionControl/Diff/Makefile
  Extras/VersionControl/DiffWidget/Makefile
-@@ -547,16 +483,14 @@
+@@ -549,16 +486,14 @@
  echo "   * C# compiler = $CSC"
  echo "   * Mozilla home: $MOZILLA_HOME"
  echo "   * mono-debugger: $enable_debugger"
