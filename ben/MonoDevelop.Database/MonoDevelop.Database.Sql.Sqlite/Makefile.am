@@ -11,7 +11,7 @@ REFS =  \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.Gui.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.dll \
-	-r:$(top_srcdir)/contrib/Mono.Data.Sqlite.dll \
+	-r:$(top_srcdir)/contrib/Sqlite/Mono.Data.Sqlite.dll \
 	-r:Mono.Data \
 	-r:System \
 	-r:System.Data
