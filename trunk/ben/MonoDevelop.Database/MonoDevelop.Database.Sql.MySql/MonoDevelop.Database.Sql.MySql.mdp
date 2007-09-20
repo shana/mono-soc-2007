@@ -39,7 +39,7 @@
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Projects" />
     <ProjectReference type="Project" localcopy="True" refto="MonoDevelop.Projects.Gui" />
     <ProjectReference type="Assembly" localcopy="True" refto="../../../build/bin/contrib/Mono.Addins.dll" />
-    <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/MySql.Data.dll" />
+    <ProjectReference type="Assembly" localcopy="True" refto="../../../contrib/MySql/MySql.Data.dll" />
   </References>
   <MonoDevelop.Autotools.MakefileInfo IntegrationEnabled="True" RelativeMakefileName="./Makefile.am" BuildTargetName="" CleanTargetName="" SyncReferences="True" IsAutotoolsProject="True" RelativeConfigureInPath="../../../">
     <BuildFilesVar Sync="True" Name="FILES" />
