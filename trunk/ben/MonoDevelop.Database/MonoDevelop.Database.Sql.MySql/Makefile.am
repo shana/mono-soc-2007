@@ -12,7 +12,7 @@ REFS =  \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.Gui.dll \
 	-r:$(top_srcdir)/build/bin/contrib/Mono.Addins.dll \
-	-r:$(top_srcdir)/Extras/MonoDevelop.Database/libs/MySql.Data.dll \
+	-r:$(top_srcdir)/contrib/MySql.Data.dll \
 	-r:System \
 	-r:System.Data
 
@@ -29,13 +29,10 @@ MYSQL_FILES = \
 
 RES = MonoDevelop.Database.Sql.MySql.addin.xml
 
-SRC_MYSQL_FILES = $(addprefix $(srcdir)/../, $(MYSQL_FILES))
-BUILD_MYSQL_FILES = $(addprefix $(ADDIN_BUILD)/, $(notdir $(MYSQL_FILES)))
-
 ADDIN = MonoDevelop.Database.Sql.MySql.addin.xml
 
 if ENABLE_MYSQL
-all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN) $(BUILD_MYSQL_FILES)
+all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
 else
 all:
 endif
@@ -48,10 +45,6 @@ $(ADDIN_BUILD)/%: $(srcdir)/lib/%
 	mkdir -p $(ADDIN_BUILD)
 	cp $< $@
 
-$(BUILD_MYSQL_FILES): $(SRC_MYSQL_FILES)
-	mkdir -p $(ADDIN_BUILD)
-	cp $(SRC_MYSQL_FILES) $(ADDIN_BUILD)/.
-
 $(ASSEMBLY): $(FILES) $(build_resources)
 	mkdir -p $(ADDIN_BUILD)
 	$(CSC) $(CSC_FLAGS) $(REFS) $(build_resources:%=/resource:%) $(build_sources) -out:$@ -target:library
@@ -59,10 +52,10 @@ $(ASSEMBLY): $(FILES) $(build_resources)
 
 if ENABLE_MYSQL
 assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
-assembly_DATA = $(ASSEMBLY) $(ADDIN) $(SRC_MYSQL_FILES)
+assembly_DATA = $(ASSEMBLY) $(ADDIN)
 endif
 
-CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb $(BUILD_MYSQL_FILES)
-EXTRA_DIST = $(SRC_MYSQL_FILES)
+CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
+EXTRA_DIST = 
 
 include $(top_srcdir)/Makefile.include

@@ -11,7 +11,7 @@ REFS =  \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Core.Gui.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Ide.dll \
 	-r:$(top_builddir)/build/bin/MonoDevelop.Projects.dll \
-	-r:$(top_srcdir)/Extras/MonoDevelop.Database/libs/Mono.Data.Sqlite.dll \
+	-r:$(top_srcdir)/contrib/Mono.Data.Sqlite.dll \
 	-r:Mono.Data \
 	-r:System \
 	-r:System.Data
@@ -26,16 +26,10 @@ FILES =  \
 
 RES = MonoDevelop.Database.Sql.Sqlite.addin.xml
 
-SQLITE_FILES = \
-	libs/Mono.Data.Sqlite.dll
-
-SRC_SQLITE_FILES = $(addprefix $(srcdir)/../, $(SQLITE_FILES))
-BUILD_SQLITE_FILES = $(addprefix $(ADDIN_BUILD)/, $(notdir $(SQLITE_FILES)))
-
 ADDIN = MonoDevelop.Database.Sql.Sqlite.addin.xml
 
 if ENABLE_SQLITE
-all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN) $(BUILD_SQLITE_FILES)
+all: $(ASSEMBLY) $(ADDIN_BUILD)/$(ADDIN)
 else
 all:
 endif
@@ -48,20 +42,16 @@ $(ADDIN_BUILD)/%: $(srcdir)/lib/%
 	mkdir -p $(ADDIN_BUILD)
 	cp $< $@
 
-$(BUILD_SQLITE_FILES): $(SRC_SQLITE_FILES)
-	mkdir -p $(ADDIN_BUILD)
-	cp $(SRC_SQLITE_FILES) $(ADDIN_BUILD)/.
-
 $(ASSEMBLY): $(FILES) $(build_resources)
 	mkdir -p $(ADDIN_BUILD)
 	$(CSC) $(CSC_FLAGS) $(REFS) $(build_resources:%=/resource:%) $(build_sources) -out:$@ -target:library
 
 if ENABLE_SQLITE
 assemblydir = $(MD_ADDIN_DIR)/MonoDevelop.Database
-assembly_DATA = $(ASSEMBLY) $(ADDIN) $(SRC_SQLITE_FILES)
+assembly_DATA = $(ASSEMBLY) $(ADDIN)
 endif
 
-CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb $(BUILD_SQLITE_FILES)
-EXTRA_DIST = $(SRC_SQLITE_FILES)
+CLEANFILES = $(ASSEMBLY) $(ASSEMBLY).mdb
+EXTRA_DIST = 
 
 include $(top_srcdir)/Makefile.include
